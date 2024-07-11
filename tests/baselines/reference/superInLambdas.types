@@ -8,8 +8,8 @@ class User {
     name: string = "Bob";
 >name : string
 >     : ^^^^^^
->"Bob" : "Bob"
->      : ^^^^^
+>"Bob" : string
+>      : ^^^^^^
 
     sayHello(): void {
 >sayHello : () => void
@@ -28,8 +28,8 @@ class RegisteredUser extends User {
     name: string = "Frank";
 >name : string
 >     : ^^^^^^
->"Frank" : "Frank"
->        : ^^^^^^^
+>"Frank" : string
+>        : ^^^^^^
 
     constructor() {
         super();
@@ -104,8 +104,8 @@ class RegisteredUser2 extends User {
     name: string = "Joe";
 >name : string
 >     : ^^^^^^
->"Joe" : "Joe"
->      : ^^^^^
+>"Joe" : string
+>      : ^^^^^^
 
     constructor() {
         super();
@@ -167,8 +167,8 @@ class RegisteredUser3 extends User {
     name: string = "Sam";
 >name : string
 >     : ^^^^^^
->"Sam" : "Sam"
->      : ^^^^^
+>"Sam" : string
+>      : ^^^^^^
 
     constructor() {
         super();
@@ -226,7 +226,7 @@ class RegisteredUser4 extends User {
     name: string = "Mark";
 >name : string
 >     : ^^^^^^
->"Mark" : "Mark"
+>"Mark" : string
 >       : ^^^^^^
 
     constructor() {

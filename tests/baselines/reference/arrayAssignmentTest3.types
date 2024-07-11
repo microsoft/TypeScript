@@ -30,8 +30,8 @@ var xx = new a(null, 7, new B());
 >                        : ^
 >a : typeof a
 >  : ^^^^^^^^
->7 : 7
->  : ^
+>7 : number
+>  : ^^^^^^
 >new B() : B
 >        : ^
 >B : typeof B

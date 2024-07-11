@@ -22,18 +22,18 @@ new Derived("", "");
 >                    : ^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
->"" : ""
->   : ^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
+>"" : string
+>   : ^^^^^^
 
 new Derived("");
 >new Derived("") : Derived
 >                : ^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 new Derived();
 >new Derived() : Derived
@@ -47,16 +47,16 @@ new Derived("", 3);
 >                   : ^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
->"" : ""
->   : ^^
->3 : 3
->  : ^
+>"" : string
+>   : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 new Derived(3);
 >new Derived(3) : Derived
 >               : ^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 

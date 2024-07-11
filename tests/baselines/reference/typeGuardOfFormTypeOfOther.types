@@ -144,8 +144,8 @@ if (typeof strOrC === "Object" as string) { // comparison is OK with cast
 >       : ^^^^^^^^^^
 >"Object" as string : string
 >                   : ^^^^^^
->"Object" : "Object"
->         : ^^^^^^^^
+>"Object" : string
+>         : ^^^^^^
 
     c = strOrC; // error: but no narrowing to C
 >c = strOrC : string | C

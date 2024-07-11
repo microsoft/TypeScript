@@ -244,12 +244,12 @@ function f(a = null, b = n, l = []) {
 >  : ^^^^
 
     a = 1
->a = 1 : 1
->      : ^
+>a = 1 : number
+>      : ^^^^^^
 >a : null
 >  : ^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     a = true
 >a = true : true
@@ -268,21 +268,21 @@ function f(a = null, b = n, l = []) {
 >   : ^^
 
     a = 'ok'
->a = 'ok' : "ok"
->         : ^^^^
+>a = 'ok' : string
+>         : ^^^^^^
 >a : null
 >  : ^^^^
->'ok' : "ok"
->     : ^^^^
+>'ok' : string
+>     : ^^^^^^
 
     // b should be number | undefined, not any
     b = 1
->b = 1 : 1
->      : ^
+>b = 1 : number
+>      : ^^^^^^
 >b : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     b = undefined
 >b = undefined : undefined
@@ -293,12 +293,12 @@ function f(a = null, b = n, l = []) {
 >          : ^^^^^^^^^
 
     b = 'error'
->b = 'error' : "error"
->            : ^^^^^^^
+>b = 'error' : string
+>            : ^^^^^^
 >b : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->'error' : "error"
->        : ^^^^^^^
+>'error' : string
+>        : ^^^^^^
 
     // l should be any[]
     l.push(1)

@@ -94,8 +94,8 @@ let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
 >     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
 ><Button /> : JSX.Element
@@ -118,8 +118,8 @@ let k2 = <Comp a={10} b="hi"><Button />
 >     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
 ><Button /> : JSX.Element
@@ -144,8 +144,8 @@ let k3 = <Comp a={10} b="hi">    <Button />
 >     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
 ><Button /> : JSX.Element
@@ -170,8 +170,8 @@ let k4 = <Comp a={10} b="hi"><Button />  </Comp>;
 >     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
 ><Button /> : JSX.Element

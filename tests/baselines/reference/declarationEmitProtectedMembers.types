@@ -32,8 +32,8 @@ class C1 {
     protected get accessor() { return 0; }
 >accessor : number
 >         : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     protected static sx: number;
 >sx : number

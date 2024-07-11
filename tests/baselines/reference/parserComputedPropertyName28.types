@@ -10,8 +10,8 @@ class C {
 >    : ^^^^^^
 >e : any
 >  : ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     [e2]: number
 >[e2] : number

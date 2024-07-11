@@ -29,6 +29,6 @@ new P<string>(r => { r('foo') });
 >         : ^^^^
 >r : (value: string) => void
 >  : ^     ^^^^^^^^^^^^^    
->'foo' : "foo"
->      : ^^^^^
+>'foo' : string
+>      : ^^^^^^
 

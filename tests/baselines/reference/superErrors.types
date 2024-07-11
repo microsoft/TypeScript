@@ -52,8 +52,8 @@ class User {
     name: string = "Bob";
 >name : string
 >     : ^^^^^^
->"Bob" : "Bob"
->      : ^^^^^
+>"Bob" : string
+>      : ^^^^^^
 
     sayHello(): void {
 >sayHello : () => void
@@ -72,8 +72,8 @@ class RegisteredUser extends User {
     name: string = "Frank";
 >name : string
 >     : ^^^^^^
->"Frank" : "Frank"
->        : ^^^^^^^
+>"Frank" : string
+>        : ^^^^^^
 
     constructor() {
         super();

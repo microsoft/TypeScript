@@ -7,20 +7,20 @@ var numStrTuple: [number, string] = [5, "hello"];
 >            : ^^^^^^^^^^^^^^^^
 >[5, "hello"] : [number, string]
 >             : ^^^^^^^^^^^^^^^^
->5 : 5
->  : ^
->"hello" : "hello"
->        : ^^^^^^^
+>5 : number
+>  : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 var numStrTuple2: [number, string] = [5, "foo", true];
 >numStrTuple2 : [number, string]
 >             : ^^^^^^^^^^^^^^^^
 >[5, "foo", true] : [number, string, boolean]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
->5 : 5
->  : ^
->"foo" : "foo"
->      : ^^^^^
+>5 : number
+>  : ^^^^^^
+>"foo" : string
+>      : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -29,10 +29,10 @@ var numStrBoolTuple: [number, string, boolean] = [5, "foo", true];
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[5, "foo", true] : [number, string, true]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
->5 : 5
->  : ^
->"foo" : "foo"
->      : ^^^^^
+>5 : number
+>  : ^^^^^^
+>"foo" : string
+>      : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -47,22 +47,22 @@ var objNumTuple: [{ a: string }, number] = [{ a: "world" }, 5];
 >               : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"world" : "world"
->        : ^^^^^^^
->5 : 5
->  : ^
+>"world" : string
+>        : ^^^^^^
+>5 : number
+>  : ^^^^^^
 
 var strTupleTuple: [string, [number, {}]] = ["bar", [5, { x: 1, y: 1 }]];
 >strTupleTuple : [string, [number, {}]]
 >              : ^^^^^^^^^^^^^^^^^^^^^^
 >["bar", [5, { x: 1, y: 1 }]] : [string, [number, { x: number; y: number; }]]
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 >[5, { x: 1, y: 1 }] : [number, { x: number; y: number; }]
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -91,8 +91,8 @@ var unionTuple: [C, string | number] = [new C(), "foo"];
 >        : ^
 >C : typeof C
 >  : ^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 
 var unionTuple1: [C, string | number] = [new C(), "foo"];
 >unionTuple1 : [C, string | number]
@@ -103,8 +103,8 @@ var unionTuple1: [C, string | number] = [new C(), "foo"];
 >        : ^
 >C : typeof C
 >  : ^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 
 var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
 >unionTuple2 : [C, string | number, D]
@@ -115,8 +115,8 @@ var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
 >        : ^
 >C : typeof C
 >  : ^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >new D() : D
 >        : ^
 >D : typeof D
@@ -127,10 +127,10 @@ var unionTuple3: [number, string| number] = [10, "foo"];
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[10, "foo"] : [number, string]
 >            : ^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->"foo" : "foo"
->      : ^^^^^
+>10 : number
+>   : ^^^^^^
+>"foo" : string
+>      : ^^^^^^
 
 numStrTuple = numStrTuple2;
 >numStrTuple = numStrTuple2 : [number, string]
@@ -158,8 +158,8 @@ objNumTuple = [ {}, 5];
 >         : ^^^^^^^^^^^^
 >{} : {}
 >   : ^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 numStrBoolTuple = numStrTuple;
 >numStrBoolTuple = numStrTuple : [number, string]
@@ -174,10 +174,10 @@ var strStrTuple: [string, string] = ["foo", "bar", 5];
 >            : ^^^^^^^^^^^^^^^^
 >["foo", "bar", 5] : [string, string, number]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
+>"bar" : string
+>      : ^^^^^^
 >5 : 5
 >  : ^
 
@@ -229,10 +229,10 @@ let var1: fixed1 = [0, 0]
 >     : ^^^^^^
 >[0, 0] : [number, number]
 >       : ^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
+>0 : number
+>  : ^^^^^^
 
 // #52551
 type EmptyTuple = []

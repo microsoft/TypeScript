@@ -8,14 +8,14 @@ class MyBase {
   getValue(): number { return 1; }
 >getValue : () => number
 >         : ^^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
   get value(): number { return 1; }
 >value : number
 >      : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 
 class MyDerived extends MyBase {

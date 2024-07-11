@@ -23,8 +23,8 @@ class Person {
 >  : ^^^^^^^^^^^^^^^
 
       return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
     }
 }
 let p = new Person();
@@ -44,8 +44,8 @@ p.A(0)
 >  : ^^^^^^
 >A : (a: string | number) => number | string
 >  : ^ ^^               ^^^^^               
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 p.B(0)
 >p.B(0) : string
@@ -56,8 +56,8 @@ p.B(0)
 >  : ^^^^^^
 >B : (a: number) => string
 >  : ^ ^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 // https://github.com/microsoft/TypeScript/issues/17345
 class C {

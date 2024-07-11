@@ -12,8 +12,8 @@ export async function main() {
 >await import("fs") : any
 >import("fs") : Promise<any>
 >             : ^^^^^^^^^^^^
->"fs" : "fs"
->     : ^^^^
+>"fs" : string
+>     : ^^^^^^
 }
 === index.js ===
 // esm format file
@@ -27,8 +27,8 @@ export async function main() {
 >await import("fs") : any
 >import("fs") : Promise<any>
 >             : ^^^^^^^^^^^^
->"fs" : "fs"
->     : ^^^^
+>"fs" : string
+>     : ^^^^^^
 }
 === types.d.ts ===
 declare module "fs";

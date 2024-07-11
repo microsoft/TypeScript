@@ -159,8 +159,8 @@ const checked = checkType<{x: number, y: string}>()({
 >  : ^^^^^^
 >1 as number : number
 >            : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
   y: "y",
 >y : "y"
@@ -493,8 +493,8 @@ const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 >                : ^^^^^^^^^^^^^^^^^
 >prop : string
 >     : ^^^^^^
->'bar' : "bar"
->      : ^^^^^
+>'bar' : string
+>      : ^^^^^^
 >extra : number
 >      : ^^^^^^
 >10 : 10

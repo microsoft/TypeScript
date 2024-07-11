@@ -10,8 +10,8 @@ var foo: {id:number;} = {id:4}; foo = {id:5};
 >       : ^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 >foo = {id:5} : { id: number; }
 >             : ^^^^^^^^^^^^^^^
 >foo : { id: number; }
@@ -20,6 +20,6 @@ var foo: {id:number;} = {id:4}; foo = {id:5};
 >       : ^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 

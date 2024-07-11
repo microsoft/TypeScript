@@ -12,20 +12,20 @@ class A {
     public static x: number = 1;
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     public static y: number = 1;
 >y : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     private static _b: number = 2;
 >_b : number
 >   : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 }
 
 const a = new A();

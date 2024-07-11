@@ -33,28 +33,28 @@ class D extends C {
 >      : ^^^^^^^^
 
    this.v = 1;
->this.v = 1 : 1
->           : ^
+>this.v = 1 : number
+>           : ^^^^^^
 >this.v : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >v : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
    this.p = 1;
->this.p = 1 : 1
->           : ^
+>this.p = 1 : number
+>           : ^^^^^^
 >this.p : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >p : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
    C.s = 1;
 >C.s = 1 : 1

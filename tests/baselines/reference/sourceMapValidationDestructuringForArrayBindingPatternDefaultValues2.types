@@ -23,12 +23,12 @@ let robotA: Robot = [1, "mower", "mowing"];
 >       : ^^^^^
 >[1, "mower", "mowing"] : [number, string, string]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->"mower" : "mower"
->        : ^^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
+>1 : number
+>  : ^^^^^^
+>"mower" : string
+>        : ^^^^^^
+>"mowing" : string
+>         : ^^^^^^
 
 function getRobot() {
 >getRobot : () => Robot
@@ -44,28 +44,28 @@ let multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >            : ^^^^^^^^^^^^^^^^^
 >["mower", ["mowing", ""]] : [string, [string, string]]
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->"mower" : "mower"
->        : ^^^^^^^
+>"mower" : string
+>        : ^^^^^^
 >["mowing", ""] : [string, string]
 >               : ^^^^^^^^^^^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
->"" : ""
->   : ^^
+>"mowing" : string
+>         : ^^^^^^
+>"" : string
+>   : ^^^^^^
 
 let multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
 >multiRobotB : MultiSkilledRobot
 >            : ^^^^^^^^^^^^^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >["trimming", "edging"] : [string, string]
 >                       : ^^^^^^^^^^^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"trimming" : string
+>           : ^^^^^^
+>"edging" : string
+>         : ^^^^^^
 
 function getMultiRobot() {
 >getMultiRobot : () => MultiSkilledRobot
@@ -113,28 +113,28 @@ let i: number;
 >  : ^^^^^^
 
 for ([, nameA = "name"] = robotA, i = 0; i < 1; i++) {
->[, nameA = "name"] = robotA, i = 0 : 0
->                                   : ^
+>[, nameA = "name"] = robotA, i = 0 : number
+>                                   : ^^^^^^
 >[, nameA = "name"] = robotA : Robot
 >                            : ^^^^^
 >[, nameA = "name"] : [undefined, string]
 >                   : ^^^^^^^^^^^^^^^^^^^
 > : undefined
 > : ^^^^^^^^^
->nameA = "name" : "name"
+>nameA = "name" : string
 >               : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
 >robotA : Robot
 >       : ^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -159,30 +159,30 @@ for ([, nameA = "name"] = robotA, i = 0; i < 1; i++) {
 >      : ^^^^^^
 }
 for ([, nameA = "name"] = getRobot(), i = 0; i < 1; i++) {
->[, nameA = "name"] = getRobot(), i = 0 : 0
->                                       : ^
+>[, nameA = "name"] = getRobot(), i = 0 : number
+>                                       : ^^^^^^
 >[, nameA = "name"] = getRobot() : Robot
 >                                : ^^^^^
 >[, nameA = "name"] : [undefined, string]
 >                   : ^^^^^^^^^^^^^^^^^^^
 > : undefined
 > : ^^^^^^^^^
->nameA = "name" : "name"
+>nameA = "name" : string
 >               : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
 >getRobot() : Robot
 >           : ^^^^^
 >getRobot : () => Robot
 >         : ^^^^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -207,34 +207,34 @@ for ([, nameA = "name"] = getRobot(), i = 0; i < 1; i++) {
 >      : ^^^^^^
 }
 for ([, nameA = "name"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->[, nameA = "name"] = [2, "trimmer", "trimming"], i = 0 : 0
->                                                       : ^
+>[, nameA = "name"] = [2, "trimmer", "trimming"], i = 0 : number
+>                                                       : ^^^^^^
 >[, nameA = "name"] = [2, "trimmer", "trimming"] : [number, string, string]
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[, nameA = "name"] : [undefined, string]
 >                   : ^^^^^^^^^^^^^^^^^^^
 > : undefined
 > : ^^^^^^^^^
->nameA = "name" : "name"
+>nameA = "name" : string
 >               : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>2 : number
+>  : ^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >"trimming" : "trimming"
 >           : ^^^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -259,8 +259,8 @@ for ([, nameA = "name"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >      : ^^^^^^
 }
 for ([, [
->[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] = multiRobotA, i = 0 : 0
->                                                                                                              : ^
+>[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] = multiRobotA, i = 0 : number
+>                                                                                                              : ^^^^^^
 >[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] = multiRobotA : MultiSkilledRobot
 >                                                                                                       : ^^^^^^^^^^^^^^^^^
 >[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] : [undefined, [string, string]]
@@ -273,36 +273,36 @@ for ([, [
 >                                                                  : ^^^^^^^^^^^^^^^^
 
     primarySkillA = "primary",
->primarySkillA = "primary" : "primary"
->                          : ^^^^^^^^^
+>primarySkillA = "primary" : string
+>                          : ^^^^^^
 >primarySkillA : string
 >              : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 
     secondarySkillA = "secondary"
->secondarySkillA = "secondary" : "secondary"
->                              : ^^^^^^^^^^^
+>secondarySkillA = "secondary" : string
+>                              : ^^^^^^
 >secondarySkillA : string
 >                : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
 ] = ["none", "none"]] = multiRobotA, i = 0; i < 1; i++) {
 >["none", "none"] : [string, string]
 >                 : ^^^^^^^^^^^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 >multiRobotA : MultiSkilledRobot
 >            : ^^^^^^^^^^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -327,8 +327,8 @@ for ([, [
 >              : ^^^^^^
 }
 for ([, [
->[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] = getMultiRobot(), i = 0 : 0
->                                                                                                                  : ^
+>[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] = getMultiRobot(), i = 0 : number
+>                                                                                                                  : ^^^^^^
 >[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] = getMultiRobot() : MultiSkilledRobot
 >                                                                                                           : ^^^^^^^^^^^^^^^^^
 >[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] : [undefined, [string, string]]
@@ -341,38 +341,38 @@ for ([, [
 >                                                                  : ^^^^^^^^^^^^^^^^
 
     primarySkillA = "primary",
->primarySkillA = "primary" : "primary"
->                          : ^^^^^^^^^
+>primarySkillA = "primary" : string
+>                          : ^^^^^^
 >primarySkillA : string
 >              : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 
     secondarySkillA = "secondary"
->secondarySkillA = "secondary" : "secondary"
->                              : ^^^^^^^^^^^
+>secondarySkillA = "secondary" : string
+>                              : ^^^^^^
 >secondarySkillA : string
 >                : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
 ] = ["none", "none"]] = getMultiRobot(), i = 0; i < 1; i++) {
 >["none", "none"] : [string, string]
 >                 : ^^^^^^^^^^^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 >getMultiRobot() : MultiSkilledRobot
 >                : ^^^^^^^^^^^^^^^^^
 >getMultiRobot : () => MultiSkilledRobot
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -397,8 +397,8 @@ for ([, [
 >              : ^^^^^^
 }
 for ([, [
->[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] = ["trimmer", ["trimming", "edging"]], i = 0 : 0
->                                                                                                                                      : ^
+>[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] = ["trimmer", ["trimming", "edging"]], i = 0 : number
+>                                                                                                                                      : ^^^^^^
 >[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] = ["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["none", "none"]] : [undefined, [string, string]]
@@ -411,44 +411,44 @@ for ([, [
 >                                                                  : ^^^^^^^^^^^^^^^^
 
     primarySkillA = "primary",
->primarySkillA = "primary" : "primary"
->                          : ^^^^^^^^^
+>primarySkillA = "primary" : string
+>                          : ^^^^^^
 >primarySkillA : string
 >              : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 
     secondarySkillA = "secondary"
->secondarySkillA = "secondary" : "secondary"
->                              : ^^^^^^^^^^^
+>secondarySkillA = "secondary" : string
+>                              : ^^^^^^
 >secondarySkillA : string
 >                : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
 ] = ["none", "none"]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >["none", "none"] : [string, string]
 >                 : ^^^^^^^^^^^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >["trimming", "edging"] : [string, string]
 >                       : ^^^^^^^^^^^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
->i = 0 : 0
->      : ^
+>"trimming" : string
+>           : ^^^^^^
+>"edging" : string
+>         : ^^^^^^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -474,8 +474,8 @@ for ([, [
 }
 
 for ([numberB = -1] = robotA, i = 0; i < 1; i++) {
->[numberB = -1] = robotA, i = 0 : 0
->                               : ^
+>[numberB = -1] = robotA, i = 0 : number
+>                               : ^^^^^^
 >[numberB = -1] = robotA : Robot
 >                        : ^^^^^
 >[numberB = -1] : [number]
@@ -490,12 +490,12 @@ for ([numberB = -1] = robotA, i = 0; i < 1; i++) {
 >  : ^
 >robotA : Robot
 >       : ^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -520,8 +520,8 @@ for ([numberB = -1] = robotA, i = 0; i < 1; i++) {
 >        : ^^^^^^
 }
 for ([numberB = -1] = getRobot(), i = 0; i < 1; i++) {
->[numberB = -1] = getRobot(), i = 0 : 0
->                                   : ^
+>[numberB = -1] = getRobot(), i = 0 : number
+>                                   : ^^^^^^
 >[numberB = -1] = getRobot() : Robot
 >                            : ^^^^^
 >[numberB = -1] : [number]
@@ -538,12 +538,12 @@ for ([numberB = -1] = getRobot(), i = 0; i < 1; i++) {
 >           : ^^^^^
 >getRobot : () => Robot
 >         : ^^^^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -568,8 +568,8 @@ for ([numberB = -1] = getRobot(), i = 0; i < 1; i++) {
 >        : ^^^^^^
 }
 for ([numberB = -1] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->[numberB = -1] = [2, "trimmer", "trimming"], i = 0 : 0
->                                                   : ^
+>[numberB = -1] = [2, "trimmer", "trimming"], i = 0 : number
+>                                                   : ^^^^^^
 >[numberB = -1] = [2, "trimmer", "trimming"] : [number, string, string]
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[numberB = -1] : [number]
@@ -584,18 +584,18 @@ for ([numberB = -1] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >  : ^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >"trimmer" : "trimmer"
 >          : ^^^^^^^^^
 >"trimming" : "trimming"
 >           : ^^^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -620,26 +620,26 @@ for ([numberB = -1] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >        : ^^^^^^
 }
 for ([nameB = "name"] = multiRobotA, i = 0; i < 1; i++) {
->[nameB = "name"] = multiRobotA, i = 0 : 0
->                                      : ^
+>[nameB = "name"] = multiRobotA, i = 0 : number
+>                                      : ^^^^^^
 >[nameB = "name"] = multiRobotA : MultiSkilledRobot
 >                               : ^^^^^^^^^^^^^^^^^
 >[nameB = "name"] : [string]
 >                 : ^^^^^^^^
->nameB = "name" : "name"
+>nameB = "name" : string
 >               : ^^^^^^
 >nameB : string
 >      : ^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
 >multiRobotA : MultiSkilledRobot
 >            : ^^^^^^^^^^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -664,28 +664,28 @@ for ([nameB = "name"] = multiRobotA, i = 0; i < 1; i++) {
 >      : ^^^^^^
 }
 for ([nameB = "name"] = getMultiRobot(), i = 0; i < 1; i++) {
->[nameB = "name"] = getMultiRobot(), i = 0 : 0
->                                          : ^
+>[nameB = "name"] = getMultiRobot(), i = 0 : number
+>                                          : ^^^^^^
 >[nameB = "name"] = getMultiRobot() : MultiSkilledRobot
 >                                   : ^^^^^^^^^^^^^^^^^
 >[nameB = "name"] : [string]
 >                 : ^^^^^^^^
->nameB = "name" : "name"
+>nameB = "name" : string
 >               : ^^^^^^
 >nameB : string
 >      : ^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
 >getMultiRobot() : MultiSkilledRobot
 >                : ^^^^^^^^^^^^^^^^^
 >getMultiRobot : () => MultiSkilledRobot
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -710,34 +710,34 @@ for ([nameB = "name"] = getMultiRobot(), i = 0; i < 1; i++) {
 >      : ^^^^^^
 }
 for ([nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
->[nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0 : 0
->                                                              : ^
+>[nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0 : number
+>                                                              : ^^^^^^
 >[nameB = "name"] = ["trimmer", ["trimming", "edging"]] : [string, string[]]
 >                                                       : ^^^^^^^^^^^^^^^^^^
 >[nameB = "name"] : [string]
 >                 : ^^^^^^^^
->nameB = "name" : "name"
+>nameB = "name" : string
 >               : ^^^^^^
 >nameB : string
 >      : ^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
 >                                    : ^^^^^^^^^^^^^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >["trimming", "edging"] : string[]
 >                       : ^^^^^^^^
 >"trimming" : "trimming"
 >           : ^^^^^^^^^^
 >"edging" : "edging"
 >         : ^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -763,8 +763,8 @@ for ([nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) 
 }
 
 for ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0; i < 1; i++) {
->[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0 : 0
->                                                                    : ^
+>[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0 : number
+>                                                                    : ^^^^^^
 >[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA : Robot
 >                                                             : ^^^^^
 >[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] : [number, string, string]
@@ -777,26 +777,26 @@ for ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0; i < 1;
 >   : ^^
 >1 : 1
 >  : ^
->nameA2 = "name" : "name"
+>nameA2 = "name" : string
 >                : ^^^^^^
 >nameA2 : string
 >       : ^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
->skillA2 = "skill" : "skill"
->                  : ^^^^^^^
+>skillA2 = "skill" : string
+>                  : ^^^^^^
 >skillA2 : string
 >        : ^^^^^^
->"skill" : "skill"
->        : ^^^^^^^
+>"skill" : string
+>        : ^^^^^^
 >robotA : Robot
 >       : ^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -821,8 +821,8 @@ for ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0; i < 1;
 >       : ^^^^^^
 }
 for ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0; i < 1; i++) {
->[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0 : 0
->                                                                        : ^
+>[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0 : number
+>                                                                        : ^^^^^^
 >[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot() : Robot
 >                                                                 : ^^^^^
 >[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] : [number, string, string]
@@ -835,28 +835,28 @@ for ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0; i 
 >   : ^^
 >1 : 1
 >  : ^
->nameA2 = "name" : "name"
+>nameA2 = "name" : string
 >                : ^^^^^^
 >nameA2 : string
 >       : ^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
->skillA2 = "skill" : "skill"
->                  : ^^^^^^^
+>skillA2 = "skill" : string
+>                  : ^^^^^^
 >skillA2 : string
 >        : ^^^^^^
->"skill" : "skill"
->        : ^^^^^^^
+>"skill" : string
+>        : ^^^^^^
 >getRobot() : Robot
 >           : ^^^^^
 >getRobot : () => Robot
 >         : ^^^^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -881,8 +881,8 @@ for ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0; i 
 >       : ^^^^^^
 }
 for ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "trimming"], i = 0 : 0
->                                                                                        : ^
+>[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "trimming"], i = 0 : number
+>                                                                                        : ^^^^^^
 >[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "trimming"] : [number, string, string]
 >                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[numberA2 = -1, nameA2 = "name", skillA2 = "skill"] : [number, string, string]
@@ -895,32 +895,32 @@ for ([numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "trimm
 >   : ^^
 >1 : 1
 >  : ^
->nameA2 = "name" : "name"
+>nameA2 = "name" : string
 >                : ^^^^^^
 >nameA2 : string
 >       : ^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
->skillA2 = "skill" : "skill"
->                  : ^^^^^^^
+>skillA2 = "skill" : string
+>                  : ^^^^^^
 >skillA2 : string
 >        : ^^^^^^
->"skill" : "skill"
->        : ^^^^^^^
+>"skill" : string
+>        : ^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
->i = 0 : 0
->      : ^
+>2 : number
+>  : ^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
+>"trimming" : string
+>           : ^^^^^^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -948,8 +948,8 @@ for (let
     [nameMA = "noName",
 >nameMA : string
 >       : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 
         [
             primarySkillA = "primary",
@@ -967,9 +967,9 @@ for (let
         ] = ["none", "none"]
 >["none", "none"] : [string, string]
 >                 : ^^^^^^^^^^^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 
     ] = multiRobotA, i = 0; i < 1; i++) {
@@ -1003,18 +1003,18 @@ for (let
 >       : ^^^^^^
 }
 for ([nameMA = "noName",
->[nameMA = "noName",    [        primarySkillA = "primary",        secondarySkillA = "secondary"    ] = ["none", "none"]] = getMultiRobot(), i = 0 : 0
->                                                                                                                                                  : ^
+>[nameMA = "noName",    [        primarySkillA = "primary",        secondarySkillA = "secondary"    ] = ["none", "none"]] = getMultiRobot(), i = 0 : number
+>                                                                                                                                                  : ^^^^^^
 >[nameMA = "noName",    [        primarySkillA = "primary",        secondarySkillA = "secondary"    ] = ["none", "none"]] = getMultiRobot() : MultiSkilledRobot
 >                                                                                                                                           : ^^^^^^^^^^^^^^^^^
 >[nameMA = "noName",    [        primarySkillA = "primary",        secondarySkillA = "secondary"    ] = ["none", "none"]] : [string, [string, string]]
 >                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->nameMA = "noName" : "noName"
->                  : ^^^^^^^^
+>nameMA = "noName" : string
+>                  : ^^^^^^
 >nameMA : string
 >       : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 
     [
 >[        primarySkillA = "primary",        secondarySkillA = "secondary"    ] = ["none", "none"] : [string, string]
@@ -1023,27 +1023,27 @@ for ([nameMA = "noName",
 >                                                                              : ^^^^^^^^^^^^^^^^
 
         primarySkillA = "primary",
->primarySkillA = "primary" : "primary"
->                          : ^^^^^^^^^
+>primarySkillA = "primary" : string
+>                          : ^^^^^^
 >primarySkillA : string
 >              : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 
         secondarySkillA = "secondary"
->secondarySkillA = "secondary" : "secondary"
->                              : ^^^^^^^^^^^
+>secondarySkillA = "secondary" : string
+>                              : ^^^^^^
 >secondarySkillA : string
 >                : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
     ] = ["none", "none"]
 >["none", "none"] : [string, string]
 >                 : ^^^^^^^^^^^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 
 ] = getMultiRobot(), i = 0; i < 1; i++) {
@@ -1051,12 +1051,12 @@ for ([nameMA = "noName",
 >                : ^^^^^^^^^^^^^^^^^
 >getMultiRobot : () => MultiSkilledRobot
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -1081,18 +1081,18 @@ for ([nameMA = "noName",
 >       : ^^^^^^
 }
 for ([nameMA = "noName",
->[nameMA = "noName",    [        primarySkillA = "primary",        secondarySkillA = "secondary"    ] = ["none", "none"]] = ["trimmer", ["trimming", "edging"]], i = 0 : 0
->                                                                                                                                                                      : ^
+>[nameMA = "noName",    [        primarySkillA = "primary",        secondarySkillA = "secondary"    ] = ["none", "none"]] = ["trimmer", ["trimming", "edging"]], i = 0 : number
+>                                                                                                                                                                      : ^^^^^^
 >[nameMA = "noName",    [        primarySkillA = "primary",        secondarySkillA = "secondary"    ] = ["none", "none"]] = ["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[nameMA = "noName",    [        primarySkillA = "primary",        secondarySkillA = "secondary"    ] = ["none", "none"]] : [string, [string, string]]
 >                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->nameMA = "noName" : "noName"
->                  : ^^^^^^^^
+>nameMA = "noName" : string
+>                  : ^^^^^^
 >nameMA : string
 >       : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 
     [
 >[        primarySkillA = "primary",        secondarySkillA = "secondary"    ] = ["none", "none"] : [string, string]
@@ -1101,46 +1101,46 @@ for ([nameMA = "noName",
 >                                                                              : ^^^^^^^^^^^^^^^^
 
         primarySkillA = "primary",
->primarySkillA = "primary" : "primary"
->                          : ^^^^^^^^^
+>primarySkillA = "primary" : string
+>                          : ^^^^^^
 >primarySkillA : string
 >              : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 
         secondarySkillA = "secondary"
->secondarySkillA = "secondary" : "secondary"
->                              : ^^^^^^^^^^^
+>secondarySkillA = "secondary" : string
+>                              : ^^^^^^
 >secondarySkillA : string
 >                : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
     ] = ["none", "none"]
 >["none", "none"] : [string, string]
 >                 : ^^^^^^^^^^^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 
 ] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >["trimming", "edging"] : [string, string]
 >                       : ^^^^^^^^^^^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
->i = 0 : 0
->      : ^
+>"trimming" : string
+>           : ^^^^^^
+>"edging" : string
+>         : ^^^^^^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -1166,8 +1166,8 @@ for ([nameMA = "noName",
 }
 
 for ([numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
->[numberA3 = -1, ...robotAInfo] = robotA, i = 0 : 0
->                                               : ^
+>[numberA3 = -1, ...robotAInfo] = robotA, i = 0 : number
+>                                               : ^^^^^^
 >[numberA3 = -1, ...robotAInfo] = robotA : Robot
 >                                        : ^^^^^
 >[numberA3 = -1, ...robotAInfo] : [number, ...(string | number)[]]
@@ -1186,12 +1186,12 @@ for ([numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >           : ^^^^^^^^^^^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -1216,8 +1216,8 @@ for ([numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >         : ^^^^^^
 }
 for ([numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
->[numberA3 = -1, ...robotAInfo] = getRobot(), i = 0 : 0
->                                                   : ^
+>[numberA3 = -1, ...robotAInfo] = getRobot(), i = 0 : number
+>                                                   : ^^^^^^
 >[numberA3 = -1, ...robotAInfo] = getRobot() : Robot
 >                                            : ^^^^^
 >[numberA3 = -1, ...robotAInfo] : [number, ...(string | number)[]]
@@ -1238,12 +1238,12 @@ for ([numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >           : ^^^^^
 >getRobot : () => Robot
 >         : ^^^^^^^^^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number
@@ -1268,8 +1268,8 @@ for ([numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >         : ^^^^^^
 }
 for ([numberA3 = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->[numberA3 = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0 : 0
->                                                                          : ^
+>[numberA3 = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0 : number
+>                                                                          : ^^^^^^
 >[numberA3 = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"] : Robot
 >                                                                   : ^^^^^
 >[numberA3 = -1, ...robotAInfo] : [number, ...(string | number)[]]
@@ -1290,18 +1290,18 @@ for ([numberA3 = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; 
 >                                  : ^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
->i = 0 : 0
->      : ^
+>2 : number
+>  : ^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
+>"trimming" : string
+>           : ^^^^^^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < 1 : boolean
 >      : ^^^^^^^
 >i : number

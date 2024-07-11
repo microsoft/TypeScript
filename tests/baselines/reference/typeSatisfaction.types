@@ -31,8 +31,8 @@ const t1 = { a: 1 } satisfies I1; // Ok
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 const t2 = { a: 1, b: 1 } satisfies I1; // Error
 >t2 : { a: number; b: number; }
@@ -43,8 +43,8 @@ const t2 = { a: 1, b: 1 } satisfies I1; // Error
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >b : number
 >  : ^^^^^^
 >1 : 1
@@ -89,8 +89,8 @@ const t5 = (m => m.substring(0)) satisfies T2; // Ok
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
 >          : ^     ^^      ^^   ^^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 const t6 = [1, 2] satisfies [number, number];
 >t6 : [number, number]
@@ -99,10 +99,10 @@ const t6 = [1, 2] satisfies [number, number];
 >                                  : ^^^^^^^^^^^^^^^^
 >[1, 2] : [number, number]
 >       : ^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 interface A {
     a: string
@@ -118,7 +118,7 @@ let t7 = { a: 'test' } satisfies A;
 >              : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'test' : "test"
+>'test' : string
 >       : ^^^^^^
 
 let t8 = { a: 'test', b: 'test' } satisfies A;
@@ -130,7 +130,7 @@ let t8 = { a: 'test', b: 'test' } satisfies A;
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'test' : "test"
+>'test' : string
 >       : ^^^^^^
 >b : string
 >  : ^^^^^^

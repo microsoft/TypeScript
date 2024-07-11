@@ -34,8 +34,8 @@ example(42, (foo, bar) => ({
 >                                                                                     : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >example : <TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(foo: TFoo, callback: TCallback, bar: TBar) => TCallback
 >        : ^    ^^    ^^         ^^^^^^^^^                    ^^   ^^    ^^        ^^         ^^   ^^    ^^^^^         
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 >(foo, bar) => ({    t: () => {        let s: string = bar;    }}) : (foo: number, bar: string) => { t: () => void; }
 >                                                                  : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
@@ -60,16 +60,16 @@ example(42, (foo, bar) => ({
 >    : ^^^^^^
     }
 }), '42');
->'42' : "42"
->     : ^^^^
+>'42' : string
+>     : ^^^^^^
 
 example(42, (foo, bar) => ({
 >example(42, (foo, bar) => ({    t() {        let s: string = bar;    }}), '42') : (foo: number, bar: string) => { t(): void; }
 >                                                                                : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >example : <TFoo, TBar, TCallback extends Callback<TFoo, TBar>>(foo: TFoo, callback: TCallback, bar: TBar) => TCallback
 >        : ^    ^^    ^^         ^^^^^^^^^                    ^^   ^^    ^^        ^^         ^^   ^^    ^^^^^         
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 >(foo, bar) => ({    t() {        let s: string = bar;    }}) : (foo: number, bar: string) => { t(): void; }
 >                                                             : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
@@ -92,6 +92,6 @@ example(42, (foo, bar) => ({
 >    : ^^^^^^
     }
 }), '42');
->'42' : "42"
->     : ^^^^
+>'42' : string
+>     : ^^^^^^
 

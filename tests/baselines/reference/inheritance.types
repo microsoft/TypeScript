@@ -64,8 +64,8 @@ class Good {
 >  : ^^^^^^      
 >function () { return 0; } : () => number
 >                          : ^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     public g() { return 0; }
 >g : () => number
@@ -83,8 +83,8 @@ class Baad extends Good {
     public f(): number { return 0; }
 >f : () => number
 >  : ^^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     public g(n: number) { return 0; }
 >g : (n: number) => number

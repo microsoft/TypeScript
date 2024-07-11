@@ -239,8 +239,8 @@ let p1 = testRecFun({ one: '1' })
 >             : ^^^^^^^^^^^^^^^^
 >one : string
 >    : ^^^^^^
->'1' : "1"
->    : ^^^
+>'1' : string
+>    : ^^^^^^
 
 void p1.result.one;
 >void p1.result.one : undefined
@@ -271,8 +271,8 @@ let p2 = p1.deeper({ two: '2' })
 >             : ^^^^^^^^^^^^^^^^
 >two : string
 >    : ^^^^^^
->'2' : "2"
->    : ^^^
+>'2' : string
+>    : ^^^^^^
 
 void p2.result.one;
 >void p2.result.one : undefined
@@ -317,8 +317,8 @@ let p3 = p2.deeper({ three: '3' })
 >               : ^^^^^^^^^^^^^^^^^^
 >three : string
 >      : ^^^^^^
->'3' : "3"
->    : ^^^
+>'3' : string
+>    : ^^^^^^
 
 void p3.result.one;
 >void p3.result.one : undefined

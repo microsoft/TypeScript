@@ -33,6 +33,6 @@ process({a:true,b:"y"});
 >     : ^^^^
 >b : string
 >  : ^^^^^^
->"y" : "y"
->    : ^^^
+>"y" : string
+>    : ^^^^^^
 

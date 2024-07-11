@@ -7,18 +7,18 @@ let a: number;
 >  : ^^^^^^
 
 o ?? (a = 1);
->o ?? (a = 1) : { x: number; } | 1
->             : ^^^^^      ^^^^^^^
+>o ?? (a = 1) : number | { x: number; }
+>             : ^^^^^^^^^^^^^^      ^^^
 >o : { x: number; } | undefined
 >  : ^^^^^      ^^^^^^^^^^^^^^^
->(a = 1) : 1
->        : ^
->a = 1 : 1
->      : ^
+>(a = 1) : number
+>        : ^^^^^^
+>a = 1 : number
+>      : ^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 a.toString();
 >a.toString() : string

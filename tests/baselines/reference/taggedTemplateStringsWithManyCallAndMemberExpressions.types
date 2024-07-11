@@ -48,14 +48,14 @@ var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
 >  : ^
 >`abc${ 0 }def` : string
 >               : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >member : new (s: string) => { new (n: number): { new (): boolean; }; }
 >       : ^^^^^ ^^      ^^^^^                                          
->"hello" : "hello"
->        : ^^^^^^^
->42 : 42
->   : ^^
+>"hello" : string
+>        : ^^^^^^
+>42 : number
+>   : ^^^^^^
 >true : true
 >     : ^^^^
 

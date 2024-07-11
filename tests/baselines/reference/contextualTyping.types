@@ -104,8 +104,8 @@ var c3t2 = <IFoo>({
     n: 1
 >n : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 })
 var c3t3: number[] = [];
@@ -416,8 +416,8 @@ c7t2[0] = <IFoo>({n: 1});
 >       : ^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 // CONTEXT: Object property assignment
 interface IPlaceHolder {
@@ -631,8 +631,8 @@ objc8.t2 = <IFoo>({
     n: 1
 >n : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 });
 objc8.t3 = [];
@@ -978,8 +978,8 @@ var c12t2 = <IFoo> ({
     n: 1
 >n : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 });
 var c12t3 = <number[]> [];
@@ -1224,10 +1224,10 @@ var efv = EF1(1,2);
 >         : ^^^^^^
 >EF1 : (a: number, b: number) => number
 >    : ^ ^^      ^^ ^^      ^^^^^      
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 
 // contextually typing from ambient class declarations
@@ -1276,10 +1276,10 @@ Point.origin = new Point(0, 0);
 >                : ^^^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
->0 : 0
->  : ^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
+>0 : number
+>  : ^^^^^^
 
 Point.prototype.add = function(dx, dy) {
 >Point.prototype.add = function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: number, dy: number) => Point
@@ -1344,14 +1344,14 @@ Point.prototype = {
     x: 0,
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     y: 0,
 >y : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     add: function(dx, dy) {
 >add : (dx: number, dy: number) => Point

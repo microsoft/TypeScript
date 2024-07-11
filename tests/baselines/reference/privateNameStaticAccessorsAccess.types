@@ -9,8 +9,8 @@ class A2 {
     static get #prop() { return ""; }
 >#prop : string
 >      : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     static set #prop(param: string) { }
 >#prop : string

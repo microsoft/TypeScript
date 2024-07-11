@@ -27,8 +27,8 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
 >                                                                     : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"ConstantIterator.prototype.next may not take any values" : "ConstantIterator.prototype.next may not take any values"
->                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"ConstantIterator.prototype.next may not take any values" : string
+>                                                          : ^^^^^^
         }
         return { value: this.constant, done: false };
 >{ value: this.constant, done: false } : { value: T; done: false; }

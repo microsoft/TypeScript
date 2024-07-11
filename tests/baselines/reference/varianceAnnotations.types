@@ -376,12 +376,12 @@ const pu: Parent<unknown> = { child: { a: 0, b: 0, child: null, parent: null }, 
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >b : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >child : null
 >      : ^^^^
 >parent : null

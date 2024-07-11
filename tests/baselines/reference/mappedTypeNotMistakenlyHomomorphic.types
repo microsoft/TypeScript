@@ -61,12 +61,12 @@ const gen2TypeA: Gen2<ABC.A> = { v:  "I am A", a: "" };
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : string
 >  : ^^^^^^
->"I am A" : "I am A"
->         : ^^^^^^^^
+>"I am A" : string
+>         : ^^^^^^
 >a : string
 >  : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 const gen2TypeB: Gen2<ABC.B> = { v:  "I am B", b: "" };
 >gen2TypeB : Gen2<ABC.B>
@@ -77,12 +77,12 @@ const gen2TypeB: Gen2<ABC.B> = { v:  "I am B", b: "" };
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : string
 >  : ^^^^^^
->"I am B" : "I am B"
->         : ^^^^^^^^
+>"I am B" : string
+>         : ^^^^^^
 >b : string
 >  : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 // 'v' ???
 type K = keyof Gen2<ABC.A>;

@@ -73,8 +73,8 @@ fs2('a', ...s2); // error on ...s2
 >                : ^^^^
 >fs2 : (a: string, b: string) => void
 >    : ^ ^^      ^^ ^^      ^^^^^    
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
 >...s2 : string
 >      : ^^^^^^
 >s2 : [string, string]
@@ -85,10 +85,10 @@ fs2('a', 'b', 'c', ...s2); // error on 'c' and ...s2
 >                          : ^^^^
 >fs2 : (a: string, b: string) => void
 >    : ^ ^^      ^^ ^^      ^^^^^    
->'a' : "a"
->    : ^^^
->'b' : "b"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
+>'b' : string
+>    : ^^^^^^
 >'c' : "c"
 >    : ^^^
 >...s2 : string
@@ -101,10 +101,10 @@ fs2('a', 'b', ...s2, 'c'); // error on ...s2 and 'c'
 >                          : ^^^^
 >fs2 : (a: string, b: string) => void
 >    : ^ ^^      ^^ ^^      ^^^^^    
->'a' : "a"
->    : ^^^
->'b' : "b"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
+>'b' : string
+>    : ^^^^^^
 >...s2 : string
 >      : ^^^^^^
 >s2 : [string, string]
@@ -117,10 +117,10 @@ fs2('a', 'b', 'c', ...s2, 'd'); // error on 'c', ...s2 and 'd'
 >                               : ^^^^
 >fs2 : (a: string, b: string) => void
 >    : ^ ^^      ^^ ^^      ^^^^^    
->'a' : "a"
->    : ^^^
->'b' : "b"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
+>'b' : string
+>    : ^^^^^^
 >'c' : "c"
 >    : ^^^
 >...s2 : string
@@ -298,8 +298,8 @@ fs5(...s2, "foo", ...s2);
 >      : ^^^^^^
 >s2 : [string, string]
 >   : ^^^^^^^^^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >...s2 : string
 >      : ^^^^^^
 >s2 : [string, string]

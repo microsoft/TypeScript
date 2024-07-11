@@ -26,8 +26,8 @@ const fooShort = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
         b: await Promise.resolve(1),
 >b : number
@@ -42,8 +42,8 @@ const fooShort = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         c: await Promise.resolve(2),
 >c : number
@@ -58,8 +58,8 @@ const fooShort = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
         d: await Promise.resolve(3),
 >d : number
@@ -74,8 +74,8 @@ const fooShort = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         e: await Promise.resolve(4),
 >e : number
@@ -90,8 +90,8 @@ const fooShort = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
     };
 }
@@ -119,8 +119,8 @@ const fooLong = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
         b: await Promise.resolve(1),
 >b : number
@@ -135,8 +135,8 @@ const fooLong = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         c: await Promise.resolve(2),
 >c : number
@@ -151,8 +151,8 @@ const fooLong = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
         d: await Promise.resolve(3),
 >d : number
@@ -167,8 +167,8 @@ const fooLong = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         e: await Promise.resolve(4),
 >e : number
@@ -183,8 +183,8 @@ const fooLong = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
         f: await Promise.resolve(5),
 >f : number
@@ -199,8 +199,8 @@ const fooLong = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
         g: await Promise.resolve(6),
 >g : number
@@ -215,8 +215,8 @@ const fooLong = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->6 : 6
->  : ^
+>6 : number
+>  : ^^^^^^
 
         h: await Promise.resolve(7),
 >h : number
@@ -231,8 +231,8 @@ const fooLong = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->7 : 7
->  : ^
+>7 : number
+>  : ^^^^^^
 
         i: await Promise.resolve(8),
 >i : number
@@ -247,8 +247,8 @@ const fooLong = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->8 : 8
->  : ^
+>8 : number
+>  : ^^^^^^
 
         j: await Promise.resolve(9),
 >j : number
@@ -263,8 +263,8 @@ const fooLong = async () => {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->9 : 9
->  : ^
+>9 : number
+>  : ^^^^^^
 
     };
 }

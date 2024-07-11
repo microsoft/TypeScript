@@ -16,8 +16,8 @@ export const myValue: Something<string> = Something.of("abc")
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >of : <A>(value: A) => import("Something").Something<A>
 >   : ^ ^^     ^^ ^^^^^       ^^^^^^^^^^^^^^^^^  ^^^^^^^^^   
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 
 export type MyType = Something.SubType<string>
 >MyType : MyType

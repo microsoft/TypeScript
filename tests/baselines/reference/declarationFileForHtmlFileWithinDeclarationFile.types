@@ -51,8 +51,8 @@ window.customElements.define("my-html5-element", mod.HTML5Element);
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions) => void
 >       : ^    ^^      ^^           ^^                        ^^       ^^^                        ^^^^^    
->"my-html5-element" : "my-html5-element"
->                   : ^^^^^^^^^^^^^^^^^^
+>"my-html5-element" : string
+>                   : ^^^^^^
 >mod.HTML5Element : typeof mod.HTML5Element
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >mod : typeof mod

@@ -14,8 +14,8 @@ const data: ReadonlyData = { value: 'foo' };
 >                 : ^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
->'foo' : "foo"
->      : ^^^^^
+>'foo' : string
+>      : ^^^^^^
 
 const clone = { ...data };
 >clone : { value: string; }
@@ -26,14 +26,14 @@ const clone = { ...data };
 >     : ^^^^^^^^^^^^
 
 clone.value = 'bar';
->clone.value = 'bar' : "bar"
->                    : ^^^^^
+>clone.value = 'bar' : string
+>                    : ^^^^^^
 >clone.value : string
 >            : ^^^^^^
 >clone : { value: string; }
 >      : ^^^^^^^^^      ^^^
 >value : string
 >      : ^^^^^^
->'bar' : "bar"
->      : ^^^^^
+>'bar' : string
+>      : ^^^^^^
 

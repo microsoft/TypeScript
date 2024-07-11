@@ -55,8 +55,8 @@ module Consumer {
 >        : ^^^^^^^^^^^^^^^^^^^
 >addListener : (type: string, listener: Events.ListenerCallback) => void
 >            : ^    ^^      ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'change' : "change"
->         : ^^^^^^^^
+>'change' : string
+>         : ^^^^^^
 >(e) => {                this.changed();            } : (e: any) => void
 >                                                     : ^ ^^^^^^^^^^^^^^
 >e : any

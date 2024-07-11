@@ -40,8 +40,8 @@ const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) 
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >otherProperty : number
 >              : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
     mySecondFunction(newParam)
 >mySecondFunction(newParam) : { commonProperty: number; otherProperty: number; }

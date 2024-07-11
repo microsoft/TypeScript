@@ -29,7 +29,7 @@ function eachPerson(callback) {
 >                  : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"Empty" : "Empty"
->        : ^^^^^^^
+>"Empty" : string
+>        : ^^^^^^
 }
 

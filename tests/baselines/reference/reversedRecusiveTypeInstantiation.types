@@ -20,8 +20,8 @@ var a : A<string, number>
 >  : ^^^^^^^^^^^^^^^^^
 
 a.zPos2Pos1.xPos1 = 1
->a.zPos2Pos1.xPos1 = 1 : 1
->                      : ^
+>a.zPos2Pos1.xPos1 = 1 : number
+>                      : ^^^^^^
 >a.zPos2Pos1.xPos1 : number
 >                  : ^^^^^^
 >a.zPos2Pos1 : A<number, string>
@@ -32,7 +32,7 @@ a.zPos2Pos1.xPos1 = 1
 >          : ^^^^^^^^^^^^^^^^^
 >xPos1 : number
 >      : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 

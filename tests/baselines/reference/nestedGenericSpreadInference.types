@@ -39,6 +39,6 @@ const leak = call(wrap(<T>(x: T) => x), 1);
 >  : ^
 >x : T
 >  : ^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 

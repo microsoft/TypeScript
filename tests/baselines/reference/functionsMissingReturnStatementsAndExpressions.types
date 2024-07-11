@@ -21,8 +21,8 @@ function f3(): string {
 >   : ^^^^^^      
 
     return "Okay, because this is a return expression.";
->"Okay, because this is a return expression." : "Okay, because this is a return expression."
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"Okay, because this is a return expression." : string
+>                                             : ^^^^^^
 }
 
 function f4(): void {

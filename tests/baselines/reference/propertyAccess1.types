@@ -8,16 +8,16 @@ var foo: { a: number; };
 >  : ^^^^^^
 
 foo.a = 4;
->foo.a = 4 : 4
->          : ^
+>foo.a = 4 : number
+>          : ^^^^^^
 >foo.a : number
 >      : ^^^^^^
 >foo : { a: number; }
 >    : ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
 foo.b = 5;
 >foo.b = 5 : 5

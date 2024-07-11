@@ -50,16 +50,16 @@ const c: C = isIt ? { isIt, text: 'hey' } : { isIt, value: 123 };
 >     : ^^^^
 >text : string
 >     : ^^^^^^
->'hey' : "hey"
->      : ^^^^^
+>'hey' : string
+>      : ^^^^^^
 >{ isIt, value: 123 } : { isIt: false; value: number; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isIt : false
 >     : ^^^^^
 >value : number
 >      : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
 const cc: C = isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 };
 >cc : C
@@ -76,8 +76,8 @@ const cc: C = isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 };
 >     : ^^^^
 >text : string
 >     : ^^^^^^
->'hey' : "hey"
->      : ^^^^^
+>'hey' : string
+>      : ^^^^^^
 >{ isIt: isIt, value: 123 } : { isIt: false; value: number; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isIt : false
@@ -86,8 +86,8 @@ const cc: C = isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 };
 >     : ^^^^^
 >value : number
 >      : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
 type ComponentProps =
 >ComponentProps : ComponentProps

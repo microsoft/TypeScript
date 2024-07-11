@@ -35,8 +35,8 @@ class Derived extends Base {
         return 10 as number | string;
 >10 as number | string : string | number
 >                      : ^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
 }
 class DerivedInterface implements Base {
@@ -54,7 +54,7 @@ class DerivedInterface implements Base {
         return 10 as number | string;
 >10 as number | string : string | number
 >                      : ^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
 }

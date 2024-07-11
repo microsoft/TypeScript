@@ -19,8 +19,8 @@ import("package").then(({default: foo}) => foo(42));
 >                       : ^        ^^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("package") : Promise<{ default: (x: number) => string; }>
 >                  : ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^^
->"package" : "package"
->          : ^^^^^^^^^
+>"package" : string
+>          : ^^^^^^
 >then : <TResult1 = { default: (x: number) => string; }, TResult2 = never>(onfulfilled?: (value: { default: (x: number) => string; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >     : ^        ^^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({default: foo}) => foo(42) : ({ default: foo }: { default: (x: number) => string; }) => string
@@ -33,6 +33,6 @@ import("package").then(({default: foo}) => foo(42));
 >        : ^^^^^^
 >foo : (x: number) => string
 >    : ^ ^^      ^^^^^      
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 

@@ -62,52 +62,52 @@ a1.y = 1;  // Error
 >  : ^
 
 a2.x = 1;
->a2.x = 1 : 1
->         : ^
+>a2.x = 1 : number
+>         : ^^^^^^
 >a2.x : number
 >     : ^^^^^^
 >a2 : typeof a1
 >   : ^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 a2.y = 1;
->a2.y = 1 : 1
->         : ^
+>a2.y = 1 : number
+>         : ^^^^^^
 >a2.y : number
 >     : ^^^^^^
 >a2 : typeof a1
 >   : ^^^^^^^^^
 >y : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 a3.x = 1;
->a3.x = 1 : 1
->         : ^
+>a3.x = 1 : number
+>         : ^^^^^^
 >a3.x : number
 >     : ^^^^^^
 >a3 : typeof a1
 >   : ^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 a3.y = 1;
->a3.y = 1 : 1
->         : ^
+>a3.y = 1 : number
+>         : ^^^^^^
 >a3.y : number
 >     : ^^^^^^
 >a3 : typeof a1
 >   : ^^^^^^^^^
 >y : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 === a.ts ===
 export var x = 1;

@@ -8,8 +8,8 @@ class C {
     static z: string = "Foo";
 >z : string
 >  : ^^^^^^
->"Foo" : "Foo"
->      : ^^^^^
+>"Foo" : string
+>      : ^^^^^^
 }
 
 class D {

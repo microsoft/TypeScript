@@ -22,16 +22,16 @@
 >null as any : any
 
     ihgs.foo = "32";
->ihgs.foo = "32" : "32"
->                : ^^^^
+>ihgs.foo = "32" : string
+>                : ^^^^^^
 >ihgs.foo : string | number
 >         : ^^^^^^^^^^^^^^^
 >ihgs : IHasGetSet
 >     : ^^^^^^^^^^
 >foo : string | number
 >    : ^^^^^^^^^^^^^^^
->"32" : "32"
->     : ^^^^
+>"32" : string
+>     : ^^^^^^
 
     let r_ihgs_foo: number = ihgs.foo;
 >r_ihgs_foo : number
@@ -66,16 +66,16 @@
 >null as any : any
 
     t_hgs.foo = "32";
->t_hgs.foo = "32" : "32"
->                 : ^^^^
+>t_hgs.foo = "32" : string
+>                 : ^^^^^^
 >t_hgs.foo : string | number
 >          : ^^^^^^^^^^^^^^^
 >t_hgs : { get foo(): number; set foo(v: number | string); }
 >      : ^^^^^^^^^^^^^      ^^^^^^^^^^ ^^               ^^^^
 >foo : string | number
 >    : ^^^^^^^^^^^^^^^
->"32" : "32"
->     : ^^^^
+>"32" : string
+>     : ^^^^^^
 
     let r_t_hgs_foo: number = t_hgs.foo;
 >r_t_hgs_foo : number

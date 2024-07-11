@@ -32,8 +32,8 @@ var myAssert = require('assert')
 >require('assert') : any
 >require : (moduleName: string) => any
 >        : ^          ^^      ^^^^^   
->'assert' : "assert"
->         : ^^^^^^^^
+>'assert' : string
+>         : ^^^^^^
 
 === app.js ===
 exports.equal = myAssert.equal

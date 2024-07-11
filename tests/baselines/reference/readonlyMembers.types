@@ -17,8 +17,8 @@ var x: X = { a: 0 };
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 x.a = 1;  // Error
 >x.a = 1 : 1
@@ -66,16 +66,16 @@ class C {
 
     constructor() {
         this.a = 1;  // Ok
->this.a = 1 : 1
->           : ^
+>this.a = 1 : number
+>           : ^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         this.b = 1;  // Ok
 >this.b = 1 : 1
@@ -108,16 +108,16 @@ class C {
 >                                                                                                                    : ^^^^^^^^^^
 
             this.a = 1;  // Error
->this.a = 1 : 1
->           : ^
+>this.a = 1 : number
+>           : ^^^^^^
 >this.a : any
 >       : ^^^
 >this : this
 >     : ^^^^
 >a : any
 >  : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
             this.b = 1;  // Error
 >this.b = 1 : 1
@@ -149,16 +149,16 @@ class C {
 >    : ^^^^^^^^^^
 
         this.a = 1;  // Error
->this.a = 1 : 1
->           : ^
+>this.a = 1 : number
+>           : ^^^^^^
 >this.a : any
 >       : ^^^
 >this : this
 >     : ^^^^
 >a : any
 >  : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         this.b = 1;  // Error
 >this.b = 1 : 1
@@ -224,16 +224,16 @@ o.a = 1;  // Error
 >  : ^
 
 o.b = 1;
->o.b = 1 : 1
->        : ^
+>o.b = 1 : number
+>        : ^^^^^^
 >o.b : number
 >    : ^^^^^^
 >o : { readonly a: number; b: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var p: { readonly a: number, b: number } = { a: 1, b: 1 };
 >p : { readonly a: number; b: number; }
@@ -246,12 +246,12 @@ var p: { readonly a: number, b: number } = { a: 1, b: 1 };
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >b : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 p.a = 1;  // Error
 >p.a = 1 : 1
@@ -266,16 +266,16 @@ p.a = 1;  // Error
 >  : ^
 
 p.b = 1;
->p.b = 1 : 1
->        : ^
+>p.b = 1 : number
+>        : ^^^^^^
 >p.b : number
 >    : ^^^^^^
 >p : { readonly a: number; b: number; }
 >  : ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >b : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var q: { a: number, b: number } = p;
 >q : { a: number; b: number; }
@@ -288,28 +288,28 @@ var q: { a: number, b: number } = p;
 >  : ^^^^^^^^^^^^^^      ^^^^^      ^^^
 
 q.a = 1;
->q.a = 1 : 1
->        : ^
+>q.a = 1 : number
+>        : ^^^^^^
 >q.a : number
 >    : ^^^^^^
 >q : { a: number; b: number; }
 >  : ^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 q.b = 1;
->q.b = 1 : 1
->        : ^
+>q.b = 1 : number
+>        : ^^^^^^
 >q.b : number
 >    : ^^^^^^
 >q : { a: number; b: number; }
 >  : ^^^^^      ^^^^^      ^^^
 >b : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 enum E {
 >E : E
@@ -370,28 +370,28 @@ N.a = 1;  // Error
 >  : ^
 
 N.b = 1;
->N.b = 1 : 1
->        : ^
+>N.b = 1 : number
+>        : ^^^^^^
 >N.b : number
 >    : ^^^^^^
 >N : typeof N
 >  : ^^^^^^^^
 >b : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 N.c = 1;
->N.c = 1 : 1
->        : ^
+>N.c = 1 : number
+>        : ^^^^^^
 >N.c : number
 >    : ^^^^^^
 >N : typeof N
 >  : ^^^^^^^^
 >c : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 let xx: { readonly [x: string]: string };
 >xx : { readonly [x: string]: string; }
@@ -410,16 +410,16 @@ let s = xx["foo"];
 >      : ^^^^^
 
 xx["foo"] = "abc";  // Error
->xx["foo"] = "abc" : "abc"
->                  : ^^^^^
+>xx["foo"] = "abc" : string
+>                  : ^^^^^^
 >xx["foo"] : string
 >          : ^^^^^^
 >xx : { readonly [x: string]: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 
 let yy: { readonly [x: number]: string, [x: string]: string };
 >yy : { readonly [x: number]: string; [x: string]: string; }
@@ -430,26 +430,26 @@ let yy: { readonly [x: number]: string, [x: string]: string };
 >  : ^^^^^^
 
 yy[1] = "abc";  // Error
->yy[1] = "abc" : "abc"
->              : ^^^^^
+>yy[1] = "abc" : string
+>              : ^^^^^^
 >yy[1] : string
 >      : ^^^^^^
 >yy : { readonly [x: number]: string; [x: string]: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 
 yy["foo"] = "abc";
->yy["foo"] = "abc" : "abc"
->                  : ^^^^^
+>yy["foo"] = "abc" : string
+>                  : ^^^^^^
 >yy["foo"] : string
 >          : ^^^^^^
 >yy : { readonly [x: number]: string; [x: string]: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 

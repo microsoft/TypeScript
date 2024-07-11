@@ -30,6 +30,6 @@ var z1: number = foo1({ x: undefined, y: "def" });  // Best common type is any
 >          : ^^^^^^^^^
 >y : string
 >  : ^^^^^^
->"def" : "def"
->      : ^^^^^
+>"def" : string
+>      : ^^^^^^
 

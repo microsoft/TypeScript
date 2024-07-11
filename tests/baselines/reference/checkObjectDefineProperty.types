@@ -55,40 +55,40 @@ x.zipStr;
 >       : ^^^^^^
 
 x.name = "Another";
->x.name = "Another" : "Another"
->                   : ^^^^^^^^^
+>x.name = "Another" : string
+>                   : ^^^^^^
 >x.name : string
 >       : ^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 >name : string
 >     : ^^^^^^
->"Another" : "Another"
->          : ^^^^^^^^^
+>"Another" : string
+>          : ^^^^^^
 
 x.zip = 98123;
->x.zip = 98123 : 98123
->              : ^^^^^
+>x.zip = 98123 : number
+>              : ^^^^^^
 >x.zip : number
 >      : ^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 >zip : number
 >    : ^^^^^^
->98123 : 98123
->      : ^^^^^
+>98123 : number
+>      : ^^^^^^
 
 x.zipStr = "OK";
->x.zipStr = "OK" : "OK"
->                : ^^^^
+>x.zipStr = "OK" : string
+>                : ^^^^^^
 >x.zipStr : string
 >         : ^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 >zipStr : string
 >       : ^^^^^^
->"OK" : "OK"
->     : ^^^^
+>"OK" : string
+>     : ^^^^^^
 
 x.lastName = "should fail";
 >x.lastName = "should fail" : "should fail"
@@ -115,16 +115,16 @@ x.houseNumber = 12; // should also fail
 >   : ^^
 
 x.zipStr = 12; // should fail
->x.zipStr = 12 : 12
->              : ^^
+>x.zipStr = 12 : number
+>              : ^^^^^^
 >x.zipStr : string
 >         : ^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 >zipStr : string
 >       : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 x.middleInit = "R"; // should also fail
 >x.middleInit = "R" : "R"

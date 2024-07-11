@@ -16,8 +16,8 @@ const obj = {
   bar: 42,
 >bar : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
   /** @type {function(number): number} */
   method1(n1) {
@@ -27,8 +27,8 @@ const obj = {
 >   : ^^^^^^
 
       return "42";
->"42" : "42"
->     : ^^^^
+>"42" : string
+>     : ^^^^^^
 
   },
   /** @type {function(number): number} */
@@ -39,8 +39,8 @@ const obj = {
 >              : ^  ^^^^^^^^^^^^^      
 >n1 : number
 >   : ^^^^^^
->"lol" : "lol"
->      : ^^^^^
+>"lol" : string
+>      : ^^^^^^
 
   /** @type {function(number): number} */
   arrowFunc: (num="0") => num + 42,
@@ -50,8 +50,8 @@ const obj = {
 >                      : ^   ^^^^^^^^^^^^^^      
 >num : number
 >    : ^^^^^^
->"0" : "0"
->    : ^^^
+>"0" : string
+>    : ^^^^^^
 >num + 42 : number
 >         : ^^^^^^
 >num : number
@@ -84,8 +84,8 @@ var s = obj.method1(0);
 >    : ^^^^^^^                  ^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^     ^^                 ^^^^^^^^^^^^^     ^^                 ^^^^^^^      ^^^
 >method1 : (arg0: number) => number
 >        : ^^^^^^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 /** @type {string} */
 var s1 = obj.method2("0");
@@ -99,6 +99,6 @@ var s1 = obj.method2("0");
 >    : ^^^^^^^                  ^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^     ^^                 ^^^^^^^^^^^^^     ^^                 ^^^^^^^      ^^^
 >method2 : (arg0: number) => number
 >        : ^^^^^^^      ^^^^^      
->"0" : "0"
->    : ^^^
+>"0" : string
+>    : ^^^^^^
 

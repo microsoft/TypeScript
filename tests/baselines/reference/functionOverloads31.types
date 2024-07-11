@@ -26,6 +26,6 @@ var x = foo(5);
 >       : ^^^^^^
 >foo : { (bar: string): string; (bar: number): number; }
 >    : ^^^   ^^      ^^^      ^^^   ^^      ^^^      ^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 

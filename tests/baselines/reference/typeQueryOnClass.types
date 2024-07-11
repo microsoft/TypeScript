@@ -80,8 +80,8 @@ class C<T> {
 >baz : (x: any) => string
 >    : ^ ^^^^^^^^^^      
 >x : any
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     ia = 1;
 >ia : number

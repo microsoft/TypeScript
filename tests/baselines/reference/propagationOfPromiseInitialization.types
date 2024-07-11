@@ -38,7 +38,7 @@ foo.then((x) => {
 
     // x is inferred to be a number
     return "asdf";
->"asdf" : "asdf"
+>"asdf" : string
 >       : ^^^^^^
 
 }).then((x) => {
@@ -59,8 +59,8 @@ foo.then((x) => {
 >       : ^^^^^^
 
     return 123;
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
 });
 

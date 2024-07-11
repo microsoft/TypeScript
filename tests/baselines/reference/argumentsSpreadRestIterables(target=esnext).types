@@ -30,8 +30,8 @@ declare const itNum: Iterable<number>
 >  : ^^^^^^
 >rest : number[]
 >     : ^^^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 >...itNum : number
 >         : ^^^^^^
 >itNum : Iterable<number>
@@ -48,8 +48,8 @@ declare const itNum: Iterable<number>
 >  : ^^^^^^
 >rest : [boolean, ...number[]]
 >     : ^^^^^^^^^^^^^^^^^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 >true : true
 >     : ^^^^
 >...itNum : number

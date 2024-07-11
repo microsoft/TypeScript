@@ -14,7 +14,7 @@ export default {
         return import('./foo2');
 >import('./foo2') : Promise<any>
 >                 : ^^^^^^^^^^^^
->'./foo2' : "./foo2"
->         : ^^^^^^^^
+>'./foo2' : string
+>         : ^^^^^^
     }
 }

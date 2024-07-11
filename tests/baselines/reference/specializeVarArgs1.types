@@ -41,6 +41,6 @@ a.push('Some Value');
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >push : (...values: string[]) => any
 >     : ^^^^      ^^^^^^^^^^^^^^^^^^
->'Some Value' : "Some Value"
->             : ^^^^^^^^^^^^
+>'Some Value' : string
+>             : ^^^^^^
 

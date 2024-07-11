@@ -8,8 +8,8 @@ class Base {
     get #prop(): number { return  123; }
 >#prop : number
 >      : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     static method(x: Derived) {
 >method : (x: Derived) => void

@@ -22,13 +22,12 @@ stringIndexerConstrainsPropertyDeclarations.ts(74,5): error TS2411: Property 'f'
 stringIndexerConstrainsPropertyDeclarations.ts(80,5): error TS2322: Type 'number' is not assignable to type 'string'.
 stringIndexerConstrainsPropertyDeclarations.ts(81,5): error TS2322: Type '() => void' is not assignable to type 'string'.
 stringIndexerConstrainsPropertyDeclarations.ts(83,5): error TS2322: Type 'number' is not assignable to type 'string'.
-stringIndexerConstrainsPropertyDeclarations.ts(85,5): error TS2322: Type 'number' is not assignable to type 'string'.
 stringIndexerConstrainsPropertyDeclarations.ts(87,5): error TS2322: Type 'number' is not assignable to type 'string'.
 stringIndexerConstrainsPropertyDeclarations.ts(88,5): error TS2322: Type 'MyString' is not assignable to type 'string'.
 stringIndexerConstrainsPropertyDeclarations.ts(94,5): error TS2322: Type '() => string' is not assignable to type 'string'.
 
 
-==== stringIndexerConstrainsPropertyDeclarations.ts (28 errors) ====
+==== stringIndexerConstrainsPropertyDeclarations.ts (27 errors) ====
     // String indexer types constrain the types of named properties in their containing type
     
     interface MyString extends String {
@@ -165,9 +164,6 @@ stringIndexerConstrainsPropertyDeclarations.ts(94,5): error TS2322: Type '() => 
 !!! related TS6501 stringIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
         1.0: '',
         2.0: 1, 
-        ~~~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6501 stringIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
         "3.0": '', 
         "4.0": 1, 
         ~~~~~

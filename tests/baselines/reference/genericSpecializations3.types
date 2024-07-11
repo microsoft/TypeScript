@@ -22,8 +22,8 @@ iFoo.foo(1);
 >     : ^^^^^^^^^^^^
 >foo : (x: number) => number
 >    : ^ ^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 class IntFooBad implements IFoo<number> { // error
 >IntFooBad : IntFooBad
@@ -79,8 +79,8 @@ stringFoo2.foo("hm");
 >           : ^^^^^^^^^^
 >foo : (x: string) => string
 >    : ^ ^^      ^^^^^      
->"hm" : "hm"
->     : ^^^^
+>"hm" : string
+>     : ^^^^^^
 
 
 intFoo = stringFoo2; // error

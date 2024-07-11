@@ -6,10 +6,10 @@ let exports: number;
 >        : ^^^^^^
 
 exports = '';
->exports = '' : ""
->             : ^^
+>exports = '' : string
+>             : ^^^^^^
 >exports : number
 >        : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 

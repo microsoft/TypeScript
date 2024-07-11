@@ -108,18 +108,18 @@ const aa7 = a7 ?? 'whatever'
 >                 : ^^
 >a7 : unknown
 >   : ^^^^^^^
->'whatever' : "whatever"
->           : ^^^^^^^^^^
+>'whatever' : string
+>           : ^^^^^^
 
 const aa8 = a8 ?? 'whatever'
->aa8 : "whatever"
->    : ^^^^^^^^^^
->a8 ?? 'whatever' : "whatever"
->                 : ^^^^^^^^^^
+>aa8 : string
+>    : ^^^^^^
+>a8 ?? 'whatever' : string
+>                 : ^^^^^^
 >a8 : null
 >   : ^^^^
->'whatever' : "whatever"
->           : ^^^^^^^^^^
+>'whatever' : string
+>           : ^^^^^^
 
 const aa9 = a9 ?? 'whatever'
 >aa9 : any

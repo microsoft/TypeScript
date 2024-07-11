@@ -8,26 +8,26 @@ class B {
     p1: number = 1;
 >p1 : number
 >   : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     p2: number = 2;
 >p2 : number
 >   : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
     p3: number = 3;
 >p3 : number
 >   : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
     p4: number = 4;
 >p4 : number
 >   : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 }
 
 class D extends B{

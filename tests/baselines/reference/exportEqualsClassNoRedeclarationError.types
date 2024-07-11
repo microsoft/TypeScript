@@ -10,8 +10,8 @@ class SomeClass {
 >         : ^^^^^^
 
         return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
     }
 
     static set someProp(value: number) {}

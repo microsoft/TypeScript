@@ -18,10 +18,10 @@ new DMap([["1", 2]]);
 >           : ^^^^^^^^^^^^^^^^^^
 >["1", 2] : [string, number]
 >         : ^^^^^^^^^^^^^^^^
->"1" : "1"
->    : ^^^
->2 : 2
->  : ^
+>"1" : string
+>    : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 const i1: Iterable<{ a: true }> | undefined = [{ a: true }];
 >i1 : Iterable<{ a: true; }> | undefined

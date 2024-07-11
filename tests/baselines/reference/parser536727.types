@@ -14,8 +14,8 @@ function foo(f: (x: string) => string) {
 >      : ^^^^^^
 >f : (x: string) => string
 >  : ^ ^^      ^^^^^      
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 }
 var g = (x: string) => x + "blah";
 >g : (x: string) => string

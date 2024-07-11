@@ -64,8 +64,8 @@ var e = `Hello` as string;
 >  : ^^^^^^
 >`Hello` as string : string
 >                  : ^^^^^^
->`Hello` : "Hello"
->        : ^^^^^^^
+>`Hello` : string
+>        : ^^^^^^
 
 var f = 1 + `${1} end of string` as string;
 >f : string

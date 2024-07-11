@@ -121,14 +121,14 @@ class A {
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >b : [number]
 >  : ^^^^^^^^
 >[2] : [number]
 >    : ^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
         [A.#field, [A.#field]] = [1, [2]];
 >[A.#field, [A.#field]] = [1, [2]] : [number, [number]]
@@ -147,12 +147,12 @@ class A {
 >  : ^^^^^^^^
 >[1, [2]] : [number, [number]]
 >         : ^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >[2] : [number]
 >    : ^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
         ({ a: A.#field = 1, b: [A.#field = 1] } = { b: [] });
 >({ a: A.#field = 1, b: [A.#field = 1] } = { b: [] }) : { b: []; a?: number; }
@@ -163,26 +163,26 @@ class A {
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->A.#field = 1 : 1
->             : ^
+>A.#field = 1 : number
+>             : ^^^^^^
 >A.#field : number
 >         : ^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >b : [number]
 >  : ^^^^^^^^
 >[A.#field = 1] : [number]
 >               : ^^^^^^^^
->A.#field = 1 : 1
->             : ^
+>A.#field = 1 : number
+>             : ^^^^^^
 >A.#field : number
 >         : ^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >{ b: [] } : { b: []; a?: number; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^
 >b : []
@@ -195,14 +195,14 @@ class A {
 >                    : ^^
 >[A.#field = 2] : [number]
 >               : ^^^^^^^^
->A.#field = 2 : 2
->             : ^
+>A.#field = 2 : number
+>             : ^^^^^^
 >A.#field : number
 >         : ^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >[] : []
 >   : ^^
 
@@ -211,8 +211,8 @@ class A {
 >                                  : ^^
 >[this.otherClass.#field = 2] : [number]
 >                             : ^^^^^^^^
->this.otherClass.#field = 2 : 2
->                           : ^
+>this.otherClass.#field = 2 : number
+>                           : ^^^^^^
 >this.otherClass.#field : number
 >                       : ^^^^^^
 >this.otherClass : typeof A
@@ -221,8 +221,8 @@ class A {
 >     : ^^^^
 >otherClass : typeof A
 >           : ^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >[] : []
 >   : ^^
     }
@@ -245,8 +245,8 @@ class A {
 >   : ^^^^^^^^
 >[2] : [number]
 >    : ^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
     }
 }
 

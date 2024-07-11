@@ -8,8 +8,8 @@ class A1 {
     static get #prop() { return ""; }
 >#prop : string
 >      : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     static set #prop(param: string) { }
 >#prop : string
@@ -28,14 +28,14 @@ class A1 {
 >     : ^^^^^^
 
         A1.#prop = "";
->A1.#prop = "" : ""
->              : ^^
+>A1.#prop = "" : string
+>              : ^^^^^^
 >A1.#prop : string
 >         : ^^^^^^
 >A1 : typeof A1
 >   : ^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
         A1.#roProp = ""; // Error
 >A1.#roProp = "" : ""

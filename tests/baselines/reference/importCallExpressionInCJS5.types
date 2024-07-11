@@ -38,8 +38,8 @@ class C {
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./0") : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : "./0"
->      : ^^^^^
+>"./0" : string
+>      : ^^^^^^
 
     method() {
 >method : () => void
@@ -50,8 +50,8 @@ class C {
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import ("./0") : Promise<typeof import("0")>
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : "./0"
->      : ^^^^^
+>"./0" : string
+>      : ^^^^^^
 
         this.myModule.then(Zero => {
 >this.myModule.then(Zero => {            console.log(Zero.foo());        }, async err => {            console.log(err);            let one = await import("./1");            console.log(one.backup());        }) : Promise<void>
@@ -108,8 +108,8 @@ class C {
 >                    : ^^^^^^^^^^^^^^^^^^
 >import("./1") : Promise<typeof import("1")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./1" : "./1"
->      : ^^^^^
+>"./1" : string
+>      : ^^^^^^
 
             console.log(one.backup());
 >console.log(one.backup()) : any
@@ -140,8 +140,8 @@ export class D {
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./0") : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : "./0"
->      : ^^^^^
+>"./0" : string
+>      : ^^^^^^
 
     method() {
 >method : () => void
@@ -152,8 +152,8 @@ export class D {
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./0") : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : "./0"
->      : ^^^^^
+>"./0" : string
+>      : ^^^^^^
 
         this.myModule.then(Zero => {
 >this.myModule.then(Zero => {            console.log(Zero.foo());        }, async err => {            console.log(err);            let one = await import("./1");            console.log(one.backup());        }) : Promise<void>
@@ -210,8 +210,8 @@ export class D {
 >                    : ^^^^^^^^^^^^^^^^^^
 >import("./1") : Promise<typeof import("1")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./1" : "./1"
->      : ^^^^^
+>"./1" : string
+>      : ^^^^^^
 
             console.log(one.backup());
 >console.log(one.backup()) : any

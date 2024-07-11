@@ -19,14 +19,14 @@ var robotA: Robot = ["trimmer", ["trimming", "edging"]];
 >       : ^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
 >                                    : ^^^^^^^^^^^^^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >["trimming", "edging"] : string[]
 >                       : ^^^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"trimming" : string
+>           : ^^^^^^
+>"edging" : string
+>         : ^^^^^^
 
 function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]) {
 >foo1 : ([, skillA]?: Robot) => void
@@ -37,20 +37,20 @@ function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "s
 >       : ^^^^^^^^
 >["noSkill", "noSkill"] : string[]
 >                       : ^^^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >["name", ["skill1", "skill2"]] : [string, string[]]
 >                               : ^^^^^^^^^^^^^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
 >["skill1", "skill2"] : string[]
 >                     : ^^^^^^^^
->"skill1" : "skill1"
->         : ^^^^^^^^
->"skill2" : "skill2"
->         : ^^^^^^^^
+>"skill1" : string
+>         : ^^^^^^
+>"skill2" : string
+>         : ^^^^^^
 
     console.log(skillA);
 >console.log(skillA) : void
@@ -70,18 +70,18 @@ function foo2([nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]) {
 >     : ^        ^^^     ^^^^^^^^^
 >nameMB : string
 >       : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 >["name", ["skill1", "skill2"]] : [string, string[]]
 >                               : ^^^^^^^^^^^^^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
 >["skill1", "skill2"] : string[]
 >                     : ^^^^^^^^
->"skill1" : "skill1"
->         : ^^^^^^^^
->"skill2" : "skill2"
->         : ^^^^^^^^
+>"skill1" : string
+>         : ^^^^^^
+>"skill2" : string
+>         : ^^^^^^
 
     console.log(nameMB);
 >console.log(nameMB) : void
@@ -101,8 +101,8 @@ function foo3([nameMA = "noName", [
 >     : ^                                          ^^     ^^^^^^^^^
 >nameMA : string
 >       : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 
     primarySkillA = "primary",
 >primarySkillA : string
@@ -119,10 +119,10 @@ function foo3([nameMA = "noName", [
 ] = ["noSkill", "noSkill"]]: Robot) {
 >["noSkill", "noSkill"] : [string, string]
 >                       : ^^^^^^^^^^^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
     console.log(nameMA);
 >console.log(nameMA) : void
@@ -152,14 +152,14 @@ foo1(["roomba", ["vacuum", "mopping"]]);
 >     : ^          ^^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, string[]]
 >                                  : ^^^^^^^^^^^^^^^^^^
->"roomba" : "roomba"
->         : ^^^^^^^^
+>"roomba" : string
+>         : ^^^^^^
 >["vacuum", "mopping"] : string[]
 >                      : ^^^^^^^^
->"vacuum" : "vacuum"
->         : ^^^^^^^^
->"mopping" : "mopping"
->          : ^^^^^^^^^
+>"vacuum" : string
+>         : ^^^^^^
+>"mopping" : string
+>          : ^^^^^^
 
 foo2(robotA);
 >foo2(robotA) : void
@@ -176,14 +176,14 @@ foo2(["roomba", ["vacuum", "mopping"]]);
 >     : ^        ^^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, string[]]
 >                                  : ^^^^^^^^^^^^^^^^^^
->"roomba" : "roomba"
->         : ^^^^^^^^
+>"roomba" : string
+>         : ^^^^^^
 >["vacuum", "mopping"] : string[]
 >                      : ^^^^^^^^
->"vacuum" : "vacuum"
->         : ^^^^^^^^
->"mopping" : "mopping"
->          : ^^^^^^^^^
+>"vacuum" : string
+>         : ^^^^^^
+>"mopping" : string
+>          : ^^^^^^
 
 foo3(robotA);
 >foo3(robotA) : void
@@ -200,12 +200,12 @@ foo3(["roomba", ["vacuum", "mopping"]]);
 >     : ^                                          ^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, string[]]
 >                                  : ^^^^^^^^^^^^^^^^^^
->"roomba" : "roomba"
->         : ^^^^^^^^
+>"roomba" : string
+>         : ^^^^^^
 >["vacuum", "mopping"] : string[]
 >                      : ^^^^^^^^
->"vacuum" : "vacuum"
->         : ^^^^^^^^
->"mopping" : "mopping"
->          : ^^^^^^^^^
+>"vacuum" : string
+>         : ^^^^^^
+>"mopping" : string
+>          : ^^^^^^
 

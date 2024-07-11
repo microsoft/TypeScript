@@ -17,16 +17,16 @@ class Derived extends Based {
 
     constructor() {
         this.x = 100;
->this.x = 100 : 100
->             : ^^^
+>this.x = 100 : number
+>             : ^^^^^^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
         super();
 >super() : void
@@ -35,16 +35,16 @@ class Derived extends Based {
 >      : ^^^^^^^^^^^^
 
         this.x = 10;
->this.x = 10 : 10
->            : ^^
+>this.x = 10 : number
+>            : ^^^^^^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
         var that = this;
 >that : this

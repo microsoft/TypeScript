@@ -30,12 +30,12 @@ f(1, 2, 3);  // no error
 >           : ^^^^^
 >f : (x: number, y: number, z: number) => any[]
 >  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 // Using ES6 collection
 var m = new Map<string, number>();
@@ -153,8 +153,8 @@ Math.sign(1);
 >     : ^^^^
 >sign : (x: number) => number
 >     : ^ ^^      ^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 // Using ES6 object
 var o = {
@@ -315,10 +315,10 @@ str.includes("hello", 0);
 >    : ^^^^^^
 >includes : (searchString: string, position?: number) => boolean
 >         : ^            ^^      ^^        ^^^      ^^^^^       
->"hello" : "hello"
->        : ^^^^^^^
->0 : 0
->  : ^
+>"hello" : string
+>        : ^^^^^^
+>0 : number
+>  : ^^^^^^
 
 // Using ES6 symbol
 var s = Symbol();

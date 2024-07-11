@@ -28,8 +28,8 @@ const n1 = a.p ?? "default";
 >  : ^^^^^                  ^^^^^^^                  ^^^
 >p : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->"default" : "default"
->          : ^^^^^^^^^
+>"default" : string
+>          : ^^^^^^
 
 const n2 = a.m() ?? "default";
 >n2 : string
@@ -44,8 +44,8 @@ const n2 = a.m() ?? "default";
 >  : ^^^^^                  ^^^^^^^                  ^^^
 >m : () => string | undefined
 >  : ^^^^^^                  
->"default" : "default"
->          : ^^^^^^^^^
+>"default" : string
+>          : ^^^^^^
 
 const n3 = a.m() ?? b.p ?? b.m() ?? "default";;
 >n3 : string
@@ -78,6 +78,6 @@ const n3 = a.m() ?? b.p ?? b.m() ?? "default";;
 >  : ^^^^^                  ^^^^^^^                  ^^^
 >m : () => string | undefined
 >  : ^^^^^^                  
->"default" : "default"
->          : ^^^^^^^^^
+>"default" : string
+>          : ^^^^^^
 

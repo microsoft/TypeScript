@@ -1126,16 +1126,16 @@ ff1(null, 'foo');  // Error
 >                 : ^^^^
 >ff1 : <T>(t: T, k: keyof T) => void
 >    : ^ ^^ ^^ ^^ ^^       ^^^^^^^^^
->'foo' : "foo"
->      : ^^^^^
+>'foo' : string
+>      : ^^^^^^
 
 ff2(null, 'foo');  // Error
 >ff2(null, 'foo') : void
 >                 : ^^^^
 >ff2 : <T>(t: T & {}, k: keyof T) => void
 >    : ^ ^^ ^^      ^^ ^^       ^^^^^^^^^
->'foo' : "foo"
->      : ^^^^^
+>'foo' : string
+>      : ^^^^^^
 
 ff3(null, 'foo');
 >ff3(null, 'foo') : void
@@ -1396,8 +1396,8 @@ function SendBlob(encoding: unknown) {
 >                      : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'encoding' : "encoding"
->           : ^^^^^^^^^^
+>'encoding' : string
+>           : ^^^^^^
     }
     encoding;
 >encoding : "utf8" | undefined
@@ -1436,8 +1436,8 @@ function doSomething1<T extends unknown>(value: T): T {
 >                               : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'Meaning of life value' : "Meaning of life value"
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>'Meaning of life value' : string
+>                        : ^^^^^^
     }
     return value;
 >value : T & ({} | null)
@@ -1568,8 +1568,8 @@ function assertNever(v: never): never {
 >                   : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'never' : "never"
->        : ^^^^^^^
+>'never' : string
+>        : ^^^^^^
 }
 
 function fx20(value: Either) {

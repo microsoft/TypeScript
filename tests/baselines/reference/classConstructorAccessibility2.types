@@ -16,8 +16,8 @@ class BaseA {
 >             : ^^^^^
 >BaseA : typeof BaseA
 >      : ^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 
 class BaseB {
@@ -35,8 +35,8 @@ class BaseB {
 >             : ^^^^^
 >BaseB : typeof BaseB
 >      : ^^^^^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 }
 
 class BaseC {
@@ -54,8 +54,8 @@ class BaseC {
 >             : ^^^^^
 >BaseC : typeof BaseC
 >      : ^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
     static staticInstance() { new BaseC(4); }
 >staticInstance : () => void
@@ -64,8 +64,8 @@ class BaseC {
 >             : ^^^^^
 >BaseC : typeof BaseC
 >      : ^^^^^^^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 }
 
 class DerivedA extends BaseA {
@@ -91,8 +91,8 @@ class DerivedA extends BaseA {
 >                : ^^^^^^^^
 >DerivedA : typeof DerivedA
 >         : ^^^^^^^^^^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
     createBaseInstance() { new BaseA(6); }
 >createBaseInstance : () => void
@@ -101,8 +101,8 @@ class DerivedA extends BaseA {
 >             : ^^^^^
 >BaseA : typeof BaseA
 >      : ^^^^^^^^^^^^
->6 : 6
->  : ^
+>6 : number
+>  : ^^^^^^
 
     static staticBaseInstance() { new BaseA(7); }
 >staticBaseInstance : () => void
@@ -111,8 +111,8 @@ class DerivedA extends BaseA {
 >             : ^^^^^
 >BaseA : typeof BaseA
 >      : ^^^^^^^^^^^^
->7 : 7
->  : ^
+>7 : number
+>  : ^^^^^^
 }
 
 class DerivedB extends BaseB {
@@ -138,8 +138,8 @@ class DerivedB extends BaseB {
 >                : ^^^^^^^^
 >DerivedB : typeof DerivedB
 >         : ^^^^^^^^^^^^^^^
->7 : 7
->  : ^
+>7 : number
+>  : ^^^^^^
 
     createBaseInstance() { new BaseB(8); } // ok
 >createBaseInstance : () => void
@@ -148,8 +148,8 @@ class DerivedB extends BaseB {
 >             : ^^^^^
 >BaseB : typeof BaseB
 >      : ^^^^^^^^^^^^
->8 : 8
->  : ^
+>8 : number
+>  : ^^^^^^
 
     static staticBaseInstance() { new BaseB(9); } // ok
 >staticBaseInstance : () => void
@@ -158,8 +158,8 @@ class DerivedB extends BaseB {
 >             : ^^^^^
 >BaseB : typeof BaseB
 >      : ^^^^^^^^^^^^
->9 : 9
->  : ^
+>9 : number
+>  : ^^^^^^
 }
 
 class DerivedC extends BaseC { // error
@@ -185,8 +185,8 @@ class DerivedC extends BaseC { // error
 >                : ^^^^^^^^
 >DerivedC : typeof DerivedC
 >         : ^^^^^^^^^^^^^^^
->9 : 9
->  : ^
+>9 : number
+>  : ^^^^^^
 
     createBaseInstance() { new BaseC(10); } // error
 >createBaseInstance : () => void
@@ -216,8 +216,8 @@ var ba = new BaseA(1);
 >             : ^^^^^
 >BaseA : typeof BaseA
 >      : ^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var bb = new BaseB(1); // error
 >bb : any
@@ -246,8 +246,8 @@ var da = new DerivedA(1);
 >                : ^^^^^^^^
 >DerivedA : typeof DerivedA
 >         : ^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var db = new DerivedB(1);
 >db : DerivedB
@@ -256,8 +256,8 @@ var db = new DerivedB(1);
 >                : ^^^^^^^^
 >DerivedB : typeof DerivedB
 >         : ^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var dc = new DerivedC(1);
 >dc : DerivedC
@@ -266,6 +266,6 @@ var dc = new DerivedC(1);
 >                : ^^^^^^^^
 >DerivedC : typeof DerivedC
 >         : ^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 

@@ -52,8 +52,8 @@ var z4 = foo({ name: "abc" });        // { name: string }
 >                : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 
 var z5 = foo({ name: "abc", a: 5 });  // { name: string; a: number }
 >z5 : { name: string; a: number; }
@@ -66,12 +66,12 @@ var z5 = foo({ name: "abc", a: 5 });  // { name: string; a: number }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 >a : number
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 var z6 = foo({ name: "abc", a: 5 }, { name: "def", b: 5 });  // error
 >z6 : { name: string; a: number; b?: undefined; } | { name: string; b: number; a?: undefined; }
@@ -84,20 +84,20 @@ var z6 = foo({ name: "abc", a: 5 }, { name: "def", b: 5 });  // error
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 >a : number
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 >{ name: "def", b: 5 } : { name: string; b: number; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"def" : "def"
->      : ^^^^^
+>"def" : string
+>      : ^^^^^^
 >b : number
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 

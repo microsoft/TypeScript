@@ -20,14 +20,14 @@ class TestObject {
     a: string = '';
 >a : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     b: number = 1;
 >b : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     c: () => void = () => { };
 >c : () => void

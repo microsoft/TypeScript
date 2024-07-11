@@ -14,10 +14,10 @@ const test1: Promise<[one: number, two: string]> = (async () => {
     return [1, 'two'];
 >[1, 'two'] : [number, string]
 >           : ^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->'two' : "two"
->      : ^^^^^
+>1 : number
+>  : ^^^^^^
+>'two' : string
+>      : ^^^^^^
 
 })();
 
@@ -40,10 +40,10 @@ const test2: Promise<[one: number, two: string]> = new Promise(
 >        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >[1, 'two'] : [number, string]
 >           : ^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->'two' : "two"
->      : ^^^^^
+>1 : number
+>  : ^^^^^^
+>'two' : string
+>      : ^^^^^^
 
 );
 
@@ -66,10 +66,10 @@ const obj: { foo: [one: number, two: string] } = {
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
 >[1, 'two'] : [number, string]
 >           : ^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->'two' : "two"
->      : ^^^^^
+>1 : number
+>  : ^^^^^^
+>'two' : string
+>      : ^^^^^^
 
 };
 

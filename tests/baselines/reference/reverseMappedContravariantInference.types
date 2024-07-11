@@ -34,6 +34,6 @@ conforms({ foo: (v: string) => false })({ foo: "hello" });
 >                 : ^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 

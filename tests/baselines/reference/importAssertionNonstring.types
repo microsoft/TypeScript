@@ -28,8 +28,8 @@ import * as thing4 from "./mod.mjs" assert {field: ["a"]};
 >      : ^^^
 >["a"] : string[]
 >      : ^^^^^^^^
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 
 import * as thing5 from "./mod.mjs" assert {field: { a: 0 }};
 >thing5 : typeof thing1

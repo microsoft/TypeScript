@@ -332,7 +332,7 @@ mock(import('./ex'))
 >     : ^ ^^ ^^          ^^^^^      
 >import('./ex') : Promise<{ default: typeof import("ex"); }>
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'./ex' : "./ex"
+>'./ex' : string
 >       : ^^^^^^
 
 === ex.d.ts ===

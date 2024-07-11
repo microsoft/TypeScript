@@ -14,8 +14,8 @@ class C {
 >                : ^
 >this : typeof C
 >     : ^^^^^^^^
->"yep" : "yep"
->      : ^^^^^
+>"yep" : string
+>      : ^^^^^^
 
     constructor (private foo: string) {
 >foo : string

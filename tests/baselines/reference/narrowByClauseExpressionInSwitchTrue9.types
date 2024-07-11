@@ -14,8 +14,8 @@ class Foo {
     mine: string = "";
 >mine : string
 >     : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     myMethod(x: IProps) {
 >myMethod : (x: IProps) => void

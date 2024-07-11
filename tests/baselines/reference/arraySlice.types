@@ -14,8 +14,8 @@ arr.splice(1, 1);
 >    : ^^^^^^^^^^^^^^^^^^^
 >splice : { (start: number, deleteCount?: number): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; } | { (start: number, deleteCount?: number): number[]; (start: number, deleteCount: number, ...items: number[]): number[]; }
 >       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 

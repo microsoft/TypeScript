@@ -56,10 +56,10 @@ const map = new Multimap("a", 1);
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Multimap : typeof Multimap
 >         : ^^^^^^^^^^^^^^^
->"a" : "a"
->    : ^^^
->1 : 1
->  : ^
+>"a" : string
+>    : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 // without type annotation
 const map2 = new Multimap("m", 2);
@@ -69,10 +69,10 @@ const map2 = new Multimap("m", 2);
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Multimap : typeof Multimap
 >         : ^^^^^^^^^^^^^^^
->"m" : "m"
->    : ^^^
->2 : 2
->  : ^
+>"m" : string
+>    : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 /** @type {number} */
 var n = map._map['hi']
@@ -224,8 +224,8 @@ var cp = new Cp(1)
 >          : ^^^^^^^^^^
 >Cp : typeof Cp
 >   : ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 /** @type {number} */
 var n = cp.x

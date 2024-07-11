@@ -19,8 +19,8 @@ var el = document.getElementById('content');
 >         : ^^^^^^^^
 >getElementById : (elementId: string) => HTMLElement | null
 >               : ^         ^^      ^^^^^                  
->'content' : "content"
->          : ^^^^^^^^^
+>'content' : string
+>          : ^^^^^^
 
 var greeter = new model.Greeter(el);
 >greeter : any

@@ -22,8 +22,8 @@ function f() {
 >               : ^^^^^^^
 >derived : typeof derived
 >        : ^^^^^^^^^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 }
 
 class base { constructor(public n: number) { } }

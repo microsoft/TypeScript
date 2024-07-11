@@ -56,8 +56,8 @@ var x11 = foo([{a:0}]); // works
 >      : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 var x111 = foo([{a:"s"}]); // error - does not match any signature
 >x111 : never
@@ -128,8 +128,8 @@ var x2 = foo2({a:0}); // works
 >      : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 var x3 = foo2({a:true}); // works
 >x3 : number

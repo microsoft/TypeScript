@@ -7,8 +7,8 @@ function fn1() {
 >    : ^^^^^^      
 
   return 42;
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 }
 
 /** @type () => string */
@@ -17,8 +17,8 @@ function fn2() {
 >    : ^^^^^^      
 
   return "foo";
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 }
 
 /** @type (arg: string) => string */
@@ -45,8 +45,8 @@ const obj1 = { type: "foo", prop: 10 };
 >      : ^^^^^
 >prop : number
 >     : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 /** @type ({ type: 'foo' } | { type: 'bar' }) & { prop: number } */
 const obj2 = { type: "other", prop: 10 };
@@ -60,6 +60,6 @@ const obj2 = { type: "other", prop: 10 };
 >        : ^^^^^^^
 >prop : number
 >     : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 

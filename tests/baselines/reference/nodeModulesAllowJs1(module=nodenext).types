@@ -457,88 +457,88 @@ const _m35 = import("./");
 >     : ^^^^^^^^^^^^
 >import("./") : Promise<any>
 >             : ^^^^^^^^^^^^
->"./" : "./"
->     : ^^^^
+>"./" : string
+>     : ^^^^^^
 
 const _m36 = import("./index");
 >_m36 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./index") : Promise<any>
 >                  : ^^^^^^^^^^^^
->"./index" : "./index"
->          : ^^^^^^^^^
+>"./index" : string
+>          : ^^^^^^
 
 const _m37 = import("./subfolder");
 >_m37 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder") : Promise<any>
 >                      : ^^^^^^^^^^^^
->"./subfolder" : "./subfolder"
->              : ^^^^^^^^^^^^^
+>"./subfolder" : string
+>              : ^^^^^^
 
 const _m38 = import("./subfolder/");
 >_m38 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder/") : Promise<any>
 >                       : ^^^^^^^^^^^^
->"./subfolder/" : "./subfolder/"
->               : ^^^^^^^^^^^^^^
+>"./subfolder/" : string
+>               : ^^^^^^
 
 const _m39 = import("./subfolder/index");
 >_m39 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder/index") : Promise<any>
 >                            : ^^^^^^^^^^^^
->"./subfolder/index" : "./subfolder/index"
->                    : ^^^^^^^^^^^^^^^^^^^
+>"./subfolder/index" : string
+>                    : ^^^^^^
 
 const _m40 = import("./subfolder2");
 >_m40 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2") : Promise<any>
 >                       : ^^^^^^^^^^^^
->"./subfolder2" : "./subfolder2"
->               : ^^^^^^^^^^^^^^
+>"./subfolder2" : string
+>               : ^^^^^^
 
 const _m41 = import("./subfolder2/");
 >_m41 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/") : Promise<any>
 >                        : ^^^^^^^^^^^^
->"./subfolder2/" : "./subfolder2/"
->                : ^^^^^^^^^^^^^^^
+>"./subfolder2/" : string
+>                : ^^^^^^
 
 const _m42 = import("./subfolder2/index");
 >_m42 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/index") : Promise<any>
 >                             : ^^^^^^^^^^^^
->"./subfolder2/index" : "./subfolder2/index"
->                     : ^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/index" : string
+>                     : ^^^^^^
 
 const _m43 = import("./subfolder2/another");
 >_m43 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/another") : Promise<any>
 >                               : ^^^^^^^^^^^^
->"./subfolder2/another" : "./subfolder2/another"
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/another" : string
+>                       : ^^^^^^
 
 const _m44 = import("./subfolder2/another/");
 >_m44 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/another/") : Promise<any>
 >                                : ^^^^^^^^^^^^
->"./subfolder2/another/" : "./subfolder2/another/"
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/another/" : string
+>                        : ^^^^^^
 
 const _m45 = import("./subfolder2/another/index");
 >_m45 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/another/index") : Promise<any>
 >                                     : ^^^^^^^^^^^^
->"./subfolder2/another/index" : "./subfolder2/another/index"
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/another/index" : string
+>                             : ^^^^^^
 
 // esm format file
 const x = 1;
@@ -901,88 +901,88 @@ const _m35 = import("./");
 >     : ^^^^^^^^^^^^
 >import("./") : Promise<any>
 >             : ^^^^^^^^^^^^
->"./" : "./"
->     : ^^^^
+>"./" : string
+>     : ^^^^^^
 
 const _m36 = import("./index");
 >_m36 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./index") : Promise<any>
 >                  : ^^^^^^^^^^^^
->"./index" : "./index"
->          : ^^^^^^^^^
+>"./index" : string
+>          : ^^^^^^
 
 const _m37 = import("./subfolder");
 >_m37 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder") : Promise<any>
 >                      : ^^^^^^^^^^^^
->"./subfolder" : "./subfolder"
->              : ^^^^^^^^^^^^^
+>"./subfolder" : string
+>              : ^^^^^^
 
 const _m38 = import("./subfolder/");
 >_m38 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder/") : Promise<any>
 >                       : ^^^^^^^^^^^^
->"./subfolder/" : "./subfolder/"
->               : ^^^^^^^^^^^^^^
+>"./subfolder/" : string
+>               : ^^^^^^
 
 const _m39 = import("./subfolder/index");
 >_m39 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder/index") : Promise<any>
 >                            : ^^^^^^^^^^^^
->"./subfolder/index" : "./subfolder/index"
->                    : ^^^^^^^^^^^^^^^^^^^
+>"./subfolder/index" : string
+>                    : ^^^^^^
 
 const _m40 = import("./subfolder2");
 >_m40 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2") : Promise<any>
 >                       : ^^^^^^^^^^^^
->"./subfolder2" : "./subfolder2"
->               : ^^^^^^^^^^^^^^
+>"./subfolder2" : string
+>               : ^^^^^^
 
 const _m41 = import("./subfolder2/");
 >_m41 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/") : Promise<any>
 >                        : ^^^^^^^^^^^^
->"./subfolder2/" : "./subfolder2/"
->                : ^^^^^^^^^^^^^^^
+>"./subfolder2/" : string
+>                : ^^^^^^
 
 const _m42 = import("./subfolder2/index");
 >_m42 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/index") : Promise<any>
 >                             : ^^^^^^^^^^^^
->"./subfolder2/index" : "./subfolder2/index"
->                     : ^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/index" : string
+>                     : ^^^^^^
 
 const _m43 = import("./subfolder2/another");
 >_m43 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/another") : Promise<any>
 >                               : ^^^^^^^^^^^^
->"./subfolder2/another" : "./subfolder2/another"
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/another" : string
+>                       : ^^^^^^
 
 const _m44 = import("./subfolder2/another/");
 >_m44 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/another/") : Promise<any>
 >                                : ^^^^^^^^^^^^
->"./subfolder2/another/" : "./subfolder2/another/"
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/another/" : string
+>                        : ^^^^^^
 
 const _m45 = import("./subfolder2/another/index");
 >_m45 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/another/index") : Promise<any>
 >                                     : ^^^^^^^^^^^^
->"./subfolder2/another/index" : "./subfolder2/another/index"
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/another/index" : string
+>                             : ^^^^^^
 
 // cjs format file
 const x = 1;
@@ -1344,88 +1344,88 @@ const _m35 = import("./");
 >     : ^^^^^^^^^^^^
 >import("./") : Promise<any>
 >             : ^^^^^^^^^^^^
->"./" : "./"
->     : ^^^^
+>"./" : string
+>     : ^^^^^^
 
 const _m36 = import("./index");
 >_m36 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./index") : Promise<any>
 >                  : ^^^^^^^^^^^^
->"./index" : "./index"
->          : ^^^^^^^^^
+>"./index" : string
+>          : ^^^^^^
 
 const _m37 = import("./subfolder");
 >_m37 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder") : Promise<any>
 >                      : ^^^^^^^^^^^^
->"./subfolder" : "./subfolder"
->              : ^^^^^^^^^^^^^
+>"./subfolder" : string
+>              : ^^^^^^
 
 const _m38 = import("./subfolder/");
 >_m38 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder/") : Promise<any>
 >                       : ^^^^^^^^^^^^
->"./subfolder/" : "./subfolder/"
->               : ^^^^^^^^^^^^^^
+>"./subfolder/" : string
+>               : ^^^^^^
 
 const _m39 = import("./subfolder/index");
 >_m39 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder/index") : Promise<any>
 >                            : ^^^^^^^^^^^^
->"./subfolder/index" : "./subfolder/index"
->                    : ^^^^^^^^^^^^^^^^^^^
+>"./subfolder/index" : string
+>                    : ^^^^^^
 
 const _m40 = import("./subfolder2");
 >_m40 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2") : Promise<any>
 >                       : ^^^^^^^^^^^^
->"./subfolder2" : "./subfolder2"
->               : ^^^^^^^^^^^^^^
+>"./subfolder2" : string
+>               : ^^^^^^
 
 const _m41 = import("./subfolder2/");
 >_m41 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/") : Promise<any>
 >                        : ^^^^^^^^^^^^
->"./subfolder2/" : "./subfolder2/"
->                : ^^^^^^^^^^^^^^^
+>"./subfolder2/" : string
+>                : ^^^^^^
 
 const _m42 = import("./subfolder2/index");
 >_m42 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/index") : Promise<any>
 >                             : ^^^^^^^^^^^^
->"./subfolder2/index" : "./subfolder2/index"
->                     : ^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/index" : string
+>                     : ^^^^^^
 
 const _m43 = import("./subfolder2/another");
 >_m43 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/another") : Promise<any>
 >                               : ^^^^^^^^^^^^
->"./subfolder2/another" : "./subfolder2/another"
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/another" : string
+>                       : ^^^^^^
 
 const _m44 = import("./subfolder2/another/");
 >_m44 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/another/") : Promise<any>
 >                                : ^^^^^^^^^^^^
->"./subfolder2/another/" : "./subfolder2/another/"
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/another/" : string
+>                        : ^^^^^^
 
 const _m45 = import("./subfolder2/another/index");
 >_m45 : Promise<any>
 >     : ^^^^^^^^^^^^
 >import("./subfolder2/another/index") : Promise<any>
 >                                     : ^^^^^^^^^^^^
->"./subfolder2/another/index" : "./subfolder2/another/index"
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./subfolder2/another/index" : string
+>                             : ^^^^^^
 
 // esm format file
 const x = 1;

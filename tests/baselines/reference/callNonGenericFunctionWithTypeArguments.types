@@ -17,8 +17,8 @@ var r = f<string>(1);
 >             : ^^^
 >f : (x: number) => any
 >  : ^ ^^      ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var f2 = (x: number) => { return null; }
 >f2 : (x: number) => any
@@ -35,8 +35,8 @@ var r2 = f2<string>(1);
 >              : ^^^
 >f2 : (x: number) => any
 >   : ^ ^^      ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var f3: { (x: number): any; }
 >f3 : (x: number) => any
@@ -51,8 +51,8 @@ var r3 = f3<string>(1);
 >              : ^^^
 >f3 : (x: number) => any
 >   : ^ ^^      ^^^^^   
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 class C {
 >C : C
@@ -82,8 +82,8 @@ var r4 = (new C()).f<string>(1);
 >  : ^^^^^^^^
 >f : (x: number) => any
 >  : ^ ^^      ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 interface I {
     f(x: number): any;
@@ -107,8 +107,8 @@ var r5 = i.f<string>(1);
 >  : ^
 >f : (x: number) => any
 >  : ^ ^^      ^^^^^   
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 class C2 {
 >C2 : C2
@@ -138,8 +138,8 @@ var r6 = (new C2()).f<string>(1);
 >   : ^^^^^^^^^
 >f : (x: number) => any
 >  : ^ ^^      ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 interface I2 {
     f(x: number);
@@ -163,8 +163,8 @@ var r7 = i2.f<string>(1);
 >   : ^^
 >f : (x: number) => any
 >  : ^ ^^      ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var a;
 >a : any

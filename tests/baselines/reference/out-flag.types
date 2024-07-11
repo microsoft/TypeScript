@@ -14,8 +14,8 @@ class MyClass
 >      : ^^^^^^      
     {
         return 42;
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
     }
 
     public SetCount(value: number)

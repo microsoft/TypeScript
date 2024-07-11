@@ -14,8 +14,8 @@ var foo1 = "a/".replace(/.[/]/, "");
 >        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/.[/]/ : RegExp
 >       : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 var foo2 = "a//".replace(/.[//]/g, "");
 >foo2 : string
@@ -30,8 +30,8 @@ var foo2 = "a//".replace(/.[//]/g, "");
 >        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/.[//]/g : RegExp
 >         : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 var foo3 = "a/".replace(/.[/no sleep /till/]/, "bugfix");
 >foo3 : string
@@ -46,6 +46,6 @@ var foo3 = "a/".replace(/.[/no sleep /till/]/, "bugfix");
 >        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/.[/no sleep /till/]/ : RegExp
 >                      : ^^^^^^
->"bugfix" : "bugfix"
->         : ^^^^^^^^
+>"bugfix" : string
+>         : ^^^^^^
 

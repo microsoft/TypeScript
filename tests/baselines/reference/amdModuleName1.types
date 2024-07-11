@@ -12,16 +12,16 @@ class Foo {
 
     constructor() {
         this.x = 5;
->this.x = 5 : 5
->           : ^
+>this.x = 5 : number
+>           : ^^^^^^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
     }
 }
 export = Foo;

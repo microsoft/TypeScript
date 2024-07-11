@@ -40,16 +40,16 @@ var rue = new TypeScript.Strasse.Street.Rue();
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 rue.address = "1 Main Street";
->rue.address = "1 Main Street" : "1 Main Street"
->                              : ^^^^^^^^^^^^^^^
+>rue.address = "1 Main Street" : string
+>                              : ^^^^^^
 >rue.address : string
 >            : ^^^^^^
 >rue : TypeScript.Strasse.Street.Rue
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >address : string
 >        : ^^^^^^
->"1 Main Street" : "1 Main Street"
->                : ^^^^^^^^^^^^^^^
+>"1 Main Street" : string
+>                : ^^^^^^
 
 void 0;
 >void 0 : undefined

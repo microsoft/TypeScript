@@ -16,10 +16,10 @@ var a1Ga = makeArrayG(1, ""); // no error
 >                  : ^^^^^^^^
 >makeArrayG : <T>(...items: T[]) => T[]
 >           : ^ ^^^^^     ^^   ^^^^^   
->1 : 1
->  : ^
->"" : ""
->   : ^^
+>1 : number
+>  : ^^^^^^
+>"" : string
+>   : ^^^^^^
 
 var a1Gb = makeArrayG<any>(1, ""); 
 >a1Gb : any[]
@@ -52,10 +52,10 @@ var a1Gd = makeArrayG<number>(1, ""); // error
 >                          : ^^^^^^^^
 >makeArrayG : <T>(...items: T[]) => T[]
 >           : ^ ^^^^^     ^^   ^^^^^   
->1 : 1
->  : ^
->"" : ""
->   : ^^
+>1 : number
+>  : ^^^^^^
+>"" : string
+>   : ^^^^^^
 
 function makeArrayGOpt<T>(item1?: T, item2?: T, item3?: T) {
 >makeArrayGOpt : <T>(item1?: T, item2?: T, item3?: T) => T[]
@@ -84,10 +84,10 @@ var a2Ga = makeArrayGOpt(1, "");
 >                     : ^^^^^^^^
 >makeArrayGOpt : <T>(item1?: T, item2?: T, item3?: T) => T[]
 >              : ^ ^^     ^^^ ^^     ^^^ ^^     ^^^ ^^^^^^^^
->1 : 1
->  : ^
->"" : ""
->   : ^^
+>1 : number
+>  : ^^^^^^
+>"" : string
+>   : ^^^^^^
 
 var a2Gb = makeArrayG<any>(1, "");
 >a2Gb : any[]

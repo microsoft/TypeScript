@@ -67,8 +67,8 @@ var b: { [x: string]: string; } = { foo: '' };
 >            : ^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
 function foo1(x: A);
 >foo1 : { (x: A): any; (x: A): any; }

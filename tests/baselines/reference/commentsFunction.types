@@ -37,10 +37,10 @@ fooWithParameters("a", 10);
 >                           : ^^^^
 >fooWithParameters : (a: string, b: number) => void
 >                  : ^ ^^      ^^ ^^      ^^^^^^^^^
->"a" : "a"
->    : ^^^
->10 : 10
->   : ^^
+>"a" : string
+>    : ^^^^^^
+>10 : number
+>   : ^^^^^^
 
 /** fooFunc
  * comment
@@ -98,20 +98,20 @@ lambdaFoo(10, 20);
 >                  : ^^^^^^
 >lambdaFoo : (a: number, b: number) => number
 >          : ^ ^^      ^^ ^^      ^^^^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 lambddaNoVarComment(10, 20);
 >lambddaNoVarComment(10, 20) : number
 >                            : ^^^^^^
 >lambddaNoVarComment : (a: number, b: number) => number
 >                    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 function blah(a: string /* multiline trailing comment 
 >blah : (a: string) => void

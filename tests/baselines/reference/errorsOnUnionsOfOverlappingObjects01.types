@@ -61,12 +61,12 @@ f({ a: '', b: '' })
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
 declare function g(x: Bar | Other): any;
 >g : (x: Bar | Other) => any
@@ -95,8 +95,8 @@ g({ a: '', b: '' })
 >   : ^^
 >b : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
 declare function h(x: Foo | Bar | Other): any;
 >h : (x: Foo | Bar | Other) => any
@@ -121,12 +121,12 @@ h({ a: '', b: '' })
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
 interface CatDog { cat: any, dog: any }
 >cat : any

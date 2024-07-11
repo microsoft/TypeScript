@@ -61,18 +61,18 @@ function f1(...args: readonly string[]) {
 >                 : ^^^^
 >f1 : (...args: readonly string[]) => void
 >   : ^^^^    ^^                 ^^^^^^^^^
->'abc' : "abc"
->      : ^^^^^
->'def' : "def"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
+>'def' : string
+>      : ^^^^^^
 
     f1('abc', ...args);
 >f1('abc', ...args) : void
 >                   : ^^^^
 >f1 : (...args: readonly string[]) => void
 >   : ^^^^    ^^                 ^^^^^^^^^
->'abc' : "abc"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
 >...args : string
 >        : ^^^^^^
 >args : readonly string[]
@@ -110,18 +110,18 @@ function f2(...args: readonly [string, string]) {
 >                 : ^^^^
 >f1 : (...args: readonly string[]) => void
 >   : ^^^^    ^^                 ^^^^^^^^^
->'abc' : "abc"
->      : ^^^^^
->'def' : "def"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
+>'def' : string
+>      : ^^^^^^
 
     f1('abc', ...args);
 >f1('abc', ...args) : void
 >                   : ^^^^
 >f1 : (...args: readonly string[]) => void
 >   : ^^^^    ^^                 ^^^^^^^^^
->'abc' : "abc"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
 >...args : string
 >        : ^^^^^^
 >args : readonly [string, string]
@@ -142,18 +142,18 @@ function f2(...args: readonly [string, string]) {
 >                 : ^^^^
 >f2 : (args_0: string, args_1: string) => void
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'abc' : "abc"
->      : ^^^^^
->'def' : "def"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
+>'def' : string
+>      : ^^^^^^
 
     f2('abc', ...args);  // Error
 >f2('abc', ...args) : void
 >                   : ^^^^
 >f2 : (args_0: string, args_1: string) => void
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'abc' : "abc"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
 >...args : string
 >        : ^^^^^^
 >args : readonly [string, string]
@@ -177,15 +177,15 @@ function f4(...args: readonly string[]) {
 >     : ^^^^^^^^^^^^^^^^^
 
     args[0] = 'abc';  // Error
->args[0] = 'abc' : "abc"
->                : ^^^^^
+>args[0] = 'abc' : string
+>                : ^^^^^^
 >args[0] : string
 >        : ^^^^^^
 >args : readonly string[]
 >     : ^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
->'abc' : "abc"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
 }
 

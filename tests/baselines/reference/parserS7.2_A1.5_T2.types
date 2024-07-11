@@ -17,8 +17,8 @@ eval("\u00A0var x\u00A0= 1\u00A0");
 >                                   : ^^^
 >eval : (x: string) => any
 >     : ^ ^^      ^^^^^   
->"\u00A0var x\u00A0= 1\u00A0" : " var x = 1 "
->                             : ^^^^^^^^^^^^^
+>"\u00A0var x\u00A0= 1\u00A0" : string
+>                             : ^^^^^^
 
 if (x !== 1) {
 >x !== 1 : boolean

@@ -51,7 +51,7 @@ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<t
 >       : ^ ^^                    ^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
->'test' : "test"
+>'test' : string
 >       : ^^^^^^
 >SelectProps : Partial<{ value?: unknown; }>
 >            : ^^^^^^^^^^^^^^^^^^       ^^^^

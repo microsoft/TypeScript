@@ -17,8 +17,8 @@ let super_covariant = { x: 1 };
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 /**
  * @type {Covariant<string>}
@@ -30,8 +30,8 @@ let sub_covariant = { x: '' };
 >          : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
 super_covariant = sub_covariant;
 >super_covariant = sub_covariant : Covariant<string>
@@ -136,8 +136,8 @@ let sub_invariant = { f: (x) => { return "" } };
 >                     : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 super_invariant = sub_invariant;  // Error
 >super_invariant = sub_invariant : Invariant<string>

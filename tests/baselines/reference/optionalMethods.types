@@ -347,7 +347,7 @@ class Derived extends Base {
     f(): number { return 1; }
 >f : () => number
 >  : ^^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 

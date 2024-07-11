@@ -92,8 +92,8 @@ var add2: Adder2 = function(x,y) {
 >  : ^^^^^^
 
     return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 
 function add3(x,y) {x}

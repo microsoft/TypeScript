@@ -700,8 +700,8 @@ function exhaustiveChecks(x: number | string | L | R): string {
 >  : ^^^^^^
 >toString : (radix?: number) => string
 >         : ^     ^^^      ^^^^^      
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
         case 'string': return x;
 >'string' : "string"
@@ -716,8 +716,8 @@ function exhaustiveChecks(x: number | string | L | R): string {
 >      : ^^^^^^
 >x : L
 >  : ^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
         case 'object': return x.x;
 >'object' : "object"
@@ -754,8 +754,8 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >  : ^^^^^^
 >toString : (radix?: number) => string
 >         : ^     ^^^      ^^^^^      
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
         case 'string': return x;
 >'string' : "string"
@@ -774,8 +774,8 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >       : ^
 >x : L
 >  : ^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
         case 'object': return (x as R).x;            // Can't narrow generic
 >'object' : "object"
@@ -816,8 +816,8 @@ function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y,
 >       : ^^^^^^
 >xy : X
 >   : ^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
         case 'object': return [xy, xy.y];
 >'object' : "object"
@@ -862,8 +862,8 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 >        : ^^^^^^^^^^^^^^^^^^^^^^
 >xy : X & Function
 >   : ^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         case 'object': return [xy, 'two'];
 >'object' : "object"
@@ -872,8 +872,8 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 >            : ^^^^^^^^^^^^^^^^^^^^
 >xy : Y & object
 >   : ^^^^^^^^^^
->'two' : "two"
->      : ^^^^^
+>'two' : string
+>      : ^^^^^^
 
         case 'number': return [xy]
 >'number' : "number"
@@ -922,8 +922,8 @@ function multipleGenericExhaustive<X extends L, Y extends R>(xy: X | Y): [X, str
 >       : ^^^^^^
 >xy : X
 >   : ^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
     }
 }
 
@@ -1713,8 +1713,8 @@ function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>
 >        : ^^^^^^^^^^^^^^^^^^^^^^
 >xy : X & Function
 >   : ^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         case 'object': return [xy, 'two'];
 >'object' : "object"
@@ -1723,8 +1723,8 @@ function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>
 >            : ^^^^^^^^^^^^^^^^^^^^
 >xy : Y & object
 >   : ^^^^^^^^^^
->'two' : "two"
->      : ^^^^^
+>'two' : string
+>      : ^^^^^^
 
         case `number`: return [xy]
 >`number` : "number"

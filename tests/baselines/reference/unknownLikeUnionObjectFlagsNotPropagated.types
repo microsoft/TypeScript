@@ -42,10 +42,10 @@ async function myUnusedFunction() {
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >['hello', 'world'] : string[]
 >                   : ^^^^^^^^
->'hello' : "hello"
->        : ^^^^^^^
->'world' : "world"
->        : ^^^^^^^
+>'hello' : string
+>        : ^^^^^^
+>'world' : string
+>        : ^^^^^^
 
     const [data1] = await Promise.all([fetch1]);
 >data1 : string[]

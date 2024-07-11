@@ -30,8 +30,8 @@ export class C {
 
     constructor() {
         this[Foo.key] = "hello";
->this[Foo.key] = "hello" : "hello"
->                        : ^^^^^^^
+>this[Foo.key] = "hello" : string
+>                        : ^^^^^^
 >this[Foo.key] : string
 >              : ^^^^^^
 >this : this
@@ -42,8 +42,8 @@ export class C {
 >    : ^^^^^^^^^^
 >key : unique symbol
 >    : ^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
     }
 }
 

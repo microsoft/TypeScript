@@ -168,8 +168,8 @@ module Sample.Thing.Widgets {
 >          : ^^^^^^^^^^
 >addWidget : (widgetId: string, widget: IWidget) => any
 >          : ^        ^^      ^^      ^^       ^^^^^^^^
->"addWidget" : "addWidget"
->            : ^^^^^^^^^^^
+>"addWidget" : string
+>            : ^^^^^^
 >this : this
 >     : ^^^^
 		}

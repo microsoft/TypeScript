@@ -98,6 +98,6 @@ var z = (function (num: number, boo = false, ...rest) { })(10)
 >      : ^^^^^
 >rest : []
 >     : ^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 

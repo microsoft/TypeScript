@@ -14,14 +14,14 @@ export class S {
     static #b() { this.#a = 42; }
 >#b : () => void
 >   : ^^^^^^^^^^
->this.#a = 42 : 42
->             : ^^
+>this.#a = 42 : number
+>             : ^^^^^^
 >this.#a : number
 >        : ^^^^^^
 >this : typeof S
 >     : ^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
     static get #c() { return S.#b(); }
 >#c : void

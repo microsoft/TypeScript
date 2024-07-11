@@ -30,12 +30,12 @@ foo(function(s) { s = 5 });  // Error, can’t assign number to string
 >                      : ^ ^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
->s = 5 : 5
->      : ^
+>s = 5 : number
+>      : ^^^^^^
 >s : string
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
  
  
  
@@ -48,12 +48,12 @@ new Foo(function(s) { s = 5 });  // error, if types are applied correctly
 >                      : ^ ^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
->s = 5 : 5
->      : ^
+>s = 5 : number
+>      : ^^^^^^
 >s : string
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
  
  
  
@@ -70,10 +70,10 @@ class Bar extends Foo { constructor() { super(function(s) { s = 5 }) } }  // err
 >                      : ^ ^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
->s = 5 : 5
->      : ^
+>s = 5 : number
+>      : ^^^^^^
 >s : string
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 

@@ -38,16 +38,16 @@ const f1: (a: string, b: number) => void = function self(a, b?) {
 >         : ^^^^
 >self : (a: string, b?: number | undefined) => void
 >     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   self("", undefined);
 >self("", undefined) : void
 >                    : ^^^^
 >self : (a: string, b?: number | undefined) => void
 >     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -82,16 +82,16 @@ const f2: (a: string, b: number) => void = function self(a, b?: number) {
 >         : ^^^^
 >self : (a: string, b?: number) => void
 >     : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   self("", undefined);
 >self("", undefined) : void
 >                    : ^^^^
 >self : (a: string, b?: number) => void
 >     : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

@@ -518,8 +518,8 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >                                                                                                                                                                                                   : ^        ^^^      ^^^^^                                                                        
 >instance : number
 >         : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
         buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,
 >buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}> : BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
@@ -578,8 +578,8 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >maxMsToWaitBeforePublishing : number
 >                            : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >maxMsToWaitBeforePublishing : 0
 >                            : ^
     }

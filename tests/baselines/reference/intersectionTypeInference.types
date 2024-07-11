@@ -61,14 +61,14 @@ var x = extend({ a: "hello" }, { b: 42 });
 >               : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >{ b: 42 } : { b: number; }
 >          : ^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 var s = x.a;
 >s : string
@@ -124,12 +124,12 @@ var z = foo({ a: "hello", b: 42 });
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >b : number
 >  : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 var z: string | number;
 >z : string | number

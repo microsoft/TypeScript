@@ -49,16 +49,16 @@ class IceCreamMonster {
 >               : ^^^^^^
 
         this.iceCreamRemaining = 100;
->this.iceCreamRemaining = 100 : 100
->                             : ^^^
+>this.iceCreamRemaining = 100 : number
+>                             : ^^^^^^
 >this.iceCreamRemaining : number
 >                       : ^^^^^^
 >this : this
 >     : ^^^^
 >iceCreamRemaining : number
 >                  : ^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
         this.wantsSprinkles = wantsSprinkles;
 >this.wantsSprinkles = wantsSprinkles : boolean
@@ -133,16 +133,16 @@ class IceCreamMonster {
 >  : ^
         {
             this.iceCreamRemaining = 0;
->this.iceCreamRemaining = 0 : 0
->                           : ^
+>this.iceCreamRemaining = 0 : number
+>                           : ^^^^^^
 >this.iceCreamRemaining : number
 >                       : ^^^^^^
 >this : this
 >     : ^^^^
 >iceCreamRemaining : number
 >                  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
             return false;
 >false : false
@@ -169,12 +169,12 @@ cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cooki
 >                                                                            : ^^^^^^^^^^^^^^^
 >IceCreamMonster : typeof IceCreamMonster
 >                : ^^^^^^^^^^^^^^^^^^^^^^
->"Chocolate Chip" : "Chocolate Chip"
->                 : ^^^^^^^^^^^^^^^^
+>"Chocolate Chip" : string
+>                 : ^^^^^^
 >false : false
 >      : ^^^^^
->"COOOOOKIE" : "COOOOOKIE"
->            : ^^^^^^^^^^^
->"Cookie Monster" : "Cookie Monster"
->                 : ^^^^^^^^^^^^^^^^
+>"COOOOOKIE" : string
+>            : ^^^^^^
+>"Cookie Monster" : string
+>                 : ^^^^^^
 

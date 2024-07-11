@@ -10,8 +10,8 @@ require("arg");
 >               : ^^^^
 >require : (s: string) => void
 >        : ^ ^^      ^^^^^    
->"arg" : "arg"
->      : ^^^^^
+>"arg" : string
+>      : ^^^^^^
 
 import exports from "./c"
 >exports : 0

@@ -42,8 +42,8 @@ const result = canYouInferThis(() => ({
 >             : ^^^^^^^^^^^^^^^^^
 >BLAH : number
 >     : ^^^^^^
->33 : 33
->   : ^^
+>33 : number
+>   : ^^^^^^
 
     b: x => { }
 >b : (x: { BLAH: number; }) => void

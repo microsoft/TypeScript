@@ -111,8 +111,8 @@ let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
 >         : ^^^^^^
 >substr : (from: number, length?: number) => string
 >       : ^    ^^      ^^      ^^^      ^^^^^      
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 // Error ('subtr' not on string)
 let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
@@ -174,8 +174,8 @@ let g = <BigGreeter key={100} />;
 >           : ^^^^^^^^^^^^^^^^^
 >key : number
 >    : ^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
 // OK - contextually typed intrinsic ref callback parameter
 let h = <div ref={x => x.innerText} />;

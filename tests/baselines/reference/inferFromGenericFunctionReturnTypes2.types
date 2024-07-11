@@ -658,8 +658,8 @@ testSet.add(1);
 >        : ^^^^^^^^^^^^^
 >add : (a: number) => void
 >    : ^ ^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 testSet.add(2);
 >testSet.add(2) : void
@@ -670,8 +670,8 @@ testSet.add(2);
 >        : ^^^^^^^^^^^^^
 >add : (a: number) => void
 >    : ^ ^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
 testSet.add(3);
 >testSet.add(3) : void
@@ -682,8 +682,8 @@ testSet.add(3);
 >        : ^^^^^^^^^^^^^
 >add : (a: number) => void
 >    : ^ ^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 const t1 = testSet.transform(
 >t1 : SetOf<string>

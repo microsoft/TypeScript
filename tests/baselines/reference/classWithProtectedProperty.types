@@ -19,8 +19,8 @@ class C {
     protected b: string = '';
 >b : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     protected c() { return '' }
 >c : () => string

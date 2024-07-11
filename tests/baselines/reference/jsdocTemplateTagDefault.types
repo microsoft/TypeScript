@@ -12,8 +12,8 @@ const aDefault1 = [""];
 >          : ^^^^^^^^^
 >[""] : [string]
 >     : ^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 /** @type {A} */ // error: `number` is not assignable to string`
 const aDefault2 = [0];
@@ -21,8 +21,8 @@ const aDefault2 = [0];
 >          : ^^^^^^^^^
 >[0] : [number]
 >    : ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 /** @type {A<string>} */ // ok, `T` is provided for `A`
 const aString = [""];
@@ -30,8 +30,8 @@ const aString = [""];
 >        : ^^^^^^^^^
 >[""] : [string]
 >     : ^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 /** @type {A<number>} */ // ok, `T` is provided for `A`
 const aNumber = [0];
@@ -39,8 +39,8 @@ const aNumber = [0];
 >        : ^^^^^^^^^
 >[0] : [number]
 >    : ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 /**
  * @template T

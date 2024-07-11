@@ -64,8 +64,8 @@ class Derived extends Base {
 >      : ^^^
 
                 return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
             },
             set foo(v: number) {

@@ -52,8 +52,8 @@ var messenger = {
 >         : ^^^
 
         }, 3000); 
->3000 : 3000
->     : ^^^^
+>3000 : number
+>     : ^^^^^^
     }
 }; 
 messenger.start(); 

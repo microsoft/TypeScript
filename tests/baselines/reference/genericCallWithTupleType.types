@@ -27,10 +27,10 @@ i1.tuple1 = ["foo", 5];
 >       : ^^^^^^^^^^^^^^^^
 >["foo", 5] : [string, number]
 >           : ^^^^^^^^^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
->5 : 5
->  : ^
+>"foo" : string
+>      : ^^^^^^
+>5 : number
+>  : ^^^^^^
 
 var e1 = i1.tuple1[0];  // string
 >e1 : string
@@ -71,10 +71,10 @@ i1.tuple1 = ["foo", 5, false, true];
 >       : ^^^^^^^^^^^^^^^^
 >["foo", 5, false, true] : [string, number, boolean, boolean]
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
->5 : 5
->  : ^
+>"foo" : string
+>      : ^^^^^^
+>5 : number
+>  : ^^^^^^
 >false : false
 >      : ^^^^^
 >true : true
@@ -204,10 +204,10 @@ i1.tuple1 = [5, "foo"];
 >       : ^^^^^^^^^^^^^^^^
 >[5, "foo"] : [number, string]
 >           : ^^^^^^^^^^^^^^^^
->5 : 5
->  : ^
->"foo" : "foo"
->      : ^^^^^
+>5 : number
+>  : ^^^^^^
+>"foo" : string
+>      : ^^^^^^
 
 i1.tuple1 = [{}, {}];
 >i1.tuple1 = [{}, {}] : [{}, {}]

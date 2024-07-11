@@ -33,24 +33,24 @@ class A {
 
     constructor() {
         this.#b = 'b';
->this.#b = 'b' : "b"
->              : ^^^
+>this.#b = 'b' : string
+>              : ^^^^^^
 >this.#b : string
 >        : ^^^^^^
 >this : this
 >     : ^^^^
->'b' : "b"
->    : ^^^
+>'b' : string
+>    : ^^^^^^
 
         this.#d = 'd';
->this.#d = 'd' : "d"
->              : ^^^
+>this.#d = 'd' : string
+>              : ^^^^^^
 >this.#d : string
 >        : ^^^^^^
 >this : this
 >     : ^^^^
->'d' : "d"
->    : ^^^
+>'d' : string
+>    : ^^^^^^
     }
 
     test() {
@@ -64,24 +64,24 @@ class A {
 >                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
 >b : string
 >  : ^^^^^^
->'b' : "b"
->    : ^^^
+>'b' : string
+>    : ^^^^^^
 >c : string
 >  : ^^^^^^
->'c' : "c"
->    : ^^^
+>'c' : string
+>    : ^^^^^^
 >d : string
 >  : ^^^^^^
->'d' : "d"
->    : ^^^
+>'d' : string
+>    : ^^^^^^
 >e : string
 >  : ^^^^^^
->'e' : "e"
->    : ^^^
+>'e' : string
+>    : ^^^^^^
 
         const {
             [this.#a]: a,
@@ -117,14 +117,14 @@ class A {
 >  : ^^^^^^
 
             [this.#e = 'e']: e,
->this.#e = 'e' : "e"
->              : ^^^
+>this.#e = 'e' : string
+>              : ^^^^^^
 >this.#e : string
 >        : ^^^^^^
 >this : this
 >     : ^^^^
->'e' : "e"
->    : ^^^
+>'e' : string
+>    : ^^^^^^
 >e : string
 >  : ^^^^^^
 

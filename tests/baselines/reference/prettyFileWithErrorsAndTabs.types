@@ -8,19 +8,19 @@ function f() {
 		const x: string = 12;
 >x : string
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 		const y: string = 12;
 >y : string
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 		const z: string = 12;
 >z : string
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 	}
 }

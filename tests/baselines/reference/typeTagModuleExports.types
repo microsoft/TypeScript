@@ -11,6 +11,6 @@ module.exports = 0;
 >       : ^^^^^^^^^^^^^^^^^^^^
 >exports : string
 >        : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 

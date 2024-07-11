@@ -22,8 +22,8 @@ texts.push(100);
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
 /**
  @ts-expect-error */
@@ -36,8 +36,8 @@ texts.push(100);
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
 /**
  @ts-expect-error */
@@ -50,8 +50,8 @@ texts.push("100");
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->"100" : "100"
->      : ^^^^^
+>"100" : string
+>      : ^^^^^^
 
 === b.tsx ===
 import * as React from "react";
@@ -94,8 +94,8 @@ let x = (
 >            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
     {/*@ts-ignore*/}
     <MyComponent foo={100} />
@@ -105,8 +105,8 @@ let x = (
 >            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
     {/*
    @ts-expect-error */}
@@ -117,8 +117,8 @@ let x = (
 >            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
     {/*
    // @ts-expect-error */}
@@ -129,8 +129,8 @@ let x = (
 >            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
     {/*
    * @ts-expect-error */}
@@ -141,8 +141,8 @@ let x = (
 >            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
     {/*@ts-expect-error*/}
     <MyComponent foo={100} />
@@ -152,8 +152,8 @@ let x = (
 >            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
     {/*
    @ts-expect-error */}
@@ -164,8 +164,8 @@ let x = (
 >            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->"hooray" : "hooray"
->         : ^^^^^^^^
+>"hooray" : string
+>         : ^^^^^^
 
   </div>
 >div : any

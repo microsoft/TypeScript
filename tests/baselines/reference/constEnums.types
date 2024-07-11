@@ -935,8 +935,8 @@ function bar(e: A.B.C.E): number {
 >  : ^^^^^^^^
 >V1 : I.V1
 >   : ^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         case A.B.C.E.V2: return 1;
 >A.B.C.E.V2 : I.V2
@@ -957,8 +957,8 @@ function bar(e: A.B.C.E): number {
 >  : ^^^^^^^^
 >V2 : I.V2
 >   : ^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         case A.B.C.E.V3: return 1;
 >A.B.C.E.V3 : I.V3
@@ -979,8 +979,8 @@ function bar(e: A.B.C.E): number {
 >  : ^^^^^^^^
 >V3 : I.V3
 >   : ^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 

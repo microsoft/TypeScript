@@ -73,8 +73,8 @@ var htmlElement: Base = d2.createElement("yo")
 >   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
->"yo" : "yo"
->     : ^^^^
+>"yo" : string
+>     : ^^^^^^
 
 var htmlCanvasElement: Derived1 = d2.createElement("canvas");
 >htmlCanvasElement : Derived1
@@ -130,8 +130,8 @@ var htmlElement2: Derived1 = d2.createElement("yo")
 >   : ^^^^^^^^^
 >createElement : { (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; (tagName: string): Base; }
 >              : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
->"yo" : "yo"
->     : ^^^^
+>"yo" : string
+>     : ^^^^^^
 
 var htmlCanvasElement2: Derived3 = d2.createElement("canvas");
 >htmlCanvasElement2 : Derived3

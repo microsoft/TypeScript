@@ -47,11 +47,10 @@ bigintWithoutLib.ts(50,22): error TS2550: Property 'getBigInt64' does not exist 
 bigintWithoutLib.ts(51,22): error TS2550: Property 'getBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(52,22): error TS2550: Property 'getBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(55,36): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
-bigintWithoutLib.ts(55,36): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 bigintWithoutLib.ts(56,36): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
 
 
-==== bigintWithoutLib.ts (51 errors) ====
+==== bigintWithoutLib.ts (50 errors) ====
     // Every line should error because these builtins are not declared
     
     // Test BigInt functions
@@ -205,8 +204,6 @@ bigintWithoutLib.ts(56,36): error TS2345: Argument of type 'bigint' is not assig
     new Intl.NumberFormat("fr").format(3000n);
                                        ~~~~~
 !!! error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
-                                       ~~~~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
     new Intl.NumberFormat("fr").format(bigintVal);
                                        ~~~~~~~~~
 !!! error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.

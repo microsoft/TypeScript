@@ -979,8 +979,8 @@ readFile('hello', (err, data) => {
 >                                                                                                                        : ^^^^
 >readFile : (path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void) => void
 >         : ^    ^^      ^^        ^^                                                                               ^^^^^    
->'hello' : "hello"
->        : ^^^^^^^
+>'hello' : string
+>        : ^^^^^^
 >(err, data) => {    if (err === null) {        data.length;    }    else {        err.message;    }} : (err: Error | null, data: unknown[] | undefined) => void
 >                                                                                                     : ^   ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >err : Error | null
@@ -1117,12 +1117,12 @@ reducer("add", { a: 1, b: 3 });
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >b : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
 >reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] }) : void
@@ -1200,8 +1200,8 @@ let fooM: FooMethod = {
 >        : ^^^^
 >cb : (e: number) => void
 >   : ^ ^^      ^^^^^    
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     } else {
       cb("abc")
@@ -1209,8 +1209,8 @@ let fooM: FooMethod = {
 >          : ^^^^
 >cb : (e: string) => void
 >   : ^ ^^      ^^^^^    
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
     }
   }
 };
@@ -1263,8 +1263,8 @@ let fooAsyncM: FooAsyncMethod = {
 >        : ^^^^
 >cb : (e: number) => void
 >   : ^ ^^      ^^^^^    
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     } else {
       cb("abc")
@@ -1272,8 +1272,8 @@ let fooAsyncM: FooAsyncMethod = {
 >          : ^^^^
 >cb : (e: string) => void
 >   : ^ ^^      ^^^^^    
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
     }
   }
 };
@@ -1326,8 +1326,8 @@ let fooGenM: FooGenMethod = {
 >        : ^^^^
 >cb : (e: number) => void
 >   : ^ ^^      ^^^^^    
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     } else {
       cb("abc")
@@ -1335,8 +1335,8 @@ let fooGenM: FooGenMethod = {
 >          : ^^^^
 >cb : (e: string) => void
 >   : ^ ^^      ^^^^^    
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
     }
   }
 };
@@ -1389,8 +1389,8 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 >        : ^^^^
 >cb : (e: number) => void
 >   : ^ ^^      ^^^^^    
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     } else {
       cb("abc")
@@ -1398,8 +1398,8 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 >          : ^^^^
 >cb : (e: string) => void
 >   : ^ ^^      ^^^^^    
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
     }
   }
 };

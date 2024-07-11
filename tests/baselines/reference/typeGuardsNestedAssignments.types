@@ -181,8 +181,8 @@ while ((match = re.exec("xxx")) != null) {
 >   : ^^^^^^
 >exec : (string: string) => RegExpExecArray | null
 >     : ^      ^^      ^^^^^                      
->"xxx" : "xxx"
->      : ^^^^^
+>"xxx" : string
+>      : ^^^^^^
 
     const length = match[1].length + match[2].length
 >length : number

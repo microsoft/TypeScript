@@ -10,12 +10,12 @@ let x = 0
 // No errors
 
 x = 1;
->x = 1 : 1
->      : ^
+>x = 1 : number
+>      : ^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 x += 2;
 >x += 2 : number

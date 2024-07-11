@@ -24,8 +24,8 @@ const foo1 = { required1: "hello" } as Foo;
 >                       : ^^^^^^^^^^^^^^^^^^^^^^
 >required1 : string
 >          : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 const foo2 = { required1: "hello", optional: "bar" } as Foo;
 >foo2 : Foo
@@ -36,10 +36,10 @@ const foo2 = { required1: "hello", optional: "bar" } as Foo;
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >required1 : string
 >          : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >optional : string
 >         : ^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 

@@ -19,12 +19,12 @@ var robotA: Robot = [1, "mower", "mowing"];
 >       : ^^^^^
 >[1, "mower", "mowing"] : [number, string, string]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->"mower" : "mower"
->        : ^^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
+>1 : number
+>  : ^^^^^^
+>"mower" : string
+>        : ^^^^^^
+>"mowing" : string
+>         : ^^^^^^
 
 function foo1([, nameA]: Robot) {
 >foo1 : ([, nameA]: Robot) => void
@@ -125,12 +125,12 @@ foo1([2, "trimmer", "trimming"]);
 >     : ^         ^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>2 : number
+>  : ^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 
 foo2(robotA);
 >foo2(robotA) : void
@@ -147,12 +147,12 @@ foo2([2, "trimmer", "trimming"]);
 >     : ^         ^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>2 : number
+>  : ^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 
 foo3(robotA);
 >foo3(robotA) : void
@@ -169,12 +169,12 @@ foo3([2, "trimmer", "trimming"]);
 >     : ^                           ^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>2 : number
+>  : ^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 
 foo4(robotA);
 >foo4(robotA) : void
@@ -191,10 +191,10 @@ foo4([2, "trimmer", "trimming"]);
 >     : ^                         ^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>2 : number
+>  : ^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 

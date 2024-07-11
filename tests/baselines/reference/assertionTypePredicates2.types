@@ -59,8 +59,8 @@ export const main = () => {
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     foo(a);
 >foo(a) : void

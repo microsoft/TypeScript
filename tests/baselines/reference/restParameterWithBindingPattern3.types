@@ -6,8 +6,8 @@ function a(...[a = 1, b = true]: string[]) { }
 >  : ^^^^      ^^        ^^^^^^^^^
 >a : string
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >b : string
 >  : ^^^^^^
 >true : true

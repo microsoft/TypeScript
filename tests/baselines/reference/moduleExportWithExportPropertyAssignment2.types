@@ -9,8 +9,8 @@ var mod1 = require('./mod1')
 >                  : ^^^^^^
 >require : (name: string) => any
 >        : ^    ^^      ^^^^^   
->'./mod1' : "./mod1"
->         : ^^^^^^^^
+>'./mod1' : string
+>         : ^^^^^^
 
 mod1.toFixed(12)
 >mod1.toFixed(12) : string
@@ -21,8 +21,8 @@ mod1.toFixed(12)
 >     : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
 >        : ^              ^^^      ^^^^^      
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 mod1.f() // error, 'f' is not a property on 'number'
 >mod1.f() : any

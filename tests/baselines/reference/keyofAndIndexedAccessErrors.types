@@ -267,8 +267,8 @@ function f10(shape: Shape) {
 >      : ^^^^^
 >"name" : "name"
 >       : ^^^^^^
->"rectangle" : "rectangle"
->            : ^^^^^^^^^^^
+>"rectangle" : string
+>            : ^^^^^^
 
     setProperty(shape, "size", 10);  // Error
 >setProperty(shape, "size", 10) : void

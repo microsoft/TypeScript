@@ -32,8 +32,8 @@ repro({
   params: 1,
 >params : number
 >       : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
   callback: () => { return a => a + 1 },
 >callback : () => (a: number) => number

@@ -8,8 +8,8 @@ class B {
     public baz: number = 1;
 >baz : number
 >    : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     constructor(public foo: string, public bar: number) {
 >foo : string
@@ -29,8 +29,8 @@ class D extends B {
     public bar: number = 1
 >bar : number
 >    : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     constructor(public foo: string, public baz: number) {
 >foo : string
@@ -45,8 +45,8 @@ class D extends B {
 >      : ^^^^^^^^
 >foo : string
 >    : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
     }
 }
 

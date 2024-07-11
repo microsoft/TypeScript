@@ -48,7 +48,7 @@ const out = myBug({obj1: {a: "test"}})
 >            : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"test" : "test"
+>"test" : string
 >       : ^^^^^^
 
 type Value<V extends string = string> = Record<"val", V>;

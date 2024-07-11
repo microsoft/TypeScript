@@ -153,12 +153,12 @@ module Editor {
 >     : ^^^^^^^
 
             for (i = 0; !(entry.isHead); i++) {
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >!(entry.isHead) : boolean
 >                : ^^^^^^^
 >(entry.isHead) : boolean

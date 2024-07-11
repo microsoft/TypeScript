@@ -108,14 +108,14 @@ function attr2(nameOrMap: any, value?: string): string {
 
         // handle map case
         return "t";
->"t" : "t"
->    : ^^^
+>"t" : string
+>    : ^^^^^^
     }
     else {
         // handle string case
         return "s";
->"s" : "s"
->    : ^^^
+>"s" : string
+>    : ^^^^^^
     }
 }
 
@@ -127,7 +127,7 @@ function foo():number;
 function foo():string { return "a" };
 >foo : () => number
 >    : ^^^^^^      
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 
 

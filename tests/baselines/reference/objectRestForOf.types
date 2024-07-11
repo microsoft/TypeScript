@@ -78,8 +78,8 @@ for (const norest of array.map(a => ({ ...a, x: 'a string' }))) {
 >  : ^^^^^      ^^^^^      ^^^
 >x : string
 >  : ^^^^^^
->'a string' : "a string"
->           : ^^^^^^^^^^
+>'a string' : string
+>           : ^^^^^^
 
     [norest.x, norest.y];
 >[norest.x, norest.y] : string[]

@@ -100,8 +100,8 @@ let override: { a: number, b: string } =
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->'override' : "override"
->           : ^^^^^^^^^^
+>'override' : string
+>           : ^^^^^^
 
 let nested: { a: number, b: boolean, c: string } =
 >nested : { a: number; b: boolean; c: string; }
@@ -120,8 +120,8 @@ let nested: { a: number, b: boolean, c: string } =
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 >{ b: false, c: 'overriden' } : { b: false; c: string; }
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b : false
@@ -130,12 +130,12 @@ let nested: { a: number, b: boolean, c: string } =
 >      : ^^^^^
 >c : string
 >  : ^^^^^^
->'overriden' : "overriden"
->            : ^^^^^^^^^^^
+>'overriden' : string
+>            : ^^^^^^
 >c : string
 >  : ^^^^^^
->'whatever' : "whatever"
->           : ^^^^^^^^^^
+>'whatever' : string
+>           : ^^^^^^
 
 let combined: { a: number, b: string, c: boolean } =
 >combined : { a: number; b: string; c: boolean; }
@@ -174,8 +174,8 @@ let combinedAfter: { a: number, b: string, c: boolean } =
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->'ok' : "ok"
->     : ^^^^
+>'ok' : string
+>     : ^^^^^^
 
 let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >combinedNestedChangeType : { a: number; b: boolean; c: number; }
@@ -194,8 +194,8 @@ let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >{ b: false, c: 'overriden' } : { b: false; c: string; }
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b : false
@@ -204,8 +204,8 @@ let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >      : ^^^^^
 >c : string
 >  : ^^^^^^
->'overriden' : "overriden"
->            : ^^^^^^^^^^^
+>'overriden' : string
+>            : ^^^^^^
 >c : number
 >  : ^^^^^^
 >-1 : -1
@@ -260,20 +260,20 @@ let getter: { a: number, c: number } =
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
 >  : ^^^^^^
->7 : 7
->  : ^
+>7 : number
+>  : ^^^^^^
 
 getter.a = 12;
->getter.a = 12 : 12
->              : ^^
+>getter.a = 12 : number
+>              : ^^^^^^
 >getter.a : number
 >         : ^^^^^^
 >getter : { a: number; c: number; }
 >       : ^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 // functions result in { }
 let spreadFunc = { ...(function () { }) };
@@ -381,8 +381,8 @@ function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
 >          : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->14 : 14
->   : ^^
+>14 : number
+>   : ^^^^^^
     }
     let o2 = { ...b && { x: 21 }}
 >o2 : { x?: number | undefined; }
@@ -628,8 +628,8 @@ let changeTypeAfter: { a: string, b: string } =
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'wrong type?' : "wrong type?"
->              : ^^^^^^^^^^^^^
+>'wrong type?' : string
+>              : ^^^^^^
 
 let changeTypeBoth: { a: string, b: number } =
 >changeTypeBoth : { a: string; b: number; }
@@ -736,14 +736,14 @@ function container(
 >                      : ^^^^^^
 >'before everything' : "before everything"
 >                    : ^^^^^^^^^^^^^^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->'yes' : "yes"
->      : ^^^^^
+>'yes' : string
+>      : ^^^^^^
 
     let computedAfter: { a: number, b: string, "at the end": number } =
 >computedAfter : { a: number; b: string; "at the end": number; }
@@ -762,14 +762,14 @@ function container(
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->'yeah' : "yeah"
+>'yeah' : string
 >       : ^^^^^^
 >['at the end'] : number
 >               : ^^^^^^
 >'at the end' : "at the end"
 >             : ^^^^^^^^^^^^
->14 : 14
->   : ^^
+>14 : number
+>   : ^^^^^^
 }
 // shortcut syntax
 let a = 12;
@@ -849,18 +849,18 @@ let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >b : string
 >  : ^^^^^^
->'yes' : "yes"
->      : ^^^^^
+>'yes' : string
+>      : ^^^^^^
 >{ c: 'no', d: false } : { c: string; d: false; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >c : string
 >  : ^^^^^^
->'no' : "no"
->     : ^^^^
+>'no' : string
+>     : ^^^^^^
 >d : false
 >  : ^^^^^
 >false : false
@@ -885,18 +885,18 @@ let overlap: { id: string, a: number, b: string } =
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >{ a: 2, b: 'extra' } : { a: number; b: string; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >b : string
 >  : ^^^^^^
->'extra' : "extra"
->        : ^^^^^^^
+>'extra' : string
+>        : ^^^^^^
 
 let overlapConflict: { id:string, a: string } =
 >overlapConflict : { id: string; a: string; }
@@ -915,14 +915,14 @@ let overlapConflict: { id:string, a: string } =
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >{ a: 'mismatch' } : { a: string; }
 >                  : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'mismatch' : "mismatch"
->           : ^^^^^^^^^^
+>'mismatch' : string
+>           : ^^^^^^
 
 let overwriteId: { id: string, a: number, c: number, d: string } =
 >overwriteId : { id: string; a: number; c: number; d: string; }
@@ -945,8 +945,8 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >id : true
 >   : ^^^^
 >true : true
@@ -955,12 +955,12 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >d : string
 >  : ^^^^^^
->'no' : "no"
->     : ^^^^
+>'no' : string
+>     : ^^^^^^
 
 function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
 >genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | { s: string; }, obj: { x: number; }) => void

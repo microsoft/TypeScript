@@ -8,8 +8,8 @@ const sym = Symbol("")
 >           : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 type Orig = { [k: string]: any, str: any, [sym]: any }
 >Orig : Orig

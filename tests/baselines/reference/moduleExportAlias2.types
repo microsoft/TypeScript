@@ -9,8 +9,8 @@ const C = require("./semver")
 >                    : ^^^^^^^^
 >require : (name: string) => any
 >        : ^    ^^      ^^^^^   
->"./semver" : "./semver"
->           : ^^^^^^^^^^
+>"./semver" : string
+>           : ^^^^^^
 
 var two = C.f(1)
 >two : any

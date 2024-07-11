@@ -129,14 +129,14 @@ const c5 = <OneThing {...obj1} yy={42} {...{yy1: "hi"}}/>
 >     : ^^^^^^^^^^^^^^^^
 >yy : number
 >   : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 >{yy1: "hi"} : { yy1: string; }
 >            : ^^^^^^^^^^^^^^^^
 >yy1 : string
 >    : ^^^^^^
->"hi" : "hi"
->     : ^^^^
+>"hi" : string
+>     : ^^^^^^
 
 const c6 = <OneThing {...obj1} {...{yy: 10000, yy1: "true"}} />
 >c6 : JSX.Element
@@ -151,11 +151,11 @@ const c6 = <OneThing {...obj1} {...{yy: 10000, yy1: "true"}} />
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yy : number
 >   : ^^^^^^
->10000 : 10000
->      : ^^^^^
+>10000 : number
+>      : ^^^^^^
 >yy1 : string
 >    : ^^^^^^
->"true" : "true"
+>"true" : string
 >       : ^^^^^^
 
 const c7 = <OneThing {...defaultObj} yy {...obj} />;  // No error. should pick second overload

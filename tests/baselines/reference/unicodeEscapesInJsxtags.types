@@ -86,8 +86,8 @@ const x = { video: () => null }
 >           : ^ ^^              ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 ; <x.\u0076ideo />
 ><x.\u0076ideo /> : JSX.Element
@@ -130,8 +130,8 @@ const x = { video: () => null }
 >             : ^ ^^              ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 // attribute name
 ;<video data-\u0076ideo />

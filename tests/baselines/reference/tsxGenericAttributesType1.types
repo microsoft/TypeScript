@@ -60,8 +60,8 @@ const decorator2 = function <T extends { x: number }>(Component: React.Stateless
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >Component : React.StatelessComponent<T>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -94,8 +94,8 @@ const decorator3 = function <T extends { x: number }, U extends { x: number } >(
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >props : T & { children?: React.ReactNode; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Component : React.StatelessComponent<T>

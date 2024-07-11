@@ -36,6 +36,6 @@ var j: typeof k.foo = { a: "hello" };
 >               : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 

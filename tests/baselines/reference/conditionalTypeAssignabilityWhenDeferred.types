@@ -403,8 +403,8 @@ set(new Foo2(), "prop", "hi"); // <-- typechecks
 >     : ^^^^^^^^^^^
 >"prop" : "prop"
 >       : ^^^^^^
->"hi" : "hi"
->     : ^^^^
+>"hi" : string
+>     : ^^^^^^
 
 type InferBecauseWhyNot<T> = [T] extends [(p: infer P1) => any]
 >InferBecauseWhyNot : InferBecauseWhyNot<T>

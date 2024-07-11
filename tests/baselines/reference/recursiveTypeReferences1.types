@@ -52,40 +52,40 @@ const hypertextNode: HypertextNode =
     ["div", { id: "parent" },
 >["div", { id: "parent" },        ["div", { id: "first-child" }, "I'm the first child"],        ["div", { id: "second-child" }, "I'm the second child"]    ] : [string, { id: string; }, [string, { id: string; }, string], [string, { id: string; }, string]]
 >                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"div" : "div"
->      : ^^^^^
+>"div" : string
+>      : ^^^^^^
 >{ id: "parent" } : { id: string; }
 >                 : ^^^^^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
->"parent" : "parent"
->         : ^^^^^^^^
+>"parent" : string
+>         : ^^^^^^
 
         ["div", { id: "first-child" }, "I'm the first child"],
 >["div", { id: "first-child" }, "I'm the first child"] : [string, { id: string; }, string]
 >                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"div" : "div"
->      : ^^^^^
+>"div" : string
+>      : ^^^^^^
 >{ id: "first-child" } : { id: string; }
 >                      : ^^^^^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
->"first-child" : "first-child"
->              : ^^^^^^^^^^^^^
+>"first-child" : string
+>              : ^^^^^^
 >"I'm the first child" : "I'm the first child"
 >                      : ^^^^^^^^^^^^^^^^^^^^^
 
         ["div", { id: "second-child" }, "I'm the second child"]
 >["div", { id: "second-child" }, "I'm the second child"] : [string, { id: string; }, string]
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"div" : "div"
->      : ^^^^^
+>"div" : string
+>      : ^^^^^^
 >{ id: "second-child" } : { id: string; }
 >                       : ^^^^^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
->"second-child" : "second-child"
->               : ^^^^^^^^^^^^^^
+>"second-child" : string
+>               : ^^^^^^
 >"I'm the second child" : "I'm the second child"
 >                       : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -435,8 +435,8 @@ flat1([1, [2, [3]]]);  // (number | number[])[]
 >  : ^
 >[3] : number[]
 >    : ^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 flat1([[[0]]]);  // number[][]
 >flat1([[[0]]]) : number[][]
@@ -449,8 +449,8 @@ flat1([[[0]]]);  // number[][]
 >      : ^^^^^^^^^^
 >[0] : number[]
 >    : ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 flat1([1, 'a', [2]]);  // (string | number)[]
 >flat1([1, 'a', [2]]) : (string | number)[]
@@ -465,8 +465,8 @@ flat1([1, 'a', [2]]);  // (string | number)[]
 >    : ^^^
 >[2] : number[]
 >    : ^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
 flat1([1, [2, 'a']]);  // (string | number)[]
 >flat1([1, [2, 'a']]) : (string | number)[]
@@ -479,10 +479,10 @@ flat1([1, [2, 'a']]);  // (string | number)[]
 >  : ^
 >[2, 'a'] : (string | number)[]
 >         : ^^^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
->'a' : "a"
->    : ^^^
+>2 : number
+>  : ^^^^^^
+>'a' : string
+>    : ^^^^^^
 
 flat1([1, ['a']]);  // Error
 >flat1([1, ['a']]) : string[]
@@ -495,8 +495,8 @@ flat1([1, ['a']]);  // Error
 >  : ^
 >['a'] : string[]
 >      : ^^^^^^^^
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
 
 flat2([1, [2, [3]]]);  // number[]
 >flat2([1, [2, [3]]]) : number[]
@@ -513,8 +513,8 @@ flat2([1, [2, [3]]]);  // number[]
 >  : ^
 >[3] : number[]
 >    : ^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 flat2([[[0]]]);  // number[]
 >flat2([[[0]]]) : number[]
@@ -527,8 +527,8 @@ flat2([[[0]]]);  // number[]
 >      : ^^^^^^^^^^
 >[0] : number[]
 >    : ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 flat2([1, 'a', [2]]);  // (string | number)[]
 >flat2([1, 'a', [2]]) : (string | number)[]
@@ -757,8 +757,8 @@ function parse(node: Tree, index: number[] = []): HTMLUListElement {
 >    : ^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->'.' : "."
->    : ^^^
+>'.' : string
+>    : ^^^^^^
 >el.textContent! : string
 >                : ^^^^^^
 >el.textContent : string | null

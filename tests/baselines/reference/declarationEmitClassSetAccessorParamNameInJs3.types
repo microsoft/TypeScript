@@ -15,7 +15,7 @@ export class Foo {
 >    : ^^^^^^^^                  ^^^
 >prop : string
 >     : ^^^^^^
->'foo' : "foo"
->      : ^^^^^
+>'foo' : string
+>      : ^^^^^^
 }
 

@@ -51,10 +51,10 @@ var array: number[] = [0, 1, ...new SymbolIterator];
 >      : ^^^^^^^^
 >[0, 1, ...new SymbolIterator] : (number | symbol)[]
 >                              : ^^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
->1 : 1
->  : ^
+>0 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 >...new SymbolIterator : symbol
 >                      : ^^^^^^
 >new SymbolIterator : SymbolIterator

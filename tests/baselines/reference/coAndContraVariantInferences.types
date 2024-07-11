@@ -82,8 +82,8 @@ const actionA = { payload: 'any-string' } as Action<'ACTION_A', string>;
 >                          : ^^^^^^^^^^^^^^^^^^^^
 >payload : string
 >        : ^^^^^^
->'any-string' : "any-string"
->             : ^^^^^^^^^^^^
+>'any-string' : string
+>             : ^^^^^^
 
 const actionB = { payload: true } as Action<'ACTION_B', boolean>;
 >actionB : Action<"ACTION_B", boolean>

@@ -58,8 +58,8 @@ console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', '));
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->', ' : ", "
->     : ^^^^
+>', ' : string
+>     : ^^^^^^
 
 const [ part ] = new Intl.NumberFormat().formatToParts();
 >part : Intl.NumberFormatPart

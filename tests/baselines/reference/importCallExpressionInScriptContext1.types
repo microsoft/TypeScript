@@ -13,8 +13,8 @@ var p1 = import("./0");
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./0") : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : "./0"
->      : ^^^^^
+>"./0" : string
+>      : ^^^^^^
 
 function arguments() { } // this is allow as the file doesn't have implicit "use strict"
 >arguments : () => void

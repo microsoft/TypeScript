@@ -24,12 +24,12 @@ const xy: XY = {x: 'x', y: 10};
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'x' : "x"
->    : ^^^
+>'x' : string
+>    : ^^^^^^
 >y : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 const z1: Z = xy; // error, {xy} doesn't overlap with {z}
 >z1 : Z
@@ -76,12 +76,12 @@ const wrapped = create({ first: { view: 0, styleMedia: "???" } });
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >view : number
 >     : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >styleMedia : string
 >           : ^^^^^^
->"???" : "???"
->      : ^^^^^
+>"???" : string
+>      : ^^^^^^
 
 const vs: ViewStyle = wrapped.first // error, first is a branded number
 >vs : ViewStyle

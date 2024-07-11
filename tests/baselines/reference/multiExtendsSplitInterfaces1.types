@@ -10,6 +10,6 @@ self.cancelAnimationFrame(0);
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cancelAnimationFrame : ((handle: number) => void) & ((handle: number) => void)
 >                     : ^^      ^^      ^^^^^    ^^^^^^      ^^      ^^^^^    ^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 

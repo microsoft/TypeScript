@@ -223,14 +223,14 @@ const response: Query = {
             light: 1,
 >light : number
 >      : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
             dark: 3,
 >dark : number
 >     : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         },
     },
@@ -292,8 +292,8 @@ const TEST_VALUE: ExtendedValue = {
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >description : null
 >            : ^^^^
 
@@ -302,12 +302,12 @@ const TEST_VALUE: ExtendedValue = {
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >description : string
 >            : ^^^^^^
->'wigglytubble' : "wigglytubble"
->               : ^^^^^^^^^^^^^^
+>'wigglytubble' : string
+>               : ^^^^^^
 
     ]
 };

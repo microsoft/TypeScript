@@ -4,6 +4,6 @@
 export const a: number = "not ok";
 >a : number
 >  : ^^^^^^
->"not ok" : "not ok"
->         : ^^^^^^^^
+>"not ok" : string
+>         : ^^^^^^
 

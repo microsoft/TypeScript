@@ -72,8 +72,8 @@ export function foo2(p = (ip = 10 as T, v: number): void => {}): void{}
 >   : ^^^^^^
 >10 as T : number
 >        : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >v : number
 >  : ^^^^^^
 

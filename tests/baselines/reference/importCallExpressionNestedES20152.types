@@ -22,8 +22,8 @@ async function foo() {
 >                      : ^^^^^^^^^^^^^^^^^^^^
 >import("./foo") : Promise<typeof import("foo")>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./foo" : "./foo"
->        : ^^^^^^^
+>"./foo" : string
+>        : ^^^^^^
 >default : "./foo"
 >        : ^^^^^^^
 }

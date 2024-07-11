@@ -10,8 +10,8 @@ class C {
 >  : ^^^^^^
 
         return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
     set x(v: string) { }
 >x : number

@@ -116,8 +116,8 @@ function toCamelCase(text: string): string {
 >     : ^^^^^^
 >substring : (start: number, end?: number) => string
 >          : ^     ^^      ^^   ^^^      ^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 
 === test.tsx ===

@@ -28,16 +28,16 @@ const y = 2
 >  : ^
 
 globalThis.x = 3
->globalThis.x = 3 : 3
->                 : ^
+>globalThis.x = 3 : number
+>                 : ^^^^^^
 >globalThis.x : number
 >             : ^^^^^^
 >globalThis : typeof globalThis
 >           : ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 globalThis.y = 4 // should error
 >globalThis.y = 4 : 4

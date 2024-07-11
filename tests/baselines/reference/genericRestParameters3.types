@@ -54,20 +54,20 @@ f1("foo", "abc");
 >                 : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >   : ^ ^^      ^^^^^    ^^                            ^^^^^    
->"foo" : "foo"
->      : ^^^^^
->"abc" : "abc"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
+>"abc" : string
+>      : ^^^^^^
 
 f1("foo", 10, true);
 >f1("foo", 10, true) : void
 >                    : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >   : ^ ^^      ^^^^^    ^^                            ^^^^^    
->"foo" : "foo"
->      : ^^^^^
->10 : 10
->   : ^^
+>"foo" : string
+>      : ^^^^^^
+>10 : number
+>   : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -76,8 +76,8 @@ f1("foo", ...t1);
 >                 : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >   : ^ ^^      ^^^^^    ^^                            ^^^^^    
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >...t1 : string | number | boolean
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : [string] | [number, boolean]
@@ -88,8 +88,8 @@ f1("foo", ...t2);
 >                 : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >   : ^ ^^      ^^^^^    ^^                            ^^^^^    
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >...t2 : string | number | boolean
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2 : [number, boolean] | readonly [string]
@@ -100,8 +100,8 @@ f1("foo", ...t3);
 >                 : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >   : ^ ^^      ^^^^^    ^^                            ^^^^^    
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >...t3 : string | number | boolean
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t3 : [string] | readonly [number, boolean]
@@ -112,8 +112,8 @@ f1("foo", ...t4);
 >                 : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >   : ^ ^^      ^^^^^    ^^                            ^^^^^    
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >...t4 : string | number | boolean
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t4 : readonly [string] | readonly [number, boolean]
@@ -124,18 +124,18 @@ f1("foo", 10);  // Error
 >              : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >   : ^ ^^      ^^^^^    ^^                            ^^^^^    
->"foo" : "foo"
->      : ^^^^^
->10 : 10
->   : ^^
+>"foo" : string
+>      : ^^^^^^
+>10 : number
+>   : ^^^^^^
 
 f1("foo");  // Error
 >f1("foo") : void
 >          : ^^^^
 >f1 : (x: string, ...args: [string] | [number, boolean]) => void
 >   : ^ ^^      ^^^^^    ^^                            ^^^^^    
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 
 f2 = f1;
 >f2 = f1 : (x: string, ...args: [string] | [number, boolean]) => void
@@ -241,10 +241,10 @@ let a = bar(10, 20);
 >            : ^^^^^^^^^^^^^^^^
 >bar : <T extends any[]>(...args: T) => T
 >    : ^ ^^^^^^^^^     ^^^^^    ^^ ^^^^^ 
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 let b = bar<CoolArray<number>>(10, 20);  // Error
 >b : CoolArray<number>
@@ -253,10 +253,10 @@ let b = bar<CoolArray<number>>(10, 20);  // Error
 >                               : ^^^^^^^^^^^^^^^^^
 >bar : <T extends any[]>(...args: T) => T
 >    : ^ ^^^^^^^^^     ^^^^^    ^^ ^^^^^ 
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 declare function baz<T>(...args: CoolArray<T>): void;
 >baz : <T>(...args: CoolArray<T>) => void
@@ -279,18 +279,18 @@ baz(1);      // Error
 >       : ^^^^
 >baz : <T>(...args: CoolArray<T>) => void
 >    : ^ ^^^^^    ^^            ^^^^^    
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 baz(1, 2);   // Error
 >baz(1, 2) : void
 >          : ^^^^
 >baz : <T>(...args: CoolArray<T>) => void
 >    : ^ ^^^^^    ^^            ^^^^^    
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 baz(...ca);  // Error
 >baz(...ca) : void
@@ -331,7 +331,7 @@ hmm("what"); // no error?  A = [] | [number, string] ?
 >            : ^^^^
 >hmm : <A extends [] | [number, string]>(...args: A) => void
 >    : ^ ^^^^^^^^^                     ^^^^^    ^^ ^^^^^    
->"what" : "what"
+>"what" : string
 >       : ^^^^^^
 
 // Repro from #35066
@@ -347,8 +347,8 @@ let x2: ReadonlyArray<string> = ["hello"];
 >   : ^^^^^^^^^^^^^^^^^
 >["hello"] : string[]
 >          : ^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 foo2(...x2);
 >foo2(...x2) : void

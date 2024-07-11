@@ -37,19 +37,19 @@ var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "no
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"mower" : "mower"
->        : ^^^^^^^
+>"mower" : string
+>        : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
+>"mowing" : string
+>         : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 
 var robotB: Robot = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } };
@@ -59,20 +59,20 @@ var robotB: Robot = { name: "trimmer", skills: { primary: "trimming", secondary:
 >                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"edging" : string
+>         : ^^^^^^
 
 var {
     skills: {
@@ -84,28 +84,28 @@ var {
 >        : ^^^
 >primaryA : string
 >         : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
         secondary: secondaryA = "noSkill"
 >secondary : any
 >          : ^^^
 >secondaryA : string
 >           : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
     } = { primary: "noSkill", secondary: "noSkill" }
 >{ primary: "noSkill", secondary: "noSkill" } : { primary: string; secondary: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } = robotA;
 >robotA : Robot
@@ -117,8 +117,8 @@ var {
 >     : ^^^
 >nameB : string
 >      : ^^^^^^
->"noNameSpecified" : "noNameSpecified"
->                  : ^^^^^^^^^^^^^^^^^
+>"noNameSpecified" : string
+>                  : ^^^^^^
 
     skills: {
 >skills : any
@@ -129,28 +129,28 @@ var {
 >        : ^^^
 >primaryB : string
 >         : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
         secondary: secondaryB = "noSkill"
 >secondary : any
 >          : ^^^
 >secondaryB : string
 >           : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
     } = { primary: "noSkill", secondary: "noSkill" }
 >{ primary: "noSkill", secondary: "noSkill" } : { primary: string; secondary: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } = robotB;
 >robotB : Robot
@@ -162,8 +162,8 @@ var {
 >     : ^^^
 >nameC : string
 >      : ^^^^^^
->"noNameSpecified" : "noNameSpecified"
->                  : ^^^^^^^^^^^^^^^^^
+>"noNameSpecified" : string
+>                  : ^^^^^^
 
     skills: {
 >skills : any
@@ -174,28 +174,28 @@ var {
 >        : ^^^
 >primaryB : string
 >         : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
         secondary: secondaryB = "noSkill"
 >secondary : any
 >          : ^^^
 >secondaryB : string
 >           : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
     } = { primary: "noSkill", secondary: "noSkill" }
 >{ primary: "noSkill", secondary: "noSkill" } : { primary: string; secondary: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } = <Robot>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
 ><Robot>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : Robot
@@ -204,20 +204,20 @@ var {
 >                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"Edger" : "Edger"
->        : ^^^^^^^
+>"Edger" : string
+>        : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "edging", secondary: "branch trimming" } : { primary: string; secondary: string; }
 >                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"edging" : string
+>         : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"branch trimming" : "branch trimming"
->                  : ^^^^^^^^^^^^^^^^^
+>"branch trimming" : string
+>                  : ^^^^^^
 
 if (nameB == nameB) {
 >nameB == nameB : boolean

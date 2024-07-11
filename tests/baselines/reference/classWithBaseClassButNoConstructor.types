@@ -42,8 +42,8 @@ var c2 = new C(1); // ok
 >         : ^
 >C : typeof C
 >  : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 class Base2<T,U> {
 >Base2 : Base2<T, U>
@@ -86,8 +86,8 @@ var d2 = new D(1); // ok
 >         : ^^^^^^^^^^^^^^^^^^
 >D : typeof D
 >  : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 // specialized base class
 class D2<T, U> extends Base2<string, number> {
@@ -122,8 +122,8 @@ var d4 = new D(1); // ok
 >         : ^^^^^^^^^^^^^^^^^^
 >D : typeof D
 >  : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 class D3 extends Base2<string, number> {
 >D3 : D3
@@ -157,6 +157,6 @@ var d6 = new D(1); // ok
 >         : ^^^^^^^^^^^^^^^^^^
 >D : typeof D
 >  : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 

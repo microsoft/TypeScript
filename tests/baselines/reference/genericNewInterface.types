@@ -14,8 +14,8 @@ function createInstance<T>(ctor: new (s: string) => T): T {
 >             : ^
 >ctor : new (s: string) => T
 >     : ^^^^^ ^^      ^^^^^ 
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 }
                    
 interface INewable<T> {
@@ -35,6 +35,6 @@ function createInstance2<T>(ctor: INewable<T>): T {
 >               : ^
 >ctor : INewable<T>
 >     : ^^^^^^^^^^^
->1024 : 1024
->     : ^^^^
+>1024 : number
+>     : ^^^^^^
 }

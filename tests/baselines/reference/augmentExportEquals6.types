@@ -28,8 +28,8 @@ import x = require("./file1");
 >  : ^^^^^^^^
 
 x.B.b = 1;
->x.B.b = 1 : 1
->          : ^
+>x.B.b = 1 : number
+>          : ^^^^^^
 >x.B.b : number
 >      : ^^^^^^
 >x.B : typeof x.B
@@ -40,8 +40,8 @@ x.B.b = 1;
 >  : ^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 // OK - './file1' is a namespace
 declare module "./file1" {

@@ -91,16 +91,16 @@ function getFoo2(): Foo {
 >    : ^
 
             arg.numProp = 10;
->arg.numProp = 10 : 10
->                 : ^^
+>arg.numProp = 10 : number
+>                 : ^^^^^^
 >arg.numProp : number
 >            : ^^^^^^
 >arg : A
 >    : ^
 >numProp : number
 >        : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
         }
         static method2 = (arg) => {
 >method2 : (arg: B) => void
@@ -111,16 +111,16 @@ function getFoo2(): Foo {
 >    : ^
 
             arg.strProp = "hello";
->arg.strProp = "hello" : "hello"
->                      : ^^^^^^^
+>arg.strProp = "hello" : string
+>                      : ^^^^^^
 >arg.strProp : string
 >            : ^^^^^^
 >arg : B
 >    : ^
 >strProp : string
 >        : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
         }
     }
 }
@@ -142,16 +142,16 @@ function getFoo3(): Foo {
 >    : ^
 
             arg.numProp = 10;
->arg.numProp = 10 : 10
->                 : ^^
+>arg.numProp = 10 : number
+>                 : ^^^^^^
 >arg.numProp : number
 >            : ^^^^^^
 >arg : A
 >    : ^
 >numProp : number
 >        : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
         }
         static method2 = function (arg) {
 >method2 : (arg: B) => void
@@ -162,16 +162,16 @@ function getFoo3(): Foo {
 >    : ^
 
             arg.strProp = "hello";
->arg.strProp = "hello" : "hello"
->                      : ^^^^^^^
+>arg.strProp = "hello" : string
+>                      : ^^^^^^
 >arg.strProp : string
 >            : ^^^^^^
 >arg : B
 >    : ^
 >strProp : string
 >        : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
         }
     }
 }

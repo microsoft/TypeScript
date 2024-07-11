@@ -601,16 +601,16 @@ const test = inners(1,2,3,4,5);
 >                  : ^^^^^^^^^
 >inners : <const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]) => T
 >       : ^^^^^^^ ^^^^^^^^^              ^^^^^    ^^                                 ^^^^^ 
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >2 : 2
 >  : ^
 >3 : 3
 >  : ^
 >4 : 4
 >  : ^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 declare function inners2<const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]): T;
 >inners2 : <const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]) => T
@@ -627,16 +627,16 @@ const test2 = inners2([1,2,3,4,5]);
 >        : ^^^^^^^ ^^^^^^^^^              ^^    ^^                                 ^^^^^ 
 >[1,2,3,4,5] : [number, 2, 3, 4, number]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >2 : 2
 >  : ^
 >3 : 3
 >  : ^
 >4 : 4
 >  : ^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 // Repro from #53307
 

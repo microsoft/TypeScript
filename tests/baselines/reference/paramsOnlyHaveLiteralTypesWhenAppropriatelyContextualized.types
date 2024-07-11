@@ -92,8 +92,8 @@ appendToOptionalArray(foo, 'x', 123);   // ok
 >    : ^^^^^^        ^^^^^^        ^^^
 >'x' : "x"
 >    : ^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
 appendToOptionalArray(foo, 'y', 'bar'); // ok
 >appendToOptionalArray(foo, 'y', 'bar') : void
@@ -104,8 +104,8 @@ appendToOptionalArray(foo, 'y', 'bar'); // ok
 >    : ^^^^^^        ^^^^^^        ^^^
 >'y' : "y"
 >    : ^^^
->'bar' : "bar"
->      : ^^^^^
+>'bar' : string
+>      : ^^^^^^
 
 appendToOptionalArray(foo, 'y', 12);    // should fail
 >appendToOptionalArray(foo, 'y', 12) : void
@@ -116,8 +116,8 @@ appendToOptionalArray(foo, 'y', 12);    // should fail
 >    : ^^^^^^        ^^^^^^        ^^^
 >'y' : "y"
 >    : ^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 appendToOptionalArray(foo, 'x', "no");  // should fail
 >appendToOptionalArray(foo, 'x', "no") : void
@@ -128,6 +128,6 @@ appendToOptionalArray(foo, 'x', "no");  // should fail
 >    : ^^^^^^        ^^^^^^        ^^^
 >'x' : "x"
 >    : ^^^
->"no" : "no"
->     : ^^^^
+>"no" : string
+>     : ^^^^^^
 

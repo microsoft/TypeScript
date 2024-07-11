@@ -22,14 +22,14 @@ function f1(x: 1 | 2): string {
             case 1: return 'a';
 >1 : 1
 >  : ^
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
 
             case 2: return 'b';
 >2 : 2
 >  : ^
->'b' : "b"
->    : ^^^
+>'b' : string
+>    : ^^^^^^
         }
         x;  // Unreachable
 >x : never
@@ -59,22 +59,22 @@ function f2(x: 1 | 2) {
         case 1: z = 10; break;
 >1 : 1
 >  : ^
->z = 10 : 10
->       : ^^
+>z = 10 : number
+>       : ^^^^^^
 >z : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
         case 2: z = 20; break;
 >2 : 2
 >  : ^
->z = 20 : 20
->       : ^^
+>z = 20 : number
+>       : ^^^^^^
 >z : number
 >  : ^^^^^^
->20 : 20
->   : ^^
+>20 : number
+>   : ^^^^^^
     }
     z;  // Definitely assigned
 >z : number
@@ -109,8 +109,8 @@ function f3(x: 1 | 2) {
 >                       : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Bad input" : "Bad input"
->            : ^^^^^^^^^^^
+>"Bad input" : string
+>            : ^^^^^^
     }
 }
 
@@ -141,8 +141,8 @@ function f(e: E): number {
 >  : ^^^^^^^^
 >A : E.A
 >  : ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
         case E.B: return 1
 >E.B : E.B
@@ -151,8 +151,8 @@ function f(e: E): number {
 >  : ^^^^^^^^
 >B : E.B
 >  : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 
@@ -186,8 +186,8 @@ function g(e: E): number {
 >  : ^^^^^^^^
 >A : E.A
 >  : ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
             case E.B: return 1
 >E.B : E.B
@@ -196,8 +196,8 @@ function g(e: E): number {
 >  : ^^^^^^^^
 >B : E.B
 >  : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
         }
 }
 
@@ -346,8 +346,8 @@ function area(s: Shape): number {
 >     : ^^^^
 >sqrt : (x: number) => number
 >     : ^ ^^      ^^^^^      
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 >4 : 4
 >  : ^
 >s.side : number
@@ -477,8 +477,8 @@ function areaWrapped(s: Shape): number {
 >     : ^^^^
 >sqrt : (x: number) => number
 >     : ^ ^^      ^^^^^      
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 >4 : 4
 >  : ^
 >s.side : number
@@ -536,12 +536,12 @@ function thisGivesError(e: MyEnum): string {
 >       : ^^^^^^^^^^^^^
 >A : MyEnum.A
 >  : ^^^^^^^^
->s = "it was A" : "it was A"
->               : ^^^^^^^^^^
+>s = "it was A" : string
+>               : ^^^^^^
 >s : string
 >  : ^^^^^^
->"it was A" : "it was A"
->           : ^^^^^^^^^^
+>"it was A" : string
+>           : ^^^^^^
 
 		case MyEnum.B: s = "it was B"; break;
 >MyEnum.B : MyEnum.B
@@ -550,12 +550,12 @@ function thisGivesError(e: MyEnum): string {
 >       : ^^^^^^^^^^^^^
 >B : MyEnum.B
 >  : ^^^^^^^^
->s = "it was B" : "it was B"
->               : ^^^^^^^^^^
+>s = "it was B" : string
+>               : ^^^^^^
 >s : string
 >  : ^^^^^^
->"it was B" : "it was B"
->           : ^^^^^^^^^^
+>"it was B" : string
+>           : ^^^^^^
 	}
 	return s;
 >s : string
@@ -583,12 +583,12 @@ function good1(e: MyEnum): string {
 >       : ^^^^^^^^^^^^^
 >A : MyEnum.A
 >  : ^^^^^^^^
->s = "it was A" : "it was A"
->               : ^^^^^^^^^^
+>s = "it was A" : string
+>               : ^^^^^^
 >s : string
 >  : ^^^^^^
->"it was A" : "it was A"
->           : ^^^^^^^^^^
+>"it was A" : string
+>           : ^^^^^^
 
 		case MyEnum.B: s = "it was B"; break;
 >MyEnum.B : MyEnum.B
@@ -597,20 +597,20 @@ function good1(e: MyEnum): string {
 >       : ^^^^^^^^^^^^^
 >B : MyEnum.B
 >  : ^^^^^^^^
->s = "it was B" : "it was B"
->               : ^^^^^^^^^^
+>s = "it was B" : string
+>               : ^^^^^^
 >s : string
 >  : ^^^^^^
->"it was B" : "it was B"
->           : ^^^^^^^^^^
+>"it was B" : string
+>           : ^^^^^^
 
 		default: s = "it was something else"; break;
->s = "it was something else" : "it was something else"
->                            : ^^^^^^^^^^^^^^^^^^^^^^^
+>s = "it was something else" : string
+>                            : ^^^^^^
 >s : string
 >  : ^^^^^^
->"it was something else" : "it was something else"
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>"it was something else" : string
+>                        : ^^^^^^
 	}
 	return s;
 >s : string
@@ -634,8 +634,8 @@ function good2(e: MyEnum): string {
 >       : ^^^^^^^^^^^^^
 >A : MyEnum.A
 >  : ^^^^^^^^
->"it was A" : "it was A"
->           : ^^^^^^^^^^
+>"it was A" : string
+>           : ^^^^^^
 
 		case MyEnum.B: return "it was B";
 >MyEnum.B : MyEnum.B
@@ -644,8 +644,8 @@ function good2(e: MyEnum): string {
 >       : ^^^^^^^^^^^^^
 >B : MyEnum.B
 >  : ^^^^^^^^
->"it was B" : "it was B"
->           : ^^^^^^^^^^
+>"it was B" : string
+>           : ^^^^^^
 	}
 }
 
@@ -776,8 +776,8 @@ function withDefault(s1: Shape2, s2: Shape2): string {
 >         : ^^^^^^^^
 
             return "1";
->"1" : "1"
->    : ^^^
+>"1" : string
+>    : ^^^^^^
 
         case "circle":
 >"circle" : "circle"
@@ -796,21 +796,21 @@ function withDefault(s1: Shape2, s2: Shape2): string {
 >         : ^^^^^^^^
 
                     return "2";
->"2" : "2"
->    : ^^^
+>"2" : string
+>    : ^^^^^^
 
                 case "circle":
 >"circle" : "circle"
 >         : ^^^^^^^^
 
                     return "3";
->"3" : "3"
->    : ^^^
+>"3" : string
+>    : ^^^^^^
 
                 default:
                     return "never";
->"never" : "never"
->        : ^^^^^^^
+>"never" : string
+>        : ^^^^^^
             }
     }
 }
@@ -836,8 +836,8 @@ function withoutDefault(s1: Shape2, s2: Shape2): string {
 >         : ^^^^^^^^
 
             return "1";
->"1" : "1"
->    : ^^^
+>"1" : string
+>    : ^^^^^^
 
         case "circle":
 >"circle" : "circle"
@@ -856,16 +856,16 @@ function withoutDefault(s1: Shape2, s2: Shape2): string {
 >         : ^^^^^^^^
 
                     return "2";
->"2" : "2"
->    : ^^^
+>"2" : string
+>    : ^^^^^^
 
                 case "circle":
 >"circle" : "circle"
 >         : ^^^^^^^^
 
                     return "3";
->"3" : "3"
->    : ^^^
+>"3" : string
+>    : ^^^^^^
             }
     }
 }
@@ -889,22 +889,22 @@ function test4(value: 1 | 2) {
         case 1: x = "one"; break;
 >1 : 1
 >  : ^
->x = "one" : "one"
->          : ^^^^^
+>x = "one" : string
+>          : ^^^^^^
 >x : string
 >  : ^^^^^^
->"one" : "one"
->      : ^^^^^
+>"one" : string
+>      : ^^^^^^
 
         case 2: x = "two"; break;
 >2 : 2
 >  : ^
->x = "two" : "two"
->          : ^^^^^
+>x = "two" : string
+>          : ^^^^^^
 >x : string
 >  : ^^^^^^
->"two" : "two"
->      : ^^^^^
+>"two" : string
+>      : ^^^^^^
     }
     return x;
 >x : string
@@ -986,8 +986,8 @@ function foo() {
     const foo: number | undefined = 0;
 >foo : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     while (true) {
 >true : true

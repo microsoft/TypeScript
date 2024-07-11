@@ -44,14 +44,14 @@ module onlyT {
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >(x: string) => '' : (x: string) => string
 >                  : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     function other2<T extends Date>(x: T) {
 >other2 : <T extends Date>(x: T) => void
@@ -285,14 +285,14 @@ module TU {
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >(x: string) => '' : (x: string) => string
 >                  : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     function other2<T extends Date>(x: T) {
 >other2 : <T extends Date>(x: T) => void

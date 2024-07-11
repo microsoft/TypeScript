@@ -15,8 +15,8 @@ export const x = add(import("./sub"));
 >    : ^ ^^ ^^          ^^^^^ 
 >import("./sub") : Promise<typeof import("sub")>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./sub" : "./sub"
->        : ^^^^^^^
+>"./sub" : string
+>        : ^^^^^^
 
 export * as Q from "./sub";
 >Q : typeof import("sub")

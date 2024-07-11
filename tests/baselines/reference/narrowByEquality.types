@@ -188,8 +188,8 @@ function test(level: number | string):number {
 >      : ^^^^^^^^^^^^^^^
     }
     return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 
 // From issue #32798

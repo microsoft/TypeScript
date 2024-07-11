@@ -26,8 +26,8 @@ function f(addUndefined1 = "J", addUndefined2?: number) {
 >                   : ^^^^^^
 >addUndefined2 : number | undefined
 >              : ^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 function g(addUndefined = "J", addDefined: number) {
 >g : (addUndefined: string | undefined, addDefined: number) => number
@@ -68,24 +68,24 @@ let total = f() + f('a', 1) + f('b') + f(undefined, 2);
 >          : ^^^^^^
 >f : (addUndefined1?: string, addUndefined2?: number) => number
 >  : ^             ^^^^^^^^^^^             ^^^      ^^^^^^^^^^^
->'a' : "a"
->    : ^^^
->1 : 1
->  : ^
+>'a' : string
+>    : ^^^^^^
+>1 : number
+>  : ^^^^^^
 >f('b') : number
 >       : ^^^^^^
 >f : (addUndefined1?: string, addUndefined2?: number) => number
 >  : ^             ^^^^^^^^^^^             ^^^      ^^^^^^^^^^^
->'b' : "b"
->    : ^^^
+>'b' : string
+>    : ^^^^^^
 >f(undefined, 2) : number
 >                : ^^^^^^
 >f : (addUndefined1?: string, addUndefined2?: number) => number
 >  : ^             ^^^^^^^^^^^             ^^^      ^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
 total = g('c', 3) + g(undefined, 4);
 >total = g('c', 3) + g(undefined, 4) : number
@@ -98,26 +98,26 @@ total = g('c', 3) + g(undefined, 4);
 >          : ^^^^^^
 >g : (addUndefined: string | undefined, addDefined: number) => number
 >  : ^            ^^^^^^^^^^^^^^^^^^^^^^          ^^      ^^^^^^^^^^^
->'c' : "c"
->    : ^^^
->3 : 3
->  : ^
+>'c' : string
+>    : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >g(undefined, 4) : number
 >                : ^^^^^^
 >g : (addUndefined: string | undefined, addDefined: number) => number
 >  : ^            ^^^^^^^^^^^^^^^^^^^^^^          ^^      ^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
 function foo1(x: string = "string", b: number) {
 >foo1 : (x: string | undefined, b: number) => void
 >     : ^ ^^      ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"string" : "string"
->         : ^^^^^^^^
+>"string" : string
+>         : ^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -154,8 +154,8 @@ function foo3(x: string | undefined = "string", b: number) {
 >     : ^ ^^                  ^^ ^^      ^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->"string" : "string"
->         : ^^^^^^^^
+>"string" : string
+>         : ^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -208,8 +208,8 @@ function allowsNull(val: OptionalNullableString = "") {
 >           : ^   ^^^                      ^^^^^^^^^
 >val : OptionalNullableString
 >    : ^^^^^^^^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     val = null;
 >val = null : null
@@ -218,12 +218,12 @@ function allowsNull(val: OptionalNullableString = "") {
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
     val = 'string and null are both ok';
->val = 'string and null are both ok' : "string and null are both ok"
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>val = 'string and null are both ok' : string
+>                                    : ^^^^^^
 >val : OptionalNullableString
 >    : ^^^^^^^^^^^^^^^^^^^^^^
->'string and null are both ok' : "string and null are both ok"
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'string and null are both ok' : string
+>                              : ^^^^^^
 }
 allowsNull(null); // still allows passing null
 >allowsNull(null) : void
@@ -241,8 +241,8 @@ foo1(undefined, 1);
 >     : ^ ^^      ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 foo2(undefined, 1);
 >foo2(undefined, 1) : void
@@ -251,8 +251,8 @@ foo2(undefined, 1);
 >     : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 foo3(undefined, 1);
 >foo3(undefined, 1) : void
@@ -261,8 +261,8 @@ foo3(undefined, 1);
 >     : ^ ^^                  ^^ ^^      ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 foo4(undefined, 1);
 >foo4(undefined, 1) : void
@@ -271,8 +271,8 @@ foo4(undefined, 1);
 >     : ^ ^^                  ^^ ^^      ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 
 function removeUndefinedButNotFalse(x = true) {

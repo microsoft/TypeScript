@@ -42,8 +42,8 @@ x.a<string>(1); // bug was that this caused 'Could not find symbol T' on return 
 >  : ^^^^^              ^^^^^^ ^^ ^^ ^^^^^^^^^^^^
 >a : <T>(x: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 x.b<string>(); // error
 >x.b<string>() : void

@@ -23,8 +23,8 @@ foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } }
 >                                                                                  : ^^^^^^
 >foo : <T, U>(x: T, y: Int<T, U>, z: Int<U, T>) => T
 >    : ^ ^^ ^^ ^^ ^^ ^^         ^^ ^^         ^^^^^ 
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 >{ method(p1) { return p1.length } } : { method(p1: string): number; }
 >                                    : ^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
 >method : (p1: string) => number

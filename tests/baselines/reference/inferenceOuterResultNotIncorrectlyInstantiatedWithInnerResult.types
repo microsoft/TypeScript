@@ -125,8 +125,8 @@ export class Foo<T> extends Base<T> {
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         return new Foo(v);
 >new Foo(v) : Foo<Assign<T, { x: number; }>>

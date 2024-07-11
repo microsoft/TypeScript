@@ -54,8 +54,8 @@ let f01 = foo.bind(undefined, 10);
 >     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 let f02 = foo.bind(undefined, 10, "hello");
 >f02 : () => string
@@ -70,10 +70,10 @@ let f02 = foo.bind(undefined, 10, "hello");
 >     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 let f03 = foo.bind(undefined, 10, 20);  // Error
 >f03 : () => string
@@ -88,10 +88,10 @@ let f03 = foo.bind(undefined, 10, 20);  // Error
 >     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 let f04 = overloaded.bind(undefined);  // typeof overloaded
 >f04 : { (s: string): number; (n: number): string; }
@@ -134,10 +134,10 @@ let c00 = foo.call(undefined, 10, "hello");
 >     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 let c01 = foo.call(undefined, 10);  // Error
 >c01 : string
@@ -152,8 +152,8 @@ let c01 = foo.call(undefined, 10);  // Error
 >     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 let c02 = foo.call(undefined, 10, 20);  // Error
 >c02 : string
@@ -168,10 +168,10 @@ let c02 = foo.call(undefined, 10, 20);  // Error
 >     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 let c03 = foo.call(undefined, 10, "hello", 30);  // Error
 >c03 : string
@@ -186,12 +186,12 @@ let c03 = foo.call(undefined, 10, "hello", 30);  // Error
 >     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
->30 : 30
->   : ^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
+>30 : number
+>   : ^^^^^^
 
 let a00 = foo.apply(undefined, [10, "hello"]);
 >a00 : string
@@ -208,10 +208,10 @@ let a00 = foo.apply(undefined, [10, "hello"]);
 >          : ^^^^^^^^^
 >[10, "hello"] : [number, string]
 >              : ^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 let a01 = foo.apply(undefined, [10]);  // Error
 >a01 : string
@@ -228,8 +228,8 @@ let a01 = foo.apply(undefined, [10]);  // Error
 >          : ^^^^^^^^^
 >[10] : [number]
 >     : ^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 let a02 = foo.apply(undefined, [10, 20]);  // Error
 >a02 : string
@@ -246,10 +246,10 @@ let a02 = foo.apply(undefined, [10, 20]);  // Error
 >          : ^^^^^^^^^
 >[10, 20] : [number, number]
 >         : ^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 let a03 = foo.apply(undefined, [10, "hello", 30]);  // Error
 >a03 : string
@@ -266,10 +266,10 @@ let a03 = foo.apply(undefined, [10, "hello", 30]);  // Error
 >          : ^^^^^^^^^
 >[10, "hello", 30] : [number, string, number]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >30 : 30
 >   : ^^
 
@@ -292,8 +292,8 @@ class C {
 >  : ^^^^^^
 >b : string
 >  : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     overloaded(s: string): number;
 >overloaded : { (s: string): number; (n: number): string; }
@@ -369,8 +369,8 @@ let f11 = c.foo.bind(c, 10);
 >     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c : C
 >  : ^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 let f12 = c.foo.bind(c, 10, "hello");
 >f12 : () => string
@@ -389,10 +389,10 @@ let f12 = c.foo.bind(c, 10, "hello");
 >     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c : C
 >  : ^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 let f13 = c.foo.bind(c, 10, 20);  // Error
 >f13 : () => string
@@ -411,10 +411,10 @@ let f13 = c.foo.bind(c, 10, 20);  // Error
 >     : ^^^ ^^    ^^ ^^       ^^                    ^^^                    ^^^ ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^                 ^^^
 >c : C
 >  : ^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 let f14 = c.foo.bind(undefined);  // Error
 >f14 : (a: number, b: string) => string
@@ -487,10 +487,10 @@ let c10 = c.foo.call(c, 10, "hello");
 >     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c : C
 >  : ^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 let c11 = c.foo.call(c, 10);  // Error
 >c11 : string
@@ -509,8 +509,8 @@ let c11 = c.foo.call(c, 10);  // Error
 >     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c : C
 >  : ^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 let c12 = c.foo.call(c, 10, 20);  // Error
 >c12 : string
@@ -529,10 +529,10 @@ let c12 = c.foo.call(c, 10, 20);  // Error
 >     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c : C
 >  : ^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 let c13 = c.foo.call(c, 10, "hello", 30);  // Error
 >c13 : string
@@ -551,12 +551,12 @@ let c13 = c.foo.call(c, 10, "hello", 30);  // Error
 >     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >c : C
 >  : ^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
->30 : 30
->   : ^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
+>30 : number
+>   : ^^^^^^
 
 let c14 = c.foo.call(undefined, 10, "hello");  // Error
 >c14 : string
@@ -575,10 +575,10 @@ let c14 = c.foo.call(undefined, 10, "hello");  // Error
 >     : ^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 let a10 = c.foo.apply(c, [10, "hello"]);
 >a10 : string
@@ -599,10 +599,10 @@ let a10 = c.foo.apply(c, [10, "hello"]);
 >  : ^
 >[10, "hello"] : [number, string]
 >              : ^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 let a11 = c.foo.apply(c, [10]);  // Error
 >a11 : string
@@ -623,8 +623,8 @@ let a11 = c.foo.apply(c, [10]);  // Error
 >  : ^
 >[10] : [number]
 >     : ^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 let a12 = c.foo.apply(c, [10, 20]);  // Error
 >a12 : string
@@ -645,10 +645,10 @@ let a12 = c.foo.apply(c, [10, 20]);  // Error
 >  : ^
 >[10, 20] : [number, number]
 >         : ^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 let a13 = c.foo.apply(c, [10, "hello", 30]);  // Error
 >a13 : string
@@ -669,10 +669,10 @@ let a13 = c.foo.apply(c, [10, "hello", 30]);  // Error
 >  : ^
 >[10, "hello", 30] : [number, string, number]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >30 : 30
 >   : ^^
 
@@ -695,10 +695,10 @@ let a14 = c.foo.apply(undefined, [10, "hello"]);  // Error
 >          : ^^^^^^^^^
 >[10, "hello"] : [number, string]
 >              : ^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 let f20 = C.bind(undefined);
 >f20 : typeof C
@@ -727,8 +727,8 @@ let f21 = C.bind(undefined, 10);
 >     : ^^^ ^^    ^^ ^^       ^^   ^^^ ^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                ^^       ^^   ^^^^^    ^^ ^^^                     ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 let f22 = C.bind(undefined, 10, "hello");
 >f22 : new () => C
@@ -743,10 +743,10 @@ let f22 = C.bind(undefined, 10, "hello");
 >     : ^^^ ^^    ^^ ^^       ^^   ^^^ ^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                ^^       ^^   ^^^^^    ^^ ^^^                     ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 let f23 = C.bind(undefined, 10, 20);  // Error
 >f23 : new () => C
@@ -761,10 +761,10 @@ let f23 = C.bind(undefined, 10, 20);  // Error
 >     : ^^^ ^^    ^^ ^^       ^^   ^^^ ^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                ^^       ^^   ^^^^^    ^^ ^^^                     ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 C.call(c, 10, "hello");
 >C.call(c, 10, "hello") : void
@@ -777,10 +777,10 @@ C.call(c, 10, "hello");
 >     : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >c : C
 >  : ^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 C.call(c, 10);  // Error
 >C.call(c, 10) : void
@@ -793,8 +793,8 @@ C.call(c, 10);  // Error
 >     : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >c : C
 >  : ^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 C.call(c, 10, 20);  // Error
 >C.call(c, 10, 20) : void
@@ -807,10 +807,10 @@ C.call(c, 10, 20);  // Error
 >     : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >c : C
 >  : ^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 C.call(c, 10, "hello", 30);  // Error
 >C.call(c, 10, "hello", 30) : void
@@ -823,12 +823,12 @@ C.call(c, 10, "hello", 30);  // Error
 >     : ^ ^^ ^^^^^^^^^     ^^    ^^                     ^^       ^^ ^^^^^    ^^ ^^^^^    
 >c : C
 >  : ^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
->30 : 30
->   : ^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
+>30 : number
+>   : ^^^^^^
 
 C.apply(c, [10, "hello"]);
 >C.apply(c, [10, "hello"]) : void
@@ -843,10 +843,10 @@ C.apply(c, [10, "hello"]);
 >  : ^
 >[10, "hello"] : [number, string]
 >              : ^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 C.apply(c, [10]);  // Error
 >C.apply(c, [10]) : void
@@ -861,8 +861,8 @@ C.apply(c, [10]);  // Error
 >  : ^
 >[10] : [number]
 >     : ^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 C.apply(c, [10, 20]);  // Error
 >C.apply(c, [10, 20]) : void
@@ -877,10 +877,10 @@ C.apply(c, [10, 20]);  // Error
 >  : ^
 >[10, 20] : [number, number]
 >         : ^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 C.apply(c, [10, "hello", 30]);  // Error
 >C.apply(c, [10, "hello", 30]) : void
@@ -895,10 +895,10 @@ C.apply(c, [10, "hello", 30]);  // Error
 >  : ^
 >[10, "hello", 30] : [number, string, number]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >30 : 30
 >   : ^^
 

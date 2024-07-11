@@ -39,6 +39,6 @@ class C {
 >  : ^^^^^^^^
 >push : (...items: number[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->"string" : "string"
->         : ^^^^^^^^
+>"string" : string
+>         : ^^^^^^
 

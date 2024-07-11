@@ -58,8 +58,8 @@ Promise.all([getT<string>(), ...getT<any>()]).then((result) => {
 >       : ^^^^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => any[]
 >      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
   tail satisfies string[]; // ok
 >tail satisfies string[] : any[]

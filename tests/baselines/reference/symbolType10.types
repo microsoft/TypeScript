@@ -12,8 +12,8 @@ var s = Symbol.for("bitwise");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"bitwise" : "bitwise"
->          : ^^^^^^^^^
+>"bitwise" : string
+>          : ^^^^^^
 
 s & s;
 >s & s : number

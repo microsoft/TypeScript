@@ -48,8 +48,8 @@ if(foo.M2.x){
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
 >           : ^     ^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 
 === test/foo.d.ts ===

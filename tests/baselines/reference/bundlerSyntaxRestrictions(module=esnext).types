@@ -46,8 +46,8 @@ import {} from "./a";
 import("./a");
 >import("./a") : Promise<typeof _>
 >              : ^^^^^^^^^^^^^^^^^
->"./a" : "./a"
->      : ^^^^^
+>"./a" : string
+>      : ^^^^^^
 
 const _ = require("./a");
 >_ : typeof _

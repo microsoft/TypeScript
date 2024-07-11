@@ -56,8 +56,8 @@ foo[o["prop.inner"]] ="A";
 foo[o.prop.inner] = "B";
 >foo[o.prop.inner] = "B" : "B"
 >                        : ^^^
->foo[o.prop.inner] : string
->                  : ^^^^^^
+>foo[o.prop.inner] : any
+>                  : ^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >o.prop.inner : "b"

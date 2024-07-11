@@ -47,12 +47,12 @@ const result3 = genericFn1({ c: "ctest", d: "dtest" });
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : string
 >  : ^^^^^^
->"ctest" : "ctest"
->        : ^^^^^^^
+>"ctest" : string
+>        : ^^^^^^
 >d : string
 >  : ^^^^^^
->"dtest" : "dtest"
->        : ^^^^^^^
+>"dtest" : string
+>        : ^^^^^^
 
 declare function genericFn2<T extends { [ind: string]: string }>(
 >genericFn2 : <T extends { [ind: string]: string; }>(obj: T) => T[never]
@@ -78,12 +78,12 @@ const result4 = genericFn2({ e: "etest", f: "ftest" });
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : string
 >  : ^^^^^^
->"etest" : "etest"
->        : ^^^^^^^
+>"etest" : string
+>        : ^^^^^^
 >f : string
 >  : ^^^^^^
->"ftest" : "ftest"
->        : ^^^^^^^
+>"ftest" : string
+>        : ^^^^^^
 
 declare function genericFn3<
 >genericFn3 : <T extends { [K in keyof T]: T[K]; }, U extends keyof T, V extends keyof T>(obj: T, u: U, v: V) => T[U & V]
@@ -112,12 +112,12 @@ const result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' w
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : string
 >  : ^^^^^^
->"gtest" : "gtest"
->        : ^^^^^^^
+>"gtest" : string
+>        : ^^^^^^
 >h : string
 >  : ^^^^^^
->"htest" : "htest"
->        : ^^^^^^^
+>"htest" : string
+>        : ^^^^^^
 >"g" : "g"
 >    : ^^^
 >"h" : "h"

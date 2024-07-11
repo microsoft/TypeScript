@@ -76,12 +76,12 @@ export var Pot = 2;
 >  : ^
 
 Pot = 42; // Shouldn't error
->Pot = 42 : 42
->         : ^^
+>Pot = 42 : number
+>         : ^^^^^^
 >Pot : number
 >    : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 export enum Utensils {
 >Utensils : Utensils

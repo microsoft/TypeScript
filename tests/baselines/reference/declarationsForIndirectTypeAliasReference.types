@@ -47,8 +47,8 @@ const MAP: StringHash = {
     a: "a"
 >a : string
 >  : ^^^^^^
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 
 };
 
@@ -61,8 +61,8 @@ const MAP2: StringHash2 = {
     a: "a"
 >a : string
 >  : ^^^^^^
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 
 };
 

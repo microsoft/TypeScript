@@ -63,8 +63,8 @@ function assertNever(a: never): never {
 >                          : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Unreachable!" : "Unreachable!"
->               : ^^^^^^^^^^^^^^
+>"Unreachable!" : string
+>               : ^^^^^^
 }
 
 function reducer(action: ReducerAction): void {

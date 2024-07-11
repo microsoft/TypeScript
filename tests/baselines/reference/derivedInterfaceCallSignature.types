@@ -148,8 +148,8 @@ area.interpolate('two')('one');
 >     : ^^^^^^^^^
 >interpolate : (interpolator: string) => D3SvgArea
 >            : ^            ^^      ^^^^^         
->'two' : "two"
->      : ^^^^^
+>'two' : string
+>      : ^^^^^^
 >'one' : "one"
 >      : ^^^^^
 

@@ -95,8 +95,8 @@ let k1 = <Comp a={10} b="hi"><></><Button /><AnotherButton /></Comp>;
 >     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
 ><></> : JSX.Element
@@ -121,8 +121,8 @@ let k2 = <Comp a={10} b="hi"><><Button /></><AnotherButton /></Comp>;
 >     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
 ><><Button /></> : JSX.Element
@@ -147,8 +147,8 @@ let k3 = <Comp a={10} b="hi"><><Button /><AnotherButton /></></Comp>;
 >     : ^ ^^    ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
 ><><Button /><AnotherButton /></> : JSX.Element
@@ -211,8 +211,8 @@ let k4 = <SingleChildComp a={10} b="hi"><><Button /><AnotherButton /></></Single
 >                : ^ ^^               ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
 ><><Button /><AnotherButton /></> : JSX.Element
@@ -238,8 +238,8 @@ let k5 = <SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></Single
 >                : ^ ^^               ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
 ><></> : JSX.Element

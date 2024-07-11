@@ -19,8 +19,8 @@ class A {
 >    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     set x(value: number) { }
 >x : number
@@ -36,8 +36,8 @@ class B {
     get x() { return 0; }
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     @dec set x(value: number) { }
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
@@ -63,8 +63,8 @@ class C {
     get x() { return 0; }
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 
 class D {
@@ -82,8 +82,8 @@ class D {
 >    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 
 class E {

@@ -88,8 +88,8 @@ function bug3(f:(x:string)=>string) { return f("s") }
 >       : ^^^^^^
 >f : (x: string) => string
 >  : ^ ^^      ^^^^^      
->"s" : "s"
->    : ^^^
+>"s" : string
+>    : ^^^^^^
 
 function fprime(x:string):string { return x; }
 >fprime : (x: string) => string

@@ -49,22 +49,22 @@ let robots: Robot[] = [{ name: "mower", skill: "mowing" }, { name: "trimmer", sk
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"mower" : "mower"
->        : ^^^^^^^
+>"mower" : string
+>        : ^^^^^^
 >skill : string
 >      : ^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
+>"mowing" : string
+>         : ^^^^^^
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >skill : string
 >      : ^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 
 let multiRobots: MultiRobot[] = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 >multiRobots : MultiRobot[]
@@ -75,19 +75,19 @@ let multiRobots: MultiRobot[] = [{ name: "mower", skills: { primary: "mowing", s
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"mower" : "mower"
->        : ^^^^^^^
+>"mower" : string
+>        : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
+>"mowing" : string
+>         : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
@@ -95,20 +95,20 @@ let multiRobots: MultiRobot[] = [{ name: "mower", skills: { primary: "mowing", s
 >                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"edging" : string
+>         : ^^^^^^
 
 function getRobots() {
 >getRobots : () => Robot[]
@@ -155,12 +155,12 @@ for ({name: nameA = "noName" } of robots) {
 >                          : ^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->nameA = "noName" : "noName"
->                 : ^^^^^^^^
+>nameA = "noName" : string
+>                 : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 >robots : Robot[]
 >       : ^^^^^^^
 
@@ -181,12 +181,12 @@ for ({name: nameA = "noName" } of getRobots()) {
 >                          : ^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->nameA = "noName" : "noName"
->                 : ^^^^^^^^
+>nameA = "noName" : string
+>                 : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 >getRobots() : Robot[]
 >            : ^^^^^^^
 >getRobots : () => Robot[]
@@ -209,12 +209,12 @@ for ({name: nameA = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "
 >                          : ^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->nameA = "noName" : "noName"
->                 : ^^^^^^^^
+>nameA = "noName" : string
+>                 : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
 >                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
@@ -261,32 +261,32 @@ for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "seconda
 >                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->primaryA = "primary" : "primary"
->                     : ^^^^^^^^^
+>primaryA = "primary" : string
+>                     : ^^^^^^
 >primaryA : string
 >         : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->secondaryA = "secondary" : "secondary"
->                         : ^^^^^^^^^^^
+>secondaryA = "secondary" : string
+>                         : ^^^^^^
 >secondaryA : string
 >           : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
     { primary: "nosKill", secondary: "noSkill" } } of multiRobots) {
 >{ primary: "nosKill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"nosKill" : "nosKill"
->          : ^^^^^^^^^
+>"nosKill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >multiRobots : MultiRobot[]
 >            : ^^^^^^^^^^^^
 
@@ -313,32 +313,32 @@ for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "seconda
 >                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->primaryA = "primary" : "primary"
->                     : ^^^^^^^^^
+>primaryA = "primary" : string
+>                     : ^^^^^^
 >primaryA : string
 >         : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->secondaryA = "secondary" : "secondary"
->                         : ^^^^^^^^^^^
+>secondaryA = "secondary" : string
+>                         : ^^^^^^
 >secondaryA : string
 >           : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
     { primary: "nosKill", secondary: "noSkill" } } of getMultiRobots()) {
 >{ primary: "nosKill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"nosKill" : "nosKill"
->          : ^^^^^^^^^
+>"nosKill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >getMultiRobots() : MultiRobot[]
 >                 : ^^^^^^^^^^^^
 >getMultiRobots : () => MultiRobot[]
@@ -367,32 +367,32 @@ for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "seconda
 >                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->primaryA = "primary" : "primary"
->                     : ^^^^^^^^^
+>primaryA = "primary" : string
+>                     : ^^^^^^
 >primaryA : string
 >         : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->secondaryA = "secondary" : "secondary"
->                         : ^^^^^^^^^^^
+>secondaryA = "secondary" : string
+>                         : ^^^^^^
 >secondaryA : string
 >           : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
     { primary: "nosKill", secondary: "noSkill" } } of
 >{ primary: "nosKill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"nosKill" : "nosKill"
->          : ^^^^^^^^^
+>"nosKill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
     <MultiRobot[]>[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 ><MultiRobot[]>[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },        { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : MultiRobot[]
@@ -403,19 +403,19 @@ for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "seconda
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"mower" : "mower"
->        : ^^^^^^^
+>"mower" : string
+>        : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
+>"mowing" : string
+>         : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 
         { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
@@ -423,20 +423,20 @@ for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "seconda
 >                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"edging" : string
+>         : ^^^^^^
 
     console.log(primaryA);
 >console.log(primaryA) : void
@@ -568,12 +568,12 @@ for ({
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } of multiRobots) {
 >multiRobots : MultiRobot[]
@@ -620,12 +620,12 @@ for ({
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } of getMultiRobots()) {
 >getMultiRobots() : MultiRobot[]
@@ -674,12 +674,12 @@ for ({
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]
@@ -742,20 +742,20 @@ for ({name: nameA = "noName", skill: skillA = "noSkill" } of robots) {
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->nameA = "noName" : "noName"
->                 : ^^^^^^^^
+>nameA = "noName" : string
+>                 : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 >skill : string
 >      : ^^^^^^
->skillA = "noSkill" : "noSkill"
->                   : ^^^^^^^^^
+>skillA = "noSkill" : string
+>                   : ^^^^^^
 >skillA : string
 >       : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >robots : Robot[]
 >       : ^^^^^^^
 
@@ -776,20 +776,20 @@ for ({name: nameA = "noName", skill: skillA = "noSkill"  } of getRobots()) {
 >                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->nameA = "noName" : "noName"
->                 : ^^^^^^^^
+>nameA = "noName" : string
+>                 : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 >skill : string
 >      : ^^^^^^
->skillA = "noSkill" : "noSkill"
->                   : ^^^^^^^^^
+>skillA = "noSkill" : string
+>                   : ^^^^^^
 >skillA : string
 >       : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >getRobots() : Robot[]
 >            : ^^^^^^^
 >getRobots : () => Robot[]
@@ -812,20 +812,20 @@ for ({name: nameA = "noName", skill: skillA = "noSkill"  } of [{ name: "mower", 
 >                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->nameA = "noName" : "noName"
->                 : ^^^^^^^^
+>nameA = "noName" : string
+>                 : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 >skill : string
 >      : ^^^^^^
->skillA = "noSkill" : "noSkill"
->                   : ^^^^^^^^^
+>skillA = "noSkill" : string
+>                   : ^^^^^^
 >skillA : string
 >       : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
 >                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
@@ -868,12 +868,12 @@ for ({
     name: nameA = "noName",
 >name : string
 >     : ^^^^^^
->nameA = "noName" : "noName"
->                 : ^^^^^^^^
+>nameA = "noName" : string
+>                 : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 
     skills: {
 >skills : { primary?: string; secondary?: string; }
@@ -886,34 +886,34 @@ for ({
         primary: primaryA = "primary",
 >primary : string
 >        : ^^^^^^
->primaryA = "primary" : "primary"
->                     : ^^^^^^^^^
+>primaryA = "primary" : string
+>                     : ^^^^^^
 >primaryA : string
 >         : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 
         secondary: secondaryA = "secondary"
 >secondary : string
 >          : ^^^^^^
->secondaryA = "secondary" : "secondary"
->                         : ^^^^^^^^^^^
+>secondaryA = "secondary" : string
+>                         : ^^^^^^
 >secondaryA : string
 >           : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
     } = { primary: "noSkill", secondary: "noSkill" }
 >{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } of multiRobots) {
 >multiRobots : MultiRobot[]
@@ -938,12 +938,12 @@ for ({
     name: nameA = "noName",
 >name : string
 >     : ^^^^^^
->nameA = "noName" : "noName"
->                 : ^^^^^^^^
+>nameA = "noName" : string
+>                 : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 
     skills: {
 >skills : { primary?: string; secondary?: string; }
@@ -956,34 +956,34 @@ for ({
         primary: primaryA = "primary",
 >primary : string
 >        : ^^^^^^
->primaryA = "primary" : "primary"
->                     : ^^^^^^^^^
+>primaryA = "primary" : string
+>                     : ^^^^^^
 >primaryA : string
 >         : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 
         secondary: secondaryA = "secondary"
 >secondary : string
 >          : ^^^^^^
->secondaryA = "secondary" : "secondary"
->                         : ^^^^^^^^^^^
+>secondaryA = "secondary" : string
+>                         : ^^^^^^
 >secondaryA : string
 >           : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
     } = { primary: "noSkill", secondary: "noSkill" }
 >{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } of getMultiRobots()) {
 >getMultiRobots() : MultiRobot[]
@@ -1010,12 +1010,12 @@ for ({
     name: nameA = "noName",
 >name : string
 >     : ^^^^^^
->nameA = "noName" : "noName"
->                 : ^^^^^^^^
+>nameA = "noName" : string
+>                 : ^^^^^^
 >nameA : string
 >      : ^^^^^^
->"noName" : "noName"
->         : ^^^^^^^^
+>"noName" : string
+>         : ^^^^^^
 
     skills: {
 >skills : { primary?: string; secondary?: string; }
@@ -1028,34 +1028,34 @@ for ({
         primary: primaryA = "primary",
 >primary : string
 >        : ^^^^^^
->primaryA = "primary" : "primary"
->                     : ^^^^^^^^^
+>primaryA = "primary" : string
+>                     : ^^^^^^
 >primaryA : string
 >         : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 
         secondary: secondaryA = "secondary"
 >secondary : string
 >          : ^^^^^^
->secondaryA = "secondary" : "secondary"
->                         : ^^^^^^^^^^^
+>secondaryA = "secondary" : string
+>                         : ^^^^^^
 >secondaryA : string
 >           : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
     } = { primary: "noSkill", secondary: "noSkill" }
 >{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } of <MultiRobot[]>[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 ><MultiRobot[]>[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : MultiRobot[]
@@ -1066,19 +1066,19 @@ for ({
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"mower" : "mower"
->        : ^^^^^^^
+>"mower" : string
+>        : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
+>"mowing" : string
+>         : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
@@ -1086,20 +1086,20 @@ for ({
 >                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"edging" : string
+>         : ^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
@@ -1249,12 +1249,12 @@ for ({
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } of multiRobots) {
 >multiRobots : MultiRobot[]
@@ -1307,12 +1307,12 @@ for ({
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } of getMultiRobots()) {
 >getMultiRobots() : MultiRobot[]
@@ -1367,12 +1367,12 @@ for ({
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 
 } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]

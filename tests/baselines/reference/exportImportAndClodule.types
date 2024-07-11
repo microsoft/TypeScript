@@ -63,8 +63,8 @@ var o = new M.D('Hello');
 >  : ^^^^^^^^
 >D : typeof K.L
 >  : ^^^^^^^^^^
->'Hello' : "Hello"
->        : ^^^^^^^
+>'Hello' : string
+>        : ^^^^^^
 
 var p: { x: number; y: number; }
 >p : { x: number; y: number; }

@@ -61,6 +61,6 @@ rootConnection('test');
 >                       : ^^^^^^^^^^^^       ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
 >rootConnection : (name: string) => { resolve: (context: any, args: any) => Promise<{}>; }
 >               : ^    ^^      ^^^^^^^^^^^^^^^^^       ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
->'test' : "test"
+>'test' : string
 >       : ^^^^^^
 

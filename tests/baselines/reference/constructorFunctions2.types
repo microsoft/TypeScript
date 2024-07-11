@@ -19,8 +19,8 @@ const A = require("./other");
 >                   : ^^^^^^^^
 >require : (id: string) => any
 >        : ^  ^^      ^^^^^   
->"./other" : "./other"
->          : ^^^^^^^^^
+>"./other" : string
+>          : ^^^^^^
 
 const a = new A().id;
 >a : number

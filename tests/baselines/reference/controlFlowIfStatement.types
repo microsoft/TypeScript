@@ -73,21 +73,21 @@ function a() {
 >     : ^^^^^^^
 
         x = 42;
->x = 42 : 42
->       : ^^
+>x = 42 : number
+>       : ^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
     }
     else {
         x = "";
->x = "" : ""
->       : ^^
+>x = "" : string
+>       : ^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
         return;
     }
@@ -108,12 +108,12 @@ function b() {
 >     : ^^^^^^^
 
         x = 42;
->x = 42 : 42
->       : ^^
+>x = 42 : number
+>       : ^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
         throw "";
 >"" : ""
@@ -121,12 +121,12 @@ function b() {
     }
     else {
         x = "";
->x = "" : ""
->       : ^^
+>x = "" : string
+>       : ^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
     }
     x; // string
 >x : string
@@ -186,8 +186,8 @@ function d<T extends string>(data: string | T): never {
 >                                : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'will always happen' : "will always happen"
->                     : ^^^^^^^^^^^^^^^^^^^^
+>'will always happen' : string
+>                     : ^^^^^^
     }
     else {
         return data;

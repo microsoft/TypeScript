@@ -10,8 +10,8 @@ class a {
 >  : ^^^^^^
 
         return "20";
->"20" : "20"
->     : ^^^^
+>"20" : string
+>     : ^^^^^^
     }
     static set x(aValue: string) {
 >x : string

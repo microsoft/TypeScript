@@ -48,8 +48,8 @@ function f1(s: Set<string> | Set<number>) {
 >  : ^^^^^^^^^^^
 >add : (value: number) => Set<number>
 >    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 }
 
 function f2(s: Set<string> | Set<number>) {
@@ -97,8 +97,8 @@ function f2(s: Set<string> | Set<number>) {
 >  : ^^^^^^^^^^^
 >add : (value: number) => Set<number>
 >    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 }
 
 function f3(s: Set<string> | Set<number>) {

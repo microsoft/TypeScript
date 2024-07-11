@@ -12,16 +12,16 @@ foo('foo');
 >           : ^^^^
 >foo : (a?: string) => void
 >    : ^ ^^^      ^^^^^^^^^
->'foo' : "foo"
->      : ^^^^^
+>'foo' : string
+>      : ^^^^^^
 
 foo('foo', 'bar'); 
 >foo('foo', 'bar') : void
 >                  : ^^^^
 >foo : (a?: string) => void
 >    : ^ ^^^      ^^^^^^^^^
->'foo' : "foo"
->      : ^^^^^
+>'foo' : string
+>      : ^^^^^^
 >'bar' : "bar"
 >      : ^^^^^
 
@@ -30,8 +30,8 @@ foo(4);
 >       : ^^^^
 >foo : (a?: string) => void
 >    : ^ ^^^      ^^^^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
 foo();
 >foo() : void

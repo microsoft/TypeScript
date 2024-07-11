@@ -1927,8 +1927,8 @@ define(function () {
 >       : ^^^
 >key : string
 >    : ^^^^^^
->'i' : "i"
->    : ^^^
+>'i' : string
+>    : ^^^^^^
             }
         }
     }
@@ -2148,8 +2148,8 @@ define(function () {
 >       : ^^^^^^^^^^^^^^^^^
 >value : any
 >      : ^^^
->'i' : "i"
->    : ^^^
+>'i' : string
+>    : ^^^^^^
                 }
                 mobileDetectRules.props[key] = values;
 >mobileDetectRules.props[key] = values : any
@@ -5315,8 +5315,8 @@ define(function () {
 >       : ^^^^^^^^^^^^^^^^^
 >pattern : any
 >        : ^^^
->'i' : "i"
->    : ^^^
+>'i' : string
+>    : ^^^^^^
             }
             return pattern.test(this.ua);
 >pattern.test(this.ua) : any
@@ -5647,8 +5647,8 @@ define(function () {
 >                                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'unknown environment' : "unknown environment"
->                      : ^^^^^^^^^^^^^^^^^^^^^
+>'unknown environment' : string
+>                      : ^^^^^^
     }
 })());
 

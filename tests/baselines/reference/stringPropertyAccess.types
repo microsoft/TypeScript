@@ -18,8 +18,8 @@ var a = x.charAt(0);
 >  : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 var b = x.hasOwnProperty('charAt');
 >b : boolean
@@ -46,8 +46,8 @@ var c = x['charAt'](0);
 >  : ^^^^^^
 >'charAt' : "charAt"
 >         : ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 var e = x['hasOwnProperty']('toFixed');
 >e : boolean

@@ -122,14 +122,14 @@ class Camera {
 >                           : ^^^^^^
 >Vector : typeof Vector
 >       : ^^^^^^^^^^^^^
->0.0 : 0
->    : ^
+>0.0 : number
+>    : ^^^^^^
 >-1.0 : -1
 >     : ^^
 >1.0 : 1
 >    : ^
->0.0 : 0
->    : ^
+>0.0 : number
+>    : ^^^^^^
 
         this.forward = Vector.norm(Vector.minus(lookAt,this.pos));
 >this.forward = Vector.norm(Vector.minus(lookAt,this.pos)) : Vector

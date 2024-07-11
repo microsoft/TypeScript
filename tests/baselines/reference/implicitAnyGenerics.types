@@ -66,8 +66,8 @@ var d2 = new D(1);
 >         : ^^^^^^^^^
 >D : typeof D
 >  : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var d3 = new D<any>(1);
 >d3 : D<any>

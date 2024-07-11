@@ -85,8 +85,8 @@ export function overloaded(a,b) {
 >                               : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Invalid arguments" : "Invalid arguments"
->                    : ^^^^^^^^^^^^^^^^^^^
+>"Invalid arguments" : string
+>                    : ^^^^^^
 }
 var o1 = overloaded(1,2)
 >o1 : number
@@ -95,10 +95,10 @@ var o1 = overloaded(1,2)
 >                : ^^^^^^
 >overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >           : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 var o2 = overloaded("zero", "one")
 >o2 : never
@@ -107,7 +107,7 @@ var o2 = overloaded("zero", "one")
 >                          : ^^^^^
 >overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >           : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
->"zero" : "zero"
+>"zero" : string
 >       : ^^^^^^
 >"one" : "one"
 >      : ^^^^^
@@ -119,8 +119,8 @@ var o3 = overloaded("a",false)
 >                      : ^^^^^^
 >overloaded : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >           : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 >false : false
 >      : ^^^^^
 
@@ -156,17 +156,17 @@ uncheckedInternally(1,2)
 >                         : ^^^^^^
 >uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >                    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 uncheckedInternally("zero", "one")
 >uncheckedInternally("zero", "one") : never
 >                                   : ^^^^^
 >uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
 >                    : ^^^ ^^      ^^ ^^      ^^^      ^^^ ^^      ^^ ^^       ^^^      ^^^
->"zero" : "zero"
+>"zero" : string
 >       : ^^^^^^
 >"one" : "one"
 >      : ^^^^^

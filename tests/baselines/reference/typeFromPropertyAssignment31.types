@@ -258,12 +258,12 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + 
 >             : ^^^^^^^^^^^^^^^^^^^
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 >ExpandoMerge(1001) : number
 >                   : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
 >             : ^^^^^^^^^^^^^^^^^^^
->1001 : 1001
->     : ^^^^
+>1001 : number
+>     : ^^^^^^
 

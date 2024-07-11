@@ -19,8 +19,8 @@ const a = { x: 10 } satisfies Partial<Point2d>;
 >          : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 // Should OK
 console.log(a.x.toFixed());

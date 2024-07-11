@@ -14,38 +14,38 @@ foo('foo', 1);
 >              : ^^^^
 >foo : (a?: string, b?: number) => void
 >    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
->'foo' : "foo"
->      : ^^^^^
->1 : 1
->  : ^
+>'foo' : string
+>      : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 foo('foo'); 
 >foo('foo') : void
 >           : ^^^^
 >foo : (a?: string, b?: number) => void
 >    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
->'foo' : "foo"
->      : ^^^^^
+>'foo' : string
+>      : ^^^^^^
 
 foo('foo','bar');
 >foo('foo','bar') : void
 >                 : ^^^^
 >foo : (a?: string, b?: number) => void
 >    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
->'foo' : "foo"
->      : ^^^^^
->'bar' : "bar"
->      : ^^^^^
+>'foo' : string
+>      : ^^^^^^
+>'bar' : string
+>      : ^^^^^^
 
 foo('foo', 1, 'bar');
 >foo('foo', 1, 'bar') : void
 >                     : ^^^^
 >foo : (a?: string, b?: number) => void
 >    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
->'foo' : "foo"
->      : ^^^^^
->1 : 1
->  : ^
+>'foo' : string
+>      : ^^^^^^
+>1 : number
+>  : ^^^^^^
 >'bar' : "bar"
 >      : ^^^^^
 

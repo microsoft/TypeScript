@@ -59,16 +59,16 @@ if (isFoo1(test)) {
 >     : ^^^^^^^^^
 
     test.foo = 'hi';
->test.foo = 'hi' : "hi"
->                : ^^^^
+>test.foo = 'hi' : string
+>                : ^^^^^^
 >test.foo : string
 >         : ^^^^^^
 >test : Foo
 >     : ^^^
 >foo : string
 >    : ^^^^^^
->'hi' : "hi"
->     : ^^^^
+>'hi' : string
+>     : ^^^^^^
 }
 
 if (isFoo2(test)) {
@@ -80,15 +80,15 @@ if (isFoo2(test)) {
 >     : ^^^^^^^^^
 
     test.foo = 'hi';
->test.foo = 'hi' : "hi"
->                : ^^^^
+>test.foo = 'hi' : string
+>                : ^^^^^^
 >test.foo : string
 >         : ^^^^^^
 >test : Foo
 >     : ^^^
 >foo : string
 >    : ^^^^^^
->'hi' : "hi"
->     : ^^^^
+>'hi' : string
+>     : ^^^^^^
 }
 

@@ -6,15 +6,15 @@
 var S = "hello world";
 >S : string
 >  : ^^^^^^
->"hello world" : "hello world"
->              : ^^^^^^^^^^^^^
+>"hello world" : string
+>              : ^^^^^^
 
 /** @type {number} */
 var n = 10;
 >n : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 /** @type {*} */
 var anyT = 2;
@@ -112,8 +112,8 @@ x1(0);
 >      : ^^^
 >x1 : (arg0: number) => any
 >   : ^^^^^^^      ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
@@ -135,8 +135,8 @@ x2(0);
 >      : ^^^^^^
 >x2 : (arg0: number) => number
 >   : ^^^^^^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 /**
  * @type {object}

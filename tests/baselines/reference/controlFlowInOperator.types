@@ -133,12 +133,12 @@ function uniqueID_54790(
 >          : ^^^^^^^^^
 
     id = "1";
->id = "1" : "1"
->         : ^^^
+>id = "1" : string
+>         : ^^^^^^
 >id : string
 >   : ^^^^^^
->"1" : "1"
->    : ^^^
+>"1" : string
+>    : ^^^^^^
   }
   if (!(id in seenIDs)) {
 >!(id in seenIDs) : boolean
@@ -208,8 +208,8 @@ function uniqueID_54790(
 >                                    : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"heat death of the universe" : "heat death of the universe"
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"heat death of the universe" : string
+>                             : ^^^^^^
 }
 
 function uniqueID_54790_2(id: string | number, seenIDs: object) {
@@ -221,12 +221,12 @@ function uniqueID_54790_2(id: string | number, seenIDs: object) {
 >        : ^^^^^^
 
   id = "a";
->id = "a" : "a"
->         : ^^^
+>id = "a" : string
+>         : ^^^^^^
 >id : string | number
 >   : ^^^^^^^^^^^^^^^
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 
   for (let i = 1; i < 3; i++) {
 >i : number
@@ -272,12 +272,12 @@ function uniqueID_54790_3(id: string | number, seenIDs: object) {
 >        : ^^^^^^
 
   id = "a";
->id = "a" : "a"
->         : ^^^
+>id = "a" : string
+>         : ^^^^^^
 >id : string | number
 >   : ^^^^^^^^^^^^^^^
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 
   for (let i = 1; i < 3; i++) {
 >i : number

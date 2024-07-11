@@ -40,6 +40,6 @@ var result = fib(5);
 >fib(5) : any
 >fib : (x: number) => any
 >    : ^ ^^      ^^^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 

@@ -17,8 +17,8 @@ type T = number;
 >  : ^^^^    ^^     ^^^^^   
 >1 as T : number
 >       : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >() => C : () => typeof C
 >        : ^^^^^^^^^^^^^^
 >C : typeof C

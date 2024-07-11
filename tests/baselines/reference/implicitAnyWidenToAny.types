@@ -60,8 +60,8 @@ var foo2: any = undefined;
 var temp: number = 5;
 >temp : number
 >     : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 var c: AnimalObj = { x: null }; 
 >c : AnimalObj
@@ -130,8 +130,8 @@ var obj0 = new objLit(1);
 >              : ^^^
 >objLit : new (n: number) => any
 >       : ^^^^^ ^^      ^^^^^   
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var obj1 = anyReturnFunc();
 >obj1 : any

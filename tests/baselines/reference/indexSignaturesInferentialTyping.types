@@ -32,12 +32,12 @@ var x1 = foo({ 0: 0, 1: 1 });       // type should be number
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >1 : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var x2 = bar({ 0: 0, 1: 1 });
 >x2 : number
@@ -50,12 +50,12 @@ var x2 = bar({ 0: 0, 1: 1 });
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >1 : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var x3 = bar({ zero: 0, one: 1 });  // type should be number
 >x3 : number
@@ -68,10 +68,10 @@ var x3 = bar({ zero: 0, one: 1 });  // type should be number
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >zero : number
 >     : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >one : number
 >    : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 

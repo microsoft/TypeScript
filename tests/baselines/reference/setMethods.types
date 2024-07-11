@@ -10,12 +10,12 @@ let numberSet = new Set([0, 1, 2]);
 >    : ^^^^^^^^^^^^^^
 >[0, 1, 2] : number[]
 >          : ^^^^^^^^
->0 : 0
->  : ^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>0 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 let stringSet = new Set(["a", "b"]);
 >stringSet : Set<string>
@@ -26,10 +26,10 @@ let stringSet = new Set(["a", "b"]);
 >    : ^^^^^^^^^^^^^^
 >["a", "b"] : string[]
 >           : ^^^^^^^^
->"a" : "a"
->    : ^^^
->"b" : "b"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
+>"b" : string
+>    : ^^^^^^
 
 let numberMap = new Map([[4, {}], [5, {}]]);
 >numberMap : Map<number, {}>
@@ -42,14 +42,14 @@ let numberMap = new Map([[4, {}], [5, {}]]);
 >                   : ^^^^^^^^^^^^^^
 >[4, {}] : [number, {}]
 >        : ^^^^^^^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 >{} : {}
 >   : ^^
 >[5, {}] : [number, {}]
 >        : ^^^^^^^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 >{} : {}
 >   : ^^
 

@@ -45,8 +45,8 @@ export function methodFnLength<T extends {}, K extends keyof T>(obj: T, methodKe
 >           : ^^^^^^^^^^
 
         return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
     }
     return fn.length;
 >fn.length : number

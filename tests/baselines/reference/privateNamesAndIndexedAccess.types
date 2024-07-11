@@ -21,8 +21,8 @@ class C {
         const ok: C["foo"] = 3;
 >ok : number
 >   : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         // not supported yet, could support in future:
         const badForNow: C[#bar] = 3;   // Error

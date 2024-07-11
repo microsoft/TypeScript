@@ -486,40 +486,40 @@ function f6() {
 >  : ^^^^^^^^
 
             x.a = "a";
->x.a = "a" : "a"
->          : ^^^
+>x.a = "a" : string
+>          : ^^^^^^
 >x.a : string
 >    : ^^^^^^
 >x : C
 >  : ^
 >a : string
 >  : ^^^^^^
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 
             x.b = "b";
->x.b = "b" : "b"
->          : ^^^
+>x.b = "b" : string
+>          : ^^^^^^
 >x.b : string
 >    : ^^^^^^
 >x : C
 >  : ^
 >b : string
 >  : ^^^^^^
->"b" : "b"
->    : ^^^
+>"b" : string
+>    : ^^^^^^
 
             x.c = "c";
->x.c = "c" : "c"
->          : ^^^
+>x.c = "c" : string
+>          : ^^^^^^
 >x.c : string
 >    : ^^^^^^
 >x : C
 >  : ^
 >c : string
 >  : ^^^^^^
->"c" : "c"
->    : ^^^
+>"c" : string
+>    : ^^^^^^
 
             return x;
 >x : C

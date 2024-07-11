@@ -59,10 +59,10 @@ var r0 = map([1, ""], (x) => x.toString());
 >    : ^ ^^ ^^  ^^   ^^ ^^           ^^^^^^^^
 >[1, ""] : (string | number)[]
 >        : ^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->"" : ""
->   : ^^
+>1 : number
+>  : ^^^^^^
+>"" : string
+>   : ^^^^^^
 >(x) => x.toString() : (x: string | number) => string
 >                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
@@ -137,10 +137,10 @@ var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
 >    : ^ ^^ ^^  ^^   ^^ ^^           ^^^^^^^^
 >[1, ""] : (string | number)[]
 >        : ^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->"" : ""
->   : ^^
+>1 : number
+>  : ^^^^^^
+>"" : string
+>   : ^^^^^^
 >(x) => x.toString() : (x: number) => string
 >                    : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -163,10 +163,10 @@ var r7b = map<number>([1, ""], (x) => x.toString()); // error
 >    : ^ ^^ ^^  ^^   ^^ ^^           ^^^^^^^^
 >[1, ""] : (string | number)[]
 >        : ^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->"" : ""
->   : ^^
+>1 : number
+>  : ^^^^^^
+>"" : string
+>   : ^^^^^^
 >(x) => x.toString() : (x: number) => string
 >                    : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number

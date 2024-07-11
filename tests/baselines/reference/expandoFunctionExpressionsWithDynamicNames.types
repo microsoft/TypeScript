@@ -10,36 +10,36 @@ const s = "X";
 >    : ^^^
 
 export const expr = () => {}
->expr : { (): void; X: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
->() => {} : { (): void; X: number; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>expr : { (): void; X: any; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; X: any; }
+>         : ^^^^^^^^^^^^^^^^^^^^^
 
 expr[s] = 0
 >expr[s] = 0 : 0
 >            : ^
->expr[s] : number
->        : ^^^^^^
->expr : { (): void; X: number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>expr[s] : any
+>        : ^^^
+>expr : { (): void; X: any; }
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >s : "X"
 >  : ^^^
 >0 : 0
 >  : ^
 
 export const expr2 = function () {}
->expr2 : { (): void; X: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
->function () {} : { (): void; X: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^
+>expr2 : { (): void; X: any; }
+>      : ^^^^^^^^^^^^^^^^^^^^^
+>function () {} : { (): void; X: any; }
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
 expr2[s] = 0
 >expr2[s] = 0 : 0
 >             : ^
->expr2[s] : number
->         : ^^^^^^
->expr2 : { (): void; X: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>expr2[s] : any
+>         : ^^^
+>expr2 : { (): void; X: any; }
+>      : ^^^^^^^^^^^^^^^^^^^^^
 >s : "X"
 >  : ^^^
 >0 : 0

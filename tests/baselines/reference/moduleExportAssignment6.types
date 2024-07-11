@@ -65,8 +65,8 @@ function exec() {
 >          : ^
 >C : typeof C
 >  : ^^^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
     return module.exports; // should be fine because `module` is defined locally
 >module.exports : number[]
@@ -89,8 +89,8 @@ function tricky() {
 >          : ^
 >C : typeof C
 >  : ^^^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
     return () => {
 >() => {        return module.exports;    } : () => number[]

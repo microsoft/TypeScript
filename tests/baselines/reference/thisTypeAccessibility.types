@@ -8,38 +8,38 @@ class MyClass {
     private p: number = 123;
 >p : number
 >  : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     protected pp: number = 123;
 >pp : number
 >   : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     public ppp: number = 123;
 >ppp : number
 >    : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     private static sp: number = 123;
 >sp : number
 >   : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     protected static spp: number = 123;
 >spp : number
 >    : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     public static sppp: number = 123;
 >sppp : number
 >     : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 }
 
 interface MyClass {

@@ -66,8 +66,8 @@ const contextual: Foo = {
     n: 16,
 >n : number
 >  : ^^^^^^
->16 : 16
->   : ^^
+>16 : number
+>   : ^^^^^^
 
     get x() { return this.n; }
 >x : number

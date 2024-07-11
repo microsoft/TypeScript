@@ -12,8 +12,8 @@ var s = Symbol.for("logical");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"logical" : "logical"
->          : ^^^^^^^^^
+>"logical" : string
+>          : ^^^^^^
 
 s && s;
 >s && s : symbol

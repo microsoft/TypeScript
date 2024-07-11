@@ -65,14 +65,14 @@ let myModule2 = import(bar() ? "./1" : null);
 >          : ^^^^^^^^^^^^
 >import(bar() ? "./1" : null) : Promise<any>
 >                             : ^^^^^^^^^^^^
->bar() ? "./1" : null : "./1"
->                     : ^^^^^
+>bar() ? "./1" : null : string
+>                     : ^^^^^^
 >bar() : boolean
 >      : ^^^^^^^
 >bar : () => boolean
 >    : ^^^^^^       
->"./1" : "./1"
->      : ^^^^^
+>"./1" : string
+>      : ^^^^^^
 
 let myModule3 = import(null);
 >myModule3 : Promise<any>

@@ -28,8 +28,8 @@ function foo1 (f?: (a: number) => void) {
 >      : ^^^^
 >f : (a: number) => void
 >  : ^ ^^      ^^^^^    
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 }
 
 function foo2 (f?: (a: number) => void) {
@@ -59,8 +59,8 @@ function foo2 (f?: (a: number) => void) {
 >      : ^^^^
 >f : (a: number) => void
 >  : ^ ^^      ^^^^^    
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 }
 
 function foo3 (f?: (a: number) => void) {
@@ -90,8 +90,8 @@ function foo3 (f?: (a: number) => void) {
 >      : ^^^^
 >f : ((a: number) => void) | undefined
 >  : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 }
 
 function bar1 (f?: (a: number) => void) {
@@ -133,8 +133,8 @@ function bar1 (f?: (a: number) => void) {
 >      : ^^^^
 >f : (a: number) => void
 >  : ^ ^^      ^^^^^    
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 }
 
 function bar2 (f?: (a: number) => void) {
@@ -176,8 +176,8 @@ function bar2 (f?: (a: number) => void) {
 >      : ^^^^
 >f : (a: number) => void
 >  : ^ ^^      ^^^^^    
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 }
 
 function bar3 (f?: (a: number) => void) {
@@ -219,7 +219,7 @@ function bar3 (f?: (a: number) => void) {
 >      : ^^^^
 >f : ((a: number) => void) | undefined
 >  : ^^ ^^      ^^^^^    ^^^^^^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 }
 

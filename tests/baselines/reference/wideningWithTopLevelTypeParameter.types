@@ -54,8 +54,8 @@ const c0 = f0(7);  // [number]
 >      : ^^^^^^^^
 >f0 : <T>(x: T) => [T]
 >   : ^ ^^ ^^ ^^^^^   
->7 : 7
->  : ^
+>7 : number
+>  : ^^^^^^
 
 const c1 = f1(7);  // [number]
 >c1 : [number]
@@ -64,8 +64,8 @@ const c1 = f1(7);  // [number]
 >      : ^^^^^^^^
 >f1 : <T>(x: C1<T>) => [T]
 >   : ^ ^^ ^^     ^^^^^   
->7 : 7
->  : ^
+>7 : number
+>  : ^^^^^^
 
 const c2 = f2(7);  // [number]
 >c2 : [number]
@@ -74,8 +74,8 @@ const c2 = f2(7);  // [number]
 >      : ^^^^^^^^
 >f2 : <T>(x: C1<C2<T>>) => [T]
 >   : ^ ^^ ^^         ^^^^^   
->7 : 7
->  : ^
+>7 : number
+>  : ^^^^^^
 
 const c3 = f3(7);  // [number]
 >c3 : [number]
@@ -84,8 +84,8 @@ const c3 = f3(7);  // [number]
 >      : ^^^^^^^^
 >f3 : <T>(x: C1<C2<C3<T>>>) => [T]
 >   : ^ ^^ ^^             ^^^^^   
->7 : 7
->  : ^
+>7 : number
+>  : ^^^^^^
 
 const c4 = f4(7);  // [7] since we have an internal nesting limit of 3
 >c4 : [7]
@@ -115,8 +115,8 @@ const a = new FormControl('');  // string
 >                    : ^^^^^^^^^^^^^^^^^^^
 >FormControl : typeof FormControl
 >            : ^^^^^^^^^^^^^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
 class FormControl2<T> {
 >FormControl2 : FormControl2<T>
@@ -134,8 +134,8 @@ const b = new FormControl2('');  // string
 >                     : ^^^^^^^^^^^^^^^^^^^^
 >FormControl2 : typeof FormControl2
 >             : ^^^^^^^^^^^^^^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
 class FormControl3<T> {
 >FormControl3 : FormControl3<T>
@@ -153,6 +153,6 @@ const c = new FormControl3('');  // string
 >                     : ^^^^^^^^^^^^^^^^^^^^
 >FormControl3 : typeof FormControl3
 >             : ^^^^^^^^^^^^^^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 

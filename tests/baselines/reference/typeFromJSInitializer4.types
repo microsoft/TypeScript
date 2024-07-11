@@ -70,12 +70,12 @@ function f(a = null, b = n, l = []) {
 
     // b should be number | undefined, not any
     b = 1
->b = 1 : 1
->      : ^
+>b = 1 : number
+>      : ^^^^^^
 >b : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     b = undefined
 >b = undefined : undefined
@@ -86,12 +86,12 @@ function f(a = null, b = n, l = []) {
 >          : ^^^^^^^^^
 
     b = 'error'
->b = 'error' : "error"
->            : ^^^^^^^
+>b = 'error' : string
+>            : ^^^^^^
 >b : number
 >  : ^^^^^^
->'error' : "error"
->        : ^^^^^^^
+>'error' : string
+>        : ^^^^^^
 
     // l should be any[]
     l.push(1)

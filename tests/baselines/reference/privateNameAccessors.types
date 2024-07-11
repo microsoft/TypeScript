@@ -8,8 +8,8 @@ class A1 {
     get #prop() { return ""; }
 >#prop : string
 >      : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     set #prop(param: string) { }
 >#prop : string
@@ -28,14 +28,14 @@ class A1 {
 >     : ^^^^^^
 
         this.#prop = "";
->this.#prop = "" : ""
->                : ^^
+>this.#prop = "" : string
+>                : ^^^^^^
 >this.#prop : string
 >           : ^^^^^^
 >this : this
 >     : ^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
         this.#roProp = ""; // Error
 >this.#roProp = "" : ""

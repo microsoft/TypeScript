@@ -6,24 +6,24 @@
 >             : ^^^^^^^^^^^^
 
 const a = (/*comm*/ 10 satisfies number);
->a : 10
->  : ^^
->(/*comm*/ 10 satisfies number) : 10
->                               : ^^
->10 satisfies number : 10
->                    : ^^
->10 : 10
->   : ^^
+>a : number
+>  : ^^^^^^
+>(/*comm*/ 10 satisfies number) : number
+>                               : ^^^^^^
+>10 satisfies number : number
+>                    : ^^^^^^
+>10 : number
+>   : ^^^^^^
 
 const b = ((/*comm*/ 10 satisfies number));
->b : 10
->  : ^^
->((/*comm*/ 10 satisfies number)) : 10
->                                 : ^^
->(/*comm*/ 10 satisfies number) : 10
->                               : ^^
->10 satisfies number : 10
->                    : ^^
->10 : 10
->   : ^^
+>b : number
+>  : ^^^^^^
+>((/*comm*/ 10 satisfies number)) : number
+>                                 : ^^^^^^
+>(/*comm*/ 10 satisfies number) : number
+>                               : ^^^^^^
+>10 satisfies number : number
+>                    : ^^^^^^
+>10 : number
+>   : ^^^^^^
 

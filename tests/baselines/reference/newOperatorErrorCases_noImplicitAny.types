@@ -6,8 +6,8 @@ function fnNumber(this: void): number { return 90; }
 >         : ^    ^^    ^^^^^      
 >this : void
 >     : ^^^^
->90 : 90
->   : ^^
+>90 : number
+>   : ^^^^^^
 
 new fnNumber(); // Error
 >new fnNumber() : any

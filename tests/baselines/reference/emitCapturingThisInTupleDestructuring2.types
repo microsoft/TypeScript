@@ -6,10 +6,10 @@ var array1: [number, number] = [1, 2];
 >       : ^^^^^^^^^^^^^^^^
 >[1, 2] : [number, number]
 >       : ^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 class B {
 >B : B

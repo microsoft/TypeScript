@@ -79,8 +79,8 @@ suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo'
 >  : ^
 >y : string
 >  : ^^^^^^
->'noo' : "noo"
->      : ^^^^^
+>'noo' : string
+>      : ^^^^^^
 >rest.y + nested.ka : string
 >                   : ^^^^^^
 >rest.y : string

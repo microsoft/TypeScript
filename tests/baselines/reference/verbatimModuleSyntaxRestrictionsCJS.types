@@ -49,8 +49,8 @@ import type { funciton as funciton2 } from "./decl"; // ok I guess?
 import("./decl"); // error
 >import("./decl") : Promise<typeof import("/decl")>
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./decl" : "./decl"
->         : ^^^^^^^^
+>"./decl" : string
+>         : ^^^^^^
 
 type T = typeof import("./decl"); // ok
 >T : typeof import("/decl")

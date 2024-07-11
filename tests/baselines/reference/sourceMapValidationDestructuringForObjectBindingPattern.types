@@ -47,12 +47,12 @@ let robot: Robot = { name: "mower", skill: "mowing" };
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"mower" : "mower"
->        : ^^^^^^^
+>"mower" : string
+>        : ^^^^^^
 >skill : string
 >      : ^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
+>"mowing" : string
+>         : ^^^^^^
 
 let multiRobot: MultiRobot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 >multiRobot : MultiRobot
@@ -61,19 +61,19 @@ let multiRobot: MultiRobot = { name: "mower", skills: { primary: "mowing", secon
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"mower" : "mower"
->        : ^^^^^^^
+>"mower" : string
+>        : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
+>"mowing" : string
+>         : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 
 function getRobot() {
@@ -174,12 +174,12 @@ for (let {name: nameA } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0; 
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >skill : string
 >      : ^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 >i : number
 >  : ^^^^^^
 >0 : 0
@@ -308,20 +308,20 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } =
 >                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"edging" : string
+>         : ^^^^^^
 
     i = 0; i < 1; i++) {
 >i : number
@@ -445,12 +445,12 @@ for (let {name: nameA, skill: skillA } = <Robot>{ name: "trimmer", skill: "trimm
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >skill : string
 >      : ^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 >i : number
 >  : ^^^^^^
 >0 : 0
@@ -591,20 +591,20 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } =
 >                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"trimmer" : "trimmer"
->          : ^^^^^^^^^
+>"trimmer" : string
+>          : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"trimming" : "trimming"
->           : ^^^^^^^^^^
+>"trimming" : string
+>           : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"edging" : string
+>         : ^^^^^^
 
     i = 0; i < 1; i++) {
 >i : number

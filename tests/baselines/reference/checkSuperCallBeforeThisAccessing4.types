@@ -62,16 +62,16 @@ class Derived extends Based {
 >      : ^^^^^^^^^^^^
 
         this.x = 10;
->this.x = 10 : 10
->            : ^^
+>this.x = 10 : number
+>            : ^^^^^^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
         var that = this;
 >that : this

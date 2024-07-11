@@ -197,10 +197,10 @@ t2 = [42, "hello"];
 >   : ^^
 >[42, "hello"] : [number, string]
 >              : ^^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 t3 = [42, "hello"];
 >t3 = [42, "hello"] : [number, string]
@@ -209,10 +209,10 @@ t3 = [42, "hello"];
 >   : ^^
 >[42, "hello"] : [number, string]
 >              : ^^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 t3 = [42,,true]
 >t3 = [42,,true] : [number, undefined, true]
@@ -221,8 +221,8 @@ t3 = [42,,true]
 >   : ^^
 >[42,,true] : [number, undefined, true]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 > : undefined
 > : ^^^^^^^^^
 >true : true
@@ -235,8 +235,8 @@ t3 = [42];
 >   : ^^
 >[42] : [number]
 >     : ^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 t4 = [42, "hello"];
 >t4 = [42, "hello"] : [number, string]
@@ -245,10 +245,10 @@ t4 = [42, "hello"];
 >   : ^^
 >[42, "hello"] : [number, string]
 >              : ^^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 t4 = [42,,true];
 >t4 = [42,,true] : [number, undefined, true]
@@ -257,8 +257,8 @@ t4 = [42,,true];
 >   : ^^
 >[42,,true] : [number, undefined, true]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 > : undefined
 > : ^^^^^^^^^
 >true : true
@@ -273,8 +273,8 @@ t4 = [,"hello", true];
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 > : undefined
 > : ^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 

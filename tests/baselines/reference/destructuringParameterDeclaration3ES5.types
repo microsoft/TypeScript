@@ -211,10 +211,10 @@ a11([1, 2]);                              // Parameter type is number[]
 >    : ^               ^^        ^^^^^^^^^
 >[1, 2] : number[]
 >       : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 // Rest parameter with generic
 function foo<T>(...a: T[]) { }
@@ -228,22 +228,22 @@ foo<number|string>("hello", 1, 2);
 >                                  : ^^^^
 >foo : <T>(...a: T[]) => void
 >    : ^ ^^^^^ ^^   ^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>"hello" : string
+>        : ^^^^^^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 foo("hello", "world");
 >foo("hello", "world") : void
 >                      : ^^^^
 >foo : <T>(...a: T[]) => void
 >    : ^ ^^^^^ ^^   ^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
->"world" : "world"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
+>"world" : string
+>        : ^^^^^^
 
 enum E { a, b }
 >E : E
@@ -272,12 +272,12 @@ foo1(1, 2, 3, E.a);
 >                   : ^^^^
 >foo1 : <T extends Number>(...a: T[]) => void
 >     : ^ ^^^^^^^^^      ^^^^^ ^^   ^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >E.a : E.a
 >    : ^^^
 >E : typeof E
@@ -290,12 +290,12 @@ foo1(1, 2, 3, E1.a, E.b);
 >                         : ^^^^
 >foo1 : <T extends Number>(...a: T[]) => void
 >     : ^ ^^^^^^^^^      ^^^^^ ^^   ^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >E1.a : E1.a
 >     : ^^^^
 >E1 : typeof E1

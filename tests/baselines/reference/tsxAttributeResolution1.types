@@ -39,8 +39,8 @@ interface Attribs1 {
 >      : ^^^
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 <test1 />; // OK
 ><test1 /> : JSX.Element
@@ -73,7 +73,7 @@ interface Attribs1 {
 >      : ^^^
 >reqd : string
 >     : ^^^^^^
->'true' : "true"
+>'true' : string
 >       : ^^^^^^
 
 // Errors
@@ -84,8 +84,8 @@ interface Attribs1 {
 >      : ^^^
 >x : string
 >  : ^^^^^^
->'0' : "0"
->    : ^^^
+>'0' : string
+>    : ^^^^^^
 
 <test1 y={0} />; // Error, no property "y"
 ><test1 y={0} /> : JSX.Element
@@ -134,8 +134,8 @@ interface Attribs1 {
 >      : ^^^
 >reqd : number
 >     : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 // Should be OK
 <var var='var' />;

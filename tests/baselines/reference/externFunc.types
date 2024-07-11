@@ -12,6 +12,6 @@ parseInt("2");
 >              : ^^^^^^
 >parseInt : { (string: string, radix?: number): number; (s: string): number; }
 >         : ^^^      ^^      ^^     ^^^      ^^^      ^^^ ^^      ^^^      ^^^
->"2" : "2"
->    : ^^^
+>"2" : string
+>    : ^^^^^^
 

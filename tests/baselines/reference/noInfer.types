@@ -282,14 +282,14 @@ assertEqual({ x: 1 }, { x: 3 }); // ok
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >{ x: 3 } : { x: number; }
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 const g = { x: 3, y: 2 };
 >g : { x: number; y: number; }
@@ -316,8 +316,8 @@ assertEqual(g, { x: 3 }); // error
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
 >invoke : <T, R>(func: (value: T) => R, value: NoInfer<T>) => R
@@ -348,8 +348,8 @@ invoke(test, { x: 1, y: 2 }); // error
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
 >2 : 2
@@ -364,8 +364,8 @@ test({ x: 1, y: 2 }); // error
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
 >2 : 2
@@ -402,8 +402,8 @@ doWork(comp, { foo: 42 }); // ok
 >            : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 doWork(comp, {}); // error
 >doWork(comp, {}) : void

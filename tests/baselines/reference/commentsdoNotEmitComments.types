@@ -26,8 +26,8 @@ foo(50);
 >        : ^^^^
 >foo : (p: number) => void
 >    : ^ ^^      ^^^^^^^^^
->50 : 50
->   : ^^
+>50 : number
+>   : ^^^^^^
 
 fooVar();
 >fooVar() : void

@@ -44,10 +44,10 @@ console.log(Intl.getCanonicalLocales(['EN-US', 'Fr']));
 >                    : ^      ^^^                          ^^^^^        
 >['EN-US', 'Fr'] : string[]
 >                : ^^^^^^^^
->'EN-US' : "EN-US"
->        : ^^^^^^^
->'Fr' : "Fr"
->     : ^^^^
+>'EN-US' : string
+>        : ^^^^^^
+>'Fr' : string
+>     : ^^^^^^
 
 // Expected output: Array ["en-US", "fr"]
 

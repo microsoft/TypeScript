@@ -30,16 +30,16 @@ class D {
 >  : ^
 
         this.widen = 6; // ok
->this.widen = 6 : 6
->               : ^
+>this.widen = 6 : number
+>               : ^^^^^^
 >this.widen : number
 >           : ^^^^^^
 >this : this
 >     : ^^^^
 >widen : number
 >      : ^^^^^^
->6 : 6
->  : ^
+>6 : number
+>  : ^^^^^^
     }
 }
 new D(7); // ok
@@ -47,6 +47,6 @@ new D(7); // ok
 >         : ^
 >D : typeof D
 >  : ^^^^^^^^
->7 : 7
->  : ^
+>7 : number
+>  : ^^^^^^
 

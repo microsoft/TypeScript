@@ -28,8 +28,8 @@ const fn = <
 >(opts:Opts<A, B>):string => 'Z'
 >opts : Opts<A, B>
 >     : ^^^^^^^^^^
->'Z' : "Z"
->    : ^^^
+>'Z' : string
+>    : ^^^^^^
 
 interface MyObjA {
   x:string,
@@ -52,8 +52,8 @@ fn<MyObjA>({
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'X' : "X"
->    : ^^^
+>'X' : string
+>    : ^^^^^^
 >y : string
 >  : ^^^^^^
 >'Y' : "Y"

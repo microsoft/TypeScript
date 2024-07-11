@@ -48,8 +48,8 @@ const p4 = import("pathToModule", "secondModule");
 >   : ^^^^^^^^^^^^
 >import("pathToModule", "secondModule") : Promise<any>
 >                                       : ^^^^^^^^^^^^
->"pathToModule" : "pathToModule"
->               : ^^^^^^^^^^^^^^
+>"pathToModule" : string
+>               : ^^^^^^
 >"secondModule" : "secondModule"
 >               : ^^^^^^^^^^^^^^
 

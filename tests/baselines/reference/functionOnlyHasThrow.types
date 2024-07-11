@@ -10,6 +10,6 @@ function clone():number {
 >                               : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"To be implemented" : "To be implemented"
->                    : ^^^^^^^^^^^^^^^^^^^
+>"To be implemented" : string
+>                    : ^^^^^^
 }

@@ -10,16 +10,16 @@ export module Baz { export var x = "hello"; }
 >        : ^^^^^^^
 
 Baz.x = "goodbye";
->Baz.x = "goodbye" : "goodbye"
->                  : ^^^^^^^^^
+>Baz.x = "goodbye" : string
+>                  : ^^^^^^
 >Baz.x : string
 >      : ^^^^^^
 >Baz : typeof Baz
 >    : ^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"goodbye" : "goodbye"
->          : ^^^^^^^^^
+>"goodbye" : string
+>          : ^^^^^^
 
 void 0;
 >void 0 : undefined

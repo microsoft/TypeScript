@@ -30,8 +30,8 @@ function withReturn() : string{
 >           : ^^^^^^      
 
     return "Hello";
->"Hello" : "Hello"
->        : ^^^^^^^
+>"Hello" : string
+>        : ^^^^^^
 }
 var withReturnVar = withReturn;
 >withReturnVar : () => string
@@ -114,8 +114,8 @@ function withOptionalInitializedParams(a: string, c: string = "hello string") {
 >  : ^^^^^^
 >c : string
 >  : ^^^^^^
->"hello string" : "hello string"
->               : ^^^^^^^^^^^^^^
+>"hello string" : string
+>               : ^^^^^^
 }
 var withOptionalInitializedParamsVar = withOptionalInitializedParams;
 >withOptionalInitializedParamsVar : (a: string, c?: string) => void

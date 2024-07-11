@@ -51,8 +51,8 @@ class Derived extends Base {
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
         this.b = y;
 >this.b = y : string
@@ -102,8 +102,8 @@ var r2 = new Derived2(1); // error
 >                : ^^^^^^^^
 >Derived2 : typeof Derived2
 >         : ^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var r3 = new Derived('', '');
 >r3 : Derived
@@ -112,10 +112,10 @@ var r3 = new Derived('', '');
 >                    : ^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
->'' : ""
->   : ^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
+>'' : string
+>   : ^^^^^^
 
 class Base2<T> {
 >Base2 : Base2<T>
@@ -161,8 +161,8 @@ class D<T> extends Base {
 >         : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
         this.b = y;
 >this.b = y : T

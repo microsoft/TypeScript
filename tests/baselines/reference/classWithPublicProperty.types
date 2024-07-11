@@ -17,8 +17,8 @@ class C {
     public b: string = '';
 >b : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     public c() { return '' }
 >c : () => string

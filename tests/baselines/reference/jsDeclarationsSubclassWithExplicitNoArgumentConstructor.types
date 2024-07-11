@@ -28,9 +28,9 @@ export class Sub extends Super {
 >                         : ^^^^
 >super : typeof Super
 >      : ^^^^^^^^^^^^
->'first' : "first"
->        : ^^^^^^^
->'second' : "second"
->         : ^^^^^^^^
+>'first' : string
+>        : ^^^^^^
+>'second' : string
+>         : ^^^^^^
     }
 }

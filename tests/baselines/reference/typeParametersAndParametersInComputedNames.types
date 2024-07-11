@@ -8,8 +8,8 @@ function foo<T>(a: T) : string {
 >  : ^
 
     return "";
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 }
 
 class A {

@@ -55,8 +55,8 @@ var c = new C(1)
 >         : ^
 >C : typeof C
 >  : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 c.x = undefined // should error
 >c.x = undefined : undefined
@@ -128,8 +128,8 @@ var k = A(1)
 >     : ^
 >A : typeof A
 >  : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var j = new A(2)
 >j : A
@@ -138,8 +138,8 @@ var j = new A(2)
 >         : ^
 >A : typeof A
 >  : ^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
 k.x === j.x
 >k.x === j.x : boolean

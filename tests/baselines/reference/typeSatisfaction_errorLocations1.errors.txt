@@ -17,7 +17,7 @@ typeSatisfaction_errorLocations1.ts(18,5): error TS2345: Argument of type '[{ a:
 typeSatisfaction_errorLocations1.ts(21,43): error TS2322: Type 'number' is not assignable to type 'boolean'.
 typeSatisfaction_errorLocations1.ts(23,23): error TS2322: Type 'boolean' is not assignable to type 'number'.
 typeSatisfaction_errorLocations1.ts(25,20): error TS1360: Type 'number' does not satisfy the expected type 'boolean'.
-typeSatisfaction_errorLocations1.ts(26,7): error TS2322: Type '1' is not assignable to type 'true'.
+typeSatisfaction_errorLocations1.ts(26,7): error TS2322: Type 'number' is not assignable to type 'true'.
 typeSatisfaction_errorLocations1.ts(29,18): error TS2322: Type 'string' is not assignable to type 'number'.
 typeSatisfaction_errorLocations1.ts(31,20): error TS1360: Type 'readonly [10, "20"]' does not satisfy the expected type 'number[]'.
   The type 'readonly [10, "20"]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
@@ -95,7 +95,7 @@ typeSatisfaction_errorLocations1.ts(48,21): error TS2322: Type '{ a: number; }' 
 !!! error TS1360: Type 'number' does not satisfy the expected type 'boolean'.
     const literal2: true = 1 satisfies number;
           ~~~~~~~~
-!!! error TS2322: Type '1' is not assignable to type 'true'.
+!!! error TS2322: Type 'number' is not assignable to type 'true'.
     
     declare function fn3(...args: unknown[]): void;
     fn3(10, ...([10, "20"] satisfies number[]));

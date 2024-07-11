@@ -32,8 +32,8 @@ const a = new Foo("");
 >            : ^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 const b = Foo(12);
 >b : number
@@ -42,6 +42,6 @@ const b = Foo(12);
 >        : ^^^^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 

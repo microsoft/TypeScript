@@ -434,12 +434,12 @@ function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
     obj2 = obj1 = { x: 1, y: 2 };
 >obj2 = obj1 = { x: 1, y: 2 } : { x: number; y: number; }
@@ -454,8 +454,8 @@ function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
 >2 : 2
@@ -485,12 +485,12 @@ function fx11(): { x?: number } {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 }
 
 // Repros from #52827

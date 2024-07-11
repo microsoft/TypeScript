@@ -14,7 +14,7 @@ mod.doNativeThing("good");
 >    : ^^^^^^^^^^
 >doNativeThing : (flag: string) => unknown
 >              : ^    ^^      ^^^^^       
->"good" : "good"
+>"good" : string
 >       : ^^^^^^
 
 === dir/native.d.node.ts ===

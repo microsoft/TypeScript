@@ -54,18 +54,18 @@ class Test {
         hello: (this.p6 = "string"),
 >hello : string
 >      : ^^^^^^
->(this.p6 = "string") : "string"
->                     : ^^^^^^^^
->this.p6 = "string" : "string"
->                   : ^^^^^^^^
+>(this.p6 = "string") : string
+>                     : ^^^^^^
+>this.p6 = "string" : string
+>                   : ^^^^^^
 >this.p6 : string
 >        : ^^^^^^
 >this : this
 >     : ^^^^
 >p6 : string
 >   : ^^^^^^
->"string" : "string"
->         : ^^^^^^^^
+>"string" : string
+>         : ^^^^^^
 
     };
 

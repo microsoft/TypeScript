@@ -64,12 +64,12 @@ module Geometry {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     // this is valid since B.Line _is_ visible outside Geometry
     export var Unit: Lines.Line = new Lines.Line(Origin, { x: 1, y: 0 });
@@ -91,12 +91,12 @@ module Geometry {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 
 // expected to work since all are exported

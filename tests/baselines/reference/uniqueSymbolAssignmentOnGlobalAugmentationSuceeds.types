@@ -8,8 +8,8 @@ const FOO_SYMBOL = Symbol('Foo');
 >              : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->'Foo' : "Foo"
->      : ^^^^^
+>'Foo' : string
+>      : ^^^^^^
 
 declare global {
 >global : any
@@ -31,14 +31,14 @@ export function foo<T>(p: Promise<T>) {
 >  : ^^^^^^^^^^
 
     p[FOO_SYMBOL] = 3;
->p[FOO_SYMBOL] = 3 : 3
->                  : ^
+>p[FOO_SYMBOL] = 3 : number
+>                  : ^^^^^^
 >p[FOO_SYMBOL] : number | undefined
 >              : ^^^^^^^^^^^^^^^^^^
 >p : Promise<T>
 >  : ^^^^^^^^^^
 >FOO_SYMBOL : unique symbol
 >           : ^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 }

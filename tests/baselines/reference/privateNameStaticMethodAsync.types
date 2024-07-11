@@ -20,8 +20,8 @@ const C = class {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
     static async foo() {
 >foo : () => Promise<number>
@@ -122,8 +122,8 @@ const C = class {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
     }
     async static *#bazBad() { yield 42; }
 >#bazBad : () => AsyncGenerator<number, void, unknown>

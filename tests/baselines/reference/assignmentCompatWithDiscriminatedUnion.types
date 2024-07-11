@@ -381,8 +381,8 @@ namespace GH14865 {
 >    : ^^^
 >data : string
 >     : ^^^^^^
->"whatevs" : "whatevs"
->          : ^^^^^^^^^
+>"whatevs" : string
+>          : ^^^^^^
 
     let b: Style1;
 >b : Style1
@@ -713,14 +713,14 @@ namespace GH39357 {
 >       : ^^^^^^^^^^^^^^^^^^^
 >b : "a" | "b"
 >  : ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >["c", ""] : ["c", string]
 >          : ^^^^^^^^^^^^^
 >"c" : "c"
 >    : ^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 }
 
 // https://github.com/microsoft/TypeScript/issues/58603

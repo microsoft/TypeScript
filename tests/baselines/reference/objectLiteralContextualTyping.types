@@ -39,8 +39,8 @@ var x = foo({ name: "Sprocket" });
 >                     : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"Sprocket" : "Sprocket"
->           : ^^^^^^^^^^
+>"Sprocket" : string
+>           : ^^^^^^
 
 var x: string;
 >x : string
@@ -57,12 +57,12 @@ var y = foo({ name: "Sprocket", description: "Bumpy wheel" });
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"Sprocket" : "Sprocket"
->           : ^^^^^^^^^^
+>"Sprocket" : string
+>           : ^^^^^^
 >description : string
 >            : ^^^^^^
->"Bumpy wheel" : "Bumpy wheel"
->              : ^^^^^^^^^^^^^
+>"Bumpy wheel" : string
+>              : ^^^^^^
 
 var y: string;
 >y : string

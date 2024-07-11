@@ -24,8 +24,8 @@ Object.keys({ a: 0 }).push("b");
 >  : ^
 >push : (...items: string[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->"b" : "b"
->    : ^^^
+>"b" : string
+>    : ^^^^^^
 
 // See also
 // https://stackoverflow.com/questions/55012174/why-doesnt-object-keys-return-a-keyof-type-in-typescript

@@ -28,8 +28,8 @@ export const mod = await (async () => {
   const x: number = 0;
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
   switch (x) {
 >x : number
@@ -44,8 +44,8 @@ export const mod = await (async () => {
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./case0.js") : Promise<{ default: typeof import("/case0"); }>
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./case0.js" : "./case0.js"
->             : ^^^^^^^^^^^^
+>"./case0.js" : string
+>             : ^^^^^^
 
     case 1:
 >1 : 1
@@ -56,8 +56,8 @@ export const mod = await (async () => {
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./case1.js") : Promise<{ default: typeof import("/case1"); }>
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./case1.js" : "./case1.js"
->             : ^^^^^^^^^^^^
+>"./case1.js" : string
+>             : ^^^^^^
 
     default:
       return await import("./caseFallback.js");
@@ -65,7 +65,7 @@ export const mod = await (async () => {
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./caseFallback.js") : Promise<{ default: typeof import("/caseFallback"); }>
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./caseFallback.js" : "./caseFallback.js"
->                    : ^^^^^^^^^^^^^^^^^^^
+>"./caseFallback.js" : string
+>                    : ^^^^^^
   }
 })();

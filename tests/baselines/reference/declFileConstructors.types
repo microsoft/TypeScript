@@ -54,8 +54,8 @@ export class ConstructorWithRestParamters {
 >      : ^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
     }
 }
 
@@ -172,8 +172,8 @@ class GlobalConstructorWithRestParamters {
 >      : ^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
     }
 }
 

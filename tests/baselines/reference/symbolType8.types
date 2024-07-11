@@ -12,8 +12,8 @@ var s = Symbol.for("compare");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"compare" : "compare"
->          : ^^^^^^^^^
+>"compare" : string
+>          : ^^^^^^
 
 s < s;
 >s < s : boolean

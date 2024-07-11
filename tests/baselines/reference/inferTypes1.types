@@ -705,8 +705,8 @@ const result = invoker('test', true)({ test: (a: boolean) => 123 })
 >                    : ^ ^^       ^^^^^^^^^^^
 >a : boolean
 >  : ^^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
 type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
 >Foo2 : string

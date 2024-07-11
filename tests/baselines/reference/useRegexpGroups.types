@@ -18,8 +18,8 @@ let result = re.exec("2015-01-02");
 >   : ^^^^^^
 >exec : (string: string) => RegExpExecArray | null
 >     : ^      ^^      ^^^^^                      
->"2015-01-02" : "2015-01-02"
->             : ^^^^^^^^^^^^
+>"2015-01-02" : string
+>             : ^^^^^^
 
 let date = result[0];
 >date : string

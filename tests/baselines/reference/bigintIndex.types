@@ -12,12 +12,12 @@ const arr: number[] = [1, 2, 3];
 >    : ^^^^^^^^
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 let num: number = arr[1];
 >num : number
@@ -95,8 +95,8 @@ key = 123n; // should error
 const bigNum: bigint = 0n;
 >bigNum : bigint
 >       : ^^^^^^
->0n : 0n
->   : ^^
+>0n : bigint
+>   : ^^^^^^
 
 const typedArray = new Uint8Array(3);
 >typedArray : Uint8Array
@@ -105,8 +105,8 @@ const typedArray = new Uint8Array(3);
 >                  : ^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 typedArray[bigNum] = 0xAA; // should error
 >typedArray[bigNum] = 0xAA : 170
@@ -137,28 +137,28 @@ typedArray[String(bigNum)] = 0xAA;
 >     : ^^^
 
 typedArray["1"] = 0xBB;
->typedArray["1"] = 0xBB : 187
->                       : ^^^
+>typedArray["1"] = 0xBB : number
+>                       : ^^^^^^
 >typedArray["1"] : number
 >                : ^^^^^^
 >typedArray : Uint8Array
 >           : ^^^^^^^^^^
 >"1" : "1"
 >    : ^^^
->0xBB : 187
->     : ^^^
+>0xBB : number
+>     : ^^^^^^
 
 typedArray[2] = 0xCC;
->typedArray[2] = 0xCC : 204
->                     : ^^^
+>typedArray[2] = 0xCC : number
+>                     : ^^^^^^
 >typedArray[2] : number
 >              : ^^^^^^
 >typedArray : Uint8Array
 >           : ^^^^^^^^^^
 >2 : 2
 >  : ^
->0xCC : 204
->     : ^^^
+>0xCC : number
+>     : ^^^^^^
 
 // {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
 === b.ts ===

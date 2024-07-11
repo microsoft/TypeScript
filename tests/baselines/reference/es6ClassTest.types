@@ -45,8 +45,8 @@ class Foo  extends Bar {
 	zoo:string = "zoo";
 >zoo : string
 >    : ^^^^^^
->"zoo" : "zoo"
->      : ^^^^^
+>"zoo" : string
+>      : ^^^^^^
 
 	x: any;
 >x : any
@@ -108,16 +108,16 @@ class Foo  extends Bar {
 >  : ^^^
 
         this.gar = 5;
->this.gar = 5 : 5
->             : ^
+>this.gar = 5 : number
+>             : ^^^^^^
 >this.gar : number
 >         : ^^^^^^
 >this : this
 >     : ^^^^
 >gar : number
 >    : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 	 }
 }
 

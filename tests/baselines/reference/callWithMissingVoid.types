@@ -212,20 +212,20 @@ a(4, "hello"); // ok
 >              : ^^^^
 >a : (x: number, y: string, z: void) => void
 >  : ^ ^^      ^^ ^^      ^^ ^^    ^^^^^    
->4 : 4
->  : ^
->"hello" : "hello"
->        : ^^^^^^^
+>4 : number
+>  : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 a(4, "hello", void 0); // ok
 >a(4, "hello", void 0) : void
 >                      : ^^^^
 >a : (x: number, y: string, z: void) => void
 >  : ^ ^^      ^^ ^^      ^^ ^^    ^^^^^    
->4 : 4
->  : ^
->"hello" : "hello"
->        : ^^^^^^^
+>4 : number
+>  : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >void 0 : undefined
 >       : ^^^^^^^^^
 >0 : 0
@@ -236,8 +236,8 @@ a(4); // not ok
 >     : ^^^^
 >a : (x: number, y: string, z: void) => void
 >  : ^ ^^      ^^ ^^      ^^ ^^    ^^^^^    
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
 function b(x: number, y: string, z: void, what: number): void  {
 >b : (x: number, y: string, z: void, what: number) => void
@@ -258,36 +258,36 @@ b(4, "hello", void 0, 2); // ok
 >                         : ^^^^
 >b : (x: number, y: string, z: void, what: number) => void
 >  : ^ ^^      ^^ ^^      ^^ ^^    ^^    ^^      ^^^^^    
->4 : 4
->  : ^
->"hello" : "hello"
->        : ^^^^^^^
+>4 : number
+>  : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >void 0 : undefined
 >       : ^^^^^^^^^
 >0 : 0
 >  : ^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
 b(4, "hello"); // not ok
 >b(4, "hello") : void
 >              : ^^^^
 >b : (x: number, y: string, z: void, what: number) => void
 >  : ^ ^^      ^^ ^^      ^^ ^^    ^^    ^^      ^^^^^    
->4 : 4
->  : ^
->"hello" : "hello"
->        : ^^^^^^^
+>4 : number
+>  : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 b(4, "hello", void 0); // not ok
 >b(4, "hello", void 0) : void
 >                      : ^^^^
 >b : (x: number, y: string, z: void, what: number) => void
 >  : ^ ^^      ^^ ^^      ^^ ^^    ^^    ^^      ^^^^^    
->4 : 4
->  : ^
->"hello" : "hello"
->        : ^^^^^^^
+>4 : number
+>  : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >void 0 : undefined
 >       : ^^^^^^^^^
 >0 : 0
@@ -298,8 +298,8 @@ b(4); // not ok
 >     : ^^^^
 >b : (x: number, y: string, z: void, what: number) => void
 >  : ^ ^^      ^^ ^^      ^^ ^^    ^^    ^^      ^^^^^    
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
 function c(x: number | void, y: void, z: void | string | number): void  {
 >c : (x: number | void, y: void, z: void | string | number) => void
@@ -407,10 +407,10 @@ call((x: number, y: number) => x + y, 4, 2) // ok
 >  : ^^^^^^
 >y : number
 >  : ^^^^^^
->4 : 4
->  : ^
->2 : 2
->  : ^
+>4 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 call((x: number, y: void) => x, 4, void 0) // ok
 >call((x: number, y: void) => x, 4, void 0) : void
@@ -425,8 +425,8 @@ call((x: number, y: void) => x, 4, void 0) // ok
 >  : ^^^^
 >x : number
 >  : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 >void 0 : undefined
 >       : ^^^^^^^^^
 >0 : 0
@@ -445,8 +445,8 @@ call((x: number, y: void) => x, 4) // ok
 >  : ^^^^
 >x : number
 >  : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
 call((x: void, y: void) => 42) // ok
 >call((x: void, y: void) => 42) : void
@@ -489,8 +489,8 @@ call((x: number | void, y: number | void) => 42, 4) // ok
 >  : ^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
 call((x: number | void, y: number | void) => 42, 4, 2) // ok
 >call((x: number | void, y: number | void) => 42, 4, 2) : void
@@ -503,10 +503,10 @@ call((x: number | void, y: number | void) => 42, 4, 2) // ok
 >  : ^^^^^^^^^^^^^
 >y : number | void
 >  : ^^^^^^^^^^^^^
->42 : 42
->   : ^^
->4 : 4
->  : ^
->2 : 2
->  : ^
+>42 : number
+>   : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 

@@ -51,16 +51,16 @@ let qq = foo({ u: { value: 10 }, v: { value: 'hello'} });  // { u: U, v: V } but
 >              : ^^^^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >v : { value: string; }
 >  : ^^^^^^^^^^^^^^^^^^
 >{ value: 'hello'} : { value: string; }
 >                  : ^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
->'hello' : "hello"
->        : ^^^^^^^
+>'hello' : string
+>        : ^^^^^^
 
 // From #42385
 interface Targets<A> {

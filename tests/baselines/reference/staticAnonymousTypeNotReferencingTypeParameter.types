@@ -33,8 +33,8 @@ let y: number = outer(5).y;
 >         : ^^^^^^^^^^^^
 >outer : <T>(x: T) => typeof Inner
 >      : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
 
@@ -59,8 +59,8 @@ class ListWrapper2 {
 >      : ^^^
 >slice : (start?: number, end?: number) => T[]
 >      : ^     ^^^      ^^   ^^^      ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
   static reversed<T>(dit: typeof ListWrapper2, array: T[]): T[] {
 >reversed : <T>(dit: typeof ListWrapper2, array: T[]) => T[]
@@ -239,8 +239,8 @@ class ListWrapper {
 >      : ^^^
 >slice : (start?: number, end?: number) => T[]
 >      : ^     ^^^      ^^   ^^^      ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
   static forEachWithIndex<T>(dit: typeof ListWrapper, array: T[], fn: (t: T, n: number) => void) {
 >forEachWithIndex : <T>(dit: typeof ListWrapper, array: T[], fn: (t: T, n: number) => void) => void
@@ -374,8 +374,8 @@ class ListWrapper {
 >      : ^
 >startIndex : number
 >           : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     return array.indexOf(value, startIndex);
 >array.indexOf(value, startIndex) : number
@@ -458,10 +458,10 @@ class ListWrapper {
 >        : ^^^^^^^
 >scanRange : <T_1>(start: number, length: number, callback: () => T_1) => T_1
 >          : ^^^^^^     ^^      ^^      ^^      ^^        ^^         ^^^^^   
->3 : 3
->  : ^
->5 : 5
->  : ^
+>3 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
 >() => {  } : () => void
 >           : ^^^^^^^^^^
 
@@ -546,8 +546,8 @@ class ListWrapper {
 >       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^
 >index : number
 >      : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >value : T
 >      : ^
 
@@ -584,8 +584,8 @@ class ListWrapper {
 >       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^
 >index : number
 >      : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     return res;
 >res : T
@@ -652,8 +652,8 @@ class ListWrapper {
 >       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^
 >index : number
 >      : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
   }
   static remove<T>(dit: typeof ListWrapper, list: T[], el: T): boolean {
@@ -703,8 +703,8 @@ class ListWrapper {
 >       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^
 >index : number
 >      : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
       return true;
 >true : true
@@ -723,16 +723,16 @@ class ListWrapper {
 >            : ^^^^^^^^^^^^^^^^^^
 >list : any[]
 >     : ^^^^^
->list.length = 0 : 0
->                : ^
+>list.length = 0 : number
+>                : ^^^^^^
 >list.length : number
 >            : ^^^^^^
 >list : any[]
 >     : ^^^^^
 >length : number
 >       : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
   static isEmpty(dit: typeof ListWrapper, list: any[]): boolean { return list.length == 0; }
 >isEmpty : (dit: typeof ListWrapper, list: any[]) => boolean
@@ -766,8 +766,8 @@ class ListWrapper {
 >value : any
 >start : number
 >      : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >end : number
 >    : ^^^^^^
 
@@ -879,8 +879,8 @@ class ListWrapper {
 >  : ^^^
 >from : number
 >     : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >to : number
 >   : ^^^^^^
 
@@ -1153,14 +1153,14 @@ let cloned = ListWrapper.clone(ListWrapper, [1,2,3,4]);
 >            : ^^^^^^^^^^^^^^^^^^
 >[1,2,3,4] : number[]
 >          : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
 
 declare function isBlank(x: any): boolean;
 >isBlank : (x: any) => boolean

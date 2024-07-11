@@ -10,8 +10,8 @@ class A {
     foo(): string { return ''; }
 >foo : () => string
 >    : ^^^^^^      
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 }
 
 class B extends A {
@@ -23,8 +23,8 @@ class B extends A {
     bar(): string { return ''; }
 >bar : () => string
 >    : ^^^^^^      
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 }
 
 class Foo {

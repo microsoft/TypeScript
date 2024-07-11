@@ -40,8 +40,8 @@ f2({ value: '' }) // missing toString satisfied by Object's member
 >              : ^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
 f2({ value: '', what: 1 }) // missing toString satisfied by Object's member
 >f2({ value: '', what: 1 }) : void
@@ -52,8 +52,8 @@ f2({ value: '', what: 1 }) // missing toString satisfied by Object's member
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 >what : number
 >     : ^^^^^^
 >1 : 1
@@ -100,8 +100,8 @@ f2({ value: '', toString: (s) => s.uhhh }) // error
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 >toString : (s: string) => any
 >         : ^ ^^^^^^^^^^^^^^^^
 >(s) => s.uhhh : (s: string) => any

@@ -28,7 +28,7 @@ function main1() : number {
 >                  : ^^^^
 >log : (s: string) => void
 >    : ^ ^^      ^^^^^    
->"in finally" : "in finally"
->             : ^^^^^^^^^^^^
+>"in finally" : string
+>             : ^^^^^^
     }
 }

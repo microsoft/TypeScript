@@ -88,8 +88,8 @@ const arrLike = {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     1: Promise.resolve(2),
 >1 : Promise<number>
@@ -102,8 +102,8 @@ const arrLike = {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
     2: Promise.resolve(4),
 >2 : Promise<number>
@@ -116,8 +116,8 @@ const arrLike = {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
     3: Promise.resolve(6),
 >3 : Promise<number>
@@ -130,8 +130,8 @@ const arrLike = {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->6 : 6
->  : ^
+>6 : number
+>  : ^^^^^^
 
     length: 4,
 >length : number
@@ -208,8 +208,8 @@ const sameArr2 = await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), 
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >Promise.resolve(2) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -218,8 +218,8 @@ const sameArr2 = await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), 
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >Promise.resolve(4) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -228,8 +228,8 @@ const sameArr2 = await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), 
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 >Promise.resolve(6) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -238,8 +238,8 @@ const sameArr2 = await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), 
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->6 : 6
->  : ^
+>6 : number
+>  : ^^^^^^
 
 const sameArr3 = await Array.fromAsync(genPromises(4));
 >sameArr3 : number[]
@@ -367,14 +367,14 @@ const mapArr2 = await Array.fromAsync([0,2,4,6], v => Promise.resolve(v ** 2));
 >          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                        ^^       ^^^   ^^^                     ^^^
 >[0,2,4,6] : number[]
 >          : ^^^^^^^^
->0 : 0
->  : ^
->2 : 2
->  : ^
->4 : 4
->  : ^
->6 : 6
->  : ^
+>0 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>6 : number
+>  : ^^^^^^
 >v => Promise.resolve(v ** 2) : (v: number) => Promise<number>
 >                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : number
@@ -409,14 +409,14 @@ const mapArr3 = await Array.fromAsync([0,2,4,6], v => v ** 2);
 >          : ^^^ ^^                   ^^                                                                               ^^^            ^^^ ^^ ^^                   ^^                                             ^^     ^^                        ^^       ^^^   ^^^                     ^^^
 >[0,2,4,6] : number[]
 >          : ^^^^^^^^
->0 : 0
->  : ^
->2 : 2
->  : ^
->4 : 4
->  : ^
->6 : 6
->  : ^
+>0 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>6 : number
+>  : ^^^^^^
 >v => v ** 2 : (v: number) => number
 >            : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number

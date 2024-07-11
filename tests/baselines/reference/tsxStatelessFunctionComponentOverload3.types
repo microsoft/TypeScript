@@ -46,8 +46,8 @@ const two2 = <ZeroThingOrTwoThing yy={100}  yy1="hello"/>;
 >                    : ^^^^^^           ^^^ ^^                            ^^       ^^       ^^^           ^^^
 >yy : number
 >   : ^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 >yy1 : string
 >    : ^^^^^^
 
@@ -131,8 +131,8 @@ const three1 = <ThreeThing yy={99} yy1="hello world" />;
 >           : ^^^ ^^               ^^^           ^^^ ^^               ^^^           ^^^ ^^                            ^^       ^^       ^^       ^^   ^^^           ^^^
 >yy : number
 >   : ^^^^^^
->99 : 99
->   : ^^
+>99 : number
+>   : ^^^^^^
 >yy1 : string
 >    : ^^^^^^
 

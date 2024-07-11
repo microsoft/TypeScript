@@ -65,8 +65,8 @@ export module M1 {
 >   : ^^
 
 			this.m1.x = 20; // OK
->this.m1.x = 20 : 20
->               : ^^
+>this.m1.x = 20 : number
+>               : ^^^^^^
 >this.m1.x : number
 >          : ^^^^^^
 >this.m1 : foo1.M1.C1
@@ -77,8 +77,8 @@ export module M1 {
 >   : ^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->20 : 20
->   : ^^
+>20 : number
+>   : ^^^^^^
 
 			var tmp = new M1.C1();
 >tmp : C1
@@ -93,16 +93,16 @@ export module M1 {
 >   : ^^^^^^^^^
 
 			tmp.y = 10; // OK
->tmp.y = 10 : 10
->           : ^^
+>tmp.y = 10 : number
+>           : ^^^^^^
 >tmp.y : number
 >      : ^^^^^^
 >tmp : C1
 >    : ^^
 >y : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 			tmp.x = 20; // Error			
 >tmp.x = 20 : 20
@@ -168,8 +168,8 @@ export module M1 {
 >   : ^^^^^^^^^^^^^^^^^
 
 			this.m1.y = 10; // OK
->this.m1.y = 10 : 10
->               : ^^
+>this.m1.y = 10 : number
+>               : ^^^^^^
 >this.m1.y : number
 >          : ^^^^^^
 >this.m1 : foo2.M1.C1
@@ -180,8 +180,8 @@ export module M1 {
 >   : ^^^^^^^^^^
 >y : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 			this.m1.x = 20; // Error
 >this.m1.x = 20 : 20

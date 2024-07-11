@@ -6,8 +6,8 @@ function getNumber(): number {
 >          : ^^^^^^      
 
     return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 class Example {
 >Example : Example
@@ -18,8 +18,8 @@ class Example {
 >          : ^^^^^^      
 
         return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
     doSomething(a = this.getNumber()): typeof a {
 >doSomething : (a?: number) => typeof a

@@ -37,10 +37,10 @@
 >          : ^
 >$ : typeof $
 >  : ^^^^^^^^
->'.foo' : ".foo"
+>'.foo' : string
 >       : ^^^^^^
 >addClass : (className: string) => $
 >         : ^         ^^      ^^^^^ 
->'bar' : "bar"
->      : ^^^^^
+>'bar' : string
+>      : ^^^^^^
 

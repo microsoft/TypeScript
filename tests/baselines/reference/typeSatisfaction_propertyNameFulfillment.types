@@ -16,14 +16,14 @@ const p = {
     a: 0,
 >a : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     b: "hello",
 >b : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
     x: 8 // Should error, 'x' isn't in 'Keys'
 >x : number
@@ -65,8 +65,8 @@ let b = p.b.substring(1);
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
 >          : ^     ^^      ^^   ^^^      ^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 // Should error even though 'd' is in 'Keys'
 let d = p.d;

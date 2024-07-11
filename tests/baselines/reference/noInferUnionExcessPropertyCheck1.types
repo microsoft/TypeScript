@@ -26,14 +26,14 @@ test1({ x: "foo" }, { x: "bar" }); // no error
 >             : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >{ x: "bar" } : { x: string; }
 >             : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 
 test1({ x: "foo" }, { x: "bar", y: 42 }); // epc error
 >test1({ x: "foo" }, { x: "bar", y: 42 }) : void
@@ -44,14 +44,14 @@ test1({ x: "foo" }, { x: "bar", y: 42 }); // epc error
 >             : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >{ x: "bar", y: 42 } : { x: string; y: number; }
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 >y : number
 >  : ^^^^^^
 >42 : 42
@@ -82,14 +82,14 @@ test2({ x: "foo" }, { x: "bar" }); // no error
 >             : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >{ x: "bar" } : { x: string; }
 >             : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 
 test2({ x: "foo" }, { x: "bar", y: 42 }); // epc error
 >test2({ x: "foo" }, { x: "bar", y: 42 }) : void
@@ -100,14 +100,14 @@ test2({ x: "foo" }, { x: "bar", y: 42 }); // epc error
 >             : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >{ x: "bar", y: 42 } : { x: string; y: number; }
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 >y : number
 >  : ^^^^^^
 >42 : 42
@@ -138,14 +138,14 @@ test3({ x: "foo" }, { x: "bar" }); // no error
 >             : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >{ x: "bar" } : { x: string; }
 >             : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 
 test3({ x: "foo" }, { x: "bar", y: 42 }); // epc error
 >test3({ x: "foo" }, { x: "bar", y: 42 }) : void
@@ -156,14 +156,14 @@ test3({ x: "foo" }, { x: "bar", y: 42 }); // epc error
 >             : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >{ x: "bar", y: 42 } : { x: string; y: number; }
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 >y : number
 >  : ^^^^^^
 >42 : 42

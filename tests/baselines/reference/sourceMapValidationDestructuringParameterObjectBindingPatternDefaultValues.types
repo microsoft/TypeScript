@@ -33,12 +33,12 @@ var robotA: Robot = { name: "mower", skill: "mowing" };
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"mower" : "mower"
->        : ^^^^^^^
+>"mower" : string
+>        : ^^^^^^
 >skill : string
 >      : ^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
+>"mowing" : string
+>         : ^^^^^^
 
 function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
 >foo1 : ({ name: nameA }?: Robot) => void
@@ -47,8 +47,8 @@ function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
 >     : ^^^
 >nameA : string
 >      : ^^^^^^
->"<NoName>" : "<NoName>"
->           : ^^^^^^^^^^
+>"<NoName>" : string
+>           : ^^^^^^
 >{ } : {}
 >    : ^^
 
@@ -71,14 +71,14 @@ function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {
 >     : ^^^
 >nameB : string
 >      : ^^^^^^
->"<NoName>" : "<NoName>"
->           : ^^^^^^^^^^
+>"<NoName>" : string
+>           : ^^^^^^
 >skill : any
 >      : ^^^
 >skillB : string
 >       : ^^^^^^
->"noSkill" : "noSkill"
->          : ^^^^^^^^^
+>"noSkill" : string
+>          : ^^^^^^
 >{} : {}
 >   : ^^
 
@@ -99,8 +99,8 @@ function foo3({ name = "<NoName>" }: Robot = {}) {
 >     : ^        ^^^     ^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"<NoName>" : "<NoName>"
->           : ^^^^^^^^^^
+>"<NoName>" : string
+>           : ^^^^^^
 >{} : {}
 >   : ^^
 
@@ -134,12 +134,12 @@ foo1({ name: "Edger", skill: "cutting edges" });
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"Edger" : "Edger"
->        : ^^^^^^^
+>"Edger" : string
+>        : ^^^^^^
 >skill : string
 >      : ^^^^^^
->"cutting edges" : "cutting edges"
->                : ^^^^^^^^^^^^^^^
+>"cutting edges" : string
+>                : ^^^^^^
 
 foo2(robotA);
 >foo2(robotA) : void
@@ -158,12 +158,12 @@ foo2({ name: "Edger", skill: "cutting edges" });
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"Edger" : "Edger"
->        : ^^^^^^^
+>"Edger" : string
+>        : ^^^^^^
 >skill : string
 >      : ^^^^^^
->"cutting edges" : "cutting edges"
->                : ^^^^^^^^^^^^^^^
+>"cutting edges" : string
+>                : ^^^^^^
 
 foo3(robotA);
 >foo3(robotA) : void
@@ -182,10 +182,10 @@ foo3({ name: "Edger", skill: "cutting edges" });
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"Edger" : "Edger"
->        : ^^^^^^^
+>"Edger" : string
+>        : ^^^^^^
 >skill : string
 >      : ^^^^^^
->"cutting edges" : "cutting edges"
->                : ^^^^^^^^^^^^^^^
+>"cutting edges" : string
+>                : ^^^^^^
 

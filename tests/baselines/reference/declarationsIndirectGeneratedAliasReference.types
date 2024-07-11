@@ -64,6 +64,6 @@ export const MyComp = Ctor.extends({foo: "bar"});
 >             : ^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 

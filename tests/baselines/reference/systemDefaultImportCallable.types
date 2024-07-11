@@ -67,6 +67,6 @@ const _: string = repeat(new Date().toUTCString() + " ", 2);
 >            : ^^^^^^      
 >" " : " "
 >    : ^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 

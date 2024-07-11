@@ -38,26 +38,26 @@ var menuData: IMenuItem[] = [
         "id": "ourLogo",
 >"id" : string
 >     : ^^^^^^
->"ourLogo" : "ourLogo"
->          : ^^^^^^^^^
+>"ourLogo" : string
+>          : ^^^^^^
 
         "type": "image",
 >"type" : string
 >       : ^^^^^^
->"image" : "image"
->        : ^^^^^^^
+>"image" : string
+>        : ^^^^^^
 
         "link": "",
 >"link" : string
 >       : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
         "icon": "modules/menu/logo.svg"
 >"icon" : string
 >       : ^^^^^^
->"modules/menu/logo.svg" : "modules/menu/logo.svg"
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>"modules/menu/logo.svg" : string
+>                        : ^^^^^^
 
     }, {
 >{        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    } : { id: string; type: string; link: string; text: string; }
@@ -66,26 +66,26 @@ var menuData: IMenuItem[] = [
         "id": "productName",
 >"id" : string
 >     : ^^^^^^
->"productName" : "productName"
->              : ^^^^^^^^^^^^^
+>"productName" : string
+>              : ^^^^^^
 
         "type": "default",
 >"type" : string
 >       : ^^^^^^
->"default" : "default"
->          : ^^^^^^^^^
+>"default" : string
+>          : ^^^^^^
 
         "link": "",
 >"link" : string
 >       : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
         "text": "Product Name"
 >"text" : string
 >       : ^^^^^^
->"Product Name" : "Product Name"
->               : ^^^^^^^^^^^^^^
+>"Product Name" : string
+>               : ^^^^^^
     }
 ];
 

@@ -8,6 +8,6 @@ var foo = <{ (): number; }> function() { return "err"; };
 >                                               : ^^^^^^      
 >function() { return "err"; } : () => string
 >                             : ^^^^^^^^^^^^
->"err" : "err"
->      : ^^^^^
+>"err" : string
+>      : ^^^^^^
 

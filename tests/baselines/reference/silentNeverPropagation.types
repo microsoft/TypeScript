@@ -64,8 +64,8 @@ const breaks = convert(
 >          : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 >{ foo() { return true } } : { foo(): true; }
 >                          : ^^^^^^^^^^^^^^^^
 >foo : () => true

@@ -26,8 +26,8 @@ class A {
 >        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
 >    : ^   ^^      ^^^^^    
->'new A' : "new A"
->        : ^^^^^^^
+>'new A' : string
+>        : ^^^^^^
 }
 
 function decorator(target: Object, propertyKey: string) {

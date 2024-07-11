@@ -28,8 +28,8 @@ const a = new A("123");
 >             : ^
 >A : typeof A
 >  : ^^^^^^^^
->"123" : "123"
->      : ^^^^^
+>"123" : string
+>      : ^^^^^^
 
 if (a instanceof A && a.stringOrUndefined) {
 >a instanceof A && a.stringOrUndefined : string | false | undefined

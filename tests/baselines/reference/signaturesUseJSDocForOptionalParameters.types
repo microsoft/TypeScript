@@ -62,8 +62,8 @@ let c1 = pInst.optionalParam('hello')
 >      : ^^^^^^^
 >optionalParam : (required: string, notRequired?: string) => MyClass
 >              : ^        ^^      ^^           ^^^      ^^^^^       
->'hello' : "hello"
->        : ^^^^^^^
+>'hello' : string
+>        : ^^^^^^
 
 let c2 = pInst.optionalParam('hello', null)
 >c2 : MyClass
@@ -76,6 +76,6 @@ let c2 = pInst.optionalParam('hello', null)
 >      : ^^^^^^^
 >optionalParam : (required: string, notRequired?: string) => MyClass
 >              : ^        ^^      ^^           ^^^      ^^^^^       
->'hello' : "hello"
->        : ^^^^^^^
+>'hello' : string
+>        : ^^^^^^
 

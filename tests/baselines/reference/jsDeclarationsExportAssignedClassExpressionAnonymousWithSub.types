@@ -69,8 +69,8 @@ module.exports.Sub = class {
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof import("index")
 >        : ^^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
 }
 

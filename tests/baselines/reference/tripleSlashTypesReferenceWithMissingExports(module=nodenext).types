@@ -15,6 +15,6 @@ const a: GlobalThing = { a: 0 };
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 

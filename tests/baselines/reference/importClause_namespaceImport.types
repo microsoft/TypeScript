@@ -67,8 +67,8 @@ const c: types.C<string> = "";
 >  : ^^^^^^
 >types : any
 >      : ^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 const d = { types };
 >d : { types: typeof types; }

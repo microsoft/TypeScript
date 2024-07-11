@@ -18,16 +18,16 @@ let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'hello' : "hello"
->        : ^^^^^^^
+>'hello' : string
+>        : ^^^^^^
 >y : number
 >  : ^^^^^^
 >2 : 2
 >  : ^
 >c : number
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 declare let wrong: { a: { y: string } };
 >wrong : { a: { y: string; }; }

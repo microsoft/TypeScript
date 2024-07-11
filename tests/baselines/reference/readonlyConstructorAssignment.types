@@ -12,16 +12,16 @@ class A {
 >  : ^^^^^^
 
         this.x = 0;
->this.x = 0 : 0
->           : ^
+>this.x = 0 : number
+>           : ^^^^^^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
     }
 }
 
@@ -79,16 +79,16 @@ class C extends A {
 >  : ^^^^^^
 
         this.x = 1;
->this.x = 1 : 1
->           : ^
+>this.x = 1 : number
+>           : ^^^^^^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 
@@ -101,16 +101,16 @@ class D {
 >  : ^^^^^^
 
         this.x = 0;
->this.x = 0 : 0
->           : ^
+>this.x = 0 : number
+>           : ^^^^^^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
     }
 }
 
@@ -134,16 +134,16 @@ class E extends D {
 >  : ^^^^^^
 
         this.x = 1;
->this.x = 1 : 1
->           : ^
+>this.x = 1 : number
+>           : ^^^^^^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 

@@ -152,8 +152,8 @@ var cp = new Cp(1)
 >          : ^^^^^^^^^^
 >Cp : typeof Cp
 >   : ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var cpp = new Cpp(2)
 >cpp : Cpp<number>
@@ -162,8 +162,8 @@ var cpp = new Cpp(2)
 >           : ^^^^^^^^^^^
 >Cpp : typeof Cpp
 >    : ^^^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
 cp.dit
 >cp.dit : Cp<number>

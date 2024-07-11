@@ -67,16 +67,16 @@ class Test extends Base {
 >      : ^^^^^^^^^^^
 
         this.prop = 1;
->this.prop = 1 : 1
->              : ^
+>this.prop = 1 : number
+>              : ^^^^^^
 >this.prop : number
 >          : ^^^^^^
 >this : this
 >     : ^^^^
 >prop : number
 >     : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 

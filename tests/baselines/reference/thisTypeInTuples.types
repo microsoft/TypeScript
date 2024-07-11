@@ -12,10 +12,10 @@ let t: [number, string] = [42, "hello"];
 >  : ^^^^^^^^^^^^^^^^
 >[42, "hello"] : [number, string]
 >              : ^^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 let a = t.slice();
 >a : [number, string]
@@ -40,8 +40,8 @@ let b = t.slice(1);
 >  : ^^^^^^^^^^^^^^^^
 >slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
 >      : ^^^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 let c = t.slice(0, 1);
 >c : (string | number)[]
@@ -54,8 +54,8 @@ let c = t.slice(0, 1);
 >  : ^^^^^^^^^^^^^^^^
 >slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
 >      : ^^^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
->1 : 1
->  : ^
+>0 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 

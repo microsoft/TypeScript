@@ -40,26 +40,26 @@ s.foo = undefined;
 >          : ^^^^^^^^^
 
 s.foo = "hello";
->s.foo = "hello" : "hello"
->                : ^^^^^^^
+>s.foo = "hello" : string
+>                : ^^^^^^
 >s.foo : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >s : Test1<string>
 >  : ^^^^^^^^^^^^^
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 s.foo = 42;
->s.foo = 42 : 42
->           : ^^
+>s.foo = 42 : number
+>           : ^^^^^^
 >s.foo : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >s : Test1<string>
 >  : ^^^^^^^^^^^^^
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 

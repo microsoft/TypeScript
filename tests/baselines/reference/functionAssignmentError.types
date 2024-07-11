@@ -16,6 +16,6 @@ func = function (){return "ONE";};
 >     : ^^^^^^^^^^^^
 >function (){return "ONE";} : () => string
 >                           : ^^^^^^^^^^^^
->"ONE" : "ONE"
->      : ^^^^^
+>"ONE" : string
+>      : ^^^^^^
 

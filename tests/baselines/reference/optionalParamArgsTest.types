@@ -45,18 +45,18 @@ class C1 {
     constructor(v: number = 1, p: number = 0) { }
 >v : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >p : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     public n:number = 0;
 >n : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     public C1M1() { return 0; } // returning C1M1A1 will result in "Unresolved symbol C1M1A1"
 >C1M1 : () => number
@@ -78,8 +78,8 @@ class C1 {
 >     : ^      ^^^      ^^      ^^^      ^^^^^^^^^^^
 >C1M3A1 : number
 >       : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >C1M3A2 : number
 >       : ^^^^^^
 >C1M3A1 : number
@@ -113,8 +113,8 @@ class C1 {
 >       : ^^^^^^
 >C1M5A2 : number
 >       : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >C1M5A3 : number
 >       : ^^^^^^
 >C1M5A1 + C1M5A2 : number
@@ -132,8 +132,8 @@ class C1 {
 >       : ^^^^^^
 >C1M5A2 : number
 >       : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >C1M5A3 : number
 >       : ^^^^^^
 >C1M5A1 + C1M5A2 : number
@@ -153,8 +153,8 @@ class C2 extends C1 {
     constructor(v2: number = 6) {
 >v2 : number
 >   : ^^^^^^
->6 : 6
->  : ^
+>6 : number
+>  : ^^^^^^
 
         super(v2);
 >super(v2) : void
@@ -274,8 +274,8 @@ var c1o1:C1 = new C1(5);
 >          : ^^
 >C1 : typeof C1
 >   : ^^^^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 var i1o1:I1 = new C1(5);
 >i1o1 : I1
@@ -284,8 +284,8 @@ var i1o1:I1 = new C1(5);
 >          : ^^
 >C1 : typeof C1
 >   : ^^^^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 // Valid
 c1o1.C1M1();
@@ -324,8 +324,8 @@ c1o1.C1M2(1);
 >     : ^^
 >C1M2 : (C1M2A1: number) => number
 >     : ^      ^^      ^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 i1o1.C1M2(1);
 >i1o1.C1M2(1) : number
@@ -336,8 +336,8 @@ i1o1.C1M2(1);
 >     : ^^
 >C1M2 : (C1M2A1: number) => number
 >     : ^      ^^      ^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var f2v1=F2(1);
 >f2v1 : number
@@ -346,8 +346,8 @@ var f2v1=F2(1);
 >      : ^^^^^^
 >F2 : (F2A1: number) => number
 >   : ^    ^^      ^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var l2v1=L2(1);
 >l2v1 : number
@@ -356,8 +356,8 @@ var l2v1=L2(1);
 >      : ^^^^^^
 >L2 : (L2A1: number) => number
 >   : ^    ^^      ^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 // Valid
 c1o1.C1M3(1,2);
@@ -369,10 +369,10 @@ c1o1.C1M3(1,2);
 >     : ^^
 >C1M3 : (C1M3A1?: number, C1M3A2?: number) => number
 >     : ^      ^^^      ^^      ^^^      ^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 i1o1.C1M3(1,2);
 >i1o1.C1M3(1,2) : number
@@ -383,10 +383,10 @@ i1o1.C1M3(1,2);
 >     : ^^
 >C1M3 : (C1M3A1?: number, C1M3A2?: number) => number
 >     : ^      ^^^      ^^      ^^^      ^^^^^      
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 var f3v1=F3(1,2);
 >f3v1 : number
@@ -395,10 +395,10 @@ var f3v1=F3(1,2);
 >        : ^^^^^^
 >F3 : (F3A1?: number, F3A2?: number) => number
 >   : ^    ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 var l3v1=L3(1,2);
 >l3v1 : number
@@ -407,10 +407,10 @@ var l3v1=L3(1,2);
 >        : ^^^^^^
 >L3 : (L3A1?: number, L3A2?: number) => number
 >   : ^    ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 // Valid
 c1o1.C1M4(1,2);
@@ -422,10 +422,10 @@ c1o1.C1M4(1,2);
 >     : ^^
 >C1M4 : (C1M4A1: number, C1M4A2?: number) => number
 >     : ^      ^^      ^^      ^^^      ^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 i1o1.C1M4(1,2);
 >i1o1.C1M4(1,2) : number
@@ -436,10 +436,10 @@ i1o1.C1M4(1,2);
 >     : ^^
 >C1M4 : (C1M4A1: number, C1M4A2?: number) => number
 >     : ^      ^^      ^^      ^^^      ^^^^^      
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 var f4v1=F4(1,2);
 >f4v1 : number
@@ -448,10 +448,10 @@ var f4v1=F4(1,2);
 >        : ^^^^^^
 >F4 : (F4A1: number, F4A2?: number) => number
 >   : ^    ^^      ^^    ^^^      ^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 var l4v1=L4(1,2);
 >l4v1 : number
@@ -460,10 +460,10 @@ var l4v1=L4(1,2);
 >        : ^^^^^^
 >L4 : (L4A1: number, L4A2?: number) => number
 >   : ^    ^^      ^^    ^^^      ^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 // Valid
 c1o1.C1M3(1);
@@ -475,8 +475,8 @@ c1o1.C1M3(1);
 >     : ^^
 >C1M3 : (C1M3A1?: number, C1M3A2?: number) => number
 >     : ^      ^^^      ^^      ^^^      ^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 i1o1.C1M3(1);
 >i1o1.C1M3(1) : number
@@ -487,8 +487,8 @@ i1o1.C1M3(1);
 >     : ^^
 >C1M3 : (C1M3A1?: number, C1M3A2?: number) => number
 >     : ^      ^^^      ^^      ^^^      ^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var f3v2=F3(1);
 >f3v2 : number
@@ -497,8 +497,8 @@ var f3v2=F3(1);
 >      : ^^^^^^
 >F3 : (F3A1?: number, F3A2?: number) => number
 >   : ^    ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var l3v2=L3(1);
 >l3v2 : number
@@ -507,8 +507,8 @@ var l3v2=L3(1);
 >      : ^^^^^^
 >L3 : (L3A1?: number, L3A2?: number) => number
 >   : ^    ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 // Valid 
 c1o1.C1M3();
@@ -557,8 +557,8 @@ c1o1.C1M4(1);
 >     : ^^
 >C1M4 : (C1M4A1: number, C1M4A2?: number) => number
 >     : ^      ^^      ^^      ^^^      ^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 i1o1.C1M4(1);
 >i1o1.C1M4(1) : number
@@ -569,8 +569,8 @@ i1o1.C1M4(1);
 >     : ^^
 >C1M4 : (C1M4A1: number, C1M4A2?: number) => number
 >     : ^      ^^      ^^      ^^^      ^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var f4v2=F4(1);
 >f4v2 : number
@@ -579,8 +579,8 @@ var f4v2=F4(1);
 >      : ^^^^^^
 >F4 : (F4A1: number, F4A2?: number) => number
 >   : ^    ^^      ^^    ^^^      ^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var l4v2=L4(1);
 >l4v2 : number
@@ -589,8 +589,8 @@ var l4v2=L4(1);
 >      : ^^^^^^
 >L4 : (L4A1: number, L4A2?: number) => number
 >   : ^    ^^      ^^    ^^^      ^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 // Negative tests - we expect these cases to fail
 c1o1.C1M1(1);
@@ -674,8 +674,8 @@ c1o1.C1M2(1,2);
 >     : ^^
 >C1M2 : (C1M2A1: number) => number
 >     : ^      ^^      ^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >2 : 2
 >  : ^
 
@@ -688,8 +688,8 @@ i1o1.C1M2(1,2);
 >     : ^^
 >C1M2 : (C1M2A1: number) => number
 >     : ^      ^^      ^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >2 : 2
 >  : ^
 
@@ -698,8 +698,8 @@ F2(1,2);
 >        : ^^^^^^
 >F2 : (F2A1: number) => number
 >   : ^    ^^      ^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >2 : 2
 >  : ^
 
@@ -708,8 +708,8 @@ L2(1,2);
 >        : ^^^^^^
 >L2 : (L2A1: number) => number
 >   : ^    ^^      ^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >2 : 2
 >  : ^
 
@@ -722,10 +722,10 @@ c1o1.C1M3(1,2,3);
 >     : ^^
 >C1M3 : (C1M3A1?: number, C1M3A2?: number) => number
 >     : ^      ^^^      ^^      ^^^      ^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 >3 : 3
 >  : ^
 
@@ -738,10 +738,10 @@ i1o1.C1M3(1,2,3);
 >     : ^^
 >C1M3 : (C1M3A1?: number, C1M3A2?: number) => number
 >     : ^      ^^^      ^^      ^^^      ^^^^^      
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 >3 : 3
 >  : ^
 
@@ -750,10 +750,10 @@ F3(1,2,3);
 >          : ^^^^^^
 >F3 : (F3A1?: number, F3A2?: number) => number
 >   : ^    ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 >3 : 3
 >  : ^
 
@@ -762,10 +762,10 @@ L3(1,2,3);
 >          : ^^^^^^
 >L3 : (L3A1?: number, L3A2?: number) => number
 >   : ^    ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 >3 : 3
 >  : ^
 
@@ -834,18 +834,18 @@ fnOpt1(1, [2, 3], [1], true);
 >                             : ^^^^
 >fnOpt1 : (id: number, children?: number[], expectedPath?: number[], isRoot?: boolean) => void
 >       : ^  ^^      ^^        ^^^        ^^            ^^^        ^^      ^^^       ^^^^^    
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >[2, 3] : number[]
 >       : ^^^^^^^^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -854,18 +854,18 @@ fnOpt2(1, [2, 3], [1], true);
 >                             : ^^^^
 >fnOpt2 : (id: number, children?: number[], expectedPath?: number[], isRoot?: boolean) => void
 >       : ^  ^^      ^^        ^^^        ^^            ^^^        ^^      ^^^       ^^^^^    
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >[2, 3] : number[]
 >       : ^^^^^^^^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >true : true
 >     : ^^^^
 

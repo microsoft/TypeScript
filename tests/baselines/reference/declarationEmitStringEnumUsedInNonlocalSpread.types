@@ -61,8 +61,8 @@ export class A {
 >         : ^^^^^^^^^^^^^^^
 >Test1 : TestEnum.Test1
 >      : ^^^^^^^^^^^^^^
->'123' : "123"
->      : ^^^^^
+>'123' : string
+>      : ^^^^^^
 
             [TestEnum.Test2]: '123',
 >[TestEnum.Test2] : string
@@ -73,8 +73,8 @@ export class A {
 >         : ^^^^^^^^^^^^^^^
 >Test2 : TestEnum.Test2
 >      : ^^^^^^^^^^^^^^
->'123' : "123"
->      : ^^^^^
+>'123' : string
+>      : ^^^^^^
 
         };
     }

@@ -8,8 +8,8 @@ class C {
     x: string = "Hello world";
 >x : string
 >  : ^^^^^^
->"Hello world" : "Hello world"
->              : ^^^^^^^^^^^^^
+>"Hello world" : string
+>              : ^^^^^^
 }
 
 class D {
@@ -19,8 +19,8 @@ class D {
     x: string = "Hello world";
 >x : string
 >  : ^^^^^^
->"Hello world" : "Hello world"
->              : ^^^^^^^^^^^^^
+>"Hello world" : string
+>              : ^^^^^^
 
     y: number;
 >y : number
@@ -28,16 +28,16 @@ class D {
 
     constructor() {
         this.y = 10;
->this.y = 10 : 10
->            : ^^
+>this.y = 10 : number
+>            : ^^^^^^
 >this.y : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >y : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
 }
 
@@ -78,15 +78,15 @@ class F extends D{
 >      : ^^^^^^^^
 
         this.j = "HI";
->this.j = "HI" : "HI"
->              : ^^^^
+>this.j = "HI" : string
+>              : ^^^^^^
 >this.j : string
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >j : string
 >  : ^^^^^^
->"HI" : "HI"
->     : ^^^^
+>"HI" : string
+>     : ^^^^^^
     }
 }

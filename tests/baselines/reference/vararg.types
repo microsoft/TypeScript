@@ -174,10 +174,10 @@ result+=x.f(x,3,3); // bad first param
 >  : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
 >x : M.C
 >  : ^^^
->3 : 3
->  : ^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 result+=x.f(3,"hello",3); // bad second param
 >result+=x.f(3,"hello",3) : string
@@ -192,12 +192,12 @@ result+=x.f(3,"hello",3); // bad second param
 >  : ^^^
 >f : (x: string, ...rest: number[]) => string
 >  : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
->3 : 3
->  : ^
->"hello" : "hello"
->        : ^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 result+=x.f("hello",3,3,3,3,3); // ok
 >result+=x.f("hello",3,3,3,3,3) : string
@@ -212,18 +212,18 @@ result+=x.f("hello",3,3,3,3,3); // ok
 >  : ^^^
 >f : (x: string, ...rest: number[]) => string
 >  : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
->3 : 3
->  : ^
->3 : 3
->  : ^
->3 : 3
->  : ^
->3 : 3
->  : ^
->3 : 3
->  : ^
+>"hello" : string
+>        : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 result+=x.f("hello"); // ok varargs length 0
 >result+=x.f("hello") : string
@@ -238,8 +238,8 @@ result+=x.f("hello"); // ok varargs length 0
 >  : ^^^
 >f : (x: string, ...rest: number[]) => string
 >  : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 result+=x.fonly(3); // ok conversion
 >result+=x.fonly(3) : string
@@ -254,8 +254,8 @@ result+=x.fonly(3); // ok conversion
 >  : ^^^
 >fonly : (...rest: string[]) => any
 >      : ^^^^    ^^        ^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 result+=x.fonly(x); // bad param
 >result+=x.fonly(x) : string
@@ -286,8 +286,8 @@ result+=x.fonly("a"); // ok
 >  : ^^^
 >fonly : (...rest: string[]) => any
 >      : ^^^^    ^^        ^^^^^^^^
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 
 result+=x.fonly("a","b","c","d"); //ok 
 >result+=x.fonly("a","b","c","d") : string
@@ -302,14 +302,14 @@ result+=x.fonly("a","b","c","d"); //ok
 >  : ^^^
 >fonly : (...rest: string[]) => any
 >      : ^^^^    ^^        ^^^^^^^^
->"a" : "a"
->    : ^^^
->"b" : "b"
->    : ^^^
->"c" : "c"
->    : ^^^
->"d" : "d"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
+>"b" : string
+>    : ^^^^^^
+>"c" : string
+>    : ^^^^^^
+>"d" : string
+>    : ^^^^^^
 
 
 

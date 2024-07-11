@@ -20,8 +20,8 @@ function f1(
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"bad" : "bad"
->      : ^^^^^
+>"bad" : string
+>      : ^^^^^^
 
   })()
 ) {
@@ -57,12 +57,12 @@ function f2(
 >                     : ^^^^^^^^^^
 
     a = 1;
->a = 1 : 1
->      : ^
+>a = 1 : number
+>      : ^^^^^^
 >a : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
   })()
 ) {
@@ -78,8 +78,8 @@ function f3(
   a: number | string | undefined = 1,
 >a : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
   required: unknown = (() => {
 >required : unknown
@@ -92,12 +92,12 @@ function f3(
 >                      : ^^^^^^^^^^
 
     a = "";
->a = "" : ""
->       : ^^
+>a = "" : string
+>       : ^^^^^^
 >a : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   })()
 ) {
@@ -113,18 +113,18 @@ function f4(
   a: number | string | undefined = 1,
 >a : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
   { [(a = "")]: b } = {} as any
->(a = "") : ""
->         : ^^
->a = "" : ""
->       : ^^
+>(a = "") : string
+>         : ^^^^^^
+>a = "" : string
+>       : ^^^^^^
 >a : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 >b : any
 >  : ^^^
 >{} as any : any

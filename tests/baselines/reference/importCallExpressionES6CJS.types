@@ -11,16 +11,16 @@ export function foo() { return "foo"; }
 import("./0");
 >import("./0") : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : "./0"
->      : ^^^^^
+>"./0" : string
+>      : ^^^^^^
 
 var p1 = import("./0");
 >p1 : Promise<typeof import("0")>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./0") : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : "./0"
->      : ^^^^^
+>"./0" : string
+>      : ^^^^^^
 
 p1.then(zero => {
 >p1.then(zero => {    return zero.foo();}) : Promise<string>
@@ -53,8 +53,8 @@ export var p2 = import("./0");
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./0") : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : "./0"
->      : ^^^^^
+>"./0" : string
+>      : ^^^^^^
 
 function foo() {
 >foo : () => void
@@ -65,8 +65,8 @@ function foo() {
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./0") : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : "./0"
->      : ^^^^^
+>"./0" : string
+>      : ^^^^^^
 }
 
 class C {
@@ -82,8 +82,8 @@ class C {
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import ("./0") : Promise<typeof import("0")>
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : "./0"
->      : ^^^^^
+>"./0" : string
+>      : ^^^^^^
     }
 }
 
@@ -100,7 +100,7 @@ export class D {
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import ("./0") : Promise<typeof import("0")>
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : "./0"
->      : ^^^^^
+>"./0" : string
+>      : ^^^^^^
     }
 }

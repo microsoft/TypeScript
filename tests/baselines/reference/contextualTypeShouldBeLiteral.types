@@ -202,8 +202,8 @@ let xy: X3 | Y3 = {
     ytra: 12
 >ytra : number
 >     : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 };
 
@@ -269,8 +269,8 @@ let xyz: LikeA | LikeB = {
     value: "foo",
 >value : string
 >      : ^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 
     method() {
 >method : () => void

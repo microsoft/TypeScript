@@ -8,12 +8,12 @@ var foo = 2;
 >  : ^
 
 foo = 3;
->foo = 3 : 3
->        : ^
+>foo = 3 : number
+>        : ^^^^^^
 >foo : number
 >    : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 var baz = 3;
 >baz : number
@@ -22,12 +22,12 @@ var baz = 3;
 >  : ^
 
 baz = 4;
->baz = 4 : 4
->        : ^
+>baz = 4 : number
+>        : ^^^^^^
 >baz : number
 >    : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
 var buzz = 10;
 >buzz : number

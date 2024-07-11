@@ -38,22 +38,22 @@ var thing = create([{ name: "bob", id: 24 }, { name: "doug", id: 32 }]);
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"bob" : "bob"
->      : ^^^^^
+>"bob" : string
+>      : ^^^^^^
 >id : number
 >   : ^^^^^^
->24 : 24
->   : ^^
+>24 : number
+>   : ^^^^^^
 >{ name: "doug", id: 32 } : { name: string; id: number; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"doug" : "doug"
+>"doug" : string
 >       : ^^^^^^
 >id : number
 >   : ^^^^^^
->32 : 32
->   : ^^
+>32 : number
+>   : ^^^^^^
 
 // Below should all be OK
 thing.doSomething((x, y) => x.name.charAt(0));      // x.name should be string, so should be OK
@@ -83,8 +83,8 @@ thing.doSomething((x, y) => x.name.charAt(0));      // x.name should be string, 
 >     : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 thing.doSomething((x, y) => x.id.toExponential(0)); // x.id should be string, so should be OK
 >thing.doSomething((x, y) => x.id.toExponential(0)) : void
@@ -113,8 +113,8 @@ thing.doSomething((x, y) => x.id.toExponential(0)); // x.id should be string, so
 >   : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
 >              : ^              ^^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 thing.doSomething((x, y) => y.name.charAt(0));      // x.name should be string, so should be OK
 >thing.doSomething((x, y) => y.name.charAt(0)) : void
@@ -143,8 +143,8 @@ thing.doSomething((x, y) => y.name.charAt(0));      // x.name should be string, 
 >     : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 thing.doSomething((x, y) => y.id.toExponential(0)); // x.id should be string, so should be OK
 >thing.doSomething((x, y) => y.id.toExponential(0)) : void
@@ -173,8 +173,8 @@ thing.doSomething((x, y) => y.id.toExponential(0)); // x.id should be string, so
 >   : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
 >              : ^              ^^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 // Below should all be in error
 thing.doSomething((x, y) => x.foo); // no such property on x

@@ -30,8 +30,8 @@ takesCallback(
 		var k: string = 10; 
 >k : string
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
 );
 

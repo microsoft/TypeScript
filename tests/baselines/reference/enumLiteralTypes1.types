@@ -421,8 +421,8 @@ function assertNever(x: never): never {
 >                              : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Unexpected value" : "Unexpected value"
->                   : ^^^^^^^^^^^^^^^^^^
+>"Unexpected value" : string
+>                   : ^^^^^^
 }
 
 function f10(x: YesNo) {

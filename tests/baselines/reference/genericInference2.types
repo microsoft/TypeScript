@@ -46,8 +46,8 @@
 >   : ^^^^^^^^^
 >observable : <T>(value: T) => ko.Observable<T>
 >           : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^   
->"Bob" : "Bob"
->      : ^^^^^
+>"Bob" : string
+>      : ^^^^^^
 
        age: ko.observable(37) 
 >age : ko.Observable<number>
@@ -60,8 +60,8 @@
 >   : ^^^^^^^^^
 >observable : <T>(value: T) => ko.Observable<T>
 >           : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^   
->37 : 37
->   : ^^
+>37 : number
+>   : ^^^^^^
 
     }; 
     var x_v = o.name().length;  // should be 'number'
@@ -101,8 +101,8 @@
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : ko.Observable<string>
 >     : ^^^^^^^^^^^^^^^^^^^^^
->"Robert" : "Robert"
->         : ^^^^^^^^
+>"Robert" : string
+>         : ^^^^^^
 
     var zz_v = o.name.N;  // should be 'number'
 >zz_v : number

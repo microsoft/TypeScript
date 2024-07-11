@@ -27,16 +27,16 @@ export const Palette = {
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : number
 >  : ^^^^^^
->255 : 255
->    : ^^^
+>255 : number
+>    : ^^^^^^
 >g : number
 >  : ^^^^^^
->255 : 255
->    : ^^^
+>255 : number
+>    : ^^^^^^
 >b : number
 >  : ^^^^^^
->255 : 255
->    : ^^^
+>255 : number
+>    : ^^^^^^
 
     black: { r: 0, g: 0, d: 0 }, // <- oops! 'd' in place of 'b'
 >black : { r: number; g: number; d: number; }
@@ -45,12 +45,12 @@ export const Palette = {
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >g : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >d : number
 >  : ^^^^^^
 >0 : 0
@@ -63,16 +63,16 @@ export const Palette = {
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >g : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >b : number
 >  : ^^^^^^
->255 : 255
->    : ^^^
+>255 : number
+>    : ^^^^^^
 
 } satisfies Record<string, Color>;
 

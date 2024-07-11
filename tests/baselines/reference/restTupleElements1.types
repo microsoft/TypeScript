@@ -260,8 +260,8 @@ f0([1]);
 >   : ^ ^^ ^^ ^^           ^^^^^      
 >[1] : [number]
 >    : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 f0([1, 2, 3]);
 >f0([1, 2, 3]) : [number, number]
@@ -270,12 +270,12 @@ f0([1, 2, 3]);
 >   : ^ ^^ ^^ ^^           ^^^^^      
 >[1, 2, 3] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 f0([1, "hello", true]);
 >f0([1, "hello", true]) : [number, string | boolean]
@@ -284,8 +284,8 @@ f0([1, "hello", true]);
 >   : ^ ^^ ^^ ^^           ^^^^^      
 >[1, "hello", true] : [number, string, true]
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >true : true
@@ -350,8 +350,8 @@ f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
 >           : ^     ^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 >f2(x => x * 2, x => x.length, x => x.charCodeAt(0)) : void
@@ -390,6 +390,6 @@ f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
 >           : ^     ^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 

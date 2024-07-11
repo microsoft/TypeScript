@@ -17,8 +17,8 @@ function fn1(x: number | undefined = x > 0 ? x : 0) { }
 >  : ^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 // Report from user
 function fn2(x?: string = someCondition ? 'value1' : x) { }
@@ -30,8 +30,8 @@ function fn2(x?: string = someCondition ? 'value1' : x) { }
 >                             : ^^^^^^^^^^^^^^^^^^
 >someCondition : any
 >              : ^^^
->'value1' : "value1"
->         : ^^^^^^^^
+>'value1' : string
+>         : ^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 

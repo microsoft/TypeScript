@@ -42,13 +42,13 @@ function f(value: A | B): number {
         case "A": return 0;
 >"A" : "A"
 >    : ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
         case "B": return 1;
 >"B" : "B"
 >    : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }

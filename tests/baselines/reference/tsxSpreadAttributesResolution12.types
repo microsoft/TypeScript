@@ -46,8 +46,8 @@ const obj3: {y: false, overwrite: string} = {
     overwrite: "hi"
 >overwrite : string
 >          : ^^^^^^
->"hi" : "hi"
->     : ^^^^
+>"hi" : string
+>     : ^^^^^^
 }
 
 interface Prop {

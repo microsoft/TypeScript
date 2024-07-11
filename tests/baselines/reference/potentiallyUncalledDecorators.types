@@ -52,7 +52,7 @@ class MultiplyByTwo {
 >                : ^^^
 >tracked : PropertyDecorator & ((...watchedProperties: string[]) => any)
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^        ^^^^^   ^
->'args' : "args"
+>'args' : string
 >       : ^^^^^^
 
     get multiplied() {

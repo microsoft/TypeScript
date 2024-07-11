@@ -45,8 +45,8 @@ const { A } = require("./a-ext");
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
 >        : ^  ^^      ^^^^^   
->"./a-ext" : "./a-ext"
->          : ^^^^^^^^^
+>"./a-ext" : string
+>          : ^^^^^^
 
 /** @param {A} p */
 function a(p) { p.x; }
@@ -96,8 +96,8 @@ const { B } = require("./b-ext");
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
 >        : ^  ^^      ^^^^^   
->"./b-ext" : "./b-ext"
->          : ^^^^^^^^^
+>"./b-ext" : string
+>          : ^^^^^^
 
 /** @param {B} p */
 function b(p) { p.x; }
@@ -137,8 +137,8 @@ const { C } = require("./c-ext");
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
 >        : ^  ^^      ^^^^^   
->"./c-ext" : "./c-ext"
->          : ^^^^^^^^^
+>"./c-ext" : string
+>          : ^^^^^^
 
 /** @param {C} p */
 function c(p) { p.x; }
@@ -181,8 +181,8 @@ const { D } = require("./d-ext");
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
 >        : ^  ^^      ^^^^^   
->"./d-ext" : "./d-ext"
->          : ^^^^^^^^^
+>"./d-ext" : string
+>          : ^^^^^^
 
 /** @param {D} p */
 function d(p) { p.x; }
@@ -224,8 +224,8 @@ const { E } = require("./e-ext");
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
 >        : ^  ^^      ^^^^^   
->"./e-ext" : "./e-ext"
->          : ^^^^^^^^^
+>"./e-ext" : string
+>          : ^^^^^^
 
 /** @param {E} p */
 function e(p) { p.x; }

@@ -69,8 +69,8 @@ const f1_c1 = f1(1);
 >      : ^^^^^^^^^^^^^^^^
 >f1 : <T, U = number>(x?: T) => [T, U]
 >   : ^ ^^ ^^^^^^^^^^^ ^^^ ^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 const C0_v0 = new C0();
 >C0_v0 : C0<any>
@@ -95,8 +95,8 @@ const C0_v1 = new C0(1);
 >          : ^^^^^^^^^^
 >C0 : typeof C0
 >   : ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 const C0_v1_y = C0_v1.y;
 >C0_v1_y : number
@@ -133,8 +133,8 @@ const C1_v1 = new C1(1);
 >          : ^^^^^^^^^^^^^^^^^^
 >C1 : typeof C1
 >   : ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 const C1_v1_y = C1_v1.y;
 >C1_v1_y : [number, number]

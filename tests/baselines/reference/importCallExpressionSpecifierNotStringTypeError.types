@@ -33,16 +33,16 @@ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
 >   : ^^^^^^^^^^^^
 >import(whatToLoad ? getSpecifier() : "defaulPath") : Promise<any>
 >                                                   : ^^^^^^^^^^^^
->whatToLoad ? getSpecifier() : "defaulPath" : boolean | "defaulPath"
->                                           : ^^^^^^^^^^^^^^^^^^^^^^
+>whatToLoad ? getSpecifier() : "defaulPath" : string | boolean
+>                                           : ^^^^^^^^^^^^^^^^
 >whatToLoad : boolean
 >           : ^^^^^^^
 >getSpecifier() : boolean
 >               : ^^^^^^^
 >getSpecifier : () => boolean
 >             : ^^^^^^       
->"defaulPath" : "defaulPath"
->             : ^^^^^^^^^^^^
+>"defaulPath" : string
+>             : ^^^^^^
 
 p1.then(zero => {
 >p1.then(zero => {    return zero.foo();  // ok, zero is any}) : Promise<any>
@@ -77,10 +77,10 @@ var p3 = import(["path1", "path2"]);
 >                           : ^^^^^^^^^^^^
 >["path1", "path2"] : string[]
 >                   : ^^^^^^^^
->"path1" : "path1"
->        : ^^^^^^^
->"path2" : "path2"
->        : ^^^^^^^
+>"path1" : string
+>        : ^^^^^^
+>"path2" : string
+>        : ^^^^^^
 
 var p4 = import(()=>"PathToModule");
 >p4 : Promise<any>

@@ -93,8 +93,8 @@ var z = new y(12);
 >          : ^^^^^^^^^^      ^^^
 >y : new (arg1: number) => { length: number; }
 >  : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 z.length;
 >z.length : number
@@ -168,8 +168,8 @@ var z2 = new y2(33);
 >           : ^^^^^^^^^^      ^^^
 >y2 : new (arg1: number) => { length: number; }
 >   : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
->33 : 33
->   : ^^
+>33 : number
+>   : ^^^^^^
 
 z2.length;
 >z2.length : number
@@ -195,8 +195,8 @@ var construct = function(dref) { return new dref(33); }
 >             : ^
 >dref : new (arg1: number) => D
 >     : ^^^^^^^^^^^      ^^^^^^
->33 : 33
->   : ^^
+>33 : number
+>   : ^^^^^^
 
 var z3 = construct(D);
 >z3 : D
@@ -275,20 +275,20 @@ foo('abc', 'def');
 >                  : ^^^^
 >foo : (...args: [string, string] | [number, string, string]) => void
 >    : ^^^^    ^^                                           ^^^^^    
->'abc' : "abc"
->      : ^^^^^
->'def' : "def"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
+>'def' : string
+>      : ^^^^^^
 
 foo(42, 'abc', 'def');
 >foo(42, 'abc', 'def') : void
 >                      : ^^^^
 >foo : (...args: [string, string] | [number, string, string]) => void
 >    : ^^^^    ^^                                           ^^^^^    
->42 : 42
->   : ^^
->'abc' : "abc"
->      : ^^^^^
->'def' : "def"
->      : ^^^^^
+>42 : number
+>   : ^^^^^^
+>'abc' : string
+>      : ^^^^^^
+>'def' : string
+>      : ^^^^^^
 

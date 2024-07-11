@@ -12,6 +12,6 @@ class foo { public bar:{id:number;} = {id:5}; }
 >       : ^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 

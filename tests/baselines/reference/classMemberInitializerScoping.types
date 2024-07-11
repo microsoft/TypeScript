@@ -28,16 +28,16 @@ class CCC {
 >    : ^^^
 
         this.y = ''; // was: error, cannot assign string to number
->this.y = '' : ""
->            : ^^
+>this.y = '' : string
+>            : ^^^^^^
 >this.y : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >y : number
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
     }
 }
 

@@ -14,8 +14,8 @@ declare function decorator(x: string): any;
 >decorator("hello") : any
 >decorator : (x: string) => any
 >          : ^ ^^      ^^^^^   
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 class Remote { }
 >Remote : Remote
@@ -29,8 +29,8 @@ class Remote { }
 >decorator("hi") : any
 >decorator : (x: string) => any
 >          : ^ ^^      ^^^^^   
->"hi" : "hi"
->     : ^^^^
+>"hi" : string
+>     : ^^^^^^
 
 class AnotherRomote {
 >AnotherRomote : AnotherRomote

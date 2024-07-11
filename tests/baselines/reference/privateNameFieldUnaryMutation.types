@@ -8,8 +8,8 @@ class C {
     #test: number = 24;
 >#test : number
 >      : ^^^^^^
->24 : 24
->   : ^^
+>24 : number
+>   : ^^^^^^
 
     constructor() {
         this.#test++;
@@ -85,14 +85,14 @@ class C {
 >     : ^^^^
 
         for (this.#test = 0; this.#test < 10; ++this.#test) {}
->this.#test = 0 : 0
->               : ^
+>this.#test = 0 : number
+>               : ^^^^^^
 >this.#test : number
 >           : ^^^^^^
 >this : this
 >     : ^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >this.#test < 10 : boolean
 >                : ^^^^^^^
 >this.#test : number
@@ -109,14 +109,14 @@ class C {
 >     : ^^^^
 
         for (this.#test = 0; this.#test < 10; this.#test++) {}
->this.#test = 0 : 0
->               : ^
+>this.#test = 0 : number
+>               : ^^^^^^
 >this.#test : number
 >           : ^^^^^^
 >this : this
 >     : ^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >this.#test < 10 : boolean
 >                : ^^^^^^^
 >this.#test : number
@@ -221,14 +221,14 @@ class C {
 >     : ^^^^
 
         for (this.#test = 0; this.#test < 10; ++(this.#test)) {}
->this.#test = 0 : 0
->               : ^
+>this.#test = 0 : number
+>               : ^^^^^^
 >this.#test : number
 >           : ^^^^^^
 >this : this
 >     : ^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >this.#test < 10 : boolean
 >                : ^^^^^^^
 >this.#test : number
@@ -247,14 +247,14 @@ class C {
 >     : ^^^^
 
         for (this.#test = 0; this.#test < 10; (this.#test)++) {}
->this.#test = 0 : 0
->               : ^
+>this.#test = 0 : number
+>               : ^^^^^^
 >this.#test : number
 >           : ^^^^^^
 >this : this
 >     : ^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >this.#test < 10 : boolean
 >                : ^^^^^^^
 >this.#test : number
@@ -397,8 +397,8 @@ class C {
 >            : ^^^^^^^
 
         for (this.getInstance().#test = 0; this.getInstance().#test < 10; ++this.getInstance().#test) {}
->this.getInstance().#test = 0 : 0
->                             : ^
+>this.getInstance().#test = 0 : number
+>                             : ^^^^^^
 >this.getInstance().#test : number
 >                         : ^^^^^^
 >this.getInstance() : C
@@ -409,8 +409,8 @@ class C {
 >     : ^^^^
 >getInstance : () => C
 >            : ^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >this.getInstance().#test < 10 : boolean
 >                              : ^^^^^^^
 >this.getInstance().#test : number
@@ -439,8 +439,8 @@ class C {
 >            : ^^^^^^^
 
         for (this.getInstance().#test = 0; this.getInstance().#test < 10; this.getInstance().#test++) {}
->this.getInstance().#test = 0 : 0
->                             : ^
+>this.getInstance().#test = 0 : number
+>                             : ^^^^^^
 >this.getInstance().#test : number
 >                         : ^^^^^^
 >this.getInstance() : C
@@ -451,8 +451,8 @@ class C {
 >     : ^^^^
 >getInstance : () => C
 >            : ^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >this.getInstance().#test < 10 : boolean
 >                              : ^^^^^^^
 >this.getInstance().#test : number
@@ -617,8 +617,8 @@ class C {
 >            : ^^^^^^^
 
         for (this.getInstance().#test = 0; this.getInstance().#test < 10; ++(this.getInstance().#test)) {}
->this.getInstance().#test = 0 : 0
->                             : ^
+>this.getInstance().#test = 0 : number
+>                             : ^^^^^^
 >this.getInstance().#test : number
 >                         : ^^^^^^
 >this.getInstance() : C
@@ -629,8 +629,8 @@ class C {
 >     : ^^^^
 >getInstance : () => C
 >            : ^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >this.getInstance().#test < 10 : boolean
 >                              : ^^^^^^^
 >this.getInstance().#test : number
@@ -661,8 +661,8 @@ class C {
 >            : ^^^^^^^
 
         for (this.getInstance().#test = 0; this.getInstance().#test < 10; (this.getInstance().#test)++) {}
->this.getInstance().#test = 0 : 0
->                             : ^
+>this.getInstance().#test = 0 : number
+>                             : ^^^^^^
 >this.getInstance().#test : number
 >                         : ^^^^^^
 >this.getInstance() : C
@@ -673,8 +673,8 @@ class C {
 >     : ^^^^
 >getInstance : () => C
 >            : ^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >this.getInstance().#test < 10 : boolean
 >                              : ^^^^^^^
 >this.getInstance().#test : number

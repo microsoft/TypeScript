@@ -46,14 +46,14 @@ class C {
 >     : ^^^^
 
         this.#a = "hello";
->this.#a = "hello" : "hello"
->                  : ^^^^^^^
+>this.#a = "hello" : string
+>                  : ^^^^^^
 >this.#a : number
 >        : ^^^^^^
 >this : this
 >     : ^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
         console.log(this.#b);
 >console.log(this.#b) : void

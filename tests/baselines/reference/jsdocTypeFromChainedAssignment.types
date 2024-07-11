@@ -137,8 +137,8 @@ a.y('no') // error
 >  : ^
 >y : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
->'no' : "no"
->     : ^^^^
+>'no' : string
+>     : ^^^^^^
 
 a.z('not really') // error
 >a.z('not really') : number
@@ -149,8 +149,8 @@ a.z('not really') // error
 >  : ^
 >z : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
->'not really' : "not really"
->             : ^^^^^^^^^^^^
+>'not really' : string
+>             : ^^^^^^
 
 A.s('still no') // error
 >A.s('still no') : any
@@ -161,8 +161,8 @@ A.s('still no') // error
 >  : ^^^^^^^^
 >s : (m: number) => any
 >  : ^ ^^      ^^^^^^^^
->'still no' : "still no"
->           : ^^^^^^^^^^
+>'still no' : string
+>           : ^^^^^^
 
 A.t('not here either') // error
 >A.t('not here either') : any
@@ -173,8 +173,8 @@ A.t('not here either') // error
 >  : ^^^^^^^^
 >t : (m: number) => any
 >  : ^ ^^      ^^^^^^^^
->'not here either' : "not here either"
->                  : ^^^^^^^^^^^^^^^^^
+>'not here either' : string
+>                  : ^^^^^^
 
 a.first = 10 // error: '10' isn't assignable to '1'
 >a.first = 10 : 10

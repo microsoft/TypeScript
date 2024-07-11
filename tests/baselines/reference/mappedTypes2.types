@@ -188,8 +188,8 @@ function f0(s1: Shape, s2: Shape) {
 >                   : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"circle" : "circle"
->         : ^^^^^^^^
+>"circle" : string
+>         : ^^^^^^
 
     assign(s2, { width: 10, height: 20 });
 >assign(s2, { width: 10, height: 20 }) : void
@@ -202,12 +202,12 @@ function f0(s1: Shape, s2: Shape) {
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >width : number
 >      : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >height : number
 >       : ^^^^^^
->20 : 20
->   : ^^
+>20 : number
+>   : ^^^^^^
 }
 
 function f1(shape: Shape) {
@@ -365,8 +365,8 @@ function f5(shape: Shape) {
 >      : ^^^^^^^^^^^^^
 >set : (value: number) => void
 >    : ^     ^^^^^^^^^^^^^    
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 }
 
 function f6(shape: DeepReadonly<Shape>) {

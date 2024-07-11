@@ -426,7 +426,7 @@ class FileService {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >getRequestUrl : { (service: string, path?: string): string; (service: string, path?: string, absolute?: boolean): string; }
 >              : ^^^       ^^      ^^    ^^^      ^^^      ^^^       ^^      ^^    ^^^      ^^        ^^^       ^^^      ^^^
->'root' : "root"
+>'root' : string
 >       : ^^^^^^
 >path : string
 >     : ^^^^^^
@@ -434,7 +434,7 @@ class FileService {
             type: 'POST',
 >type : string
 >     : ^^^^^^
->'POST' : "POST"
+>'POST' : string
 >       : ^^^^^^
 
             headers: {},

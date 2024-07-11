@@ -27,6 +27,6 @@ test('hi') // error, T=number
 >           : ^^^^^^
 >test : Test<number>
 >     : ^^^^^^^^^^^^
->'hi' : "hi"
->     : ^^^^
+>'hi' : string
+>     : ^^^^^^
 

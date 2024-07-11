@@ -95,12 +95,12 @@ function functionC(): void {
 >    : ^^^
 
                 key = "AA";
->key = "AA" : "AA"
->           : ^^^^
+>key = "AA" : string
+>           : ^^^^^^
 >key : string
 >    : ^^^^^^
->"AA" : "AA"
->     : ^^^^
+>"AA" : string
+>     : ^^^^^^
 
                 break;
             }

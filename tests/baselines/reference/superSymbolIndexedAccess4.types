@@ -12,8 +12,8 @@ var symbol = Symbol.for('myThing');
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->'myThing' : "myThing"
->          : ^^^^^^^^^
+>'myThing' : string
+>          : ^^^^^^
 
 class Bar {
 >Bar : Bar

@@ -61,8 +61,8 @@ function foo(a: number) {
 >        : ^^^^
 >foo : (a: number) => void
 >    : ^ ^^      ^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     foo(); // not ok
 >foo() : void
@@ -75,8 +75,8 @@ foo(10);
 >        : ^^^^
 >foo : (a: number) => void
 >    : ^ ^^      ^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 foo(); // not ok - needs number
 >foo() : void

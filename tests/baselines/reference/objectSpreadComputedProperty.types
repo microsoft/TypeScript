@@ -9,14 +9,14 @@ function f() {
     let n: number = 12;
 >n : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
     let m: number = 13;
 >m : number
 >  : ^^^^^^
->13 : 13
->   : ^^
+>13 : number
+>   : ^^^^^^
 
     let a: any = null;
 >a : any

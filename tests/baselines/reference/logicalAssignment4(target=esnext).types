@@ -22,8 +22,8 @@ function foo1(results: number[] | undefined) {
 >   : ^^^^^^^
 >push : (...items: number[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 }
 
 function foo2(results: number[] | undefined) {
@@ -47,8 +47,8 @@ function foo2(results: number[] | undefined) {
 >   : ^^^^^^^
 >push : (...items: number[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 }
 
 function foo3(results: number[] | undefined) {
@@ -74,8 +74,8 @@ function foo3(results: number[] | undefined) {
 >        : ^^^^^^^^
 >push : (...items: number[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 }
 
 function foo4(results: number[] | undefined) {
@@ -101,8 +101,8 @@ function foo4(results: number[] | undefined) {
 >        : ^^^^^^^^
 >push : (...items: number[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 }
 
 interface ThingWithOriginal {

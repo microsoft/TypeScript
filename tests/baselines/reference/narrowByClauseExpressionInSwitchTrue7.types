@@ -8,8 +8,8 @@ class Base {
     basey: string = "";
 >basey : string
 >      : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 }
 
 class Derived1 extends Base {
@@ -21,8 +21,8 @@ class Derived1 extends Base {
     d: string = "";
 >d : string
 >  : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 }
 
 class Derived2 extends Base {
@@ -34,14 +34,14 @@ class Derived2 extends Base {
     d: string = "";
 >d : string
 >  : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     other: string = "";
 >other : string
 >      : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 }
 
 function classy(base: Base, someDerived: Derived1 | Derived2) {

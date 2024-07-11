@@ -23,40 +23,40 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 >   : ^^^^^^^^^^^^^^^
 
     obj[k0] = 1;
->obj[k0] = 1 : 1
->            : ^
+>obj[k0] = 1 : number
+>            : ^^^^^^
 >obj[k0] : number
 >        : ^^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
 >    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k0 : "a"
 >   : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     obj[k0] = 2;
->obj[k0] = 2 : 2
->            : ^
+>obj[k0] = 2 : number
+>            : ^^^^^^
 >obj[k0] : number
 >        : ^^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
 >    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k0 : "a"
 >   : ^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
     obj[k0] = 'x';  // Error
->obj[k0] = 'x' : "x"
->              : ^^^
+>obj[k0] = 'x' : string
+>              : ^^^^^^
 >obj[k0] : number
 >        : ^^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
 >    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k0 : "a"
 >   : ^^^
->'x' : "x"
->    : ^^^
+>'x' : string
+>    : ^^^^^^
 
     obj[k1] = 1;
 >obj[k1] = 1 : 1
@@ -95,40 +95,40 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 >    : ^^^
 
     obj[k2] = 1;    // Error
->obj[k2] = 1 : 1
->            : ^
+>obj[k2] = 1 : number
+>            : ^^^^^^
 >obj[k2] : never
 >        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
 >    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k2 : "a" | "b" | "c"
 >   : ^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     obj[k2] = 2;    // Error
->obj[k2] = 2 : 2
->            : ^
+>obj[k2] = 2 : number
+>            : ^^^^^^
 >obj[k2] : never
 >        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
 >    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k2 : "a" | "b" | "c"
 >   : ^^^^^^^^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
     obj[k2] = 'x';  // Error
->obj[k2] = 'x' : "x"
->              : ^^^
+>obj[k2] = 'x' : string
+>              : ^^^^^^
 >obj[k2] : never
 >        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
 >    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k2 : "a" | "b" | "c"
 >   : ^^^^^^^^^^^^^^^
->'x' : "x"
->    : ^^^
+>'x' : string
+>    : ^^^^^^
 }
 
 function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b: { [key: string]: number }, c: T, k: keyof T) {
@@ -232,28 +232,28 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >  : ^^^^^^^
 
     a.x = 1;
->a.x = 1 : 1
->        : ^
+>a.x = 1 : number
+>        : ^^^^^^
 >a.x : number
 >    : ^^^^^^
 >a : { x: number; y: number; }
 >  : ^^^^^      ^^^^^      ^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     b.x = 1;
->b.x = 1 : 1
->        : ^
+>b.x = 1 : number
+>        : ^^^^^^
 >b.x : number
 >    : ^^^^^^
 >b : { [key: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     c.x = 1;  // Error, cannot write to index signature through constraint
 >c.x = 1 : 1
@@ -418,16 +418,16 @@ function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof It
 >    : ^^^
 
   obj[k2] = 123;  // Error
->obj[k2] = 123 : 123
->              : ^^^
+>obj[k2] = 123 : number
+>              : ^^^^^^
 >obj[k2] : never
 >        : ^^^^^
 >obj : T
 >    : ^
 >k2 : keyof Item
 >   : ^^^^^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
   obj[k3] = 123;  // Error
 >obj[k3] = 123 : 123
@@ -469,40 +469,40 @@ function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
 >   : ^
 
   obj.foo = 123;
->obj.foo = 123 : 123
->              : ^^^
+>obj.foo = 123 : number
+>              : ^^^^^^
 >obj.foo : number
 >        : ^^^^^^
 >obj : Dict
 >    : ^^^^
 >foo : number
 >    : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
   obj[k1] = 123;
->obj[k1] = 123 : 123
->              : ^^^
+>obj[k1] = 123 : number
+>              : ^^^^^^
 >obj[k1] : number
 >        : ^^^^^^
 >obj : Dict
 >    : ^^^^
 >k1 : string
 >   : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
   obj[k2] = 123;
->obj[k2] = 123 : 123
->              : ^^^
+>obj[k2] = 123 : number
+>              : ^^^^^^
 >obj[k2] : number
 >        : ^^^^^^
 >obj : Dict
 >    : ^^^^
 >k2 : K
 >   : ^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 }
 
 function f12<T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) {
@@ -821,28 +821,28 @@ export class c {
 
   constructor() {
     this.a = "b";
->this.a = "b" : "b"
->             : ^^^
+>this.a = "b" : string
+>             : ^^^^^^
 >this.a : string
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : string
 >  : ^^^^^^
->"b" : "b"
->    : ^^^
+>"b" : string
+>    : ^^^^^^
 
     this["a"] = "b";
->this["a"] = "b" : "b"
->                : ^^^
+>this["a"] = "b" : string
+>                : ^^^^^^
 >this["a"] : string
 >          : ^^^^^^
 >this : this
 >     : ^^^^
 >"a" : "a"
 >    : ^^^
->"b" : "b"
->    : ^^^
+>"b" : string
+>    : ^^^^^^
   }
 }
 

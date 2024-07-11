@@ -16,8 +16,8 @@ module A
 >      : ^^^^^^      
         {
             return "from private B";
->"from private B" : "from private B"
->                 : ^^^^^^^^^^^^^^^^
+>"from private B" : string
+>                 : ^^^^^^
         }
     }
 }
@@ -35,8 +35,8 @@ module A
 >      : ^^^^^^      
         {
             return "from export B";
->"from export B" : "from export B"
->                : ^^^^^^^^^^^^^^^
+>"from export B" : string
+>                : ^^^^^^
         }
     }
 }

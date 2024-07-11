@@ -118,8 +118,8 @@ const A = object<Something>()({
   name: "A",
 >name : string
 >     : ^^^^^^
->"A" : "A"
->    : ^^^
+>"A" : string
+>    : ^^^^^^
 
   fields: () => ({
 >fields : () => any

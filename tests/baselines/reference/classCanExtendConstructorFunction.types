@@ -190,8 +190,8 @@ class Sql extends Wagon {
 >                                                   : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"please do not use XML. It was a joke." : "please do not use XML. It was a joke."
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"please do not use XML. It was a joke." : string
+>                                        : ^^^^^^
         }
         else {
             super.speed() // run faster
@@ -312,7 +312,7 @@ class Conestoga extends Wagon {
 >              : ^^^^
 >super : typeof Wagon
 >      : ^^^^^^^^^^^^
->'nope' : "nope"
+>'nope' : string
 >       : ^^^^^^
     }
     // should error since others is not optional
@@ -410,8 +410,8 @@ var soup = new Soup(1);
 >            : ^^^^^^^^^^^^
 >Soup : typeof Soup
 >     : ^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 soup.flavour
 >soup.flavour : number

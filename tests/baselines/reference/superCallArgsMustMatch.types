@@ -32,8 +32,8 @@ class T6 extends T5<number>{
 >            : ^^^^
 >super : typeof T5
 >      : ^^^^^^^^^
->"hi" : "hi"
->     : ^^^^
+>"hi" : string
+>     : ^^^^^^
 
         var x: number = this.foo;
 >x : number

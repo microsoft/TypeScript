@@ -12,8 +12,8 @@ class C {
     constructor(public x: string = 1) { // error
 >x : string
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         var y = x;
 >y : string

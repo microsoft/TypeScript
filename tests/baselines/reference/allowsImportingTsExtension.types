@@ -31,8 +31,8 @@ const aPromise = import("./a.ts"); // error
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./a.ts") : Promise<typeof import("a")>
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./a.ts" : "./a.ts"
->         : ^^^^^^^^
+>"./a.ts" : string
+>         : ^^^^^^
 
 === c.ts ===
 import type { A } from "./a.d.ts"; // ok
@@ -55,6 +55,6 @@ const aPromise = import("./a.d.ts"); // error
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./a.d.ts") : Promise<typeof import("a")>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./a.d.ts" : "./a.d.ts"
->           : ^^^^^^^^^^
+>"./a.d.ts" : string
+>           : ^^^^^^
 

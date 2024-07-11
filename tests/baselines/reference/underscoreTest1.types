@@ -27,12 +27,12 @@ _.each([1, 2, 3], (num) => alert(num.toString()));
 >     : ^^^ ^^    ^^   ^^        ^^                  ^^       ^^^   ^^^    ^^^ ^^    ^^             ^^        ^^                  ^^       ^^^   ^^^    ^^^
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >(num) => alert(num.toString()) : (num: number) => void
 >                               : ^   ^^^^^^^^^^^^^^^^^
 >num : number
@@ -63,16 +63,16 @@ _.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(valu
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >one : number
 >    : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >two : number
 >    : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >three : number
 >      : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 >(value: number, key?: string) => alert(value.toString()) : (value: number, key?: string) => void
 >                                                         : ^     ^^      ^^   ^^^      ^^^^^^^^^
 >value : number
@@ -103,12 +103,12 @@ _.map([1, 2, 3], (num) => num * 3);
 >    : ^^^ ^^ ^^    ^^   ^^        ^^               ^^       ^^^   ^^^   ^^^ ^^ ^^    ^^             ^^        ^^               ^^       ^^^   ^^^   ^^^
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >(num) => num * 3 : (num: number) => number
 >                 : ^   ^^^^^^^^^^^^^^^^^^^
 >num : number
@@ -133,16 +133,16 @@ _.map({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => value * 3);
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >one : number
 >    : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >two : number
 >    : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >three : number
 >      : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 >(value: number, key?: string) => value * 3 : (value: number, key?: string) => number
 >                                           : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
 >value : number
@@ -169,12 +169,12 @@ var sum = _.reduce([1, 2, 3], (memo, num) => memo + num, 0);
 >       : ^^^ ^^    ^^   ^^        ^^             ^^            ^^^ ^^       ^^^   ^^^ ^^^ ^^ ^^    ^^   ^^        ^^             ^^            ^^ ^^       ^^^   ^^^ ^^^ ^^    ^^             ^^        ^^             ^^            ^^^ ^^       ^^^   ^^^ ^^^ ^^ ^^    ^^             ^^        ^^             ^^            ^^ ^^       ^^^   ^^^ ^^^
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >(memo, num) => memo + num : (memo: number, num: number) => number
 >                          : ^    ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >memo : number
@@ -187,8 +187,8 @@ var sum = _.reduce([1, 2, 3], (memo, num) => memo + num, 0);
 >     : ^^^^^^
 >num : number
 >    : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 var list = [[0, 1], [2, 3], [4, 5]];
 >list : number[][]
@@ -259,18 +259,18 @@ var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >     : ^^^ ^^    ^^   ^^        ^^                     ^^       ^^^   ^^^ ^^^ ^^    ^^             ^^        ^^                     ^^       ^^^   ^^^ ^^^
 >[1, 2, 3, 4, 5, 6] : number[]
 >                   : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
->5 : 5
->  : ^
->6 : 6
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
+>6 : number
+>  : ^^^^^^
 >(num) => num % 2 == 0 : (num: number) => boolean
 >                      : ^   ^^^^^^^^^^^^^^^^^^^^
 >num : number
@@ -299,18 +299,18 @@ var evens = _.filter([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >       : ^^^ ^^    ^^   ^^        ^^                     ^^       ^^^   ^^^   ^^^ ^^    ^^             ^^        ^^                     ^^       ^^^   ^^^   ^^^
 >[1, 2, 3, 4, 5, 6] : number[]
 >                   : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
->5 : 5
->  : ^
->6 : 6
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
+>6 : number
+>  : ^^^^^^
 >(num) => num % 2 == 0 : (num: number) => boolean
 >                      : ^   ^^^^^^^^^^^^^^^^^^^^
 >num : number
@@ -409,18 +409,18 @@ var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >       : ^^^ ^^    ^^   ^^        ^^                     ^^       ^^^   ^^^   ^^^ ^^    ^^             ^^        ^^                     ^^       ^^^   ^^^   ^^^
 >[1, 2, 3, 4, 5, 6] : number[]
 >                   : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
->5 : 5
->  : ^
->6 : 6
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
+>6 : number
+>  : ^^^^^^
 >(num) => num % 2 == 0 : (num: number) => boolean
 >                      : ^   ^^^^^^^^^^^^^^^^^^^^
 >num : number
@@ -489,14 +489,14 @@ _.contains([1, 2, 3], 3);
 >         : ^^^ ^^    ^^   ^^     ^^ ^^^       ^^^ ^^    ^^             ^^     ^^ ^^^       ^^^
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 _.invoke([[5, 1, 7], [3, 2, 1]], 'sort');
 >_.invoke([[5, 1, 7], [3, 2, 1]], 'sort') : any[]
@@ -525,7 +525,7 @@ _.invoke([[5, 1, 7], [3, 2, 1]], 'sort');
 >  : ^
 >1 : 1
 >  : ^
->'sort' : "sort"
+>'sort' : string
 >       : ^^^^^^
 
 var stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
@@ -575,7 +575,7 @@ _.pluck(stooges, 'name');
 >      : ^^^    ^^     ^^            ^^      ^^^     ^^^    ^^               ^^            ^^      ^^^     ^^^
 >stooges : { name: string; age: number; }[]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'name' : "name"
+>'name' : string
 >       : ^^^^^^
 
 _.max(stooges, (stooge) => stooge.age);
@@ -639,18 +639,18 @@ _.sortBy([1, 2, 3, 4, 5, 6], (num) => Math.sin(num));
 >       : ^^^ ^^    ^^   ^^        ^^                 ^^       ^^^   ^^^   ^^^ ^^    ^^             ^^        ^^                 ^^       ^^^   ^^^   ^^^ ^^    ^^   ^^            ^^      ^^^   ^^^ ^^    ^^             ^^            ^^      ^^^   ^^^
 >[1, 2, 3, 4, 5, 6] : number[]
 >                   : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
->5 : 5
->  : ^
->6 : 6
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
+>6 : number
+>  : ^^^^^^
 >(num) => Math.sin(num) : (num: number) => number
 >                       : ^   ^^^^^^^^^^^^^^^^^^^
 >num : number
@@ -679,12 +679,12 @@ _([1.3, 2.1, 2.4]).groupBy((e: number, i?: number, list?: number[]) => Math.floo
 >  : ^^^^^^^^^^^^^^^^^
 >[1.3, 2.1, 2.4] : number[]
 >                : ^^^^^^^^
->1.3 : 1.3
->    : ^^^
->2.1 : 2.1
->    : ^^^
->2.4 : 2.4
->    : ^^^
+>1.3 : number
+>    : ^^^^^^
+>2.1 : number
+>    : ^^^^^^
+>2.4 : number
+>    : ^^^^^^
 >groupBy : { (iterator?: Iterator_<number, any>, context?: any): Dictionary<number[]>; (propertyName: string): Dictionary<number[]>; }
 >        : ^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(e: number, i?: number, list?: number[]) => Math.floor(e) : (e: number, i?: number, list?: number[]) => number
@@ -717,12 +717,12 @@ _.groupBy([1.3, 2.1, 2.4], (num: number) => Math.floor(num));
 >        : ^^^ ^^    ^^   ^^        ^^^                 ^^       ^^^   ^^^               ^^^ ^^    ^^             ^^        ^^^                 ^^       ^^^   ^^^               ^^^ ^^    ^^   ^^            ^^      ^^^               ^^^ ^^    ^^             ^^            ^^      ^^^               ^^^
 >[1.3, 2.1, 2.4] : number[]
 >                : ^^^^^^^^
->1.3 : 1.3
->    : ^^^
->2.1 : 2.1
->    : ^^^
->2.4 : 2.4
->    : ^^^
+>1.3 : number
+>    : ^^^^^^
+>2.1 : number
+>    : ^^^^^^
+>2.4 : number
+>    : ^^^^^^
 >(num: number) => Math.floor(num) : (num: number) => number
 >                                 : ^   ^^      ^^^^^^^^^^^
 >num : number
@@ -749,14 +749,14 @@ _.groupBy(['one', 'two', 'three'], 'length');
 >        : ^^^ ^^    ^^   ^^        ^^^                 ^^       ^^^   ^^^               ^^^ ^^    ^^             ^^        ^^^                 ^^       ^^^   ^^^               ^^^ ^^    ^^   ^^            ^^      ^^^               ^^^ ^^    ^^             ^^            ^^      ^^^               ^^^
 >['one', 'two', 'three'] : string[]
 >                        : ^^^^^^^^
->'one' : "one"
->      : ^^^^^
->'two' : "two"
->      : ^^^^^
->'three' : "three"
->        : ^^^^^^^
->'length' : "length"
->         : ^^^^^^^^
+>'one' : string
+>      : ^^^^^^
+>'two' : string
+>      : ^^^^^^
+>'three' : string
+>        : ^^^^^^
+>'length' : string
+>         : ^^^^^^
 
 _.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
 >_.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd') : Dictionary<number>
@@ -769,16 +769,16 @@ _.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
 >        : ^^^ ^^    ^^   ^^        ^^^                 ^^       ^^^   ^^^                  ^^^ ^^    ^^             ^^        ^^^                 ^^       ^^^   ^^^                  ^^^ ^^    ^^   ^^            ^^      ^^^                  ^^^ ^^    ^^             ^^            ^^      ^^^                  ^^^
 >[1, 2, 3, 4, 5] : number[]
 >                : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
->5 : 5
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
 >(num) => num % 2 == 0 ? 'even' : 'odd' : (num: number) => "even" | "odd"
 >                                       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >num : number
@@ -811,18 +811,18 @@ _.shuffle([1, 2, 3, 4, 5, 6]);
 >        : ^^^ ^^    ^^   ^^^   ^^^ ^^    ^^             ^^^   ^^^
 >[1, 2, 3, 4, 5, 6] : number[]
 >                   : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
->5 : 5
->  : ^
->6 : 6
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
+>6 : number
+>  : ^^^^^^
 
 // (function(){ return _.toArray(arguments).slice(1); })(1, 2, 3, 4);
 
@@ -839,16 +839,16 @@ _.size({ one: 1, two: 2, three: 3 });
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >one : number
 >    : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >two : number
 >    : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >three : number
 >      : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -863,16 +863,16 @@ _.first([5, 4, 3, 2, 1]);
 >      : ^^^ ^^    ^^   ^^^ ^^^ ^^    ^^   ^^     ^^      ^^^   ^^^
 >[5, 4, 3, 2, 1] : number[]
 >                : ^^^^^^^^
->5 : 5
->  : ^
->4 : 4
->  : ^
->3 : 3
->  : ^
->2 : 2
->  : ^
->1 : 1
->  : ^
+>5 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 _.initial([5, 4, 3, 2, 1]);
 >_.initial([5, 4, 3, 2, 1]) : number
@@ -885,16 +885,16 @@ _.initial([5, 4, 3, 2, 1]);
 >        : ^^^ ^^    ^^   ^^^ ^^^ ^^    ^^   ^^     ^^      ^^^   ^^^
 >[5, 4, 3, 2, 1] : number[]
 >                : ^^^^^^^^
->5 : 5
->  : ^
->4 : 4
->  : ^
->3 : 3
->  : ^
->2 : 2
->  : ^
->1 : 1
->  : ^
+>5 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 _.last([5, 4, 3, 2, 1]);
 >_.last([5, 4, 3, 2, 1]) : number
@@ -907,16 +907,16 @@ _.last([5, 4, 3, 2, 1]);
 >     : ^^^ ^^    ^^   ^^^ ^^^ ^^    ^^   ^^     ^^      ^^^   ^^^
 >[5, 4, 3, 2, 1] : number[]
 >                : ^^^^^^^^
->5 : 5
->  : ^
->4 : 4
->  : ^
->3 : 3
->  : ^
->2 : 2
->  : ^
->1 : 1
->  : ^
+>5 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 _.rest([5, 4, 3, 2, 1]);
 >_.rest([5, 4, 3, 2, 1]) : number[]
@@ -929,16 +929,16 @@ _.rest([5, 4, 3, 2, 1]);
 >     : ^ ^^    ^^   ^^     ^^^      ^^^^^   
 >[5, 4, 3, 2, 1] : number[]
 >                : ^^^^^^^^
->5 : 5
->  : ^
->4 : 4
->  : ^
->3 : 3
->  : ^
->2 : 2
->  : ^
->1 : 1
->  : ^
+>5 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 _.compact([0, 1, false, 2, '', 3]);
 >_.compact([0, 1, false, 2, '', 3]) : (string | number | boolean)[]
@@ -1072,24 +1072,24 @@ _.without([1, 2, 1, 0, 3, 1, 4], 0, 1);
 >        : ^ ^^    ^^   ^^^^^      ^^   ^^^^^   
 >[1, 2, 1, 0, 3, 1, 4] : number[]
 >                      : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->1 : 1
->  : ^
->0 : 0
->  : ^
->3 : 3
->  : ^
->1 : 1
->  : ^
->4 : 4
->  : ^
->0 : 0
->  : ^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
+>0 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>0 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 _.union([1, 2, 3], [101, 2, 1, 10], [2, 1]);
 >_.union([1, 2, 3], [101, 2, 1, 10], [2, 1]) : number[]
@@ -1102,28 +1102,28 @@ _.union([1, 2, 3], [101, 2, 1, 10], [2, 1]);
 >      : ^ ^^^^^      ^^     ^^^^^   
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >[101, 2, 1, 10] : number[]
 >                : ^^^^^^^^
->101 : 101
->    : ^^^
->2 : 2
->  : ^
->1 : 1
->  : ^
->10 : 10
->   : ^^
+>101 : number
+>    : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 >[2, 1] : number[]
 >       : ^^^^^^^^
->2 : 2
->  : ^
->1 : 1
->  : ^
+>2 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 _.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]);
 >_.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]) : number[]
@@ -1136,28 +1136,28 @@ _.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]);
 >             : ^ ^^^^^      ^^     ^^^^^   
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >[101, 2, 1, 10] : number[]
 >                : ^^^^^^^^
->101 : 101
->    : ^^^
->2 : 2
->  : ^
->1 : 1
->  : ^
->10 : 10
->   : ^^
+>101 : number
+>    : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 >[2, 1] : number[]
 >       : ^^^^^^^^
->2 : 2
->  : ^
->1 : 1
->  : ^
+>2 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 _.difference([1, 2, 3, 4, 5], [5, 2, 10]);
 >_.difference([1, 2, 3, 4, 5], [5, 2, 10]) : number[]
@@ -1170,24 +1170,24 @@ _.difference([1, 2, 3, 4, 5], [5, 2, 10]);
 >           : ^ ^^    ^^   ^^^^^      ^^     ^^^^^   
 >[1, 2, 3, 4, 5] : number[]
 >                : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
->5 : 5
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
 >[5, 2, 10] : number[]
 >           : ^^^^^^^^
->5 : 5
->  : ^
->2 : 2
->  : ^
->10 : 10
->   : ^^
+>5 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 
 _.uniq([1, 2, 1, 3, 1, 4]);
 >_.uniq([1, 2, 1, 3, 1, 4]) : number[]
@@ -1200,18 +1200,18 @@ _.uniq([1, 2, 1, 3, 1, 4]);
 >     : ^^^ ^^    ^^   ^^        ^^^       ^^^   ^^^ ^^ ^^    ^^   ^^        ^^       ^^        ^^               ^^       ^^^   ^^^   ^^^
 >[1, 2, 1, 3, 1, 4] : number[]
 >                   : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->1 : 1
->  : ^
->3 : 3
->  : ^
->1 : 1
->  : ^
->4 : 4
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
 
 _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]);
 >_.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]) : Tuple3<string, number, boolean>[]
@@ -1224,20 +1224,20 @@ _.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]);
 >    : ^^^  ^^  ^^  ^^    ^^  ^^    ^^^                ^^^  ^^  ^^  ^^  ^^    ^^  ^^    ^^  ^^    ^^^                    ^^^  ^^  ^^  ^^  ^^  ^^    ^^  ^^    ^^  ^^    ^^  ^^    ^^^                        ^^^^^^      ^^       ^^^       ^^^
 >['moe', 'larry', 'curly'] : string[]
 >                          : ^^^^^^^^
->'moe' : "moe"
->      : ^^^^^
->'larry' : "larry"
->        : ^^^^^^^
->'curly' : "curly"
->        : ^^^^^^^
+>'moe' : string
+>      : ^^^^^^
+>'larry' : string
+>        : ^^^^^^
+>'curly' : string
+>        : ^^^^^^
 >[30, 40, 50] : number[]
 >             : ^^^^^^^^
->30 : 30
->   : ^^
->40 : 40
->   : ^^
->50 : 50
->   : ^^
+>30 : number
+>   : ^^^^^^
+>40 : number
+>   : ^^^^^^
+>50 : number
+>   : ^^^^^^
 >[true, false, false] : boolean[]
 >                     : ^^^^^^^^^
 >true : true
@@ -1258,12 +1258,12 @@ _.object(['moe', 'larry', 'curly'], [30, 40, 50]);
 >       : ^^^    ^^       ^^^   ^^^    ^^        ^^      ^^     ^^^   ^^^
 >['moe', 'larry', 'curly'] : string[]
 >                          : ^^^^^^^^
->'moe' : "moe"
->      : ^^^^^
->'larry' : "larry"
->        : ^^^^^^^
->'curly' : "curly"
->        : ^^^^^^^
+>'moe' : string
+>      : ^^^^^^
+>'larry' : string
+>        : ^^^^^^
+>'curly' : string
+>        : ^^^^^^
 >[30, 40, 50] : number[]
 >             : ^^^^^^^^
 >30 : 30
@@ -1314,14 +1314,14 @@ _.indexOf([1, 2, 3], 2);
 >        : ^ ^^    ^^   ^^     ^^ ^^        ^^^       ^^^^^      
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);
 >_.lastIndexOf([1, 2, 3, 1, 2, 3], 2) : number
@@ -1334,20 +1334,20 @@ _.lastIndexOf([1, 2, 3, 1, 2, 3], 2);
 >            : ^ ^^    ^^   ^^     ^^ ^^         ^^^      ^^^^^      
 >[1, 2, 3, 1, 2, 3] : number[]
 >                   : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 _.sortedIndex([10, 20, 30, 40, 50], 35);
 >_.sortedIndex([10, 20, 30, 40, 50], 35) : number
@@ -1360,18 +1360,18 @@ _.sortedIndex([10, 20, 30, 40, 50], 35);
 >            : ^^^ ^^    ^^   ^^   ^^ ^^            ^^      ^^^      ^^^ ^^    ^^   ^^   ^^ ^^        ^^^                 ^^       ^^^   ^^^      ^^^
 >[10, 20, 30, 40, 50] : number[]
 >                     : ^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
->30 : 30
->   : ^^
->40 : 40
->   : ^^
->50 : 50
->   : ^^
->35 : 35
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
+>30 : number
+>   : ^^^^^^
+>40 : number
+>   : ^^^^^^
+>50 : number
+>   : ^^^^^^
+>35 : number
+>   : ^^^^^^
 
 _.range(10);
 >_.range(10) : number[]
@@ -1382,8 +1382,8 @@ _.range(10);
 >  : ^^^^^^^^^^^^^^^^^
 >range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
 >      : ^^^    ^^      ^^^        ^^^     ^^      ^^    ^^      ^^    ^^^      ^^^        ^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 _.range(1, 11);
 >_.range(1, 11) : number[]
@@ -1394,10 +1394,10 @@ _.range(1, 11);
 >  : ^^^^^^^^^^^^^^^^^
 >range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
 >      : ^^^    ^^      ^^^        ^^^     ^^      ^^    ^^      ^^    ^^^      ^^^        ^^^
->1 : 1
->  : ^
->11 : 11
->   : ^^
+>1 : number
+>  : ^^^^^^
+>11 : number
+>   : ^^^^^^
 
 _.range(0, 30, 5);
 >_.range(0, 30, 5) : number[]
@@ -1408,12 +1408,12 @@ _.range(0, 30, 5);
 >  : ^^^^^^^^^^^^^^^^^
 >range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
 >      : ^^^    ^^      ^^^        ^^^     ^^      ^^    ^^      ^^    ^^^      ^^^        ^^^
->0 : 0
->  : ^
->30 : 30
->   : ^^
->5 : 5
->  : ^
+>0 : number
+>  : ^^^^^^
+>30 : number
+>   : ^^^^^^
+>5 : number
+>  : ^^^^^^
 
 _.range(0, 30, 5);
 >_.range(0, 30, 5) : number[]
@@ -1424,12 +1424,12 @@ _.range(0, 30, 5);
 >  : ^^^^^^^^^^^^^^^^^
 >range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
 >      : ^^^    ^^      ^^^        ^^^     ^^      ^^    ^^      ^^    ^^^      ^^^        ^^^
->0 : 0
->  : ^
->30 : 30
->   : ^^
->5 : 5
->  : ^
+>0 : number
+>  : ^^^^^^
+>30 : number
+>   : ^^^^^^
+>5 : number
+>  : ^^^^^^
 
 _.range(0);
 >_.range(0) : number[]
@@ -1440,8 +1440,8 @@ _.range(0);
 >  : ^^^^^^^^^^^^^^^^^
 >range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
 >      : ^^^    ^^      ^^^        ^^^     ^^      ^^    ^^      ^^    ^^^      ^^^        ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -1667,8 +1667,8 @@ _.delay(log, 1000, 'logged later');
 >      : ^    ^^        ^^    ^^      ^^^^^    ^^     ^^^^^      
 >log : (message?: string, ...rest: string[]) => void
 >    : ^       ^^^      ^^^^^    ^^        ^^^^^^^^^
->1000 : 1000
->     : ^^^^
+>1000 : number
+>     : ^^^^^^
 >'logged later' : "logged later"
 >               : ^^^^^^^^^^^^^^
 
@@ -1687,8 +1687,8 @@ _.defer(function () { alert('deferred'); });
 >                  : ^^^^
 >alert : { (message?: any): void; (x: string): void; }
 >      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
->'deferred' : "deferred"
->           : ^^^^^^^^^^
+>'deferred' : string
+>           : ^^^^^^
 
 var updatePosition = () => alert('updating position...');
 >updatePosition : () => void
@@ -1699,8 +1699,8 @@ var updatePosition = () => alert('updating position...');
 >                              : ^^^^
 >alert : { (message?: any): void; (x: string): void; }
 >      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
->'updating position...' : "updating position..."
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>'updating position...' : string
+>                       : ^^^^^^
 
 var throttled = _.throttle(updatePosition, 100);
 >throttled : () => void
@@ -1715,8 +1715,8 @@ var throttled = _.throttle(updatePosition, 100);
 >         : ^ ^^^^^^^^^        ^^    ^^ ^^    ^^      ^^^^^ 
 >updatePosition : () => void
 >               : ^^^^^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
 $(null).scroll(throttled);
 >$(null).scroll(throttled) : any
@@ -1741,8 +1741,8 @@ var calculateLayout = () => alert('calculating layout...');
 >                               : ^^^^
 >alert : { (message?: any): void; (x: string): void; }
 >      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
->'calculating layout...' : "calculating layout..."
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>'calculating layout...' : string
+>                        : ^^^^^^
 
 var lazyLayout = _.debounce(calculateLayout, 300);
 >lazyLayout : () => void
@@ -1757,8 +1757,8 @@ var lazyLayout = _.debounce(calculateLayout, 300);
 >         : ^ ^^^^^^^^^        ^^    ^^ ^^    ^^      ^^         ^^^       ^^^^^ 
 >calculateLayout : () => void
 >                : ^^^^^^^^^^
->300 : 300
->    : ^^^
+>300 : number
+>    : ^^^^^^
 
 $(null).resize(lazyLayout);
 >$(null).resize(lazyLayout) : any
@@ -1783,8 +1783,8 @@ var createApplication = () => alert('creating application...');
 >                                 : ^^^^
 >alert : { (message?: any): void; (x: string): void; }
 >      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
->'creating application...' : "creating application..."
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>'creating application...' : string
+>                          : ^^^^^^
 
 var initialize = _.once(createApplication);
 >initialize : () => void
@@ -1825,8 +1825,8 @@ var render = () => alert("rendering...");
 >                      : ^^^^
 >alert : { (message?: any): void; (x: string): void; }
 >      : ^^^       ^^^   ^^^    ^^^ ^^      ^^^    ^^^
->"rendering..." : "rendering..."
->               : ^^^^^^^^^^^^^^
+>"rendering..." : string
+>               : ^^^^^^
 
 var renderNotes = _.after(notes.length, render);
 >renderNotes : () => void
@@ -2111,8 +2111,8 @@ _.extend({ name: 'moe' }, { age: 50 });
 >                : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->'moe' : "moe"
->      : ^^^^^
+>'moe' : string
+>      : ^^^^^^
 >{ age: 50 } : { age: number; }
 >            : ^^^^^^^^^^^^^^^^
 >age : number
@@ -2133,20 +2133,20 @@ _.pick({ name: 'moe', age: 50, userid: 'moe1' }, 'name', 'age');
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->'moe' : "moe"
->      : ^^^^^
+>'moe' : string
+>      : ^^^^^^
 >age : number
 >    : ^^^^^^
->50 : 50
->   : ^^
+>50 : number
+>   : ^^^^^^
 >userid : string
 >       : ^^^^^^
->'moe1' : "moe1"
+>'moe1' : string
 >       : ^^^^^^
->'name' : "name"
+>'name' : string
 >       : ^^^^^^
->'age' : "age"
->      : ^^^^^
+>'age' : string
+>      : ^^^^^^
 
 _.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid');
 >_.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid') : { name: string; age: number; userid: string; }
@@ -2161,18 +2161,18 @@ _.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid');
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->'moe' : "moe"
->      : ^^^^^
+>'moe' : string
+>      : ^^^^^^
 >age : number
 >    : ^^^^^^
->50 : 50
->   : ^^
+>50 : number
+>   : ^^^^^^
 >userid : string
 >       : ^^^^^^
->'moe1' : "moe1"
+>'moe1' : string
 >       : ^^^^^^
->'userid' : "userid"
->         : ^^^^^^^^
+>'userid' : string
+>         : ^^^^^^
 
 var iceCream = { flavor: "chocolate" };
 >iceCream : { flavor: string; }
@@ -2219,8 +2219,8 @@ _.clone({ name: 'moe' });
 >                : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->'moe' : "moe"
->      : ^^^^^
+>'moe' : string
+>      : ^^^^^^
 
 _.chain([1, 2, 3, 200])
 >_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map(function (num) { return num * num })    .value() : number[]
@@ -2249,14 +2249,14 @@ _.chain([1, 2, 3, 200])
 >      : ^^^ ^^    ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^ ^^    ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^ ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
 >[1, 2, 3, 200] : number[]
 >               : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->200 : 200
->    : ^^^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>200 : number
+>    : ^^^^^^
 
     .filter(function (num) { return num % 2 == 0; })
 >filter : (iterator: Iterator_<number, boolean>, context?: any) => Underscore.ChainedArray<number>
@@ -2325,8 +2325,8 @@ _.has({ a: 1, b: 2, c: 3 }, "b");
 >  : ^^^^^^
 >3 : 3
 >  : ^
->"b" : "b"
->    : ^^^
+>"b" : string
+>    : ^^^^^^
 
 var moe = { name: 'moe', luckyNumbers: [13, 27, 34] };
 >moe : { name: string; luckyNumbers: number[]; }
@@ -2749,8 +2749,8 @@ _.times(3, function (n) { genie.grantWishNumber(n); });
 >  : ^^^^^^^^^^^^^^^^^
 >times : <U>(n: number, iterator: Iterator_<number, U>, context?: any) => U[]
 >      : ^ ^^ ^^      ^^        ^^                    ^^       ^^^   ^^^^^   
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 >function (n) { genie.grantWishNumber(n); } : (n: number) => void
 >                                           : ^ ^^^^^^^^^^^^^^^^^
 >n : number
@@ -2775,10 +2775,10 @@ _.random(0, 100);
 >  : ^^^^^^^^^^^^^^^^^
 >random : { (max: number): number; (min: number, max: number): number; }
 >       : ^^^   ^^      ^^^      ^^^   ^^      ^^   ^^      ^^^      ^^^
->0 : 0
->  : ^
->100 : 100
->    : ^^^
+>0 : number
+>  : ^^^^^^
+>100 : number
+>    : ^^^^^^
 
 _.mixin({
 >_.mixin({    capitalize: function (string) {        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();    }}) : void
@@ -2850,8 +2850,8 @@ _.mixin({
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
->"fabio" : "fabio"
->        : ^^^^^^^
+>"fabio" : string
+>        : ^^^^^^
 >capitalize : any
 >           : ^^^
 
@@ -2864,8 +2864,8 @@ _.uniqueId('contact_');
 >  : ^^^^^^^^^^^^^^^^^
 >uniqueId : { (): number; (prefix: string): string; }
 >         : ^^^^^^      ^^^      ^^      ^^^      ^^^
->'contact_' : "contact_"
->           : ^^^^^^^^^^
+>'contact_' : string
+>           : ^^^^^^
 
 _.escape('Curly, Larry & Moe');
 >_.escape('Curly, Larry & Moe') : string
@@ -2876,8 +2876,8 @@ _.escape('Curly, Larry & Moe');
 >  : ^^^^^^^^^^^^^^^^^
 >escape : (s: string) => string
 >       : ^ ^^      ^^^^^      
->'Curly, Larry & Moe' : "Curly, Larry & Moe"
->                     : ^^^^^^^^^^^^^^^^^^^^
+>'Curly, Larry & Moe' : string
+>                     : ^^^^^^
 
 var object = { cheese: 'crumpets', stuff: function () { return 'nonsense'; } };
 >object : { cheese: string; stuff: () => string; }
@@ -2906,8 +2906,8 @@ _.result(object, 'cheese');
 >       : ^      ^^   ^^        ^^      ^^^^^   
 >object : { cheese: string; stuff: () => string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'cheese' : "cheese"
->         : ^^^^^^^^
+>'cheese' : string
+>         : ^^^^^^
 
 _.result(object, 'stuff');
 >_.result(object, 'stuff') : any
@@ -2920,8 +2920,8 @@ _.result(object, 'stuff');
 >       : ^      ^^   ^^        ^^      ^^^^^   
 >object : { cheese: string; stuff: () => string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'stuff' : "stuff"
->        : ^^^^^^^
+>'stuff' : string
+>        : ^^^^^^
 
 var compiled = _.template("hello: <%= name %>");
 >compiled : (data: any) => string
@@ -2934,8 +2934,8 @@ var compiled = _.template("hello: <%= name %>");
 >  : ^^^^^^^^^^^^^^^^^
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >         : ^^^              ^^      ^^^                     ^^^              ^^      ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
->"hello: <%= name %>" : "hello: <%= name %>"
->                     : ^^^^^^^^^^^^^^^^^^^^
+>"hello: <%= name %>" : string
+>                     : ^^^^^^
 
 compiled({ name: 'moe' });
 >compiled({ name: 'moe' }) : string
@@ -2990,8 +2990,8 @@ var template = _.template("<b><%- value %></b>");
 >  : ^^^^^^^^^^^^^^^^^
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >         : ^^^              ^^      ^^^                     ^^^              ^^      ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
->"<b><%- value %></b>" : "<b><%- value %></b>"
->                      : ^^^^^^^^^^^^^^^^^^^^^
+>"<b><%- value %></b>" : string
+>                      : ^^^^^^
 
 template({ value: '<script>' });
 >template({ value: '<script>' }) : string
@@ -3016,8 +3016,8 @@ var compiled2 = _.template("<% print('Hello ' + epithet); %>");
 >  : ^^^^^^^^^^^^^^^^^
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >         : ^^^              ^^      ^^^                     ^^^              ^^      ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
->"<% print('Hello ' + epithet); %>" : "<% print('Hello ' + epithet); %>"
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"<% print('Hello ' + epithet); %>" : string
+>                                   : ^^^^^^
 
 compiled2({ epithet: "stooge" });
 >compiled2({ epithet: "stooge" }) : string
@@ -3061,8 +3061,8 @@ var template2 = _.template("Hello {{ name }}!");
 >  : ^^^^^^^^^^^^^^^^^
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >         : ^^^              ^^      ^^^                     ^^^              ^^      ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
->"Hello {{ name }}!" : "Hello {{ name }}!"
->                    : ^^^^^^^^^^^^^^^^^^^
+>"Hello {{ name }}!" : string
+>                    : ^^^^^^
 
 template2({ name: "Mustache" });
 >template2({ name: "Mustache" }) : string
@@ -3085,8 +3085,8 @@ _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'da
 >  : ^^^^^^^^^^^^^^^^^
 >template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
 >         : ^^^              ^^      ^^^                     ^^^              ^^      ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
->"Using 'with': <%= data.answer %>" : "Using 'with': <%= data.answer %>"
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"Using 'with': <%= data.answer %>" : string
+>                                   : ^^^^^^
 >{ answer: 'no' } : { answer: string; }
 >                 : ^^^^^^^^^^^^^^^^^^^
 >answer : string
@@ -3097,7 +3097,7 @@ _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'da
 >                     : ^^^^^^^^^^^^^^^^^^^^^
 >variable : string
 >         : ^^^^^^
->'data' : "data"
+>'data' : string
 >       : ^^^^^^
 
 === underscoreTest1_underscore.ts ===

@@ -14,8 +14,8 @@ class LOL {
     x = 1
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     /** @readonly */
     y = 2

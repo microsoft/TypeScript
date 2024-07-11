@@ -130,8 +130,8 @@ q["asd"].a.substr(1);
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
 >       : ^    ^^      ^^      ^^^      ^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 q["asd"].b;  // Error
 >q["asd"].b : any

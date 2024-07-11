@@ -134,8 +134,8 @@ function foo(options?: { a: string, b: number }) {
 >    : ^^^
 
     (options || {}).a = 1;          // Object type widened, error
->(options || {}).a = 1 : 1
->                      : ^
+>(options || {}).a = 1 : number
+>                      : ^^^^^^
 >(options || {}).a : any
 >                  : ^^^
 >(options || {}) : { a: string; b: number; } | {}
@@ -148,12 +148,12 @@ function foo(options?: { a: string, b: number }) {
 >   : ^^
 >a : any
 >  : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     (options || {})["a"] = 1;       // Object type widened, error
->(options || {})["a"] = 1 : 1
->                         : ^
+>(options || {})["a"] = 1 : number
+>                         : ^^^^^^
 >(options || {})["a"] : any
 >                     : ^^^
 >(options || {}) : { a: string; b: number; } | {}
@@ -166,7 +166,7 @@ function foo(options?: { a: string, b: number }) {
 >   : ^^
 >"a" : "a"
 >    : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 

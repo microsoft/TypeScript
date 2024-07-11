@@ -4,6 +4,6 @@
 export const x: string = 3;
 >x : string
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 

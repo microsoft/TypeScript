@@ -111,8 +111,8 @@ const container1 = createContainer('hi')
 >                      : ^^^^^^^^^^^^^^^^^
 >createContainer : <T extends unknown>(value: T) => Container<T>
 >                : ^ ^^^^^^^^^       ^^     ^^ ^^^^^            
->'hi' : "hi"
->     : ^^^^
+>'hi' : string
+>     : ^^^^^^
 
 const container2 = createContainer(2)
 >container2 : Container<number>
@@ -121,8 +121,8 @@ const container2 = createContainer(2)
 >                   : ^^^^^^^^^^^^^^^^^
 >createContainer : <T extends unknown>(value: T) => Container<T>
 >                : ^ ^^^^^^^^^       ^^     ^^ ^^^^^            
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
 f([container1, container2], (value1, value2) => {
 >f([container1, container2], (value1, value2) => {    value1;  // string    value2;  // number}) : void

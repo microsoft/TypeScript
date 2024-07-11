@@ -62,8 +62,8 @@ c.doThing({a: 42});
 >        : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 export let x = c.doThing({a: 12});
 >x : { b: number; }
@@ -80,8 +80,8 @@ export let x = c.doThing({a: 12});
 >        : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 export { c, Foo };
 >c : Foo

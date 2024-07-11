@@ -72,8 +72,8 @@ export class Cls {
     get getSetOk(): number { return 0 }
 >getSetOk : number
 >         : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     set getSetOk(value) { }
 >getSetOk : number
@@ -84,8 +84,8 @@ export class Cls {
     get getSetOk2() { return 0 }
 >getSetOk2 : number
 >          : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     set getSetOk2(value: number) { }
 >getSetOk2 : number
@@ -96,8 +96,8 @@ export class Cls {
     get getSetOk3(): number { return 0 }
 >getSetOk3 : number
 >          : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     set getSetOk3(value: number) { }
 >getSetOk3 : number
@@ -109,14 +109,14 @@ export class Cls {
 let noAnnotationStringName: string = "noAnnotationStringName";
 >noAnnotationStringName : string
 >                       : ^^^^^^
->"noAnnotationStringName" : "noAnnotationStringName"
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>"noAnnotationStringName" : string
+>                         : ^^^^^^
 
 let noParamAnnotationStringName: string = "noParamAnnotationStringName";
 >noParamAnnotationStringName : string
 >                            : ^^^^^^
->"noParamAnnotationStringName" : "noParamAnnotationStringName"
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"noParamAnnotationStringName" : string
+>                              : ^^^^^^
 
 const noAnnotationLiteralName = "noAnnotationLiteralName";
 >noAnnotationLiteralName : "noAnnotationLiteralName"

@@ -12,8 +12,8 @@ var s = Symbol.for("shift");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"shift" : "shift"
->        : ^^^^^^^
+>"shift" : string
+>        : ^^^^^^
 
 s << s;
 >s << s : number

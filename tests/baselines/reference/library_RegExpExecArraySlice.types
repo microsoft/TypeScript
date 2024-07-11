@@ -25,8 +25,8 @@ regExpExecArrayValue.slice(0);
 >                     : ^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
 >      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 regExpExecArrayValue.slice(0,1);
 >regExpExecArrayValue.slice(0,1) : string[]
@@ -37,8 +37,8 @@ regExpExecArrayValue.slice(0,1);
 >                     : ^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
 >      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
->0 : 0
->  : ^
->1 : 1
->  : ^
+>0 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 

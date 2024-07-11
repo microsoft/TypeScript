@@ -8,8 +8,8 @@ function foo1(): number {
 >     : ^^^^^^^^^^^
 
     return 123;
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 }
 foo1.toFixed = "";
 >foo1.toFixed = "" : ""
@@ -48,8 +48,8 @@ function foo3(): string {
 >     : ^^^^^^^^^^^
 
     return "";
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 }
 foo3.trim = "";
 >foo3.trim = "" : ""
@@ -74,8 +74,8 @@ function foo4(): ({x: number}) {
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 }
 foo4.x = "456";
 >foo4.x = "456" : "456"

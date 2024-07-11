@@ -14,12 +14,12 @@ function foo(x: number | string) {
 >  : ^^^^^^^^^^
 
         x = 10;
->x = 10 : 10
->       : ^^
+>x = 10 : number
+>       : ^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
     if (typeof x === "string") {
 >typeof x === "string" : boolean
@@ -95,12 +95,12 @@ function foo2(x: number | string) {
         };
     }
     x = "hello";
->x = "hello" : "hello"
->            : ^^^^^^^
+>x = "hello" : string
+>            : ^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
     f();
 >f() : number
@@ -146,12 +146,12 @@ function foo3(x: number | string) {
 >  : ^^^^^^^^^^^^^^^
     }
     x = "hello";
->x = "hello" : "hello"
->            : ^^^^^^^
+>x = "hello" : string
+>            : ^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
     f();
 >f() : number

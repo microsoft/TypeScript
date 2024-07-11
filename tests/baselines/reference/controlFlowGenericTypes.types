@@ -90,8 +90,8 @@ function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
 >  : ^
     }
     return "hello";
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 }
 
 function f2<T>(x: Extract<T, string | undefined> | null): string {
@@ -121,8 +121,8 @@ function f2<T>(x: Extract<T, string | undefined> | null): string {
 >  : ^^^^^^
     }
     return "hello";
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 }
 
 interface Box<T> {
@@ -525,8 +525,8 @@ function get<K extends keyof A>(key: K, obj: A): number {
 >      : ^^^^^^
     }
     return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 };
 
@@ -561,8 +561,8 @@ function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyo
 >    : ^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >eventName : keyof ET
 >          : ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     emittingObject.off(eventName as typeof eventName, 0);
 >emittingObject.off(eventName as typeof eventName, 0) : void
@@ -579,8 +579,8 @@ function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyo
 >          : ^^^^^^^^
 >eventName : keyof ET
 >          : ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 
 // In an element access obj[x], we consider obj to be in a constraint position, except when obj is of

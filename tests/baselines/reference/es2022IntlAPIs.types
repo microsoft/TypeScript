@@ -47,8 +47,8 @@ for (const zoneName of timezoneNames) {
     timeZone: 'America/Los_Angeles',
 >timeZone : string
 >         : ^^^^^^
->'America/Los_Angeles' : "America/Los_Angeles"
->                      : ^^^^^^^^^^^^^^^^^^^^^
+>'America/Los_Angeles' : string
+>                      : ^^^^^^
 
     timeZoneName: zoneName,
 >timeZoneName : "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"

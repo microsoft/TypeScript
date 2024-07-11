@@ -24,7 +24,7 @@ export class Bet implements Aleph {
   q: string = 'lol'; // And so will this implements error
 >q : string
 >  : ^^^^^^
->'lol' : "lol"
->      : ^^^^^
+>'lol' : string
+>      : ^^^^^^
 }
 

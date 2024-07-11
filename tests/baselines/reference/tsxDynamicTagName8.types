@@ -28,8 +28,8 @@ export class Text extends React.Component<{}, {}> {
   _tagName: string = 'div';
 >_tagName : string
 >         : ^^^^^^
->'div' : "div"
->      : ^^^^^
+>'div' : string
+>      : ^^^^^^
 
   render() {
 >render : () => any

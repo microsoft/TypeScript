@@ -62,10 +62,10 @@ f1(42, "hello", true);
 >                      : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -108,8 +108,8 @@ f1(42, ...t2);
 >              : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 >...t2 : string | boolean
 >      : ^^^^^^^^^^^^^^^^
 >t2 : [string, boolean]
@@ -120,10 +120,10 @@ f1(42, "hello", ...t1);
 >                       : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >...t1 : boolean
 >      : ^^^^^^^
 >t1 : [boolean]
@@ -134,10 +134,10 @@ f1(42, "hello", true, ...t0);
 >                             : ^^^^
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 >...t0 : never
@@ -182,10 +182,10 @@ f2(42, "hello", true);
 >                      : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
 >   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -228,8 +228,8 @@ f2(42, ...t2);
 >              : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
 >   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 >...t2 : string | boolean
 >      : ^^^^^^^^^^^^^^^^
 >t2 : [string, boolean]
@@ -240,10 +240,10 @@ f2(42, "hello", ...t1);
 >                       : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
 >   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >...t1 : boolean
 >      : ^^^^^^^
 >t1 : [boolean]
@@ -254,10 +254,10 @@ f2(42, "hello", true, ...t0);
 >                             : ^^^^
 >f2 : (x0: number, x1: string, x2: boolean) => void
 >   : ^  ^^      ^^  ^^      ^^  ^^       ^^^^^    
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 >...t0 : never
@@ -310,10 +310,10 @@ const x10 = f10(42, "hello", true);  // [number, string, boolean]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
 >    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -324,10 +324,10 @@ const x11 = f10(42, "hello");  // [number, string]
 >                 : ^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
 >    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 const x12 = f10(42);  // [number]
 >x12 : [number]
@@ -336,8 +336,8 @@ const x12 = f10(42);  // [number]
 >        : ^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
 >    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 const x13 = f10();  // []
 >x13 : []
@@ -366,8 +366,8 @@ const x15 = f10(42, ...t2);  // [number, string, boolean]
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
 >    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 >...t2 : string | boolean
 >      : ^^^^^^^^^^^^^^^^
 >t2 : [string, boolean]
@@ -380,10 +380,10 @@ const x16 = f10(42, "hello", ...t1);  // [number, string, boolean]
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
 >    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >...t1 : boolean
 >      : ^^^^^^^
 >t1 : [boolean]
@@ -396,10 +396,10 @@ const x17 = f10(42, "hello", true, ...t0);  // [number, string, boolean]
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
 >    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 >...t0 : never
@@ -460,8 +460,8 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >             : ^^^^^^^^^^^^^^
 >f10 : <T extends unknown[]>(...args: T) => T
 >    : ^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >...u : string
 >     : ^^^^^^
 >u : U
@@ -748,10 +748,10 @@ let x20 = call((x, y) => x + y, 10, 20);  // number
 >  : ^^^^^^
 >y : number
 >  : ^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 let x21 = call((x, y) => x + y, 10, "hello");  // string
 >x21 : string
@@ -772,10 +772,10 @@ let x21 = call((x, y) => x + y, 10, "hello");  // string
 >  : ^^^^^^
 >y : string
 >  : ^^^^^^
->10 : 10
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>10 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 let x22 = call(f15, "hello", 42);  // string | number
 >x22 : string | number
@@ -786,10 +786,10 @@ let x22 = call(f15, "hello", 42);  // string | number
 >     : ^ ^^^^^^^^^         ^^ ^^ ^^                 ^^^^^    ^^ ^^^^^^
 >f15 : (a: string, b: number) => string | number
 >    : ^ ^^      ^^ ^^      ^^^^^               
->"hello" : "hello"
->        : ^^^^^^^
->42 : 42
->   : ^^
+>"hello" : string
+>        : ^^^^^^
+>42 : number
+>   : ^^^^^^
 
 let x23 = call(f16, "hello", 42);  // unknown
 >x23 : string | number
@@ -800,10 +800,10 @@ let x23 = call(f16, "hello", 42);  // unknown
 >     : ^ ^^^^^^^^^         ^^ ^^ ^^                 ^^^^^    ^^ ^^^^^^
 >f16 : <A, B>(a: A, b: B) => A | B
 >    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
->"hello" : "hello"
->        : ^^^^^^^
->42 : 42
->   : ^^
+>"hello" : string
+>        : ^^^^^^
+>42 : number
+>   : ^^^^^^
 
 let x24 = call<[string, number], string | number>(f16, "hello", 42);  // string | number
 >x24 : string | number
@@ -814,10 +814,10 @@ let x24 = call<[string, number], string | number>(f16, "hello", 42);  // string 
 >     : ^ ^^^^^^^^^         ^^ ^^ ^^                 ^^^^^    ^^ ^^^^^^
 >f16 : <A, B>(a: A, b: B) => A | B
 >    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
->"hello" : "hello"
->        : ^^^^^^^
->42 : 42
->   : ^^
+>"hello" : string
+>        : ^^^^^^
+>42 : number
+>   : ^^^^^^
 
 let x30 = callr(sn, (x, y) => x + y);  // string
 >x30 : string
@@ -945,10 +945,10 @@ f20(42, "hello", true);
 >                       : ^^^^^^^^
 >f20 : (x: number, y: string, z: boolean) => string[]
 >    : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^        
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -957,8 +957,8 @@ f21("hello", true);
 >                   : ^^^^^^^^
 >f21 : (y: string, z: boolean) => string[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -1027,10 +1027,10 @@ g20(42, "hello", true);
 >                       : ^^^^^^^^
 >g20 : (x: number, y?: string, z?: boolean) => string[]
 >    : ^ ^^      ^^ ^^^      ^^ ^^^       ^^^^^        
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -1039,26 +1039,26 @@ g20(42, "hello");
 >                 : ^^^^^^^^
 >g20 : (x: number, y?: string, z?: boolean) => string[]
 >    : ^ ^^      ^^ ^^^      ^^ ^^^       ^^^^^        
->42 : 42
->   : ^^
->"hello" : "hello"
->        : ^^^^^^^
+>42 : number
+>   : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 g20(42);
 >g20(42) : string[]
 >        : ^^^^^^^^
 >g20 : (x: number, y?: string, z?: boolean) => string[]
 >    : ^ ^^      ^^ ^^^      ^^ ^^^       ^^^^^        
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 g21("hello", true);
 >g21("hello", true) : string[]
 >                   : ^^^^^^^^
 >g21 : (y?: string | undefined, z?: boolean | undefined) => string[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -1067,8 +1067,8 @@ g21("hello");
 >             : ^^^^^^^^
 >g21 : (y?: string | undefined, z?: boolean | undefined) => string[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 g21();
 >g21() : string[]
@@ -1113,8 +1113,8 @@ const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: nu
 >                                 : ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >f30 : <T, U extends ((x: T) => any)[]>(x: T, ...args: U) => U
 >    : ^ ^^ ^^^^^^^^^                 ^^ ^^ ^^^^^    ^^ ^^^^^ 
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 >x => "" + x : (x: number) => string
 >            : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -1245,8 +1245,8 @@ events.emit('move', 10, 'left');
 >     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >'move' : "move"
 >       : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >'left' : "left"
 >       : ^^^^^^
 
@@ -1261,8 +1261,8 @@ events.emit('jump', 20, 'up');
 >     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >'jump' : "jump"
 >       : ^^^^^^
->20 : 20
->   : ^^
+>20 : number
+>   : ^^^^^^
 >'up' : "up"
 >     : ^^^^
 
@@ -1277,7 +1277,7 @@ events.emit('stop', 'Bye!');
 >     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >'stop' : "stop"
 >       : ^^^^^^
->'Bye!' : "Bye!"
+>'Bye!' : string
 >       : ^^^^^^
 
 events.emit('done');

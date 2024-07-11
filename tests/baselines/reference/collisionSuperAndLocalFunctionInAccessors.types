@@ -18,8 +18,8 @@ class Foo {
 >       : ^^^^^^^^^^
         }
         return 10;
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
     set prop1(val: number) {
 >prop1 : number
@@ -48,8 +48,8 @@ class b extends Foo {
 >       : ^^^^^^^^^^
         }
         return 10;
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
     set prop2(val: number) {
 >prop2 : number
@@ -85,8 +85,8 @@ class c extends Foo {
             }
         }
         return 10;
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
     set prop2(val: number) {
 >prop2 : number

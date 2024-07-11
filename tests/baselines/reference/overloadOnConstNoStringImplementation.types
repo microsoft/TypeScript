@@ -85,15 +85,15 @@ var cb: (number) => number = (x: number) => 1;
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 x2(1, cb); // error
 >x2(1, cb) : any
 >x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
 >   : ^^^ ^^      ^^  ^^                   ^^^^^^^^^ ^^      ^^  ^^                    ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >cb : (number: any) => number
 >   : ^      ^^^^^^^^^^      
 
@@ -101,25 +101,25 @@ x2(1, (x: 'hi') => 1); // error
 >x2(1, (x: 'hi') => 1) : any
 >x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
 >   : ^^^ ^^      ^^  ^^                   ^^^^^^^^^ ^^      ^^  ^^                    ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >(x: 'hi') => 1 : (x: "hi") => number
 >               : ^ ^^    ^^^^^^^^^^^
 >x : "hi"
 >  : ^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 x2(1, (x: string) => 1);
 >x2(1, (x: string) => 1) : any
 >x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
 >   : ^^^ ^^      ^^  ^^                   ^^^^^^^^^ ^^      ^^  ^^                    ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >(x: string) => 1 : (x: string) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 

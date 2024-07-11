@@ -97,8 +97,8 @@ module MemberWithConstructSignature {
 >  : ^^^^
 >a : new (x: number) => void
 >  : ^^^^^ ^^      ^^^^^    
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     // S's
     interface I extends Base {

@@ -4,8 +4,8 @@
 0 as number;
 >0 as number : number
 >            : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 var v = <string>undefined;
 >v : any

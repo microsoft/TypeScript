@@ -56,8 +56,8 @@ window.setTimeout(() => null, 100);
 >           : ^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^      ^^^^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^      ^
 >() => null : () => any
 >           : ^^^^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
 // Arrow function as value in array literal
 
@@ -209,8 +209,8 @@ module M2 {
 >           : ^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^      ^^^^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^      ^
 >() => null : () => any
 >           : ^^^^^^^^^
->100 : 100
->    : ^^^
+>100 : number
+>    : ^^^^^^
 
     // Arrow function as value in array literal
 

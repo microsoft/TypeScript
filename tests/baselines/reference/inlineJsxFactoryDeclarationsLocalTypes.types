@@ -264,36 +264,36 @@ export const tree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={
 >      : ^     ^^                                                          ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 ><MyClass x={3} y={4} /> : predom.JSX.Element
 >                        : ^^^^^^^^^^^^^^^^^^
 >MyClass : typeof MyClass
 >        : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 ><MyClass x={5} y={6} /> : predom.JSX.Element
 >                        : ^^^^^^^^^^^^^^^^^^
 >MyClass : typeof MyClass
 >        : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->6 : 6
->  : ^
+>6 : number
+>  : ^^^^^^
 >MySFC : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
 >      : ^     ^^                                                          ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -499,36 +499,36 @@ const _tree = <DOMSFC x={1} y={2}><DOMClass x={3} y={4} /><DOMClass x={5} y={6} 
 >       : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 ><DOMClass x={3} y={4} /> : dom.JSX.Element
 >                         : ^^^^^^^^^^^^^^^
 >DOMClass : typeof DOMClass
 >         : ^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 ><DOMClass x={5} y={6} /> : dom.JSX.Element
 >                         : ^^^^^^^^^^^^^^^
 >DOMClass : typeof DOMClass
 >         : ^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->6 : 6
->  : ^
+>6 : number
+>  : ^^^^^^
 >DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
 >       : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
 
@@ -542,36 +542,36 @@ const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={
 >      : ^     ^^                                          ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 ><MyClass x={3} y={4} /> : dom.JSX.Element
 >                        : ^^^^^^^^^^^^^^^
 >MyClass : typeof MyClass
 >        : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 ><MyClass x={5} y={6} /> : dom.JSX.Element
 >                        : ^^^^^^^^^^^^^^^
 >MyClass : typeof MyClass
 >        : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->6 : 6
->  : ^
+>6 : number
+>  : ^^^^^^
 >MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
 >      : ^     ^^                                          ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -585,12 +585,12 @@ const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
 >       : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >tree : import("renderer2").predom.JSX.Element
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tree : import("renderer2").predom.JSX.Element

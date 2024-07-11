@@ -28,19 +28,19 @@ const obj: Readonly<ObjType> = {
   foo: 'bar',
 >foo : string
 >    : ^^^^^^
->'bar' : "bar"
->      : ^^^^^
+>'bar' : string
+>      : ^^^^^^
 
   baz: 'qux',
 >baz : string
 >    : ^^^^^^
->'qux' : "qux"
->      : ^^^^^
+>'qux' : string
+>      : ^^^^^^
 
   quux: 'quuz',
 >quux : string
 >     : ^^^^^^
->'quuz' : "quuz"
+>'quuz' : string
 >       : ^^^^^^
 }
 

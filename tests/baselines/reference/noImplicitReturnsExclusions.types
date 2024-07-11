@@ -281,8 +281,8 @@ registerCommand("_references-view.showHistoryItem", async (item) => { // Error, 
 >                                                                                                                                                                                                                                      : ^^^^
 >registerCommand : (command: string, callback: (...args: any[]) => any, thisArg?: any) => void
 >                : ^       ^^      ^^        ^^                       ^^       ^^^   ^^^^^    
->"_references-view.showHistoryItem" : "_references-view.showHistoryItem"
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"_references-view.showHistoryItem" : string
+>                                   : ^^^^^^
 >async (item) => { // Error, contextual return type of Promise<unknown>  if (item instanceof HistoryItem) {    return executeCommand("vscode.open", item.input.location.uri);  }} : (item: any) => Promise<unknown>
 >                                                                                                                                                                                 : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : any
@@ -301,8 +301,8 @@ registerCommand("_references-view.showHistoryItem", async (item) => { // Error, 
 >                                                       : ^^^^^^^^^^^^^^^^^
 >executeCommand : <T = unknown>(command: string, ...rest: any[]) => Thenable<T>
 >               : ^ ^^^^^^^^^^^^       ^^      ^^^^^    ^^     ^^^^^           
->"vscode.open" : "vscode.open"
->              : ^^^^^^^^^^^^^
+>"vscode.open" : string
+>              : ^^^^^^
 >item.input.location.uri : string
 >                        : ^^^^^^
 >item.input.location : { uri: string; }

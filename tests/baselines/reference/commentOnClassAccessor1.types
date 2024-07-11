@@ -11,6 +11,6 @@ class C {
   get bar(): number { return 1;}
 >bar : number
 >    : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }

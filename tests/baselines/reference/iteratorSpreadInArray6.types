@@ -51,10 +51,10 @@ var array: number[] = [0, 1];
 >      : ^^^^^^^^
 >[0, 1] : number[]
 >       : ^^^^^^^^
->0 : 0
->  : ^
->1 : 1
->  : ^
+>0 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 array.concat([...new SymbolIterator]);
 >array.concat([...new SymbolIterator]) : number[]

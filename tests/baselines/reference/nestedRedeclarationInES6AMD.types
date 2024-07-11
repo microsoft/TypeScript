@@ -12,11 +12,11 @@ function a() {
 >  : ^
 
         status = 2;
->status = 2 : 2
->           : ^
+>status = 2 : number
+>           : ^^^^^^
 >status : number
 >       : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
     }
 }

@@ -36,8 +36,8 @@ callIt({
 >        : ^^^^^^^^^^^^
 >() => 0 : () => number
 >        : ^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     consume: n => n.toFixed()
 >consume : (n: number) => string
@@ -72,8 +72,8 @@ callIt({
 >        : ^  ^^^^^^^^^^^^^^^^^^^
 >_a : number
 >   : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     consume: n => n.toFixed(),
 >consume : (n: number) => string
@@ -106,8 +106,8 @@ callIt({
 >        : ^^^^^^^^^^^^
 
         return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     },
     consume: n => n.toFixed()
@@ -147,8 +147,8 @@ callItT([() => 0, n => n.toFixed()]);
 >                            : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >() => 0 : () => number
 >        : ^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >n => n.toFixed() : (n: number) => string
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -173,8 +173,8 @@ callItT([_a => 0, n => n.toFixed()]);
 >        : ^  ^^^^^^^^^^^^^^^^^^^
 >_a : number
 >   : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >n => n.toFixed() : (n: number) => string
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -231,8 +231,8 @@ const myGeneric = inferTypeFn({
 >               : ^         ^^^^^^^^^^^^^^^^^^^
 >parameter : string
 >          : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
     operateWithGeneric: generic => generic.toFixed()
 >operateWithGeneric : (generic: number) => string
@@ -430,8 +430,8 @@ test({
 >  : ^^^^^^^^^^^^
 >() => 0 : () => number
 >        : ^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     b: (a) => 'a',
 >b : (a: number) => string
@@ -440,8 +440,8 @@ test({
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
 
     c: (b) => {
 >c : (b: string) => void
@@ -472,8 +472,8 @@ test({
 >  : ^^^^^^^^^^^^
 >() => 0 : () => number
 >        : ^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     b: (a) => a,
 >b : (a: number) => number
@@ -696,8 +696,8 @@ simplified({ generator: () => 123, receiver: (t) => console.log(t + 2) })
 >          : ^^^^^^^^^^^^
 >() => 123 : () => number
 >          : ^^^^^^^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 >receiver : (t: number) => void
 >         : ^ ^^^^^^^^^^^^^^^^^
 >(t) => console.log(t + 2) : (t: number) => void
@@ -840,8 +840,8 @@ function example<TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>
 >      : ^      ^^^^^^^^^^^   ^^      ^^^^^^^^^^
 >params : TParams
 >       : ^^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
         return options.map(data)
 >options.map(data) : TMapped
@@ -882,8 +882,8 @@ example({
 >                        : ^      ^^      ^^^^^^^^^^^
 >params : Params
 >       : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     map: (number) => String(number)
 >map : (number: number) => string
@@ -918,8 +918,8 @@ example({
 >       : ^^^^^^
 >foo : number
 >    : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     map: (number) => String(number)
 >map : (number: number) => string
@@ -954,8 +954,8 @@ example({
 >       : ^^^^^^
 >foo : number
 >    : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
     map: (number) => String(number)
 >map : (number: number) => string
@@ -1080,8 +1080,8 @@ Foo({
 >          : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     b: (arg) => {
 >b : (arg: number) => void
@@ -1173,8 +1173,8 @@ const resNested = nested({
 >    : ^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->"," : ","
->    : ^^^
+>"," : string
+>    : ^^^^^^
 
   },
 });
@@ -1504,8 +1504,8 @@ const resOnion = onion({
 >    : ^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->"," : ","
->    : ^^^
+>"," : string
+>    : ^^^^^^
 
     nested2: {
 >nested2 : { c: (arg: string) => boolean; }
@@ -1616,8 +1616,8 @@ const resOnion2 = onion2({
 >    : ^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->"," : ","
->    : ^^^
+>"," : string
+>    : ^^^^^^
 
     c: (arg) => Number(arg),
 >c : (arg: string[]) => number
@@ -1727,8 +1727,8 @@ const distantRes = distant({
 >           : ^   ^^^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
       },
     },

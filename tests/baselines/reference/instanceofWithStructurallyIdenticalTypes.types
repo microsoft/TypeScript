@@ -80,8 +80,8 @@ function foo1(x: C1 | C2 | C3): string {
 >     : ^^^^^^
     }
     return "error";
->"error" : "error"
->        : ^^^^^^^
+>"error" : string
+>        : ^^^^^^
 }
 
 function isC1(c: C1 | C2 | C3): c is C1 { return c instanceof C1 }
@@ -179,8 +179,8 @@ function foo2(x: C1 | C2 | C3): string {
 >     : ^^^
     }
     return "error";
->"error" : "error"
->        : ^^^^^^^
+>"error" : string
+>        : ^^^^^^
 }
 
 // More tests

@@ -31,16 +31,16 @@ if (foo[x] === undefined) {
 >          : ^^^^^^^^^
 
     foo[x] = 1
->foo[x] = 1 : 1
->           : ^
+>foo[x] = 1 : number
+>           : ^^^^^^
 >foo[x] : number | undefined
 >       : ^^^^^^^^^^^^^^^^^^
 >foo : Dictionary<number>
 >    : ^^^^^^^^^^^^^^^^^^
 >x : "bar"
 >  : ^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 else {
     let nu = foo[x]

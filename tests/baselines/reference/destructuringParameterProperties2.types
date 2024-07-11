@@ -128,8 +128,8 @@ var x = new C1(undefined, [0, undefined, ""]);
 >          : ^^^^^^^^^
 >[0, undefined, ""] : [number, undefined, string]
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >"" : ""
@@ -176,14 +176,14 @@ var y = new C1(10, [0, "", true]);
 >                          : ^^
 >C1 : typeof C1
 >   : ^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >[0, "", true] : [number, string, true]
 >              : ^^^^^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
->"" : ""
->   : ^^
+>0 : number
+>  : ^^^^^^
+>"" : string
+>   : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -228,14 +228,14 @@ var z = new C1(10, [undefined, "", null]);
 >                                  : ^^
 >C1 : typeof C1
 >   : ^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >[undefined, "", null] : [undefined, string, null]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
 >z_a : any

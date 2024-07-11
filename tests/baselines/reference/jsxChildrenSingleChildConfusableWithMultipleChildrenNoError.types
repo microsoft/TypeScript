@@ -59,8 +59,8 @@ export class App extends React.Component<{}> {
                 ['Users', <div/>],
 >['Users', <div/>] : [string, JSX.Element]
 >                  : ^^^^^^^^^^^^^^^^^^^^^
->'Users' : "Users"
->        : ^^^^^^^
+>'Users' : string
+>        : ^^^^^^
 ><div/> : JSX.Element
 >       : ^^^^^^^^^^^
 >div : any
@@ -69,8 +69,8 @@ export class App extends React.Component<{}> {
                 ['Products', <div/>]
 >['Products', <div/>] : [string, JSX.Element]
 >                     : ^^^^^^^^^^^^^^^^^^^^^
->'Products' : "Products"
->           : ^^^^^^^^^^
+>'Products' : string
+>           : ^^^^^^
 ><div/> : JSX.Element
 >       : ^^^^^^^^^^^
 >div : any

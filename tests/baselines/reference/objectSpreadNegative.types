@@ -122,8 +122,8 @@ spread = { s: "foo" };  // error, missing 'b'
 >             : ^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 
 let b = { b: false };
 >b : { b: boolean; }
@@ -190,8 +190,8 @@ let ignore: { a: number, b: string } =
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->'ignored' : "ignored"
->          : ^^^^^^^^^
+>'ignored' : string
+>          : ^^^^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -238,8 +238,8 @@ let combinedBefore: { a: number, b: string, c: boolean } =
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->'ok' : "ok"
->     : ^^^^
+>'ok' : string
+>     : ^^^^^^
 >o3 : { a: number; b: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o4 : { b: string; c: boolean; }
@@ -262,8 +262,8 @@ let combinedMid: { a: number, b: string, c: boolean } =
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->'ok' : "ok"
->     : ^^^^
+>'ok' : string
+>     : ^^^^^^
 >o4 : { b: string; c: boolean; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -286,8 +286,8 @@ let combinedNested: { a: number, b: boolean, c: string, d: string } =
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 >{ b: false, c: 'overriden' } : { b: false; c: string; }
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >b : false
@@ -296,22 +296,22 @@ let combinedNested: { a: number, b: boolean, c: string, d: string } =
 >      : ^^^^^
 >c : string
 >  : ^^^^^^
->'overriden' : "overriden"
->            : ^^^^^^^^^^^
+>'overriden' : string
+>            : ^^^^^^
 >d : string
 >  : ^^^^^^
->'actually new' : "actually new"
->               : ^^^^^^^^^^^^^^
+>'actually new' : string
+>               : ^^^^^^
 >{ a: 5, d: 'maybe new' } : { a: number; d: string; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 >d : string
 >  : ^^^^^^
->'maybe new' : "maybe new"
->            : ^^^^^^^^^^^
+>'maybe new' : string
+>            : ^^^^^^
 
 let changeTypeBefore: { a: number, b: string } =
 >changeTypeBefore : { a: number; b: string; }
@@ -326,8 +326,8 @@ let changeTypeBefore: { a: number, b: string } =
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'wrong type?' : "wrong type?"
->              : ^^^^^^^^^^^^^
+>'wrong type?' : string
+>              : ^^^^^^
 >o3 : { a: number; b: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -352,12 +352,12 @@ let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number 
 >                  : ^^^^^^
 >'in the middle' : "in the middle"
 >                : ^^^^^^^^^^^^^^^
->13 : 13
->   : ^^
+>13 : number
+>   : ^^^^^^
 >b : string
 >  : ^^^^^^
->'maybe?' : "maybe?"
->         : ^^^^^^^^
+>'maybe?' : string
+>         : ^^^^^^
 >o4 : { b: string; c: boolean; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -475,16 +475,16 @@ let setterOnly = { ...{ set b (bad: number) { } } };
 >    : ^^^^^^
 
 setterOnly.b = 12; // error, 'b' does not exist
->setterOnly.b = 12 : 12
->                  : ^^
+>setterOnly.b = 12 : number
+>                  : ^^^^^^
 >setterOnly.b : undefined
 >             : ^^^^^^^^^
 >setterOnly : { b: undefined; }
 >           : ^^^^^^^^^^^^^^^^^
 >b : undefined
 >  : ^^^^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 // methods are skipped because they aren't enumerable
 class C { p = 1; m() { } }

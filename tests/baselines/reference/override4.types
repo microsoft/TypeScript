@@ -8,14 +8,14 @@ class B {
     p1: number = 1;
 >p1 : number
 >   : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     p2: number = 1;
 >p2 : number
 >   : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     p3: () => void;
 >p3 : () => void
@@ -47,14 +47,14 @@ class D extends B {
     p1: number = 2;
 >p1 : number
 >   : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
     override p2: number = 3;
 >p2 : number
 >   : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
     p3: () => void;
 >p3 : () => void

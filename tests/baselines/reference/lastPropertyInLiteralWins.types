@@ -23,8 +23,8 @@ function test(thing: Thing) {
 >      : ^^^^^
 >thunk : (str: string) => void
 >      : ^   ^^      ^^^^^    
->"str" : "str"
->      : ^^^^^
+>"str" : string
+>      : ^^^^^^
 }
 test({ // Should error, as last one wins, and is wrong type
 >test({ // Should error, as last one wins, and is wrong type    thunk: (str: string) => {},    thunk: (num: number) => {}}) : void

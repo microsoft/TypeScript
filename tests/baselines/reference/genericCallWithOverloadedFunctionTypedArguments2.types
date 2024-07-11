@@ -114,8 +114,8 @@ module GenericParameter {
 >  : ^
 >y : T
 >  : ^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     function foo7<T>(x:T, cb: { (x: T): string; (x: T, y?: T): string }) {
 >foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
@@ -143,8 +143,8 @@ module GenericParameter {
 >                        : ^^^ ^^^^^^^^^^^^      ^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^      ^^^
 >foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
 >     : ^ ^^ ^^ ^^  ^^                                          ^^^^^^^^ ^^ ^^^      ^^^ ^^ ^^ ^^^ ^^^      ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 ><T>(x: T) => x : <T>(x: T) => T
 >               : ^ ^^ ^^ ^^^^^^
 >x : T
@@ -167,8 +167,8 @@ module GenericParameter {
 >           : ^^^ ^^^^^^^^^^^^      ^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^      ^^^
 >foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
 >     : ^ ^^ ^^ ^^  ^^                                          ^^^^^^^^ ^^ ^^^      ^^^ ^^ ^^ ^^^ ^^^      ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >a : { <T>(x: T): number; <T>(x: number): T; }
 >  : ^^^ ^^ ^^ ^^^      ^^^ ^^ ^^      ^^^ ^^^
 }

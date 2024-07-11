@@ -57,10 +57,10 @@ var arrayVar: string[] = ['a', 'b'];
 >         : ^^^^^^^^
 >['a', 'b'] : string[]
 >           : ^^^^^^^^
->'a' : "a"
->    : ^^^
->'b' : "b"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
+>'b' : string
+>    : ^^^^^^
 
 var complicatedArrayVar: { x: number; y: string; }[] ;
 >complicatedArrayVar : { x: number; y: string; }[]
@@ -83,12 +83,12 @@ complicatedArrayVar.push({ x: 30, y : 'hello world' });
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->30 : 30
->   : ^^
+>30 : number
+>   : ^^^^^^
 >y : string
 >  : ^^^^^^
->'hello world' : "hello world"
->              : ^^^^^^^^^^^^^
+>'hello world' : string
+>              : ^^^^^^
 
 var n1: { [s: string]: number; };
 >n1 : { [s: string]: number; }
@@ -202,8 +202,8 @@ module m2 {
 >a : any
 >b2 : number
 >   : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b : any
 
     var m1;
@@ -213,8 +213,8 @@ module m2 {
 >a2 : any
 >b22 : number
 >    : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b222 : any
 
     var m3;

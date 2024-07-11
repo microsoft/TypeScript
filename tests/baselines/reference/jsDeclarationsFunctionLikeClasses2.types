@@ -80,8 +80,8 @@ Vec.prototype = {
 >                                                                     : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->`Dot product only applicable for vectors of equal length` : "Dot product only applicable for vectors of equal length"
->                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>`Dot product only applicable for vectors of equal length` : string
+>                                                          : ^^^^^^
         }
         let sum = 0;
 >sum : number
@@ -399,10 +399,10 @@ export const origin = new Point2D(0, 0);
 >                  : ^^^^^^^
 >Point2D : typeof Point2D
 >        : ^^^^^^^^^^^^^^
->0 : 0
->  : ^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
+>0 : number
+>  : ^^^^^^
 
 // export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this
 

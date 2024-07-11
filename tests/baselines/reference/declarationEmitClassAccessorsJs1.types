@@ -15,8 +15,8 @@ export class VFile {
 >     : ^^^^^^
 
     return ''
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
   }
 
   /**

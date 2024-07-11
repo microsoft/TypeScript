@@ -64,8 +64,8 @@ export const fnExpressionConstVariableOk = function foo(): number { return 0;}
 >                                    : ^^^^^^      
 >foo : () => number
 >    : ^^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 export const fnArrowConstVariableOk = (cb = function(){ }): string => "S";
 >fnArrowConstVariableOk : (cb?: () => void) => string
@@ -76,8 +76,8 @@ export const fnArrowConstVariableOk = (cb = function(){ }): string => "S";
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
 export let fnExpressionLetVariableOk = function foo(): number { return 0;}
 >fnExpressionLetVariableOk : () => number
@@ -86,8 +86,8 @@ export let fnExpressionLetVariableOk = function foo(): number { return 0;}
 >                                    : ^^^^^^      
 >foo : () => number
 >    : ^^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 export let fnArrowLetVariableOk = (cb = function(){ }): string => "S";
 >fnArrowLetVariableOk : (cb?: () => void) => string
@@ -98,8 +98,8 @@ export let fnArrowLetVariableOk = (cb = function(){ }): string => "S";
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
 export var fnExpressionVarVariableOk = function foo(): number { return 0;}
 >fnExpressionVarVariableOk : () => number
@@ -108,8 +108,8 @@ export var fnExpressionVarVariableOk = function foo(): number { return 0;}
 >                                    : ^^^^^^      
 >foo : () => number
 >    : ^^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 export var fnArrowVarVariableOk = (cb = function(){ }): string => "S";
 >fnArrowVarVariableOk : (cb?: () => void) => string
@@ -120,8 +120,8 @@ export var fnArrowVarVariableOk = (cb = function(){ }): string => "S";
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
 // Not exported
 const fnExpressionConstVariableInternal = function foo() { return 0;}
@@ -264,16 +264,16 @@ export class ExportedClass {
 >                                     : ^^^^^^      
 >foo : () => number
 >    : ^^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     fnArrowOK = (): string => "S";
 >fnArrowOK : () => string
 >          : ^^^^^^      
 >(): string => "S" : () => string
 >                  : ^^^^^^      
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
     protected fnExpressionProtectedOk = function foo(): number { return 0; }
 >fnExpressionProtectedOk : () => number
@@ -282,16 +282,16 @@ export class ExportedClass {
 >                                     : ^^^^^^      
 >foo : () => number
 >    : ^^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     protected fnArrowProtectedOK = (): string => "S";
 >fnArrowProtectedOK : () => string
 >                   : ^^^^^^      
 >(): string => "S" : () => string
 >                  : ^^^^^^      
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
     static fnStaticExpressionOk = function foo(): number { return 0; }
 >fnStaticExpressionOk : () => number
@@ -300,16 +300,16 @@ export class ExportedClass {
 >                                     : ^^^^^^      
 >foo : () => number
 >    : ^^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     static fnStaticArrowOk = (): string => "S";
 >fnStaticArrowOk : () => string
 >                : ^^^^^^      
 >(): string => "S" : () => string
 >                  : ^^^^^^      
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
     protected static fnStaticExpressionProtectedOk = function foo(): number { return 0; }    
 >fnStaticExpressionProtectedOk : () => number
@@ -318,16 +318,16 @@ export class ExportedClass {
 >                                     : ^^^^^^      
 >foo : () => number
 >    : ^^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     protected static fnStaticArrowProtectedOk = (): string => "S";
 >fnStaticArrowProtectedOk : () => string
 >                         : ^^^^^^      
 >(): string => "S" : () => string
 >                  : ^^^^^^      
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
     
 
     // No Error not in declarations
@@ -728,8 +728,8 @@ export const fnParamExpressionConstVariableOwnerHasReturnType = function foo(cb 
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 export const fnParamArrowConstVariableOwnerHasReturnType = (cb = function(){ }): string => "S";
 >fnParamArrowConstVariableOwnerHasReturnType : (cb?: () => void) => string
@@ -740,8 +740,8 @@ export const fnParamArrowConstVariableOwnerHasReturnType = (cb = function(){ }):
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
 export let fnParamExpressionLetVariableOwnerHasReturnType = function foo(cb = function(){ }): number { return 0;}
 >fnParamExpressionLetVariableOwnerHasReturnType : (cb?: () => void) => number
@@ -754,8 +754,8 @@ export let fnParamExpressionLetVariableOwnerHasReturnType = function foo(cb = fu
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 export let fnParamArrowLetVariableOwnerHasReturnType = (cb = function(){ }): string => "S";
 >fnParamArrowLetVariableOwnerHasReturnType : (cb?: () => void) => string
@@ -766,8 +766,8 @@ export let fnParamArrowLetVariableOwnerHasReturnType = (cb = function(){ }): str
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
 export var fnParamExpressionVarVariableOwnerHasReturnType = function foo(cb = function(){ }): number { return 0;}
 >fnParamExpressionVarVariableOwnerHasReturnType : (cb?: () => void) => number
@@ -780,8 +780,8 @@ export var fnParamExpressionVarVariableOwnerHasReturnType = function foo(cb = fu
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 export var fnParamArrowVarVariableOwnerHasReturnType = (cb = function(){ }): string => "S";
 >fnParamArrowVarVariableOwnerHasReturnType : (cb?: () => void) => string
@@ -792,8 +792,8 @@ export var fnParamArrowVarVariableOwnerHasReturnType = (cb = function(){ }): str
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
 // No Errors
 export const fnParamExpressionConstVariableOk = function foo(cb = function(): void{ }): number { return 0;}
@@ -807,8 +807,8 @@ export const fnParamExpressionConstVariableOk = function foo(cb = function(): vo
 >   : ^^^^^^    
 >function(): void{ } : () => void
 >                    : ^^^^^^    
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 export const fnParamArrowConstVariableOk = (cb = function(): void{ }): string => "S";
 >fnParamArrowConstVariableOk : (cb?: () => void) => string
@@ -819,8 +819,8 @@ export const fnParamArrowConstVariableOk = (cb = function(): void{ }): string =>
 >   : ^^^^^^    
 >function(): void{ } : () => void
 >                    : ^^^^^^    
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
 export let fnParamExpressionLetVariableOk = function foo(cb = function(): void{ }): number { return 0;}
 >fnParamExpressionLetVariableOk : (cb?: () => void) => number
@@ -833,8 +833,8 @@ export let fnParamExpressionLetVariableOk = function foo(cb = function(): void{ 
 >   : ^^^^^^    
 >function(): void{ } : () => void
 >                    : ^^^^^^    
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 export let fnParamArrowLetVariableOk = (cb = function(): void{ }): string => "S";
 >fnParamArrowLetVariableOk : (cb?: () => void) => string
@@ -845,8 +845,8 @@ export let fnParamArrowLetVariableOk = (cb = function(): void{ }): string => "S"
 >   : ^^^^^^    
 >function(): void{ } : () => void
 >                    : ^^^^^^    
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
 export var fnParamExpressionVarVariableOk = function foo(cb = function(): void{ }): number { return 0;}
 >fnParamExpressionVarVariableOk : (cb?: () => void) => number
@@ -859,8 +859,8 @@ export var fnParamExpressionVarVariableOk = function foo(cb = function(): void{ 
 >   : ^^^^^^    
 >function(): void{ } : () => void
 >                    : ^^^^^^    
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 export var fnParamArrowVarVariableOk = (cb = function(): void{ }): string => "S";
 >fnParamArrowVarVariableOk : (cb?: () => void) => string
@@ -871,8 +871,8 @@ export var fnParamArrowVarVariableOk = (cb = function(): void{ }): string => "S"
 >   : ^^^^^^    
 >function(): void{ } : () => void
 >                    : ^^^^^^    
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
 export const fnParamExpressionConstVariableInternal = function foo(cb = function(){ }) { return 0;}
 >fnParamExpressionConstVariableInternal : (cb?: () => void) => number
@@ -1081,8 +1081,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     fnArrowMethodHasReturn = (cb = function(){ }): string => "S";
 >fnArrowMethodHasReturn : (cb?: () => void) => string
@@ -1093,8 +1093,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
     protected fnExpressionProtectedMethodHasReturn = function foo(cb = function(){ }): number { return 0; }
 >fnExpressionProtectedMethodHasReturn : (cb?: () => void) => number
@@ -1107,8 +1107,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     protected fnArrowProtectedMethodHasReturn = (cb = function(){ }): string => "S";
 >fnArrowProtectedMethodHasReturn : (cb?: () => void) => string
@@ -1119,8 +1119,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
     static fnStaticExpressionMethodHasReturn = function foo(cb = function(){ }): number { return 0; }
 >fnStaticExpressionMethodHasReturn : (cb?: () => void) => number
@@ -1133,8 +1133,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     static fnStaticArrowMethodHasReturn = (cb = function(){ }): string => "S";
 >fnStaticArrowMethodHasReturn : (cb?: () => void) => string
@@ -1145,8 +1145,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
     protected static fnStaticExpressionProtectedMethodHasReturn = function foo(cb = function(){ }): number { return 0; }    
 >fnStaticExpressionProtectedMethodHasReturn : (cb?: () => void) => number
@@ -1159,8 +1159,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     protected static fnStaticArrowProtectedMethodHasReturn = (cb = function(){ }): string => "S";
 >fnStaticArrowProtectedMethodHasReturn : (cb?: () => void) => string
@@ -1171,8 +1171,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^^^^^
 >function(){ } : () => void
 >              : ^^^^^^^^^^
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
     // Have annotation only on parameter
     fnExpressionOnlyOnParam = function foo(cb = function(): void { }) { return 0; }
@@ -1291,8 +1291,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^    
 >function(): void { } : () => void
 >                     : ^^^^^^    
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     fnArrowOK = (cb = function(): void { }): string => "S";
 >fnArrowOK : (cb?: () => void) => string
@@ -1303,8 +1303,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^    
 >function(): void { } : () => void
 >                     : ^^^^^^    
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
     protected fnExpressionProtectedOk = function foo(cb = function(): void { }): number { return 0; }
 >fnExpressionProtectedOk : (cb?: () => void) => number
@@ -1317,8 +1317,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^    
 >function(): void { } : () => void
 >                     : ^^^^^^    
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     protected fnArrowProtectedOK = (cb = function(): void { }): string => "S";
 >fnArrowProtectedOK : (cb?: () => void) => string
@@ -1329,8 +1329,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^    
 >function(): void { } : () => void
 >                     : ^^^^^^    
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
     static fnStaticExpressionOk = function foo(cb = function(): void{ }): number { return 0; }
 >fnStaticExpressionOk : (cb?: () => void) => number
@@ -1343,8 +1343,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^    
 >function(): void{ } : () => void
 >                    : ^^^^^^    
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     static fnStaticArrowOk = (cb = function(): void{ }): string => "S";
 >fnStaticArrowOk : (cb?: () => void) => string
@@ -1355,8 +1355,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^    
 >function(): void{ } : () => void
 >                    : ^^^^^^    
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
 
     protected static fnStaticExpressionProtectedOk = function foo(cb = function(): void{ }): number { return 0; }    
 >fnStaticExpressionProtectedOk : (cb?: () => void) => number
@@ -1369,8 +1369,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^    
 >function(): void{ } : () => void
 >                    : ^^^^^^    
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     protected static fnStaticArrowProtectedOk = (cb = function(): void{ }): string => "S";
 >fnStaticArrowProtectedOk : (cb?: () => void) => string
@@ -1381,8 +1381,8 @@ export class FnParamsExportedClass {
 >   : ^^^^^^    
 >function(): void{ } : () => void
 >                    : ^^^^^^    
->"S" : "S"
->    : ^^^
+>"S" : string
+>    : ^^^^^^
     
 
     // No Error, not in declarations

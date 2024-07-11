@@ -24,8 +24,8 @@ f([undefined, ''] as [never, string]); // T: never
 >                : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
 f([undefined, ''] as [void, string]); // T: void
 >f([undefined, ''] as [void, string]) : void
@@ -38,8 +38,8 @@ f([undefined, ''] as [void, string]); // T: void
 >                : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
 // Repro from #22563
 

@@ -24,8 +24,8 @@ class A {
 >    : ^^^
 
             return '';
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
         }
 
         // it does error here as expected
@@ -54,8 +54,8 @@ class B {
 >    : ^^^
 
             return '';
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
         }
 
         // it should error here because it returns undefined
@@ -84,8 +84,8 @@ class C {
 >    : ^^^
 
             return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
         }
 
         // it should error here because it returns undefined

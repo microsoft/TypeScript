@@ -10,8 +10,8 @@ class C {
 >                                           : ^      ^^^    ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^
 >boundMethodLogger : <This, Args extends any[], Return>(source: string, bound?: boolean) => (target: (this: This, ...args: Args) => Return, context: ClassMethodDecoratorContext<This, (this: This, ...args: Args) => Return>) => ((this: This, ...args: Args) => Return)
 >                  : ^    ^^    ^^^^^^^^^     ^^      ^^      ^^      ^^     ^^^^^^^^^^^^^^^^      ^^                                     ^^       ^^                                                                        ^^^^^                                       
->"Yadda" : "Yadda"
->        : ^^^^^^^
+>"Yadda" : string
+>        : ^^^^^^
 >true : true
 >     : ^^^^
 

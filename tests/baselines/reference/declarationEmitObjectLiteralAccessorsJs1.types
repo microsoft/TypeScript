@@ -17,8 +17,8 @@ export const obj1 = {
 >  : ^^^^^^
 
     return "";
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   },
   /** 
@@ -49,8 +49,8 @@ export const obj2 = {
 >  : ^^^^^^
 
     return "";
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   },
   /** 
@@ -80,8 +80,8 @@ export const obj3 = {
 >  : ^^^^^^
 
     return "";
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   },
 };

@@ -20,8 +20,8 @@ class C {
 >  : ^^^^^^
 
         return "string";  // Error; get contextual type by set accessor parameter type annotation
->"string" : "string"
->         : ^^^^^^^^
+>"string" : string
+>         : ^^^^^^
     }
 
     set Y(y) { }
@@ -65,7 +65,7 @@ class C {
 >  : ^^^^^^
 
         return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }

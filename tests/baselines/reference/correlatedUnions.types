@@ -96,8 +96,8 @@ processRecord({ kind: 'n', v: 42, f: v => v.toExponential() });
 >    : ^^^
 >v : number
 >  : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 >f : (v: number) => string
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >v => v.toExponential() : (v: number) => string
@@ -286,8 +286,8 @@ const handlers: HandlerMap = {
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
 >        : ^              ^^^      ^^^^^      
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
 };
 
@@ -320,8 +320,8 @@ const data: DataEntry[] = [
 >      : ^^^^^
 >data : string
 >     : ^^^^^^
->'abc' : "abc"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
 
     { type: 'foo', data: 'def' },
 >{ type: 'foo', data: 'def' } : { type: "foo"; data: string; }
@@ -332,8 +332,8 @@ const data: DataEntry[] = [
 >      : ^^^^^
 >data : string
 >     : ^^^^^^
->'def' : "def"
->      : ^^^^^
+>'def' : string
+>      : ^^^^^^
 
     { type: 'bar', data: 42 },
 >{ type: 'bar', data: 42 } : { type: "bar"; data: number; }
@@ -344,8 +344,8 @@ const data: DataEntry[] = [
 >      : ^^^^^
 >data : number
 >     : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 ];
 
@@ -427,8 +427,8 @@ process([{ type: 'foo', data: 'abc' }]);
 >      : ^^^^^
 >data : string
 >     : ^^^^^^
->'abc' : "abc"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
 
 // --------
 
@@ -857,10 +857,10 @@ function ff1() {
 >      : ^ ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^      ^^ ^^^^^    ^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^^^^^^^^^^
 >'sum' : "sum"
 >      : ^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
     const x2 = apply('concat', 'str1', 'str2', 'str3' )
 >x2 : void
@@ -871,11 +871,11 @@ function ff1() {
 >      : ^ ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^      ^^ ^^^^^    ^^^^^^^^^                      ^^^^^^^^^^                                 ^^^^^^^^^^^^^^^
 >'concat' : "concat"
 >         : ^^^^^^^^
->'str1' : "str1"
+>'str1' : string
 >       : ^^^^^^
->'str2' : "str2"
+>'str2' : string
 >       : ^^^^^^
->'str3' : "str3"
+>'str3' : string
 >       : ^^^^^^
 }
 
@@ -1031,8 +1031,8 @@ const ref: MyObj = {
 >             : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     someOtherKey: { name: 42 }
 >someOtherKey : { name: number; }
@@ -1041,8 +1041,8 @@ const ref: MyObj = {
 >             : ^^^^^^^^^^^^^^^^^
 >name : number
 >     : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 };
 

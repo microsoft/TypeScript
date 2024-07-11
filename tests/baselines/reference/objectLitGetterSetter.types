@@ -37,8 +37,8 @@
 >eval("public = 1;") : any
 >eval : (x: string) => any
 >     : ^ ^^      ^^^^^   
->"public = 1;" : "public = 1;"
->              : ^^^^^^^^^^^^^
+>"public = 1;" : string
+>              : ^^^^^^
 
                     return 11;
 >11 : 11

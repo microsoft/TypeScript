@@ -12,8 +12,8 @@ function int8ArraySubarray() {
 >                  : ^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     arr.subarray();
 >arr.subarray() : Int8Array
@@ -34,8 +34,8 @@ function int8ArraySubarray() {
 >    : ^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Int8Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^         
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Int8Array
@@ -46,10 +46,10 @@ function int8ArraySubarray() {
 >    : ^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Int8Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^         
->0 : 0
->  : ^
->10 : 10
->   : ^^
+>0 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 }
 
 function uint8ArraySubarray() {
@@ -63,8 +63,8 @@ function uint8ArraySubarray() {
 >                   : ^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     arr.subarray();
 >arr.subarray() : Uint8Array
@@ -85,8 +85,8 @@ function uint8ArraySubarray() {
 >    : ^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Uint8Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^          
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Uint8Array
@@ -97,10 +97,10 @@ function uint8ArraySubarray() {
 >    : ^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Uint8Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^          
->0 : 0
->  : ^
->10 : 10
->   : ^^
+>0 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 }
 
 function uint8ClampedArraySubarray() {
@@ -114,8 +114,8 @@ function uint8ClampedArraySubarray() {
 >                          : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     arr.subarray();
 >arr.subarray() : Uint8ClampedArray
@@ -136,8 +136,8 @@ function uint8ClampedArraySubarray() {
 >    : ^^^^^^^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Uint8ClampedArray
 >         : ^     ^^^      ^^   ^^^      ^^^^^                 
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Uint8ClampedArray
@@ -148,10 +148,10 @@ function uint8ClampedArraySubarray() {
 >    : ^^^^^^^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Uint8ClampedArray
 >         : ^     ^^^      ^^   ^^^      ^^^^^                 
->0 : 0
->  : ^
->10 : 10
->   : ^^
+>0 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 }
 
 function int16ArraySubarray() {
@@ -165,8 +165,8 @@ function int16ArraySubarray() {
 >                   : ^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     arr.subarray();
 >arr.subarray() : Int16Array
@@ -187,8 +187,8 @@ function int16ArraySubarray() {
 >    : ^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Int16Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^          
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Int16Array
@@ -199,10 +199,10 @@ function int16ArraySubarray() {
 >    : ^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Int16Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^          
->0 : 0
->  : ^
->10 : 10
->   : ^^
+>0 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 }
 
 function uint16ArraySubarray() {
@@ -216,8 +216,8 @@ function uint16ArraySubarray() {
 >                    : ^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     arr.subarray();
 >arr.subarray() : Uint16Array
@@ -238,8 +238,8 @@ function uint16ArraySubarray() {
 >    : ^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Uint16Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^           
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Uint16Array
@@ -250,10 +250,10 @@ function uint16ArraySubarray() {
 >    : ^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Uint16Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^           
->0 : 0
->  : ^
->10 : 10
->   : ^^
+>0 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 }
 
 function int32ArraySubarray() {
@@ -267,8 +267,8 @@ function int32ArraySubarray() {
 >                   : ^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     arr.subarray();
 >arr.subarray() : Int32Array
@@ -289,8 +289,8 @@ function int32ArraySubarray() {
 >    : ^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Int32Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^          
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Int32Array
@@ -301,10 +301,10 @@ function int32ArraySubarray() {
 >    : ^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Int32Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^          
->0 : 0
->  : ^
->10 : 10
->   : ^^
+>0 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 }
 
 function uint32ArraySubarray() {
@@ -318,8 +318,8 @@ function uint32ArraySubarray() {
 >                    : ^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     arr.subarray();
 >arr.subarray() : Uint32Array
@@ -340,8 +340,8 @@ function uint32ArraySubarray() {
 >    : ^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Uint32Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^           
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Uint32Array
@@ -352,10 +352,10 @@ function uint32ArraySubarray() {
 >    : ^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Uint32Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^           
->0 : 0
->  : ^
->10 : 10
->   : ^^
+>0 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 }
 
 function float32ArraySubarray() {
@@ -369,8 +369,8 @@ function float32ArraySubarray() {
 >                     : ^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     arr.subarray();
 >arr.subarray() : Float32Array
@@ -391,8 +391,8 @@ function float32ArraySubarray() {
 >    : ^^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Float32Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^            
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Float32Array
@@ -403,10 +403,10 @@ function float32ArraySubarray() {
 >    : ^^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Float32Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^            
->0 : 0
->  : ^
->10 : 10
->   : ^^
+>0 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 }
 
 function float64ArraySubarray() {
@@ -420,8 +420,8 @@ function float64ArraySubarray() {
 >                     : ^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     arr.subarray();
 >arr.subarray() : Float64Array
@@ -442,8 +442,8 @@ function float64ArraySubarray() {
 >    : ^^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Float64Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^            
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Float64Array
@@ -454,9 +454,9 @@ function float64ArraySubarray() {
 >    : ^^^^^^^^^^^^
 >subarray : (begin?: number, end?: number) => Float64Array
 >         : ^     ^^^      ^^   ^^^      ^^^^^            
->0 : 0
->  : ^
->10 : 10
->   : ^^
+>0 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 }
 

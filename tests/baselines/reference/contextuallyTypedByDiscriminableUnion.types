@@ -56,8 +56,8 @@ function invoke(item: ADT) {
 >     : ^^^^^^^^   ^^^^^^^^^ ^^      ^^^      ^^^
 >method : (x: string) => number
 >       : ^ ^^      ^^^^^      
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
     }
     else {
         item.method(42);
@@ -69,8 +69,8 @@ function invoke(item: ADT) {
 >     : ^^^^^^^^   ^^^^^^^^^ ^^      ^^^      ^^^
 >method : (x: number) => string
 >       : ^ ^^      ^^^^^      
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
     }
 }
 

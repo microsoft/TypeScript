@@ -20,8 +20,8 @@ class C {
     public get Bar() { return "foo";} // ok
 >Bar : string
 >    : ^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 
     public set Bar(bar:string) {} // ok - type must be declared
 >Bar : string
@@ -51,8 +51,8 @@ var o2 = {get Foo(){return 0;}, set Foo(val:number){}}; // ok - types agree
 >                                              : ^^^^^^^^^^^^^^^^
 >Foo : number
 >    : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >Foo : number
 >    : ^^^^^^
 >val : number

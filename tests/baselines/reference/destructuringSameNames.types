@@ -32,8 +32,8 @@ let { foo, foo: bar } = { foo: 1 };
 >           : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
 ({ foo, foo: bar } = { foo: 3 });
 >({ foo, foo: bar } = { foo: 3 }) : { foo: number; }
@@ -52,8 +52,8 @@ let { foo, foo: bar } = { foo: 1 };
 >           : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 ({ foo: bar, foo } = { foo: 4 });
 >({ foo: bar, foo } = { foo: 4 }) : { foo: number; }
@@ -72,8 +72,8 @@ let { foo, foo: bar } = { foo: 1 };
 >           : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
 ({ foo, bar: foo } = { foo: 3, bar: 33 });
 >({ foo, bar: foo } = { foo: 3, bar: 33 }) : { foo: number; bar: number; }
@@ -92,12 +92,12 @@ let { foo, foo: bar } = { foo: 1 };
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 >bar : number
 >    : ^^^^^^
->33 : 33
->   : ^^
+>33 : number
+>   : ^^^^^^
 
 ({ bar: foo, foo } = { foo: 4, bar: 44 });
 >({ bar: foo, foo } = { foo: 4, bar: 44 }) : { foo: number; bar: number; }
@@ -116,12 +116,12 @@ let { foo, foo: bar } = { foo: 1 };
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 >bar : number
 >    : ^^^^^^
->44 : 44
->   : ^^
+>44 : number
+>   : ^^^^^^
 
 ({ foo: bar, foo: bar } = { foo: 5 });
 >({ foo: bar, foo: bar } = { foo: 5 }) : { foo: number; }
@@ -142,8 +142,8 @@ let { foo, foo: bar } = { foo: 1 };
 >           : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 ({ foo: bar, bar: foo } = { foo: 6, bar: 66 });
 >({ foo: bar, bar: foo } = { foo: 6, bar: 66 }) : { foo: number; bar: number; }
@@ -164,12 +164,12 @@ let { foo, foo: bar } = { foo: 1 };
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->6 : 6
->  : ^
+>6 : number
+>  : ^^^^^^
 >bar : number
 >    : ^^^^^^
->66 : 66
->   : ^^
+>66 : number
+>   : ^^^^^^
 
 ({ foo: bar, foo: bar } = { foo: 7 });
 >({ foo: bar, foo: bar } = { foo: 7 }) : { foo: number; }
@@ -190,8 +190,8 @@ let { foo, foo: bar } = { foo: 1 };
 >           : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->7 : 7
->  : ^
+>7 : number
+>  : ^^^^^^
 
 [foo, foo] = [111, 1111];
 >[foo, foo] = [111, 1111] : [number, number]
@@ -204,10 +204,10 @@ let { foo, foo: bar } = { foo: 1 };
 >    : ^^^^^^
 >[111, 1111] : [number, number]
 >            : ^^^^^^^^^^^^^^^^
->111 : 111
->    : ^^^
->1111 : 1111
->     : ^^^^
+>111 : number
+>    : ^^^^^^
+>1111 : number
+>     : ^^^^^^
 
 [foo, foo] = [222, 2222];
 >[foo, foo] = [222, 2222] : [number, number]
@@ -220,10 +220,10 @@ let { foo, foo: bar } = { foo: 1 };
 >    : ^^^^^^
 >[222, 2222] : [number, number]
 >            : ^^^^^^^^^^^^^^^^
->222 : 222
->    : ^^^
->2222 : 2222
->     : ^^^^
+>222 : number
+>    : ^^^^^^
+>2222 : number
+>     : ^^^^^^
 
 [bar, foo, foo] = [333, 3333, 33333];
 >[bar, foo, foo] = [333, 3333, 33333] : [number, number, number]
@@ -238,12 +238,12 @@ let { foo, foo: bar } = { foo: 1 };
 >    : ^^^^^^
 >[333, 3333, 33333] : [number, number, number]
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^
->333 : 333
->    : ^^^
->3333 : 3333
->     : ^^^^
->33333 : 33333
->      : ^^^^^
+>333 : number
+>    : ^^^^^^
+>3333 : number
+>     : ^^^^^^
+>33333 : number
+>      : ^^^^^^
 
 [foo, bar, foo] = [333, 3333, 33333];
 >[foo, bar, foo] = [333, 3333, 33333] : [number, number, number]
@@ -258,12 +258,12 @@ let { foo, foo: bar } = { foo: 1 };
 >    : ^^^^^^
 >[333, 3333, 33333] : [number, number, number]
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^
->333 : 333
->    : ^^^
->3333 : 3333
->     : ^^^^
->33333 : 33333
->      : ^^^^^
+>333 : number
+>    : ^^^^^^
+>3333 : number
+>     : ^^^^^^
+>33333 : number
+>      : ^^^^^^
 
 [foo, foo, bar] = [444, 4444, 44444];
 >[foo, foo, bar] = [444, 4444, 44444] : [number, number, number]
@@ -278,12 +278,12 @@ let { foo, foo: bar } = { foo: 1 };
 >    : ^^^^^^
 >[444, 4444, 44444] : [number, number, number]
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^
->444 : 444
->    : ^^^
->4444 : 4444
->     : ^^^^
->44444 : 44444
->      : ^^^^^
+>444 : number
+>    : ^^^^^^
+>4444 : number
+>     : ^^^^^^
+>44444 : number
+>      : ^^^^^^
 
 // Error cases
 

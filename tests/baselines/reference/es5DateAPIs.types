@@ -10,6 +10,6 @@ Date.UTC(2017); // should error
 >     : ^^^^^^^^^^^^^^^
 >UTC : (year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number) => number
 >    : ^    ^^      ^^          ^^      ^^    ^^^      ^^     ^^^      ^^       ^^^      ^^       ^^^      ^^  ^^^      ^^^^^      
->2017 : 2017
->     : ^^^^
+>2017 : number
+>     : ^^^^^^
 

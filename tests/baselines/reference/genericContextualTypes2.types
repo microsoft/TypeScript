@@ -96,8 +96,8 @@ createMachine<{ count: number }>({
     count: 0,
 >count : number
 >      : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
   },
   entry: assign({

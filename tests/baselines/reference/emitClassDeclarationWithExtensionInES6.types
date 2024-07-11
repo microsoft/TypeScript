@@ -90,10 +90,10 @@ class D extends C {
 >      : ^
 >baz : (a: string, y: number) => void
 >    : ^ ^^      ^^ ^^      ^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
->10 : 10
->   : ^^
+>"hello" : string
+>        : ^^^^^^
+>10 : number
+>   : ^^^^^^
     }
 }
 

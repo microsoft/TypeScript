@@ -55,8 +55,8 @@ var c = new C('a');
 >           : ^
 >C : typeof C
 >  : ^^^^^^^^
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
 
 interface I {
     new(x: 'hi'): Derived1;
@@ -152,6 +152,6 @@ var r3: Base = new a('hm');
 >            : ^^^^
 >a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
 >  : ^^^^^^^ ^^    ^^^        ^^^^^^^ ^^     ^^^        ^^^^^^^ ^^      ^^^    ^^^
->'hm' : "hm"
->     : ^^^^
+>'hm' : string
+>     : ^^^^^^
 

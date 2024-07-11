@@ -20,8 +20,8 @@ class C {
     private b: string = '';
 >b : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     private c() { return '' }
 >c : () => string

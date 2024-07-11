@@ -62,8 +62,8 @@ export const result = <MyComponent x="yes" y={{
     value: 42
 >value : number
 >      : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 }} />;
 

@@ -10,20 +10,20 @@ function f1() {
 >  : ^^^^^
 
     x = 1;
->x = 1 : 1
->      : ^
+>x = 1 : number
+>      : ^^^^^^
 >x : never
 >  : ^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     x = "abc";
->x = "abc" : "abc"
->          : ^^^^^
+>x = "abc" : string
+>          : ^^^^^^
 >x : never
 >  : ^^^^^
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 
     x = false;
 >x = false : false
@@ -74,8 +74,8 @@ function f3(): never {
 >   : ^^^^^^     
 
     return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 
 function f4(): never {

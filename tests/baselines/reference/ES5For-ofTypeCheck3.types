@@ -6,10 +6,10 @@ var tuple: [string, number] = ["", 0];
 >      : ^^^^^^^^^^^^^^^^
 >["", 0] : [string, number]
 >        : ^^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
->0 : 0
->  : ^
+>"" : string
+>   : ^^^^^^
+>0 : number
+>  : ^^^^^^
 
 for (var v of tuple) { }
 >v : string | number

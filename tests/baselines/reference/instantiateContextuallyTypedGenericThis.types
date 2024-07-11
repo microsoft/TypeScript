@@ -54,8 +54,8 @@ $.each(lines, function(dit) {
 >    : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >this.charAt(1) : string
 >               : ^^^^^^
 >this.charAt : (pos: number) => string
@@ -64,8 +64,8 @@ $.each(lines, function(dit) {
 >     : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 });
 

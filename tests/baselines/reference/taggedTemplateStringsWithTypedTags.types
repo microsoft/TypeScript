@@ -50,10 +50,10 @@ f `abc${1}def${2}ghi`;
 >  : ^
 >`abc${1}def${2}ghi` : string
 >                    : ^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 f `abc`.member
 >f `abc`.member : I
@@ -76,10 +76,10 @@ f `abc${1}def${2}ghi`.member;
 >  : ^
 >`abc${1}def${2}ghi` : string
 >                    : ^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 >member : I
 >       : ^
 
@@ -104,10 +104,10 @@ f `abc${1}def${2}ghi`["member"];
 >  : ^
 >`abc${1}def${2}ghi` : string
 >                    : ^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 >"member" : "member"
 >         : ^^^^^^^^
 
@@ -130,10 +130,10 @@ f `abc`[0].member `abc${1}def${2}ghi`;
 >       : ^
 >`abc${1}def${2}ghi` : string
 >                    : ^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi` : I
@@ -148,20 +148,20 @@ f `abc${1}def${2}ghi`["member"].member `abc${1}def${2}ghi`;
 >  : ^
 >`abc${1}def${2}ghi` : string
 >                    : ^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 >"member" : "member"
 >         : ^^^^^^^^
 >member : I
 >       : ^
 >`abc${1}def${2}ghi` : string
 >                    : ^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 f.thisIsNotATag(`abc`);
 >f.thisIsNotATag(`abc`) : void
@@ -172,8 +172,8 @@ f.thisIsNotATag(`abc`);
 >  : ^
 >thisIsNotATag : (x: string) => void
 >              : ^ ^^      ^^^^^    
->`abc` : "abc"
->      : ^^^^^
+>`abc` : string
+>      : ^^^^^^
 
 f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f.thisIsNotATag(`abc${1}def${2}ghi`) : void

@@ -32,8 +32,8 @@ parrot({
     name: "TypeScript",
 >name : string
 >     : ^^^^^^
->"TypeScript" : "TypeScript"
->             : ^^^^^^^^^^^^
+>"TypeScript" : string
+>             : ^^^^^^
 
 });
 
@@ -48,14 +48,14 @@ parrot({
     name: "TypeScript",
 >name : string
 >     : ^^^^^^
->"TypeScript" : "TypeScript"
->             : ^^^^^^^^^^^^
+>"TypeScript" : string
+>             : ^^^^^^
 
     age: 5,
 >age : number
 >    : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 });
 
@@ -70,8 +70,8 @@ parrot({
     name: "TypeScript",
 >name : string
 >     : ^^^^^^
->"TypeScript" : "TypeScript"
->             : ^^^^^^^^^^^^
+>"TypeScript" : string
+>             : ^^^^^^
 
     age: function () { },
 >age : () => void
@@ -92,8 +92,8 @@ parrot({
     name: "TypeScript",
 >name : string
 >     : ^^^^^^
->"TypeScript" : "TypeScript"
->             : ^^^^^^^^^^^^
+>"TypeScript" : string
+>             : ^^^^^^
 
     sayHello() {
 >sayHello : () => void

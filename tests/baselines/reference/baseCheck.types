@@ -24,8 +24,8 @@ class ELoc extends C {
 >            : ^^^^
 >super : typeof C
 >      : ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >x : number
 >  : ^^^^^^
     }
@@ -45,8 +45,8 @@ class ELocVar extends C {
 >              : ^^^^
 >super : typeof C
 >      : ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >loc : any
 >    : ^^^
     }
@@ -92,8 +92,8 @@ class E extends C { constructor(public z: number) { super(0, this.z) } }
 >                 : ^^^^
 >super : typeof C
 >      : ^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >this.z : number
 >       : ^^^^^^
 >this : this
@@ -112,8 +112,8 @@ class F extends C { constructor(public z: number) { super("hello", this.z) } } /
 >                       : ^^^^
 >super : typeof C
 >      : ^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >this.z : number
 >       : ^^^^^^
 >this : this

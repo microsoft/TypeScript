@@ -179,16 +179,16 @@ v[1] = 1;        // Error
 >  : ^
 
 v[2] = 1;        // Error
->v[2] = 1 : 1
->         : ^
+>v[2] = 1 : number
+>         : ^^^^^^
 >v[2] : number
 >     : ^^^^^^
 >v : readonly [number, number, ...number[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 delete v[2];     // Error
 >delete v[2] : boolean
@@ -201,8 +201,8 @@ delete v[2];     // Error
 >  : ^
 
 v[0 + 1] = 1;    // Error
->v[0 + 1] = 1 : 1
->             : ^
+>v[0 + 1] = 1 : number
+>             : ^^^^^^
 >v[0 + 1] : number
 >         : ^^^^^^
 >v : readonly [number, number, ...number[]]
@@ -213,12 +213,12 @@ v[0 + 1] = 1;    // Error
 >  : ^
 >1 : 1
 >  : ^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 v[0 + 2] = 1;    // Error
->v[0 + 2] = 1 : 1
->             : ^
+>v[0 + 2] = 1 : number
+>             : ^^^^^^
 >v[0 + 2] : number
 >         : ^^^^^^
 >v : readonly [number, number, ...number[]]
@@ -229,8 +229,8 @@ v[0 + 2] = 1;    // Error
 >  : ^
 >2 : 2
 >  : ^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 delete v[0 + 1]; // Error
 >delete v[0 + 1] : boolean

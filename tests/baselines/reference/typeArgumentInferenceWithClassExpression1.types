@@ -27,8 +27,8 @@ foo(class { static prop = "hello" }).length;
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : string
 >     : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >length : number
 >       : ^^^^^^
 

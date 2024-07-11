@@ -14,8 +14,8 @@ let y: [t: "AAA", ...args: { [S in SS1]: [a: number]; }[SS1]] = ["AAA", 1];
 >           : ^^^^^^^^^^^^^^^
 >"AAA" : "AAA"
 >      : ^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 type SS2 = "1" | "2" | "3";
 >SS2 : SS2
@@ -28,8 +28,8 @@ let z: [t: "AAA", ...args: { [S in SS2]: [a: number]; }[SS2]] = ["AAA", 1];
 >           : ^^^^^^^^^^^^^^^
 >"AAA" : "AAA"
 >      : ^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 class I<SS extends string>{
 >I : I<SS>

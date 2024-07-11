@@ -11,12 +11,12 @@ const f = (value) => {
 >      : ^^^^^^
 
     value = 1 // should error
->value = 1 : 1
->          : ^
+>value = 1 : number
+>          : ^^^^^^
 >value : string
 >      : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 };
 /** @type {(s: string) => void} */
@@ -27,11 +27,11 @@ function g(s) {
 >  : ^^^^^^
 
     s = 1 // Should error
->s = 1 : 1
->      : ^
+>s = 1 : number
+>      : ^^^^^^
 >s : string
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 

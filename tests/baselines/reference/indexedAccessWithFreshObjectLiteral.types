@@ -195,14 +195,14 @@ function corge(id: string) {
       a: 123,
 >a : number
 >  : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
       b: ""
 >b : string
 >  : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   } as Record<string, number | string>)[id]
 >id : string
@@ -228,14 +228,14 @@ function grault(id: string) {
       a: 123,
 >a : number
 >  : ^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
       b: ""
 >b : string
 >  : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   } as { [k: string]: string | number})[id]
 >k : string

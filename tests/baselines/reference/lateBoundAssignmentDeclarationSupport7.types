@@ -7,14 +7,15 @@ const x = require("./lateBoundAssignmentDeclarationSupport7.js");
 >require("./lateBoundAssignmentDeclarationSupport7.js") : typeof x
 >                                                       : ^^^^^^^^
 >require : any
+>        : ^^^
 >"./lateBoundAssignmentDeclarationSupport7.js" : "./lateBoundAssignmentDeclarationSupport7.js"
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const y = x.F["my-fake-sym"];
->y : string
->  : ^^^^^^
->x.F["my-fake-sym"] : string
->                   : ^^^^^^
+>y : any
+>  : ^^^
+>x.F["my-fake-sym"] : any
+>                   : ^^^
 >x.F : typeof x.F
 >    : ^^^^^^^^^^
 >x : typeof x
@@ -25,10 +26,10 @@ const y = x.F["my-fake-sym"];
 >              : ^^^^^^^^^^^^^
 
 const z = x.F[x.S];
->z : string
->  : ^^^^^^
->x.F[x.S] : string
->         : ^^^^^^
+>z : any
+>  : ^^^
+>x.F[x.S] : any
+>         : ^^^
 >x.F : typeof x.F
 >    : ^^^^^^^^^^
 >x : typeof x
@@ -64,8 +65,8 @@ function F() {
 F[_sym] = "ok";
 >F[_sym] = "ok" : "ok"
 >               : ^^^^
->F[_sym] : string
->        : ^^^^^^
+>F[_sym] : any
+>        : ^^^
 >F : typeof F
 >  : ^^^^^^^^
 >_sym : unique symbol
@@ -76,8 +77,8 @@ F[_sym] = "ok";
 F[_str] = "ok";
 >F[_str] = "ok" : "ok"
 >               : ^^^^
->F[_str] : string
->        : ^^^^^^
+>F[_str] : any
+>        : ^^^
 >F : typeof F
 >  : ^^^^^^^^
 >_str : "my-fake-sym"

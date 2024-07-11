@@ -67,12 +67,12 @@ export const x: import("./foo") = { x: 0, y: 0 };
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >y : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 export let y: import("./foo2").Bar.I = { a: "", b: 0 };
 >y : import("foo2").Bar.I
@@ -83,12 +83,12 @@ export let y: import("./foo2").Bar.I = { a: "", b: 0 };
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 >b : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 export class Bar2 {
 >Bar2 : Bar2

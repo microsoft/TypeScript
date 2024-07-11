@@ -23,8 +23,8 @@ const D = require("./mod1");
 >                  : ^^^^^^^^
 >require : (name: string) => any
 >        : ^    ^^      ^^^^^   
->"./mod1" : "./mod1"
->         : ^^^^^^^^
+>"./mod1" : string
+>         : ^^^^^^
 
 /** @type {D} */
 var d;

@@ -275,8 +275,8 @@ let [key, value]: KeyValue = ["foo"];
 >      : ^^^^^^^^^^^^^^^^^^
 >["foo"] : [string]
 >        : ^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 
 value.toUpperCase();  // Error
 >value.toUpperCase() : any

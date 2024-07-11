@@ -107,16 +107,16 @@ function getObj() {
 
 === b.ts ===
 variable.a = 1;
->variable.a = 1 : 1
->               : ^
+>variable.a = 1 : number
+>               : ^^^^^^
 >variable.a : number
 >           : ^^^^^^
 >variable : typeof variable
 >         : ^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 (new C()).member.a = 1;
 >(new C()).member.a = 1 : 1

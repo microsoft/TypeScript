@@ -10,8 +10,8 @@ const z7 = false;
 const z8: number = 23;
 >z8 : number
 >   : ^^^^^^
->23 : 23
->   : ^^
+>23 : number
+>   : ^^^^^^
 
 const z9 = 0, z10 :string = "", z11 = null;
 >z9 : 0
@@ -20,7 +20,7 @@ const z9 = 0, z10 :string = "", z11 = null;
 >  : ^
 >z10 : string
 >    : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 >z11 : any
 

@@ -20,8 +20,8 @@ declare module JSX {
 >      : ^^^
 >data-foo : number
 >         : ^^^^^^
->32 : 32
->   : ^^
+>32 : number
+>   : ^^^^^^
 
 // OK
 <test1 data-foo={'32'} />;
@@ -31,8 +31,8 @@ declare module JSX {
 >      : ^^^
 >data-foo : string
 >         : ^^^^^^
->'32' : "32"
->     : ^^^^
+>'32' : string
+>     : ^^^^^^
 
 <test1 data-bar={'32'} />;
 ><test1 data-bar={'32'} /> : JSX.Element

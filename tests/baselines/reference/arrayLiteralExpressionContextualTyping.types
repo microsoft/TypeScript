@@ -33,12 +33,12 @@ var tup: [number, number, number] = [1, 2, 3, 4];
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, 4] : [number, number, number, number]
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >4 : 4
 >  : ^
 
@@ -47,12 +47,12 @@ var tup1: [number|string, number|string, number|string] = [1, 2, 3, "string"];
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, "string"] : [number, number, number, string]
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
@@ -61,12 +61,12 @@ var tup2: [number, number, number] = [1, 2, 3, "string"];  // Error
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, "string"] : [number, number, number, string]
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
@@ -109,12 +109,12 @@ var spr2:[number, number, number] = [1, 2, 3, ...tup];  // Error
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, ...tup] : [number, number, number, number, number, number]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >...tup : number
 >       : ^^^^^^
 >tup : [number, number, number]

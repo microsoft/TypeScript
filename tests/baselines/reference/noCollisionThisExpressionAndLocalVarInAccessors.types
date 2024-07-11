@@ -39,8 +39,8 @@ class class1 {
         }
 
         return 10;
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
     set a(val: number) {
 >a : number
@@ -118,8 +118,8 @@ class class2 {
         }
 
         return 10;
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
     set a(val: number) {
 >a : number

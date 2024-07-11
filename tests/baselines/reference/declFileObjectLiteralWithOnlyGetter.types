@@ -26,8 +26,8 @@ var /*4*/point = makePoint(2);
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >makePoint : (x: number) => { readonly x: number; }
 >          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
 var /*2*/x = point./*3*/x;
 >x : number

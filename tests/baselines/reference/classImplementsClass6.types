@@ -10,14 +10,14 @@ class A {
 >    : ^^^^^^      
 
         return "";
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
     }
     foo(): number { return 1; }
 >foo : () => number
 >    : ^^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 class C implements A {
 >C : C

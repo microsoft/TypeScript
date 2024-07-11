@@ -40,6 +40,6 @@ betaOfNumber.takesArgOfT(5);
 >             : ^^^^^^^^^^^^
 >takesArgOfT : (arg: number) => Alpha<number>
 >            : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 

@@ -8,8 +8,8 @@ class One {
   get prop1(): string { return ""; }
 >prop1 : string
 >      : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   set prop1(s: string | number) { }
 >prop1 : string
@@ -41,8 +41,8 @@ class Two {
   get prop2(): string { return ""; }
 >prop2 : string
 >      : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   set prop2(s: string | 42) { }
 >prop2 : string

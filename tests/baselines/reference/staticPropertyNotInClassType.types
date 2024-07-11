@@ -56,10 +56,10 @@ module NonGeneric {
 >            : ^
 >C : typeof C
 >  : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
     var r = c.fn();
 >r : C
@@ -159,10 +159,10 @@ module Generic {
 >             : ^^^^^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->1 : 1
->  : ^
->'' : ""
->   : ^^
+>1 : number
+>  : ^^^^^^
+>'' : string
+>   : ^^^^^^
 
     var r = c.fn();
 >r : C<number, string>

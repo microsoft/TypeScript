@@ -29,12 +29,12 @@ o?.[a = 1];
 >           : ^^^
 >o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
 >  : ^^^^^^    ^^     ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a = 1 : 1
->      : ^
+>a = 1 : number
+>      : ^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 a.toString();
 >a.toString() : string
@@ -59,12 +59,12 @@ o?.x[b = 1];
 >  : ^^^^^^    ^^     ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
->b = 1 : 1
->      : ^
+>b = 1 : number
+>      : ^^^^^^
 >b : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 b.toString();
 >b.toString() : string
@@ -85,12 +85,12 @@ o?.(c = 1)
 >           : ^^^
 >o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
 >  : ^^^^^^    ^^     ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->c = 1 : 1
->      : ^
+>c = 1 : number
+>      : ^^^^^^
 >c : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 c.toString();
 >c.toString() : string
@@ -115,12 +115,12 @@ o?.x(d = 1);
 >  : ^^^^^^    ^^     ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
->d = 1 : 1
->      : ^
+>d = 1 : number
+>      : ^^^^^^
 >d : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 d.toString();
 >d.toString() : string
@@ -3229,8 +3229,8 @@ const someObject: SomeObject = {
     someProperty: 42
 >someProperty : number
 >             : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 };
 

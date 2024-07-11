@@ -103,10 +103,10 @@ function g({ prop = ["hello", 1234] }: Tuples) {}
 >     : ^^^^^^^^^^^^^^^^
 >["hello", 1234] : [string, number]
 >                : ^^^^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
->1234 : 1234
->     : ^^^^
+>"hello" : string
+>        : ^^^^^^
+>1234 : number
+>     : ^^^^^^
 
 interface StringUnion {
     prop: "foo" | "bar";

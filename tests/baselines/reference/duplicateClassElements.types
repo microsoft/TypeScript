@@ -45,8 +45,8 @@ class a {
 >  : ^^^^^^
 
         return "Hello";
->"Hello" : "Hello"
->        : ^^^^^^^
+>"Hello" : string
+>        : ^^^^^^
     }
     set y(_y: string) {
 >y : string
@@ -79,8 +79,8 @@ class a {
 >   : ^^^^^^
 
         return 10;
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
     }
     set x2(_x: number) {
 >x2 : number
@@ -97,8 +97,8 @@ class a {
 >   : ^^^^^^
 
         return "Hello";
->"Hello" : "Hello"
->        : ^^^^^^^
+>"Hello" : string
+>        : ^^^^^^
     }
     set z2(_y: string) {
 >z2 : string

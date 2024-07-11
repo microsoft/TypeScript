@@ -49,8 +49,8 @@ const test: RowRenderer<Entity> = {
     caption: 'My Date',
 >caption : string
 >        : ^^^^^^
->'My Date' : "My Date"
->          : ^^^^^^^^^
+>'My Date' : string
+>          : ^^^^^^
 
     formatter: (value) => value ? value.toString() : '-' // value: any
 >formatter : (value: Date | null) => string
@@ -71,7 +71,7 @@ const test: RowRenderer<Entity> = {
 >      : ^^^^
 >toString : () => string
 >         : ^^^^^^      
->'-' : "-"
->    : ^^^
+>'-' : string
+>    : ^^^^^^
 }
 

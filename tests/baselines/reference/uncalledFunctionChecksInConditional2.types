@@ -61,8 +61,8 @@ Type Count: 1,000
 >     : ^^^^^^^^^^^
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions, endMark?: string) => PerformanceMeasure
 >        : ^           ^^      ^^                     ^^^                                  ^^       ^^^      ^^^^^                  
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     perf.clearMarks("")
 >perf.clearMarks("") : void
@@ -73,8 +73,8 @@ Type Count: 1,000
 >     : ^^^^^^^^^^^
 >clearMarks : (markName?: string) => void
 >           : ^        ^^^      ^^^^^    
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     perf.clearMeasures("")
 >perf.clearMeasures("") : void
@@ -85,8 +85,8 @@ Type Count: 1,000
 >     : ^^^^^^^^^^^
 >clearMeasures : (measureName?: string) => void
 >              : ^           ^^^      ^^^^^    
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
   }
 
   // With ||
@@ -133,8 +133,8 @@ Type Count: 1,000
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
 >     : ^        ^^      ^^           ^^^                      ^^^^^               
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
   }
 
   // With ??
@@ -187,8 +187,8 @@ Type Count: 1,000
 >     : ^^^^^^^^^^^
 >mark : (markName: string, markOptions?: PerformanceMarkOptions) => PerformanceMark
 >     : ^        ^^      ^^           ^^^                      ^^^^^               
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
   }
 };
 
@@ -396,8 +396,8 @@ function isMobile() {
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
 >           : ^^     ^^      ^^^^^              ^^^^^^     ^^      ^^^^^              ^
->'(max-device-width: 680px)' : "(max-device-width: 680px)"
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'(max-device-width: 680px)' : string
+>                            : ^^^^^^
 
     _isMobile = isMobileMatch && isMobileMatch.matches;
 >_isMobile = isMobileMatch && isMobileMatch.matches : boolean

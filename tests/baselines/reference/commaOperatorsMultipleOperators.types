@@ -178,8 +178,8 @@ null, true, 1;
 >       : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >new Object() : Object
 >             : ^^^^^^
 >Object : ObjectConstructor
@@ -220,8 +220,8 @@ var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
 >       : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >new Object() : Object
 >             : ^^^^^^
 >Object : ObjectConstructor

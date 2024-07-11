@@ -34,7 +34,7 @@ const propB1: IProps | number = { INVALID_PROP_NAME: 'share', iconProp: 'test' }
 >        : ^^^^^^^
 >iconProp : string
 >         : ^^^^^^
->'test' : "test"
+>'test' : string
 >       : ^^^^^^
 
 // Nested typing works here and we also get an expected error:
@@ -53,7 +53,7 @@ const propB2: IProps | number = { nestedProp: { asdfasdf: 'test' }, iconProp: 't
 >       : ^^^^^^
 >iconProp : string
 >         : ^^^^^^
->'test' : "test"
+>'test' : string
 >       : ^^^^^^
 
 // Want an error generated here but there isn't one.
@@ -72,6 +72,6 @@ const propA1: INestedProps | number = { nestedProps: { INVALID_PROP_NAME: 'share
 >        : ^^^^^^^
 >iconProp : string
 >         : ^^^^^^
->'test' : "test"
+>'test' : string
 >       : ^^^^^^
 

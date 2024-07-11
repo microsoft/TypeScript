@@ -38,5 +38,5 @@ const a = foo[dashStrMem];
 export declare function foo(): void;
 export declare namespace foo {
     var bar: number;
-    var strMemName: string;
+    var strMemName: any;
 }

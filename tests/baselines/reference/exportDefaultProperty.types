@@ -122,8 +122,8 @@ namespace A {
 >  : ^^^^^^^^
 >b : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 export default A.B;
 >A.B : typeof A.B

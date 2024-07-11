@@ -37,16 +37,16 @@ function Tagged<T extends Constructor<{}>>(Base: T) {
 >     : ^^^^^
 
       this._tag = "";
->this._tag = "" : ""
->               : ^^
+>this._tag = "" : string
+>               : ^^^^^^
 >this._tag : string
 >          : ^^^^^^
 >this : this
 >     : ^^^^
 >_tag : string
 >     : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
     }
   };
 }

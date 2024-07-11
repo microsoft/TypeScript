@@ -62,8 +62,8 @@ class Test1 {
 >            : ^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
         var foo: typeof this.data.foo = '';
 >foo : string
@@ -78,8 +78,8 @@ class Test1 {
 >     : ^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
         var self: typeof this = this;
 >self : this
@@ -106,8 +106,8 @@ class Test1 {
 >     : ^^^^
 >this : string
 >     : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
     }
 }
 
@@ -146,8 +146,8 @@ function Test3(this: { no: number }) {
 >     : ^^^^^^      ^^^
 >no : number
 >   : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 
 function Test4(this: { no: number } | undefined) {
@@ -167,8 +167,8 @@ function Test4(this: { no: number } | undefined) {
 >     : ^^^^^^      ^^^^^^^^^^^^^^^
 >no : number
 >   : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 
 class Test5 {
@@ -197,8 +197,8 @@ class Test5 {
 >     : ^^^^
 >no : number
 >   : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 

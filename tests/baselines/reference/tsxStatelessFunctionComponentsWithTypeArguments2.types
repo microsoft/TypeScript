@@ -47,8 +47,8 @@ function Bar<T extends {prop: number}>(arg: T) {
 >    : ^
 >ignore-prop : number
 >            : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
  }
 
 // Error
@@ -137,14 +137,14 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) 
 >       : ^^^^^^^^
 >[1, 2, 3, 4] : number[]
 >             : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
 >selectHandler : (val: string) => void
 >              : ^   ^^      ^^^^^^^^^
 >(val: string) => { } : (val: string) => void

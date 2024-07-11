@@ -117,14 +117,14 @@ class C4 {
     b: number = 0;
 >b : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     c: string = "abc";
 >c : string
 >  : ^^^^^^
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 
     #d = 0
 >#d : number
@@ -135,14 +135,14 @@ class C4 {
     #e: number = 0
 >#e : number
 >   : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     #f: string= "abc"
 >#f : string
 >   : ^^^^^^
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 }
 
 // Assignment in constructor satisfies strict initialization check
@@ -161,26 +161,26 @@ class C5 {
 
     constructor() {
         this.a = 0;
->this.a = 0 : 0
->           : ^
+>this.a = 0 : number
+>           : ^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
         this.#b = 0;
->this.#b = 0 : 0
->            : ^
+>this.#b = 0 : number
+>            : ^^^^^^
 >this.#b : number
 >        : ^^^^^^
 >this : this
 >     : ^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
     }
 }
 
@@ -209,26 +209,26 @@ class C6 {
             return;
         }
         this.a = 0;
->this.a = 0 : 0
->           : ^
+>this.a = 0 : number
+>           : ^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
         this.#b = 0;
->this.#b = 0 : 0
->            : ^
+>this.#b = 0 : number
+>            : ^^^^^^
 >this.#b : number
 >        : ^^^^^^
 >this : this
 >     : ^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
     }
 }
 
@@ -253,50 +253,50 @@ class C7 {
 >     : ^^^^^^^
 
             this.a = 1;
->this.a = 1 : 1
->           : ^
+>this.a = 1 : number
+>           : ^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
             this.#b = 1;
->this.#b = 1 : 1
->            : ^
+>this.#b = 1 : number
+>            : ^^^^^^
 >this.#b : number
 >        : ^^^^^^
 >this : this
 >     : ^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
             return;
         }
         this.a = 0;
->this.a = 0 : 0
->           : ^
+>this.a = 0 : number
+>           : ^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
         this.#b = 1;
->this.#b = 1 : 1
->            : ^
+>this.#b = 1 : number
+>            : ^^^^^^
 >this.#b : number
 >        : ^^^^^^
 >this : this
 >     : ^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 
@@ -525,40 +525,40 @@ class C12 {
 
     constructor() {
         this[a] = 1;
->this[a] = 1 : 1
->            : ^
+>this[a] = 1 : number
+>            : ^^^^^^
 >this[a] : number
 >        : ^^^^^^
 >this : this
 >     : ^^^^
 >a : "a"
 >  : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         this[b] = 1;
->this[b] = 1 : 1
->            : ^
+>this[b] = 1 : number
+>            : ^^^^^^
 >this[b] : number
 >        : ^^^^^^
 >this : this
 >     : ^^^^
 >b : unique symbol
 >  : ^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         this['c'] = 1;
->this['c'] = 1 : 1
->              : ^
+>this['c'] = 1 : number
+>              : ^^^^^^
 >this['c'] : number
 >          : ^^^^^^
 >this : this
 >     : ^^^^
 >'c' : "c"
 >    : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 
@@ -594,8 +594,8 @@ class C13 {
 
     constructor() {
         this[E.A] = 1;
->this[E.A] = 1 : 1
->              : ^
+>this[E.A] = 1 : number
+>              : ^^^^^^
 >this[E.A] : number
 >          : ^^^^^^
 >this : this
@@ -606,8 +606,8 @@ class C13 {
 >  : ^^^^^^^^
 >A : E.A
 >  : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 

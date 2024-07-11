@@ -67,8 +67,8 @@ module.exports.Sub = function() {
 >       : ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (p: number): void; new (p: number): exports; Sub: typeof Sub; }
 >        : ^^^ ^^      ^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 }
 module.exports.Sub.prototype = { }
 >module.exports.Sub.prototype = { } : {}

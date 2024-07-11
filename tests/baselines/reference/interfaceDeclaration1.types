@@ -75,8 +75,8 @@ class C1 implements I3 {
         var prototype: number = 3;
 >prototype : number
 >          : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
     }
 }
 

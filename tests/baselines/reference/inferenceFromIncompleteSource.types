@@ -38,8 +38,8 @@ Component({items: [{name:' string'}], itemKey: 'name' });
 >                 : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->' string' : " string"
->          : ^^^^^^^^^
+>' string' : string
+>          : ^^^^^^
 >itemKey : "name"
 >        : ^^^^^^
 >'name' : "name"

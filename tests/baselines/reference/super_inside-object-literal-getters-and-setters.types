@@ -71,8 +71,8 @@ class F { public test(): string { return ""; } }
 >  : ^
 >test : () => string
 >     : ^^^^^^      
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 class SuperObjectTest extends F {
 >SuperObjectTest : SuperObjectTest

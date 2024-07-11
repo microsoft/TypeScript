@@ -23,8 +23,8 @@ async function fAsyncExplicit(): Promise<[number, boolean]> {
     return [1, true];
 >[1, true] : [number, true]
 >          : ^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >true : true
 >     : ^^^^
 }

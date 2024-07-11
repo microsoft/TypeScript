@@ -285,8 +285,8 @@ var y: StringAndBoolean = ["1", false];
 >  : ^^^^^^^^^^^^^^^^
 >["1", false] : [string, false]
 >             : ^^^^^^^^^^^^^^^
->"1" : "1"
->    : ^^^
+>"1" : string
+>    : ^^^^^^
 >false : false
 >      : ^^^^^
 

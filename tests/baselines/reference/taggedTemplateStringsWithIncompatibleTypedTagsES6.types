@@ -200,8 +200,8 @@ f.thisIsNotATag(`abc`);
 >  : ^
 >thisIsNotATag : (x: string) => void
 >              : ^ ^^      ^^^^^    
->`abc` : "abc"
->      : ^^^^^
+>`abc` : string
+>      : ^^^^^^
 
 f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f.thisIsNotATag(`abc${1}def${2}ghi`) : void

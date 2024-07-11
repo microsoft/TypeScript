@@ -25,7 +25,7 @@ async function test(skip: boolean) {
 >              : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'test' : "test"
+>'test' : string
 >       : ^^^^^^
     }
 }

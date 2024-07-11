@@ -214,8 +214,8 @@ function Comp() {
 >                     : ^^^^^^^^^^^^^^^^^^
 >displayEnum : (value: string) => Capitalize<string>
 >            : ^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^
->"VALUE" : "VALUE"
->        : ^^^^^^^
+>"VALUE" : string
+>        : ^^^^^^
 
   </div>
 >div : any

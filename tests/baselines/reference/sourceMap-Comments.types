@@ -18,8 +18,8 @@ module sas.tools {
             let f: number = 2;
 >f : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
             switch (f) {
 >f : number

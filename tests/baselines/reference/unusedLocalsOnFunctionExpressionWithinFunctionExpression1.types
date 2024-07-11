@@ -32,10 +32,10 @@ var greeter = function (person: string, person2: string) {
 >   : ^^
     }
     person2 = "dummy value";
->person2 = "dummy value" : "dummy value"
->                        : ^^^^^^^^^^^^^
+>person2 = "dummy value" : string
+>                        : ^^^^^^
 >person2 : string
 >        : ^^^^^^
->"dummy value" : "dummy value"
->              : ^^^^^^^^^^^^^
+>"dummy value" : string
+>              : ^^^^^^
 }

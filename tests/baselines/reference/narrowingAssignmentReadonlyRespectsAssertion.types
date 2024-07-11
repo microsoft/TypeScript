@@ -38,12 +38,12 @@ function subDataFunc(): TestCase<string | number>[] {
 >     : ^^^^^^^^
 >["a", "b", "c"] : string[]
 >                : ^^^^^^^^
->"a" : "a"
->    : ^^^
->"b" : "b"
->    : ^^^
->"c" : "c"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
+>"b" : string
+>    : ^^^^^^
+>"c" : string
+>    : ^^^^^^
 
       { val1: 2, val2: [1, 2, 3] },
 >{ val1: 2, val2: [1, 2, 3] } : { val1: number; val2: number[]; }
@@ -56,12 +56,12 @@ function subDataFunc(): TestCase<string | number>[] {
 >     : ^^^^^^^^
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
       { val1: ["a", "z"], val2: ["x", "y", "z"] },
 >{ val1: ["a", "z"], val2: ["x", "y", "z"] } : { val1: string[]; val2: string[]; }
@@ -70,20 +70,20 @@ function subDataFunc(): TestCase<string | number>[] {
 >     : ^^^^^^^^
 >["a", "z"] : string[]
 >           : ^^^^^^^^
->"a" : "a"
->    : ^^^
->"z" : "z"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
+>"z" : string
+>    : ^^^^^^
 >val2 : string[]
 >     : ^^^^^^^^
 >["x", "y", "z"] : string[]
 >                : ^^^^^^^^
->"x" : "x"
->    : ^^^
->"y" : "y"
->    : ^^^
->"z" : "z"
->    : ^^^
+>"x" : string
+>    : ^^^^^^
+>"y" : string
+>    : ^^^^^^
+>"z" : string
+>    : ^^^^^^
 
       { val1: [5, 10], val2: [10, 100, 1000] },
 >{ val1: [5, 10], val2: [10, 100, 1000] } : { val1: number[]; val2: number[]; }
@@ -92,20 +92,20 @@ function subDataFunc(): TestCase<string | number>[] {
 >     : ^^^^^^^^
 >[5, 10] : number[]
 >        : ^^^^^^^^
->5 : 5
->  : ^
->10 : 10
->   : ^^
+>5 : number
+>  : ^^^^^^
+>10 : number
+>   : ^^^^^^
 >val2 : number[]
 >     : ^^^^^^^^
 >[10, 100, 1000] : number[]
 >                : ^^^^^^^^
->10 : 10
->   : ^^
->100 : 100
->    : ^^^
->1000 : 1000
->     : ^^^^
+>10 : number
+>   : ^^^^^^
+>100 : number
+>    : ^^^^^^
+>1000 : number
+>     : ^^^^^^
 
   ];
 }

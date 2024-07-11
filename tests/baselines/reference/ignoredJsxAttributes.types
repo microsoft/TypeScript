@@ -42,14 +42,14 @@ let props: Props = {
     foo: "",
 >foo : string
 >    : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     "data-yadda": 42,  // Error
 >"data-yadda" : number
 >             : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 };
 
@@ -64,8 +64,8 @@ let x1 = <Yadda foo="hello" data-yadda={42}/>;
 >    : ^^^^^^
 >data-yadda : number
 >           : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
 >x2 : JSX.Element
@@ -78,6 +78,6 @@ let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
 >    : ^^^^^^
 >data-yadda : number
 >           : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 

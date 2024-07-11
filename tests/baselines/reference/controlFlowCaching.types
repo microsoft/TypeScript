@@ -600,8 +600,8 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >            : ^^^
 >length : any
 >       : ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
         taMinorTick.length > 0 ? taMinorTick.length : 0) +
 >taMinorTick.length > 0 ? taMinorTick.length : 0 : any
@@ -619,8 +619,8 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >            : ^^^
 >length : any
 >       : ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
         tsize + taTitleGap;
 >tsize : any
@@ -813,12 +813,12 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
     }
 
     titleRotation = (taTitleOrientation && taTitleOrientation == "away") ? 180 : 0;
->titleRotation = (taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : 0 | 180
->                                                                               : ^^^^^^^
+>titleRotation = (taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : number
+>                                                                               : ^^^^^^
 >titleRotation : number
 >              : ^^^^^^
->(taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : 0 | 180
->                                                               : ^^^^^^^
+>(taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : number
+>                                                               : ^^^^^^
 >(taTitleOrientation && taTitleOrientation == "away") : any
 >taTitleOrientation && taTitleOrientation == "away" : any
 >taTitleOrientation : any
@@ -827,10 +827,10 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >taTitleOrientation : any
 >"away" : "away"
 >       : ^^^^^^
->180 : 180
->    : ^^^
->0 : 0
->  : ^
+>180 : number
+>    : ^^^^^^
+>0 : number
+>  : ^^^^^^
 
     titlePos.y = offsets.t - titleOffset + (titleRotation ? 0 : tsize);
 >titlePos.y = offsets.t - titleOffset + (titleRotation ? 0 : tsize) : any

@@ -35,7 +35,7 @@ export default {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >scalar : (value: string) => import("src/lib/operators/scalar").Scalar
 >       : ^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^
->"14px" : "14px"
+>"14px" : string
 >       : ^^^^^^
 	}
 };

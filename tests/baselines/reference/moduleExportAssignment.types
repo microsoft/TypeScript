@@ -63,8 +63,8 @@ npmlog.on('hi') // both references should see EE.on
 >       : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >on : (s: string) => void
 >   : ^ ^^      ^^^^^^^^^
->'hi' : "hi"
->     : ^^^^
+>'hi' : string
+>     : ^^^^^^
 
 module.exports.on('hi') // here too
 >module.exports.on('hi') : void
@@ -79,8 +79,8 @@ module.exports.on('hi') // here too
 >        : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >on : (s: string) => void
 >   : ^ ^^      ^^^^^^^^^
->'hi' : "hi"
->     : ^^^^
+>'hi' : string
+>     : ^^^^^^
 
 npmlog.x = 1
 >npmlog.x = 1 : 1

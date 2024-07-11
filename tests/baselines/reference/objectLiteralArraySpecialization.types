@@ -37,22 +37,22 @@ var thing = create([ { name: "bob", id: 24 }, { name: "doug", id: 32 } ]); // sh
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"bob" : "bob"
->      : ^^^^^
+>"bob" : string
+>      : ^^^^^^
 >id : number
 >   : ^^^^^^
->24 : 24
->   : ^^
+>24 : number
+>   : ^^^^^^
 >{ name: "doug", id: 32 } : { name: string; id: number; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"doug" : "doug"
+>"doug" : string
 >       : ^^^^^^
 >id : number
 >   : ^^^^^^
->32 : 32
->   : ^^
+>32 : number
+>   : ^^^^^^
 
 thing.doSomething((x, y) => x.name === "bob"); // should not error
 >thing.doSomething((x, y) => x.name === "bob") : void

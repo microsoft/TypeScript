@@ -17,10 +17,10 @@ let v = new m.Vector(3, 2);
 >  : ^^^^^^^^
 >Vector : typeof m.Vector
 >       : ^^^^^^^^^^^^^^^
->3 : 3
->  : ^
->2 : 2
->  : ^
+>3 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 let magnitude = m.getLength(v);
 >magnitude : number
@@ -49,10 +49,10 @@ let p: m.Point = v.translate(5, 5);
 >  : ^^^^^^^^
 >translate : (dx: number, dy: number) => m.Vector
 >          : ^  ^^      ^^  ^^      ^^^^^^^^^^^^^
->5 : 5
->  : ^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
 
 p = v.reverse();
 >p = v.reverse() : m.Point

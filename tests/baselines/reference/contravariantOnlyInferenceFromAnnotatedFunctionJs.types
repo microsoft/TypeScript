@@ -53,8 +53,8 @@ const result = foo({
     thing: "asd",
 >thing : string
 >      : ^^^^^^
->"asd" : "asd"
->      : ^^^^^
+>"asd" : string
+>      : ^^^^^^
 
   },
 });

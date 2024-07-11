@@ -26,8 +26,8 @@
         export var analysisPass: number = 0;
 >analysisPass : number
 >             : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
         export function Alert(output: string) {
 >Alert : (output: string) => void

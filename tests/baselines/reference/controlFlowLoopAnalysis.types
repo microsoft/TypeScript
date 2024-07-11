@@ -12,8 +12,8 @@ function foo(x: number): number { return 1; }
 >    : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 function test1() {
 >test1 : () => void
@@ -49,12 +49,12 @@ function test1() {
             }
         }
         x = 1;
->x = 1 : 1
->      : ^
+>x = 1 : number
+>      : ^^^^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 
@@ -69,12 +69,12 @@ function test2() {
 >  : ^^^^^^^^^^^^^^^^^^
 
     x = 1;
->x = 1 : 1
->      : ^
+>x = 1 : number
+>      : ^^^^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     while (cond) {
 >cond : boolean

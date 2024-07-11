@@ -57,8 +57,8 @@ var a = fun(x => x, 10);
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 var b = fun((x => x), 10);
 >b : number
@@ -75,8 +75,8 @@ var b = fun((x => x), 10);
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 var c = fun(((x => x)), 10);
 >c : number
@@ -95,8 +95,8 @@ var c = fun(((x => x)), 10);
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 var d = fun((((x => x))), 10);
 >d : number
@@ -117,8 +117,8 @@ var d = fun((((x => x))), 10);
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 var e = fun(x => x, x => x, 10);
 >e : number
@@ -139,8 +139,8 @@ var e = fun(x => x, x => x, 10);
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 var f = fun((x => x), (x => x), 10);
 >f : number
@@ -165,8 +165,8 @@ var f = fun((x => x), (x => x), 10);
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 var g = fun(((x => x)), ((x => x)), 10);
 >g : number
@@ -195,8 +195,8 @@ var g = fun(((x => x)), ((x => x)), 10);
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 var h = fun((((x => x))), ((x => x)), 10);
 >h : number
@@ -227,8 +227,8 @@ var h = fun((((x => x))), ((x => x)), 10);
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 // Ternaries in parens
 var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);

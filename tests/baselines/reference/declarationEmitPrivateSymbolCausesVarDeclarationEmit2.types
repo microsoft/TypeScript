@@ -23,8 +23,8 @@ export class C {
 >    : ^^^^^^
 >x : unique symbol
 >  : ^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 
 === c.ts ===

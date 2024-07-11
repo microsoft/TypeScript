@@ -25,8 +25,8 @@ const o: { n: number, test?: (this: { n: number }) => void } = { n: 1 }
 >         : ^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 o.test = f
 >o.test = f : (this: { n: number; }) => void

@@ -24,8 +24,8 @@ Symbol count: 50,000
 >    : ^^^
 >key : string
 >    : ^^^^^^
->"key-attr" : "key-attr"
->           : ^^^^^^^^^^
+>"key-attr" : string
+>           : ^^^^^^
 >div : any
 >    : ^^^
 

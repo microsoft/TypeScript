@@ -12,18 +12,18 @@ foo(0, 1);
 >          : ^^^^
 >foo : (...a: number[]) => void
 >    : ^^^^ ^^        ^^^^^^^^^
->0 : 0
->  : ^
->1 : 1
->  : ^
+>0 : number
+>  : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 foo('foo'); 
 >foo('foo') : void
 >           : ^^^^
 >foo : (...a: number[]) => void
 >    : ^^^^ ^^        ^^^^^^^^^
->'foo' : "foo"
->      : ^^^^^
+>'foo' : string
+>      : ^^^^^^
 
 foo();
 >foo() : void
@@ -36,8 +36,8 @@ foo(1, 'bar');
 >              : ^^^^
 >foo : (...a: number[]) => void
 >    : ^^^^ ^^        ^^^^^^^^^
->1 : 1
->  : ^
->'bar' : "bar"
->      : ^^^^^
+>1 : number
+>  : ^^^^^^
+>'bar' : string
+>      : ^^^^^^
 

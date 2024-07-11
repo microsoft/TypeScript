@@ -42,14 +42,14 @@ var j = 32 as number|string;
 >  : ^^^^^^^^^^^^^^^
 >32 as number|string : string | number
 >                    : ^^^^^^^^^^^^^^^
->32 : 32
->   : ^^
+>32 : number
+>   : ^^^^^^
 
 j = '';
->j = '' : ""
->       : ^^
+>j = '' : string
+>       : ^^^^^^
 >j : string | number
 >  : ^^^^^^^^^^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 

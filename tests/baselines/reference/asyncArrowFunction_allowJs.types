@@ -8,8 +8,8 @@ const a = () => 0
 >  : ^^^^^^      
 >() => 0 : () => string
 >        : ^^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 // Error (good)
 /** @type {function(): string} */

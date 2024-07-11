@@ -19,10 +19,10 @@ foo `${function (x: number) { x = "bad"; } }`;
 >                                    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
->x = "bad" : "bad"
->          : ^^^^^
+>x = "bad" : string
+>          : ^^^^^^
 >x : number
 >  : ^^^^^^
->"bad" : "bad"
->      : ^^^^^
+>"bad" : string
+>      : ^^^^^^
 

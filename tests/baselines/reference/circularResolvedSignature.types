@@ -54,8 +54,8 @@ export function Component() {
         value: "string", // this should be a number
 >value : string
 >      : ^^^^^^
->"string" : "string"
->         : ^^^^^^^^
+>"string" : string
+>         : ^^^^^^
 
         foo: (arg) => setState(arg),
 >foo : (arg: any) => void

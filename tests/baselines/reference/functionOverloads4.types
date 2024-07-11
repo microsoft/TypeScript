@@ -8,6 +8,6 @@ function foo():number;
 function foo():string { return "a" }
 >foo : () => number
 >    : ^^^^^^      
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 

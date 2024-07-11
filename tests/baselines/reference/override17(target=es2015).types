@@ -10,8 +10,8 @@ class A {
 >   : ^^^^^^      
 
         return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
     }
 
     public m2(): number {
@@ -19,8 +19,8 @@ class A {
 >   : ^^^^^^      
 
         return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
     }
 
     public m3(): void {}
@@ -48,8 +48,8 @@ class B extends A {
 >   : ^^^^^^      
 
         return 30;
->30 : 30
->   : ^^
+>30 : number
+>   : ^^^^^^
     }
 
     override m3(): void {}

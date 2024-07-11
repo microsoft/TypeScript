@@ -88,8 +88,8 @@ export function HereIsTheError() {
             value={'s'}
 >value : string
 >      : ^^^^^^
->'s' : "s"
->    : ^^^
+>'s' : string
+>    : ^^^^^^
 
             onChange={val => console.log(val)} // <- this throws an error
 >onChange : (val: string | undefined) => void
@@ -131,8 +131,8 @@ ComponentWithUnion({
     value: 's',
 >value : string
 >      : ^^^^^^
->'s' : "s"
->    : ^^^
+>'s' : string
+>    : ^^^^^^
 
     onChange: val => console.log(val) // <- this works fine
 >onChange : (val: string | undefined) => void

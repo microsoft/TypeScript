@@ -68,8 +68,8 @@ export class A extends Class<A>("A")(
 >              : ^      ^^      ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Class : <Self>(identifier: string) => <Fields>(fields: Fields, annotations?: Schema<Self>) => Class<OutputFrom<Fields>>
 >      : ^    ^^          ^^      ^^^^^                                                                                 
->"A" : "A"
->    : ^^^
+>"A" : string
+>    : ^^^^^^
 
   { a: string },
 >{ a: string } : { a: () => Type<string>; }

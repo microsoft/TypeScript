@@ -101,8 +101,8 @@ g2.give(1);
 >   : ^^^^^^^^^^^^^^^^^^^^^
 >give : (value: number) => number
 >     : ^     ^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 const g3 = g(GenericNumberOrString);
 >g3 : GenericNumberOrString<string | number>
@@ -123,8 +123,8 @@ g3.give(1);
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >give : (value: string | number) => string | number
 >     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 g3.give('1');
 >g3.give('1') : string | number
@@ -135,8 +135,8 @@ g3.give('1');
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >give : (value: string | number) => string | number
 >     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'1' : "1"
->    : ^^^
+>'1' : string
+>    : ^^^^^^
 
 // repro from #35636
 class C<T> {}

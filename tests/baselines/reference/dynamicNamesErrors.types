@@ -140,16 +140,16 @@ export class ClassMemberVisibility {
 >    : ^^^^^^      
 >y : unique symbol
 >  : ^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     static get [z](): number { return 0; }
 >[z] : number
 >    : ^^^^^^
 >z : unique symbol
 >  : ^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     static set [w](value: number) { }
 >[w] : number
@@ -170,16 +170,16 @@ export class ClassMemberVisibility {
 >    : ^^^^^^      
 >y : unique symbol
 >  : ^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     get [z](): number { return 0; }
 >[z] : number
 >    : ^^^^^^
 >z : unique symbol
 >  : ^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     set [w](value: number) { }
 >[w] : number
@@ -227,16 +227,16 @@ export const ObjectLiteralVisibility = {
 >    : ^^^^^^      
 >y : unique symbol
 >  : ^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     get [z](): number { return 0; },
 >[z] : number
 >    : ^^^^^^
 >z : unique symbol
 >  : ^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     set [w](value: number) { },
 >[w] : number

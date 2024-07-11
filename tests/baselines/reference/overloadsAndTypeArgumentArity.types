@@ -30,13 +30,13 @@ Callbacks<number, string, boolean>('s'); // no error
 >                                        : ^^^^
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
 >          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^  ^^  ^^  ^^     ^^^      ^^^    ^^^
->'s' : "s"
->    : ^^^
+>'s' : string
+>    : ^^^^^^
 
 new Callbacks<number, string, boolean>('s'); // no error
 >new Callbacks<number, string, boolean>('s') : any
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
 >          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^  ^^  ^^  ^^     ^^^      ^^^    ^^^
->'s' : "s"
->    : ^^^
+>'s' : string
+>    : ^^^^^^
 

@@ -72,14 +72,14 @@ const state: State = {
         b: "",
 >b : string
 >  : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
         c: 0,
 >c : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     },
     d: false,
@@ -105,6 +105,6 @@ const newState: State = set(state, ["a", 'b'], 'why'); // shouldn't be an error
 >    : ^^^
 >'b' : "b"
 >    : ^^^
->'why' : "why"
->      : ^^^^^
+>'why' : string
+>      : ^^^^^^
 

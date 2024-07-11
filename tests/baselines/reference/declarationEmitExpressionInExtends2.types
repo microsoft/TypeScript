@@ -32,6 +32,6 @@ class MyClass extends getClass(2) <string, number> {
 >            : ^^^^^^^^^^^^^^^^^
 >getClass : <T>(c: T) => typeof C
 >         : ^ ^^ ^^ ^^^^^^^^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 }

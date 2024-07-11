@@ -10,8 +10,8 @@ export const cls = class {
     foo: string = "";
 >foo : string
 >    : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 }
 
 

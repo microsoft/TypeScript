@@ -922,10 +922,10 @@ const p1 = new Point(10, 20);
 >                  : ^^^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 const p2 = newPoint(10, 20);
 >p2 : Point
@@ -934,10 +934,10 @@ const p2 = newPoint(10, 20);
 >                 : ^^^^^
 >newPoint : (x: number, y: number) => Point
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
 const bag1 = new Bag(1, 2, 3);
 >bag1 : Bag<number>
@@ -946,12 +946,12 @@ const bag1 = new Bag(1, 2, 3);
 >                 : ^^^^^^^^^^^
 >Bag : typeof Bag
 >    : ^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 const bag2 = newBag('a', 'b', 'c');
 >bag2 : Bag<string>
@@ -960,12 +960,12 @@ const bag2 = newBag('a', 'b', 'c');
 >                      : ^^^^^^^^^^^
 >newBag : <T>(...args: T[]) => Bag<T>
 >       : ^ ^^^^^    ^^^^^^^^^^^^^^^^
->'a' : "a"
->    : ^^^
->'b' : "b"
->    : ^^^
->'c' : "c"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
+>'b' : string
+>    : ^^^^^^
+>'c' : string
+>    : ^^^^^^
 
 declare class Comp<P> {
 >Comp : Comp<P>
@@ -1244,8 +1244,8 @@ const arr: string[] = map(identityStr)(['a']);
 >            : ^ ^^      ^^^^^^^^^^^
 >['a'] : string[]
 >      : ^^^^^^^^
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
 
 const arr1: string[] = map(identity)(['a']);
 >arr1 : string[]
@@ -1260,8 +1260,8 @@ const arr1: string[] = map(identity)(['a']);
 >         : ^ ^^     ^^ ^^^^^ 
 >['a'] : string[]
 >      : ^^^^^^^^
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
 
 // #9949
 
@@ -1359,8 +1359,8 @@ const fn20 = pipe((_a?: {}) => 1);
 >               : ^  ^^^  ^^^^^^^^^^^
 >_a : {} | undefined
 >   : ^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 // #29904.3
 
@@ -1415,8 +1415,8 @@ const promise = Promise.resolve(1);
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 promise.then(
 >promise.then(    pipe(        x => x + 1,        x => x * 2,    ),) : Promise<number>
@@ -1638,8 +1638,8 @@ foo2(identity, 1);
 >     : ^ ^^ ^^^^^^  ^^ ^^ ^^^ ^^ ^^^ ^^^^^      
 >identity : <T>(value: T) => T
 >         : ^ ^^     ^^ ^^^^^ 
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 // Repro from #30324
 
@@ -1664,6 +1664,6 @@ const a2 = times(identity)(5); // => [0, 1, 2, 3, 4]
 >      : ^ ^^  ^^                ^^^^^                  
 >identity : <T>(value: T) => T
 >         : ^ ^^     ^^ ^^^^^ 
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 

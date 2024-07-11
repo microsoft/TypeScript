@@ -16,8 +16,8 @@ var z: { x: number; y: (w:string)=>number;} = {
     x: 12,
 >x : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
     y: function(w) {
 >y : (w: string) => number
@@ -28,8 +28,8 @@ var z: { x: number; y: (w:string)=>number;} = {
 >  : ^^^^^^
 
         return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     }
 

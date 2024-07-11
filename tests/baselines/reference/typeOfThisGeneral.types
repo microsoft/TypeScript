@@ -30,16 +30,16 @@ class MyTestClass {
 >  : ^^^^^^
 
         this.canary = 3;
->this.canary = 3 : 3
->                : ^
+>this.canary = 3 : number
+>                : ^^^^^^
 >this.canary : number
 >            : ^^^^^^
 >this : this
 >     : ^^^^
 >canary : number
 >       : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
     }
 
     //type of 'this' in member function param list is the class instance type
@@ -296,16 +296,16 @@ class MyGenericTestClass<T, U> {
 >  : ^^^^^^
 
         this.canary = 3;
->this.canary = 3 : 3
->                : ^
+>this.canary = 3 : number
+>                : ^^^^^^
 >this.canary : number
 >            : ^^^^^^
 >this : this
 >     : ^^^^
 >canary : number
 >       : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
     }
 
     //type of 'this' in member function param list is the class instance type

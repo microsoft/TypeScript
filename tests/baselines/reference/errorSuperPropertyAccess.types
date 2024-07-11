@@ -212,16 +212,16 @@ class SomeDerived1 extends SomeBase {
 >      : ^^^^^^^^^^^^^^^
 
         super.publicMember = 1;
->super.publicMember = 1 : 1
->                       : ^
+>super.publicMember = 1 : number
+>                       : ^^^^^^
 >super.publicMember : number
 >                   : ^^^^^^
 >super : SomeBase
 >      : ^^^^^^^^
 >publicMember : number
 >             : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 
     fn() {
@@ -333,16 +333,16 @@ class SomeDerived2 extends SomeBase {
 >      : ^^^^^^^^^^^^^^^
 
         super.privateMember = 1;
->super.privateMember = 1 : 1
->                        : ^
+>super.privateMember = 1 : number
+>                        : ^^^^^^
 >super.privateMember : number
 >                    : ^^^^^^
 >super : SomeBase
 >      : ^^^^^^^^
 >privateMember : number
 >              : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 
     fn() {
@@ -413,28 +413,28 @@ class SomeDerived3 extends SomeBase {
 >   : ^^^^^^^^^^
 
         super.publicStaticMember = 3;
->super.publicStaticMember = 3 : 3
->                             : ^
+>super.publicStaticMember = 3 : number
+>                             : ^^^^^^
 >super.publicStaticMember : number
 >                         : ^^^^^^
 >super : typeof SomeBase
 >      : ^^^^^^^^^^^^^^^
 >publicStaticMember : number
 >                   : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         super.privateStaticMember = 3;
->super.privateStaticMember = 3 : 3
->                              : ^
+>super.privateStaticMember = 3 : number
+>                              : ^^^^^^
 >super.privateStaticMember : number
 >                          : ^^^^^^
 >super : typeof SomeBase
 >      : ^^^^^^^^^^^^^^^
 >privateStaticMember : number
 >                    : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         super.privateStaticFunc();
 >super.privateStaticFunc() : void
@@ -451,28 +451,28 @@ class SomeDerived3 extends SomeBase {
 >  : ^^^^^^
 
         super.publicStaticMember = 3;
->super.publicStaticMember = 3 : 3
->                             : ^
+>super.publicStaticMember = 3 : number
+>                             : ^^^^^^
 >super.publicStaticMember : number
 >                         : ^^^^^^
 >super : typeof SomeBase
 >      : ^^^^^^^^^^^^^^^
 >publicStaticMember : number
 >                   : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         super.privateStaticMember = 3;
->super.privateStaticMember = 3 : 3
->                              : ^
+>super.privateStaticMember = 3 : number
+>                              : ^^^^^^
 >super.privateStaticMember : number
 >                          : ^^^^^^
 >super : typeof SomeBase
 >      : ^^^^^^^^^^^^^^^
 >privateStaticMember : number
 >                    : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         super.privateStaticFunc();
 >super.privateStaticFunc() : void
@@ -495,28 +495,28 @@ class SomeDerived3 extends SomeBase {
 >  : ^^^^^^
 
         super.publicStaticMember = 3;
->super.publicStaticMember = 3 : 3
->                             : ^
+>super.publicStaticMember = 3 : number
+>                             : ^^^^^^
 >super.publicStaticMember : number
 >                         : ^^^^^^
 >super : typeof SomeBase
 >      : ^^^^^^^^^^^^^^^
 >publicStaticMember : number
 >                   : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         super.privateStaticMember = 3;
->super.privateStaticMember = 3 : 3
->                              : ^
+>super.privateStaticMember = 3 : number
+>                              : ^^^^^^
 >super.privateStaticMember : number
 >                          : ^^^^^^
 >super : typeof SomeBase
 >      : ^^^^^^^^^^^^^^^
 >privateStaticMember : number
 >                    : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         super.privateStaticFunc();
 >super.privateStaticFunc() : void

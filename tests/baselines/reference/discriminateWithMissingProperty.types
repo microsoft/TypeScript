@@ -53,6 +53,6 @@ foo({ mode: "numeric", data: new Uint8Array([30]) }); // Should error
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >[30] : number[]
 >     : ^^^^^^^^
->30 : 30
->   : ^^
+>30 : number
+>   : ^^^^^^
 

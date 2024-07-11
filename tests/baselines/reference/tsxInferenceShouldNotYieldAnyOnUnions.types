@@ -48,8 +48,8 @@ ShouldInferFromData({ data: "1" });
 >              : ^^^^^^^^^^^^^^^^^
 >data : string
 >     : ^^^^^^
->"1" : "1"
->    : ^^^
+>"1" : string
+>    : ^^^^^^
 
 ShouldInferFromData({ data: "1", convert: n => "" + n });
 >ShouldInferFromData({ data: "1", convert: n => "" + n }) : JSX.Element
@@ -60,8 +60,8 @@ ShouldInferFromData({ data: "1", convert: n => "" + n });
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >data : string
 >     : ^^^^^^
->"1" : "1"
->    : ^^^
+>"1" : string
+>    : ^^^^^^
 >convert : (n: string) => string
 >        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => "" + n : (n: string) => string
@@ -84,8 +84,8 @@ ShouldInferFromData({ data: 2, convert: n => "" + n });
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >data : number
 >     : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >convert : (n: number) => string
 >        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => "" + n : (n: number) => string
@@ -109,8 +109,8 @@ const f1 = <ShouldInferFromData data={"1"} />;
 >                    : ^ ^^     ^^        ^^^^^           
 >data : string
 >     : ^^^^^^
->"1" : "1"
->    : ^^^
+>"1" : string
+>    : ^^^^^^
 
 const f2 = <ShouldInferFromData data={"1"} convert={n => "" + n} />;
 >f2 : JSX.Element
@@ -121,8 +121,8 @@ const f2 = <ShouldInferFromData data={"1"} convert={n => "" + n} />;
 >                    : ^ ^^     ^^        ^^^^^           
 >data : string
 >     : ^^^^^^
->"1" : "1"
->    : ^^^
+>"1" : string
+>    : ^^^^^^
 >convert : (n: string) => string
 >        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => "" + n : (n: string) => string
@@ -145,8 +145,8 @@ const f3 = <ShouldInferFromData data={2} convert={n => "" + n} />;
 >                    : ^ ^^     ^^        ^^^^^           
 >data : number
 >     : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >convert : (n: number) => string
 >        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => "" + n : (n: number) => string

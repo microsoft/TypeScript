@@ -30,8 +30,8 @@ greet("Hello");
 >               : ^^^^^^
 >greet : (greeting: string) => number
 >      : ^        ^^      ^^^^^      
->"Hello" : "Hello"
->        : ^^^^^^^
+>"Hello" : string
+>        : ^^^^^^
 
 var incrGreetings = () => greetings++;
 >incrGreetings : () => number

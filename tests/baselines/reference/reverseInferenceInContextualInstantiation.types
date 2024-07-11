@@ -8,8 +8,8 @@ function compare<T>(a: T, b: T): number { return 0; }
 >  : ^
 >b : T
 >  : ^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 var x: number[];
 >x : number[]

@@ -16,12 +16,12 @@ String.raw({ raw: ["foo", "bar", "baz"] }, 1, 2);
 >    : ^^^^^^^^
 >["foo", "bar", "baz"] : string[]
 >                      : ^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
->"bar" : "bar"
->      : ^^^^^
->"baz" : "baz"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
+>"bar" : string
+>      : ^^^^^^
+>"baz" : string
+>      : ^^^^^^
 >1 : 1
 >  : ^
 >2 : 2

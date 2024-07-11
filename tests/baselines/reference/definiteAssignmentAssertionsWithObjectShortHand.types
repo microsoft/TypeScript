@@ -4,8 +4,8 @@
 const a: string | undefined = 'ff';
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->'ff' : "ff"
->     : ^^^^
+>'ff' : string
+>     : ^^^^^^
 
 const foo = { a! }
 >foo : { a: string; }

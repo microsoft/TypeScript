@@ -88,8 +88,8 @@ const myExtendedClass = new MyExtendedClass('string');
 >                              : ^^^^^^^^^^^^^^^
 >MyExtendedClass : typeof MyExtendedClass
 >                : ^^^^^^^^^^^^^^^^^^^^^^
->'string' : "string"
->         : ^^^^^^^^
+>'string' : string
+>         : ^^^^^^
 
 const AnotherMixedClass = MyMixin(MyExtendedClass);
 >AnotherMixedClass : typeof MyExtendedClass & import("BaseClass").Constructor<MyMixin>

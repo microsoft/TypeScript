@@ -36,8 +36,8 @@ export function removeClass (node:HTMLElement, className:string) {
 >                 : ^^^
 >className : string
 >          : ^^^^^^
->function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	} : (everything: string, leftDelimiter: any, name: any, rightDelimiter: any) => " " | ""
->                                                                                                                                      : ^          ^^^^^^^^^^             ^^^^^^^    ^^^^^^^              ^^^^^^^^^^^^^^^^^^
+>function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	} : (everything: string, leftDelimiter: any, name: any, rightDelimiter: any) => string
+>                                                                                                                                      : ^          ^^^^^^^^^^             ^^^^^^^    ^^^^^^^              ^^^^^^^^^^^^^^^^
 >everything : string
 >           : ^^^^^^
 >leftDelimiter : any
@@ -48,8 +48,8 @@ export function removeClass (node:HTMLElement, className:string) {
 >               : ^^^
 
 		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';
->leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '' : "" | " "
->                                                              : ^^^^^^^^
+>leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '' : string
+>                                                              : ^^^^^^
 >leftDelimiter.length + rightDelimiter.length === 2 : boolean
 >                                                   : ^^^^^^^
 >leftDelimiter.length + rightDelimiter.length : any
@@ -68,10 +68,10 @@ export function removeClass (node:HTMLElement, className:string) {
 >       : ^^^
 >2 : 2
 >  : ^
->' ' : " "
->    : ^^^
->'' : ""
->   : ^^
+>' ' : string
+>    : ^^^^^^
+>'' : string
+>   : ^^^^^^
 
 	});
 }

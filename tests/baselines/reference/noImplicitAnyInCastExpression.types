@@ -34,8 +34,8 @@ interface IFoo {
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 >b : undefined
 >  : ^^^^^^^^^
 >undefined : undefined

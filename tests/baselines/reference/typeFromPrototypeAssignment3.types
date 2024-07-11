@@ -79,6 +79,6 @@ const n = map.get('hi')
 >    : ^^^^^^^^^
 >get : (key: string) => number
 >    : ^   ^^      ^^^^^      
->'hi' : "hi"
->     : ^^^^
+>'hi' : string
+>     : ^^^^^^
 

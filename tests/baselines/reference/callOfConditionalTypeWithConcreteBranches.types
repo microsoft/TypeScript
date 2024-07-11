@@ -20,8 +20,8 @@ function fn<T>(arg: Q<T>) {
 >        : ^^^^
 >arg : Q<T>
 >    : ^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 }
 // Legal invocations are not problematic
 fn<string | number>(m => m.toFixed());
@@ -124,8 +124,8 @@ fn2<string | number>(m => m(42));
 >      : ^^^^
 >m : (n: number) => void
 >  : ^ ^^^^^^^^^^^^^    
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 fn2<number>(m => m(42));
 >fn2<number>(m => m(42)) : void
@@ -140,8 +140,8 @@ fn2<number>(m => m(42));
 >      : ^^^^
 >m : (n: number) => void
 >  : ^ ^^^^^^^^^^^^^    
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 // webidl-conversions example where substituion must occur, despite contravariance of the position
 // due to the invariant usage in `Parameters`

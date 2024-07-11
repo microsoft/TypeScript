@@ -12,8 +12,8 @@ var s = Symbol.for("multiply");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"multiply" : "multiply"
->           : ^^^^^^^^^^
+>"multiply" : string
+>           : ^^^^^^
 
 s * s;
 >s * s : number

@@ -61,34 +61,34 @@ class D1 extends getBase() {
 >                    : ^^^^
 >super : BaseConstructor
 >      : ^^^^^^^^^^^^^^^
->"abc" : "abc"
->      : ^^^^^
->"def" : "def"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
+>"def" : string
+>      : ^^^^^^
 
         this.x = "x";
->this.x = "x" : "x"
->             : ^^^
+>this.x = "x" : string
+>             : ^^^^^^
 >this.x : string
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : string
 >  : ^^^^^^
->"x" : "x"
->    : ^^^
+>"x" : string
+>    : ^^^^^^
 
         this.y = "y";
->this.y = "y" : "y"
->             : ^^^
+>this.y = "y" : string
+>             : ^^^^^^
 >this.y : string
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >y : string
 >  : ^^^^^^
->"y" : "y"
->    : ^^^
+>"y" : string
+>    : ^^^^^^
     }
 }
 
@@ -106,42 +106,42 @@ class D2 extends getBase() <number> {
 >          : ^^^^
 >super : BaseConstructor
 >      : ^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
         super(10, 20);
 >super(10, 20) : void
 >              : ^^^^
 >super : BaseConstructor
 >      : ^^^^^^^^^^^^^^^
->10 : 10
->   : ^^
->20 : 20
->   : ^^
+>10 : number
+>   : ^^^^^^
+>20 : number
+>   : ^^^^^^
 
         this.x = 1;
->this.x = 1 : 1
->           : ^
+>this.x = 1 : number
+>           : ^^^^^^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         this.y = 2;
->this.y = 2 : 2
->           : ^
+>this.y = 2 : number
+>           : ^^^^^^
 >this.y : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >y : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
     }
 }
 
@@ -159,34 +159,34 @@ class D3 extends getBase() <string, number> {
 >                 : ^^^^
 >super : BaseConstructor
 >      : ^^^^^^^^^^^^^^^
->"abc" : "abc"
->      : ^^^^^
->42 : 42
->   : ^^
+>"abc" : string
+>      : ^^^^^^
+>42 : number
+>   : ^^^^^^
 
         this.x = "x";
->this.x = "x" : "x"
->             : ^^^
+>this.x = "x" : string
+>             : ^^^^^^
 >this.x : string
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : string
 >  : ^^^^^^
->"x" : "x"
->    : ^^^
+>"x" : string
+>    : ^^^^^^
 
         this.y = 2;
->this.y = 2 : 2
->           : ^
+>this.y = 2 : number
+>           : ^^^^^^
 >this.y : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >y : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
     }
 }
 

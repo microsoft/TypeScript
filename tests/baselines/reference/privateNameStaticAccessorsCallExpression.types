@@ -10,14 +10,14 @@ class A {
 >           : ^^^^^^^^^^
 >function() { A.#x = 10; } : () => void
 >                          : ^^^^^^^^^^
->A.#x = 10 : 10
->          : ^^
+>A.#x = 10 : number
+>          : ^^^^^^
 >A.#x : number
 >     : ^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     static get #fieldFunc2() { return  function(a, ...b) {}; }
 >#fieldFunc2 : (a: any, ...b: any[]) => void

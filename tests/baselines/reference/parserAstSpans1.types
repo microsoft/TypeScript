@@ -477,8 +477,8 @@ class c3 extends c2 {
 >          : ^^^^
 >super : typeof c2
 >      : ^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
         this.p1 = super.c2_p1;
 >this.p1 = super.c2_p1 : number
@@ -539,8 +539,8 @@ var c2_i = new c2(10);
 >           : ^^
 >c2 : typeof c2
 >   : ^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 var c3_i = new c3();
 >c3_i : c3
@@ -692,8 +692,8 @@ var c4_i = new c4(10);
 >           : ^^
 >c4 : typeof c4
 >   : ^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 interface i2 {
     /** i2_p1*/

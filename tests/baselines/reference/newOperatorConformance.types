@@ -131,8 +131,8 @@ function newFn2<T extends { new (s: number): string}>(s: T) {
 >          : ^^^^^^
 >s : T
 >  : ^
->32 : 32
->   : ^^
+>32 : number
+>   : ^^^^^^
 
     var p: string;
 >p : string

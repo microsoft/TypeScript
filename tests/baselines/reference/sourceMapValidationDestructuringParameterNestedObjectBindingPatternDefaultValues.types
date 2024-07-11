@@ -37,19 +37,19 @@ var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "no
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"mower" : "mower"
->        : ^^^^^^^
+>"mower" : string
+>        : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"mowing" : "mowing"
->         : ^^^^^^^^
+>"mowing" : string
+>         : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"none" : "none"
+>"none" : string
 >       : ^^^^^^
 
 function foo1(
@@ -65,28 +65,28 @@ function foo1(
 >        : ^^^
 >primaryA : string
 >         : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 
             secondary: secondaryA = "secondary"
 >secondary : any
 >          : ^^^
 >secondaryA : string
 >           : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
         } = { primary: "SomeSkill", secondary: "someSkill" }
 >{ primary: "SomeSkill", secondary: "someSkill" } : { primary: string; secondary: string; }
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"SomeSkill" : "SomeSkill"
->            : ^^^^^^^^^^^
+>"SomeSkill" : string
+>            : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"someSkill" : "someSkill"
->            : ^^^^^^^^^^^
+>"someSkill" : string
+>            : ^^^^^^
 
     }: Robot = robotA) {
 >robotA : Robot
@@ -113,7 +113,7 @@ function foo2(
 >     : ^^^
 >nameC : string
 >      : ^^^^^^
->"name" : "name"
+>"name" : string
 >       : ^^^^^^
 
         skills: {
@@ -125,28 +125,28 @@ function foo2(
 >        : ^^^
 >primaryB : string
 >         : ^^^^^^
->"primary" : "primary"
->          : ^^^^^^^^^
+>"primary" : string
+>          : ^^^^^^
 
             secondary: secondaryB = "secondary"
 >secondary : any
 >          : ^^^
 >secondaryB : string
 >           : ^^^^^^
->"secondary" : "secondary"
->            : ^^^^^^^^^^^
+>"secondary" : string
+>            : ^^^^^^
 
         } = { primary: "SomeSkill", secondary: "someSkill" }
 >{ primary: "SomeSkill", secondary: "someSkill" } : { primary: string; secondary: string; }
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"SomeSkill" : "SomeSkill"
->            : ^^^^^^^^^^^
+>"SomeSkill" : string
+>            : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"someSkill" : "someSkill"
->            : ^^^^^^^^^^^
+>"someSkill" : string
+>            : ^^^^^^
 
     }: Robot = robotA) {
 >robotA : Robot
@@ -173,12 +173,12 @@ function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Ro
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"SomeSkill" : "SomeSkill"
->            : ^^^^^^^^^^^
+>"SomeSkill" : string
+>            : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"someSkill" : "someSkill"
->            : ^^^^^^^^^^^
+>"someSkill" : string
+>            : ^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -216,20 +216,20 @@ foo1({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" 
 >                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"Edger" : "Edger"
->        : ^^^^^^^
+>"Edger" : string
+>        : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "edging", secondary: "branch trimming" } : { primary: string; secondary: string; }
 >                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"edging" : string
+>         : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"branch trimming" : "branch trimming"
->                  : ^^^^^^^^^^^^^^^^^
+>"branch trimming" : string
+>                  : ^^^^^^
 
 foo2(robotA);
 >foo2(robotA) : void
@@ -248,20 +248,20 @@ foo2({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" 
 >                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"Edger" : "Edger"
->        : ^^^^^^^
+>"Edger" : string
+>        : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "edging", secondary: "branch trimming" } : { primary: string; secondary: string; }
 >                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"edging" : string
+>         : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"branch trimming" : "branch trimming"
->                  : ^^^^^^^^^^^^^^^^^
+>"branch trimming" : string
+>                  : ^^^^^^
 
 foo3(robotA);
 >foo3(robotA) : void
@@ -280,18 +280,18 @@ foo3({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" 
 >                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"Edger" : "Edger"
->        : ^^^^^^^
+>"Edger" : string
+>        : ^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "edging", secondary: "branch trimming" } : { primary: string; secondary: string; }
 >                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"edging" : "edging"
->         : ^^^^^^^^
+>"edging" : string
+>         : ^^^^^^
 >secondary : string
 >          : ^^^^^^
->"branch trimming" : "branch trimming"
->                  : ^^^^^^^^^^^^^^^^^
+>"branch trimming" : string
+>                  : ^^^^^^
 

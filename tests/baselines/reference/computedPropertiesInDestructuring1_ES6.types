@@ -225,8 +225,8 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 >             : ^^^^^^^^^^^^^^^^
 >bar : string
 >    : ^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 
 ({[foo2()]: bar3} = {bar: "bar"});
 >({[foo2()]: bar3} = {bar: "bar"}) : { bar: string; }

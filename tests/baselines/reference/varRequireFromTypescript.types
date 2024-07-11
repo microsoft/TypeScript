@@ -22,8 +22,8 @@ var crunch = new ex.Crunch(1);
 >   : ^^^^^^^^^
 >Crunch : typeof ex.Crunch
 >       : ^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 crunch.n
 >crunch.n : number

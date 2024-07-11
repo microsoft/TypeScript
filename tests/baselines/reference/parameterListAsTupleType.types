@@ -40,8 +40,8 @@ const a: Xps = ['should-not-work']; // works, but shouldn't
 >  : ^^^^^^^^^^^
 >['should-not-work'] : [string]
 >                    : ^^^^^^^^
->'should-not-work' : "should-not-work"
->                  : ^^^^^^^^^^^^^^^^^
+>'should-not-work' : string
+>                  : ^^^^^^
 
 function t(...args: Xps) {} // should work
 >t : (a: number) => void

@@ -36,8 +36,8 @@ module c {
 >      : ^^^^^^
 >b : (x: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
     export var bVal2 = b;
 >bVal2 : (x: number) => number

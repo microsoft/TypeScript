@@ -277,8 +277,8 @@ const b6 = <MainButton {...{ onClick(e: any){} }} children={10} />;  // incorrec
 >  : ^^^
 >children : number
 >         : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
 const b7 = <MainButton {...{ onClick(e: any){} }} children="hello" className />;  // incorrect type for optional attribute
 >b7 : JSX.Element

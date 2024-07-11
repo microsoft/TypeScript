@@ -61,8 +61,8 @@ TestComponent({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test lab
 >        : ^^^^^^^
 >ariaLabel : string
 >          : ^^^^^^
->'test label' : "test label"
->             : ^^^^^^^^^^^^
+>'test label' : string
+>             : ^^^^^^
 
 const TestComponent2: StatelessComponent<TestProps | {props2: {x: number}}> = (props) => {
 >TestComponent2 : StatelessComponent<TestProps | { props2: { x: number; }; }>
@@ -100,6 +100,6 @@ TestComponent2({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test la
 >        : ^^^^^^^
 >ariaLabel : string
 >          : ^^^^^^
->'test label' : "test label"
->             : ^^^^^^^^^^^^
+>'test label' : string
+>             : ^^^^^^
 

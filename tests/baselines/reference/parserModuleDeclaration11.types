@@ -20,8 +20,8 @@ string.foo("abc");
 >       : ^^^^^^^^^^^^^
 >foo : (s: string) => any
 >    : ^ ^^      ^^^^^^^^
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 
 var x: string.X;
 >x : string.X

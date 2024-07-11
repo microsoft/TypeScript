@@ -376,15 +376,15 @@ export class BarCorrectlyFails extends Foo {
 >            : ^^^^
 >super : typeof Foo
 >      : ^^^^^^^^^^
->1337 : 1337
->     : ^^^^
+>1337 : number
+>     : ^^^^^^
         }
     }
     bar(): number { return 4; }
 >bar : () => number
 >    : ^^^^^^      
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 }
 
 export class BarIncorrectlyWorks extends Foo {
@@ -406,8 +406,8 @@ export class BarIncorrectlyWorks extends Foo {
 >            : ^^^^
 >super : typeof Foo
 >      : ^^^^^^^^^^
->1337 : 1337
->     : ^^^^
+>1337 : number
+>     : ^^^^^^
         }
         else {
             const value = this.bar();  // Error
@@ -434,7 +434,7 @@ export class BarIncorrectlyWorks extends Foo {
     bar(): number { return 4; }
 >bar : () => number
 >    : ^^^^^^      
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 }
 

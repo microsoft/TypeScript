@@ -3,35 +3,35 @@
 === typeSatisfaction_asConstArrays.ts ===
 // with readonly array
 const arr1 = [1, 2, 3] as const satisfies readonly unknown[]
->arr1 : readonly [1, 2, 3]
->     : ^^^^^^^^^^^^^^^^^^
->[1, 2, 3] as const satisfies readonly unknown[] : readonly [1, 2, 3]
->                                                : ^^^^^^^^^^^^^^^^^^
->[1, 2, 3] as const : readonly [1, 2, 3]
->                   : ^^^^^^^^^^^^^^^^^^
->[1, 2, 3] : readonly [1, 2, 3]
->          : ^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>arr1 : readonly [number, number, number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3] as const satisfies readonly unknown[] : readonly [number, number, number]
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3] as const : readonly [number, number, number]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3] : readonly [number, number, number]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 // with mutable array
 const arr2 = [1, 2, 3] as const satisfies unknown[]
->arr2 : [1, 2, 3]
->     : ^^^^^^^^^
->[1, 2, 3] as const satisfies unknown[] : [1, 2, 3]
->                                       : ^^^^^^^^^
->[1, 2, 3] as const : [1, 2, 3]
->                   : ^^^^^^^^^
->[1, 2, 3] : [1, 2, 3]
->          : ^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>arr2 : [number, number, number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3] as const satisfies unknown[] : [number, number, number]
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3] as const : [number, number, number]
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3] : [number, number, number]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 

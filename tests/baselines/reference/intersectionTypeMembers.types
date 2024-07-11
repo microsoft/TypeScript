@@ -21,40 +21,40 @@ var abc: A & B & C;
 >    : ^^^^^^^^^
 
 abc.a = "hello";
->abc.a = "hello" : "hello"
->                : ^^^^^^^
+>abc.a = "hello" : string
+>                : ^^^^^^
 >abc.a : string
 >      : ^^^^^^
 >abc : A & B & C
 >    : ^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 abc.b = "hello";
->abc.b = "hello" : "hello"
->                : ^^^^^^^
+>abc.b = "hello" : string
+>                : ^^^^^^
 >abc.b : string
 >      : ^^^^^^
 >abc : A & B & C
 >    : ^^^^^^^^^
 >b : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 abc.c = "hello";
->abc.c = "hello" : "hello"
->                : ^^^^^^^
+>abc.c = "hello" : string
+>                : ^^^^^^
 >abc.c : string
 >      : ^^^^^^
 >abc : A & B & C
 >    : ^^^^^^^^^
 >c : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 interface X { x: A }
 >x : A
@@ -73,8 +73,8 @@ var xyz: X & Y & Z;
 >    : ^^^^^^^^^
 
 xyz.x.a = "hello";
->xyz.x.a = "hello" : "hello"
->                  : ^^^^^^^
+>xyz.x.a = "hello" : string
+>                  : ^^^^^^
 >xyz.x.a : string
 >        : ^^^^^^
 >xyz.x : A & B & C
@@ -85,12 +85,12 @@ xyz.x.a = "hello";
 >  : ^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 xyz.x.b = "hello";
->xyz.x.b = "hello" : "hello"
->                  : ^^^^^^^
+>xyz.x.b = "hello" : string
+>                  : ^^^^^^
 >xyz.x.b : string
 >        : ^^^^^^
 >xyz.x : A & B & C
@@ -101,12 +101,12 @@ xyz.x.b = "hello";
 >  : ^^^^^^^^^
 >b : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 xyz.x.c = "hello";
->xyz.x.c = "hello" : "hello"
->                  : ^^^^^^^
+>xyz.x.c = "hello" : string
+>                  : ^^^^^^
 >xyz.x.c : string
 >        : ^^^^^^
 >xyz.x : A & B & C
@@ -117,8 +117,8 @@ xyz.x.c = "hello";
 >  : ^^^^^^^^^
 >c : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 type F1 = (x: string) => string;
 >F1 : F1
@@ -143,8 +143,8 @@ var s = f("hello");
 >           : ^^^^^^
 >f : F1 & F2
 >  : ^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 var n = f(42);
 >n : number
@@ -153,8 +153,8 @@ var n = f(42);
 >      : ^^^^^^
 >f : F1 & F2
 >  : ^^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 interface D {
     nested: { doublyNested: { d: string; }, different: { e: number } };
@@ -203,14 +203,14 @@ const de: D & E = {
             d: 'yes',
 >d : string
 >  : ^^^^^^
->'yes' : "yes"
->      : ^^^^^
+>'yes' : string
+>      : ^^^^^^
 
             f: 'no'
 >f : string
 >  : ^^^^^^
->'no' : "no"
->     : ^^^^
+>'no' : string
+>     : ^^^^^^
 
         },
         different: { e: 12 },
@@ -220,8 +220,8 @@ const de: D & E = {
 >          : ^^^^^^^^^^^^^^
 >e : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
         other: { g: 101 }
 >other : { g: number; }
@@ -230,8 +230,8 @@ const de: D & E = {
 >           : ^^^^^^^^^^^^^^
 >g : number
 >  : ^^^^^^
->101 : 101
->    : ^^^
+>101 : number
+>    : ^^^^^^
     }
 }
 
@@ -277,26 +277,26 @@ const defg: D & E & F & G = {
             d: 'yes',
 >d : string
 >  : ^^^^^^
->'yes' : "yes"
->      : ^^^^^
+>'yes' : string
+>      : ^^^^^^
 
             f: 'no',
 >f : string
 >  : ^^^^^^
->'no' : "no"
->     : ^^^^
+>'no' : string
+>     : ^^^^^^
 
             g: 'ok',
 >g : string
 >  : ^^^^^^
->'ok' : "ok"
->     : ^^^^
+>'ok' : string
+>     : ^^^^^^
 
             h: 'affirmative'
 >h : string
 >  : ^^^^^^
->'affirmative' : "affirmative"
->              : ^^^^^^^^^^^^^
+>'affirmative' : string
+>              : ^^^^^^
 
         },
         different: { e: 12 },
@@ -306,8 +306,8 @@ const defg: D & E & F & G = {
 >          : ^^^^^^^^^^^^^^
 >e : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
         other: { g: 101 }
 >other : { g: number; }
@@ -316,8 +316,8 @@ const defg: D & E & F & G = {
 >           : ^^^^^^^^^^^^^^
 >g : number
 >  : ^^^^^^
->101 : 101
->    : ^^^
+>101 : number
+>    : ^^^^^^
     }
 }
 

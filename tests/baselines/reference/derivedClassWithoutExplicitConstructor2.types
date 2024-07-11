@@ -74,8 +74,8 @@ var r2 = new Derived(1);
 >               : ^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 var r3 = new Derived(1, 2);
 >r3 : Derived
@@ -84,10 +84,10 @@ var r3 = new Derived(1, 2);
 >                  : ^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 var r4 = new Derived(1, 2, 3);
 >r4 : Derived
@@ -96,12 +96,12 @@ var r4 = new Derived(1, 2, 3);
 >                     : ^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 class Base2<T> {
 >Base2 : Base2<T>

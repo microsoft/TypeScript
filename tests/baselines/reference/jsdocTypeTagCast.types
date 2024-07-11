@@ -22,8 +22,8 @@ var W = /** @type {string} */(4); // Error
 >  : ^^^^^^
 >(4) : string
 >    : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
 /** @type {*} */
 var a;
@@ -128,16 +128,16 @@ function SomeFakeClass() {
 
     /** @type {string|number} */
     this.p = "bar";
->this.p = "bar" : "bar"
->               : ^^^^^
+>this.p = "bar" : string
+>               : ^^^^^^
 >this.p : string | number
 >       : ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >p : string | number
 >  : ^^^^^^^^^^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 }
 
 // Type assertion should check for assignability in either direction

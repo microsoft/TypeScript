@@ -722,14 +722,14 @@ async function mainFindMany() {
     select: "foo",
 >select : string
 >       : ^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 
     include: "bar",
 >include : string
 >        : ^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 
   });
   const itsOne = await findManyWrapper({});
@@ -757,8 +757,8 @@ async function mainFindMany() {
 >                  : ^^^^^^^^^^^^^^^^^^^
 >select : string
 >       : ^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 
   const itsTwo2 = await findManyWrapper({ include: "bar" });
 >itsTwo2 : 2
@@ -773,8 +773,8 @@ async function mainFindMany() {
 >                   : ^^^^^^^^^^^^^^^^^^^^
 >include : string
 >        : ^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 }
 
 // repro from #41831
@@ -795,8 +795,8 @@ async function mainFindMany() {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
   Promise.all(promises).then((results) => {
 >Promise.all(promises).then((results) => {    const first = results[0]    const second = results[1] // error  }) : Promise<void>
@@ -860,8 +860,8 @@ async function test40330() {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     const promiseVoid = async () => {}
 >promiseVoid : () => Promise<void>

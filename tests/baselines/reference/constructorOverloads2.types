@@ -61,8 +61,8 @@ var f1 = new Foo("hey");
 >               : ^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->"hey" : "hey"
->      : ^^^^^
+>"hey" : string
+>      : ^^^^^^
 
 var f2 = new Foo(0);
 >f2 : Foo
@@ -71,8 +71,8 @@ var f2 = new Foo(0);
 >           : ^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 var f3 = new Foo(f1);
 >f3 : Foo

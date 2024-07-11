@@ -11,8 +11,8 @@ const c1 = false;
 const c2: number = 23;
 >c2 : number
 >   : ^^^^^^
->23 : 23
->   : ^^
+>23 : number
+>   : ^^^^^^
 
 const c3 = 0, c4 :string = "", c5 = null;
 >c3 : 0
@@ -21,8 +21,8 @@ const c3 = 0, c4 :string = "", c5 = null;
 >  : ^
 >c4 : string
 >   : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 >c5 : any
 
 

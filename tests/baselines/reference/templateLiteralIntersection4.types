@@ -50,14 +50,14 @@ const { Provider, useUsername, useAge, useStore } = createStore({
   username: "Aral",
 >username : string
 >         : ^^^^^^
->"Aral" : "Aral"
+>"Aral" : string
 >       : ^^^^^^
 
   age: 31
 >age : number
 >    : ^^^^^^
->31 : 31
->   : ^^
+>31 : number
+>   : ^^^^^^
 
 });
 

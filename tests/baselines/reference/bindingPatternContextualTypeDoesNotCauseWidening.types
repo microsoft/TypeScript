@@ -24,12 +24,12 @@ const _    = pick(['b'], { a: 'a', b: 'b' }); // T: "b"
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
 >b : string
 >  : ^^^^^^
->'b' : "b"
->    : ^^^
+>'b' : string
+>    : ^^^^^^
 
 const {  } = pick(['b'], { a: 'a', b: 'b' }); // T: "b" | "a" ??? (before fix)
 >pick(['b'], { a: 'a', b: 'b' }) : Pick<{ a: string; b: string; }, "b">
@@ -44,10 +44,10 @@ const {  } = pick(['b'], { a: 'a', b: 'b' }); // T: "b" | "a" ??? (before fix)
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
 >b : string
 >  : ^^^^^^
->'b' : "b"
->    : ^^^
+>'b' : string
+>    : ^^^^^^
 

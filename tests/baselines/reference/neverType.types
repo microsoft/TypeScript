@@ -40,8 +40,8 @@ function fail() {
 >                          : ^^^^^
 >error : (message: string) => never
 >      : ^       ^^      ^^^^^     
->"Something failed" : "Something failed"
->                   : ^^^^^^^^^^^^^^^^^^
+>"Something failed" : string
+>                   : ^^^^^^
 }
 
 function failOrThrow(shouldFail: boolean) {
@@ -120,8 +120,8 @@ function move1(direction: "up" | "down") {
 >                               : ^^^^^
 >error : (message: string) => never
 >      : ^       ^^      ^^^^^     
->"Should never get here" : "Should never get here"
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>"Should never get here" : string
+>                        : ^^^^^^
 }
 
 function move2(direction: "up" | "down") {
@@ -161,8 +161,8 @@ function move2(direction: "up" | "down") {
 >                               : ^^^^^
 >error : (message: string) => never
 >      : ^       ^^      ^^^^^     
->"Should never get here" : "Should never get here"
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>"Should never get here" : string
+>                        : ^^^^^^
 }
 
 function check<T>(x: T | undefined) {
@@ -180,8 +180,8 @@ function check<T>(x: T | undefined) {
 >                         : ^^^^^
 >error : (message: string) => never
 >      : ^       ^^      ^^^^^     
->"Undefined value" : "Undefined value"
->                  : ^^^^^^^^^^^^^^^^^
+>"Undefined value" : string
+>                  : ^^^^^^
 }
 
 class C {
@@ -303,8 +303,8 @@ let errorCallback = () => error("Error callback");
 >                        : ^^^^^
 >error : (message: string) => never
 >      : ^       ^^      ^^^^^     
->"Error callback" : "Error callback"
->                 : ^^^^^^^^^^^^^^^^
+>"Error callback" : string
+>                 : ^^^^^^
 
 test(() => "hello");
 >test(() => "hello") : string
@@ -313,8 +313,8 @@ test(() => "hello");
 >     : ^  ^^            ^^^^^^^^^^^
 >() => "hello" : () => string
 >              : ^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 test(() => fail());
 >test(() => fail()) : string

@@ -168,16 +168,16 @@ function test(label: Label) {
 >           : ^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->67 : 67
->   : ^^
+>67 : number
+>   : ^^^^^^
 >extend : <T>(props: T) => Label & { id: number; } & T
 >       : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ tag: "hello" } : { tag: string; }
 >                 : ^^^^^^^^^^^^^^^^
 >tag : string
 >    : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
     extended.id;  // Ok
 >extended.id : number

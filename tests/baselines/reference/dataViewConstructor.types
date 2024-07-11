@@ -10,6 +10,6 @@ new DataView(new Uint8Array(32)); // should error
 >                   : ^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->32 : 32
->   : ^^
+>32 : number
+>   : ^^^^^^
 

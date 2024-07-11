@@ -12,16 +12,16 @@ class C {
     get X(): number { return 1; }
 >X : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     foo(): number {
 >foo : () => number
 >    : ^^^^^^      
 
         return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 
     static y: number;
@@ -33,16 +33,16 @@ class C {
 >  : ^^^^^^
 
         return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
     static bar(): number {
 >bar : () => number
 >    : ^^^^^^      
 
         return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 
@@ -103,16 +103,16 @@ class E extends D {
     get X(): string{ return ''; }
 >X : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     foo(): string {
 >foo : () => string
 >    : ^^^^^^      
 
         return '';
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
     }
 
     static y: string;
@@ -124,16 +124,16 @@ class E extends D {
 >  : ^^^^^^
 
         return '';
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
     }
     static bar(): string {
 >bar : () => string
 >    : ^^^^^^      
 
         return '';
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
     }
 }
 

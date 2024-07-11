@@ -146,8 +146,8 @@ const int8Array = new Int8Array(3);
 >                 : ^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 str = int8Array.toLocaleString(); // OK
 >str = int8Array.toLocaleString() : string
@@ -212,8 +212,8 @@ const uint8Array = new Uint8Array(3);
 >                  : ^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 str = uint8Array.toLocaleString(); // OK
 >str = uint8Array.toLocaleString() : string
@@ -278,8 +278,8 @@ const uint8ClampedArray = new Uint8ClampedArray(3);
 >                         : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 str = uint8ClampedArray.toLocaleString(); // OK
 >str = uint8ClampedArray.toLocaleString() : string
@@ -344,8 +344,8 @@ const int16Array = new Int16Array(3);
 >                  : ^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 str = int16Array.toLocaleString(); // OK
 >str = int16Array.toLocaleString() : string
@@ -410,8 +410,8 @@ const uint16Array = new Uint16Array(3);
 >                   : ^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 str = uint16Array.toLocaleString(); // OK
 >str = uint16Array.toLocaleString() : string
@@ -476,8 +476,8 @@ const int32Array = new Int32Array(3);
 >                  : ^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 str = int32Array.toLocaleString(); // OK
 >str = int32Array.toLocaleString() : string
@@ -542,8 +542,8 @@ const uint32Array = new Uint32Array(3);
 >                   : ^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 str = uint32Array.toLocaleString(); // OK
 >str = uint32Array.toLocaleString() : string
@@ -608,8 +608,8 @@ const float32Array = new Float32Array(3);
 >                    : ^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 str = float32Array.toLocaleString(); // OK
 >str = float32Array.toLocaleString() : string
@@ -674,8 +674,8 @@ const float64Array = new Float64Array(3);
 >                    : ^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 str = float64Array.toLocaleString(); // OK
 >str = float64Array.toLocaleString() : string

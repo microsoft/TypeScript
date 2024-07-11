@@ -25,16 +25,16 @@ foo(1);
 >       : ^^^^
 >foo : (n?: number | undefined, s?: string) => void
 >    : ^ ^^^         ^^^^^^^^^^^ ^^^      ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 foo(1, "hi");
 >foo(1, "hi") : void
 >             : ^^^^
 >foo : (n?: number | undefined, s?: string) => void
 >    : ^ ^^^         ^^^^^^^^^^^ ^^^      ^^^^^^^^^
->1 : 1
->  : ^
->"hi" : "hi"
->     : ^^^^
+>1 : number
+>  : ^^^^^^
+>"hi" : string
+>     : ^^^^^^
 

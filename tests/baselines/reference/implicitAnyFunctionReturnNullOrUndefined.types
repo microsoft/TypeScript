@@ -47,8 +47,8 @@ function bar1(): any { return undefined; }
 function fooBar(): number { return 1; }
 >fooBar : () => number
 >       : ^^^^^^      
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 function fooFoo() { return 5; }
 >fooFoo : () => number

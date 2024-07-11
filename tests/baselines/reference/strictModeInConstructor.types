@@ -17,8 +17,8 @@ class B extends A {
     public s: number = 9;
 >s : number
 >  : ^^^^^^
->9 : 9
->  : ^
+>9 : number
+>  : ^^^^^^
 
     constructor () {
         "use strict";   // No error
@@ -42,8 +42,8 @@ class C extends A {
     public s: number = 9;
 >s : number
 >  : ^^^^^^
->9 : 9
->  : ^
+>9 : number
+>  : ^^^^^^
 
     constructor () {
         super();            // No error
@@ -67,8 +67,8 @@ class D extends A {
     public s: number = 9;
 >s : number
 >  : ^^^^^^
->9 : 9
->  : ^
+>9 : number
+>  : ^^^^^^
 
     constructor () {
         var x = 1; // No error
@@ -108,8 +108,8 @@ class Bs extends A {
     public static s: number = 9;
 >s : number
 >  : ^^^^^^
->9 : 9
->  : ^
+>9 : number
+>  : ^^^^^^
 
     constructor () {
         "use strict";   // No error
@@ -133,8 +133,8 @@ class Cs extends A {
     public static s: number = 9;
 >s : number
 >  : ^^^^^^
->9 : 9
->  : ^
+>9 : number
+>  : ^^^^^^
 
     constructor () {
         super();            // No error
@@ -158,8 +158,8 @@ class Ds extends A {
     public static s: number = 9;
 >s : number
 >  : ^^^^^^
->9 : 9
->  : ^
+>9 : number
+>  : ^^^^^^
 
     constructor () {
         var x = 1; // no Error

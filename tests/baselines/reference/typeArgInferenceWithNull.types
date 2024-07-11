@@ -64,6 +64,6 @@ fn6({ x: null }, y => { }, { x: "" }); // y has type { x: any }, but ideally wou
 >          : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 

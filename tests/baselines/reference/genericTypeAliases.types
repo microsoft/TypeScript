@@ -78,7 +78,7 @@ ls = () => "lazy";
 >   : ^^^^^^^^^^^^
 >() => "lazy" : () => string
 >             : ^^^^^^^^^^^^
->"lazy" : "lazy"
+>"lazy" : string
 >       : ^^^^^^
 
 type Foo<T> = T | { x: Foo<T> };
@@ -203,12 +203,12 @@ var s: Strange<number>;
 >  : ^^^^^^
 
 s = "hello";
->s = "hello" : "hello"
->            : ^^^^^^^
+>s = "hello" : string
+>            : ^^^^^^
 >s : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 interface AB<A, B> {
     a: A;
@@ -235,31 +235,31 @@ var p: TaggedPair<number>;
 >  : ^^^^^^^^^^^^^^^^^^
 
 p.a = 1;
->p.a = 1 : 1
->        : ^
+>p.a = 1 : number
+>        : ^^^^^^
 >p.a : number
 >    : ^^^^^^
 >p : TaggedPair<number>
 >  : ^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 p.b = 2;
->p.b = 2 : 2
->        : ^
+>p.b = 2 : number
+>        : ^^^^^^
 >p.b : number
 >    : ^^^^^^
 >p : TaggedPair<number>
 >  : ^^^^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
 
 p.tag = "test";
->p.tag = "test" : "test"
+>p.tag = "test" : string
 >               : ^^^^^^
 >p.tag : string
 >      : ^^^^^^
@@ -267,7 +267,7 @@ p.tag = "test";
 >  : ^^^^^^^^^^^^^^^^^^
 >tag : string
 >    : ^^^^^^
->"test" : "test"
+>"test" : string
 >       : ^^^^^^
 
 function f<A>() {

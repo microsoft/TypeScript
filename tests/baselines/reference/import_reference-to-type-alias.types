@@ -51,8 +51,8 @@ export module App {
 >            : ^^^^^^      
 
                 return "Bill Gates";
->"Bill Gates" : "Bill Gates"
->             : ^^^^^^^^^^^^
+>"Bill Gates" : string
+>             : ^^^^^^
             }
         }
     }

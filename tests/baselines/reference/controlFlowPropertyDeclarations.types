@@ -405,8 +405,8 @@ export class HTMLtoJSX {
 >        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/\r/g : RegExp
 >      : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
         .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
@@ -452,8 +452,8 @@ export class HTMLtoJSX {
 >     : ^^^^^^
 >indexOf : (searchString: string, position?: number) => number
 >        : ^            ^^      ^^        ^^^      ^^^^^      
->'\n' : "\n"
->     : ^^^^
+>'\n' : string
+>     : ^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1

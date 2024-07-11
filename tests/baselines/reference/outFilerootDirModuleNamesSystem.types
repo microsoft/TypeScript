@@ -32,6 +32,6 @@ export default function foo() { new Foo(); }
 import("./a");
 >import("./a") : Promise<typeof import("src/a")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./a" : "./a"
->      : ^^^^^
+>"./a" : string
+>      : ^^^^^^
 

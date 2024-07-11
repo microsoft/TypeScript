@@ -44,8 +44,8 @@ module clodule {
 >        : ^^^^^^^^^^^^^^
 >sfn : (id: string) => number
 >    : ^  ^^      ^^^^^^^^^^^
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
     }
 }
 

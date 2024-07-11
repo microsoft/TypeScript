@@ -24,6 +24,6 @@ function foo(bar:{a:any;}): string {return ""}
 >    : ^^^^^   ^^^
 >a : any
 >  : ^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 

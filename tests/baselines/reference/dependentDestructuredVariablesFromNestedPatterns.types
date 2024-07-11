@@ -168,8 +168,8 @@ async function test3() {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >Promise.reject(1) : Promise<never>
 >                  : ^^^^^^^^^^^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>

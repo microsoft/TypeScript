@@ -15,8 +15,8 @@ class C {
     static barBack:string = "";
 >barBack : string
 >        : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     public bazBack = "";
 >bazBack : string
@@ -108,7 +108,7 @@ var foo = c.Foo;
 >    : ^^^^^^
 
 c.Foo = "foov";
->c.Foo = "foov" : "foov"
+>c.Foo = "foov" : string
 >               : ^^^^^^
 >c.Foo : string
 >      : ^^^^^^
@@ -116,7 +116,7 @@ c.Foo = "foov";
 >  : ^
 >Foo : string
 >    : ^^^^^^
->"foov" : "foov"
+>"foov" : string
 >       : ^^^^^^
 
 var bar = C.Bar;
@@ -130,7 +130,7 @@ var bar = C.Bar;
 >    : ^^^^^^
 
 C.Bar = "barv";
->C.Bar = "barv" : "barv"
+>C.Bar = "barv" : string
 >               : ^^^^^^
 >C.Bar : string
 >      : ^^^^^^
@@ -138,7 +138,7 @@ C.Bar = "barv";
 >  : ^^^^^^^^
 >Bar : string
 >    : ^^^^^^
->"barv" : "barv"
+>"barv" : string
 >       : ^^^^^^
 
 var baz = c.Baz;
@@ -173,8 +173,8 @@ var o : {Foo:number;} = {get Foo() {return 0;}, set Foo(val:number){val}}; // o
 >                                                  : ^^^^^^^^^^^^^^^^
 >Foo : number
 >    : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >Foo : number
 >    : ^^^^^^
 >val : number
@@ -193,16 +193,16 @@ var ofg = o.Foo;
 >    : ^^^^^^
 
 o.Foo = 0;
->o.Foo = 0 : 0
->          : ^
+>o.Foo = 0 : number
+>          : ^^^^^^
 >o.Foo : number
 >      : ^^^^^^
 >o : { Foo: number; }
 >  : ^^^^^^^      ^^^
 >Foo : number
 >    : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 
 interface I1 {
@@ -225,8 +225,8 @@ var i:I1 = function (n) {return n;}
 const x: string | number = Math.random() < 0.5 ? "str" : 123;
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->Math.random() < 0.5 ? "str" : 123 : "str" | 123
->                                  : ^^^^^^^^^^^
+>Math.random() < 0.5 ? "str" : 123 : string | number
+>                                  : ^^^^^^^^^^^^^^^
 >Math.random() < 0.5 : boolean
 >                    : ^^^^^^^
 >Math.random() : number
@@ -239,10 +239,10 @@ const x: string | number = Math.random() < 0.5 ? "str" : 123;
 >       : ^^^^^^      
 >0.5 : 0.5
 >    : ^^^
->"str" : "str"
->      : ^^^^^
->123 : 123
->    : ^^^
+>"str" : string
+>      : ^^^^^^
+>123 : number
+>    : ^^^^^^
 
 if (typeof x === "string") {
 >typeof x === "string" : boolean

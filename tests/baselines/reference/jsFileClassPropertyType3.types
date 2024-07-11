@@ -38,8 +38,8 @@ class C {
 
 === bar.ts ===
 (new C()).p = "string"; // Error
->(new C()).p = "string" : "string"
->                       : ^^^^^^^^
+>(new C()).p = "string" : string
+>                       : ^^^^^^
 >(new C()).p : number
 >            : ^^^^^^
 >(new C()) : C
@@ -50,6 +50,6 @@ class C {
 >  : ^^^^^^^^
 >p : number
 >  : ^^^^^^
->"string" : "string"
->         : ^^^^^^^^
+>"string" : string
+>         : ^^^^^^
 

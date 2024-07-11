@@ -78,8 +78,8 @@ t = [1];              // Error
 >  : ^^^^^^^^^^^^^^^^
 >[1] : [number]
 >    : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 t = [1, "hello"];     // Ok
 >t = [1, "hello"] : [number, string]
@@ -88,10 +88,10 @@ t = [1, "hello"];     // Ok
 >  : ^^^^^^^^^^^^^^^^
 >[1, "hello"] : [number, string]
 >             : ^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->"hello" : "hello"
->        : ^^^^^^^
+>1 : number
+>  : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 t = ["hello", 1];     // Error
 >t = ["hello", 1] : [string, number]
@@ -100,10 +100,10 @@ t = ["hello", 1];     // Error
 >  : ^^^^^^^^^^^^^^^^
 >["hello", 1] : [string, number]
 >             : ^^^^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
->1 : 1
->  : ^
+>"hello" : string
+>        : ^^^^^^
+>1 : number
+>  : ^^^^^^
 
 t = [1, "hello", 2];  // Error
 >t = [1, "hello", 2] : [number, string, number]
@@ -112,10 +112,10 @@ t = [1, "hello", 2];  // Error
 >  : ^^^^^^^^^^^^^^^^
 >[1, "hello", 2] : [number, string, number]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->"hello" : "hello"
->        : ^^^^^^^
+>1 : number
+>  : ^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >2 : 2
 >  : ^
 
@@ -126,8 +126,8 @@ var tf: [string, (x: string) => number] = ["hello", x => x.length];
 >  : ^^^^^^
 >["hello", x => x.length] : [string, (x: string) => number]
 >                         : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >x => x.length : (x: string) => number
 >              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -156,12 +156,12 @@ var ff1 = ff("hello", ["foo", x => x.length]);
 >                                    : ^^^^^^
 >ff : <T, U>(a: T, b: [T, (x: T) => U]) => U
 >   : ^ ^^ ^^ ^^ ^^ ^^                ^^^^^ 
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 >["foo", x => x.length] : [string, (x: string) => number]
 >                       : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
+>"foo" : string
+>      : ^^^^^^
 >x => x.length : (x: string) => number
 >              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -201,10 +201,10 @@ var tt = tuple2(1, "string");
 >                    : ^^^^^^^^^^^^^^^^
 >tuple2 : <T0, T1>(item0: T0, item1: T1) => [T0, T1]
 >       : ^  ^^  ^^     ^^  ^^     ^^  ^^^^^        
->1 : 1
->  : ^
->"string" : "string"
->         : ^^^^^^^^
+>1 : number
+>  : ^^^^^^
+>"string" : string
+>         : ^^^^^^
 
 var tt0 = tt[0];
 >tt0 : number
@@ -257,8 +257,8 @@ tt = tuple2(1, undefined);
 >                     : ^^^^^^^^^^^^^
 >tuple2 : <T0, T1>(item0: T0, item1: T1) => [T0, T1]
 >       : ^  ^^  ^^     ^^  ^^     ^^  ^^^^^        
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -269,8 +269,8 @@ tt = [1, undefined];
 >   : ^^^^^^^^^^^^^^^^
 >[1, undefined] : [number, undefined]
 >               : ^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

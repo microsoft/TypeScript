@@ -72,12 +72,12 @@ var [b3, b4, b5]: [number, number, string] = [1, 2, "string"];
 >   : ^^^^^^
 >[1, 2, "string"] : [number, number, string]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->"string" : "string"
->         : ^^^^^^^^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>"string" : string
+>         : ^^^^^^
 
 function foo() {
 >foo : () => number[]
@@ -172,8 +172,8 @@ var [[c5], c6]: [[string|number], boolean] = [[1], true];
 >            : ^^^^^^^^^^^^^^^^
 >[1] : [number]
 >    : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >true : true
 >     : ^^^^
 

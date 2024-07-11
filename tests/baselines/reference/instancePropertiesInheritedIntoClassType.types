@@ -55,10 +55,10 @@ module NonGeneric {
 >            : ^
 >D : typeof D
 >  : ^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
     var r = d.fn();
 >r : D
@@ -93,16 +93,16 @@ module NonGeneric {
 >  : ^^^^^^
 
     r.y = 4;
->r.y = 4 : 4
->        : ^
+>r.y = 4 : number
+>        : ^^^^^^
 >r.y : number
 >    : ^^^^^^
 >r : D
 >  : ^
 >y : number
 >  : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
     var r6 = d.y(); // error
 >r6 : any
@@ -170,10 +170,10 @@ module Generic {
 >             : ^^^^^^^^^^^^^^^^^
 >D : typeof D
 >  : ^^^^^^^^
->1 : 1
->  : ^
->'' : ""
->   : ^^
+>1 : number
+>  : ^^^^^^
+>'' : string
+>   : ^^^^^^
 
     var r = d.fn();
 >r : D<number, string>
@@ -208,16 +208,16 @@ module Generic {
 >  : ^^^^^^
 
     r.y = '';
->r.y = '' : ""
->         : ^^
+>r.y = '' : string
+>         : ^^^^^^
 >r.y : string
 >    : ^^^^^^
 >r : D<number, string>
 >  : ^^^^^^^^^^^^^^^^^
 >y : string
 >  : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     var r6 = d.y(); // error
 >r6 : any

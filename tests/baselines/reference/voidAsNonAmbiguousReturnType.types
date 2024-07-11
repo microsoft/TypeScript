@@ -19,7 +19,7 @@ function main() {
 >   : ^^^^^^^^^
 >mkdirSync : (path: string, mode?: number) => void
 >          : ^    ^^      ^^    ^^^      ^^^^^    
->'test' : "test"
+>'test' : string
 >       : ^^^^^^
 }
 

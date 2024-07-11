@@ -18,8 +18,8 @@ const test1: Action = function* () {
 >     : ^^^^^^^^
 >yield '' : string[]
 >         : ^^^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     return next[0]
 >next[0] : string
@@ -55,8 +55,8 @@ const test2: Action2 = async function* () {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
     return next[0]
 >next[0] : string

@@ -52,8 +52,8 @@ const a3 = f1(1, sn);  // number
 >          : ^^^^^^
 >f1 : <T>(x: T, y: string | T) => T
 >   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >sn : string | number
 >   : ^^^^^^^^^^^^^^^
 
@@ -66,8 +66,8 @@ const a4 = f1(undefined, "abc");  // undefined
 >   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
->"abc" : "abc"
->      : ^^^^^
+>"abc" : string
+>      : ^^^^^^
 
 const a5 = f1("foo", "bar");  // "foo"
 >a5 : "foo"
@@ -78,8 +78,8 @@ const a5 = f1("foo", "bar");  // "foo"
 >   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >"foo" : "foo"
 >      : ^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : string
+>      : ^^^^^^
 
 const a6 = f1(true, false);  // boolean
 >a6 : boolean
@@ -102,8 +102,8 @@ const a7 = f1("hello", 1);  // Error
 >   : ^ ^^ ^^ ^^ ^^          ^^^^^ 
 >"hello" : "hello"
 >        : ^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 declare function f2<T>(value: [string, T]): T;
 >f2 : <T>(value: [string, T]) => T
@@ -120,8 +120,8 @@ var b1 = f2(["string", true]);  // boolean
 >   : ^ ^^     ^^           ^^^^^ 
 >["string", true] : [string, true]
 >                 : ^^^^^^^^^^^^^^
->"string" : "string"
->         : ^^^^^^^^
+>"string" : string
+>         : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -216,8 +216,8 @@ const d3 = f4(42);  // Error
 >       : ^^
 >f4 : <T>(x: string & T) => T
 >   : ^ ^^ ^^          ^^^^^ 
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 export interface Foo<T> {
     then<U>(f: (x: T) => U | Foo<U>, g: U): Foo<U>;

@@ -29,21 +29,21 @@ try {
 >  : ^^^^^^
 
         a = 1;
->a = 1 : 1
->      : ^
+>a = 1 : number
+>      : ^^^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     } else {
         a = 2;
->a = 2 : 2
->      : ^
+>a = 2 : number
+>      : ^^^^^^
 >a : number
 >  : ^^^^^^
->2 : 2
->  : ^
+>2 : number
+>  : ^^^^^^
     }
 } finally {
     console.log(x);

@@ -120,8 +120,8 @@ var a = new C1([{ x1: 10, x2: "", x3: true }, "", false]);
 >   : ^^^^^^^
 >true : true
 >     : ^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 >false : false
 >      : ^^^^^
 

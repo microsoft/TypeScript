@@ -101,8 +101,8 @@ const yy: number[] & [number, ...number[]] = [1];
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1] : [number]
 >    : ^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 const xx: [number, ...number[]] = yy;
 >xx : [number, ...number[]]

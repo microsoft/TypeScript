@@ -12,8 +12,8 @@ var s = Symbol.for("postfix");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"postfix" : "postfix"
->          : ^^^^^^^^^
+>"postfix" : string
+>          : ^^^^^^
 
 s++;
 >s++ : number

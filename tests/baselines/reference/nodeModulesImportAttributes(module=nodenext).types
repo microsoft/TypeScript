@@ -19,8 +19,8 @@ const json2 = import("./package.json", { with: { type: "json" } }); // should be
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./package.json", { with: { type: "json" } }) : Promise<{ default: { name: string; private: boolean; type: string; }; }>
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./package.json" : "./package.json"
->                 : ^^^^^^^^^^^^^^^^
+>"./package.json" : string
+>                 : ^^^^^^
 >{ with: { type: "json" } } : { with: { type: string; }; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >with : { type: string; }
@@ -29,7 +29,7 @@ const json2 = import("./package.json", { with: { type: "json" } }); // should be
 >                 : ^^^^^^^^^^^^^^^^^
 >type : string
 >     : ^^^^^^
->"json" : "json"
+>"json" : string
 >       : ^^^^^^
 
 === package.json ===

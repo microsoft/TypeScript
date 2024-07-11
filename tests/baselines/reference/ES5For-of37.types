@@ -46,8 +46,8 @@ for (const i of [0, 1, 2, 3, 4]) {
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'ERR' : "ERR"
->      : ^^^^^
+>'ERR' : string
+>      : ^^^^^^
             }
         }
         console.log(i);

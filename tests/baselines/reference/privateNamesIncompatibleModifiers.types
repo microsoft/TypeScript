@@ -82,8 +82,8 @@ class A {
     public get #fooProp() { return  3; }         // Error
 >#fooProp : number
 >         : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
     public set #fooProp(value: number) {  }      // Error
 >#fooProp : number
@@ -94,8 +94,8 @@ class A {
     private get #barProp() { return  3; }        // Error
 >#barProp : number
 >         : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
     private set #barProp(value: number) {  }     // Error
 >#barProp : number
@@ -106,8 +106,8 @@ class A {
     protected get #bazProp() { return  3; }      // Error
 >#bazProp : number
 >         : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
     protected set #bazProp(value: number) {  }   // Error
 >#bazProp : number
@@ -118,8 +118,8 @@ class A {
     readonly get #quxProp() { return  3; }       // Error
 >#quxProp : number
 >         : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
     readonly set #quxProp(value: number) {  }    // Error
 >#quxProp : number
@@ -140,8 +140,8 @@ class A {
     async get #asyncProp() { return 1; }         // Error
 >#asyncProp : number
 >           : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     async set #asyncProp(value: number) { }      // Error
 >#asyncProp : number

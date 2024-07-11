@@ -10,8 +10,8 @@ export async function foo({ foo = await import("./bar") }) {
 >                      : ^^^^^^^^^^^^^^^^^^^^
 >import("./bar") : Promise<typeof import("bar")>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./bar" : "./bar"
->        : ^^^^^^^
+>"./bar" : string
+>        : ^^^^^^
 }
 
 export function* foo2({ foo = yield "a" }) {

@@ -122,8 +122,8 @@ amb = { tag: "A", x: "hi" }
 >    : ^^^
 >x : string
 >  : ^^^^^^
->"hi" : "hi"
->     : ^^^^
+>"hi" : string
+>     : ^^^^^^
 
 amb = { tag: "A", y: 12 }
 >amb = { tag: "A", y: 12 } : { tag: "A"; y: number; }
@@ -138,8 +138,8 @@ amb = { tag: "A", y: 12 }
 >    : ^^^
 >y : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 amb = { tag: "A", x: "hi", y: 12 }
 >amb = { tag: "A", x: "hi", y: 12 } : { tag: "A"; x: string; y: number; }
@@ -154,12 +154,12 @@ amb = { tag: "A", x: "hi", y: 12 }
 >    : ^^^
 >x : string
 >  : ^^^^^^
->"hi" : "hi"
->     : ^^^^
+>"hi" : string
+>     : ^^^^^^
 >y : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 
 // correctly error on excess property 'extra', even when ambiguous
 amb = { tag: "A", x: "hi", extra: 12 }
@@ -175,8 +175,8 @@ amb = { tag: "A", x: "hi", extra: 12 }
 >    : ^^^
 >x : string
 >  : ^^^^^^
->"hi" : "hi"
->     : ^^^^
+>"hi" : string
+>     : ^^^^^^
 >extra : number
 >      : ^^^^^^
 >12 : 12
@@ -195,8 +195,8 @@ amb = { tag: "A", y: 12, extra: 12 }
 >    : ^^^
 >y : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
 >extra : number
 >      : ^^^^^^
 >12 : 12
@@ -277,8 +277,8 @@ over = { a: 1, b: 1, first: "ok", second: "error" }
 >  : ^
 >first : string
 >      : ^^^^^^
->"ok" : "ok"
->     : ^^^^
+>"ok" : string
+>     : ^^^^^^
 >second : string
 >       : ^^^^^^
 >"error" : "error"
@@ -301,8 +301,8 @@ over = { a: 1, b: 1, first: "ok", third: "error" }
 >  : ^
 >first : string
 >      : ^^^^^^
->"ok" : "ok"
->     : ^^^^
+>"ok" : string
+>     : ^^^^^^
 >third : string
 >      : ^^^^^^
 >"error" : "error"
@@ -401,8 +401,8 @@ const abab: AB = {
         a: "a",
 >a : string
 >  : ^^^^^^
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 
         b: "b", // excess -- kind: "A"
 >b : string
@@ -432,14 +432,14 @@ const abac: AB = {
         a: "a",
 >a : string
 >  : ^^^^^^
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 
         c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
 >c : string
 >  : ^^^^^^
->"c" : "c"
->    : ^^^
+>"c" : string
+>    : ^^^^^^
     }
 }
 
@@ -546,8 +546,8 @@ const obj1: { [x: string]: number } | { [x: number]: number } = { a: 'abc' };  /
 >             : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'abc' : "abc"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
 
 const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Error
 >obj2 : { [x: string]: number; } | { a: number; }
@@ -560,12 +560,12 @@ const obj2: { [x: string]: number } | { a: number } = { a: 5, c: 'abc' };  // Er
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 >c : string
 >  : ^^^^^^
->'abc' : "abc"
->      : ^^^^^
+>'abc' : string
+>      : ^^^^^^
 
 // Repro from #33732
 

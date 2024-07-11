@@ -48,12 +48,12 @@ async function test2() {
 >   : ^^
 
     for (i = 1; i < limit; ++i) {
->i = 1 : 1
->      : ^
+>i = 1 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >i < limit : boolean
 >          : ^^^^^^^
 >i : number

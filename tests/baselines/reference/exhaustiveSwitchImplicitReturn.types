@@ -16,8 +16,8 @@ function foo1(bar: "a"): number {
 >    : ^^^
 
             return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 
@@ -36,8 +36,8 @@ function foo2(bar: "a"): number {
 >    : ^^^
 
             return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 
     let unusedVariable;
@@ -60,8 +60,8 @@ function foo3(bar: "a"): number {
 >    : ^^^
 
             return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 
     function neverCalled() {}
@@ -84,8 +84,8 @@ function foo4(bar: "a"): number {
 >    : ^^^
 
             return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 
     foo3(bar);
@@ -112,8 +112,8 @@ function foo5(bar: "a" | "b"): number {
 >    : ^^^
 
             return 1;
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 
@@ -138,8 +138,8 @@ function foo6(bar: "a", a: boolean, b: boolean): number {
             case "a": return 1;
 >"a" : "a"
 >    : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
         }
     }
     else {
@@ -158,8 +158,8 @@ function foo6(bar: "a", a: boolean, b: boolean): number {
             case false: return 0;
 >false : false
 >      : ^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
         }
     }
 }

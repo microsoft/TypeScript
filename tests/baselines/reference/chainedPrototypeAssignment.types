@@ -9,8 +9,8 @@ var mod = require('./mod');
 >                 : ^^^^^^^^^^
 >require : (name: string) => any
 >        : ^    ^^      ^^^^^   
->'./mod' : "./mod"
->        : ^^^^^^^
+>'./mod' : string
+>        : ^^^^^^
 
 var a = new mod.A()
 >a : A
@@ -45,7 +45,7 @@ a.m('nope')
 >  : ^
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
->'nope' : "nope"
+>'nope' : string
 >       : ^^^^^^
 
 b.m('not really')
@@ -57,8 +57,8 @@ b.m('not really')
 >  : ^
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
->'not really' : "not really"
->             : ^^^^^^^^^^^^
+>'not really' : string
+>             : ^^^^^^
 
 === types.d.ts ===
 declare function require(name: string): any;

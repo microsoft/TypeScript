@@ -13,12 +13,12 @@ function f1() {
 
     try {
         a = 123;
->a = 123 : 123
->        : ^^^
+>a = 123 : number
+>        : ^^^^^^
 >a : number | null
 >  : ^^^^^^^^^^^^^
->123 : 123
->    : ^^^
+>123 : number
+>    : ^^^^^^
 
         return a;
 >a : number
@@ -50,8 +50,8 @@ function f1() {
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
 >        : ^              ^^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >"123" : "123"
 >      : ^^^^^
         }
@@ -763,12 +763,12 @@ const main = () => {
 
     try {
         hoge = 'hoge!';
->hoge = 'hoge!' : "hoge!"
->               : ^^^^^^^
+>hoge = 'hoge!' : string
+>               : ^^^^^^
 >hoge : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->'hoge!' : "hoge!"
->        : ^^^^^^^
+>'hoge!' : string
+>        : ^^^^^^
 
         return;
     }

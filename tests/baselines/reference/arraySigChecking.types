@@ -111,8 +111,8 @@ isEmpty(new Array(3));
 >             : ^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 isEmpty(new Array<string>(3));
 >isEmpty(new Array<string>(3)) : boolean
@@ -123,8 +123,8 @@ isEmpty(new Array<string>(3));
 >                     : ^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 isEmpty(['a']);
 >isEmpty(['a']) : boolean

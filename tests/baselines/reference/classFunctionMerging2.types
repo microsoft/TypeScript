@@ -42,8 +42,8 @@ let b = new B("Hey")
 >             : ^
 >B : typeof B
 >  : ^^^^^^^^
->"Hey" : "Hey"
->      : ^^^^^
+>"Hey" : string
+>      : ^^^^^^
 
 console.log(b.a)
 >console.log(b.a) : void

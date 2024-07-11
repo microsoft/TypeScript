@@ -6,6 +6,6 @@ var x = 23 as string;
 >  : ^^^^^^
 >23 as string : string
 >             : ^^^^^^
->23 : 23
->   : ^^
+>23 : number
+>   : ^^^^^^
 

@@ -8,8 +8,8 @@ class Test1 {
     get foo(): string { return "" }
 >foo : string
 >    : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     set foo(s: string | number) {
 >foo : string
@@ -37,8 +37,8 @@ class Test1 {
     get bar(): string | number { return "" }
 >bar : string | number
 >    : ^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
     set bar(s: string | number | boolean) {
 >bar : string | number
@@ -106,16 +106,16 @@ type Test3 = {
 >      : ^^^^^^^^^^^^
 
     t.foo = 32;
->t.foo = 32 : 32
->           : ^^
+>t.foo = 32 : number
+>           : ^^^^^^
 >t.foo : string | number
 >      : ^^^^^^^^^^^^^^^
 >t : Test1
 >  : ^^^^^
 >foo : string | number
 >    : ^^^^^^^^^^^^^^^
->32 : 32
->   : ^^
+>32 : number
+>   : ^^^^^^
 
     let m: string = t.foo;
 >m : string
@@ -183,16 +183,16 @@ type Test3 = {
 >   : ^^
 
     t.foo = 32;
->t.foo = 32 : 32
->           : ^^
+>t.foo = 32 : number
+>           : ^^^^^^
 >t.foo : string | number
 >      : ^^^^^^^^^^^^^^^
 >t : Test2
 >  : ^^^^^
 >foo : string | number
 >    : ^^^^^^^^^^^^^^^
->32 : 32
->   : ^^
+>32 : number
+>   : ^^^^^^
 
     let m: string = t.foo;
 >m : string
@@ -260,16 +260,16 @@ type Test3 = {
 >   : ^^
 
     t.foo = 32;
->t.foo = 32 : 32
->           : ^^
+>t.foo = 32 : number
+>           : ^^^^^^
 >t.foo : string | number
 >      : ^^^^^^^^^^^^^^^
 >t : Test3
 >  : ^^^^^
 >foo : string | number
 >    : ^^^^^^^^^^^^^^^
->32 : 32
->   : ^^
+>32 : number
+>   : ^^^^^^
 
     let m: string = t.foo;
 >m : string

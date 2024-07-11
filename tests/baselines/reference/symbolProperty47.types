@@ -16,8 +16,8 @@ class C {
 >            : ^^^^^^^^^^^^^
 
         return "";
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
     }
     // Should take a string
     set [Symbol.hasInstance](x: number) {
@@ -35,8 +35,8 @@ class C {
 }
 
 (new C)[Symbol.hasInstance] = 0;
->(new C)[Symbol.hasInstance] = 0 : 0
->                                : ^
+>(new C)[Symbol.hasInstance] = 0 : number
+>                                : ^^^^^^
 >(new C)[Symbol.hasInstance] : number
 >                            : ^^^^^^
 >(new C) : C
@@ -51,12 +51,12 @@ class C {
 >       : ^^^^^^^^^^^^^^^^^
 >hasInstance : unique symbol
 >            : ^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 (new C)[Symbol.hasInstance] = "";
->(new C)[Symbol.hasInstance] = "" : ""
->                                 : ^^
+>(new C)[Symbol.hasInstance] = "" : string
+>                                 : ^^^^^^
 >(new C)[Symbol.hasInstance] : number
 >                            : ^^^^^^
 >(new C) : C
@@ -71,6 +71,6 @@ class C {
 >       : ^^^^^^^^^^^^^^^^^
 >hasInstance : unique symbol
 >            : ^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 

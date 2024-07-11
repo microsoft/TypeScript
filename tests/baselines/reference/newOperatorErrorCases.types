@@ -91,8 +91,8 @@ var c2 = new T<string>;  // Ok
 function fnNumber(): number { return 32; }
 >fnNumber : () => number
 >         : ^^^^^^      
->32 : 32
->   : ^^
+>32 : number
+>   : ^^^^^^
 
 var s = new fnNumber(); // Error
 >s : any

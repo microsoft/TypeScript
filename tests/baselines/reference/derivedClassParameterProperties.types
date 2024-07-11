@@ -159,16 +159,16 @@ class Derived6 extends Base {
 >  : ^^^^^^
 
         this.a = 1;
->this.a = 1 : 1
->           : ^
+>this.a = 1 : number
+>           : ^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
         var b = 2;
 >b : number
@@ -205,28 +205,28 @@ class Derived7 extends Base {
 >  : ^^^^^^
 
         this.a = 3;
->this.a = 3 : 3
->           : ^
+>this.a = 3 : number
+>           : ^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         this.b = 3;
->this.b = 3 : 3
->           : ^
+>this.b = 3 : number
+>           : ^^^^^^
 >this.b : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >b : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         super();
 >super() : void
@@ -263,28 +263,28 @@ class Derived8 extends Base {
 >      : ^^^^^^^^^^^
 
         this.a = 3;
->this.a = 3 : 3
->           : ^
+>this.a = 3 : number
+>           : ^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         this.b = 3;        
->this.b = 3 : 3
->           : ^
+>this.b = 3 : number
+>           : ^^^^^^
 >this.b : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >b : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
     }
 }
 
@@ -316,28 +316,28 @@ class Derived9<T> extends Base2<T> {
 >  : ^^^^^^
 
         this.a = 3;
->this.a = 3 : 3
->           : ^
+>this.a = 3 : number
+>           : ^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         this.b = 3;
->this.b = 3 : 3
->           : ^
+>this.b = 3 : number
+>           : ^^^^^^
 >this.b : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >b : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         super();
 >super() : void
@@ -374,27 +374,27 @@ class Derived10<T> extends Base2<T> {
 >      : ^^^^^^^^^^^^
 
         this.a = 3;
->this.a = 3 : 3
->           : ^
+>this.a = 3 : number
+>           : ^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
         this.b = 3;
->this.b = 3 : 3
->           : ^
+>this.b = 3 : number
+>           : ^^^^^^
 >this.b : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >b : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
     }
 }

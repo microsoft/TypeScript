@@ -36,8 +36,8 @@ class C {
 >    : ^^^^^^^^^^^^
 
                 return "well this looks kinda C-ish.";
->"well this looks kinda C-ish." : "well this looks kinda C-ish."
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"well this looks kinda C-ish." : string
+>                               : ^^^^^^
             }
         }
     }
@@ -96,8 +96,8 @@ class D extends C {
                 cProp: 1,
 >cProp : number
 >      : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
                 dProp: () => this,
 >dProp : () => this
@@ -110,8 +110,8 @@ class D extends C {
                 foo() { return "You win!!!!!" }
 >foo : () => string
 >    : ^^^^^^^^^^^^
->"You win!!!!!" : "You win!!!!!"
->               : ^^^^^^^^^^^^^^
+>"You win!!!!!" : string
+>               : ^^^^^^
 
             };
         }

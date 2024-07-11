@@ -46,7 +46,7 @@ class foo {
 >     : ^^^^
 >bar : { (): any; (foo: string): any; }
 >    : ^^^^^^^^^^^^   ^^      ^^^^^^^^^
->"test" : "test"
+>"test" : string
 >       : ^^^^^^
    }
 }

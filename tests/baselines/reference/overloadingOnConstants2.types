@@ -125,8 +125,8 @@ var d: D = bar("hi", []); // D
 >              : ^
 >bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
 >    : ^^^ ^^     ^^     ^^        ^^^ ^^^ ^^      ^^     ^^        ^^^ ^^^
->"hi" : "hi"
->     : ^^^^
+>"hi" : string
+>     : ^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -149,8 +149,8 @@ var f: C = bar("um", []); // C
 >              : ^
 >bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
 >    : ^^^ ^^     ^^     ^^        ^^^ ^^^ ^^      ^^     ^^        ^^^ ^^^
->"um" : "um"
->     : ^^^^
+>"um" : string
+>     : ^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 

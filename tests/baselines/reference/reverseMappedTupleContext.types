@@ -20,10 +20,10 @@ const result1 = test1(["foo", 42]);
 >      : ^ ^^   ^^                         ^^^^^ 
 >["foo", 42] : [string, number]
 >            : ^^^^^^^^^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
->42 : 42
->   : ^^
+>"foo" : string
+>      : ^^^^^^
+>42 : number
+>   : ^^^^^^
 
 declare function test2<T extends readonly unknown[]>(arg: {
 >test2 : <T extends readonly unknown[]>(arg: { [K in keyof T]: T[K]; }) => T
@@ -42,10 +42,10 @@ const result2 = test2(["foo", 42]);
 >      : ^ ^^^^^^^^^                  ^^   ^^                         ^^^^^ 
 >["foo", 42] : [string, number]
 >            : ^^^^^^^^^^^^^^^^
->"foo" : "foo"
->      : ^^^^^
->42 : 42
->   : ^^
+>"foo" : string
+>      : ^^^^^^
+>42 : number
+>   : ^^^^^^
 
 type Schema = Record<string, unknown> | readonly unknown[];
 >Schema : Schema
@@ -74,14 +74,14 @@ const created1 = create([() => 1, [() => ""]]);
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => 1 : () => number
 >        : ^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >[() => ""] : [() => string]
 >           : ^^^^^^^^^^^^^^
 >() => "" : () => string
 >         : ^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 const created2 = create({
 >created2 : { a: number; b: [string]; }
@@ -98,8 +98,8 @@ const created2 = create({
 >  : ^^^^^^^^^^^^
 >() => 1 : () => number
 >        : ^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
   b: [() => ""],
 >b : [() => string]
@@ -108,8 +108,8 @@ const created2 = create({
 >           : ^^^^^^^^^^^^^^
 >() => "" : () => string
 >         : ^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
 });
 

@@ -12,16 +12,16 @@ function* g1(): Generator<number, boolean, string> {
     yield "a"; // error
 >yield "a" : string
 >          : ^^^^^^
->"a" : "a"
->    : ^^^
+>"a" : string
+>    : ^^^^^^
 
     const x: number = yield 1; // error
 >x : number
 >  : ^^^^^^
 >yield 1 : string
 >        : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     return 10; // error
 >10 : 10
@@ -37,8 +37,8 @@ function* g2(): Generator<number, boolean, string> {
 >  : ^^^^^^
 >yield 1 : string
 >        : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     return true;
 >true : true

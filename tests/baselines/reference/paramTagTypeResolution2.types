@@ -24,8 +24,8 @@ f({ x: 42 }, { x(param) { param.toFixed() } });
 >          : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 >{ x(param) { param.toFixed() } } : { x(param: number): void; }
 >                                 : ^^^^     ^^^^^^^^^^^^^^^^^^
 >x : (param: number) => void

@@ -33,16 +33,16 @@ class Derived {
 >     : ^^^^
 
         this.n = 12;
->this.n = 12 : 12
->            : ^^
+>this.n = 12 : number
+>            : ^^^^^^
 >this.n : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >n : number
 >  : ^^^^^^
->12 : 12
->   : ^^
+>12 : number
+>   : ^^^^^^
     }
 }
 

@@ -36,8 +36,8 @@ module Test {
         public moo: number = 0;
 >moo : number
 >    : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
     }
 
     export function bug(): ILineTokens {

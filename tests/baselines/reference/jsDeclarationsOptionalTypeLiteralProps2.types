@@ -34,15 +34,15 @@ function foo({ a, b, c }) {
 >       : ^^^^^^
 >b : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >(c ?? 0) : number
 >         : ^^^^^^
 >c ?? 0 : number
 >       : ^^^^^^
 >c : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 

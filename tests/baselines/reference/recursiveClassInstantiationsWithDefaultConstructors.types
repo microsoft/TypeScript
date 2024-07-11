@@ -12,8 +12,8 @@ module TypeScript2 {
         public prefix: string = "";
 >prefix : string
 >       : ^^^^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
     }
     export class MemberNameArray extends MemberName {
 >MemberNameArray : MemberNameArray

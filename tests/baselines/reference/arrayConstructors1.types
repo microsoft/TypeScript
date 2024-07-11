@@ -14,8 +14,8 @@ x = new Array(1);
 >             : ^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 x = new Array('hi', 'bye'); 
 >x = new Array('hi', 'bye') : string[]
@@ -26,10 +26,10 @@ x = new Array('hi', 'bye');
 >                       : ^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->'hi' : "hi"
->     : ^^^^
->'bye' : "bye"
->      : ^^^^^
+>'hi' : string
+>     : ^^^^^^
+>'bye' : string
+>      : ^^^^^^
 
 x = new Array<string>('hi', 'bye');
 >x = new Array<string>('hi', 'bye') : string[]
@@ -40,10 +40,10 @@ x = new Array<string>('hi', 'bye');
 >                               : ^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->'hi' : "hi"
->     : ^^^^
->'bye' : "bye"
->      : ^^^^^
+>'hi' : string
+>     : ^^^^^^
+>'bye' : string
+>      : ^^^^^^
 
 var y: number[];
 >y : number[]
@@ -58,8 +58,8 @@ y = new Array(1);
 >             : ^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 y = new Array(1,2);
 >y = new Array(1,2) : number[]
@@ -70,10 +70,10 @@ y = new Array(1,2);
 >               : ^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 y = new Array<number>(1, 2);
 >y = new Array<number>(1, 2) : number[]
@@ -84,8 +84,8 @@ y = new Array<number>(1, 2);
 >                        : ^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 

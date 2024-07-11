@@ -28,22 +28,22 @@ f1(1, 2);
 >         : ^^^
 >f1 : { (a: number): any; (a: number, b: number, c: number): any; }
 >   : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
 
 f1(1, 2, 3, 4);
 >f1(1, 2, 3, 4) : any
 >               : ^^^
 >f1 : { (a: number): any; (a: number, b: number, c: number): any; }
 >   : ^^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 >4 : 4
 >  : ^
 
@@ -92,54 +92,54 @@ f2(1);
 >      : ^^^
 >f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
 >   : ^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
 f2(1, 2, 3);
 >f2(1, 2, 3) : any
 >            : ^^^
 >f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
 >   : ^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
 
 f2(1, 2, 3, 4, 5);
 >f2(1, 2, 3, 4, 5) : any
 >                  : ^^^
 >f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
 >   : ^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
->5 : 5
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
 
 f2(1, 2, 3, 4, 5, 6, 7);
 >f2(1, 2, 3, 4, 5, 6, 7) : any
 >                        : ^^^
 >f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
 >   : ^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
->5 : 5
->  : ^
->6 : 6
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
+>6 : number
+>  : ^^^^^^
 >7 : 7
 >  : ^
 
@@ -148,16 +148,16 @@ f2(1, 2, 3, 4, 5, ...[6, 7]);
 >                             : ^^^
 >f2 : { (): any; (a: number, b: number): any; (a: number, b: number, c: number, d: number): any; (a: number, b: number, c: number, d: number, e: number, f: number): any; }
 >   : ^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^^
->1 : 1
->  : ^
->2 : 2
->  : ^
->3 : 3
->  : ^
->4 : 4
->  : ^
->5 : 5
->  : ^
+>1 : number
+>  : ^^^^^^
+>2 : number
+>  : ^^^^^^
+>3 : number
+>  : ^^^^^^
+>4 : number
+>  : ^^^^^^
+>5 : number
+>  : ^^^^^^
 >...[6, 7] : number
 >          : ^^^^^^
 >[6, 7] : [number, number]

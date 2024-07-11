@@ -53,8 +53,8 @@ function F(x: string): number { return 42; }
 >  : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 module M {
 >M : typeof M

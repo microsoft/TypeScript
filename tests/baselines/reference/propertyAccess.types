@@ -43,8 +43,8 @@ var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : string
 >  : ^^^^^^
->'three' : "three"
->        : ^^^^^^^
+>'three' : string
+>        : ^^^^^^
 >'three' : string
 >        : ^^^^^^
 >'three' : "three"
@@ -161,16 +161,16 @@ var someObject: { name: string };
 
 // Assign to a property access
 obj.y = 4;
->obj.y = 4 : 4
->          : ^
+>obj.y = 4 : number
+>          : ^^^^^^
 >obj.y : number
 >      : ^^^^^^
 >obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
->4 : 4
->  : ^
+>4 : number
+>  : ^^^^^^
 
 // Property access on value of type 'any'
 anyVar.x = anyVar.y = obj.x = anyVar.z;

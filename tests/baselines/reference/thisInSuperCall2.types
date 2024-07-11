@@ -41,8 +41,8 @@ class Foo2 extends Base {
     public x: number = 0;
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     constructor() {
         super(this); // error

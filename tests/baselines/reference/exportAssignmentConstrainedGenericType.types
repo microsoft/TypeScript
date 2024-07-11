@@ -26,12 +26,12 @@ var y = new foo({a: "test", b: 42}); // Should be OK
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"test" : "test"
+>"test" : string
 >       : ^^^^^^
 >b : number
 >  : ^^^^^^
->42 : 42
->   : ^^
+>42 : number
+>   : ^^^^^^
 
 var z: number = y.test.b;
 >z : number

@@ -294,8 +294,8 @@ module ts {
 >                 : ^^^^^^      
 
             return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
         }
         getSignature(index: number): Signature {
 >getSignature : (index: number) => Signature
@@ -312,8 +312,8 @@ module ts {
 >                  : ^^^^^^      
 
             return 0;
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
         }
         getSignatures(): Signature[] {
 >getSignatures : () => Signature[]

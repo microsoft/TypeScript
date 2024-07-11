@@ -31,8 +31,8 @@ const bn1 = box(0);  // Box<number>
 >       : ^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
 >    : ^ ^^     ^^ ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 const bn2: Box<number> = box(0);  // Ok
 >bn2 : Box<number>
@@ -41,8 +41,8 @@ const bn2: Box<number> = box(0);  // Ok
 >       : ^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
 >    : ^ ^^     ^^ ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
 const bb1 = box(false);  // Box<boolean>
 >bb1 : Box<boolean>

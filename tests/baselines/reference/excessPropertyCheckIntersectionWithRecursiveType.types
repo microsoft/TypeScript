@@ -290,8 +290,8 @@ const grandUser: GrandUser = {
   name: "Grand User",
 >name : string
 >     : ^^^^^^
->"Grand User" : "Grand User"
->             : ^^^^^^^^^^^^
+>"Grand User" : string
+>             : ^^^^^^
 
   children: [
 >children : { name: string; children: { name: string; children: { name: string; children: { name: string; }[]; }[]; }[]; }[]
@@ -305,8 +305,8 @@ const grandUser: GrandUser = {
       name: "Son",
 >name : string
 >     : ^^^^^^
->"Son" : "Son"
->      : ^^^^^
+>"Son" : string
+>      : ^^^^^^
 
       children: [
 >children : { name: string; children: { name: string; children: { name: string; }[]; }[]; }[]
@@ -320,8 +320,8 @@ const grandUser: GrandUser = {
           name: "Grand son",
 >name : string
 >     : ^^^^^^
->"Grand son" : "Grand son"
->            : ^^^^^^^^^^^
+>"Grand son" : string
+>            : ^^^^^^
 
           children: [
 >children : { name: string; children: { name: string; }[]; }[]

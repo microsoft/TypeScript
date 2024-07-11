@@ -70,10 +70,10 @@ const waitValue = Atomics.wait(int32, 0, 0);
 >     : ^^^          ^^          ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                ^^^          ^^             ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                ^^^
 >int32 : Int32Array
 >      : ^^^^^^^^^^
->0 : 0
->  : ^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
+>0 : number
+>  : ^^^^^^
 
 const { async, value } = Atomics.waitAsync(int32, 0, 0);
 >async : boolean
@@ -90,10 +90,10 @@ const { async, value } = Atomics.waitAsync(int32, 0, 0);
 >          : ^^^          ^^          ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^          ^^             ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^
 >int32 : Int32Array
 >      : ^^^^^^^^^^
->0 : 0
->  : ^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
+>0 : number
+>  : ^^^^^^
 
 const { async: async64, value: value64 } = Atomics.waitAsync(int64, 0, BigInt(0));
 >async : any
@@ -114,8 +114,8 @@ const { async: async64, value: value64 } = Atomics.waitAsync(int64, 0, BigInt(0)
 >          : ^^^          ^^          ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^          ^^             ^^     ^^      ^^     ^^      ^^       ^^^      ^^^                                                                                                          ^^^
 >int64 : BigInt64Array
 >      : ^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >BigInt(0) : bigint
 >          : ^^^^^^
 >BigInt : BigIntConstructor

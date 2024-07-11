@@ -477,12 +477,12 @@ module TypeScript {
                 for (i = 0, len = type.implementsList.length; i < len; i++) {
 >i = 0, len = type.implementsList.length : any
 >                                        : ^^^
->i = 0 : 0
->      : ^
+>i = 0 : number
+>      : ^^^^^^
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >len = type.implementsList.length : any
 >                                 : ^^^
 >len : any

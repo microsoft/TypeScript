@@ -97,28 +97,28 @@ if (obj3 instanceof B) { // narrowed to B<number>.
 >  : ^^^^^^^^^^^^
 
     obj3.foo = 1;
->obj3.foo = 1 : 1
->             : ^
+>obj3.foo = 1 : number
+>             : ^^^^^^
 >obj3.foo : number
 >         : ^^^^^^
 >obj3 : B<number>
 >     : ^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     obj3.foo = "str";
->obj3.foo = "str" : "str"
->                 : ^^^^^
+>obj3.foo = "str" : string
+>                 : ^^^^^^
 >obj3.foo : number
 >         : ^^^^^^
 >obj3 : B<number>
 >     : ^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->"str" : "str"
->      : ^^^^^
+>"str" : string
+>      : ^^^^^^
 
     obj3.bar = "str";
 >obj3.bar = "str" : "str"

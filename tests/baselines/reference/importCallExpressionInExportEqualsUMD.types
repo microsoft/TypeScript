@@ -16,7 +16,7 @@ export = async function() {
 >                            : ^^
 >import("./something") : Promise<42>
 >                      : ^^^^^^^^^^^
->"./something" : "./something"
->              : ^^^^^^^^^^^^^
+>"./something" : string
+>              : ^^^^^^
 
 };

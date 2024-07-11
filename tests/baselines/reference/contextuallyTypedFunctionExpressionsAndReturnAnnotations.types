@@ -34,8 +34,8 @@ foo((y): (y2: number) => void => {
 >  : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
     return null;
 });

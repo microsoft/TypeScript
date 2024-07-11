@@ -27,8 +27,8 @@ for (var i = 0; i < 10; i++) { // ok
 for (var j: number = 0; j < 10; j++) { // ok
 >j : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >j < 10 : boolean
 >       : ^^^^^^^
 >j : number

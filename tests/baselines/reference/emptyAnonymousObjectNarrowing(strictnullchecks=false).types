@@ -189,8 +189,8 @@ const foo = (value: unknown): string => {
 >      : ^^^^^^^
 
       return 'foo';
->'foo' : "foo"
->      : ^^^^^
+>'foo' : string
+>      : ^^^^^^
   }
   if (value === 'xyz') {
 >value === 'xyz' : boolean
@@ -205,8 +205,8 @@ const foo = (value: unknown): string => {
 >      : ^^^^^
   }
   return '';
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
 };
 

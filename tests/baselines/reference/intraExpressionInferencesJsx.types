@@ -137,8 +137,8 @@ const Component = <T extends Animations>({
       value: 1,
 >value : number
 >      : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
       a: true,
 >a : true
@@ -157,8 +157,8 @@ const Component = <T extends Animations>({
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return "";
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   }}
 />;
@@ -189,8 +189,8 @@ const Component = <T extends Animations>({
       value: 1,
 >value : number
 >      : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
       a: true,
 >a : true
@@ -225,8 +225,8 @@ const Component = <T extends Animations>({
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return "";
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   }}
 />;
@@ -257,8 +257,8 @@ const Component = <T extends Animations>({
       value: 1,
 >value : number
 >      : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
       a: true,
 >a : true
@@ -295,8 +295,8 @@ const Component = <T extends Animations>({
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return "";
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 
   }}
 />;
@@ -341,8 +341,8 @@ function Foo<T>(props: Props<T>) {
 >  : ^^^^^^^^^^^^
 >() => 10 : () => number
 >         : ^^^^^^^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
   b={(arg) => { arg.toString(); }}
 >b : (arg: number) => void
@@ -375,8 +375,8 @@ function Foo<T>(props: Props<T>) {
 >          : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
   b={(arg) => { arg.toString(); }}
 >b : (arg: number) => void
@@ -411,8 +411,8 @@ function Foo<T>(props: Props<T>) {
 >          : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 
   b: (arg) => { arg.toString(); },
 >b : (arg: number) => void

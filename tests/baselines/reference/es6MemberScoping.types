@@ -39,8 +39,8 @@ class Foo2 {
   static Foo2():number { return 0; } // should not be an error
 >Foo2 : () => number
 >     : ^^^^^^      
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
  
 }
 

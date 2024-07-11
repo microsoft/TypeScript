@@ -101,10 +101,10 @@ var o1: { x: [string, number], y: { c: boolean, d: string, e: number } } = { x: 
 >  : ^^^^^^^^^^^^^^^^
 >["string", 1] : [string, number]
 >              : ^^^^^^^^^^^^^^^^
->"string" : "string"
->         : ^^^^^^^^
->1 : 1
->  : ^
+>"string" : string
+>         : ^^^^^^
+>1 : number
+>  : ^^^^^^
 >y : { c: true; d: string; e: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ c: true, d: "world", e: 3 } : { c: true; d: string; e: number; }
@@ -115,12 +115,12 @@ var o1: { x: [string, number], y: { c: boolean, d: string, e: number } } = { x: 
 >     : ^^^^
 >d : string
 >  : ^^^^^^
->"world" : "world"
->        : ^^^^^^^
+>"world" : string
+>        : ^^^^^^
 >e : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : number
+>  : ^^^^^^
 
 foo(o1); // Not error since x has contextual type of tuple namely [string, number]
 >foo(o1) : void
@@ -179,10 +179,10 @@ var tuple: [string, number, boolean] = ["string", 1, true];
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >["string", 1, true] : [string, number, true]
 >                    : ^^^^^^^^^^^^^^^^^^^^^^
->"string" : "string"
->         : ^^^^^^^^
->1 : 1
->  : ^
+>"string" : string
+>         : ^^^^^^
+>1 : number
+>  : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -201,10 +201,10 @@ baz(["string", 1, true]);
 >    : ^ ^^                         ^^^^^^^^^
 >["string", 1, true] : [string, number, true]
 >                    : ^^^^^^^^^^^^^^^^^^^^^^
->"string" : "string"
->         : ^^^^^^^^
->1 : 1
->  : ^
+>"string" : string
+>         : ^^^^^^
+>1 : number
+>  : ^^^^^^
 >true : true
 >     : ^^^^
 
@@ -223,10 +223,10 @@ baz(["string", 1, true, ...array]);  // Error
 >    : ^ ^^                         ^^^^^^^^^
 >["string", 1, true, ...array] : [string, number, true, ...(string | number | boolean)[]]
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"string" : "string"
->         : ^^^^^^^^
->1 : 1
->  : ^
+>"string" : string
+>         : ^^^^^^
+>1 : number
+>  : ^^^^^^
 >true : true
 >     : ^^^^
 >...array : string | number | boolean
