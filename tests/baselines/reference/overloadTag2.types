@@ -83,8 +83,8 @@ var b = new Foo('str')
 >               : ^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->'str' : string
->      : ^^^^^^
+>'str' : "str"
+>      : ^^^^^
 
 var c = new Foo(2)
 >c : Foo
@@ -93,8 +93,8 @@ var c = new Foo(2)
 >           : ^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var d = new Foo('str', 2)
 >d : Foo
@@ -103,8 +103,8 @@ var d = new Foo('str', 2)
 >                  : ^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->'str' : string
->      : ^^^^^^
->2 : number
->  : ^^^^^^
+>'str' : "str"
+>      : ^^^^^
+>2 : 2
+>  : ^
 

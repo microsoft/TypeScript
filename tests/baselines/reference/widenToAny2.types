@@ -22,6 +22,6 @@ var z3:number = foo3([undefined, "def"]);  // Type is any, but should be string
 >                   : ^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->"def" : string
->      : ^^^^^^
+>"def" : "def"
+>      : ^^^^^
 

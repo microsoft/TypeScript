@@ -19,8 +19,8 @@ class Example {
   insideClass: FuncType = function(val) { // error span goes from here
 >insideClass : FuncType
 >            : ^^^^^^^^
->function(val) { // error span goes from here    switch (val) {      case 1:        return "1";      case 2:        return "2";      case 3:        return "3"      case 4:        return "4"      case 5:        return "5"      // forgot case 6    }  } : (val: Values) => string | undefined
->                                                                                                                                                                                                                                                          : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function(val) { // error span goes from here    switch (val) {      case 1:        return "1";      case 2:        return "2";      case 3:        return "3"      case 4:        return "4"      case 5:        return "5"      // forgot case 6    }  } : (val: Values) => "1" | "2" | "3" | "4" | "5" | undefined
+>                                                                                                                                                                                                                                                          : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val : Values
 >    : ^^^^^^
 
@@ -33,40 +33,40 @@ class Example {
 >  : ^
 
         return "1";
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 
       case 2:
 >2 : 2
 >  : ^
 
         return "2";
->"2" : string
->    : ^^^^^^
+>"2" : "2"
+>    : ^^^
 
       case 3:
 >3 : 3
 >  : ^
 
         return "3"
->"3" : string
->    : ^^^^^^
+>"3" : "3"
+>    : ^^^
 
       case 4:
 >4 : 4
 >  : ^
 
         return "4"
->"4" : string
->    : ^^^^^^
+>"4" : "4"
+>    : ^^^
 
       case 5:
 >5 : 5
 >  : ^
 
         return "5"
->"5" : string
->    : ^^^^^^
+>"5" : "5"
+>    : ^^^
 
       // forgot case 6
     }
@@ -76,8 +76,8 @@ class Example {
 const outsideClass: FuncType = function(val) { // compare to errors only on this line in this case 
 >outsideClass : FuncType
 >             : ^^^^^^^^
->function(val) { // compare to errors only on this line in this case     switch (val) {      case 1:        return "1";      case 2:        return "2";      case 3:        return "3"      case 4:        return "4"      case 5:        return "5"      // forgot case 6    }} : (val: Values) => string | undefined
->                                                                                                                                                                                                                                                                                : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function(val) { // compare to errors only on this line in this case     switch (val) {      case 1:        return "1";      case 2:        return "2";      case 3:        return "3"      case 4:        return "4"      case 5:        return "5"      // forgot case 6    }} : (val: Values) => "1" | "2" | "3" | "4" | "5" | undefined
+>                                                                                                                                                                                                                                                                                : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val : Values
 >    : ^^^^^^
 
@@ -90,40 +90,40 @@ const outsideClass: FuncType = function(val) { // compare to errors only on this
 >  : ^
 
         return "1";
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 
       case 2:
 >2 : 2
 >  : ^
 
         return "2";
->"2" : string
->    : ^^^^^^
+>"2" : "2"
+>    : ^^^
 
       case 3:
 >3 : 3
 >  : ^
 
         return "3"
->"3" : string
->    : ^^^^^^
+>"3" : "3"
+>    : ^^^
 
       case 4:
 >4 : 4
 >  : ^
 
         return "4"
->"4" : string
->    : ^^^^^^
+>"4" : "4"
+>    : ^^^
 
       case 5:
 >5 : 5
 >  : ^
 
         return "5"
->"5" : string
->    : ^^^^^^
+>"5" : "5"
+>    : ^^^
 
       // forgot case 6
     }

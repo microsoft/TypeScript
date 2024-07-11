@@ -18,20 +18,20 @@ var map = new Map([["", true]]);
 >             : ^^^^^^^^^^^^^^^^
 >["", true] : [string, true]
 >           : ^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >true : true
 >     : ^^^^
 
 for ([k = "", v = false] of map) {
 >[k = "", v = false] : [string, boolean]
 >                    : ^^^^^^^^^^^^^^^^^
->k = "" : string
->       : ^^^^^^
+>k = "" : ""
+>       : ^^
 >k : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >v = false : false
 >          : ^^^^^
 >v : boolean

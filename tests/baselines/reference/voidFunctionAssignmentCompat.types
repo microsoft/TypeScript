@@ -124,7 +124,7 @@ var frv3: (v:any)=>number = (function() { return function () { return 0; } })() 
 >                                                : ^^^^^^^^^^^^^^^^^^
 >function () { return 0; } : () => number
 >                          : ^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 

@@ -14,8 +14,8 @@ const b = Symbol('b');
 >            : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->'b' : string
->    : ^^^^^^
+>'b' : "b"
+>    : ^^^
 
 class Foo {
 >Foo : Foo

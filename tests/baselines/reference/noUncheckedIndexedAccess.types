@@ -94,8 +94,8 @@ const e4: boolean = strMap[0 as string | number];
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 as string | number : string | number
 >                     : ^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 const e5: boolean = strMap[0 as string | 0 | 1];
 >e5 : boolean
@@ -360,8 +360,8 @@ const num_ok2: boolean = numMap[0 as number];
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 as number : number
 >            : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 const num_ok3: boolean = numMap[0 as 0 | 1];
 >num_ok3 : boolean

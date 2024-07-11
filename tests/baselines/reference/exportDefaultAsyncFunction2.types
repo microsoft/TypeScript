@@ -39,8 +39,8 @@ export default async(() => await(Promise.resolve(1)));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 === b.ts ===
 export default async () => { return 0; };

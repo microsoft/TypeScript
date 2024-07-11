@@ -119,8 +119,8 @@ map4.get("");
 >     : ^^^^^^^^^
 >get : (key: string) => number
 >    : ^   ^^      ^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 map4["add-on"]();
 >map4["add-on"]() : void

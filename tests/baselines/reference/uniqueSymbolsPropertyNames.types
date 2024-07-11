@@ -27,8 +27,8 @@ const uniqueSymbol0 = Symbol.for("");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 const uniqueSymbol1 = Symbol.for("");
 >uniqueSymbol1 : unique symbol
@@ -41,8 +41,8 @@ const uniqueSymbol1 = Symbol.for("");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 
 function getUniqueSymbol0(): typeof uniqueSymbol0 {
@@ -86,8 +86,8 @@ const Op: OpTypes = {
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"equal" : string
->        : ^^^^^^
+>"equal" : "equal"
+>        : ^^^^^^^
 
 } as OpTypes;
 

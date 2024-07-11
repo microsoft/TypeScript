@@ -10,8 +10,8 @@ var foo: {id:number;} = {id:4, name:"foo"};
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 >name : string
 >     : ^^^^^^
 >"foo" : "foo"

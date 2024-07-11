@@ -12,6 +12,6 @@ export = x;
 import("./a");
 >import("./a") : Promise<any>
 >              : ^^^^^^^^^^^^
->"./a" : string
->      : ^^^^^^
+>"./a" : "./a"
+>      : ^^^^^
 

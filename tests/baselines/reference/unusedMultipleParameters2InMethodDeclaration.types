@@ -22,11 +22,11 @@ class Dummy {
 >   : ^^
 
         person2 = "dummy value";
->person2 = "dummy value" : string
->                        : ^^^^^^
+>person2 = "dummy value" : "dummy value"
+>                        : ^^^^^^^^^^^^^
 >person2 : string
 >        : ^^^^^^
->"dummy value" : string
->              : ^^^^^^
+>"dummy value" : "dummy value"
+>              : ^^^^^^^^^^^^^
     }
 }

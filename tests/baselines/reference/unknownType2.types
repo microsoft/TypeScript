@@ -84,8 +84,8 @@ if (u === 5) {
 >  : ^
 >toString : (radix?: number) => string
 >         : ^     ^^^      ^^^^^      
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 }
 
 if (u === true || u === false) {
@@ -874,8 +874,8 @@ function switchResponse(x: unknown): SomeResponse {
 >                              : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'unknown response' : string
->                   : ^^^^^^
+>'unknown response' : "unknown response"
+>                   : ^^^^^^^^^^^^^^^^^^
     }
     // Arguably this should be never.
     type End = isTrue<isUnknown<typeof x>>
@@ -917,8 +917,8 @@ function switchResponseWrong(x: unknown): SomeResponse {
 >                                          : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'Can you repeat the question?' : string
->                               : ^^^^^^
+>'Can you repeat the question?' : "Can you repeat the question?"
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     // Arguably this should be never.
     type End = isTrue<isUnknown<typeof x>>

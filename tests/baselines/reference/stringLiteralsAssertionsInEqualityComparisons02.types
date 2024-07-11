@@ -44,8 +44,8 @@ var c = "foo" == (<number>"bar");
 >                : ^^^^^^
 ><number>"bar" : number
 >              : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 var d = "foo" === ("bar" as EnhancedString);
 >d : boolean

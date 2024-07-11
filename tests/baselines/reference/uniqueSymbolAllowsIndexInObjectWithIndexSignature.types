@@ -9,8 +9,8 @@ export const SYM = Symbol('a unique symbol');
 >                          : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->'a unique symbol' : string
->                  : ^^^^^^
+>'a unique symbol' : "a unique symbol"
+>                  : ^^^^^^^^^^^^^^^^^
 
 export interface I {
   [SYM]: 'sym';

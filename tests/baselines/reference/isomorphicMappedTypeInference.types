@@ -247,8 +247,8 @@ function f2() {
 >        : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
 >    : ^ ^^ ^^ ^^^^^      
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
         b: box("hello"),
 >b : Box<string>
@@ -257,8 +257,8 @@ function f2() {
 >             : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
 >    : ^ ^^ ^^ ^^^^^      
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
         c: box(true)
 >c : Box<boolean>
@@ -309,8 +309,8 @@ function f3() {
 >        : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
 >    : ^ ^^ ^^ ^^^^^      
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
         b: box("hello"),
 >b : Box<string>
@@ -319,8 +319,8 @@ function f3() {
 >             : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
 >    : ^ ^^ ^^ ^^^^^      
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
         c: box(true)
 >c : Box<boolean>
@@ -365,8 +365,8 @@ function f4() {
 >        : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
 >    : ^ ^^ ^^ ^^^^^      
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
         b: box("hello"),
 >b : Box<string>
@@ -375,8 +375,8 @@ function f4() {
 >             : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
 >    : ^ ^^ ^^ ^^^^^      
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
         c: box(true)
 >c : Box<boolean>
@@ -456,8 +456,8 @@ function f5(s: string) {
 >        : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
 >    : ^ ^^ ^^ ^^^^^      
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
         b: box("hello"),
 >b : Box<string>
@@ -466,8 +466,8 @@ function f5(s: string) {
 >             : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
 >    : ^ ^^ ^^ ^^^^^      
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
         c: box(true)
 >c : Box<boolean>
@@ -537,8 +537,8 @@ function f6(s: string) {
 >        : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
 >    : ^ ^^ ^^ ^^^^^      
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
         b: box("hello"),
 >b : Box<string>
@@ -547,8 +547,8 @@ function f6(s: string) {
 >             : ^^^^^^^^^^^
 >box : <T>(x: T) => Box<T>
 >    : ^ ^^ ^^ ^^^^^      
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
         c: box(true)
 >c : Box<boolean>
@@ -695,8 +695,8 @@ var g1 = applySpec({
 >(a: any) => 3 : (a: any) => number
 >              : ^ ^^   ^^^^^^^^^^^
 >a : any
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
     nested: {
 >nested : { mul: (b: any) => string; }
@@ -710,8 +710,8 @@ var g1 = applySpec({
 >(b: any) => "n" : (b: any) => string
 >                : ^ ^^   ^^^^^^^^^^^
 >b : any
->"n" : string
->    : ^^^^^^
+>"n" : "n"
+>    : ^^^
     }
 });
 
@@ -780,8 +780,8 @@ foo(o, {b: 9});
 >       : ^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->9 : number
->  : ^^^^^^
+>9 : 9
+>  : ^
 
 o = foo(o, {b: 9});
 >o = foo(o, {b: 9}) : { a: number; b: number; }
@@ -798,8 +798,8 @@ o = foo(o, {b: 9});
 >       : ^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->9 : number
->  : ^^^^^^
+>9 : 9
+>  : ^
 
 // Inferring to { [P in K]: X }, where K extends keyof T, produces same inferences as
 // inferring to { [P in keyof T]: X }.
@@ -845,12 +845,12 @@ let x0 = f20({ foo: 42, bar: "hello" });
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >bar : string
 >    : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 let x1 = f21({ foo: 42, bar: "hello" });
 >x1 : "foo" | "bar"
@@ -863,12 +863,12 @@ let x1 = f21({ foo: 42, bar: "hello" });
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >bar : string
 >    : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 let x2 = f22({ foo: { value: 42} , bar: { value: "hello" } });
 >x2 : { foo: number; bar: string; }
@@ -885,16 +885,16 @@ let x2 = f22({ foo: { value: 42} , bar: { value: "hello" } });
 >             : ^^^^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >bar : { value: string; }
 >    : ^^^^^^^^^^^^^^^^^^
 >{ value: "hello" } : { value: string; }
 >                   : ^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 let x3 = f23({ foo: 42, bar: "hello" });
 >x3 : { foo: number; bar: string; }
@@ -907,12 +907,12 @@ let x3 = f23({ foo: 42, bar: "hello" });
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >bar : string
 >    : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 let x4 = f24({ foo: 42, bar: "hello" });
 >x4 : { foo: number; bar: string; } & { foo: number; bar: string; }
@@ -925,12 +925,12 @@ let x4 = f24({ foo: 42, bar: "hello" });
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >bar : string
 >    : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 // Repro from #29765
 

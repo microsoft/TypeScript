@@ -215,18 +215,18 @@ function f20() {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >{ x: 1 } : { x: number; }
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
 >x2 : { x: number; y: number; }
@@ -239,22 +239,22 @@ function f20() {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >y : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
 >x3 : { x: number; y: number; }
@@ -267,22 +267,22 @@ function f20() {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >{ x: 1, y: 1, z: 1 } : { x: number; y: number; z: number; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >y : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >z : number
 >  : ^^^^^^
 >1 : 1
@@ -304,18 +304,18 @@ function f21() {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >{ x: 1 } : { x: number; }
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
 >x2 : { x: number; y: number; }
@@ -328,22 +328,22 @@ function f21() {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >{ x: 1, y: 1 } : { x: number; y: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >y : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
 >x3 : { x: number; y: number; }
@@ -356,22 +356,22 @@ function f21() {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >{ x: 1, y: 1, z: 1 } : { x: number; y: number; z: number; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >y : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >z : number
 >  : ^^^^^^
 >1 : 1
@@ -429,12 +429,12 @@ let foo: Foo = { a: "hello", b: 42 };
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >b : number
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 setState(foo, { a: "test", b: 43 })
 >setState(foo, { a: "test", b: 43 }) : void
@@ -447,12 +447,12 @@ setState(foo, { a: "test", b: 43 })
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"test" : string
+>"test" : "test"
 >       : ^^^^^^
 >b : number
 >  : ^^^^^^
->43 : number
->   : ^^^^^^
+>43 : 43
+>   : ^^
 
 setState(foo, { a: "hi" });
 >setState(foo, { a: "hi" }) : void
@@ -465,8 +465,8 @@ setState(foo, { a: "hi" });
 >            : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"hi" : string
->     : ^^^^^^
+>"hi" : "hi"
+>     : ^^^^
 
 setState(foo, { b: undefined });
 >setState(foo, { b: undefined }) : void
@@ -594,12 +594,12 @@ c.setState({ a: "test", b: 43 });
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"test" : string
+>"test" : "test"
 >       : ^^^^^^
 >b : number
 >  : ^^^^^^
->43 : number
->   : ^^^^^^
+>43 : 43
+>   : ^^
 
 c.setState({ a: "hi" });
 >c.setState({ a: "hi" }) : void
@@ -614,8 +614,8 @@ c.setState({ a: "hi" });
 >            : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"hi" : string
->     : ^^^^^^
+>"hi" : "hi"
+>     : ^^^^
 
 c.setState({ b: undefined });
 >c.setState({ b: undefined }) : void
@@ -704,8 +704,8 @@ let x1: T2 = { a: 'no' };  // Error
 >            : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'no' : string
->     : ^^^^^^
+>'no' : "no"
+>     : ^^^^
 
 let x2: Partial<T2> = { a: 'no' }; // Error
 >x2 : Partial<T2>
@@ -714,8 +714,8 @@ let x2: Partial<T2> = { a: 'no' }; // Error
 >            : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'no' : string
->     : ^^^^^^
+>'no' : "no"
+>     : ^^^^
 
 let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
 >x3 : { [x: string]: any; a?: number | undefined; }
@@ -724,8 +724,8 @@ let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
 >            : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'no' : string
->     : ^^^^^^
+>'no' : "no"
+>     : ^^^^
 
 // Repro from #13044
 
@@ -757,8 +757,8 @@ let o: O = {x: 5, y: false};
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 >y : false
 >  : ^^^^^
 >false : false
@@ -777,8 +777,8 @@ let f: Foo2<O, 'x'> = {
 >       : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->7 : number
->  : ^^^^^^
+>7 : 7
+>  : ^
 
     pt: {x: 7, y: false},
 >pt : { x: number; y: boolean; }

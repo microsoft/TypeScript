@@ -12,8 +12,8 @@ const foo = Symbol.for("foo");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 
 const o = { [foo]: undefined };
 >o : { [foo]: any; }

@@ -34,10 +34,10 @@ foo2(["s", "t"]);
 >     : ^ ^^        ^^^^^^^^^
 >["s", "t"] : string[]
 >           : ^^^^^^^^
->"s" : string
->    : ^^^^^^
->"t" : string
->    : ^^^^^^
+>"s" : "s"
+>    : ^^^
+>"t" : "t"
+>    : ^^^
 
 function foo3(x: (n: number) =>number) { };
 >foo3 : (x: (n: number) => number) => void

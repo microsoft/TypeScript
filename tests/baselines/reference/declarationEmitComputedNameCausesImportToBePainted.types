@@ -34,8 +34,8 @@ export const context: Context = {
 >      : ^^^^^^
 >Key : unique symbol
 >    : ^^^^^^^^^^^^^
->'bar' : string
->      : ^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
 }
 
 export const withContext = ({ [Key]: value }: Context) => value;

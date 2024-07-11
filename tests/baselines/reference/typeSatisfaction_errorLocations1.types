@@ -159,10 +159,10 @@ const tuple1: [boolean, boolean] = [true, 100 satisfies unknown];
 >                              : ^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
->100 satisfies unknown : number
->                      : ^^^^^^
->100 : number
->    : ^^^^^^
+>100 satisfies unknown : 100
+>                      : ^^^
+>100 : 100
+>    : ^^^
 
 const obj2 = { a: 10, b: true } satisfies Record<string, number>;
 >obj2 : { a: number; b: boolean; }
@@ -173,8 +173,8 @@ const obj2 = { a: 10, b: true } satisfies Record<string, number>;
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : boolean
 >  : ^^^^^^^
 >true : true
@@ -193,10 +193,10 @@ const literal2: true = 1 satisfies number;
 >         : ^^^^
 >true : true
 >     : ^^^^
->1 satisfies number : number
->                   : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 satisfies number : 1
+>                   : ^
+>1 : 1
+>  : ^
 
 declare function fn3(...args: unknown[]): void;
 >fn3 : (...args: unknown[]) => void
@@ -209,8 +209,8 @@ fn3(10, ...([10, "20"] satisfies number[]));
 >                                            : ^^^^
 >fn3 : (...args: unknown[]) => void
 >    : ^^^^    ^^         ^^^^^    
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >...([10, "20"] satisfies number[]) : string | number
 >                                   : ^^^^^^^^^^^^^^^
 >([10, "20"] satisfies number[]) : (string | number)[]
@@ -219,10 +219,10 @@ fn3(10, ...([10, "20"] satisfies number[]));
 >                              : ^^^^^^^^^^^^^^^^^^^
 >[10, "20"] : (string | number)[]
 >           : ^^^^^^^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
->"20" : string
->     : ^^^^^^
+>10 : 10
+>   : ^^
+>"20" : "20"
+>     : ^^^^
 
 const tuple2 = [10, "20"] as const;
 >tuple2 : readonly [10, "20"]
@@ -241,8 +241,8 @@ fn3(10, ...(tuple2 satisfies number[]));
 >                                        : ^^^^
 >fn3 : (...args: unknown[]) => void
 >    : ^^^^    ^^         ^^^^^    
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >...(tuple2 satisfies number[]) : 10 | "20"
 >                               : ^^^^^^^^^
 >(tuple2 satisfies number[]) : readonly [10, "20"]
@@ -263,8 +263,8 @@ fn4(10, ...(["10", "20"] satisfies readonly string[]));
 >                                                       : ^^^^
 >fn4 : (...args: number[]) => void
 >    : ^^^^    ^^        ^^^^^    
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >...(["10", "20"] satisfies readonly string[]) : string
 >                                              : ^^^^^^
 >(["10", "20"] satisfies readonly string[]) : string[]
@@ -273,10 +273,10 @@ fn4(10, ...(["10", "20"] satisfies readonly string[]));
 >                                         : ^^^^^^^^
 >["10", "20"] : string[]
 >             : ^^^^^^^^
->"10" : string
->     : ^^^^^^
->"20" : string
->     : ^^^^^^
+>"10" : "10"
+>     : ^^^^
+>"20" : "20"
+>     : ^^^^
 
 const tuple3 = ["10", "20"] as const;
 >tuple3 : readonly ["10", "20"]
@@ -295,8 +295,8 @@ fn4(10, ...(tuple3 satisfies readonly string[]));
 >                                                 : ^^^^
 >fn4 : (...args: number[]) => void
 >    : ^^^^    ^^        ^^^^^    
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >...(tuple3 satisfies readonly string[]) : "20" | "10"
 >                                        : ^^^^^^^^^^^
 >(tuple3 satisfies readonly string[]) : readonly ["10", "20"]
@@ -311,10 +311,10 @@ function fn5(): number {
 >    : ^^^^^^      
 
   return "foo" satisfies unknown;
->"foo" satisfies unknown : string
->                        : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" satisfies unknown : "foo"
+>                        : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 }
 
 function fn6(): number {
@@ -322,10 +322,10 @@ function fn6(): number {
 >    : ^^^^^^      
 
   return "foo" satisfies number;
->"foo" satisfies number : string
->                       : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" satisfies number : "foo"
+>                       : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 }
 
 ((): { a: true } => ({}) satisfies unknown)();

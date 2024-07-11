@@ -64,8 +64,8 @@ const checked_ = checkType_<{x: number, y: string}>()({
 >  : ^^^^^^
 >1 as number : number
 >            : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
   y: "y",
 >y : "y"

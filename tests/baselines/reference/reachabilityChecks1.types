@@ -105,8 +105,8 @@ function f1(x) {
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"123" : string
->      : ^^^^^^
+>"123" : "123"
+>      : ^^^^^
     }
     var x;
 >x : any

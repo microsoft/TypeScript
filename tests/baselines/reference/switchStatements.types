@@ -47,8 +47,8 @@ switch (x) {
 >             : ^^^^
 >Date : DateConstructor
 >     : ^^^^^^^^^^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
     case new Object():
 >new Object() : Object
@@ -103,8 +103,8 @@ switch (x) {
 >  : ^^^^^^^^
 >fn : (x: number) => string
 >   : ^ ^^      ^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     case <T>(x: number) => '':
 ><T>(x: number) => '' : <T>(x: number) => string
@@ -125,8 +125,8 @@ switch (x) {
 >  : ^^^^^^
 >'' : ""
 >   : ^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
     default:
 }
@@ -199,8 +199,8 @@ switch (new Date(12)) { }
 >             : ^^^^
 >Date : DateConstructor
 >     : ^^^^^^^^^^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 switch (new Object()) { }
 >new Object() : Object
@@ -253,8 +253,8 @@ switch ((<T>(x: T) => '')(1)) { }
 >  : ^
 >'' : ""
 >   : ^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 
 

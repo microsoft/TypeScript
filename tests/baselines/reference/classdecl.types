@@ -31,8 +31,8 @@ class a {
 >  : ^^^^^^
 
         return 30;
->30 : number
->   : ^^^^^^
+>30 : 30
+>   : ^^
     }
     public set d(a: number) {
 >d : number

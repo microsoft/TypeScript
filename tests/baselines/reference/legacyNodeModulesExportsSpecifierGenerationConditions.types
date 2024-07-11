@@ -16,8 +16,8 @@ export const a = async () => (await import("inner")).x();
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("inner") : Promise<typeof import("node_modules/inner/index")>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"inner" : string
->        : ^^^^^^
+>"inner" : "inner"
+>        : ^^^^^^^
 >x : () => import("node_modules/inner/private").Thing
 >  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
 

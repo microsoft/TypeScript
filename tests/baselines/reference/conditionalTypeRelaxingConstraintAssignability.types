@@ -65,8 +65,8 @@ new Elem('' as ElChildren.Text);
 >     : ^^^^^^^^^^^
 >'' as ElChildren.Text : string
 >                      : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >ElChildren : any
 >           : ^^^
 
@@ -77,8 +77,8 @@ new Elem('' as ElChildren.Void | ElChildren.Text); // error
 >     : ^^^^^^^^^^^
 >'' as ElChildren.Void | ElChildren.Text : string | undefined
 >                                        : ^^^^^^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >ElChildren : any
 >           : ^^^
 >ElChildren : any
@@ -91,8 +91,8 @@ new Elem('' as ElChildren); // error
 >     : ^^^^^^^^^^^
 >'' as ElChildren : ElChildren
 >                 : ^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 // Repro from #31766
 

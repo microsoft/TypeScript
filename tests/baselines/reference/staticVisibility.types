@@ -102,8 +102,8 @@ class C2 {
 barback:string = "";
 >barback : string
 >        : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
  
 
 
@@ -111,8 +111,8 @@ barback:string = "";
 static get Bar() {return "bar";} // ok
 >Bar : string
 >    : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
  
 static set Bar(bar:string) {barback = bar;} // not ok
 >Bar : string

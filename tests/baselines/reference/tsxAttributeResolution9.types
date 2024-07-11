@@ -50,6 +50,6 @@ export class MyComponent {
 >            : ^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 

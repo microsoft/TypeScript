@@ -47,16 +47,16 @@ class A {
 
     constructor() {
         this.a = 1;
->this.a = 1 : number
->           : ^^^^^^
+>this.a = 1 : 1
+>           : ^
 >this.a : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 }
 

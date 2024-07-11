@@ -19,12 +19,12 @@ var robotA: Robot = [1, "mower", "mowing"];
 >       : ^^^^^
 >[1, "mower", "mowing"] : [number, string, string]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->"mower" : string
->        : ^^^^^^
->"mowing" : string
->         : ^^^^^^
+>1 : 1
+>  : ^
+>"mower" : "mower"
+>        : ^^^^^^^
+>"mowing" : "mowing"
+>         : ^^^^^^^^
 
 function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
 >foo1 : ([, nameA]?: Robot) => void
@@ -33,18 +33,18 @@ function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
 > : ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
->"noName" : string
->         : ^^^^^^
+>"noName" : "noName"
+>         : ^^^^^^^^
 >[-1, "name", "skill"] : [number, string, string]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
 >  : ^
->"name" : string
+>"name" : "name"
 >       : ^^^^^^
->"skill" : string
->        : ^^^^^^
+>"skill" : "skill"
+>        : ^^^^^^^
 
     console.log(nameA);
 >console.log(nameA) : void
@@ -74,10 +74,10 @@ function foo2([numberB = -1]: Robot = [-1, "name", "skill"]) {
 >   : ^^
 >1 : 1
 >  : ^
->"name" : string
+>"name" : "name"
 >       : ^^^^^^
->"skill" : string
->        : ^^^^^^
+>"skill" : "skill"
+>        : ^^^^^^^
 
     console.log(numberB);
 >console.log(numberB) : void
@@ -103,22 +103,22 @@ function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, 
 >  : ^
 >nameA2 : string
 >       : ^^^^^^
->"name" : string
+>"name" : "name"
 >       : ^^^^^^
 >skillA2 : string
 >        : ^^^^^^
->"skill" : string
->        : ^^^^^^
+>"skill" : "skill"
+>        : ^^^^^^^
 >[-1, "name", "skill"] : [number, string, string]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
 >  : ^
->"name" : string
+>"name" : "name"
 >       : ^^^^^^
->"skill" : string
->        : ^^^^^^
+>"skill" : "skill"
+>        : ^^^^^^^
 
     console.log(nameA2);
 >console.log(nameA2) : void
@@ -150,10 +150,10 @@ function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
 >   : ^^
 >1 : 1
 >  : ^
->"name" : string
+>"name" : "name"
 >       : ^^^^^^
->"skill" : string
->        : ^^^^^^
+>"skill" : "skill"
+>        : ^^^^^^^
 
     console.log(robotAInfo);
 >console.log(robotAInfo) : void
@@ -183,12 +183,12 @@ foo1([2, "trimmer", "trimming"]);
 >     : ^         ^^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
->"trimmer" : string
->          : ^^^^^^
->"trimming" : string
->           : ^^^^^^
+>2 : 2
+>  : ^
+>"trimmer" : "trimmer"
+>          : ^^^^^^^^^
+>"trimming" : "trimming"
+>           : ^^^^^^^^^^
 
 foo2(robotA);
 >foo2(robotA) : void
@@ -205,12 +205,12 @@ foo2([2, "trimmer", "trimming"]);
 >     : ^         ^^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
->"trimmer" : string
->          : ^^^^^^
->"trimming" : string
->           : ^^^^^^
+>2 : 2
+>  : ^
+>"trimmer" : "trimmer"
+>          : ^^^^^^^^^
+>"trimming" : "trimming"
+>           : ^^^^^^^^^^
 
 foo3(robotA);
 >foo3(robotA) : void
@@ -227,12 +227,12 @@ foo3([2, "trimmer", "trimming"]);
 >     : ^                           ^^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
->"trimmer" : string
->          : ^^^^^^
->"trimming" : string
->           : ^^^^^^
+>2 : 2
+>  : ^
+>"trimmer" : "trimmer"
+>          : ^^^^^^^^^
+>"trimming" : "trimming"
+>           : ^^^^^^^^^^
 
 foo4(robotA);
 >foo4(robotA) : void
@@ -249,10 +249,10 @@ foo4([2, "trimmer", "trimming"]);
 >     : ^                         ^^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
->"trimmer" : string
->          : ^^^^^^
->"trimming" : string
->           : ^^^^^^
+>2 : 2
+>  : ^
+>"trimmer" : "trimmer"
+>          : ^^^^^^^^^
+>"trimming" : "trimming"
+>           : ^^^^^^^^^^
 

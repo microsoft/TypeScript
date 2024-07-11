@@ -40,8 +40,8 @@ foo = { id: 1234 };                // Ok
 >             : ^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->1234 : number
->     : ^^^^^^
+>1234 : 1234
+>     : ^^^^
 
 foo = { id: 1234, name: "test" };  // Ok
 >foo = { id: 1234, name: "test" } : { id: number; name: string; }
@@ -52,11 +52,11 @@ foo = { id: 1234, name: "test" };  // Ok
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->1234 : number
->     : ^^^^^^
+>1234 : 1234
+>     : ^^^^
 >name : string
 >     : ^^^^^^
->"test" : string
+>"test" : "test"
 >       : ^^^^^^
 
 foo = { name: "test" };            // Error, id missing
@@ -68,7 +68,7 @@ foo = { name: "test" };            // Error, id missing
 >                 : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"test" : string
+>"test" : "test"
 >       : ^^^^^^
 
 foo = {id: 1234, print:()=>{}}	   // Ok
@@ -80,8 +80,8 @@ foo = {id: 1234, print:()=>{}}	   // Ok
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->1234 : number
->     : ^^^^^^
+>1234 : 1234
+>     : ^^^^
 >print : () => void
 >      : ^^^^^^^^^^
 >()=>{} : () => void
@@ -98,8 +98,8 @@ var s = foo.name || "default";
 >    : ^^^^
 >name : string
 >     : ^^^^^^
->"default" : string
->          : ^^^^^^
+>"default" : "default"
+>          : ^^^^^^^^^
 
 if (foo.print !== undefined) foo.print();
 >foo.print !== undefined : boolean
@@ -178,8 +178,8 @@ var test6: i3 = { M: 5 };
 >         : ^^^^^^^^^^^^^^
 >M : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 var test7: i2 = { M: function () { } };
 >test7 : i2
@@ -206,8 +206,8 @@ var test8: i4 = { M: 5 }
 >         : ^^^^^^^^^^^^^^
 >M : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 test8 = {};
 >test8 = {} : {}

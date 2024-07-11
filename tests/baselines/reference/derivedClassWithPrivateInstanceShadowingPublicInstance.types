@@ -14,8 +14,8 @@ class Base {
 >   : ^^^^^^      
 
         return '';
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
     }
 
     public get a() { return 1; }
@@ -47,8 +47,8 @@ class Derived extends Base {
 >   : ^^^^^^      
 
         return '';
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
     }
 
     private get a() { return 1; }

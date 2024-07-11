@@ -66,8 +66,8 @@ const f11 = id1(function ({ foo = 42 }) { return foo });
 >                                       : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >foo : number
 >    : ^^^^^^
 
@@ -114,8 +114,8 @@ const f14 = id4(function ({ foo = 42 }) { return foo });
 >                                       : ^       ^^^^^^^^^^      ^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >foo : number
 >    : ^^^^^^
 
@@ -142,8 +142,8 @@ const f21 = id1(function (foo = 42) { return foo });
 >                                   : ^   ^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >foo : number
 >    : ^^^^^^
 
@@ -174,8 +174,8 @@ const f25 = id5(function (foo = 42) { return foo });
 >                                   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >foo : number
 >    : ^^^^^^
 
@@ -320,8 +320,8 @@ g1((x = 1) => 0);  // number
 >             : ^ ^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >0 : 0
 >  : ^
 
@@ -334,8 +334,8 @@ g2((x = 1) => 0);  // number
 >             : ^ ^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >0 : 0
 >  : ^
 
@@ -348,8 +348,8 @@ g3((x = 1) => 0);  // number
 >             : ^ ^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >0 : 0
 >  : ^
 
@@ -362,8 +362,8 @@ g4((x = 1) => 0);  // number
 >             : ^ ^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >0 : 0
 >  : ^
 
@@ -378,8 +378,8 @@ g5((x = 1) => 0);  // any
 >  : ^^^
 >1 : 1
 >  : ^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 g6((x = 1) => 0);  // number
 >g6((x = 1) => 0) : (x?: number) => number
@@ -390,10 +390,10 @@ g6((x = 1) => 0);  // number
 >             : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>0 : 0
+>  : ^
 
 g6((x?) => 0);     // Implicit any error
 >g6((x?) => 0) : (x?: any) => number
@@ -404,8 +404,8 @@ g6((x?) => 0);     // Implicit any error
 >          : ^ ^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 g6((...x) => 0);   // []
 >g6((...x) => 0) : () => number
@@ -416,8 +416,8 @@ g6((...x) => 0);   // []
 >            : ^^^^^^^^^^^^
 >x : []
 >  : ^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 // Repro from #28816
 
@@ -465,8 +465,8 @@ const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
 >       : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
   return foo;
 >foo : number
@@ -551,8 +551,8 @@ const memoizedAdd3 = memoize((x: number, y = 0): number => x + y);
 >  : ^^^^^^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >x + y : number
 >      : ^^^^^^
 >x : number
@@ -591,16 +591,16 @@ export function executeSomething() {
 >      : ^^^^^^^
 
             root.innerHTML = '';
->root.innerHTML = '' : string
->                    : ^^^^^^
+>root.innerHTML = '' : ""
+>                    : ^^
 >root.innerHTML : string
 >               : ^^^^^^
 >root : HTMLElement
 >     : ^^^^^^^^^^^
 >innerHTML : string
 >          : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
         }
     });
 }

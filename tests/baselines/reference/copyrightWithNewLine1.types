@@ -20,8 +20,8 @@ var el = document.getElementById('content');
 >         : ^^^^^^^^
 >getElementById : (elementId: string) => HTMLElement | null
 >               : ^         ^^      ^^^^^                  
->'content' : string
->          : ^^^^^^
+>'content' : "content"
+>          : ^^^^^^^^^
 
 var greeter = new model.Greeter(el);
 >greeter : any

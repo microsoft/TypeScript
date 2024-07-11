@@ -220,12 +220,12 @@ var { x, ...fresh } = { x: 1, y: 2 };
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >y : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 class Removable {
 >Removable : Removable
@@ -248,8 +248,8 @@ class Removable {
     get both(): number { return 12 }
 >both : number
 >     : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
     set both(value: number) { }
 >both : number

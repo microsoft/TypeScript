@@ -38,8 +38,8 @@ namespace Foo {
 >        : ^^^^^^      
 
         return 5;
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
     }
 }
 function Bar() {
@@ -61,7 +61,7 @@ namespace Bar {
 >  : ^^^^^^
 
         return 5;
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
     }
 }

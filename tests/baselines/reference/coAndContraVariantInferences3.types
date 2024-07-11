@@ -310,8 +310,8 @@ buildOverload("updateImportDeclaration")
 >                                         : ^^^^^^^^^^^^^^^
 >buildOverload : (name: string) => OverloadBuilder
 >              : ^    ^^      ^^^^^               
->"updateImportDeclaration" : string
->                          : ^^^^^^
+>"updateImportDeclaration" : "updateImportDeclaration"
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     .overload({
 >overload : <T extends OverloadDefinitions>(overloads: T) => BindableOverloadBuilder<T>

@@ -45,16 +45,16 @@ class Dummy<usedtypeparameter, unusedtypeparameter> {
 >   : ^^
 
         this.greeting = "Dummy Message";
->this.greeting = "Dummy Message" : string
->                                : ^^^^^^
+>this.greeting = "Dummy Message" : "Dummy Message"
+>                                : ^^^^^^^^^^^^^^^
 >this.greeting : string
 >              : ^^^^^^
 >this : this
 >     : ^^^^
 >greeting : string
 >         : ^^^^^^
->"Dummy Message" : string
->                : ^^^^^^
+>"Dummy Message" : "Dummy Message"
+>                : ^^^^^^^^^^^^^^^
     }
 
     public greeter(person: string) {

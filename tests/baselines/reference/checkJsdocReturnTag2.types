@@ -10,8 +10,8 @@ function f() {
 >  : ^^^^^^      
 
     return 5;
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 }
 
 /**
@@ -22,10 +22,10 @@ function f1() {
 >   : ^^^^^^               
 
     return 5 || true;
->5 || true : number | true
->          : ^^^^^^^^^^^^^
->5 : number
->  : ^^^^^^
+>5 || true : true | 5
+>          : ^^^^^^^^
+>5 : 5
+>  : ^
 >true : true
 >     : ^^^^
 }

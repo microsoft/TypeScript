@@ -100,12 +100,12 @@ const yy: Record<string, A> & Record<string, B> = {
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >b : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 };
 

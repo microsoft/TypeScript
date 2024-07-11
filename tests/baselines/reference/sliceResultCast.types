@@ -16,6 +16,6 @@ x.slice(1) as readonly string[];
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >slice : ((start?: number, end?: number) => (string | number)[]) | ((start?: number, end?: number) => (string | number)[])
 >      : ^^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

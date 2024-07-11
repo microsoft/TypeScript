@@ -4,8 +4,8 @@
 let foo: string = "";
 >foo : string
 >    : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 function f1 (bar = foo) { // unexpected compiler error; works at runtime
 >f1 : (bar?: string) => string
@@ -18,8 +18,8 @@ function f1 (bar = foo) { // unexpected compiler error; works at runtime
     var foo: number = 2;
 >foo : number
 >    : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
     return bar; // returns 1
 >bar : string
@@ -43,8 +43,8 @@ function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at 
     var foo: number = 2;
 >foo : number
 >    : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
     return bar(); // returns 1
 >bar() : string
@@ -122,8 +122,8 @@ function f7({[foo]: bar}: any[]) {
     let foo: number = 2;
 >foo : number
 >    : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 }
 
 class Foo {

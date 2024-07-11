@@ -257,16 +257,16 @@ module M {
         for (var j=z.length=1;j>=0;j--) {
 >j : number
 >  : ^^^^^^
->z.length=1 : number
->           : ^^^^^^
+>z.length=1 : 1
+>           : ^
 >z.length : number
 >         : ^^^^^^
 >z : IEye[]
 >  : ^^^^^^
 >length : number
 >       : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >j>=0 : boolean
 >     : ^^^^^^^
 >j : number

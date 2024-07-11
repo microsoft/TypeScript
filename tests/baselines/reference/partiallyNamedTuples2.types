@@ -41,8 +41,8 @@ const id1 = "abc" as string;
 >    : ^^^^^^
 >"abc" as string : string
 >                : ^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 const matches = x.get(id1);
 >matches : Iterable<[id2: string, object]>

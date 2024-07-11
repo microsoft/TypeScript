@@ -14,8 +14,8 @@ const c: Combo = () => 1
 >  : ^^^^^
 >() => 1 : { (): number; p: {}; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 // should not be an expando object, but contextually typed by Combo.p
 c.p = {}

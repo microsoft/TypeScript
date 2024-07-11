@@ -51,8 +51,8 @@ function getProps(): AnimalInfo {
 >      : ^^^^^
 >subType : string
 >        : ^^^^^^
->'Large' : string
->        : ^^^^^^
+>'Large' : "Large"
+>        : ^^^^^^^
 }
 
 var props:AnimalInfo = getProps();
@@ -82,8 +82,8 @@ var props2:AnimalInfo = { type: 'Cat', subType: 'Large' };
 >      : ^^^^^
 >subType : string
 >        : ^^^^^^
->'Large' : string
->        : ^^^^^^
+>'Large' : "Large"
+>        : ^^^^^^^
 
 var component2 = <AnimalComponent {...props2} />
 >component2 : error

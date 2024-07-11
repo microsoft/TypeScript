@@ -49,8 +49,8 @@ Elem({prop: {a: "x"}, children: i => ({a: "z"})});
 >         : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"x" : string
->    : ^^^^^^
+>"x" : "x"
+>    : ^^^
 >children : (i: { a: string; }) => { a: string; }
 >         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >i => ({a: "z"}) : (i: { a: string; }) => { a: string; }
@@ -63,8 +63,8 @@ Elem({prop: {a: "x"}, children: i => ({a: "z"})});
 >         : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"z" : string
->    : ^^^^^^
+>"z" : "z"
+>    : ^^^
 
 const q = <Elem prop={{a: "x"}} children={i => ({a: "z"})} />
 >q : JSX.Element
@@ -79,8 +79,8 @@ const q = <Elem prop={{a: "x"}} children={i => ({a: "z"})} />
 >         : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"x" : string
->    : ^^^^^^
+>"x" : "x"
+>    : ^^^
 >children : (i: { a: string; }) => { a: string; }
 >         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >i => ({a: "z"}) : (i: { a: string; }) => { a: string; }
@@ -93,8 +93,8 @@ const q = <Elem prop={{a: "x"}} children={i => ({a: "z"})} />
 >         : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"z" : string
->    : ^^^^^^
+>"z" : "z"
+>    : ^^^
 
 const qq = <Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem>
 >qq : JSX.Element
@@ -109,8 +109,8 @@ const qq = <Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem>
 >         : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"x" : string
->    : ^^^^^^
+>"x" : "x"
+>    : ^^^
 >i => ({a: "z"}) : (i: { a: string; }) => { a: string; }
 >                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >i : { a: string; }
@@ -121,8 +121,8 @@ const qq = <Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem>
 >         : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"z" : string
->    : ^^^^^^
+>"z" : "z"
+>    : ^^^
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
 >     : ^ ^^ ^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 

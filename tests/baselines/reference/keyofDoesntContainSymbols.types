@@ -77,8 +77,8 @@ const val = set(obj, 'str', '');
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >'str' : "str"
 >      : ^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 // string
 const valB = set(obj, 'num', '');
@@ -92,8 +92,8 @@ const valB = set(obj, 'num', '');
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >'num' : "num"
 >      : ^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 // Expect type error
 // Argument of type '""' is not assignable to parameter of type 'number'.

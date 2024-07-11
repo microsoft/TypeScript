@@ -53,8 +53,8 @@ let pair1: Pair<FooBar> = {
     value: 3
 >value : number
 >      : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 };
 
@@ -74,8 +74,8 @@ let pair2: Pairs<FooBar>[keyof FooBar] = {
     value: 3
 >value : number
 >      : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 };
 

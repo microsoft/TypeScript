@@ -8,8 +8,8 @@ class A2 {
     get #prop() { return ""; }
 >#prop : string
 >      : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     set #prop(param: string) { }
 >#prop : string

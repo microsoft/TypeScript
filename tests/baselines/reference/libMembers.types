@@ -16,8 +16,8 @@ s.substring(0);
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
 >          : ^     ^^      ^^   ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 s.substring(3,4);
 >s.substring(3,4) : string
@@ -28,10 +28,10 @@ s.substring(3,4);
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
 >          : ^     ^^      ^^   ^^^      ^^^^^      
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
 s.subby(12);   // error unresolved
 >s.subby(12) : any
@@ -54,8 +54,8 @@ String.fromCharCode(12);
 >       : ^^^^^^^^^^^^^^^^^
 >fromCharCode : (...codes: number[]) => string
 >             : ^^^^     ^^        ^^^^^      
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 module M {
 >M : typeof M

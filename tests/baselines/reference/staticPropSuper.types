@@ -15,8 +15,8 @@ class B extends A {
     public static s: number = 9;
 >s : number
 >  : ^^^^^^
->9 : number
->  : ^^^^^^
+>9 : 9
+>  : ^
 
     constructor() {
         var x = 1; // should not error
@@ -42,8 +42,8 @@ class C extends A {
     public p: number = 10;
 >p : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     constructor() {
         var x = 1; // should error
@@ -63,8 +63,8 @@ class D extends A {
     private p: number = 11;
 >p : number
 >  : ^^^^^^
->11 : number
->   : ^^^^^^
+>11 : 11
+>   : ^^
 
     constructor() {
         var x = 1; // should error
@@ -84,8 +84,8 @@ class E extends A {
     p: number = 12;
 >p : number
 >  : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
     constructor() {
         var x = 1; // should error

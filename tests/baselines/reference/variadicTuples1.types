@@ -93,12 +93,12 @@ const t2 = tup2(['hello'], [10, true]);
 >     : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['hello'] : [string]
 >          : ^^^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 >[10, true] : [number, true]
 >           : ^^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >true : true
 >     : ^^^^
 
@@ -148,12 +148,12 @@ const tc2 = concat(['hello'], [42]);
 >       : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^      ^^ ^^      ^^^^^            
 >['hello'] : [string]
 >          : ^^^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 >[42] : [number]
 >     : ^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 const tc3 = concat([1, 2, 3], sa);
 >tc3 : [number, number, number, ...string[]]
@@ -164,12 +164,12 @@ const tc3 = concat([1, 2, 3], sa);
 >       : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^      ^^ ^^      ^^^^^            
 >[1, 2, 3] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
 >sa : string[]
 >   : ^^^^^^^^
 
@@ -184,12 +184,12 @@ const tc4 = concat(sa, [1, 2, 3]);  // Ideally would be [...string[], number, nu
 >   : ^^^^^^^^
 >[1, 2, 3] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
 
 function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) {
 >concat2 : <T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) => (T[number] | U[number])[]
@@ -269,18 +269,18 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 >                                 : ^^^^
 >foo1 : (a: number, b: string, c: boolean, ...d: number[]) => void
 >     : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^ ^^        ^^^^^    
->1 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
 >true : true
 >     : ^^^^
->42 : number
->   : ^^^^^^
->43 : number
->   : ^^^^^^
->44 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
+>43 : 43
+>   : ^^
+>44 : 44
+>   : ^^
 
     foo1(...t1, true, 42, 43, 44);
 >foo1(...t1, true, 42, 43, 44) : void
@@ -293,12 +293,12 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 >   : ^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
->42 : number
->   : ^^^^^^
->43 : number
->   : ^^^^^^
->44 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
+>43 : 43
+>   : ^^
+>44 : 44
+>   : ^^
 
     foo1(...t1, ...t2, 42, 43, 44);
 >foo1(...t1, ...t2, 42, 43, 44) : void
@@ -313,12 +313,12 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 >      : ^^^^^^^
 >t2 : [boolean]
 >   : ^^^^^^^^^
->42 : number
->   : ^^^^^^
->43 : number
->   : ^^^^^^
->44 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
+>43 : 43
+>   : ^^
+>44 : 44
+>   : ^^
 
     foo1(...t1, ...t2, ...a1);
 >foo1(...t1, ...t2, ...a1) : void
@@ -380,32 +380,32 @@ function foo4<U extends unknown[]>(u: U) {
 >           : ^^
 >foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
 >     : ^ ^^^^^^^^^         ^^ ^^      ^^^^^    ^^              ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
     foo3(1, 'hello', true, 2);
 >foo3(1, 'hello', true, 2) : [string, boolean]
 >                          : ^^^^^^^^^^^^^^^^^
 >foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
 >     : ^ ^^^^^^^^^         ^^ ^^      ^^^^^    ^^              ^^^^^ 
->1 : number
->  : ^^^^^^
->'hello' : string
->        : ^^^^^^
+>1 : 1
+>  : ^
+>'hello' : "hello"
+>        : ^^^^^^^
 >true : true
 >     : ^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
     foo3(1, ...u, 'hi', 2);
 >foo3(1, ...u, 'hi', 2) : [...U, string]
 >                       : ^^^^^^^^^^^^^^
 >foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
 >     : ^ ^^^^^^^^^         ^^ ^^      ^^^^^    ^^              ^^^^^ 
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >...u : unknown
 >     : ^^^^^^^
 >u : U
@@ -420,8 +420,8 @@ function foo4<U extends unknown[]>(u: U) {
 >        : ^^^^^^^^^
 >foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
 >     : ^ ^^^^^^^^^         ^^ ^^      ^^^^^    ^^              ^^^^^ 
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 }
 
 // Contextual typing of array literals
@@ -457,10 +457,10 @@ ft1(['hello', 42]);  // (string | number)[]
 >    : ^ ^^^^^^^^^         ^^ ^^ ^^^^^ 
 >['hello', 42] : (string | number)[]
 >              : ^^^^^^^^^^^^^^^^^^^
->'hello' : string
->        : ^^^^^^
->42 : number
->   : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
 
 ft2(['hello', 42]);  // readonly (string | number)[]
 >ft2(['hello', 42]) : readonly (string | number)[]
@@ -469,10 +469,10 @@ ft2(['hello', 42]);  // readonly (string | number)[]
 >    : ^ ^^^^^^^^^         ^^ ^^ ^^^^^               
 >['hello', 42] : (string | number)[]
 >              : ^^^^^^^^^^^^^^^^^^^
->'hello' : string
->        : ^^^^^^
->42 : number
->   : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
 
 ft3(['hello', 42]);  // [string, number]
 >ft3(['hello', 42]) : [string, number]
@@ -481,10 +481,10 @@ ft3(['hello', 42]);  // [string, number]
 >    : ^ ^^^^^^^^^         ^^ ^^      ^^^^^ 
 >['hello', 42] : [string, number]
 >              : ^^^^^^^^^^^^^^^^
->'hello' : string
->        : ^^^^^^
->42 : number
->   : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
 
 ft4(['hello', 42]);  // readonly [string, number]
 >ft4(['hello', 42]) : readonly [string, number]
@@ -493,10 +493,10 @@ ft4(['hello', 42]);  // readonly [string, number]
 >    : ^ ^^^^^^^^^         ^^ ^^      ^^^^^               
 >['hello', 42] : [string, number]
 >              : ^^^^^^^^^^^^^^^^
->'hello' : string
->        : ^^^^^^
->42 : number
->   : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
 
 // Indexing variadic tuple types
 
@@ -699,20 +699,20 @@ let tm1 = fm1([['abc'], [42], [true], ['def']]);  // [boolean, string]
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['abc'] : string[]
 >        : ^^^^^^^^
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 >[42] : number[]
 >     : ^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >[true] : true[]
 >       : ^^^^^^
 >true : true
 >     : ^^^^
 >['def'] : string[]
 >        : ^^^^^^^^
->'def' : string
->      : ^^^^^^
+>'def' : "def"
+>      : ^^^^^
 
 // Spread of readonly array-like infers mutable array-like
 
@@ -737,16 +737,16 @@ function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >           : ^^
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
 >    : ^ ^^^^^^^^^         ^^ ^^      ^^^^^    ^^ ^^^^^ 
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 
     fx1('abc', ...u);  // U
 >fx1('abc', ...u) : U
 >                 : ^
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
 >    : ^ ^^^^^^^^^         ^^ ^^      ^^^^^    ^^ ^^^^^ 
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 >...u : unknown
 >     : ^^^^^^^
 >u : U
@@ -757,8 +757,8 @@ function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >                 : ^^^^^^
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
 >    : ^ ^^^^^^^^^         ^^ ^^      ^^^^^    ^^ ^^^^^ 
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 >...v : unknown
 >     : ^^^^^^^
 >v : V
@@ -769,8 +769,8 @@ function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >                    : ^
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
 >    : ^ ^^^^^^^^^         ^^ ^^      ^^^^^    ^^ ^^^^^ 
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 >...u : unknown
 >     : ^^^^^^^
 >u : U
@@ -781,8 +781,8 @@ function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >                    : ^
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
 >    : ^ ^^^^^^^^^         ^^ ^^      ^^^^^    ^^ ^^^^^ 
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 >...v : unknown
 >     : ^^^^^^^
 >v : V
@@ -810,16 +810,16 @@ function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >           : ^^
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
 >    : ^ ^^^^^^^^^                  ^^ ^^      ^^^^^    ^^ ^^^^^ 
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 
     fx2('abc', ...u);  // U
 >fx2('abc', ...u) : U
 >                 : ^
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
 >    : ^ ^^^^^^^^^                  ^^ ^^      ^^^^^    ^^ ^^^^^ 
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 >...u : unknown
 >     : ^^^^^^^
 >u : U
@@ -830,8 +830,8 @@ function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >                 : ^^^^^^
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
 >    : ^ ^^^^^^^^^                  ^^ ^^      ^^^^^    ^^ ^^^^^ 
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 >...v : unknown
 >     : ^^^^^^^
 >v : V
@@ -842,8 +842,8 @@ function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >                    : ^
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
 >    : ^ ^^^^^^^^^                  ^^ ^^      ^^^^^    ^^ ^^^^^ 
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 >...u : unknown
 >     : ^^^^^^^
 >u : U
@@ -854,8 +854,8 @@ function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >                    : ^
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
 >    : ^ ^^^^^^^^^                  ^^ ^^      ^^^^^    ^^ ^^^^^ 
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 >...v : unknown
 >     : ^^^^^^^
 >v : V
@@ -1663,8 +1663,8 @@ const c1 = curry(fn1, 1);  // (b: string, c: boolean, d: string[]) => number
 >      : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
 >    : ^ ^^      ^^ ^^      ^^ ^^       ^^ ^^        ^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const c2 = curry(fn1, 1, 'abc');  // (c: boolean, d: string[]) => number
 >c2 : (c: boolean, d: string[]) => number
@@ -1675,10 +1675,10 @@ const c2 = curry(fn1, 1, 'abc');  // (c: boolean, d: string[]) => number
 >      : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
 >    : ^ ^^      ^^ ^^      ^^ ^^       ^^ ^^        ^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
 
 const c3 = curry(fn1, 1, 'abc', true);  // (d: string[]) => number
 >c3 : (d: string[]) => number
@@ -1689,10 +1689,10 @@ const c3 = curry(fn1, 1, 'abc', true);  // (d: string[]) => number
 >      : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
 >    : ^ ^^      ^^ ^^      ^^ ^^       ^^ ^^        ^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
 >true : true
 >     : ^^^^
 
@@ -1705,18 +1705,18 @@ const c4 = curry(fn1, 1, 'abc', true, ['x', 'y']);  // () => number
 >      : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
 >    : ^ ^^      ^^ ^^      ^^ ^^       ^^ ^^        ^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
 >true : true
 >     : ^^^^
 >['x', 'y'] : string[]
 >           : ^^^^^^^^
->'x' : string
->    : ^^^^^^
->'y' : string
->    : ^^^^^^
+>'x' : "x"
+>    : ^^^
+>'y' : "y"
+>    : ^^^
 
 const fn2 = (x: number, b: boolean, ...args: string[]) => 0;
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
@@ -1751,8 +1751,8 @@ const c11 = curry(fn2, 1);  // (b: boolean, ...args: string[]) => number
 >      : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
 >    : ^ ^^      ^^ ^^       ^^^^^    ^^        ^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const c12 = curry(fn2, 1, true);  // (...args: string[]) => number
 >c12 : (...b: string[]) => number
@@ -1763,8 +1763,8 @@ const c12 = curry(fn2, 1, true);  // (...args: string[]) => number
 >      : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
 >    : ^ ^^      ^^ ^^       ^^^^^    ^^        ^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >true : true
 >     : ^^^^
 
@@ -1777,14 +1777,14 @@ const c13 = curry(fn2, 1, true, 'abc', 'def');  // (...args: string[]) => number
 >      : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
 >    : ^ ^^      ^^ ^^       ^^^^^    ^^        ^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >true : true
 >     : ^^^^
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
 
 const fn3 = (...args: string[]) => 0;
 >fn3 : (...args: string[]) => number
@@ -1815,10 +1815,10 @@ const c21 = curry(fn3, 'abc', 'def');  // (...args: string[]) => number
 >      : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn3 : (...args: string[]) => number
 >    : ^^^^    ^^        ^^^^^^^^^^^
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
 
 const c22 = curry(fn3, ...sa);  // (...args: string[]) => number
 >c22 : (...b: string[]) => number
@@ -1882,10 +1882,10 @@ curry2(fn10, ['hello', 42], [true]);
 >     : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^        
 >['hello', 42] : [string, number]
 >              : ^^^^^^^^^^^^^^^^
->'hello' : string
->        : ^^^^^^
->42 : number
->   : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+>42 : 42
+>   : ^^
 >[true] : [true]
 >       : ^^^^^^
 >true : true
@@ -1900,12 +1900,12 @@ curry2(fn10, ['hello'], [42, true]);
 >     : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^        
 >['hello'] : [string]
 >          : ^^^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 >[42, true] : [number, true]
 >           : ^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >true : true
 >     : ^^^^
 
@@ -1926,20 +1926,20 @@ ft([1, 2, 3], [1, 2, 3]);
 >   : ^ ^^^^^^^^^         ^^  ^^      ^^  ^^               ^^^^^ 
 >[1, 2, 3] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
 >[1, 2, 3] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
 
 ft([1, 2], [1, 2, 3]);
 >ft([1, 2], [1, 2, 3]) : [number, number]
@@ -1948,18 +1948,18 @@ ft([1, 2], [1, 2, 3]);
 >   : ^ ^^^^^^^^^         ^^  ^^      ^^  ^^               ^^^^^ 
 >[1, 2] : [number, number]
 >       : ^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >[1, 2, 3] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
 
 ft(['a', 'b'], ['c', 'd'])
 >ft(['a', 'b'], ['c', 'd']) : [string, string]
@@ -1968,16 +1968,16 @@ ft(['a', 'b'], ['c', 'd'])
 >   : ^ ^^^^^^^^^         ^^  ^^      ^^  ^^               ^^^^^ 
 >['a', 'b'] : [string, string]
 >           : ^^^^^^^^^^^^^^^^
->'a' : string
->    : ^^^^^^
->'b' : string
->    : ^^^^^^
+>'a' : "a"
+>    : ^^^
+>'b' : "b"
+>    : ^^^
 >['c', 'd'] : [string, string]
 >           : ^^^^^^^^^^^^^^^^
->'c' : string
->    : ^^^^^^
->'d' : string
->    : ^^^^^^
+>'c' : "c"
+>    : ^^^
+>'d' : "d"
+>    : ^^^
 
 ft(['a', 'b'], ['c', 'd', 42])
 >ft(['a', 'b'], ['c', 'd', 42]) : [string, string]
@@ -1986,18 +1986,18 @@ ft(['a', 'b'], ['c', 'd', 42])
 >   : ^ ^^^^^^^^^         ^^  ^^      ^^  ^^               ^^^^^ 
 >['a', 'b'] : [string, string]
 >           : ^^^^^^^^^^^^^^^^
->'a' : string
->    : ^^^^^^
->'b' : string
->    : ^^^^^^
+>'a' : "a"
+>    : ^^^
+>'b' : "b"
+>    : ^^^
 >['c', 'd', 42] : [string, string, number]
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^
->'c' : string
->    : ^^^^^^
->'d' : string
->    : ^^^^^^
->42 : number
->   : ^^^^^^
+>'c' : "c"
+>    : ^^^
+>'d' : "d"
+>    : ^^^
+>42 : 42
+>   : ^^
 
 // Last argument is contextually typed
 
@@ -2014,18 +2014,18 @@ call('hello', 32, (a, b) => 42);
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >call : <T extends unknown[], R>(...args: [...T, (...args: T) => R]) => [T, R]
 >     : ^ ^^^^^^^^^         ^^ ^^^^^    ^^                         ^^^^^      
->'hello' : string
->        : ^^^^^^
->32 : number
->   : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+>32 : 32
+>   : ^^
 >(a, b) => 42 : (a: string, b: number) => number
 >             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 call(...sa, (...x) => 42);
 >call(...sa, (...x) => 42) : [string[], number]
@@ -2040,8 +2040,8 @@ call(...sa, (...x) => 42);
 >             : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >x : string[]
 >  : ^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 // No inference to ending optional elements (except with identical structure)
 
@@ -2076,10 +2076,10 @@ function f21<U extends string[]>(args: [...U, number?]) {
 >    : ^ ^^^^^^^^^         ^^^^^^^    ^^               ^^^^^ 
 >["foo", "bar"] : [string, string]
 >               : ^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
     let v3 = f20(["foo", 42]);  // [string]
 >v3 : [string]
@@ -2090,10 +2090,10 @@ function f21<U extends string[]>(args: [...U, number?]) {
 >    : ^ ^^^^^^^^^         ^^^^^^^    ^^               ^^^^^ 
 >["foo", 42] : [string, number]
 >            : ^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
->42 : number
->   : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>42 : 42
+>   : ^^
 }
 
 declare function f22<T extends unknown[] = []>(args: [...T, number]): T;
@@ -2133,10 +2133,10 @@ function f23<U extends string[]>(args: [...U, number]) {
 >    : ^^^ ^^^^^^^^^         ^^^^^^^    ^^              ^^^ ^^^ ^^^^^^^^^         ^^^^^^^    ^^      ^^^ ^^^
 >["foo", "bar"] : [string, string]
 >               : ^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
     let v3 = f22(["foo", 42]);  // [string]
 >v3 : [string]
@@ -2147,10 +2147,10 @@ function f23<U extends string[]>(args: [...U, number]) {
 >    : ^^^ ^^^^^^^^^         ^^^^^^^    ^^              ^^^ ^^^ ^^^^^^^^^         ^^^^^^^    ^^      ^^^ ^^^
 >["foo", 42] : [string, number]
 >            : ^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
->42 : number
->   : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>42 : 42
+>   : ^^
 }
 
 // Repro from #39327
@@ -2186,10 +2186,10 @@ const b = a.bind("", 1);  // Desc<[boolean], object>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
 >     : ^ ^^^^^^^^^         ^^ ^^^^^^^^^         ^^ ^^    ^^                     ^^^^^    ^^ ^^^^^               
->"" : string
->   : ^^^^^^
->1 : number
->  : ^^^^^^
+>"" : ""
+>   : ^^
+>1 : 1
+>  : ^
 
 // Repro from #39607
 

@@ -20,28 +20,28 @@ var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >            : ^^^^^^^^^^^^^^^^^
 >["mower", ["mowing", ""]] : [string, [string, string]]
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->"mower" : string
->        : ^^^^^^
+>"mower" : "mower"
+>        : ^^^^^^^
 >["mowing", ""] : [string, string]
 >               : ^^^^^^^^^^^^^^^^
->"mowing" : string
->         : ^^^^^^
->"" : string
->   : ^^^^^^
+>"mowing" : "mowing"
+>         : ^^^^^^^^
+>"" : ""
+>   : ^^
 
 var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
 >multiRobotB : MultiSkilledRobot
 >            : ^^^^^^^^^^^^^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->"trimmer" : string
->          : ^^^^^^
+>"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >["trimming", "edging"] : [string, string]
 >                       : ^^^^^^^^^^^^^^^^
->"trimming" : string
->           : ^^^^^^
->"edging" : string
->         : ^^^^^^
+>"trimming" : "trimming"
+>           : ^^^^^^^^^^
+>"edging" : "edging"
+>         : ^^^^^^^^
 
 let [, skillA] = multiRobotA;
 > : undefined

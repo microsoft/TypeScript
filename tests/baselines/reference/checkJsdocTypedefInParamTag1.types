@@ -35,8 +35,8 @@ foo({x: 'abc'});
 >           : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 
 /**
  * @typedef {Object} AnotherOpts
@@ -69,8 +69,8 @@ foo1({anotherX: "world"});
 >                    : ^^^^^^^^^^^^^^^^^^^^^
 >anotherX : string
 >         : ^^^^^^
->"world" : string
->        : ^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
 
 /**
  * @typedef {object} Opts1
@@ -104,6 +104,6 @@ foo2({x: 'abc'});
 >           : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 

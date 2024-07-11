@@ -14,6 +14,6 @@ function f(x: string): number {
 >  : ^^^^^^
 
     return 0;
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 } 

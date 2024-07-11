@@ -40,8 +40,8 @@ declare module M {
 >  : ^^^^^^^^
 >Function : typeof M.Function
 >         : ^^^^^^^^^^^^^^^^^
->"return 5" : string
->           : ^^^^^^
+>"return 5" : "return 5"
+>           : ^^^^^^^^^^
 
 M.Function("yo");
 >M.Function("yo") : any

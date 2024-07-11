@@ -78,12 +78,12 @@ c1 = new C1(["larry", "{curly}", "moe"]);
 >   : ^^^^^^^^^
 >["larry", "{curly}", "moe"] : string[]
 >                            : ^^^^^^^^
->"larry" : string
->        : ^^^^^^
->"{curly}" : string
->          : ^^^^^^
->"moe" : string
->      : ^^^^^^
+>"larry" : "larry"
+>        : ^^^^^^^
+>"{curly}" : "{curly}"
+>          : ^^^^^^^^^
+>"moe" : "moe"
+>      : ^^^^^
 
 var useC1Properties = c1.x === c1.y && c1.y === c1.z;
 >useC1Properties : boolean
@@ -128,10 +128,10 @@ var c2 = new C2(["10", 10, !!10]);
 >   : ^^^^^^^^^
 >["10", 10, !!10] : [string, number, boolean]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
->"10" : string
->     : ^^^^^^
->10 : number
->   : ^^^^^^
+>"10" : "10"
+>     : ^^^^
+>10 : 10
+>   : ^^
 >!!10 : boolean
 >     : ^^^^^^^
 >!10 : boolean
@@ -178,12 +178,12 @@ var c3 = new C3({x: 0, y: "", z: false});
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >y : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >z : false
 >  : ^^^^^
 >false : false
@@ -202,12 +202,12 @@ c3 = new C3({x: 0, "y": "y", z: true});
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >"y" : string
 >    : ^^^^^^
->"y" : string
->    : ^^^^^^
+>"y" : "y"
+>    : ^^^
 >z : true
 >  : ^^^^
 >true : true

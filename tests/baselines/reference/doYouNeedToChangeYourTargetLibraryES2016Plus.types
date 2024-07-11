@@ -124,8 +124,8 @@ const testAtomics = Atomics.add(new Uint8Array(0), 0, 0);
 >                  : ^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >0 : 0
 >  : ^
 >0 : 0
@@ -189,8 +189,8 @@ const testRegExpExecArrayGroups = /(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[
 >                                                         : ^^^^^^
 >exec : (string: string) => RegExpExecArray | null
 >     : ^      ^^      ^^^^^                      
->"2019-04-30" : string
->             : ^^^^^^
+>"2019-04-30" : "2019-04-30"
+>             : ^^^^^^^^^^^^
 >groups : any
 >       : ^^^
 
@@ -366,8 +366,8 @@ const testSymbolDescription = Symbol("foo").description;
 >              : ^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >description : any
 >            : ^^^
 

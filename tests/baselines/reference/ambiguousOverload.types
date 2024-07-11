@@ -32,8 +32,8 @@ var x: number = foof("s", null);
 >                : ^^^^^^
 >foof : { (bar: string, y: any): number; (bar: string, x: any): string; }
 >     : ^^^   ^^      ^^ ^^^^^^^^      ^^^   ^^      ^^ ^^^^^^^^      ^^^
->"s" : string
->    : ^^^^^^
+>"s" : "s"
+>    : ^^^
 
 var y: string = foof("s", null);
 >y : string
@@ -42,8 +42,8 @@ var y: string = foof("s", null);
 >                : ^^^^^^
 >foof : { (bar: string, y: any): number; (bar: string, x: any): string; }
 >     : ^^^   ^^      ^^ ^^^^^^^^      ^^^   ^^      ^^ ^^^^^^^^      ^^^
->"s" : string
->    : ^^^^^^
+>"s" : "s"
+>    : ^^^
 
 function foof2(bar: string, x): string;
 >foof2 : { (bar: string, x: any): string; (bar: string, y: any): number; }
@@ -76,8 +76,8 @@ var x2: string = foof2("s", null);
 >                 : ^^^^^^
 >foof2 : { (bar: string, x: any): string; (bar: string, y: any): number; }
 >      : ^^^   ^^      ^^ ^^^^^^^^      ^^^   ^^      ^^ ^^^^^^^^      ^^^
->"s" : string
->    : ^^^^^^
+>"s" : "s"
+>    : ^^^
 
 var y2: number = foof2("s", null);
 >y2 : number
@@ -86,6 +86,6 @@ var y2: number = foof2("s", null);
 >                 : ^^^^^^
 >foof2 : { (bar: string, x: any): string; (bar: string, y: any): number; }
 >      : ^^^   ^^      ^^ ^^^^^^^^      ^^^   ^^      ^^ ^^^^^^^^      ^^^
->"s" : string
->    : ^^^^^^
+>"s" : "s"
+>    : ^^^
 

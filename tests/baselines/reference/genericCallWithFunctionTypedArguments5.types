@@ -138,8 +138,8 @@ var r5 = foo({ cb: <T>(x: T) => '' }); // {}
 >                : ^ ^^ ^^ ^^^^^^^^^^^
 >x : T
 >  : ^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var r6 = foo({ cb: (x: string) => '' }); // string
 >r6 : string
@@ -156,8 +156,8 @@ var r6 = foo({ cb: (x: string) => '' }); // string
 >                  : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var r7 = foo({ cb: () => '' }); // string
 >r7 : string
@@ -172,6 +172,6 @@ var r7 = foo({ cb: () => '' }); // string
 >   : ^^^^^^^^^^^^
 >() => '' : () => string
 >         : ^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 

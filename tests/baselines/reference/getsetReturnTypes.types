@@ -27,8 +27,8 @@ var x = makePoint(2).x;
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >makePoint : (x: number) => { readonly x: number; }
 >          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >x : number
 >  : ^^^^^^
 
@@ -41,8 +41,8 @@ var y: number = makePoint(2).x;
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >makePoint : (x: number) => { readonly x: number; }
 >          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >x : number
 >  : ^^^^^^
 

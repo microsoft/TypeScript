@@ -73,12 +73,12 @@ catch (e) {
 >         : ^^^^^^^^
 
     e = 1;
->e = 1 : number
->      : ^^^^^^
+>e = 1 : 1
+>      : ^
 >e : unknown
 >  : ^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     if (isString) {
 >isString : boolean

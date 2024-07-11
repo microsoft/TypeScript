@@ -53,8 +53,8 @@ module App {
 >            : ^^^^^^      
 
                 return "Bill Gates";
->"Bill Gates" : string
->             : ^^^^^^
+>"Bill Gates" : "Bill Gates"
+>             : ^^^^^^^^^^^^
             }
         }
     }

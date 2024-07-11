@@ -58,10 +58,10 @@ var arrayVar: string[] = ['a', 'b'];
 >         : ^^^^^^^^
 >['a', 'b'] : string[]
 >           : ^^^^^^^^
->'a' : string
->    : ^^^^^^
->'b' : string
->    : ^^^^^^
+>'a' : "a"
+>    : ^^^
+>'b' : "b"
+>    : ^^^
 
 
 function simpleFunction() {

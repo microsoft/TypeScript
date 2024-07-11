@@ -56,6 +56,6 @@ Clone.clone("ok");
 >      : ^^^^^^^^^^^^
 >clone : (url: string) => void
 >      : ^   ^^      ^^^^^    
->"ok" : string
->     : ^^^^^^
+>"ok" : "ok"
+>     : ^^^^
 

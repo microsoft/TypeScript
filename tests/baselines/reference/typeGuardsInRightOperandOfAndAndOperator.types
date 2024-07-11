@@ -53,14 +53,14 @@ function foo2(x: number | string) {
 >                : ^^^^^^
 >(x = 10) && x : number
 >              : ^^^^^^
->(x = 10) : number
->         : ^^^^^^
->x = 10 : number
->       : ^^^^^^
+>(x = 10) : 10
+>         : ^^
+>x = 10 : 10
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >x : number
 >  : ^^^^^^
 }
@@ -86,14 +86,14 @@ function foo3(x: number | string) {
 >                     : ^^^^^^
 >(x = "hello") && x : string
 >                   : ^^^^^^
->(x = "hello") : string
->              : ^^^^^^
->x = "hello" : string
->            : ^^^^^^
+>(x = "hello") : "hello"
+>              : ^^^^^^^
+>x = "hello" : "hello"
+>            : ^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >x : string
 >  : ^^^^^^
 }

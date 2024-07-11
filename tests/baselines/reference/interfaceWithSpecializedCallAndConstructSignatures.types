@@ -38,8 +38,8 @@ var r2 = f('A');
 >f('A') : any
 >f : Foo
 >  : ^^^
->'A' : string
->    : ^^^^^^
+>'A' : "A"
+>    : ^^^
 
 var r3 = new f('a');
 >r3 : any
@@ -56,6 +56,6 @@ var r4 = new f('A');
 >           : ^^^^^^
 >f : Foo
 >  : ^^^
->'A' : string
->    : ^^^^^^
+>'A' : "A"
+>    : ^^^
 

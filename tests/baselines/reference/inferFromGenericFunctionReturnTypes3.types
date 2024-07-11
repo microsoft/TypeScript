@@ -100,8 +100,8 @@ function wrappedBar(): Wrap<'bar'> {
     const value2: string = 'bar';
 >value2 : string
 >       : ^^^^^^
->'bar' : string
->      : ^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
 
     const literal2 = wrapBar(value2);  // Error
 >literal2 : Wrap<"bar">
@@ -200,10 +200,10 @@ let arr: Array<[number, number]> = [[1, 2]]
 >         : ^^^^^^^^^^^^^^^^^^
 >[1, 2] : [number, number]
 >       : ^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
 let mappedArr: Array<[number, number]> = arr.map(([x, y]) => {
 >mappedArr : [number, number][]
@@ -327,8 +327,8 @@ function bug(): Diagnostic[] {
 			message: 'message'
 >message : string
 >        : ^^^^^^
->'message' : string
->          : ^^^^^^
+>'message' : "message"
+>          : ^^^^^^^^^
 		}
 	});
 }
@@ -532,10 +532,10 @@ let result: OK<[string, number]> = ok(["hello", 12]);
 >   : ^ ^^     ^^ ^^^^^     
 >["hello", 12] : [string, number]
 >              : ^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
->12 : number
->   : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>12 : 12
+>   : ^^
 
 // Repro from #25889
 
@@ -633,14 +633,14 @@ const f1: F = () => {
             name: "David Gomes",
 >name : string
 >     : ^^^^^^
->"David Gomes" : string
->              : ^^^^^^
+>"David Gomes" : "David Gomes"
+>              : ^^^^^^^^^^^^^
 
             age: 23,
 >age : number
 >    : ^^^^^^
->23 : number
->   : ^^^^^^
+>23 : 23
+>   : ^^
 
             position: "GOALKEEPER",
 >position : "GOALKEEPER"
@@ -655,14 +655,14 @@ const f1: F = () => {
             name: "Cristiano Ronaldo",
 >name : string
 >     : ^^^^^^
->"Cristiano Ronaldo" : string
->                    : ^^^^^^
+>"Cristiano Ronaldo" : "Cristiano Ronaldo"
+>                    : ^^^^^^^^^^^^^^^^^^^
 
             age: 33,
 >age : number
 >    : ^^^^^^
->33 : number
->   : ^^^^^^
+>33 : 33
+>   : ^^
 
             position: "STRIKER",
 >position : "STRIKER"

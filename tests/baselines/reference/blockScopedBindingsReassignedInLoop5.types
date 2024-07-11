@@ -54,11 +54,11 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
         break;
     else 
         y = 5;
->y = 5 : number
->      : ^^^^^^
+>y = 5 : 5
+>      : ^
 >y : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 }
 

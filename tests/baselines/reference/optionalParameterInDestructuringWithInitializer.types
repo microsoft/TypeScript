@@ -26,12 +26,12 @@ function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
   f(a, b)
 >f(a, b) : void
@@ -53,8 +53,8 @@ function func2( {a, b = 3}: {a: number, b?:number} = {a: 1,b: 2} ) {
 >  : ^^^^^^
 >b : number
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >a : number
 >  : ^^^^^^
 >b : number | undefined
@@ -63,12 +63,12 @@ function func2( {a, b = 3}: {a: number, b?:number} = {a: 1,b: 2} ) {
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
   f(a, b)
 >f(a, b) : void
@@ -98,8 +98,8 @@ function func3( {a, b}: {a: number, b?: number} = {a: 1} ) {
 >       : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
   f(a,b)
 >f(a,b) : void
@@ -141,16 +141,16 @@ function func4( {a: {b, c}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >c : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >d : number
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
   f(b,c)
 >f(b,c) : void
@@ -174,8 +174,8 @@ function func5({a: {b, c = 4}, d}: {a: {b: number,c?: number},d: number} = {a: {
 >  : ^^^^^^
 >c : number
 >  : ^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 >d : number
 >  : ^^^^^^
 >a : { b: number; c?: number; }
@@ -194,16 +194,16 @@ function func5({a: {b, c = 4}, d}: {a: {b: number,c?: number},d: number} = {a: {
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >c : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >d : number
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
   f(b, c)
 >f(b, c) : void
@@ -231,12 +231,12 @@ function func6( {a: {b, c} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: n
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 >c : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 >d : number
 >  : ^^^^^^
 >a : { b: number; c?: number; }
@@ -255,16 +255,16 @@ function func6( {a: {b, c} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: n
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >c : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >d : number
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
   f(b, c)
 >f(b, c) : void
@@ -288,18 +288,18 @@ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, 
 >  : ^^^^^^
 >c : number
 >  : ^^^^^^
->6 : number
->  : ^^^^^^
+>6 : 6
+>  : ^
 >{b: 4, c: 5} : { b: number; c: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 >c : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 >d : number
 >  : ^^^^^^
 >a : { b: number; c?: number; }
@@ -318,16 +318,16 @@ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, 
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >c : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >d : number
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
   f(b, c)
 >f(b, c) : void

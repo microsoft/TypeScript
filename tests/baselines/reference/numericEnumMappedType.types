@@ -64,52 +64,52 @@ const e2: E2 = E2.ONE;
 >    : ^^^^^^
 
 b1[1] = "a";
->b1[1] = "a" : string
->            : ^^^^^^
+>b1[1] = "a" : "a"
+>            : ^^^
 >b1[1] : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >b1 : Bins1
 >   : ^^^^^
 >1 : 1
 >  : ^
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 
 b1[e1] = "b";
->b1[e1] = "b" : string
->             : ^^^^^^
+>b1[e1] = "b" : "b"
+>             : ^^^
 >b1[e1] : string | undefined
 >       : ^^^^^^^^^^^^^^^^^^
 >b1 : Bins1
 >   : ^^^^^
 >e1 : E1.ONE
 >   : ^^^^^^
->"b" : string
->    : ^^^^^^
+>"b" : "b"
+>    : ^^^
 
 b2[1] = "a";
->b2[1] = "a" : string
->            : ^^^^^^
+>b2[1] = "a" : "a"
+>            : ^^^
 >b2[1] : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >b2 : Bins2
 >   : ^^^^^
 >1 : 1
 >  : ^
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 
 b2[e2] = "b";
->b2[e2] = "b" : string
->             : ^^^^^^
+>b2[e2] = "b" : "b"
+>             : ^^^
 >b2[e2] : string | undefined
 >       : ^^^^^^^^^^^^^^^^^^
 >b2 : Bins2
 >   : ^^^^^
 >e2 : E2.ONE
 >   : ^^^^^^
->"b" : string
->    : ^^^^^^
+>"b" : "b"
+>    : ^^^
 
 // Multiple numeric enum types accrue to the same numeric index signature in a mapped type
 

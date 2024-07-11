@@ -372,8 +372,8 @@ function f5(a: 1, b: 0 | 1 | 2) {
 >     : ^^^^^^
 >g : { (x: 0): string; (x: 1): boolean; (x: number): number; }
 >  : ^^^ ^^ ^^^      ^^^ ^^ ^^^       ^^^ ^^      ^^^      ^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
     var z4 = g(a);
 >z4 : boolean
@@ -407,8 +407,8 @@ function assertNever(x: never): never {
 >                              : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Unexpected value" : string
->                   : ^^^^^^
+>"Unexpected value" : "Unexpected value"
+>                   : ^^^^^^^^^^^^^^^^^^
 }
 
 type Tag = 0 | 1 | 2;

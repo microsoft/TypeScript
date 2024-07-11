@@ -136,8 +136,8 @@ const filter1 = list2.filter(function(item, node, list): item is Test {
 >         : ^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->'c' : string
->    : ^^^^^^
+>'c' : "c"
+>    : ^^^
 
 const x: List<Test> = filter1; // $ExpectType List<Test>
 >x : List<Test>

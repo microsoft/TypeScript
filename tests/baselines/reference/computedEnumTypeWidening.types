@@ -18,8 +18,8 @@ enum E {
 >            : ^^^^^^
 >computed : (x: number) => number
 >         : ^ ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     B = computed(1),
 >B : E.B
@@ -28,8 +28,8 @@ enum E {
 >            : ^^^^^^
 >computed : (x: number) => number
 >         : ^ ^^      ^^^^^      
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     C = computed(2),
 >C : E.C
@@ -38,8 +38,8 @@ enum E {
 >            : ^^^^^^
 >computed : (x: number) => number
 >         : ^ ^^      ^^^^^      
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
     D = computed(3),
 >D : E.D
@@ -48,8 +48,8 @@ enum E {
 >            : ^^^^^^
 >computed : (x: number) => number
 >         : ^ ^^      ^^^^^      
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 }
 
 function f1() {

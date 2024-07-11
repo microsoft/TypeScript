@@ -40,8 +40,8 @@ const syncFactory: SyncSequenceFactory = function* (){
 >     : ^^^^^^
 >yield "What is your name?" : string
 >                           : ^^^^^^
->"What is your name?" : string
->                     : ^^^^^^
+>"What is your name?" : "What is your name?"
+>                     : ^^^^^^^^^^^^^^^^^^^^
   }
   return `That's the end of the game, ${name}`
 >`That's the end of the game, ${name}` : string
@@ -75,8 +75,8 @@ const asyncFactory: AsyncSequenceFactory = async function* (){
 >     : ^^^^^^
 >yield "What is your name?" : string
 >                           : ^^^^^^
->"What is your name?" : string
->                     : ^^^^^^
+>"What is your name?" : "What is your name?"
+>                     : ^^^^^^^^^^^^^^^^^^^^
   }
   return `That's the end of the game, ${name}`
 >`That's the end of the game, ${name}` : string
@@ -110,8 +110,8 @@ const looserSyncFactory: SequenceFactory = function* (){
 >     : ^^^^^^
 >yield "What is your name?" : string
 >                           : ^^^^^^
->"What is your name?" : string
->                     : ^^^^^^
+>"What is your name?" : "What is your name?"
+>                     : ^^^^^^^^^^^^^^^^^^^^
   }
   return `That's the end of the game, ${name}`
 >`That's the end of the game, ${name}` : string
@@ -145,8 +145,8 @@ const looserAsyncFactory: SequenceFactory = async function* (){
 >     : ^^^^^^
 >yield "What is your name?" : string
 >                           : ^^^^^^
->"What is your name?" : string
->                     : ^^^^^^
+>"What is your name?" : "What is your name?"
+>                     : ^^^^^^^^^^^^^^^^^^^^
   }
   return `That's the end of the game, ${name}`
 >`That's the end of the game, ${name}` : string

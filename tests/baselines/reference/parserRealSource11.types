@@ -326,8 +326,8 @@ module TypeScript {
 >                                               : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"please implement in derived class" : string
->                                    : ^^^^^^
+>"please implement in derived class" : "please implement in derived class"
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             }
             return this;
 >this : this
@@ -757,8 +757,8 @@ module TypeScript {
 >                                               : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"please implement in derived class" : string
->                                    : ^^^^^^
+>"please implement in derived class" : "please implement in derived class"
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             }
             emitter.emitParensAndCommentsInPlace(this, false);
 >emitter.emitParensAndCommentsInPlace(this, false) : any
@@ -1138,8 +1138,8 @@ module TypeScript {
 >      : ^^^^^^^
 >name : string
 >     : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
             var resolved = "";
 >resolved : string
@@ -1233,10 +1233,10 @@ module TypeScript {
 >  : ^^^^^^
 >2 : 2
 >  : ^
->4 : number
->  : ^^^^^^
->16 : number
->   : ^^^^^^
+>4 : 4
+>  : ^
+>16 : 16
+>   : ^^
 
                     resolved += name.substr(start, i - start);
 >resolved += name.substr(start, i - start) : string
@@ -2104,8 +2104,8 @@ module TypeScript {
 >                   : ^^^^
 >super : typeof Identifier
 >      : ^^^^^^^^^^^^^^^^^
->"__missing" : string
->            : ^^^^^^
+>"__missing" : "__missing"
+>            : ^^^^^^^^^^^
         }
 
         public isMissing() {
@@ -2982,8 +2982,8 @@ module TypeScript {
 >                                               : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"please implement in derived class" : string
->                                    : ^^^^^^
+>"please implement in derived class" : "please implement in derived class"
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             }
             return this;
 >this : this
@@ -3751,8 +3751,8 @@ module TypeScript {
 >                                               : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"please implement in derived class" : string
->                                    : ^^^^^^
+>"please implement in derived class" : "please implement in derived class"
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             }
             emitter.recordSourceMappingEnd(this);
 >emitter.recordSourceMappingEnd(this) : any
@@ -4767,8 +4767,8 @@ module TypeScript {
 >                                               : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"please implement in derived class" : string
->                                    : ^^^^^^
+>"please implement in derived class" : "please implement in derived class"
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             }
             return this;
 >this : this
@@ -5373,8 +5373,8 @@ module TypeScript {
 >                                                    : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"should be de-sugared during type check" : string
->                                         : ^^^^^^
+>"should be de-sugared during type check" : "should be de-sugared during type check"
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                     default:
                         throw new Error("please implement in derived class");
@@ -5382,8 +5382,8 @@ module TypeScript {
 >                                               : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"please implement in derived class" : string
->                                    : ^^^^^^
+>"please implement in derived class" : "please implement in derived class"
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 }
             }
             emitter.recordSourceMappingEnd(this);
@@ -5872,8 +5872,8 @@ module TypeScript {
 >      : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
 >        : ^              ^^^      ^^^^^      
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >toString : () => string
 >         : ^^^^^^      
             }
@@ -7056,8 +7056,8 @@ module TypeScript {
 >         : ^^^
 >ArgDecl : any
 >        : ^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
         }
 
         public isOptional = false;
@@ -8393,8 +8393,8 @@ module TypeScript {
 >                                      : ^^^^^^^^^^^^
 >LocationInfo : typeof LocationInfo
 >             : ^^^^^^^^^^^^^^^^^^^
->"unknown" : string
->          : ^^^^^^
+>"unknown" : "unknown"
+>          : ^^^^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1
@@ -8498,8 +8498,8 @@ module TypeScript {
 >                         : ^^^^^^^^^^
 >Identifier : typeof Identifier
 >           : ^^^^^^^^^^^^^^^^^
->"script" : string
->         : ^^^^^^
+>"script" : "script"
+>         : ^^^^^^^^
 >false : false
 >      : ^^^^^
 >vars : ASTList
@@ -16183,8 +16183,8 @@ module TypeScript {
 >                                        : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"should not emit a type ref" : string
->                             : ^^^^^^
+>"should not emit a type ref" : "should not emit a type ref"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
 
         public typeCheck(typeFlow: TypeFlow) {
@@ -18618,8 +18618,8 @@ module TypeScript {
 >        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/^\s+|\s+$/g : RegExp
 >             : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
                     }
                 }
                 else {
@@ -18650,8 +18650,8 @@ module TypeScript {
 >        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/^\s+|\s+$/g : RegExp
 >             : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
                 }
             }
 

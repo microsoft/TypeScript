@@ -25,12 +25,12 @@ const x: import("foo") = { x: 0, y: 0 };
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 declare module "foo2" {
 >"foo2" : typeof import("foo2")
@@ -87,12 +87,12 @@ let y: import("foo2").Bar.I = { a: "", b: 0 };
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >b : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 class Bar2 {
 >Bar2 : Bar2

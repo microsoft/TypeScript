@@ -102,14 +102,14 @@ export let b1 = 1;
 export var c1: string = 'a';
 >c1 : string
 >   : ^^^^^^
->'a' : string
->    : ^^^^^^
+>'a' : "a"
+>    : ^^^
 
 export let d1: number = 1;
 >d1 : number
 >   : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 class D {}
 >D : D

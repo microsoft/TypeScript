@@ -111,8 +111,8 @@ class Other extends Doing {
 >             : ^^^^^^^^^^
 
         return 0;
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
     }
 
     // in a setter

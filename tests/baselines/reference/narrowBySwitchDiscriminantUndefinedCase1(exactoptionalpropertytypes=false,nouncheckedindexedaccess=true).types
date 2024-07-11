@@ -118,7 +118,7 @@ function assertUnreachable(_: never): never {
 >                                    : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Unreachable path taken" : string
->                         : ^^^^^^
+>"Unreachable path taken" : "Unreachable path taken"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

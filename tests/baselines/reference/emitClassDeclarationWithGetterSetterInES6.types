@@ -26,8 +26,8 @@ class C {
 >      : ^^^^^^
 
         return "BYE";
->"BYE" : string
->      : ^^^^^^
+>"BYE" : "BYE"
+>      : ^^^^^
     }
     static get ["computedname"]() {
 >["computedname"] : string
@@ -36,8 +36,8 @@ class C {
 >               : ^^^^^^^^^^^^^^
 
         return "";
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
     }
     get ["computedname1"]() {
 >["computedname1"] : string

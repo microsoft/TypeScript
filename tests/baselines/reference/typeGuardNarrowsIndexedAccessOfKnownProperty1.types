@@ -492,7 +492,7 @@ export function g(pair: [number, string?]): string {
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 }
 

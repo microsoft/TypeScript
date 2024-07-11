@@ -20,8 +20,8 @@ const C = class {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     async foo() {
 >foo : () => Promise<number>
@@ -120,8 +120,8 @@ const C = class {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
     }
 }
 

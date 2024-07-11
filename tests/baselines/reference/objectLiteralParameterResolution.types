@@ -41,13 +41,13 @@ var s = $.extend({
     type: "GET" ,
 >type : string
 >     : ^^^^^^
->"GET" : string
->      : ^^^^^^
+>"GET" : "GET"
+>      : ^^^^^
 
     data: "data" ,
 >data : string
 >     : ^^^^^^
->"data" : string
+>"data" : "data"
 >       : ^^^^^^
 
     success: wrapSuccessCallback(requestContext, callback) ,
@@ -77,7 +77,7 @@ var s = $.extend({
     dataType: "json" ,
 >dataType : string
 >         : ^^^^^^
->"json" : string
+>"json" : "json"
 >       : ^^^^^^
 
     converters: { "text json": "" },
@@ -87,8 +87,8 @@ var s = $.extend({
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >"text json" : string
 >            : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     traditional: true ,
 >traditional : true
@@ -99,8 +99,8 @@ var s = $.extend({
     timeout: 12,
 >timeout : number
 >        : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
     }, "");
 >"" : ""

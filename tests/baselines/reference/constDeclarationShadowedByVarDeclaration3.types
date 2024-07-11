@@ -19,8 +19,8 @@ class Rule {
     public name: string = '';
 >name : string
 >     : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     constructor(name: string) {
 >name : string

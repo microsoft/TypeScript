@@ -24,8 +24,8 @@ var goodObj: Object = {
 >  : ^^^
 
         return "";
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
     }
 }; // Ok, because toString is a subtype of Object's toString
 

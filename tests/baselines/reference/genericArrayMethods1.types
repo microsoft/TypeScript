@@ -16,6 +16,6 @@ var x:string[] =  [0,1].slice(0); // this should be an error
 >  : ^
 >slice : (start?: number, end?: number) => number[]
 >      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 

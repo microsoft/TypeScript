@@ -12,8 +12,8 @@ var s = Symbol.for("assign");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"assign" : string
->         : ^^^^^^
+>"assign" : "assign"
+>         : ^^^^^^^^
 
 var str = "";
 >str : string

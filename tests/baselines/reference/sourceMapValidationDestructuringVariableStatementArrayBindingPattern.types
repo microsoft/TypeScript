@@ -20,24 +20,24 @@ var robotA: Robot = [1, "mower", "mowing"];
 >       : ^^^^^
 >[1, "mower", "mowing"] : [number, string, string]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->"mower" : string
->        : ^^^^^^
->"mowing" : string
->         : ^^^^^^
+>1 : 1
+>  : ^
+>"mower" : "mower"
+>        : ^^^^^^^
+>"mowing" : "mowing"
+>         : ^^^^^^^^
 
 var robotB: Robot = [2, "trimmer", "trimming"];
 >robotB : Robot
 >       : ^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
->"trimmer" : string
->          : ^^^^^^
->"trimming" : string
->           : ^^^^^^
+>2 : 2
+>  : ^
+>"trimmer" : "trimmer"
+>          : ^^^^^^^^^
+>"trimming" : "trimming"
+>           : ^^^^^^^^^^
 
 
 let [, nameA] = robotA;

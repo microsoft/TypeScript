@@ -38,8 +38,8 @@ function F(x: string): number { return 42; }
 >  : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 function F2(x: number): boolean { return x < 42; }
 >F2 : (x: number) => boolean
@@ -112,14 +112,14 @@ module N {
 var aNumber: number = 'this is a string';
 >aNumber : number
 >        : ^^^^^^
->'this is a string' : string
->                   : ^^^^^^
+>'this is a string' : "this is a string"
+>                   : ^^^^^^^^^^^^^^^^^^
 
 var aString: string = 9.9;
 >aString : string
 >        : ^^^^^^
->9.9 : number
->    : ^^^^^^
+>9.9 : 9.9
+>    : ^^^
 
 var aDate: Date = 9.9;
 >aDate : Date
@@ -164,8 +164,8 @@ var anObjectLiteral: I = { id: 'a string' };
 >                   : ^^^^^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
->'a string' : string
->           : ^^^^^^
+>'a string' : "a string"
+>           : ^^^^^^^^^^
 
 var anOtherObjectLiteral: { id: string } = new C();
 >anOtherObjectLiteral : { id: string; }
@@ -202,8 +202,8 @@ var aLambda: typeof F = (x) => 'a string';
 >                  : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'a string' : string
->           : ^^^^^^
+>'a string' : "a string"
+>           : ^^^^^^^^^^
 
 var aModule: typeof M = N;
 >aModule : typeof M

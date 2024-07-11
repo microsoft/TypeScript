@@ -50,16 +50,16 @@ abstract class AbstractClass {
 >    : ^^^^^^
 
             this.prop = "Hello World";
->this.prop = "Hello World" : string
->                          : ^^^^^^
+>this.prop = "Hello World" : "Hello World"
+>                          : ^^^^^^^^^^^^^
 >this.prop : string
 >          : ^^^^^^
 >this : this
 >     : ^^^^
 >prop : string
 >     : ^^^^^^
->"Hello World" : string
->              : ^^^^^^
+>"Hello World" : "Hello World"
+>              : ^^^^^^^^^^^^^
         }
         this.cb(str);
 >this.cb(str) : void
@@ -235,8 +235,8 @@ abstract class DerivedAbstractClass extends AbstractClass {
 >     : ^^^^
 >method : (num: number) => void
 >       : ^   ^^      ^^^^^    
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         // OK, references are to another instance
         other.cb(other.prop);
@@ -383,8 +383,8 @@ class User {
 >  : ^^^^^^^^^^^^^
 >cb : (s: string) => void
 >   : ^ ^^      ^^^^^    
->"hi" : string
->     : ^^^^^^
+>"hi" : "hi"
+>     : ^^^^
 
         a.method(12);
 >a.method(12) : void
@@ -395,8 +395,8 @@ class User {
 >  : ^^^^^^^^^^^^^
 >method : (num: number) => void
 >       : ^   ^^      ^^^^^    
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
         a.method2();
 >a.method2() : void

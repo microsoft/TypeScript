@@ -15,12 +15,12 @@ type TestSynthetic = // Resolved to T, should be `number` or an inference failur
 const y: TestSynthetic = 3; // Type '3' is not assignable to type 'T'. (shouldn't error)
 >y : number
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 const z: TestSynthetic = '3'; // Type '"3""' is not assignable to type 'T'. (should not mention T)
 >z : number
 >  : ^^^^^^
->'3' : string
->    : ^^^^^^
+>'3' : "3"
+>    : ^^^
 

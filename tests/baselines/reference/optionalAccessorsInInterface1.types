@@ -27,7 +27,7 @@ defineMyProperty({}, "name", { get: function () { return 5; } });
 >                 : ^ ^^   ^^ ^^      ^^          ^^                    ^^^^^   
 >{} : {}
 >   : ^^
->"name" : string
+>"name" : "name"
 >       : ^^^^^^
 >{ get: function () { return 5; } } : { get: () => number; }
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^
@@ -64,7 +64,7 @@ defineMyProperty2({}, "name", { get: function () { return 5; } });
 >                  : ^ ^^   ^^ ^^      ^^          ^^                     ^^^^^   
 >{} : {}
 >   : ^^
->"name" : string
+>"name" : "name"
 >       : ^^^^^^
 >{ get: function () { return 5; } } : { get: () => number; }
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^

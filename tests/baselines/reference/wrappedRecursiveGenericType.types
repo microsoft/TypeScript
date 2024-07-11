@@ -28,20 +28,20 @@ var x: A<number>;
 >  : ^^^^^^^^^
 
 x.val = 5;         // val -> number
->x.val = 5 : number
->          : ^^^^^^
+>x.val = 5 : 5
+>          : ^
 >x.val : number
 >      : ^^^^^^
 >x : A<number>
 >  : ^^^^^^^^^
 >val : number
 >    : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 x.a.val = 5;       // val -> number
->x.a.val = 5 : number
->            : ^^^^^^
+>x.a.val = 5 : 5
+>            : ^
 >x.a.val : number
 >        : ^^^^^^
 >x.a : B<number>
@@ -52,8 +52,8 @@ x.a.val = 5;       // val -> number
 >  : ^^^^^^^^^
 >val : number
 >    : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 x.a.b.val = 5;     // val -> X<number> (This should be an error)
 >x.a.b.val = 5 : 5

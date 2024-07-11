@@ -24,8 +24,8 @@ if (typeof envVar === `string`) {
 >       : ^^^^^^
 >slice : (start?: number, end?: number) => string
 >      : ^     ^^^      ^^   ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 declare const obj: {test: string} | {}
@@ -55,7 +55,7 @@ if (`test` in obj) {
 >     : ^^^^^^
 >slice : (start?: number, end?: number) => string
 >      : ^     ^^^      ^^   ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 

@@ -57,7 +57,7 @@ export module m2 {
 >      : ^
 >foo : (a: number) => number
 >    : ^ ^^      ^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
     }
 }

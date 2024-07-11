@@ -18,12 +18,12 @@ const a = dropPrivateProps1({foo: 42, _bar: 'secret'}); // type is {foo: number}
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >_bar : string
 >     : ^^^^^^
->'secret' : string
->         : ^^^^^^
+>'secret' : "secret"
+>         : ^^^^^^^^
 
 //a._bar                                                // error: _bar does not exist           <===== as expected
 const b = dropPrivateProps2({foo: 42, _bar: 'secret'}); // type is {foo: number, _bar: string}
@@ -37,12 +37,12 @@ const b = dropPrivateProps2({foo: 42, _bar: 'secret'}); // type is {foo: number,
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >_bar : string
 >     : ^^^^^^
->'secret' : string
->         : ^^^^^^
+>'secret' : "secret"
+>         : ^^^^^^^^
 
 //b._bar                                                // no error, type of b._bar is string   <===== NOT expected
 

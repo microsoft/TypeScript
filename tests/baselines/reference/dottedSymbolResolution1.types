@@ -82,8 +82,8 @@ function _setBarAndText(): void {
 >  : ^^^^^^
 >find : (selector: string) => JQuery
 >     : ^        ^^      ^^^^^      
->" " : string
->    : ^^^^^^
+>" " : " "
+>    : ^^^
 >function () {        var $this: JQuery = $(''),            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here    } : () => void
 >                                                                                                                                                                          : ^^^^^^^^^^
 
@@ -94,8 +94,8 @@ function _setBarAndText(): void {
 >      : ^^^^^^
 >$ : JQueryStatic
 >  : ^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
             thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here
 >thisBar : JQuery
@@ -108,8 +108,8 @@ function _setBarAndText(): void {
 >      : ^^^^^^
 >find : (selector: string) => JQuery
 >     : ^        ^^      ^^^^^      
->".fx-usagebars-calloutbar-this" : string
->                                : ^^^^^^
+>".fx-usagebars-calloutbar-this" : ".fx-usagebars-calloutbar-this"
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     } );
 }

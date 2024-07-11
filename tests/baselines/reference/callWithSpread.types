@@ -45,22 +45,22 @@ foo(1, 2, "abc");
 >                 : ^^^^
 >foo : (x: number, y: number, ...z: string[]) => void
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->"abc" : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>"abc" : "abc"
+>      : ^^^^^
 
 foo(1, 2, ...a);
 >foo(1, 2, ...a) : void
 >                : ^^^^
 >foo : (x: number, y: number, ...z: string[]) => void
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
@@ -71,16 +71,16 @@ foo(1, 2, ...a, "abc");
 >                       : ^^^^
 >foo : (x: number, y: number, ...z: string[]) => void
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 obj.foo(1, 2, "abc");
 >obj.foo(1, 2, "abc") : X
@@ -91,12 +91,12 @@ obj.foo(1, 2, "abc");
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->"abc" : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>"abc" : "abc"
+>      : ^^^^^
 
 obj.foo(1, 2, ...a);
 >obj.foo(1, 2, ...a) : X
@@ -107,10 +107,10 @@ obj.foo(1, 2, ...a);
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
@@ -125,16 +125,16 @@ obj.foo(1, 2, ...a, "abc");
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 obj.foo(1, 2, ...a).foo(1, 2, "abc");
 >obj.foo(1, 2, ...a).foo(1, 2, "abc") : X
@@ -149,22 +149,22 @@ obj.foo(1, 2, ...a).foo(1, 2, "abc");
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->"abc" : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>"abc" : "abc"
+>      : ^^^^^
 
 obj.foo(1, 2, ...a).foo(1, 2, ...a);
 >obj.foo(1, 2, ...a).foo(1, 2, ...a) : X
@@ -179,20 +179,20 @@ obj.foo(1, 2, ...a).foo(1, 2, ...a);
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
@@ -211,26 +211,26 @@ obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 (obj.foo)(1, 2, "abc");
 >(obj.foo)(1, 2, "abc") : X
@@ -243,12 +243,12 @@ obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->"abc" : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>"abc" : "abc"
+>      : ^^^^^
 
 (obj.foo)(1, 2, ...a);
 >(obj.foo)(1, 2, ...a) : X
@@ -261,10 +261,10 @@ obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
@@ -281,16 +281,16 @@ obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 ((obj.foo)(1, 2, ...a).foo)(1, 2, "abc");
 >((obj.foo)(1, 2, ...a).foo)(1, 2, "abc") : X
@@ -309,22 +309,22 @@ obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->"abc" : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>"abc" : "abc"
+>      : ^^^^^
 
 ((obj.foo)(1, 2, ...a).foo)(1, 2, ...a);
 >((obj.foo)(1, 2, ...a).foo)(1, 2, ...a) : X
@@ -343,20 +343,20 @@ obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
@@ -379,26 +379,26 @@ obj.foo(1, 2, ...a).foo(1, 2, ...a, "abc");
 >    : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 xa[1].foo(1, 2, "abc");
 >xa[1].foo(1, 2, "abc") : X
@@ -413,12 +413,12 @@ xa[1].foo(1, 2, "abc");
 >  : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->"abc" : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>"abc" : "abc"
+>      : ^^^^^
 
 xa[1].foo(1, 2, ...a);
 >xa[1].foo(1, 2, ...a) : X
@@ -433,10 +433,10 @@ xa[1].foo(1, 2, ...a);
 >  : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
@@ -455,16 +455,16 @@ xa[1].foo(1, 2, ...a, "abc");
 >  : ^
 >foo : (x: number, y: number, ...z: string[]) => X
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^ 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
 >  : ^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 (<Function>xa[1].foo)(...[1, 2, "abc"]);
 >(<Function>xa[1].foo)(...[1, 2, "abc"]) : any
@@ -561,20 +561,20 @@ class D extends C {
 >            : ^^^^
 >super : typeof C
 >      : ^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
         super(1, 2, ...a);
 >super(1, 2, ...a) : void
 >                  : ^^^^
 >super : typeof C
 >      : ^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]
@@ -593,10 +593,10 @@ class D extends C {
 >      : ^
 >foo : (x: number, y: number, ...z: string[]) => void
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
         super.foo(1, 2, ...a);
 >super.foo(1, 2, ...a) : void
@@ -607,10 +607,10 @@ class D extends C {
 >      : ^
 >foo : (x: number, y: number, ...z: string[]) => void
 >    : ^ ^^      ^^ ^^      ^^^^^ ^^        ^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...a : string
 >     : ^^^^^^
 >a : string[]

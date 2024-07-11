@@ -120,8 +120,8 @@ var y:string=x.f(3); // good
 >  : ^^^
 >f : { (s: string): number; (n: number): string; }
 >  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 y=x.f("nope"); // can't assign number to string
 >y=x.f("nope") : number
@@ -136,7 +136,7 @@ y=x.f("nope"); // can't assign number to string
 >  : ^^^
 >f : { (s: string): number; (n: number): string; }
 >  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
->"nope" : string
+>"nope" : "nope"
 >       : ^^^^^^
 
 var z:string=x.g(x.g(3,3)); // good
@@ -158,10 +158,10 @@ var z:string=x.g(x.g(3,3)); // good
 >  : ^^^
 >g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
 >  : ^^^  ^^      ^^  ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^^^^^^^^^^^^^ ^^^^^^^^      ^^^
->3 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
+>3 : 3
+>  : ^
 
 z=x.g(2,2,2); // no match
 >z=x.g(2,2,2) : never
@@ -178,8 +178,8 @@ z=x.g(2,2,2); // no match
 >  : ^^^  ^^      ^^  ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^^^^^^^^^^^^^ ^^^^^^^^      ^^^
 >2 : 2
 >  : ^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >2 : 2
 >  : ^
 
@@ -232,10 +232,10 @@ z=x.h(2,2); // no match
 >  : ^^^
 >h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
 >  : ^^^  ^^      ^^  ^^      ^^^      ^^^  ^^      ^^  ^^      ^^^      ^^^
->2 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
+>2 : 2
+>  : ^
 
 z=x.h("hello",0); // good
 >z=x.h("hello",0) : string
@@ -250,10 +250,10 @@ z=x.h("hello",0); // good
 >  : ^^^
 >h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
 >  : ^^^  ^^      ^^  ^^      ^^^      ^^^  ^^      ^^  ^^      ^^^      ^^^
->"hello" : string
->        : ^^^^^^
->0 : number
->  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>0 : 0
+>  : ^
 
 var v=x.g;
 >v : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }

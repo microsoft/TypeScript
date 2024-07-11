@@ -11,16 +11,16 @@ var STRING1: string[] = ["", ""];
 >        : ^^^^^^^^
 >["", ""] : string[]
 >         : ^^^^^^^^
->"" : string
->   : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
+>"" : ""
+>   : ^^
 
 function foo(): string { return ""; }
 >foo : () => string
 >    : ^^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 class A {
 >A : A

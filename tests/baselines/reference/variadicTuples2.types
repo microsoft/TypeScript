@@ -130,8 +130,8 @@ tt1 = [5];
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >[5] : [number]
 >    : ^^^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 tt1 = ['abc', 5];
 >tt1 = ['abc', 5] : [string, number]
@@ -140,10 +140,10 @@ tt1 = ['abc', 5];
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >['abc', 5] : [string, number]
 >           : ^^^^^^^^^^^^^^^^
->'abc' : string
->      : ^^^^^^
->5 : number
->  : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
+>5 : 5
+>  : ^
 
 tt1 = ['abc', 'def', 5];
 >tt1 = ['abc', 'def', 5] : [string, string, number]
@@ -152,12 +152,12 @@ tt1 = ['abc', 'def', 5];
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >['abc', 'def', 5] : [string, string, number]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
->5 : number
->  : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
+>5 : 5
+>  : ^
 
 tt1 = ['abc', 'def', 5, 6];  // Error
 >tt1 = ['abc', 'def', 5, 6] : [string, string, number, number]
@@ -166,14 +166,14 @@ tt1 = ['abc', 'def', 5, 6];  // Error
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >['abc', 'def', 5, 6] : [string, string, number, number]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
->5 : number
->  : ^^^^^^
->6 : number
->  : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
+>5 : 5
+>  : ^
+>6 : 6
+>  : ^
 
 declare function ft1(...args: [...strs: string[], num: number]): void;
 >ft1 : (...args: [...strs: string[], num: number]) => void
@@ -186,44 +186,44 @@ ft1(5);
 >       : ^^^^
 >ft1 : (...args: [...strs: string[], num: number]) => void
 >    : ^^^^    ^^                                ^^^^^    
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 ft1('abc', 5);
 >ft1('abc', 5) : void
 >              : ^^^^
 >ft1 : (...args: [...strs: string[], num: number]) => void
 >    : ^^^^    ^^                                ^^^^^    
->'abc' : string
->      : ^^^^^^
->5 : number
->  : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
+>5 : 5
+>  : ^
 
 ft1('abc', 'def', 5);
 >ft1('abc', 'def', 5) : void
 >                     : ^^^^
 >ft1 : (...args: [...strs: string[], num: number]) => void
 >    : ^^^^    ^^                                ^^^^^    
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
->5 : number
->  : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
+>5 : 5
+>  : ^
 
 ft1('abc', 'def', 5, 6);  // Error
 >ft1('abc', 'def', 5, 6) : void
 >                        : ^^^^
 >ft1 : (...args: [...strs: string[], num: number]) => void
 >    : ^^^^    ^^                                ^^^^^    
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
->5 : number
->  : ^^^^^^
->6 : number
->  : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
+>5 : 5
+>  : ^
+>6 : 6
+>  : ^
 
 declare let tt2: [number, ...string[], number];
 >tt2 : [number, ...string[], number]
@@ -236,8 +236,8 @@ tt2 = [0];  // Error
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0] : [number]
 >    : ^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 tt2 = [0, 1];
 >tt2 = [0, 1] : [number, number]
@@ -246,10 +246,10 @@ tt2 = [0, 1];
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 1] : [number, number]
 >       : ^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->1 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
 
 tt2 = [0, 1, 2];  // Error
 >tt2 = [0, 1, 2] : [number, number, number]
@@ -258,12 +258,12 @@ tt2 = [0, 1, 2];  // Error
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 1, 2] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
 tt2 = [0, 'abc', 1];
 >tt2 = [0, 'abc', 1] : [number, string, number]
@@ -272,12 +272,12 @@ tt2 = [0, 'abc', 1];
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 'abc', 1] : [number, string, number]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
->1 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
+>1 : 1
+>  : ^
 
 tt2 = [0, 'abc', 'def', 1];
 >tt2 = [0, 'abc', 'def', 1] : [number, string, string, number]
@@ -286,14 +286,14 @@ tt2 = [0, 'abc', 'def', 1];
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 'abc', 'def', 1] : [number, string, string, number]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
->1 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
+>1 : 1
+>  : ^
 
 tt2 = [0, 'abc', 1, 'def'];  // Error
 >tt2 = [0, 'abc', 1, 'def'] : [number, string, number, string]
@@ -302,14 +302,14 @@ tt2 = [0, 'abc', 1, 'def'];  // Error
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 'abc', 1, 'def'] : [number, string, number, string]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
->1 : number
->  : ^^^^^^
->'def' : string
->      : ^^^^^^
+>0 : 0
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
+>1 : 1
+>  : ^
+>'def' : "def"
+>      : ^^^^^
 
 tt2 = [true, 'abc', 'def', 1];  // Error
 >tt2 = [true, 'abc', 'def', 1] : [boolean, string, string, number]
@@ -320,12 +320,12 @@ tt2 = [true, 'abc', 'def', 1];  // Error
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
->1 : number
->  : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
+>1 : 1
+>  : ^
 
 tt2 = [0, 'abc', 'def', true];  // Error
 >tt2 = [0, 'abc', 'def', true] : [number, string, string, boolean]
@@ -334,12 +334,12 @@ tt2 = [0, 'abc', 'def', true];  // Error
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, 'abc', 'def', true] : [number, string, string, boolean]
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
+>0 : 0
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
 >true : true
 >     : ^^^^
 
@@ -356,70 +356,70 @@ ft2(0);  // Error
 >       : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
 >    : ^  ^^      ^^^^^    ^^                               ^^^^^    
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 ft2(0, 1);
 >ft2(0, 1) : void
 >          : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
 >    : ^  ^^      ^^^^^    ^^                               ^^^^^    
->0 : number
->  : ^^^^^^
->1 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
 
 ft2(0, 1, 2);  // Error
 >ft2(0, 1, 2) : void
 >             : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
 >    : ^  ^^      ^^^^^    ^^                               ^^^^^    
->0 : number
->  : ^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
 ft2(0, 'abc', 1);
 >ft2(0, 'abc', 1) : void
 >                 : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
 >    : ^  ^^      ^^^^^    ^^                               ^^^^^    
->0 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
->1 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
+>1 : 1
+>  : ^
 
 ft2(0, 'abc', 'def', 1);
 >ft2(0, 'abc', 'def', 1) : void
 >                        : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
 >    : ^  ^^      ^^^^^    ^^                               ^^^^^    
->0 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
->1 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
+>1 : 1
+>  : ^
 
 ft2(0, 'abc', 1, 'def');  // Error
 >ft2(0, 'abc', 1, 'def') : void
 >                        : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
 >    : ^  ^^      ^^^^^    ^^                               ^^^^^    
->0 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
->1 : number
->  : ^^^^^^
->'def' : string
->      : ^^^^^^
+>0 : 0
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
+>1 : 1
+>  : ^
+>'def' : "def"
+>      : ^^^^^
 
 ft2(true, 'abc', 'def', 1);  // Error
 >ft2(true, 'abc', 'def', 1) : void
@@ -428,24 +428,24 @@ ft2(true, 'abc', 'def', 1);  // Error
 >    : ^  ^^      ^^^^^    ^^                               ^^^^^    
 >true : true
 >     : ^^^^
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
->1 : number
->  : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
+>1 : 1
+>  : ^
 
 ft2(0, 'abc', 'def', true);  // Error
 >ft2(0, 'abc', 'def', true) : void
 >                           : ^^^^
 >ft2 : (n1: number, ...rest: [...strs: string[], n2: number]) => void
 >    : ^  ^^      ^^^^^    ^^                               ^^^^^    
->0 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
->'def' : string
->      : ^^^^^^
+>0 : 0
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
+>'def' : "def"
+>      : ^^^^^
 >true : true
 >     : ^^^^
 
@@ -550,8 +550,8 @@ function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => vo
 >     : ^^^^^^^^^^^      ^^ ^^^^^    ^
 >slice : (start?: number, end?: number) => (((...values: T) => void) | T[number])[]
 >      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^      ^^ ^^^^^    ^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >-1 : -1
 >   : ^^
 >1 : 1
@@ -573,10 +573,10 @@ pipe("foo", 123, true, (a, b, c) => {
 >                                                                                            : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
 >     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
->"foo" : string
->      : ^^^^^^
->123 : number
->    : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>123 : 123
+>    : ^^^
 >true : true
 >     : ^^^^
 >(a, b, c) => {    a;  // string    b;  // number    c;  // boolean} : (a: string, b: number, c: boolean) => void
@@ -607,10 +607,10 @@ pipe("foo", 123, true, (...x) => {
 >                                                                         : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
 >     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
->"foo" : string
->      : ^^^^^^
->123 : number
->    : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>123 : 123
+>    : ^^^
 >true : true
 >     : ^^^^
 >(...x) => {    x;  // [string, number, boolean]} : (x_0: string, x_1: number, x_2: boolean) => void
@@ -653,8 +653,8 @@ pipe(1, ...sa, 2, (...x) => {
 >                                                                                                                      : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
 >     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >...sa : string
 >      : ^^^^^^
 >sa : string[]
@@ -745,8 +745,8 @@ fn1([1]);  // Error
 >    : ^ ^^ ^^ ^^                    ^^^^^      
 >[1] : [number]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 fn1([1, 'abc']);  // [number, string]
 >fn1([1, 'abc']) : [number, string]
@@ -755,10 +755,10 @@ fn1([1, 'abc']);  // [number, string]
 >    : ^ ^^ ^^ ^^                    ^^^^^      
 >[1, 'abc'] : [number, string]
 >           : ^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
 
 fn1([1, 'abc', true]);  // [string, boolean]
 >fn1([1, 'abc', true]) : [string, boolean]
@@ -767,10 +767,10 @@ fn1([1, 'abc', true]);  // [string, boolean]
 >    : ^ ^^ ^^ ^^                    ^^^^^      
 >[1, 'abc', true] : [number, string, true]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
 >true : true
 >     : ^^^^
 
@@ -795,8 +795,8 @@ fn2([1]);  // Error
 >    : ^ ^^ ^^ ^^                    ^^^^^      
 >[1] : [number]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 fn2([1, 'abc']);  // [number, string]
 >fn2([1, 'abc']) : [number, string]
@@ -805,10 +805,10 @@ fn2([1, 'abc']);  // [number, string]
 >    : ^ ^^ ^^ ^^                    ^^^^^      
 >[1, 'abc'] : [number, string]
 >           : ^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
 
 fn2([1, 'abc', true]);  // [number, boolean]
 >fn2([1, 'abc', true]) : [number, boolean]
@@ -817,10 +817,10 @@ fn2([1, 'abc', true]);  // [number, boolean]
 >    : ^ ^^ ^^ ^^                    ^^^^^      
 >[1, 'abc', true] : [number, string, true]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>'abc' : "abc"
+>      : ^^^^^
 >true : true
 >     : ^^^^
 
@@ -841,8 +841,8 @@ const a1 = foo('blah1', 1);
 >    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^              
 >'blah1' : "blah1"
 >        : ^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const b1 = foo('blah1', 'blah2', 1);
 >b1 : ["blah1", "blah2", number]
@@ -855,8 +855,8 @@ const b1 = foo('blah1', 'blah2', 1);
 >        : ^^^^^^^
 >'blah2' : "blah2"
 >        : ^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const c1 = foo(1);  // Error
 >c1 : [string, ...string[], number]
@@ -865,8 +865,8 @@ const c1 = foo(1);  // Error
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
 >    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^              
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const d1 = foo(1, 2);  // Error
 >d1 : [string, ...string[], number]
@@ -875,10 +875,10 @@ const d1 = foo(1, 2);  // Error
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
 >    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^              
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
 const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
 >e1 : [string, ...string[], number]
@@ -887,14 +887,14 @@ const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
 >    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^              
->'blah1' : string
->        : ^^^^^^
->'blah2' : string
->        : ^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>'blah1' : "blah1"
+>        : ^^^^^^^
+>'blah2' : "blah2"
+>        : ^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
 

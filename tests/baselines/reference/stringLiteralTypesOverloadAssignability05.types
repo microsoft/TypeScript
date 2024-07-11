@@ -20,8 +20,8 @@ function f(x: string): number {
 >  : ^^^^^^
 
     return 0;
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 function g(x: "foo"): number;
@@ -37,8 +37,8 @@ function g(x: string): number {
 >  : ^^^^^^
 
     return 0;
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 let a = f;

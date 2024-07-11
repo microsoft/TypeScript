@@ -18,8 +18,8 @@ class C {
 >             : ^^^^^^
 >options : number
 >        : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
     }
 }
 

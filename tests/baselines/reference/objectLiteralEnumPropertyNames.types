@@ -37,8 +37,8 @@ const x: TestStrs = {
 >     : ^^^^^^^^^^^
 >A : Strs.A
 >  : ^^^^^^
->'xo' : string
->     : ^^^^^^
+>'xo' : "xo"
+>     : ^^^^
 
     [Strs.B]: 'xe'
 >[Strs.B] : string
@@ -49,8 +49,8 @@ const x: TestStrs = {
 >     : ^^^^^^^^^^^
 >B : Strs.B
 >  : ^^^^^^
->'xe' : string
->     : ^^^^^^
+>'xe' : "xe"
+>     : ^^^^
 }
 const ux = {
 >ux : { a: string; b: string; }
@@ -93,16 +93,16 @@ const y: TestStrs = {
 >      : ^^^^^^
 >'a' : "a"
 >    : ^^^
->'yo' : string
->     : ^^^^^^
+>'yo' : "yo"
+>     : ^^^^
 
     ['b']: 'ye'
 >['b'] : string
 >      : ^^^^^^
 >'b' : "b"
 >    : ^^^
->'ye' : string
->     : ^^^^^^
+>'ye' : "ye"
+>     : ^^^^
 }
 const a = 'a';
 >a : "a"
@@ -127,16 +127,16 @@ const z: TestStrs = {
 >    : ^^^^^^
 >a : "a"
 >  : ^^^
->'zo' : string
->     : ^^^^^^
+>'zo' : "zo"
+>     : ^^^^
 
     [b]: 'ze'
 >[b] : string
 >    : ^^^^^^
 >b : "b"
 >  : ^^^
->'ze' : string
->     : ^^^^^^
+>'ze' : "ze"
+>     : ^^^^
 }
 const uz = {
 >uz : { a: string; b: string; }
@@ -196,8 +196,8 @@ const n: TestNums = {
 >     : ^^^^^^^^^^^
 >A : Nums.A
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     [Nums.B]: 2
 >[Nums.B] : number
@@ -208,8 +208,8 @@ const n: TestNums = {
 >     : ^^^^^^^^^^^
 >B : Nums.B
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 }
 const un = {
 >un : { 0: number; 1: number; }
@@ -264,16 +264,16 @@ const m: TestNums = {
 >     : ^^^^^^
 >an : 0
 >   : ^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
     [bn]: 6
 >[bn] : number
 >     : ^^^^^^
 >bn : 1
 >   : ^
->6 : number
->  : ^^^^^^
+>6 : 6
+>  : ^
 }
 const um = {
 >um : { 0: number; 1: number; }

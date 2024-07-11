@@ -30,8 +30,8 @@ function getHashLength(hash: Hash): number {
 >                                           : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"This doesn't look like a hash" : string
->                                : ^^^^^^
+>"This doesn't look like a hash" : "This doesn't look like a hash"
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     return hash.length;
 >hash.length : number
@@ -65,8 +65,8 @@ function getHashLength2<T extends { __tag__: unknown}>(hash: string & T): number
 >                                           : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"This doesn't look like a hash" : string
->                                : ^^^^^^
+>"This doesn't look like a hash" : "This doesn't look like a hash"
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     return hash.length;
 >hash.length : number

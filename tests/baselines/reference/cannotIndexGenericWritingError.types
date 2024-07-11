@@ -47,14 +47,14 @@ function foo2<T extends number[] & { [s: string]: number | string }>(target: T, 
 >  : ^
 
     target[1] = 1; // ok
->target[1] = 1 : number
->              : ^^^^^^
+>target[1] = 1 : 1
+>              : ^
 >target[1] : number
 >          : ^^^^^^
 >target : T
 >       : ^
 >1 : 1
 >  : ^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 }

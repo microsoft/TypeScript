@@ -41,12 +41,12 @@ const result: number = removeF<number>({ f: '', g: 3 }).g
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >g : number
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >g : number
 >  : ^^^^^^
 

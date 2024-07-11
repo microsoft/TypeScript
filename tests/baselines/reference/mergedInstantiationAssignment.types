@@ -31,16 +31,16 @@ const v1 = new GenericObject() as GenericObject &
 >  : ^^^^^^^^^^^^^^^^^^
 
 v1.x = 432;
->v1.x = 432 : number
->           : ^^^^^^
+>v1.x = 432 : 432
+>           : ^^^
 >v1.x : number
 >     : ^^^^^^
 >v1 : GenericObject<number> & ({ a?: string; } | { b?: number; })
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
 >x : number
 >  : ^^^^^^
->432 : number
->    : ^^^^^^
+>432 : 432
+>    : ^^^
 
 class GenericObjectWithoutSetter<T = number> {
 >GenericObjectWithoutSetter : GenericObjectWithoutSetter<T>
@@ -68,16 +68,16 @@ const v2 = new GenericObjectWithoutSetter() as GenericObjectWithoutSetter &
 >  : ^^^^^^^^^^^^^^^^^^
 
 v2.x = 42;
->v2.x = 42 : number
->          : ^^^^^^
+>v2.x = 42 : 42
+>          : ^^
 >v2.x : number
 >     : ^^^^^^
 >v2 : GenericObjectWithoutSetter<number> & ({ a?: string; } | { b?: number; })
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
 >x : number
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 class NormalObject {
 >NormalObject : NormalObject
@@ -107,14 +107,14 @@ const v3 = new NormalObject() as NormalObject &
 >  : ^^^^^^^^^^^^^^^^^^
 
 v3.x = 42;
->v3.x = 42 : number
->          : ^^^^^^
+>v3.x = 42 : 42
+>          : ^^
 >v3.x : number
 >     : ^^^^^^
 >v3 : NormalObject & ({ a?: string; } | { b?: number; })
 >   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
 >x : number
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 

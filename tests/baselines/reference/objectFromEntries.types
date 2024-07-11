@@ -18,20 +18,20 @@ const o = Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]);
 >         : ^^^^^^^^^^^^^^^^
 >'a' : "a"
 >    : ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >['b', 2] : [string, number]
 >         : ^^^^^^^^^^^^^^^^
 >'b' : "b"
 >    : ^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >['c', 3] : [string, number]
 >         : ^^^^^^^^^^^^^^^^
 >'c' : "c"
 >    : ^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 const o2 = Object.fromEntries(new URLSearchParams());
 >o2 : { [k: string]: string; }
@@ -72,10 +72,10 @@ const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
 >              : ^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"key" : string
->      : ^^^^^^
->"value" : string
->        : ^^^^^^
+>"key" : "key"
+>      : ^^^^^
+>"value" : "value"
+>        : ^^^^^^^
 
 const frozenArray = Object.freeze([['a', 1], ['b', 2], ['c', 3]]);
 >frozenArray : readonly (string | number)[][]
@@ -92,22 +92,22 @@ const frozenArray = Object.freeze([['a', 1], ['b', 2], ['c', 3]]);
 >                               : ^^^^^^^^^^^^^^^^^^^^^
 >['a', 1] : (string | number)[]
 >         : ^^^^^^^^^^^^^^^^^^^
->'a' : string
->    : ^^^^^^
->1 : number
->  : ^^^^^^
+>'a' : "a"
+>    : ^^^
+>1 : 1
+>  : ^
 >['b', 2] : (string | number)[]
 >         : ^^^^^^^^^^^^^^^^^^^
->'b' : string
->    : ^^^^^^
->2 : number
->  : ^^^^^^
+>'b' : "b"
+>    : ^^^
+>2 : 2
+>  : ^
 >['c', 3] : (string | number)[]
 >         : ^^^^^^^^^^^^^^^^^^^
->'c' : string
->    : ^^^^^^
->3 : number
->  : ^^^^^^
+>'c' : "c"
+>    : ^^^
+>3 : 3
+>  : ^
 
 const o4 = Object.fromEntries(frozenArray);
 >o4 : any
@@ -136,22 +136,22 @@ const frozenArray2: readonly [string, number][] = Object.freeze([['a', 1], ['b',
 >                               : ^^^^^^^^^^^^^^^^^^
 >['a', 1] : [string, number]
 >         : ^^^^^^^^^^^^^^^^
->'a' : string
->    : ^^^^^^
->1 : number
->  : ^^^^^^
+>'a' : "a"
+>    : ^^^
+>1 : 1
+>  : ^
 >['b', 2] : [string, number]
 >         : ^^^^^^^^^^^^^^^^
->'b' : string
->    : ^^^^^^
->2 : number
->  : ^^^^^^
+>'b' : "b"
+>    : ^^^
+>2 : 2
+>  : ^
 >['c', 3] : [string, number]
 >         : ^^^^^^^^^^^^^^^^
->'c' : string
->    : ^^^^^^
->3 : number
->  : ^^^^^^
+>'c' : "c"
+>    : ^^^
+>3 : 3
+>  : ^
 
 const o5 = Object.fromEntries(frozenArray2);
 >o5 : { [k: string]: number; }

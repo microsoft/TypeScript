@@ -340,8 +340,8 @@ function Getter() {
         get #foo() { return ""}
 >#foo : string
 >     : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
         set #foo(value: string) { }
 >#foo : string
@@ -471,8 +471,8 @@ function Setter() {
         get #foo() { return ""}
 >#foo : string
 >     : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
     }
 
     // Error
@@ -969,8 +969,8 @@ function StaticGetter() {
         static get #foo() { return ""}
 >#foo : string
 >     : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
         static set #foo(value: string) { }
 >#foo : string
@@ -1103,8 +1103,8 @@ function StaticSetter() {
         static get #foo() { return ""}
 >#foo : string
 >     : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
     }
 
     // Error

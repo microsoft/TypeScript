@@ -14,8 +14,8 @@ var thingy: B = {
     me: "A"
 >me : string
 >   : ^^^^^^
->"A" : string
->    : ^^^^^^
+>"A" : "A"
+>    : ^^^
 
 };
 declare function foo(a: string): void;

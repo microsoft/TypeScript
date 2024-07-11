@@ -26,8 +26,8 @@
 >                                  : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'param is not defined' : string
->                       : ^^^^^^
+>'param is not defined' : "param is not defined"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
     } = data;
 >data : { param: string; }
@@ -61,8 +61,8 @@
     let foo: string | undefined = "";
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     const {
         param = (() => { throw new Error('param is not defined') })(),
@@ -78,8 +78,8 @@
 >                                  : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'param is not defined' : string
->                       : ^^^^^^
+>'param is not defined' : "param is not defined"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
     } = data;
 >data : { param: string; }
@@ -104,8 +104,8 @@
     let foo: string | undefined = "";
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     const {
         param = (() => { foo = undefined })(),
@@ -147,8 +147,8 @@
     let foo: string | undefined = "";
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     const {
         param = (() => { return "" + 1 })(),
@@ -214,12 +214,12 @@
 >                                               : ^^^^^^^^^^^^^^
 >() => { foo = ""; return 'window' as const } : () => "window"
 >                                             : ^^^^^^^^^^^^^^
->foo = "" : string
->         : ^^^^^^
+>foo = "" : ""
+>         : ^^
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >'window' as const : "window"
 >                  : ^^^^^^^^
 >'window' : "window"
@@ -296,12 +296,12 @@
 >                                               : ^^^^^^^^^^^^^^
 >() => { foo = ""; return 'window' as const } : () => "window"
 >                                             : ^^^^^^^^^^^^^^
->foo = "" : string
->         : ^^^^^^
+>foo = "" : ""
+>         : ^^
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >'window' as const : "window"
 >                  : ^^^^^^^^
 >'window' : "window"
@@ -378,12 +378,12 @@
 >                                     : ^^^^^^^^^^^^
 >() => { foo = ""; return window; } : () => Window
 >                                   : ^^^^^^^^^^^^
->foo = "" : string
->         : ^^^^^^
+>foo = "" : ""
+>         : ^^
 >foo : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >window : Window
 >       : ^^^^^^
 >window : Window

@@ -12,8 +12,8 @@
 >  : ^
 >eval : (x: string) => any
 >     : ^ ^^      ^^^^^   
->"10" : string
->     : ^^^^^^
+>"10" : "10"
+>     : ^^^^
 
 declare var eva;
 >eva : any

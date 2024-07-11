@@ -40,8 +40,8 @@ async function compute(promise: Promise<any>) {
 >                    : ^^^^^^^^^^^^^^^^^^
 >import("./1") : Promise<typeof import("1")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./1" : string
->      : ^^^^^^
+>"./1" : "./1"
+>      : ^^^^^
 
         return j.backup();
 >j.backup() : any
@@ -67,6 +67,6 @@ compute(import("./0"));
 >        : ^       ^^            ^^^^^^^^^^^^^^^^^
 >import("./0") : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : string
->      : ^^^^^^
+>"./0" : "./0"
+>      : ^^^^^
 

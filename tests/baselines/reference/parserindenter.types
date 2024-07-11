@@ -2376,8 +2376,8 @@ module Formatting {
 >                      : ^                   ^^      ^^     ^^      ^^^^^      
 >languageHostIndentation : string
 >                        : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
             //TypeScript: Projection snapshots not supported
 
@@ -2755,8 +2755,8 @@ module Formatting {
 >                    : ^^^^^^
 
                     return "";
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
                 var totalIndent = 0;
 >totalIndent : number
@@ -2826,8 +2826,8 @@ module Formatting {
 >  : ^
 
                     return "";
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
                 else
                     return this.GetIndentString(null, totalIndent, tabSize, convertTabsToSpaces);
@@ -3308,12 +3308,12 @@ module Formatting {
 >  : ^
 
                 newIndentSize = 0;
->newIndentSize = 0 : number
->                  : ^^^^^^
+>newIndentSize = 0 : 0
+>                  : ^
 >newIndentSize : number
 >              : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
             }
 
             var newIndent = this.GetIndentString(null, newIndentSize, this.editorOptions.TabSize, this.editorOptions.ConvertTabsToSpaces);
@@ -4423,12 +4423,12 @@ module Formatting {
 >          : ^^^^^^
 
                         lastDelta = 0;
->lastDelta = 0 : number
->              : ^^^^^^
+>lastDelta = 0 : 0
+>              : ^
 >lastDelta : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
                     }
 
                     if (indentNode.CanIndent()) {

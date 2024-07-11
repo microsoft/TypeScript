@@ -20,8 +20,8 @@ foo("", function* () {
 >                                                                                                                                : ^^^^^^
 >foo : <T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) => T) => T
 >    : ^ ^^ ^^ ^^ ^^   ^^                           ^^    ^^           ^^^^^ 
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >function* () {    yield* {        *[Symbol.iterator]() {            yield x => x.length        }    }} : () => Generator<(x: string) => number, void, undefined>
 >                                                                                                       : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

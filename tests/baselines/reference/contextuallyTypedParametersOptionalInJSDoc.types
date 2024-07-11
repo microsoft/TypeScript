@@ -46,16 +46,16 @@ const fn1 =
 >         : ^^^^
 >self : (a: string, b?: number | undefined) => void
 >     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     self("", undefined);
 >self("", undefined) : void
 >                    : ^^^^
 >self : (a: string, b?: number | undefined) => void
 >     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -92,16 +92,16 @@ const fn2 =
 >         : ^^^^
 >self : (a: string, b?: number | undefined) => void
 >     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     self("", undefined);
 >self("", undefined) : void
 >                    : ^^^^
 >self : (a: string, b?: number | undefined) => void
 >     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

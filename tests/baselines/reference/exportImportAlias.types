@@ -76,10 +76,10 @@ var b: { x: number; y: number; } = new C.a.Point(0, 0);
 >  : ^^^^^^^^
 >Point : typeof A.Point
 >      : ^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
 
 var c: { name: string };
 >c : { name: string; }
@@ -172,10 +172,10 @@ var n: { x: number; y: number; } = new Z.y.Point(0, 0);
 >  : ^^^^^^^^^^
 >Point : typeof X.Y.Point
 >      : ^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
 
 module K {
 >K : typeof K
@@ -242,8 +242,8 @@ var o = new M.D('Hello');
 >  : ^^^^^^^^
 >D : typeof K.L
 >  : ^^^^^^^^^^
->'Hello' : string
->        : ^^^^^^
+>'Hello' : "Hello"
+>        : ^^^^^^^
 
 var p: { x: number; y: number; }
 >p : { x: number; y: number; }

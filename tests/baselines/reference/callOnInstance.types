@@ -30,8 +30,8 @@ var s2: string = (new D(1))();
 >         : ^
 >D : typeof D
 >  : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 declare class C { constructor(value: number); }
 >C : C
@@ -48,6 +48,6 @@ declare class C { constructor(value: number); }
 >         : ^
 >C : typeof C
 >  : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

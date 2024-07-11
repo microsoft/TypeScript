@@ -28,8 +28,8 @@ const _private = Symbol();
 foo[_private] = "ok";
 >foo[_private] = "ok" : "ok"
 >                     : ^^^^
->foo[_private] : any
->              : ^^^
+>foo[_private] : string
+>              : ^^^^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >_private : unique symbol
@@ -40,8 +40,8 @@ foo[_private] = "ok";
 const x: string = foo[_private];
 >x : string
 >  : ^^^^^^
->foo[_private] : any
->              : ^^^
+>foo[_private] : string
+>              : ^^^^^^
 >foo : typeof foo
 >    : ^^^^^^^^^^
 >_private : unique symbol

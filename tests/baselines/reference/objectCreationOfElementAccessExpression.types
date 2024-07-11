@@ -14,16 +14,16 @@ class Food {
 >     : ^^^^^^
 
         this.amount = 100;
->this.amount = 100 : number
->                  : ^^^^^^
+>this.amount = 100 : 100
+>                  : ^^^
 >this.amount : number
 >            : ^^^^^^
 >this : this
 >     : ^^^^
 >amount : number
 >       : ^^^^^^
->100 : number
->    : ^^^^^^
+>100 : 100
+>    : ^^^
     }
     public eat(amountToEat: number): boolean {
 >eat : (amountToEat: number) => boolean
@@ -56,16 +56,16 @@ class Food {
 >  : ^
 
             this.amount = 0;
->this.amount = 0 : number
->                : ^^^^^^
+>this.amount = 0 : 0
+>                : ^
 >this.amount : number
 >            : ^^^^^^
 >this : this
 >     : ^^^^
 >amount : number
 >       : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
             return false;
 >false : false
@@ -118,8 +118,8 @@ class IceCream extends MonsterFood {
 >                           : ^^^^
 >super : typeof MonsterFood
 >      : ^^^^^^^^^^^^^^^^^^
->"Ice Cream" : string
->            : ^^^^^^
+>"Ice Cream" : "Ice Cream"
+>            : ^^^^^^^^^^^
 >flavor : string
 >       : ^^^^^^
     }
@@ -141,8 +141,8 @@ class Cookie extends MonsterFood {
 >                        : ^^^^
 >super : typeof MonsterFood
 >      : ^^^^^^^^^^^^^^^^^^
->"Cookie" : string
->         : ^^^^^^
+>"Cookie" : "Cookie"
+>         : ^^^^^^^^
 >flavor : string
 >       : ^^^^^^
     }
@@ -183,8 +183,8 @@ class ExpensiveOrganicDogFood extends PetFood {
 >                            : ^^^^
 >super : typeof PetFood
 >      : ^^^^^^^^^^^^^^
->"Origen" : string
->         : ^^^^^^
+>"Origen" : "Origen"
+>         : ^^^^^^^^
 >whereToBuy : number
 >           : ^^^^^^
     }
@@ -206,8 +206,8 @@ class ExpensiveOrganicCatFood extends PetFood {
 >                                    : ^^^^
 >super : typeof PetFood
 >      : ^^^^^^^^^^^^^^
->"Nature's Logic" : string
->                 : ^^^^^^
+>"Nature's Logic" : "Nature's Logic"
+>                 : ^^^^^^^^^^^^^^^^
 >whereToBuy : number
 >           : ^^^^^^
     }
@@ -237,8 +237,8 @@ var foods = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate 
 >                                    : ^^^^^^^^
 >IceCream : typeof IceCream
 >         : ^^^^^^^^^^^^^^^
->'Mint chocolate chip' : string
->                      : ^^^^^^
+>'Mint chocolate chip' : "Mint chocolate chip"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >Cookie('Chocolate chip', false) : any
 >                                : ^^^
 >Cookie : typeof Cookie
@@ -251,8 +251,8 @@ var foods = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate 
 >                                  : ^^^^^^
 >Cookie : typeof Cookie
 >       : ^^^^^^^^^^^^^
->'Peanut butter' : string
->                : ^^^^^^
+>'Peanut butter' : "Peanut butter"
+>                : ^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -273,8 +273,8 @@ var foods2: MonsterFood[] = new PetFood[new IceCream('Mint chocolate chip') , Co
 >                                    : ^^^^^^^^
 >IceCream : typeof IceCream
 >         : ^^^^^^^^^^^^^^^
->'Mint chocolate chip' : string
->                      : ^^^^^^
+>'Mint chocolate chip' : "Mint chocolate chip"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >Cookie('Chocolate chip', false) : any
 >                                : ^^^
 >Cookie : typeof Cookie
@@ -287,8 +287,8 @@ var foods2: MonsterFood[] = new PetFood[new IceCream('Mint chocolate chip') , Co
 >                                  : ^^^^^^
 >Cookie : typeof Cookie
 >       : ^^^^^^^^^^^^^
->'Peanut butter' : string
->                : ^^^^^^
+>'Peanut butter' : "Peanut butter"
+>                : ^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 

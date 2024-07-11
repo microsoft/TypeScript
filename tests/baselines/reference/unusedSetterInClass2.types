@@ -17,15 +17,15 @@ class Employee {
 >  : ^^^^^^^^^^
 
         this.p = 0;
->this.p = 0 : number
->           : ^^^^^^
+>this.p = 0 : 0
+>           : ^
 >this.p : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >p : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
     }
 }

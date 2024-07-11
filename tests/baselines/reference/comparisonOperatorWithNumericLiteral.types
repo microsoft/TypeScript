@@ -26,8 +26,8 @@ x > <number>0;
 >  : ^^^^^^^^^^
 ><number>0 : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 x > <BrandedNum>0;
 >x > <BrandedNum>0 : boolean
@@ -55,8 +55,8 @@ x < <number>0;
 >  : ^^^^^^^^^^
 ><number>0 : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 x < <BrandedNum>0;
 >x < <BrandedNum>0 : boolean
@@ -84,8 +84,8 @@ x >= <number>0;
 >  : ^^^^^^^^^^
 ><number>0 : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 x >= <BrandedNum>0;
 >x >= <BrandedNum>0 : boolean
@@ -113,8 +113,8 @@ x <= <number>0;
 >  : ^^^^^^^^^^
 ><number>0 : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 x <= <BrandedNum>0;
 >x <= <BrandedNum>0 : boolean
@@ -142,8 +142,8 @@ x == <number>0;
 >  : ^^^^^^^^^^
 ><number>0 : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 x == <BrandedNum>0;
 >x == <BrandedNum>0 : boolean
@@ -171,8 +171,8 @@ x != <number>0;
 >  : ^^^^^^^^^^
 ><number>0 : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 x != <BrandedNum>0;
 >x != <BrandedNum>0 : boolean
@@ -200,8 +200,8 @@ x === <number>0;
 >  : ^^^^^^^^^^
 ><number>0 : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 x === <BrandedNum>0;
 >x === <BrandedNum>0 : boolean
@@ -229,8 +229,8 @@ x !== <number>0;
 >  : ^^^^^^^^^^
 ><number>0 : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 x !== <BrandedNum>0;
 >x !== <BrandedNum>0 : boolean

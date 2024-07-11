@@ -61,8 +61,8 @@ var y = new enumdule.Point(0, 0);
 >         : ^^^^^^^^^^^^^^^
 >Point : typeof enumdule.Point
 >      : ^^^^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
 

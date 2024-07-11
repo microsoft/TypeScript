@@ -89,8 +89,8 @@ function distinguish(thing: string | number | Date) {
 >      : ^^^^^^
 >toPrecision : (precision?: number) => string
 >            : ^         ^^^      ^^^^^      
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
     }
 }
 

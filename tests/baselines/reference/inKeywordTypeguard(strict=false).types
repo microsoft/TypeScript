@@ -122,16 +122,16 @@ function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithO
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.a = "1";
->x.a = "1" : string
->          : ^^^^^^
+>x.a = "1" : "1"
+>          : ^^^
 >x.a : string
 >    : ^^^^^^
 >x : AWithOptionalProp
 >  : ^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 
     } else {
         x.b = "1";
@@ -155,8 +155,8 @@ class AWithMethod {
     a(): string { return ""; }
 >a : () => string
 >  : ^^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 }
 
 class BWithMethod {
@@ -166,8 +166,8 @@ class BWithMethod {
     b(): string { return ""; }
 >b : () => string
 >  : ^^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 }
 
 function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {

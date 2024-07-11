@@ -16,6 +16,6 @@ const o: I = { m() { throw new Error("not implemented"); } };
 >                             : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"not implemented" : string
->                  : ^^^^^^
+>"not implemented" : "not implemented"
+>                  : ^^^^^^^^^^^^^^^^^
 

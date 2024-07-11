@@ -47,8 +47,8 @@ Func({
         foo: ""
 >foo : string
 >    : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     },
     validate: props => {

@@ -120,6 +120,6 @@ from(new MyObservable(42))
 >                     : ^^^^^^^^^^^^^^^^^^^^
 >MyObservable : typeof MyObservable
 >             : ^^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 

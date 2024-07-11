@@ -81,16 +81,16 @@ a1([1, 2, [["world"]]]);
 >   : ^             ^^                            ^^^^^^^^^
 >[1, 2, [["world"]]] : [number, number, string[][]]
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >[["world"]] : string[][]
 >            : ^^^^^^^^^^
 >["world"] : string[]
 >          : ^^^^^^^^
->"world" : string
->        : ^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
 
 a1([1, 2, [["world"]], 3]);
 >a1([1, 2, [["world"]], 3]) : void
@@ -99,16 +99,16 @@ a1([1, 2, [["world"]], 3]);
 >   : ^             ^^                            ^^^^^^^^^
 >[1, 2, [["world"]], 3] : [number, number, string[][], number]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >[["world"]] : string[][]
 >            : ^^^^^^^^^^
 >["world"] : string[]
 >          : ^^^^^^^^
->"world" : string
->        : ^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
 >3 : 3
 >  : ^
 
@@ -268,8 +268,8 @@ b2("string", { x: 200, y: "string" });
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->200 : number
->    : ^^^^^^
+>200 : 200
+>    : ^^^
 >y : string
 >  : ^^^^^^
 >"string" : "string"
@@ -286,8 +286,8 @@ b2("string", { x: 200, y: true });
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->200 : number
->    : ^^^^^^
+>200 : 200
+>    : ^^^
 >y : boolean
 >  : ^^^^^^^
 >true : true
@@ -344,8 +344,8 @@ function c3({b}: { b: number|string} = { b: "hello" }) { }
 >               : ^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 function c5([a, b, [[c]]]) { }
 >c5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
@@ -432,8 +432,8 @@ c1({ z: 1 })      // Implied type is {z:number}?
 >         : ^^^^^^^^^^^^^^
 >z : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 c2({});         // Implied type is {z?: number}
 >c2({}) : void
@@ -452,8 +452,8 @@ c2({z:1});      // Implied type is {z?: number}
 >      : ^^^^^^^^^^^^^^
 >z : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 c3({ b: 1 });     // Implied type is { b: number|string }.
 >c3({ b: 1 }) : void
@@ -464,8 +464,8 @@ c3({ b: 1 });     // Implied type is { b: number|string }.
 >         : ^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 c5([1, 2, [["string"]]]);               // Implied type is is [any, any, [[any]]]
 >c5([1, 2, [["string"]]]) : void

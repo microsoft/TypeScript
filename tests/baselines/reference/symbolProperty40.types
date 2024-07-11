@@ -67,8 +67,8 @@ c[Symbol.iterator]("");
 >       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
 >         : ^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 c[Symbol.iterator](0);
 >c[Symbol.iterator](0) : number
@@ -83,6 +83,6 @@ c[Symbol.iterator](0);
 >       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
 >         : ^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 

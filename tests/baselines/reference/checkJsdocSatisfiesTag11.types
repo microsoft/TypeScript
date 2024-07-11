@@ -22,17 +22,17 @@ const t1 = { a: 1 };
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 /**
  * @satisfies {number}
  */
 const t2 = /** @satisfies {number} */ (1);
->t2 : number
->   : ^^^^^^
->(1) : number
->    : ^^^^^^
->1 : number
->  : ^^^^^^
+>t2 : 1
+>   : ^
+>(1) : 1
+>    : ^
+>1 : 1
+>  : ^
 

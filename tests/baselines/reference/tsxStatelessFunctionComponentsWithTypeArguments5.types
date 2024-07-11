@@ -97,8 +97,8 @@ function Bar<T extends { prop: number }>(arg: T) {
 >    : ^
 >ignore-prop : number
 >            : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     let a3 = <ComponentSpecific {...arg} prop="hello" />;   // U is "hello"
 >a3 : JSX.Element

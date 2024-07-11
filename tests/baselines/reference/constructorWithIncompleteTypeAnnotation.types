@@ -61,8 +61,8 @@ module TypeScriptAllInOne {
                 var retValue: number = 0;
 >retValue : number
 >         : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
                 retValue = bfs.VARIABLES();
 >retValue = bfs.VARIABLES() : number
@@ -390,12 +390,12 @@ module TypeScriptAllInOne {
 >                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"var" : number
 >      : ^^^^^^
->number = 42 : number
->            : ^^^^^^
+>number = 42 : 42
+>            : ^^
 >number : number
 >       : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >equals : (x: any) => boolean
 >       : ^ ^^^^^^^^^^^^^^^^^
 >function (x) { return x["var"] === 42; } : (x: any) => boolean
@@ -677,8 +677,8 @@ module TypeScriptAllInOne {
 >      : ^^^^^^
 
             return 0;
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
         }
 
         /// <summary>
@@ -707,21 +707,21 @@ module TypeScriptAllInOne {
 >  : ^
 
                 retVal = 1;
->retVal = 1 : number
->           : ^^^^^^
+>retVal = 1 : 1
+>           : ^
 >retVal : number
 >       : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
             else
                 retVal = 0;
->retVal = 0 : number
->           : ^^^^^^
+>retVal = 0 : 0
+>           : ^
 >retVal : number
 >       : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
             switch (i) {
 >i : number
@@ -732,12 +732,12 @@ module TypeScriptAllInOne {
 >  : ^
 
                     retVal = 1;
->retVal = 1 : number
->           : ^^^^^^
+>retVal = 1 : 1
+>           : ^
 >retVal : number
 >       : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
                     break;
                 case 3:
@@ -745,12 +745,12 @@ module TypeScriptAllInOne {
 >  : ^
 
                     retVal = 1;
->retVal = 1 : number
->           : ^^^^^^
+>retVal = 1 : 1
+>           : ^
 >retVal : number
 >       : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
                     break;
                 default:
@@ -919,16 +919,16 @@ module TypeScriptAllInOne {
 >  : ^^^^^^^^
 >[1, 2, 3, 4, 5, ] : number[]
 >                  : ^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
->5 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
+>5 : 5
+>  : ^
 
             var i = a[1];/*[]*/
 >i : number
@@ -1163,8 +1163,8 @@ module TypeScriptAllInOne {
 >  : ^^^^^^
 ><number>5.0 : number
 >            : ^^^^^^
->5.0 : number
->    : ^^^^^^
+>5.0 : 5
+>    : ^
 
             i -= i;/*-=*/
 >i -= i : number
@@ -1277,12 +1277,12 @@ module TypeScriptAllInOne {
 >  : ^
 
                 return 0;
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
             else return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
         }
 
     }

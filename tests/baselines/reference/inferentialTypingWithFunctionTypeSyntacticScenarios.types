@@ -41,8 +41,8 @@ s = map("", dottedIdentity.x);
 >                          : ^^^^^^
 >map : <T, U>(array: T, func: (x: T) => U) => U
 >    : ^ ^^ ^^     ^^ ^^    ^^           ^^^^^ 
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >dottedIdentity.x : <V>(y: V) => V
 >                 : ^ ^^ ^^ ^^^^^ 
 >dottedIdentity : { x: <V>(y: V) => V; }
@@ -60,8 +60,8 @@ s = map("", dottedIdentity['x']);
 >                             : ^^^^^^
 >map : <T, U>(array: T, func: (x: T) => U) => U
 >    : ^ ^^ ^^     ^^ ^^    ^^           ^^^^^ 
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >dottedIdentity['x'] : <V>(y: V) => V
 >                    : ^ ^^ ^^ ^^^^^ 
 >dottedIdentity : { x: <V>(y: V) => V; }
@@ -79,8 +79,8 @@ s = map("", (() => identity)());
 >                            : ^^^^^^
 >map : <T, U>(array: T, func: (x: T) => U) => U
 >    : ^ ^^ ^^     ^^ ^^    ^^           ^^^^^ 
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >(() => identity)() : <V>(y: V) => V
 >                   : ^ ^^ ^^ ^^^^^ 
 >(() => identity) : () => <V>(y: V) => V
@@ -109,8 +109,8 @@ s = map("", new ic());
 >                  : ^^^^^^
 >map : <T, U>(array: T, func: (x: T) => U) => U
 >    : ^ ^^ ^^     ^^ ^^    ^^           ^^^^^ 
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >new ic() : <V>(y: V) => V
 >         : ^ ^^ ^^ ^^^^^ 
 >ic : IdentityConstructor
@@ -129,8 +129,8 @@ s = map("", t = identity);
 >                      : ^^^^^^
 >map : <T, U>(array: T, func: (x: T) => U) => U
 >    : ^ ^^ ^^     ^^ ^^    ^^           ^^^^^ 
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >t = identity : <V>(y: V) => V
 >             : ^ ^^ ^^ ^^^^^ 
 >t : any
@@ -147,8 +147,8 @@ s = map("", <typeof identity>identity);
 >                                   : ^^^^^^
 >map : <T, U>(array: T, func: (x: T) => U) => U
 >    : ^ ^^ ^^     ^^ ^^    ^^           ^^^^^ 
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 ><typeof identity>identity : <V>(y: V) => V
 >                          : ^ ^^ ^^ ^^^^^ 
 >identity : <V>(y: V) => V
@@ -166,8 +166,8 @@ s = map("", (identity));
 >                    : ^^^^^^
 >map : <T, U>(array: T, func: (x: T) => U) => U
 >    : ^ ^^ ^^     ^^ ^^    ^^           ^^^^^ 
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >(identity) : <V>(y: V) => V
 >           : ^ ^^ ^^ ^^^^^ 
 >identity : <V>(y: V) => V
@@ -183,8 +183,8 @@ s = map("", ("", identity));
 >                        : ^^^^^^
 >map : <T, U>(array: T, func: (x: T) => U) => U
 >    : ^ ^^ ^^     ^^ ^^    ^^           ^^^^^ 
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >("", identity) : <V>(y: V) => V
 >               : ^ ^^ ^^ ^^^^^ 
 >"", identity : <V>(y: V) => V

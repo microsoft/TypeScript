@@ -1008,14 +1008,14 @@ function CreateTypedArraysOf2() {
 >          : ^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Int8Array
 >   : ^^^^     ^^        ^^^^^         
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
     typedArrays[1] = Uint8Array.of(1,2,3,4);
 >typedArrays[1] = Uint8Array.of(1,2,3,4) : Uint8Array
@@ -1033,14 +1033,14 @@ function CreateTypedArraysOf2() {
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint8Array
 >   : ^^^^     ^^        ^^^^^          
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
     typedArrays[2] = Int16Array.of(1,2,3,4);
 >typedArrays[2] = Int16Array.of(1,2,3,4) : Int16Array
@@ -1058,14 +1058,14 @@ function CreateTypedArraysOf2() {
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Int16Array
 >   : ^^^^     ^^        ^^^^^          
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
     typedArrays[3] = Uint16Array.of(1,2,3,4);
 >typedArrays[3] = Uint16Array.of(1,2,3,4) : Uint16Array
@@ -1083,14 +1083,14 @@ function CreateTypedArraysOf2() {
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint16Array
 >   : ^^^^     ^^        ^^^^^           
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
     typedArrays[4] = Int32Array.of(1,2,3,4);
 >typedArrays[4] = Int32Array.of(1,2,3,4) : Int32Array
@@ -1108,14 +1108,14 @@ function CreateTypedArraysOf2() {
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Int32Array
 >   : ^^^^     ^^        ^^^^^          
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
     typedArrays[5] = Uint32Array.of(1,2,3,4);
 >typedArrays[5] = Uint32Array.of(1,2,3,4) : Uint32Array
@@ -1133,14 +1133,14 @@ function CreateTypedArraysOf2() {
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint32Array
 >   : ^^^^     ^^        ^^^^^           
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
     typedArrays[6] = Float32Array.of(1,2,3,4);
 >typedArrays[6] = Float32Array.of(1,2,3,4) : Float32Array
@@ -1158,14 +1158,14 @@ function CreateTypedArraysOf2() {
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Float32Array
 >   : ^^^^     ^^        ^^^^^            
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
     typedArrays[7] = Float64Array.of(1,2,3,4);
 >typedArrays[7] = Float64Array.of(1,2,3,4) : Float64Array
@@ -1183,14 +1183,14 @@ function CreateTypedArraysOf2() {
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Float64Array
 >   : ^^^^     ^^        ^^^^^            
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
     typedArrays[8] = Uint8ClampedArray.of(1,2,3,4);
 >typedArrays[8] = Uint8ClampedArray.of(1,2,3,4) : Uint8ClampedArray
@@ -1208,14 +1208,14 @@ function CreateTypedArraysOf2() {
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint8ClampedArray
 >   : ^^^^     ^^        ^^^^^                 
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
     return typedArrays;
 >typedArrays : any[]

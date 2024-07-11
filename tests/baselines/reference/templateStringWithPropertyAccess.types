@@ -12,6 +12,6 @@
 >  : ^
 >indexOf : (searchString: string, position?: number) => number
 >        : ^            ^^      ^^        ^^^      ^^^^^      
->`abc` : string
->      : ^^^^^^
+>`abc` : "abc"
+>      : ^^^^^
 

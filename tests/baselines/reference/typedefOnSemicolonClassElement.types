@@ -11,7 +11,7 @@ export class Preferences {
   a = 'ok'
 >a : string
 >  : ^^^^^^
->'ok' : string
->     : ^^^^^^
+>'ok' : "ok"
+>     : ^^^^
 }
 

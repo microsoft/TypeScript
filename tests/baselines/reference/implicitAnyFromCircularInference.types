@@ -107,8 +107,8 @@ function foo(x: A): string { return "abc"; }
 >    : ^ ^^ ^^^^^      
 >x : A
 >  : ^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 class C {
 >C : C

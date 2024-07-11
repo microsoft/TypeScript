@@ -26,8 +26,8 @@ function foo1(a: number) {
 >         : ^^^
 >use : (a: string) => any
 >    : ^ ^^      ^^^^^^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 
             break;
         case 2:
@@ -39,8 +39,8 @@ function foo1(a: number) {
 >         : ^^^
 >use : (a: string) => any
 >    : ^ ^^      ^^^^^^^^
->"2" : string
->    : ^^^^^^
+>"2" : "2"
+>    : ^^^
 
         case 3:
 >3 : 3
@@ -51,8 +51,8 @@ function foo1(a: number) {
 >         : ^^^
 >use : (a: string) => any
 >    : ^ ^^      ^^^^^^^^
->"3" : string
->    : ^^^^^^
+>"3" : "3"
+>    : ^^^
     }
 }
 
@@ -76,8 +76,8 @@ function foo2(a: number) {
 >         : ^^^
 >use : (a: string) => any
 >    : ^ ^^      ^^^^^^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 
             break;
         default:
@@ -86,8 +86,8 @@ function foo2(a: number) {
 >         : ^^^
 >use : (a: string) => any
 >    : ^ ^^      ^^^^^^^^
->"2" : string
->    : ^^^^^^
+>"2" : "2"
+>    : ^^^
 
         case 2:
 >2 : 2
@@ -98,7 +98,7 @@ function foo2(a: number) {
 >         : ^^^
 >use : (a: string) => any
 >    : ^ ^^      ^^^^^^^^
->"3" : string
->    : ^^^^^^
+>"3" : "3"
+>    : ^^^
     }
 }

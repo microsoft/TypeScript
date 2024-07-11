@@ -34,16 +34,16 @@ class X {
 >                                        : ^^^^^^^^^^
 
             this.y = 0;
->this.y = 0 : number
->           : ^^^^^^
+>this.y = 0 : 0
+>           : ^
 >this.y : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
         }).promise();
 >promise : any

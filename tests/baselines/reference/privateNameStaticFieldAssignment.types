@@ -13,14 +13,14 @@ class A {
 
     constructor() {
         A.#field = 1;
->A.#field = 1 : number
->             : ^^^^^^
+>A.#field = 1 : 1
+>             : ^
 >A.#field : number
 >         : ^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         A.#field += 2;
 >A.#field += 2 : number
@@ -143,8 +143,8 @@ class A {
 >   : ^^
 
         A.getClass().#field = 1;
->A.getClass().#field = 1 : number
->                        : ^^^^^^
+>A.getClass().#field = 1 : 1
+>                        : ^
 >A.getClass().#field : number
 >                    : ^^^^^^
 >A.getClass() : typeof A
@@ -155,8 +155,8 @@ class A {
 >  : ^^^^^^^^
 >getClass : () => typeof A
 >         : ^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         A.getClass().#field += 2;
 >A.getClass().#field += 2 : number

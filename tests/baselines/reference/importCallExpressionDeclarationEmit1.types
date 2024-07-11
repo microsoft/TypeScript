@@ -60,8 +60,8 @@ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
 >               : ^^^^^^
 >getSpecifier : () => string
 >             : ^^^^^^      
->"defaulPath" : string
->             : ^^^^^^
+>"defaulPath" : "defaulPath"
+>             : ^^^^^^^^^^^^
 
 function returnDynamicLoad(path: string) {
 >returnDynamicLoad : (path: string) => Promise<any>

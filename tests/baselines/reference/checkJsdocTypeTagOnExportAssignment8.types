@@ -17,8 +17,8 @@ export default {
     a: 'a',
 >a : string
 >  : ^^^^^^
->'a' : string
->    : ^^^^^^
+>'a' : "a"
+>    : ^^^
 
     b: 'b'
 >b : "b"

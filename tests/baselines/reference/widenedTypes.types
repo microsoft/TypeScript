@@ -48,16 +48,16 @@ var t = [3, (3, null)];
 >  : ^
 
 t[3] = "";
->t[3] = "" : string
->          : ^^^^^^
+>t[3] = "" : ""
+>          : ^^
 >t[3] : number
 >     : ^^^^^^
 >t : number[]
 >  : ^^^^^^^^
 >3 : 3
 >  : ^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 var x: typeof undefined = 3;
 >x : any
@@ -94,16 +94,16 @@ var u = [3, (y = null)];
 >  : ^^^
 
 u[3] = "";
->u[3] = "" : string
->          : ^^^^^^
+>u[3] = "" : ""
+>          : ^^
 >u[3] : number
 >     : ^^^^^^
 >u : number[]
 >  : ^^^^^^^^
 >3 : 3
 >  : ^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 var ob: { x: typeof undefined } = { x: "" };
 >ob : { x: typeof undefined; }
@@ -125,8 +125,8 @@ var arr: string[] = [3, null]; // not assignable because null is not widened. BC
 >    : ^^^^^^^^
 >[3, null] : number[]
 >          : ^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
 >obj : { [x: string]: string; }
@@ -137,8 +137,8 @@ var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because nul
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >y : null
 >  : ^^^^
 

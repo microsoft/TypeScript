@@ -10,10 +10,10 @@ export default createSvgIcon("Hello", "ArrowLeft");
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createSvgIcon : (path: string, displayName: string) => import("packages/core/src/SvgIcon").SomeInterface
 >              : ^    ^^      ^^           ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"Hello" : string
->        : ^^^^^^
->"ArrowLeft" : string
->            : ^^^^^^
+>"Hello" : "Hello"
+>        : ^^^^^^^
+>"ArrowLeft" : "ArrowLeft"
+>            : ^^^^^^^^^^^
 
 === packages/core/src/SvgIcon.d.ts ===
 import { StyledComponentProps } from "@ts-bug/styles";

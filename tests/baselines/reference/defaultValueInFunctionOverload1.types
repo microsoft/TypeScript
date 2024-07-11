@@ -6,8 +6,8 @@ function foo(x: string = '');
 >    : ^ ^^^      ^^^^^^^^
 >x : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 function foo(x = '') { }
 >foo : (x?: string) => any

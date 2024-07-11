@@ -21,7 +21,7 @@ objectSpreadNegative.ts(52,20): error TS2698: Spread types may only be created f
 objectSpreadNegative.ts(54,19): error TS2698: Spread types may only be created from object types.
 objectSpreadNegative.ts(59,1): error TS2349: This expression is not callable.
   Type '{}' has no call signatures.
-objectSpreadNegative.ts(63,1): error TS2322: Type 'number' is not assignable to type 'undefined'.
+objectSpreadNegative.ts(63,1): error TS2322: Type '12' is not assignable to type 'undefined'.
 objectSpreadNegative.ts(69,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
 objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on type '{}'.
 
@@ -142,7 +142,7 @@ objectSpreadNegative.ts(74,11): error TS2339: Property 'a' does not exist on typ
     let setterOnly = { ...{ set b (bad: number) { } } };
     setterOnly.b = 12; // error, 'b' does not exist
     ~~~~~~~~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'undefined'.
+!!! error TS2322: Type '12' is not assignable to type 'undefined'.
     
     // methods are skipped because they aren't enumerable
     class C { p = 1; m() { } }

@@ -12,10 +12,10 @@ const strings: NonEmptyStringArray = ['one', 'two']
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >['one', 'two'] : [string, string]
 >               : ^^^^^^^^^^^^^^^^
->'one' : string
->      : ^^^^^^
->'two' : string
->      : ^^^^^^
+>'one' : "one"
+>      : ^^^^^
+>'two' : "two"
+>      : ^^^^^
 
 const [s0, s1, s2] = strings;
 >s0 : string

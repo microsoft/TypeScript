@@ -242,8 +242,8 @@ const comp = ctor({ common: "ok", ref: x => console.log(x) });
 >                                           : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >common : string
 >       : ^^^^^^
->"ok" : string
->     : ^^^^^^
+>"ok" : "ok"
+>     : ^^^^
 >ref : (x: any) => void
 >    : ^ ^^^^^^^^^^^^^^
 >x => console.log(x) : (x: any) => void

@@ -61,8 +61,8 @@ class Derived extends Base {
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         var r2 = super.foo({ a: 1, b: 2 }); // { a: number }
 >r2 : { a: number; }
@@ -79,8 +79,8 @@ class Derived extends Base {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : number
 >  : ^^^^^^
 >2 : 2
@@ -101,11 +101,11 @@ class Derived extends Base {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
     }
 }

@@ -10,8 +10,8 @@ const A = Symbol("A");
 >            : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"A" : string
->    : ^^^^^^
+>"A" : "A"
+>    : ^^^
 
 const B = Symbol("B");
 >B : unique symbol
@@ -20,8 +20,8 @@ const B = Symbol("B");
 >            : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"B" : string
->    : ^^^^^^
+>"B" : "B"
+>    : ^^^
 
 type Action =
 >Action : Action

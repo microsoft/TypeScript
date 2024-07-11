@@ -63,16 +63,16 @@ let mutable: Base & Mutable;
 >        : ^^^^^^^^^^^^^^
 
 mutable.value = 12;
->mutable.value = 12 : number
->                   : ^^^^^^
+>mutable.value = 12 : 12
+>                   : ^^
 >mutable.value : number
 >              : ^^^^^^
 >mutable : Base & Mutable
 >        : ^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 let differentType: Base & DifferentType;
 >differentType : Base & DifferentType

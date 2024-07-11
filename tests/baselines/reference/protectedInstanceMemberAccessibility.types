@@ -14,8 +14,8 @@ class A {
 >  : ^^^^^^      
 
         return "hello";
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
     }
 }
 

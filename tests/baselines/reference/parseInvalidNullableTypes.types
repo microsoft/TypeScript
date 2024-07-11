@@ -58,8 +58,8 @@ const a = 1 as any?;
 const b: number? = 1;
 >b : number | null
 >  : ^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const c = 1 as ?any;
 >c : any
@@ -72,8 +72,8 @@ const c = 1 as ?any;
 const d: ?number = 1;
 >d : number | null
 >  : ^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 let e: unknown?;
 >e : unknown

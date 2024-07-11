@@ -14,10 +14,10 @@ let v = new Math2d.Vector(3, 2);
 >       : ^^^^^^^^^^^^^
 >Vector : typeof Math2d.Vector
 >       : ^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
+>2 : 2
+>  : ^
 
 let magnitude = Math2d.getLength(v);
 >magnitude : number
@@ -46,10 +46,10 @@ let p: Math2d.Point = v.translate(5, 5);
 >  : ^^^^^^^^^^^^^
 >translate : (dx: number, dy: number) => Math2d.Vector
 >          : ^  ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^
->5 : number
->  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
+>5 : 5
+>  : ^
 
 p = v.reverse();
 >p = v.reverse() : Math2d.Point

@@ -30,8 +30,8 @@ test1(
     count: 0,
 >count : number
 >      : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
   },
   {
@@ -47,8 +47,8 @@ test1(
 >    : ^^^^^^^^^^^^^^^^^^
 >max : number
 >    : ^^^^^^
->500 : number
->    : ^^^^^^
+>500 : 500
+>    : ^^^
 
     hasAccess: (ctx, user: { name: string }) => {},
 >hasAccess : (ctx: { count: number; }, user: { name: string; }) => void
@@ -90,6 +90,6 @@ const test3: (arg: number) => void = (arg = 1) => {};
 >                : ^   ^^^^^^^^^^^^^^^^^^
 >arg : number
 >    : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

@@ -4,6 +4,6 @@
 const a: number = 1
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

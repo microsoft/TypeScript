@@ -861,8 +861,8 @@ class Derived extends Base {
 >      : ^^^^
 >method : (x: string) => any
 >       : ^ ^^      ^^^^^   
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     b() { return async () => super.getter }
 >b : () => () => Promise<any>
@@ -902,8 +902,8 @@ class Derived extends Base {
 >      : ^^^^
 >"method" : "method"
 >         : ^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     e() { return async () => super["getter"] }
 >e : () => () => Promise<any>
@@ -943,8 +943,8 @@ class Derived extends Base {
 >      : ^^^^^^^^^^^
 >method : (x: string) => any
 >       : ^ ^^      ^^^^^   
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     static b() { return async () => super.getter }
 >b : () => () => Promise<any>
@@ -984,8 +984,8 @@ class Derived extends Base {
 >      : ^^^^^^^^^^^
 >"method" : "method"
 >         : ^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     static e() { return async () => super["getter"] }
 >e : () => () => Promise<any>

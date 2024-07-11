@@ -22,14 +22,14 @@ function compare<T extends Comparable<T>>(x: T, y: T): number {
 >          : ^^^^^^^
 >x : T
 >  : ^
->y == null ? 0 : -1 : number
+>y == null ? 0 : -1 : 0 | -1
 >                   : ^^^^^^
 >y == null : boolean
 >          : ^^^^^^^
 >y : T
 >  : ^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >-1 : -1
 >   : ^^
 >1 : 1
@@ -40,8 +40,8 @@ function compare<T extends Comparable<T>>(x: T, y: T): number {
 >          : ^^^^^^^
 >y : T
 >  : ^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     return x.comparer(y);
 >x.comparer(y) : number
@@ -83,8 +83,8 @@ var a = new ComparableString("a");
 >                          : ^^^^^^^^^^^^^^^^
 >ComparableString : typeof ComparableString
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 
 var b = new ComparableString("b");
 >b : ComparableString
@@ -93,8 +93,8 @@ var b = new ComparableString("b");
 >                          : ^^^^^^^^^^^^^^^^
 >ComparableString : typeof ComparableString
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
->"b" : string
->    : ^^^^^^
+>"b" : "b"
+>    : ^^^
 
 var c = compare<ComparableString>(a, b);
 >c : number

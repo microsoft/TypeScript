@@ -92,8 +92,8 @@ var z = new Zet(1)
 >           : ^^^^^^^^^^^
 >Zet : typeof Zet
 >    : ^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 z.t = 2
 >z.t = 2 : 2
@@ -131,14 +131,14 @@ let answer = z.add(3, { nested: 4 })
 >  : ^^^^^^^^^^^
 >add : (v: number, o: { nested: number; }) => number
 >    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >{ nested: 4 } : { nested: number; }
 >              : ^^^^^^^^^^^^^^^^^^^
 >nested : number
 >       : ^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 
 // lookup in typedef should not crash the compiler, even when the type is unknown
 /**

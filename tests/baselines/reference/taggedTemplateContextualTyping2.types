@@ -77,8 +77,8 @@ tempTag2 `${ x => { x<number>(undefined); return x; }         }${ 0 }`;
 >          : ^^^^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<string, number>(null); return y; } }${ "hello" }`;
 >tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<string, number>(null); return y; } }${ "hello" }` : string
@@ -109,8 +109,8 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<strin
 >  : ^ ^^ ^^ ^^ ^^^^^ 
 >y : <S, T>(p: T) => T
 >  : ^ ^^ ^^ ^^ ^^^^^ 
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }`;
 >tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }` : string
@@ -133,6 +133,6 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ 
 >  : ^ ^^ ^^ ^^ ^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 

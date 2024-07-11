@@ -98,14 +98,14 @@ var result = destructure(value, text => 'string', y => 'other one'); // text: st
 >                 : ^    ^^^^^^^^^^^^^^^^^^^
 >text : string
 >     : ^^^^^^
->'string' : string
->         : ^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
 >y => 'other one' : (y: Y) => string
 >                 : ^ ^^^^^^^^^^^^^^
 >y : Y
 >  : ^
->'other one' : string
->            : ^^^^^^
+>'other one' : "other one"
+>            : ^^^^^^^^^^^
 
 // Repro from #4212
 

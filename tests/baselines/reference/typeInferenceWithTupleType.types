@@ -25,10 +25,10 @@ var combineResult = combine("string", 10);
 >                      : ^^^^^^^^^^^^^^^^
 >combine : <T, U>(x: T, y: U) => [T, U]
 >        : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
->"string" : string
->         : ^^^^^^
->10 : number
->   : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+>10 : 10
+>   : ^^
 
 var combineEle1 = combineResult[0]; // string
 >combineEle1 : string
@@ -152,16 +152,16 @@ var zipResult = zip(["foo", "bar"], [5, 6]);
 >    : ^ ^^ ^^      ^^   ^^      ^^   ^^^^^        
 >["foo", "bar"] : string[]
 >               : ^^^^^^^^
->"foo" : string
->      : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 >[5, 6] : number[]
 >       : ^^^^^^^^
->5 : number
->  : ^^^^^^
->6 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
+>6 : 6
+>  : ^
 
 var zipResultEle = zipResult[0]; // [string, number]
 >zipResultEle : [string, number]

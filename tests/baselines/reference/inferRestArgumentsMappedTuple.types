@@ -39,14 +39,14 @@ const myPrimitiveTupleOld: [string, number] = extractPrimitivesOld({ primitive: 
 >                  : ^^^^^^^^^^^^^^^^^^^^^^
 >primitive : string
 >          : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >{ primitive: 0 } : { primitive: number; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
 >primitive : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 type TupleMapperNew<Tuple extends any[]> = {
 >TupleMapperNew : TupleMapperNew<Tuple>
@@ -76,12 +76,12 @@ const myPrimitiveTupleNew: [string, number] = extractPrimitivesNew({ primitive: 
 >                  : ^^^^^^^^^^^^^^^^^^^^^^
 >primitive : string
 >          : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >{ primitive: 0 } : { primitive: number; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
 >primitive : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 

@@ -26,6 +26,6 @@ b.reduce<number>((c, d) => c + d, 0); // should not error on '+'
 >  : ^^^^^^
 >d : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 

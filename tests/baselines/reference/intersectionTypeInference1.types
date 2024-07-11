@@ -62,6 +62,6 @@ export const Form3 = brokenFunction(parameterFn)({store: "hello"})
 >                 : ^^^^^^^^^^^^^^^^^^
 >store : string
 >      : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 

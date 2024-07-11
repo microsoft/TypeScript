@@ -18,8 +18,8 @@ foo()(1 as number).toString();
 >    : ^^^^^^      
 >1 as number : number
 >            : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >toString : any
 >         : ^^^
 
@@ -36,8 +36,8 @@ foo()   (1 as number).toString();
 >    : ^^^^^^      
 >1 as number : number
 >            : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >toString : any
 >         : ^^^
 
@@ -56,8 +56,8 @@ foo()
 (1 as number).toString();
 >1 as number : number
 >            : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >toString : any
 >         : ^^^
 
@@ -98,8 +98,8 @@ foo()
     (<number>1).toString();
 ><number>1 : number
 >          : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >toString : any
 >         : ^^^
 

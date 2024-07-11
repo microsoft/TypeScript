@@ -61,8 +61,8 @@ c.m(function(n) { return "hello: "+n; },18);
 >          : ^^^^^^^^^
 >n : number
 >  : ^^^^^^
->18 : number
->   : ^^^^^^
+>18 : 18
+>   : ^^
 
 
 

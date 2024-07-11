@@ -70,10 +70,10 @@ var result2 = concat2(1, ""); // result2 will be number|string
 >               : ^^^
 >concat2 : <T, U>(x: T, y: U) => any
 >        : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^
->1 : number
->  : ^^^^^^
->"" : string
->   : ^^^^^^
+>1 : 1
+>  : ^
+>"" : ""
+>   : ^^
 
 var elementCount2 = result.length; 
 >elementCount2 : any

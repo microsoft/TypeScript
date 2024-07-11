@@ -30,8 +30,8 @@ export function createInstance(): Interface {
 >         : ^^^^^^
 >SYMBOL : unique symbol
 >       : ^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
   }
 }
 

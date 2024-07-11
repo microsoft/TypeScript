@@ -150,8 +150,8 @@ abstract class AbstractAccessorMismatch {
     get p2(): string { return "should work"; }
 >p2 : string
 >   : ^^^^^^
->"should work" : string
->              : ^^^^^^
+>"should work" : "should work"
+>              : ^^^^^^^^^^^^^
 
     abstract set p2(val: string);
 >p2 : string

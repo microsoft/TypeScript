@@ -57,8 +57,8 @@ class Person {
 >         : ^^^^^^^^
 >push : (...items: string[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->"New child" : string
->            : ^^^^^^
+>"New child" : "New child"
+>            : ^^^^^^^^^^^
 }
 
 

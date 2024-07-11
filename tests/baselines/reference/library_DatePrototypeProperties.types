@@ -378,8 +378,8 @@ Date.prototype.setTime(0);
 >          : ^^^^
 >setTime : (time: number) => number
 >        : ^    ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setMilliseconds(0);
 >Date.prototype.setMilliseconds(0) : number
@@ -394,8 +394,8 @@ Date.prototype.setMilliseconds(0);
 >          : ^^^^
 >setMilliseconds : (ms: number) => number
 >                : ^  ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setUTCMilliseconds(0);
 >Date.prototype.setUTCMilliseconds(0) : number
@@ -410,8 +410,8 @@ Date.prototype.setUTCMilliseconds(0);
 >          : ^^^^
 >setUTCMilliseconds : (ms: number) => number
 >                   : ^  ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setSeconds(0);
 >Date.prototype.setSeconds(0) : number
@@ -426,8 +426,8 @@ Date.prototype.setSeconds(0);
 >          : ^^^^
 >setSeconds : (sec: number, ms?: number) => number
 >           : ^   ^^      ^^  ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setUTCSeconds(0);
 >Date.prototype.setUTCSeconds(0) : number
@@ -442,8 +442,8 @@ Date.prototype.setUTCSeconds(0);
 >          : ^^^^
 >setUTCSeconds : (sec: number, ms?: number) => number
 >              : ^   ^^      ^^  ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setMinutes(0);
 >Date.prototype.setMinutes(0) : number
@@ -458,8 +458,8 @@ Date.prototype.setMinutes(0);
 >          : ^^^^
 >setMinutes : (min: number, sec?: number, ms?: number) => number
 >           : ^   ^^      ^^   ^^^      ^^  ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setUTCMinutes(0);
 >Date.prototype.setUTCMinutes(0) : number
@@ -474,8 +474,8 @@ Date.prototype.setUTCMinutes(0);
 >          : ^^^^
 >setUTCMinutes : (min: number, sec?: number, ms?: number) => number
 >              : ^   ^^      ^^   ^^^      ^^  ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setHours(0);
 >Date.prototype.setHours(0) : number
@@ -490,8 +490,8 @@ Date.prototype.setHours(0);
 >          : ^^^^
 >setHours : (hours: number, min?: number, sec?: number, ms?: number) => number
 >         : ^     ^^      ^^   ^^^      ^^   ^^^      ^^  ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setUTCHours(0);
 >Date.prototype.setUTCHours(0) : number
@@ -506,8 +506,8 @@ Date.prototype.setUTCHours(0);
 >          : ^^^^
 >setUTCHours : (hours: number, min?: number, sec?: number, ms?: number) => number
 >            : ^     ^^      ^^   ^^^      ^^   ^^^      ^^  ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setDate(0);
 >Date.prototype.setDate(0) : number
@@ -522,8 +522,8 @@ Date.prototype.setDate(0);
 >          : ^^^^
 >setDate : (date: number) => number
 >        : ^    ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setUTCDate(0);
 >Date.prototype.setUTCDate(0) : number
@@ -538,8 +538,8 @@ Date.prototype.setUTCDate(0);
 >          : ^^^^
 >setUTCDate : (date: number) => number
 >           : ^    ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setMonth(0);
 >Date.prototype.setMonth(0) : number
@@ -554,8 +554,8 @@ Date.prototype.setMonth(0);
 >          : ^^^^
 >setMonth : (month: number, date?: number) => number
 >         : ^     ^^      ^^    ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setUTCMonth(0);
 >Date.prototype.setUTCMonth(0) : number
@@ -570,8 +570,8 @@ Date.prototype.setUTCMonth(0);
 >          : ^^^^
 >setUTCMonth : (month: number, date?: number) => number
 >            : ^     ^^      ^^    ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setFullYear(0);
 >Date.prototype.setFullYear(0) : number
@@ -586,8 +586,8 @@ Date.prototype.setFullYear(0);
 >          : ^^^^
 >setFullYear : (year: number, month?: number, date?: number) => number
 >            : ^    ^^      ^^     ^^^      ^^    ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.setUTCFullYear(0);
 >Date.prototype.setUTCFullYear(0) : number
@@ -602,8 +602,8 @@ Date.prototype.setUTCFullYear(0);
 >          : ^^^^
 >setUTCFullYear : (year: number, month?: number, date?: number) => number
 >               : ^    ^^      ^^     ^^^      ^^    ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 Date.prototype.toUTCString();
 >Date.prototype.toUTCString() : string

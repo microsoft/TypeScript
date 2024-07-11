@@ -73,8 +73,8 @@ c[Symbol.iterator]("");
 >       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
 >         : ^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 c[Symbol.iterator]("hello");
 >c[Symbol.iterator]("hello") : { x: string; hello: string; }

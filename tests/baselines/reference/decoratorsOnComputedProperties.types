@@ -30,20 +30,20 @@ function foo(): string { return ++i + ""; }
 const fieldNameA: string = "fieldName1";
 >fieldNameA : string
 >           : ^^^^^^
->"fieldName1" : string
->             : ^^^^^^
+>"fieldName1" : "fieldName1"
+>             : ^^^^^^^^^^^^
 
 const fieldNameB: string = "fieldName2";
 >fieldNameB : string
 >           : ^^^^^^
->"fieldName2" : string
->             : ^^^^^^
+>"fieldName2" : "fieldName2"
+>             : ^^^^^^^^^^^^
 
 const fieldNameC: string = "fieldName3";
 >fieldNameC : string
 >           : ^^^^^^
->"fieldName3" : string
->             : ^^^^^^
+>"fieldName3" : "fieldName3"
+>             : ^^^^^^^^^^^^
 
 class A {
 >A : A

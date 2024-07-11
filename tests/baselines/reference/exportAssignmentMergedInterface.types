@@ -14,7 +14,7 @@ x("test");
 >          : ^^^^
 >x : foo
 >  : ^^^
->"test" : string
+>"test" : "test"
 >       : ^^^^^^
 
 x(42);
@@ -22,8 +22,8 @@ x(42);
 >      : ^^^^^^
 >x : foo
 >  : ^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 var y: string = x.b;
 >y : string

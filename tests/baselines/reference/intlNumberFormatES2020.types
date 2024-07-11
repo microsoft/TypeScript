@@ -57,7 +57,7 @@ new Intl.NumberFormat('en-NZ', { numberingSystem: 'arab' });
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numberingSystem : string
 >                : ^^^^^^
->'arab' : string
+>'arab' : "arab"
 >       : ^^^^^^
 
 // Currency
@@ -88,8 +88,8 @@ const { currency, currencySign } = new Intl.NumberFormat('en-NZ', { style: 'curr
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'NZD' : string
->      : ^^^^^^
+>'NZD' : "NZD"
+>      : ^^^^^
 >currencySign : "accounting"
 >             : ^^^^^^^^^^^^
 >'accounting' : "accounting"
@@ -125,8 +125,8 @@ const { unit, unitDisplay } = new Intl.NumberFormat('en-NZ', { style: 'unit', un
 >       : ^^^^^^
 >unit : string
 >     : ^^^^^^
->'kilogram' : string
->           : ^^^^^^
+>'kilogram' : "kilogram"
+>           : ^^^^^^^^^^
 >unitDisplay : "narrow"
 >            : ^^^^^^^^
 >'narrow' : "narrow"

@@ -18,8 +18,8 @@ declare const thing: Thing;
 const { value = "123" } = thing;
 >value : string | number
 >      : ^^^^^^^^^^^^^^^
->"123" : string
->      : ^^^^^^
+>"123" : "123"
+>      : ^^^^^
 >thing : Thing
 >      : ^^^^^
 

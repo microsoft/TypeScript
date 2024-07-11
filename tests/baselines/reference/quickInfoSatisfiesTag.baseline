@@ -4,7 +4,7 @@
 // const a = 1;
 //       ^
 // | ----------------------------------------------------------------------
-// | const a: number
+// | const a: 1
 // | @satisfies {number} comment
 // | ----------------------------------------------------------------------
 
@@ -44,8 +44,8 @@
           "kind": "space"
         },
         {
-          "text": "number",
-          "kind": "keyword"
+          "text": "1",
+          "kind": "stringLiteral"
         }
       ],
       "documentation": [],

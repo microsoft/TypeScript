@@ -16,6 +16,6 @@ function foo();
 function foo():string { return "a" }
 >foo : { (): any; (): string; }
 >    : ^^^^^^^^^^^^^^^      ^^^
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 

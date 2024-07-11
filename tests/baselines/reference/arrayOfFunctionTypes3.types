@@ -117,8 +117,8 @@ var r5b = r4(1);
 >      : ^^^^^^
 >r4 : { (x: number): number; (x: any): any; }
 >   : ^^^ ^^      ^^^      ^^^ ^^   ^^^   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var a2: { <T>(x: T): number; (x: string): string;};
 >a2 : { <T>(x: T): number; (x: string): string; }
@@ -171,6 +171,6 @@ var r7 = r6(''); // any not string
 >r6('') : any
 >r6 : { (x: number): number; <T>(x: T): any; }
 >   : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^   ^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 

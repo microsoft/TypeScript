@@ -74,10 +74,10 @@ const readonlyLocales: Readonly<string[]> = ['de-DE', 'ja-JP'];
 >                : ^^^^^^^^^^^^^^^^^
 >['de-DE', 'ja-JP'] : string[]
 >                   : ^^^^^^^^
->'de-DE' : string
->        : ^^^^^^
->'ja-JP' : string
->        : ^^^^^^
+>'de-DE' : "de-DE"
+>        : ^^^^^^^
+>'ja-JP' : "ja-JP"
+>        : ^^^^^^^
 
 now.toLocaleString(enUS);
 >now.toLocaleString(enUS) : string

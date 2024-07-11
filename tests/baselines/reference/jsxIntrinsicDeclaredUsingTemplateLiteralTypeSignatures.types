@@ -34,8 +34,8 @@ declare namespace JSX {
 >       : ^^^
 >prop : number
 >     : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 <foobarbaz prop="literal"/>;
 ><foobarbaz prop="literal"/> : any

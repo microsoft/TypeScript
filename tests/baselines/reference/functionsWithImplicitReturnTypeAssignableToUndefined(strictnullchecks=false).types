@@ -154,8 +154,8 @@ function f8(): string | null {
 >       : ^^^^^^      
 >0.5 : 0.5
 >    : ^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 
     // Implicit return, but undefined is assignable to null when strictNullChecks is off.
 }

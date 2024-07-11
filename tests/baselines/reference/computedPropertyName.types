@@ -8,8 +8,8 @@ export const onInit = Symbol("onInit");
 >                 : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"onInit" : string
->         : ^^^^^^
+>"onInit" : "onInit"
+>         : ^^^^^^^^
 
 === component.ts ===
 import type { onInit } from "./framework-hooks";

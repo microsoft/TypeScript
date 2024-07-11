@@ -169,8 +169,8 @@ let o2: I = {
     n: 1001,
 >n : number
 >  : ^^^^^^
->1001 : number
->     : ^^^^^^
+>1001 : 1001
+>     : ^^^^
 
     explicitThis: function (m) {
 >explicitThis : (this: I, m: number) => any
@@ -215,8 +215,8 @@ let n = x(12); // callee:void doesn't match this:I
 >      : ^^^^^^
 >x : (this: I, m: number) => number
 >  : ^    ^^^^^ ^^      ^^^^^      
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 let u: Unused;
 >u : Unused
@@ -241,8 +241,8 @@ n = y(12); // ok, callee:void matches this:any
 >      : ^^^^^^
 >y : (m: number) => number
 >  : ^ ^^      ^^^^^      
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 c.explicitVoid = c.implicitThis // ok, implicitThis(this:any)
 >c.explicitVoid = c.implicitThis : (m: number) => number

@@ -31,8 +31,8 @@ b('foo').charAt(0);
 >      : ^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 interface A {
     (x: 'A1'): string;
@@ -132,8 +132,8 @@ var x5: void = c('A0');
 >        : ^^^^
 >c : C
 >  : ^
->'A0' : string
->     : ^^^^^^
+>'A0' : "A0"
+>     : ^^^^
 
 var x6: number[] = c('C1');
 >x6 : number[]
@@ -172,6 +172,6 @@ var x9: void = c('generic');
 >             : ^^^^
 >c : C
 >  : ^
->'generic' : string
->          : ^^^^^^
+>'generic' : "generic"
+>          : ^^^^^^^^^
 

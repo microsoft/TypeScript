@@ -406,8 +406,8 @@ module TypeScript {
 >                                  : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Invalid call to 'up'" : string
->                       : ^^^^^^
+>"Invalid call to 'up'" : "Invalid call to 'up'"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
             this.top--;
 >this.top-- : number
@@ -453,8 +453,8 @@ module TypeScript {
 >                                    : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Invalid call to 'down'" : string
->                         : ^^^^^^
+>"Invalid call to 'down'" : "Invalid call to 'down'"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
             this.top++;
 >this.top++ : number

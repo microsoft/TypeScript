@@ -358,20 +358,20 @@ function f21<T>(pAny: any, pNever: never, pT: T) {
 >  : ^^^^^^^
 
     x = 123;
->x = 123 : number
->        : ^^^^^^
+>x = 123 : 123
+>        : ^^^
 >x : unknown
 >  : ^^^^^^^
->123 : number
->    : ^^^^^^
+>123 : 123
+>    : ^^^
 
     x = "hello";
->x = "hello" : string
->            : ^^^^^^
+>x = "hello" : "hello"
+>            : ^^^^^^^
 >x : unknown
 >  : ^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     x = [1, 2, 3];
 >x = [1, 2, 3] : number[]
@@ -523,8 +523,8 @@ function f24(x: { [x: string]: unknown }) {
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
     x = [1, 2, 3]; // Error
 >x = [1, 2, 3] : number[]
@@ -533,12 +533,12 @@ function f24(x: { [x: string]: unknown }) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
 
     x = 123;  // Error
 >x = 123 : 123

@@ -71,8 +71,8 @@ function foo(things: Val[]): void {
 >    : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
 >        : ^              ^^^      ^^^^^      
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
         }
         else {
             const { val } = thing;

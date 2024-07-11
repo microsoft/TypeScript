@@ -36,8 +36,8 @@ let a: B = { a: { x: 'hello' } }; // ok
 >               : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 
 let b: B = { a: { x: 2 } }; // error - types of property x are incompatible
 >b : B
@@ -50,8 +50,8 @@ let b: B = { a: { x: 2 } }; // error - types of property x are incompatible
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 let c: B = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
 >c : B
@@ -64,8 +64,8 @@ let c: B = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 >y : number
 >  : ^^^^^^
 >2 : 2
@@ -82,12 +82,12 @@ let d: D = { a: { x: 'hello' }, c: 5 }; // ok
 >               : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 >c : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 let e: D = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
 >e : D
@@ -100,12 +100,12 @@ let e: D = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatibl
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >c : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
 >f : D
@@ -118,16 +118,16 @@ let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in typ
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 >y : number
 >  : ^^^^^^
 >2 : 2
 >  : ^
 >c : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 // https://github.com/Microsoft/TypeScript/issues/18075
 
@@ -164,14 +164,14 @@ export const photo: typeof obj.photo = {
     id: 1,
 >id : number
 >   : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     url: '',
 >url : string
 >    : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     xyz: 1 // Great! This causes an error!
 >xyz : number
@@ -190,14 +190,14 @@ export const myInstance: MyType = {
     id: 1,
 >id : number
 >   : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     name: '',
 >name : string
 >     : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     photo: {
 >photo : { id: number; url: string; xyz: number; }
@@ -208,14 +208,14 @@ export const myInstance: MyType = {
         id: 1,
 >id : number
 >   : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         url: '',
 >url : string
 >    : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
         xyz: 2 // This should also be an error
 >xyz : number

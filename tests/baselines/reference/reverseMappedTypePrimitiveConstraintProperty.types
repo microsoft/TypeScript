@@ -42,15 +42,15 @@ const result = test({
     nestedProp: "bar",
 >nestedProp : string
 >           : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
   },
   extra: "baz",
 >extra : string
 >      : ^^^^^^
->"baz" : string
->      : ^^^^^^
+>"baz" : "baz"
+>      : ^^^^^
 
 });
 

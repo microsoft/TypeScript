@@ -24,8 +24,8 @@ d ?? (d = x ?? "x")
 >         : ^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->"x" : string
->    : ^^^^^^
+>"x" : "x"
+>    : ^^^
 
 d.length;
 >d.length : number
@@ -48,8 +48,8 @@ e ??= x ?? "x"
 >         : ^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->"x" : string
->    : ^^^^^^
+>"x" : "x"
+>    : ^^^
 
 e.length
 >e.length : number

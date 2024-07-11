@@ -8,8 +8,8 @@ class C {
     a(): number { return 0; } // error: duplicate identifier
 >a : () => number
 >  : ^^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     a: number;
 >a : () => number
@@ -26,8 +26,8 @@ class K {
     b(): number { return 0; }
 >b : () => number
 >  : ^^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 class D {
 >D : D

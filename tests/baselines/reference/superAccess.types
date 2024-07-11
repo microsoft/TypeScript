@@ -8,13 +8,13 @@ class MyBase {
     static S1: number = 5;
 >S1 : number
 >   : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
     private S2: string = "test";
 >S2 : string
 >   : ^^^^^^
->"test" : string
+>"test" : "test"
 >       : ^^^^^^
 
     f = () => 5;

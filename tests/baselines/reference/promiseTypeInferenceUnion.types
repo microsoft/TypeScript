@@ -73,8 +73,8 @@ const g1: Promise<number> = Promise.resolve(f1(42));
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >f1 : (x: number) => number | Promise<number>
 >   : ^ ^^      ^^^^^                        
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 const g2: Promise<number> = Promise.resolve(f2(42));
 >g2 : Promise<number>
@@ -91,8 +91,8 @@ const g2: Promise<number> = Promise.resolve(f2(42));
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : (x: number) => number | PromiseLike<number>
 >   : ^ ^^      ^^^^^                            
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 const g3: Promise<number> = Promise.resolve(f3(42));
 >g3 : Promise<number>
@@ -109,6 +109,6 @@ const g3: Promise<number> = Promise.resolve(f3(42));
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f3 : (x: number) => number | Promise<number> | PromiseLike<number>
 >   : ^ ^^      ^^^^^                                              
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 

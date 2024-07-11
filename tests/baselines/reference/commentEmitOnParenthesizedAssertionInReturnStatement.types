@@ -24,8 +24,8 @@ export class Foo {
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
   }
 
   foo(): Promise<void> {

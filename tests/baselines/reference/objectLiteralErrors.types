@@ -523,8 +523,8 @@ var g1 = { get a(): number { return 4; }, set a(n: string) { } };
 >                                                        : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >a : number
 >  : ^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 >a : number
 >  : ^^^^^^
 >n : string
@@ -537,8 +537,8 @@ var g2 = { get a() { return 4; }, set a(n: string) { } };
 >                                                : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 >a : string
 >  : ^^^^^^
 >n : string

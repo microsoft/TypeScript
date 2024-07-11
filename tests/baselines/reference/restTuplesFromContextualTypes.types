@@ -350,8 +350,8 @@ declare const t3: [boolean, ...string[]];
 >  : ^^^^^^^
 >c : string
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >...t3 : string | boolean
 >      : ^^^^^^^^^^^^^^^^
 >t3 : [boolean, ...string[]]
@@ -366,8 +366,8 @@ declare const t3: [boolean, ...string[]];
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, ...string[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >...t3 : string | boolean
 >      : ^^^^^^^^^^^^^^^^
 >t3 : [boolean, ...string[]]
@@ -384,8 +384,8 @@ declare const t3: [boolean, ...string[]];
 >  : ^^^^^^
 >x : [boolean, ...string[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >...t3 : string | boolean
 >      : ^^^^^^^^^^^^^^^^
 >t3 : [boolean, ...string[]]
@@ -404,8 +404,8 @@ declare const t3: [boolean, ...string[]];
 >  : ^^^^^^^
 >x : string[]
 >  : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >...t3 : string | boolean
 >      : ^^^^^^^^^^^^^^^^
 >t3 : [boolean, ...string[]]
@@ -426,8 +426,8 @@ declare const t3: [boolean, ...string[]];
 >  : ^^^^^^
 >x : string[]
 >  : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >...t3 : string | boolean
 >      : ^^^^^^^^^^^^^^^^
 >t3 : [boolean, ...string[]]
@@ -542,8 +542,8 @@ function f4<T extends any[]>(t: T) {
 >  : ^^^^^^
 >x : T
 >  : ^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >...t : any
 >     : ^^^
 >t : T
@@ -560,10 +560,10 @@ function f4<T extends any[]>(t: T) {
 >  : ^^^^^^
 >x : [number, ...T]
 >  : ^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >...t : any
 >     : ^^^
 >t : T
@@ -635,8 +635,8 @@ let g0 = f5(() => "hello");
 >   : ^ ^^^^^^^^^     ^^ ^^ ^^                 ^^^^^                 
 >() => "hello" : () => string
 >              : ^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 let g1 = f5((x, y) => 42);
 >g1 : (x: any, y: any) => number
@@ -651,8 +651,8 @@ let g1 = f5((x, y) => 42);
 >  : ^^^
 >y : any
 >  : ^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 let g2 = f5((x: number, y) => 42);
 >g2 : (x: number, y: any) => number
@@ -667,8 +667,8 @@ let g2 = f5((x: number, y) => 42);
 >  : ^^^^^^
 >y : any
 >  : ^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 let g3 = f5((x: number, y: number) => x + y);
 >g3 : (x: number, y: number) => number
@@ -733,8 +733,8 @@ let g5 = pipe(() => true, b => 42);
 >        : ^ ^^^^^^^^^^^^^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 let g6 = pipe(x => "hello", s => s.length);
 >g6 : (x: any) => number
@@ -747,8 +747,8 @@ let g6 = pipe(x => "hello", s => s.length);
 >             : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >s => s.length : (s: string) => number
 >              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
@@ -773,8 +773,8 @@ let g7 = pipe((x, y) => 42, x => "" + x);
 >  : ^^^
 >y : any
 >  : ^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >x => "" + x : (x: number) => string
 >            : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -799,8 +799,8 @@ let g8 = pipe((x: number, y: string) => 42, x => "" + x);
 >  : ^^^^^^
 >y : string
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >x => "" + x : (x: number) => string
 >            : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -859,10 +859,10 @@ declare function take(cb: (a: number, b: string) => void): void;
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rest : [number, string]
 >     : ^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->'' : string
->   : ^^^^^^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
 
 take(function(...rest){});
 >take(function(...rest){}) : void

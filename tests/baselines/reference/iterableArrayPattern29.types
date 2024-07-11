@@ -28,14 +28,14 @@ takeFirstTwoEntries(...new Map([["", true], ["hello", true]]));
 >                              : ^^^^^^^^^^^^^^^^
 >["", true] : [string, true]
 >           : ^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >true : true
 >     : ^^^^
 >["hello", true] : [string, true]
 >                : ^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >true : true
 >     : ^^^^
 

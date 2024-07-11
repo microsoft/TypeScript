@@ -49,7 +49,7 @@ function getSpecsFromRaw(
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isString : (text: unknown) => text is string
 >         : ^    ^^       ^^^^^              
->"string" : string
->         : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 }
 

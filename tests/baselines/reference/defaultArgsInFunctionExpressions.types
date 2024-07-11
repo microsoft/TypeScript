@@ -20,8 +20,8 @@ var n: number = f(4);
 >     : ^^^^^^
 >f : (a?: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 
 n = f();
 >n = f() : number
@@ -40,8 +40,8 @@ var s: string = f('');
 >      : ^^^^^^
 >f : (a?: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 s = f();
 >s = f() : number
@@ -61,8 +61,8 @@ var f2 = function (a: string = 3) { return a; }; // Should error, but be of type
 >                                       : ^ ^^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >a : string
 >  : ^^^^^^
 
@@ -75,8 +75,8 @@ s = f2('');
 >       : ^^^^^^
 >f2 : (a?: string) => string
 >   : ^ ^^^      ^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 s = f2();
 >s = f2() : string
@@ -127,8 +127,8 @@ var f4: (a: number) => void = function (a = "") { };
 >                      : ^ ^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 // Contextually type the default arg using the function's contextual type
 var f5: (a: (s: string) => any) => void = function (a = s => <number>s) { };

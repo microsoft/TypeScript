@@ -35,8 +35,8 @@ function testFunc2<A extends object>(a: A, sa: Something<A>) {
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : string
 >     : ^^^^^^
->'hi' : string
->     : ^^^^^^
+>'hi' : "hi"
+>     : ^^^^
 >arg : A
 >    : ^
 >a : A
@@ -51,8 +51,8 @@ function testFunc2<A extends object>(a: A, sa: Something<A>) {
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : string
 >     : ^^^^^^
->'bye' : string
->      : ^^^^^^
+>'bye' : "bye"
+>      : ^^^^^
 >arg : A
 >    : ^
 >a : A

@@ -29,7 +29,7 @@ const blah: Style = [
         foo: 'asdf',
 >foo : string
 >    : ^^^^^^
->'asdf' : string
+>'asdf' : "asdf"
 >       : ^^^^^^
 
         jj: 1 // intentional error

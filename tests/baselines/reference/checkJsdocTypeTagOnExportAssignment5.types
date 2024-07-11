@@ -15,12 +15,12 @@ export default { a: 1, b: 1 };
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 === b.js ===
 import a from "./a";

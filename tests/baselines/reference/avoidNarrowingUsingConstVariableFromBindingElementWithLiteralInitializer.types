@@ -16,8 +16,8 @@ export function test(arg: { index?: number }) {
   const { index = 0 } = arg;
 >index : number
 >      : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >arg : { index?: number; }
 >    : ^^^^^^^^^^      ^^^
 

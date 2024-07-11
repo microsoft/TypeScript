@@ -32,8 +32,8 @@ let [ x1, c1 = {a: "a"} ]: [number, I?] = [1];
 >    : ^^^
 >[1] : [number]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 let [ c_ = {a: "a"} ]: I[] = [];
 >c_ : I
@@ -63,8 +63,8 @@ function foo() {
 >  : ^
 >[1] : [number]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     return length;
 >length : 1

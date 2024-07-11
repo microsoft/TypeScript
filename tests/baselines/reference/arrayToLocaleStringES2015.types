@@ -70,8 +70,8 @@ str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 
 const dates: readonly Date[] = [new Date(), new Date()];
 >dates : readonly Date[]
@@ -136,8 +136,8 @@ str = dates.toLocaleString('fr', { timeZone: 'UTC' }); // OK
 >                    : ^^^^^^^^^^^^^^^^^^^^^
 >timeZone : string
 >         : ^^^^^^
->'UTC' : string
->      : ^^^^^^
+>'UTC' : "UTC"
+>      : ^^^^^
 
 const mixed = [1, new Date(), 59782, new Date()];
 >mixed : (number | Date)[]
@@ -210,8 +210,8 @@ str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 
 str = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }); // OK
 >str = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }) : string
@@ -236,16 +236,16 @@ str = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: '
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 >style : "currency"
 >      : ^^^^^^^^^^
 >'currency' : "currency"
 >           : ^^^^^^^^^^
 >timeZone : string
 >         : ^^^^^^
->'UTC' : string
->      : ^^^^^^
+>'UTC' : "UTC"
+>      : ^^^^^
 
 const int8Array = new Int8Array(3);
 >int8Array : Int8Array
@@ -254,8 +254,8 @@ const int8Array = new Int8Array(3);
 >                 : ^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 str = int8Array.toLocaleString(); // OK
 >str = int8Array.toLocaleString() : string
@@ -310,8 +310,8 @@ str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' });
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 
 const uint8Array = new Uint8Array(3);
 >uint8Array : Uint8Array
@@ -320,8 +320,8 @@ const uint8Array = new Uint8Array(3);
 >                  : ^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 str = uint8Array.toLocaleString(); // OK
 >str = uint8Array.toLocaleString() : string
@@ -376,8 +376,8 @@ str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' })
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 
 const uint8ClampedArray = new Uint8ClampedArray(3);
 >uint8ClampedArray : Uint8ClampedArray
@@ -386,8 +386,8 @@ const uint8ClampedArray = new Uint8ClampedArray(3);
 >                         : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 str = uint8ClampedArray.toLocaleString(); // OK
 >str = uint8ClampedArray.toLocaleString() : string
@@ -442,8 +442,8 @@ str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: '
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 
 const int16Array = new Int16Array(3);
 >int16Array : Int16Array
@@ -452,8 +452,8 @@ const int16Array = new Int16Array(3);
 >                  : ^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 str = int16Array.toLocaleString(); // OK
 >str = int16Array.toLocaleString() : string
@@ -508,8 +508,8 @@ str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' })
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 
 const uint16Array = new Uint16Array(3);
 >uint16Array : Uint16Array
@@ -518,8 +518,8 @@ const uint16Array = new Uint16Array(3);
 >                   : ^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 str = uint16Array.toLocaleString(); // OK
 >str = uint16Array.toLocaleString() : string
@@ -574,8 +574,8 @@ str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 
 const int32Array = new Int32Array(3);
 >int32Array : Int32Array
@@ -584,8 +584,8 @@ const int32Array = new Int32Array(3);
 >                  : ^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 str = int32Array.toLocaleString(); // OK
 >str = int32Array.toLocaleString() : string
@@ -640,8 +640,8 @@ str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' })
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 
 const uint32Array = new Uint32Array(3);
 >uint32Array : Uint32Array
@@ -650,8 +650,8 @@ const uint32Array = new Uint32Array(3);
 >                   : ^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 str = uint32Array.toLocaleString(); // OK
 >str = uint32Array.toLocaleString() : string
@@ -706,8 +706,8 @@ str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 
 const float32Array = new Float32Array(3);
 >float32Array : Float32Array
@@ -716,8 +716,8 @@ const float32Array = new Float32Array(3);
 >                    : ^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 str = float32Array.toLocaleString(); // OK
 >str = float32Array.toLocaleString() : string
@@ -772,8 +772,8 @@ str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' 
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 
 const float64Array = new Float64Array(3);
 >float64Array : Float64Array
@@ -782,8 +782,8 @@ const float64Array = new Float64Array(3);
 >                    : ^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 str = float64Array.toLocaleString(); // OK
 >str = float64Array.toLocaleString() : string
@@ -838,6 +838,6 @@ str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' 
 >           : ^^^^^^^^^^
 >currency : string
 >         : ^^^^^^
->'EUR' : string
->      : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
 

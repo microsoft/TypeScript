@@ -37,7 +37,7 @@ var z2 = foo.y + 10; // Should resolve
 export var y: number = 42;
 >y : number
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 

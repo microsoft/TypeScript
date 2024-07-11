@@ -44,8 +44,8 @@ let a = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a} />; // 
 >           : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"y" : string
->    : ^^^^^^
+>"y" : "y"
+>    : ^^^
 >nextValues : (a: { x: string; }) => { x: string; }
 >           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a => a : (a: { x: string; }) => { x: string; }
@@ -64,8 +64,8 @@ let b = <GenericComponent initialValues={12} nextValues={a => a} />; // No error
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >initialValues : number
 >              : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >nextValues : (a: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
@@ -88,8 +88,8 @@ let c = <GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x 
 >           : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"y" : string
->    : ^^^^^^
+>"y" : "y"
+>    : ^^^
 >nextValues : (a: { x: string; }) => { x: string; }
 >           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a => ({ x: a.x }) : (a: { x: string; }) => { x: string; }
@@ -122,8 +122,8 @@ let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; /
 >           : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"y" : string
->    : ^^^^^^
+>"y" : "y"
+>    : ^^^
 >nextValues : (a: { x: string; }) => string
 >           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a => a.x : (a: { x: string; }) => string

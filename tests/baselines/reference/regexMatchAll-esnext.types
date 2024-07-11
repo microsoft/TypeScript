@@ -16,8 +16,8 @@ const matches = /\w/g[Symbol.matchAll]("matchAll");
 >       : ^^^^^^^^^^^^^^^^^
 >matchAll : unique symbol
 >         : ^^^^^^^^^^^^^
->"matchAll" : string
->           : ^^^^^^
+>"matchAll" : "matchAll"
+>           : ^^^^^^^^^^
 
 const array = [...matches];
 >array : RegExpMatchArray[]

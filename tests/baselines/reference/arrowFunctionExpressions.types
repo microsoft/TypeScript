@@ -171,8 +171,8 @@ var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 >         : ^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var p10 = ([{ value, done }]) => { };
 >p10 : ([{ value, done }]: [{ value: any; done: any; }]) => void
@@ -278,10 +278,10 @@ var e = arrrr()(3)()(4);
 >        : ^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
 >arrrr : () => (m: number) => () => (n: number) => number
 >      : ^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
 var e: number;
 >e : number
@@ -321,10 +321,10 @@ function someFn() {
 >       : ^ ^^      ^^^^^^^^^^^
 >arr : (n: number) => (p: number) => number
 >    : ^ ^^      ^^^^^^ ^^      ^^^^^^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 >toExponential : (fractionDigits?: number) => string
 >              : ^              ^^^      ^^^^^      
 }
@@ -357,12 +357,12 @@ function someOtherFn() {
 >       : ^^^^^^
 >arr : (n: number) => string
 >    : ^ ^^      ^^^^^^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 // Arrow function used in nested function in function
@@ -424,8 +424,8 @@ var f = (n: string) => {
 >      : ^^^^^^^^^^^^
 >fn : (x: number) => () => string
 >   : ^ ^^      ^^^^^^^^^^^^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 }
 var g = f('')();
 >g : string
@@ -436,8 +436,8 @@ var g = f('')();
 >      : ^^^^^^^^^^^^
 >f : (n: string) => () => string
 >  : ^ ^^      ^^^^^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var g: string;
 >g : string
@@ -492,8 +492,8 @@ var h = someOuterFn()('')()();
 >              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >someOuterFn : () => (n: string) => () => () => number
 >            : ^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 h.toExponential();
 >h.toExponential() : string

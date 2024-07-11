@@ -99,16 +99,16 @@ var r3 = d.c;
 >  : ^^^^^^
 
 d.c = '';
->d.c = '' : string
->         : ^^^^^^
+>d.c = '' : ""
+>         : ^^
 >d.c : string
 >    : ^^^^^^
 >d : Derived
 >  : ^^^^^^^
 >c : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var r4 = Derived.r;
 >r4 : string
@@ -143,16 +143,16 @@ var r6 = Derived.t;
 >  : ^^^^^^
 
 Derived.t = '';
->Derived.t = '' : string
->               : ^^^^^^
+>Derived.t = '' : ""
+>               : ^^
 >Derived.t : string
 >          : ^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 >t : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 class Base2 {
 >Base2 : Base2

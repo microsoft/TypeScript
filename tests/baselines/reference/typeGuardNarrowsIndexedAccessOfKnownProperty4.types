@@ -11,16 +11,16 @@ class Foo {
 
     constructor() {
         this.x = 5;
->this.x = 5 : number
->           : ^^^^^^
+>this.x = 5 : 5
+>           : ^
 >this.x : number | undefined
 >       : ^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
         this.x;    // number
 >this.x : number

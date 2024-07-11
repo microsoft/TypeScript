@@ -55,8 +55,8 @@ const repro: BugRepro = {
       key: 'bla', // should be OK: Not excess
 >key : string
 >    : ^^^^^^
->'bla' : string
->      : ^^^^^^
+>'bla' : "bla"
+>      : ^^^^^
 
       value: null,
 >value : null

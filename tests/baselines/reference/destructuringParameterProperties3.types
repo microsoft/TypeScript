@@ -128,12 +128,12 @@ var x = new C1(undefined, [0, true, ""]);
 >          : ^^^^^^^^^
 >[0, true, ""] : [number, true, string]
 >              : ^^^^^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >true : true
 >     : ^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 var [x_a, x_b, x_c] = [x.getA(), x.getB(), x.getC()];
 >x_a : any
@@ -176,12 +176,12 @@ var y = new C1(10, [0, true, true]);
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C1 : typeof C1
 >   : ^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >[0, true, true] : [number, true, true]
 >                : ^^^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >true : true
 >     : ^^^^
 >true : true
@@ -234,10 +234,10 @@ var z = new C1(10, [undefined, "", ""]);
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->"" : string
->   : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
+>"" : ""
+>   : ^^
 
 var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
 >z_a : any

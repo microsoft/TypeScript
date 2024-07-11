@@ -16,8 +16,8 @@ module __test1__ {
 >           : ^^^^^^^^^^^^^^^^
 >one : number
 >    : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     export var __val__obj4 = obj4;
 >__val__obj4 : interfaceWithPublicAndOptional<number, string>
@@ -40,8 +40,8 @@ module __test2__ {
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^
 >classWithPublic : typeof classWithPublic
 >                : ^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     export var __val__x1 = x1;
 >__val__x1 : classWithPublic<number>

@@ -73,8 +73,8 @@ const fn = ((x = "ok") => null) satisfies StringOrNumberFunc;
 >                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"ok" : string
->     : ^^^^^^
+>"ok" : "ok"
+>     : ^^^^
 
 fn();
 >fn() : null
@@ -87,7 +87,7 @@ fn(32);
 >       : ^^^^
 >fn : (x?: string | number) => null
 >   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->32 : number
->   : ^^^^^^
+>32 : 32
+>   : ^^
 
 

@@ -43,8 +43,8 @@ var x1: Action[] = [
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >trueness : boolean
 >         : ^^^^^^^
 >false : false
@@ -55,8 +55,8 @@ var x1: Action[] = [
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >name : string
 >     : ^^^^^^
 >"three" : "three"
@@ -125,8 +125,8 @@ var z1: { id: number }[] =
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >trueness : boolean
 >         : ^^^^^^^
 >false : false
@@ -137,8 +137,8 @@ var z1: { id: number }[] =
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >name : string
 >     : ^^^^^^
 >"three" : "three"

@@ -29,12 +29,12 @@ const foo1: MappedModel<'Foo'> = { aFoo: 'test', bFoo: 42 };
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >aFoo : string
 >     : ^^^^^^
->'test' : string
+>'test' : "test"
 >       : ^^^^^^
 >bFoo : number
 >     : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 const foo2: MappedModel<'Foo'> = { bFoo: 'bar' };  // Error
 >foo2 : MappedModel<"Foo">
@@ -43,8 +43,8 @@ const foo2: MappedModel<'Foo'> = { bFoo: 'bar' };  // Error
 >                : ^^^^^^^^^^^^^^^^^
 >bFoo : string
 >     : ^^^^^^
->'bar' : string
->      : ^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
 
 function f1<T extends string>() {
 >f1 : <T extends string>() => void

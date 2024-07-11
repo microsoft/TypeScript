@@ -13,8 +13,8 @@ export class Element {
 >            : ^^^^^^
 
     return  ''
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
   }
   set textContent(x) {}
 >textContent : string

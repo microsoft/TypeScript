@@ -115,8 +115,8 @@ var Obj4: Obj4type;
 >     : ^^^^^^^^
 >x : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 <Obj4 x={'10'} />; // Error
 ><Obj4 x={'10'} /> : JSX.Element
@@ -125,6 +125,6 @@ var Obj4: Obj4type;
 >     : ^^^^^^^^
 >x : string
 >  : ^^^^^^
->'10' : string
->     : ^^^^^^
+>'10' : "10"
+>     : ^^^^
 

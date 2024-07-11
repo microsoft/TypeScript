@@ -60,8 +60,8 @@ const foo: Primitive = {
     value: 10,
 >value : number
 >      : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     multipleOf: 5, // excess property
 >multipleOf : number
@@ -156,8 +156,8 @@ const b: DisjointDiscriminants = {
     p3: 42,
 >p3 : number
 >   : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     p4: "hello"
 >p4 : string
@@ -195,8 +195,8 @@ const c: DisjointDiscriminants = {
     p4: "hello"
 >p4 : string
 >   : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 };
 
@@ -250,14 +250,14 @@ const c1: CommonWithOverlappingOptionals = {
     n: 1,
 >n : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     a: 1,
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     b: 1  // excess property
 >b : number
@@ -286,14 +286,14 @@ const c2: CommonWithDisjointOverlappingOptionals = {
     n: 1,
 >n : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     a: 1,
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     b: 1  // excess property
 >b : number

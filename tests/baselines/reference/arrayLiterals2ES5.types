@@ -116,18 +116,18 @@ var b1: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >                                 : ^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
 >["hello", "string"] : string[]
 >                    : ^^^^^^^^
->"hello" : string
->        : ^^^^^^
->"string" : string
->         : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 
 // The resulting type an array literal expression is determined as follows:
 //     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
@@ -193,18 +193,18 @@ var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >                                 : ^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
 >["hello", "string"] : string[]
 >                    : ^^^^^^^^
->"hello" : string
->        : ^^^^^^
->"string" : string
->         : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 
 var temp3 = [undefined, null, undefined];
 >temp3 : any[]

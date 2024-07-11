@@ -8,7 +8,7 @@ const _data = Symbol('data');
 >               : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->'data' : string
+>'data' : "data"
 >       : ^^^^^^
 
 export class User {

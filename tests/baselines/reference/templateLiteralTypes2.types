@@ -369,8 +369,8 @@ function ft13(s: string, cond: boolean) {
 >                       : ^^^^^^
 >cond : boolean
 >     : ^^^^^^^
->'a' : string
->    : ^^^^^^
+>'a' : "a"
+>    : ^^^
 >`foo${s}` : string
 >          : ^^^^^^
 >s : string
@@ -582,8 +582,8 @@ const t5 = takesLiteral(`foo.bar.${someUnion}`);  // "abc" | "def" | "ghi"
 const pixelValue: number = 22;
 >pixelValue : number
 >           : ^^^^^^
->22 : number
->   : ^^^^^^
+>22 : 22
+>   : ^^
 
 type PixelValueType = `${number}px`;
 >PixelValueType : `${number}px`

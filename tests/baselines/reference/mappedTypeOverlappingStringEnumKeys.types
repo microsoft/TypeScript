@@ -100,8 +100,8 @@ const catMap: CatMap = {
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >address : string
 >        : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     { type: AlienAnimalTypes.CAT, planet: "" }
 >{ type: AlienAnimalTypes.CAT, planet: "" } : { type: AlienAnimalTypes; planet: string; }
@@ -116,8 +116,8 @@ const catMap: CatMap = {
 >    : ^^^^^^^^^^^^^^^^
 >planet : string
 >       : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
   ],
   dog: [] as never[]

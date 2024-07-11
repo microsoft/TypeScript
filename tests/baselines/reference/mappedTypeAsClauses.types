@@ -164,8 +164,8 @@ const e1: T1 = {
     foo: "hello"
 >foo : string
 >    : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 };
 type T2 = keyof T1;

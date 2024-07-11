@@ -34,6 +34,6 @@ const fb = fn.bind({ blub: "blub" });
 >                 : ^^^^^^^^^^^^^^^^^
 >blub : string
 >     : ^^^^^^
->"blub" : string
+>"blub" : "blub"
 >       : ^^^^^^
 

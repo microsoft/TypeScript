@@ -38,8 +38,8 @@ async function f() {
 >                                                                                  : ^^^^^^^^^
 >import("./a", {        with: {            type: "not-json",        },    }) : Promise<typeof ns>
 >                                                                            : ^^^^^^^^^^^^^^^^^^
->"./a" : string
->      : ^^^^^^
+>"./a" : "./a"
+>      : ^^^^^
 >{        with: {            type: "not-json",        },    } : { with: { type: "not-json"; }; }
 >                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

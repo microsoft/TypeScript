@@ -38,8 +38,8 @@ let numTuple: [number] = [1];
 >         : ^^^^^^^^
 >[1] : [number]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 export let a = numTuple.map(x => x * x);
 >a : number[]
@@ -70,30 +70,30 @@ let numNum: [number, number] = [    100,     100];
 >       : ^^^^^^^^^^^^^^^^
 >[    100,     100] : [number, number]
 >                   : ^^^^^^^^^^^^^^^^
->100 : number
->    : ^^^^^^
->100 : number
->    : ^^^^^^
+>100 : 100
+>    : ^^^
+>100 : 100
+>    : ^^^
 
 let strStr: [string, string] = ["hello", "hello"];
 >strStr : [string, string]
 >       : ^^^^^^^^^^^^^^^^
 >["hello", "hello"] : [string, string]
 >                   : ^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 let numStr: [number, string] = [    100, "hello"];
 >numStr : [number, string]
 >       : ^^^^^^^^^^^^^^^^
 >[    100, "hello"] : [number, string]
 >                   : ^^^^^^^^^^^^^^^^
->100 : number
->    : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>100 : 100
+>    : ^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 export let b = numNum.map(n => n * n);
 >b : number[]
@@ -140,8 +140,8 @@ export let c = strStr.map(s => s.charCodeAt(0));
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
 >           : ^     ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 export let d = numStr.map(x => x);
 >d : (string | number)[]
@@ -168,12 +168,12 @@ let numNumNum: [number, number, number] = [1, 2, 3];
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
 
 export let e = numNumNum.map(n => n * n);
 >e : number[]
@@ -204,14 +204,14 @@ let numNumNumNum: [number, number, number, number] = [1, 2, 3, 4];
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, 4] : [number, number, number, number]
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
 export let f = numNumNumNum.map(n => n * n);
 >f : number[]
@@ -242,16 +242,16 @@ let numNumNumNumNum: [number, number, number, number, number] = [1, 2, 3, 4, 5];
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, 4, 5] : [number, number, number, number, number]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
->5 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
+>5 : 5
+>  : ^
 
 export let g = numNumNumNumNum.map(n => n * n);
 >g : number[]
@@ -283,18 +283,18 @@ let numNumNumNumNumNum: [number, number, number, number, number, number] = [1, 2
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, 4, 5, 6] : [number, number, number, number, number, number]
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
->5 : number
->  : ^^^^^^
->6 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
+>5 : 5
+>  : ^
+>6 : 6
+>  : ^
 
 export let h = numNumNumNumNum.map(n => n * n);
 >h : number[]

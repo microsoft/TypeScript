@@ -30,8 +30,8 @@ const n1: number = a?.m?.({x: 12 }); // should be an error (`undefined` is not a
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 const n2: number = a?.m?.({x: absorb()}); // likewise
 >n2 : number
@@ -68,8 +68,8 @@ const n3: number | undefined = a?.m?.({x: 12}); // should be ok
 >        : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 const n4: number | undefined = a?.m?.({x: absorb()}); // likewise
 >n4 : number | undefined
@@ -107,8 +107,8 @@ let t1 = a?.m?.({x: 12});
 >        : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 t1 = a!.m!({x: 12});
 >t1 = a!.m!({x: 12}) : number
@@ -131,6 +131,6 @@ t1 = a!.m!({x: 12});
 >        : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 

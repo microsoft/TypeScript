@@ -38,10 +38,10 @@ function f1() {
 >              : ^
 >C : typeof C
 >  : ^^^^^^^^
->10 : number
->   : ^^^^^^
->20 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
+>20 : 20
+>   : ^^
 
     let x = v.x;
 >x : number
@@ -99,8 +99,8 @@ function f2() {
 >      : ^^^^^^^^
 >f : (x: number) => typeof C
 >  : ^ ^^      ^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     let v = new C(20);
 >v : C
@@ -109,8 +109,8 @@ function f2() {
 >          : ^
 >C : typeof C
 >  : ^^^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
 
     let x = v.x;
 >x : number
@@ -172,10 +172,10 @@ function f3() {
 >          : ^^^^^^^^
 >f : (x: number, y: number) => typeof C
 >  : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
->20 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
+>20 : 20
+>   : ^^
 
     let v = new C();
 >v : C

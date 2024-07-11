@@ -11,16 +11,16 @@ var STRING1: string[] = ["", "abc"];
 >        : ^^^^^^^^
 >["", "abc"] : string[]
 >            : ^^^^^^^^
->"" : string
->   : ^^^^^^
->"abc" : string
->      : ^^^^^^
+>"" : ""
+>   : ^^
+>"abc" : "abc"
+>      : ^^^^^
 
 function foo(): string { return "abc"; }
 >foo : () => string
 >    : ^^^^^^      
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 class A {
 >A : A
@@ -203,8 +203,8 @@ var ResultIsBoolean12 = !STRING.charAt(0);
 >       : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 // multiple ! operator
 var ResultIsBoolean13 = !!STRING;

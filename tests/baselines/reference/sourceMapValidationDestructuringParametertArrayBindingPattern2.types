@@ -19,14 +19,14 @@ var robotA: Robot = ["trimmer", ["trimming", "edging"]];
 >       : ^^^^^
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->"trimmer" : string
->          : ^^^^^^
+>"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >["trimming", "edging"] : [string, string]
 >                       : ^^^^^^^^^^^^^^^^
->"trimming" : string
->           : ^^^^^^
->"edging" : string
->         : ^^^^^^
+>"trimming" : "trimming"
+>           : ^^^^^^^^^^
+>"edging" : "edging"
+>         : ^^^^^^^^
 
 function foo1([, skillA]: Robot) {
 >foo1 : ([, skillA]: Robot) => void
@@ -125,14 +125,14 @@ foo1(["roomba", ["vacuum", "mopping"]]);
 >     : ^          ^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->"roomba" : string
->         : ^^^^^^
+>"roomba" : "roomba"
+>         : ^^^^^^^^
 >["vacuum", "mopping"] : [string, string]
 >                      : ^^^^^^^^^^^^^^^^
->"vacuum" : string
->         : ^^^^^^
->"mopping" : string
->          : ^^^^^^
+>"vacuum" : "vacuum"
+>         : ^^^^^^^^
+>"mopping" : "mopping"
+>          : ^^^^^^^^^
 
 foo2(robotA);
 >foo2(robotA) : void
@@ -149,14 +149,14 @@ foo2(["roomba", ["vacuum", "mopping"]]);
 >     : ^        ^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->"roomba" : string
->         : ^^^^^^
+>"roomba" : "roomba"
+>         : ^^^^^^^^
 >["vacuum", "mopping"] : [string, string]
 >                      : ^^^^^^^^^^^^^^^^
->"vacuum" : string
->         : ^^^^^^
->"mopping" : string
->          : ^^^^^^
+>"vacuum" : "vacuum"
+>         : ^^^^^^^^
+>"mopping" : "mopping"
+>          : ^^^^^^^^^
 
 foo3(robotA);
 >foo3(robotA) : void
@@ -173,14 +173,14 @@ foo3(["roomba", ["vacuum", "mopping"]]);
 >     : ^                                          ^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->"roomba" : string
->         : ^^^^^^
+>"roomba" : "roomba"
+>         : ^^^^^^^^
 >["vacuum", "mopping"] : [string, string]
 >                      : ^^^^^^^^^^^^^^^^
->"vacuum" : string
->         : ^^^^^^
->"mopping" : string
->          : ^^^^^^
+>"vacuum" : "vacuum"
+>         : ^^^^^^^^
+>"mopping" : "mopping"
+>          : ^^^^^^^^^
 
 foo4(robotA);
 >foo4(robotA) : void
@@ -197,12 +197,12 @@ foo4(["roomba", ["vacuum", "mopping"]]);
 >     : ^                    ^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->"roomba" : string
->         : ^^^^^^
+>"roomba" : "roomba"
+>         : ^^^^^^^^
 >["vacuum", "mopping"] : [string, string]
 >                      : ^^^^^^^^^^^^^^^^
->"vacuum" : string
->         : ^^^^^^
->"mopping" : string
->          : ^^^^^^
+>"vacuum" : "vacuum"
+>         : ^^^^^^^^
+>"mopping" : "mopping"
+>          : ^^^^^^^^^
 

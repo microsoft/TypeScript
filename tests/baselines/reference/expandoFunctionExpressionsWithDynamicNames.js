@@ -29,9 +29,9 @@ exports.expr2[s] = 0;
 //// [expandoFunctionExpressionsWithDynamicNames.d.ts]
 export declare const expr: {
     (): void;
-    X: any;
+    X: number;
 };
 export declare const expr2: {
     (): void;
-    X: any;
+    X: number;
 };

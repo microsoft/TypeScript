@@ -34,8 +34,8 @@ logLength(42);  // error
 >              : ^^^^^^
 >logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
 >          : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 let z;
 >z : any
@@ -50,8 +50,8 @@ z = logLength(42);  // no error; T is inferred as `any`
 >              : ^^^^^^
 >logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
 >          : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 function logFirstLength<T extends string[], U extends string>(arg: { [K in U]: T }[U]): T {
 >logFirstLength : <T extends string[], U extends string>(arg: { [K in U]: T; }[U]) => T
@@ -90,8 +90,8 @@ logFirstLength([42]);  // error
 >               : ^ ^^^^^^^^^        ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
 >[42] : number[]
 >     : ^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 let zz = [];
 >zz : any[]
@@ -112,8 +112,8 @@ zz.push(logLength(42));  // no error; T is inferred as `any`
 >              : ^^^^^^
 >logLength : <T extends string, U extends string>(arg: { [K in U]: T; }[U]) => T
 >          : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 zz = logFirstLength([42]);  // no error; T is inferred as `any[]`
 >zz = logFirstLength([42]) : string[]
@@ -126,6 +126,6 @@ zz = logFirstLength([42]);  // no error; T is inferred as `any[]`
 >               : ^ ^^^^^^^^^        ^^ ^^^^^^^^^      ^^   ^^                   ^^^^^ 
 >[42] : number[]
 >     : ^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 

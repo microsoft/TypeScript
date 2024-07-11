@@ -17,14 +17,14 @@ var p1 = import<Promise<any>>("./0");  // error
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import<Promise<any>>("./0") : Promise<typeof import("0")>
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : string
->      : ^^^^^^
+>"./0" : "./0"
+>      : ^^^^^
 
 var p2 = import<>("./0");  // error
 >p2 : Promise<typeof import("0")>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import<>("./0") : Promise<typeof import("0")>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./0" : string
->      : ^^^^^^
+>"./0" : "./0"
+>      : ^^^^^
 

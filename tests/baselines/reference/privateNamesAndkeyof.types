@@ -18,8 +18,8 @@ class A {
     get #fooProp() { return 1; };
 >#fooProp : number
 >         : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     set #fooProp(value: number) { };
 >#fooProp : number

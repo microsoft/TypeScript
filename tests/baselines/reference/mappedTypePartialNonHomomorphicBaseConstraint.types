@@ -20,8 +20,8 @@ class Model<D> {
 >     : ^^^^^^^^
 >["some base error"] : string[]
 >                    : ^^^^^^^^
->"some base error" : string
->                  : ^^^^^^
+>"some base error" : "some base error"
+>                  : ^^^^^^^^^^^^^^^^^
   }
 }
 

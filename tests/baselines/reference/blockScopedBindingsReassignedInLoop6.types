@@ -67,12 +67,12 @@ function f1() {
 >  : ^
 
             y = 5;
->y = 5 : number
->      : ^^^^^^
+>y = 5 : 5
+>      : ^
 >y : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
         else
             return;
@@ -161,12 +161,12 @@ function f2() {
 >  : ^
 
             y = 5;
->y = 5 : number
->      : ^^^^^^
+>y = 5 : 5
+>      : ^
 >y : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
         else
             return;

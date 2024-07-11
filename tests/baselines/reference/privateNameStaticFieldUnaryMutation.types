@@ -8,8 +8,8 @@ class C {
     static #test: number = 24;
 >#test : number
 >      : ^^^^^^
->24 : number
->   : ^^^^^^
+>24 : 24
+>   : ^^
 
     constructor() {
         C.#test++;
@@ -85,14 +85,14 @@ class C {
 >  : ^^^^^^^^
 
         for (C.#test = 0; C.#test < 10; ++C.#test) {}
->C.#test = 0 : number
->            : ^^^^^^
+>C.#test = 0 : 0
+>            : ^
 >C.#test : number
 >        : ^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >C.#test < 10 : boolean
 >             : ^^^^^^^
 >C.#test : number
@@ -109,14 +109,14 @@ class C {
 >  : ^^^^^^^^
 
         for (C.#test = 0; C.#test < 10; C.#test++) {}
->C.#test = 0 : number
->            : ^^^^^^
+>C.#test = 0 : 0
+>            : ^
 >C.#test : number
 >        : ^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >C.#test < 10 : boolean
 >             : ^^^^^^^
 >C.#test : number
@@ -257,8 +257,8 @@ class C {
 >         : ^^^^^^^^^^^^^^
 
         for (this.getClass().#test = 0; this.getClass().#test < 10; ++this.getClass().#test) {}
->this.getClass().#test = 0 : number
->                          : ^^^^^^
+>this.getClass().#test = 0 : 0
+>                          : ^
 >this.getClass().#test : number
 >                      : ^^^^^^
 >this.getClass() : typeof C
@@ -269,8 +269,8 @@ class C {
 >     : ^^^^
 >getClass : () => typeof C
 >         : ^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >this.getClass().#test < 10 : boolean
 >                           : ^^^^^^^
 >this.getClass().#test : number
@@ -299,8 +299,8 @@ class C {
 >         : ^^^^^^^^^^^^^^
 
         for (this.getClass().#test = 0; this.getClass().#test < 10; this.getClass().#test++) {}
->this.getClass().#test = 0 : number
->                          : ^^^^^^
+>this.getClass().#test = 0 : 0
+>                          : ^
 >this.getClass().#test : number
 >                      : ^^^^^^
 >this.getClass() : typeof C
@@ -311,8 +311,8 @@ class C {
 >     : ^^^^
 >getClass : () => typeof C
 >         : ^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >this.getClass().#test < 10 : boolean
 >                           : ^^^^^^^
 >this.getClass().#test : number

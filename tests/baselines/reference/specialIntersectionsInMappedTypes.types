@@ -20,26 +20,26 @@ const a: Alignments = {
     left: "align-left",
 >left : string
 >     : ^^^^^^
->"align-left" : string
->             : ^^^^^^
+>"align-left" : "align-left"
+>             : ^^^^^^^^^^^^
 
     center: "align-center",
 >center : string
 >       : ^^^^^^
->"align-center" : string
->               : ^^^^^^
+>"align-center" : "align-center"
+>               : ^^^^^^^^^^^^^^
 
     right: "align-right",
 >right : string
 >      : ^^^^^^
->"align-right" : string
->              : ^^^^^^
+>"align-right" : "align-right"
+>              : ^^^^^^^^^^^^^
 
     other: "align-other",
 >other : string
 >      : ^^^^^^
->"align-other" : string
->              : ^^^^^^
+>"align-other" : "align-other"
+>              : ^^^^^^^^^^^^^
 
 };
 

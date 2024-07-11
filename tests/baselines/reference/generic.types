@@ -29,8 +29,8 @@ let a: A<string> = { a: "" };
 >          : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 let b: B<number> = { a: 3 };
 >b : A<number>
@@ -39,8 +39,8 @@ let b: B<number> = { a: 3 };
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 let c: A<boolean> = {};
 >c : A<boolean>

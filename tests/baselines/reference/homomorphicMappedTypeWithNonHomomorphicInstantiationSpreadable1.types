@@ -53,8 +53,8 @@ const result = func1({
         label: "first",
 >label : string
 >      : ^^^^^^
->"first" : string
->        : ^^^^^^
+>"first" : "first"
+>        : ^^^^^^^
 
         options: [
 >options : [{ value: number; }, { value: string; }]
@@ -68,8 +68,8 @@ const result = func1({
                 value: 123,
 >value : number
 >      : ^^^^^^
->123 : number
->    : ^^^^^^
+>123 : 123
+>    : ^^^
 
             },
             {
@@ -79,8 +79,8 @@ const result = func1({
                 value: "foo",
 >value : string
 >      : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 
             },
         ],
@@ -94,8 +94,8 @@ const result = func1({
         label: "second",
 >label : string
 >      : ^^^^^^
->"second" : string
->         : ^^^^^^
+>"second" : "second"
+>         : ^^^^^^^^
 
         options: [
 >options : [{ value: string; }, { value: true; }]
@@ -109,8 +109,8 @@ const result = func1({
                 value: "bar",
 >value : string
 >      : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
             },
             {

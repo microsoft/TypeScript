@@ -12,8 +12,8 @@ let err = new Error("foo", { cause: new Error("bar") });
 >                                              : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
 >                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
@@ -22,8 +22,8 @@ let err = new Error("foo", { cause: new Error("bar") });
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 err.cause;
 >err.cause : unknown
@@ -40,8 +40,8 @@ let anotherErr = new Error("foo", { cause: a });
 >                               : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >{ cause: a } : { cause: unknown; }
 >             : ^^^^^^^^^^^^^^^^^^^
 >cause : unknown
@@ -62,8 +62,8 @@ new EvalError("foo", { cause: new Error("bar") });
 >                                                  : ^^^^^^^^^
 >EvalError : EvalErrorConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
 >                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
@@ -72,16 +72,16 @@ new EvalError("foo", { cause: new Error("bar") });
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 new EvalError("foo", { cause: a });
 >new EvalError("foo", { cause: a }) : EvalError
 >                                   : ^^^^^^^^^
 >EvalError : EvalErrorConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >{ cause: a } : { cause: unknown; }
 >             : ^^^^^^^^^^^^^^^^^^^
 >cause : unknown
@@ -94,8 +94,8 @@ new RangeError("foo", { cause: new Error("bar") });
 >                                                   : ^^^^^^^^^^
 >RangeError : RangeErrorConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
 >                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
@@ -104,16 +104,16 @@ new RangeError("foo", { cause: new Error("bar") });
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 new ReferenceError("foo", { cause: new Error("bar") });
 >new ReferenceError("foo", { cause: new Error("bar") }) : ReferenceError
 >                                                       : ^^^^^^^^^^^^^^
 >ReferenceError : ReferenceErrorConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
 >                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
@@ -122,16 +122,16 @@ new ReferenceError("foo", { cause: new Error("bar") });
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 new SyntaxError("foo", { cause: new Error("bar") });
 >new SyntaxError("foo", { cause: new Error("bar") }) : SyntaxError
 >                                                    : ^^^^^^^^^^^
 >SyntaxError : SyntaxErrorConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
 >                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
@@ -140,16 +140,16 @@ new SyntaxError("foo", { cause: new Error("bar") });
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 new TypeError("foo", { cause: new Error("bar") });
 >new TypeError("foo", { cause: new Error("bar") }) : TypeError
 >                                                  : ^^^^^^^^^
 >TypeError : TypeErrorConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
 >                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
@@ -158,16 +158,16 @@ new TypeError("foo", { cause: new Error("bar") });
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 new URIError("foo", { cause: new Error("bar") });
 >new URIError("foo", { cause: new Error("bar") }) : URIError
 >                                                 : ^^^^^^^^
 >URIError : URIErrorConstructor
 >         : ^^^^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
 >                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
@@ -176,8 +176,8 @@ new URIError("foo", { cause: new Error("bar") });
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 new AggregateError([], "foo", { cause: new Error("bar") });
 >new AggregateError([], "foo", { cause: new Error("bar") }) : AggregateError
@@ -186,8 +186,8 @@ new AggregateError([], "foo", { cause: new Error("bar") });
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }
 >                            : ^^^^^^^^^^^^^^^^^
 >cause : Error
@@ -196,6 +196,6 @@ new AggregateError([], "foo", { cause: new Error("bar") });
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 

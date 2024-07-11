@@ -238,10 +238,10 @@ series([
 >            : ^^^^^^^
 >cb : Callback<unknown>
 >   : ^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->300 : number
->    : ^^^^^^
+>1 : 1
+>  : ^
+>300 : 300
+>    : ^^^
 
     cb => setTimeout(() => cb(null, 2), 200),
 >cb => setTimeout(() => cb(null, 2), 200) : (cb: Callback<unknown>) => number
@@ -258,10 +258,10 @@ series([
 >            : ^^^^^^^
 >cb : Callback<unknown>
 >   : ^^^^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
->200 : number
->    : ^^^^^^
+>2 : 2
+>  : ^
+>200 : 200
+>    : ^^^
 
     cb => setTimeout(() => cb(null, 3), 100),
 >cb => setTimeout(() => cb(null, 3), 100) : (cb: Callback<unknown>) => number
@@ -278,10 +278,10 @@ series([
 >            : ^^^^^^^
 >cb : Callback<unknown>
 >   : ^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
->100 : number
->    : ^^^^^^
+>3 : 3
+>  : ^
+>100 : 100
+>    : ^^^
 
 ], (error, results) => {
 >(error, results) => {    if (error) {        console.error(error)    } else {        console.log(results)    }} : (error: Error | null, results: unknown[] | null) => void

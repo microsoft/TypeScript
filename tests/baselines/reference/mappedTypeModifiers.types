@@ -340,8 +340,8 @@ function f1(x: Partial<Foo>) {
 >  : ^^^^^^^^^^^^
 >"other" : "other"
 >        : ^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >toFixed : (fractionDigits?: number) => string
 >        : ^              ^^^      ^^^^^      
 }

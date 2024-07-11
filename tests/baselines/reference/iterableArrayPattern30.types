@@ -18,14 +18,14 @@ const [[k1, v1], [k2, v2]] = new Map([["", true], ["hello", true]])
 >                              : ^^^^^^^^^^^^^^^^
 >["", true] : [string, true]
 >           : ^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >true : true
 >     : ^^^^
 >["hello", true] : [string, true]
 >                : ^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >true : true
 >     : ^^^^
 

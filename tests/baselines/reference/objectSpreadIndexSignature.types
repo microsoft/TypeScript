@@ -98,14 +98,14 @@ var writable = { ...roindex };
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 writable.a = 0;  // should be ok.
->writable.a = 0 : number
->               : ^^^^^^
+>writable.a = 0 : 0
+>               : ^
 >writable.a : number
 >           : ^^^^^^
 >writable : { [x: string]: number; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 

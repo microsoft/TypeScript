@@ -14,7 +14,7 @@ const m1 = new Person("Name")
 >                   : ^^^^^^
 >Person : typeof Person
 >       : ^^^^^^^^^^^^^
->"Name" : string
+>"Name" : "Name"
 >       : ^^^^^^
 
 m1.thing;
@@ -59,40 +59,40 @@ m1.setonlyAccessor;
 
 // allowed assignments
 m1.thing = 10;
->m1.thing = 10 : number
->              : ^^^^^^
+>m1.thing = 10 : 10
+>              : ^^
 >m1.thing : number
 >         : ^^^^^^
 >m1 : Person
 >   : ^^^^^^
 >thing : number
 >      : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 m1.rwAccessors = 11;
->m1.rwAccessors = 11 : number
->                    : ^^^^^^
+>m1.rwAccessors = 11 : 11
+>                    : ^^
 >m1.rwAccessors : number
 >               : ^^^^^^
 >m1 : Person
 >   : ^^^^^^
 >rwAccessors : number
 >            : ^^^^^^
->11 : number
->   : ^^^^^^
+>11 : 11
+>   : ^^
 
 m1.setonlyAccessor = "yes";
->m1.setonlyAccessor = "yes" : string
->                           : ^^^^^^
+>m1.setonlyAccessor = "yes" : "yes"
+>                           : ^^^^^
 >m1.setonlyAccessor : string
 >                   : ^^^^^^
 >m1 : Person
 >   : ^^^^^^
 >setonlyAccessor : string
 >                : ^^^^^^
->"yes" : string
->      : ^^^^^^
+>"yes" : "yes"
+>      : ^^^^^
 
 // disallowed assignments
 m1.readonlyProp = "name";
@@ -120,40 +120,40 @@ m1.readonlyAccessor = 12;
 >   : ^^
 
 m1.thing = "no";
->m1.thing = "no" : string
->                : ^^^^^^
+>m1.thing = "no" : "no"
+>                : ^^^^
 >m1.thing : number
 >         : ^^^^^^
 >m1 : Person
 >   : ^^^^^^
 >thing : number
 >      : ^^^^^^
->"no" : string
->     : ^^^^^^
+>"no" : "no"
+>     : ^^^^
 
 m1.rwAccessors = "no";
->m1.rwAccessors = "no" : string
->                      : ^^^^^^
+>m1.rwAccessors = "no" : "no"
+>                      : ^^^^
 >m1.rwAccessors : number
 >               : ^^^^^^
 >m1 : Person
 >   : ^^^^^^
 >rwAccessors : number
 >            : ^^^^^^
->"no" : string
->     : ^^^^^^
+>"no" : "no"
+>     : ^^^^
 
 m1.setonlyAccessor = 0;
->m1.setonlyAccessor = 0 : number
->                       : ^^^^^^
+>m1.setonlyAccessor = 0 : 0
+>                       : ^
 >m1.setonlyAccessor : string
 >                   : ^^^^^^
 >m1 : Person
 >   : ^^^^^^
 >setonlyAccessor : string
 >                : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 
 === mod1.js ===

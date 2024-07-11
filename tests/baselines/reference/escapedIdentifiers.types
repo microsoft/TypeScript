@@ -68,52 +68,52 @@ module moduleType\u0032 {
 }
 
 moduleType1.baz1 = 3;
->moduleType1.baz1 = 3 : number
->                     : ^^^^^^
+>moduleType1.baz1 = 3 : 3
+>                     : ^
 >moduleType1.baz1 : number
 >                 : ^^^^^^
 >moduleType1 : typeof moduleType1
 >            : ^^^^^^^^^^^^^^^^^^
 >baz1 : number
 >     : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 moduleType\u0031.baz1 = 3;
->moduleType\u0031.baz1 = 3 : number
->                          : ^^^^^^
+>moduleType\u0031.baz1 = 3 : 3
+>                          : ^
 >moduleType\u0031.baz1 : number
 >                      : ^^^^^^
 >moduleType\u0031 : typeof moduleType1
 >                 : ^^^^^^^^^^^^^^^^^^
 >baz1 : number
 >     : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 moduleType2.baz2 = 3;
->moduleType2.baz2 = 3 : number
->                     : ^^^^^^
+>moduleType2.baz2 = 3 : 3
+>                     : ^
 >moduleType2.baz2 : number
 >                 : ^^^^^^
 >moduleType2 : typeof moduleType\u0032
 >            : ^^^^^^^^^^^^^^^^^^^^^^^
 >baz2 : number
 >     : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 moduleType\u0032.baz2 = 3;
->moduleType\u0032.baz2 = 3 : number
->                          : ^^^^^^
+>moduleType\u0032.baz2 = 3 : 3
+>                          : ^
 >moduleType\u0032.baz2 : number
 >                      : ^^^^^^
 >moduleType\u0032 : typeof moduleType\u0032
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >baz2 : number
 >     : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 // classes
 
@@ -143,16 +143,16 @@ var classType1Object1 = new classType1();
 >           : ^^^^^^^^^^^^^^^^^
 
 classType1Object1.foo1 = 2;
->classType1Object1.foo1 = 2 : number
->                           : ^^^^^^
+>classType1Object1.foo1 = 2 : 2
+>                           : ^
 >classType1Object1.foo1 : number
 >                       : ^^^^^^
 >classType1Object1 : classType1
 >                  : ^^^^^^^^^^
 >foo1 : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var classType1Object2 = new classType\u0031();
 >classType1Object2 : classType1
@@ -163,16 +163,16 @@ var classType1Object2 = new classType\u0031();
 >                : ^^^^^^^^^^^^^^^^^
 
 classType1Object2.foo1 = 2;
->classType1Object2.foo1 = 2 : number
->                           : ^^^^^^
+>classType1Object2.foo1 = 2 : 2
+>                           : ^
 >classType1Object2.foo1 : number
 >                       : ^^^^^^
 >classType1Object2 : classType1
 >                  : ^^^^^^^^^^
 >foo1 : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var classType2Object1 = new classType2();
 >classType2Object1 : classType\u0032
@@ -183,16 +183,16 @@ var classType2Object1 = new classType2();
 >           : ^^^^^^^^^^^^^^^^^^^^^^
 
 classType2Object1.foo2 = 2;
->classType2Object1.foo2 = 2 : number
->                           : ^^^^^^
+>classType2Object1.foo2 = 2 : 2
+>                           : ^
 >classType2Object1.foo2 : number
 >                       : ^^^^^^
 >classType2Object1 : classType\u0032
 >                  : ^^^^^^^^^^^^^^^
 >foo2 : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var classType2Object2 = new classType\u0032();
 >classType2Object2 : classType\u0032
@@ -203,16 +203,16 @@ var classType2Object2 = new classType\u0032();
 >                : ^^^^^^^^^^^^^^^^^^^^^^
 
 classType2Object2.foo2 = 2;
->classType2Object2.foo2 = 2 : number
->                           : ^^^^^^
+>classType2Object2.foo2 = 2 : 2
+>                           : ^
 >classType2Object2.foo2 : number
 >                       : ^^^^^^
 >classType2Object2 : classType\u0032
 >                  : ^^^^^^^^^^^^^^^
 >foo2 : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 // interfaces
 interface interfaceType1 { 
@@ -235,20 +235,20 @@ var interfaceType1Object1 = <interfaceType1>{ bar1: 0 };
 >            : ^^^^^^^^^^^^^^^^^
 >bar1 : number
 >     : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 interfaceType1Object1.bar1 = 2;
->interfaceType1Object1.bar1 = 2 : number
->                               : ^^^^^^
+>interfaceType1Object1.bar1 = 2 : 2
+>                               : ^
 >interfaceType1Object1.bar1 : number
 >                           : ^^^^^^
 >interfaceType1Object1 : interfaceType1
 >                      : ^^^^^^^^^^^^^^
 >bar1 : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var interfaceType1Object2 = <interfaceType\u0031>{ bar1: 0 };
 >interfaceType1Object2 : interfaceType1
@@ -259,20 +259,20 @@ var interfaceType1Object2 = <interfaceType\u0031>{ bar1: 0 };
 >            : ^^^^^^^^^^^^^^^^^
 >bar1 : number
 >     : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 interfaceType1Object2.bar1 = 2;
->interfaceType1Object2.bar1 = 2 : number
->                               : ^^^^^^
+>interfaceType1Object2.bar1 = 2 : 2
+>                               : ^
 >interfaceType1Object2.bar1 : number
 >                           : ^^^^^^
 >interfaceType1Object2 : interfaceType1
 >                      : ^^^^^^^^^^^^^^
 >bar1 : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var interfaceType2Object1 = <interfaceType2>{ bar2: 0 };
 >interfaceType2Object1 : interfaceType\u0032
@@ -283,20 +283,20 @@ var interfaceType2Object1 = <interfaceType2>{ bar2: 0 };
 >            : ^^^^^^^^^^^^^^^^^
 >bar2 : number
 >     : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 interfaceType2Object1.bar2 = 2;
->interfaceType2Object1.bar2 = 2 : number
->                               : ^^^^^^
+>interfaceType2Object1.bar2 = 2 : 2
+>                               : ^
 >interfaceType2Object1.bar2 : number
 >                           : ^^^^^^
 >interfaceType2Object1 : interfaceType\u0032
 >                      : ^^^^^^^^^^^^^^^^^^^
 >bar2 : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var interfaceType2Object2 = <interfaceType\u0032>{ bar2: 0 };
 >interfaceType2Object2 : interfaceType\u0032
@@ -307,20 +307,20 @@ var interfaceType2Object2 = <interfaceType\u0032>{ bar2: 0 };
 >            : ^^^^^^^^^^^^^^^^^
 >bar2 : number
 >     : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 interfaceType2Object2.bar2 = 2;
->interfaceType2Object2.bar2 = 2 : number
->                               : ^^^^^^
+>interfaceType2Object2.bar2 = 2 : 2
+>                               : ^
 >interfaceType2Object2.bar2 : number
 >                           : ^^^^^^
 >interfaceType2Object2 : interfaceType\u0032
 >                      : ^^^^^^^^^^^^^^^^^^^
 >bar2 : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 
 // arguments
@@ -341,20 +341,20 @@ class testClass {
 >     : ^^^^^^
 
         arg\u0031 = 1;
->arg\u0031 = 1 : number
->              : ^^^^^^
+>arg\u0031 = 1 : 1
+>              : ^
 >arg\u0031 : number
 >          : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         arg2 = 'string';
->arg2 = 'string' : string
->                : ^^^^^^
+>arg2 = 'string' : "string"
+>                : ^^^^^^^^
 >arg2 : string
 >     : ^^^^^^
->'string' : string
->         : ^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
 
         arg\u0033 = true;
 >arg\u0033 = true : true
@@ -365,12 +365,12 @@ class testClass {
 >     : ^^^^
 
         arg4 = 2;
->arg4 = 2 : number
->         : ^^^^^^
+>arg4 = 2 : 2
+>         : ^
 >arg4 : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
     }
 }
 
@@ -397,38 +397,38 @@ var constructorTestObject = new constructorTestClass(1, 'string', true, 2);
 >                                               : ^^^^^^^^^^^^^^^^^^^^
 >constructorTestClass : typeof constructorTestClass
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->'string' : string
->         : ^^^^^^
+>1 : 1
+>  : ^
+>'string' : "string"
+>         : ^^^^^^^^
 >true : true
 >     : ^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 constructorTestObject.arg\u0031 = 1;
->constructorTestObject.arg\u0031 = 1 : number
->                                    : ^^^^^^
+>constructorTestObject.arg\u0031 = 1 : 1
+>                                    : ^
 >constructorTestObject.arg\u0031 : number
 >                                : ^^^^^^
 >constructorTestObject : constructorTestClass
 >                      : ^^^^^^^^^^^^^^^^^^^^
 >arg\u0031 : number
 >          : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 constructorTestObject.arg2 = 'string';
->constructorTestObject.arg2 = 'string' : string
->                                      : ^^^^^^
+>constructorTestObject.arg2 = 'string' : "string"
+>                                      : ^^^^^^^^
 >constructorTestObject.arg2 : string
 >                           : ^^^^^^
 >constructorTestObject : constructorTestClass
 >                      : ^^^^^^^^^^^^^^^^^^^^
 >arg2 : string
 >     : ^^^^^^
->'string' : string
->         : ^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
 
 constructorTestObject.arg\u0033 = true;
 >constructorTestObject.arg\u0033 = true : true
@@ -443,16 +443,16 @@ constructorTestObject.arg\u0033 = true;
 >     : ^^^^
 
 constructorTestObject.arg4 = 2;
->constructorTestObject.arg4 = 2 : number
->                               : ^^^^^^
+>constructorTestObject.arg4 = 2 : 2
+>                               : ^
 >constructorTestObject.arg4 : number
 >                           : ^^^^^^
 >constructorTestObject : constructorTestClass
 >                      : ^^^^^^^^^^^^^^^^^^^^
 >arg4 : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 // Lables
 

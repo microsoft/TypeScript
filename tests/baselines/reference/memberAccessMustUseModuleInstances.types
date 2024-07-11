@@ -19,8 +19,8 @@ WinJS.Promise.timeout(10);
 >        : ^^^^^^^^^^^^^^^^^^^^
 >timeout : (delay: number) => WinJS.Promise
 >        : ^     ^^      ^^^^^^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 === memberAccessMustUseModuleInstances_0.ts ===
 export class Promise {

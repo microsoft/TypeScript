@@ -83,8 +83,8 @@ var p = new A.Point(0, 0); // unexpected error here, bug 840000
 >  : ^^^^^^^^
 >Point : typeof A.Point
 >      : ^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
  

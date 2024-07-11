@@ -37,7 +37,7 @@ export module Database {
 >       : ^^^^^^^^^^^^^^^
 >Person : typeof P.Models.Person
 >       : ^^^^^^^^^^^^^^^^^^^^^^
->"Rock" : string
+>"Rock" : "Rock"
 >       : ^^^^^^
 	    }
 	}

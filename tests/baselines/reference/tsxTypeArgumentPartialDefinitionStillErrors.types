@@ -29,8 +29,8 @@ function SFC<T>(props: Record<string, T>) {
 >    : ^ ^^     ^^                 ^^^^^^^^^^^
 >prop : number
 >     : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >SFC : <T>(props: Record<string, T>) => string
 >    : ^ ^^     ^^                 ^^^^^^^^^^^
 

@@ -16,8 +16,8 @@ var numberArray = [5];
 >            : ^^^^^^^^
 >[5] : number[]
 >    : ^^^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 /**
  * @param {Array} arr
@@ -46,8 +46,8 @@ var anyPromise = Promise.resolve(5);
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 /** @type {Promise<number>} */
 var numberPromise = Promise.resolve(5);
@@ -61,8 +61,8 @@ var numberPromise = Promise.resolve(5);
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 /**
  * @param {Promise} pr

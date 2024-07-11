@@ -198,6 +198,6 @@ var r3: Base = c.foo('hm');
 >  : ^
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >    : ^^^ ^^    ^^^        ^^^ ^^     ^^^        ^^^ ^^      ^^^    ^^^
->'hm' : string
->     : ^^^^^^
+>'hm' : "hm"
+>     : ^^^^
 

@@ -58,8 +58,8 @@ export class ObservableValue<T> {
             type: "update",
 >type : string
 >     : ^^^^^^
->"update" : string
->         : ^^^^^^
+>"update" : "update"
+>         : ^^^^^^^^
 
             object: this,
 >object : this

@@ -20,8 +20,8 @@ foo({ id: 1234 });                 // Ok
 >             : ^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->1234 : number
->     : ^^^^^^
+>1234 : 1234
+>     : ^^^^
 
 foo({ id: 1234, name: "hello" });  // Ok
 >foo({ id: 1234, name: "hello" }) : void
@@ -32,12 +32,12 @@ foo({ id: 1234, name: "hello" });  // Ok
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->1234 : number
->     : ^^^^^^
+>1234 : 1234
+>     : ^^^^
 >name : string
 >     : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 foo({ id: 1234, name: false });    // Error, name of wrong type
 >foo({ id: 1234, name: false }) : void
@@ -48,8 +48,8 @@ foo({ id: 1234, name: false });    // Error, name of wrong type
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->1234 : number
->     : ^^^^^^
+>1234 : 1234
+>     : ^^^^
 >name : boolean
 >     : ^^^^^^^
 >false : false
@@ -64,6 +64,6 @@ foo({ name: "hello" });            // Error, id required but missing
 >                  : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 

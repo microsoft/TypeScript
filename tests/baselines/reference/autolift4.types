@@ -63,10 +63,10 @@ class Point {
 >               : ^^^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
 }
 
 class Point3D extends Point {

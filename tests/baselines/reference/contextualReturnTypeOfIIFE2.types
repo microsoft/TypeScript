@@ -63,6 +63,6 @@ app.foo.bar.someFun(1);
 >    : ^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^
 >someFun : (arg: number) => void
 >        : ^   ^^      ^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

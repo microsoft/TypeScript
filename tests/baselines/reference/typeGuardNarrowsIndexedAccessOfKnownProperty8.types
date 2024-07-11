@@ -28,8 +28,8 @@ export class C {
 
     constructor() {
         this[a.key] = "foo";
->this[a.key] = "foo" : string
->                    : ^^^^^^
+>this[a.key] = "foo" : "foo"
+>                    : ^^^^^
 >this[a.key] : string
 >            : ^^^^^^
 >this : this
@@ -40,8 +40,8 @@ export class C {
 >  : ^^^^^^^^
 >key : "a"
 >    : ^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
     }
 }
 

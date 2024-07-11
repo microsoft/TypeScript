@@ -176,6 +176,6 @@ const query = Object.entries(obj).map(
 ).join('&');
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->'&' : string
->    : ^^^^^^
+>'&' : "&"
+>    : ^^^
 

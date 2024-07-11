@@ -54,7 +54,7 @@ function run(options: { something?(b?: string): void }) {
 >              : ^^^^
 >something : (b?: string) => void
 >          : ^ ^^^      ^^^^^    
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 }
 

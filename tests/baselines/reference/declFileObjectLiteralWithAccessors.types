@@ -47,8 +47,8 @@ var /*4*/point = makePoint(2);
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >makePoint : (x: number) => { b: number; x: number; }
 >          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var /*2*/x = point.x;
 >x : number
@@ -61,14 +61,14 @@ var /*2*/x = point.x;
 >  : ^^^^^^
 
 point./*3*/x = 30;
->point./*3*/x = 30 : number
->                  : ^^^^^^
+>point./*3*/x = 30 : 30
+>                  : ^^
 >point./*3*/x : number
 >             : ^^^^^^
 >point : { b: number; x: number; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->30 : number
->   : ^^^^^^
+>30 : 30
+>   : ^^
 

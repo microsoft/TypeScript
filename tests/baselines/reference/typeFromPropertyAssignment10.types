@@ -86,16 +86,16 @@ Outer.app.Inner = class {
     constructor() {
         /** @type {number} */
         this.y = 12;
->this.y = 12 : number
->            : ^^^^^^
+>this.y = 12 : 12
+>            : ^^
 >this.y : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >y : number
 >  : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
     }
 }
 var example = new Outer.app.Inner();
@@ -278,6 +278,6 @@ Outer.app.statische(101); // Infinity, duh
 >    : ^^^^^^^^^^^^^^^^
 >statische : (k: number) => number
 >          : ^ ^^      ^^^^^^^^^^^
->101 : number
->    : ^^^^^^
+>101 : 101
+>    : ^^^
 

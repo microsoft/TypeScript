@@ -8,8 +8,8 @@ class A {
     #foo: number = 3;
 >#foo : number
 >     : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 }
 
 new A().#foo = 4;               // Error

@@ -54,12 +54,12 @@ function foo2(x: number | string) {
 >         : ^^^^^^^^
 
         x = 10;
->x = 10 : number
->       : ^^^^^^
+>x = 10 : 10
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
         return x; // number
 >x : number
@@ -88,12 +88,12 @@ function foo3(x: number | string) {
 >         : ^^^^^^^^
 
         x = "Hello";
->x = "Hello" : string
->            : ^^^^^^
+>x = "Hello" : "Hello"
+>            : ^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"Hello" : string
->        : ^^^^^^
+>"Hello" : "Hello"
+>        : ^^^^^^^
 
         return x; // string
 >x : string
@@ -127,12 +127,12 @@ function foo4(x: number | string) {
     }
     else {
         x = 10;
->x = 10 : number
->       : ^^^^^^
+>x = 10 : 10
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
         return x; // number
 >x : number
@@ -161,12 +161,12 @@ function foo5(x: number | string) {
     }
     else {
         x = "hello";
->x = "hello" : string
->            : ^^^^^^
+>x = "hello" : "hello"
+>            : ^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
         return x; // string
 >x : string
@@ -190,12 +190,12 @@ function foo6(x: number | string) {
 >         : ^^^^^^^^
 
         x = 10;
->x = 10 : number
->       : ^^^^^^
+>x = 10 : 10
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
         return x; // number
 >x : number
@@ -203,12 +203,12 @@ function foo6(x: number | string) {
     }
     else {
         x = "hello";
->x = "hello" : string
->            : ^^^^^^
+>x = "hello" : "hello"
+>            : ^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
         return x; // string
 >x : string

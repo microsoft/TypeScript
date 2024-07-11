@@ -28,8 +28,8 @@ function stringify1(anything: { toString(): string } | undefined): string {
 >         : ^^^^^^
 >toUpperCase : () => string
 >            : ^^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 }
 
 function stringify2(anything: {} | undefined): string {
@@ -57,8 +57,8 @@ function stringify2(anything: {} | undefined): string {
 >         : ^^^^^^
 >toUpperCase : () => string
 >            : ^^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 }
 
 function stringify3(anything: unknown | undefined): string { // should simplify to just `unknown` which should narrow fine
@@ -86,8 +86,8 @@ function stringify3(anything: unknown | undefined): string { // should simplify 
 >         : ^^^^^^
 >toUpperCase : () => string
 >            : ^^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 }
 
 function stringify4(anything: { toString?(): string } | undefined): string {
@@ -117,7 +117,7 @@ function stringify4(anything: { toString?(): string } | undefined): string {
 >         : ^^^^^^
 >toUpperCase : () => string
 >            : ^^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 }
 

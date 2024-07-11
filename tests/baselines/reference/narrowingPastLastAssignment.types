@@ -16,12 +16,12 @@ function f1(x: string | number) {
 >  : ^^^^^^^^^^^^^^^
 
     x = "abc";
->x = "abc" : string
->          : ^^^^^^
+>x = "abc" : "abc"
+>          : ^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
     action(() => { x /* string | number */ });
 >action(() => { x /* string | number */ }) : void
@@ -34,12 +34,12 @@ function f1(x: string | number) {
 >  : ^^^^^^^^^^^^^^^
 
     x = 42;
->x = 42 : number
->       : ^^^^^^
+>x = 42 : 42
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     action(() => { x /* number */ });
 >action(() => { x /* number */ }) : void
@@ -63,12 +63,12 @@ function f2() {
 >  : ^^^^^^^^^^^^^^^
 
     x = 42;
->x = 42 : number
->       : ^^^^^^
+>x = 42 : 42
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     let a = () => { x /* number */ };
 >a : () => void
@@ -145,20 +145,20 @@ function f3(x: string | number) {
 >       : ^ ^^        ^^^^^^^^^
 >() => { x = "abc" } : () => void
 >                    : ^^^^^^^^^^
->x = "abc" : string
->          : ^^^^^^
+>x = "abc" : "abc"
+>          : ^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
     x = 42;
->x = 42 : number
->       : ^^^^^^
+>x = 42 : 42
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     action(() => { x /* string | number */ });
 >action(() => { x /* string | number */ }) : void
@@ -182,8 +182,8 @@ function f4(cond: () => boolean) {
     let x: string | number = 0;
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     while (cond()) {
 >cond() : boolean
@@ -192,12 +192,12 @@ function f4(cond: () => boolean) {
 >     : ^^^^^^       
 
         x = "abc";
->x = "abc" : string
->          : ^^^^^^
+>x = "abc" : "abc"
+>          : ^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
         action(() => { x /* string | number */ });
 >action(() => { x /* string | number */ }) : void
@@ -210,12 +210,12 @@ function f4(cond: () => boolean) {
 >  : ^^^^^^^^^^^^^^^
 
         x = 42;
->x = 42 : number
->       : ^^^^^^
+>x = 42 : 42
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
         action(() => { x /* string | number */ });
 >action(() => { x /* string | number */ }) : void
@@ -253,12 +253,12 @@ function f5(x: string | number, cond: () => boolean) {
 >     : ^^^^^^       
 
         x = 1;
->x = 1 : number
->      : ^^^^^^
+>x = 1 : 1
+>      : ^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         action(() => { x /* string | number */ });
 >action(() => { x /* string | number */ }) : void
@@ -272,12 +272,12 @@ function f5(x: string | number, cond: () => boolean) {
     }
     else {
         x = 2;
->x = 2 : number
->      : ^^^^^^
+>x = 2 : 2
+>      : ^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
         action(() => { x /* string | number */ });
 >action(() => { x /* string | number */ }) : void
@@ -315,12 +315,12 @@ function f5a(cond: boolean) {
 >  : ^^^^^^^^^^^^^^^^^^
 
         x = 1;
->x = 1 : number
->      : ^^^^^^
+>x = 1 : 1
+>      : ^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         action(() => { x /* number */ });
 >action(() => { x /* number */ }) : void
@@ -338,12 +338,12 @@ function f5a(cond: boolean) {
 >  : ^^^^^^^^^^^^^^^^^^
 
         x = 2;
->x = 2 : number
->      : ^^^^^^
+>x = 2 : 2
+>      : ^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
         action(() => { x /* number */ });
 >action(() => { x /* number */ }) : void
@@ -491,12 +491,12 @@ let g: string | number;
 >  : ^^^^^^^^^^^^^^^
 
 g = "abc";
->g = "abc" : string
->          : ^^^^^^
+>g = "abc" : "abc"
+>          : ^^^^^
 >g : string | number
 >  : ^^^^^^^^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 action(() => { g /* string | number */ });
 >action(() => { g /* string | number */ }) : void
@@ -519,12 +519,12 @@ namespace Foo {
 >  : ^^^^^^^^^^^^^^^
 
     x = "abc";
->x = "abc" : string
->          : ^^^^^^
+>x = "abc" : "abc"
+>          : ^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
     action(() => { x /* string | number */ });
 >action(() => { x /* string | number */ }) : void
@@ -541,12 +541,12 @@ namespace Foo {
 >  : ^^^^^^^^^^^^^^^
 
     y = "abc";
->y = "abc" : string
->          : ^^^^^^
+>y = "abc" : "abc"
+>          : ^^^^^
 >y : string | number
 >  : ^^^^^^^^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
     action(() => { y /* string */ });
 >action(() => { y /* string */ }) : void
@@ -570,12 +570,12 @@ function f10() {
 >  : ^^^^^^^^^^^^^^^^^^
 
     i = 0;
->i = 0 : number
->      : ^^^^^^
+>i = 0 : 0
+>      : ^
 >i : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     return (k: number) => k === i + 1;
 >(k: number) => k === i + 1 : (k: number) => boolean
@@ -605,8 +605,8 @@ function makeAdder(n?: number) {
 >        : ^^^^^^
 >n : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     return (m: number) => n + m;
 >(m: number) => n + m : (m: number) => number
@@ -685,8 +685,8 @@ function f12() {
 >       : ^^^^^^^^^^^^^^^^^^^^^
 >get : (key: string) => number[] | undefined
 >    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 
     if (foo == null) {
 >foo == null : boolean

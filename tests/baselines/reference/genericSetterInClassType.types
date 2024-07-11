@@ -16,8 +16,8 @@ module Generic {
             return 1 as never;
 >1 as never : never
 >           : ^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
         }
         set y(v) { }
 >y : T
@@ -88,8 +88,8 @@ module Generic {
     }
     
     new Box<number>().value = 3;
->new Box<number>().value = 3 : number
->                            : ^^^^^^
+>new Box<number>().value = 3 : 3
+>                            : ^
 >new Box<number>().value : number
 >                        : ^^^^^^
 >new Box<number>() : Box<number>
@@ -98,6 +98,6 @@ module Generic {
 >    : ^^^^^^^^^^
 >value : number
 >      : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 }

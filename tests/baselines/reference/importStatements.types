@@ -23,10 +23,10 @@ module A {
 >                : ^^^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
 }
 
 // no code gen expected
@@ -98,10 +98,10 @@ module D {
 >  : ^^^^^^^^
 >Point : typeof a.Point
 >      : ^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
 }
 
 module E {

@@ -106,8 +106,8 @@ n1.toExponential(2); // should not error if 'n1' is correctly number.
 >   : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
 >              : ^              ^^^      ^^^^^      
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 n2.x = "fail";       // should error, as 'n2' should be type 'number', not 'any'.
 >n2.x = "fail" : "fail"
@@ -130,8 +130,8 @@ n2.toExponential(2); // should not error if 'n2' is correctly number.
 >   : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
 >              : ^              ^^^      ^^^^^      
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var n3 = b.reduce<string>( (x, y) => x + y, ""); // Initial value is of type string
 >n3 : string
@@ -156,8 +156,8 @@ var n3 = b.reduce<string>( (x, y) => x + y, ""); // Initial value is of type str
 >  : ^^^^^^
 >y : number
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 n3.toExponential(2); // should error if 'n3' is correctly type 'string'
 >n3.toExponential(2) : any
@@ -180,6 +180,6 @@ n3.charAt(0);        // should not error if 'n3' is correctly type 'string'
 >   : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 

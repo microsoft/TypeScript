@@ -85,8 +85,8 @@ class Test4 {
 >  : ^^^^^^
 >0 : 0
 >  : ^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >(n * Test4.m1(n - 1)) : number
 >                      : ^^^^^^
 >n * Test4.m1(n - 1) : number
@@ -126,8 +126,8 @@ class Test4 {
 >  : ^^^^^^
 >0 : 0
 >  : ^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >(n * Test4["m2"](n - 1)) : number
 >                         : ^^^^^^
 >n * Test4["m2"](n - 1) : number

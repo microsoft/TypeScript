@@ -25,6 +25,6 @@ export const elem: HTMLElement = { field: 'a' };
 >               : ^^^^^^^^^^^^^^^^^^
 >field : string
 >      : ^^^^^^
->'a' : string
->    : ^^^^^^
+>'a' : "a"
+>    : ^^^
 

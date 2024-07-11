@@ -6,15 +6,15 @@
 const test = 'add'
 >test : string
 >     : ^^^^^^
->'add' : string
->      : ^^^^^^
+>'add' : "add"
+>      : ^^^^^
 
 /** @type {import("./mod1").TestEnum} */
 const tost = 'remove'
 >tost : string
 >     : ^^^^^^
->'remove' : string
->         : ^^^^^^
+>'remove' : "remove"
+>         : ^^^^^^^^
 
 === value.js ===
 import { TestEnum } from "./mod1"

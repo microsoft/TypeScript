@@ -52,12 +52,12 @@ map = { x: "xxx", y: "yyy" };
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"xxx" : string
->      : ^^^^^^
+>"xxx" : "xxx"
+>      : ^^^^^
 >y : string
 >  : ^^^^^^
->"yyy" : string
->      : ^^^^^^
+>"yyy" : "yyy"
+>      : ^^^^^
 
 map = empty1;
 >map = empty1 : {}

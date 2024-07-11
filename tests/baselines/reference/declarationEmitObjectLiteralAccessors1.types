@@ -14,8 +14,8 @@ export const obj1 = {
 >  : ^^^^^^
 
     return "";
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
   },
   /** my awesome setter (second in source order) */
@@ -40,8 +40,8 @@ export const obj2 = {
 >  : ^^^^^^
 
     return "";
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
   },
   /** my awesome setter */
@@ -65,8 +65,8 @@ export const obj3 = {
 >  : ^^^^^^
 
     return "";
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
   },
 };

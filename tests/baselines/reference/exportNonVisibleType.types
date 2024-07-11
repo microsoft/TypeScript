@@ -18,12 +18,12 @@ var x: I1 = {a: "test", b: 42};
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"test" : string
+>"test" : "test"
 >       : ^^^^^^
 >b : number
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 export = x; // Should fail, I1 not exported.
 >x : I1

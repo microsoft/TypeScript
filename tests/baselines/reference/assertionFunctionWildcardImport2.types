@@ -26,8 +26,8 @@ function isNonNullable<T>(obj: T): asserts obj is NonNullable<T> {
 >                                          : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Must not be a nullable value" : string
->                               : ^^^^^^
+>"Must not be a nullable value" : "Must not be a nullable value"
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

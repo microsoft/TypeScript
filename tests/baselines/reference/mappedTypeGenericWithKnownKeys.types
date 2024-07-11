@@ -20,16 +20,16 @@ function test<Shape extends Record<string, string>>(shape: Shape, key: keyof Sha
 >   : ^^
 
     obj.knownLiteralKey = 1;
->obj.knownLiteralKey = 1 : number
->                        : ^^^^^^
+>obj.knownLiteralKey = 1 : 1
+>                        : ^
 >obj.knownLiteralKey : number
 >                    : ^^^^^^
 >obj : Record<keyof Shape | "knownLiteralKey", number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >knownLiteralKey : number
 >                : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     obj[key] = 2;
 >obj[key] = 2 : 2
@@ -64,8 +64,8 @@ function test<Shape extends Record<string, string>>(shape: Shape, key: keyof Sha
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'' as string : string
 >             : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >4 : 4
 >  : ^
 }

@@ -353,8 +353,8 @@ const f5 = ({ a: string, b, c }: O): typeof string => '';
 >  : ^^^^^^
 >string : string
 >       : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 const obj1 = {
 >obj1 : { method({ a: string }: O): void; }
@@ -397,8 +397,8 @@ function f6({ a: string = "" }: O) { }
 >  : ^^^
 >string : string
 >       : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 const f7 = ({ a: string = "", b, c }: O) => { };
 >f7 : ({ a: string, b, c }: O) => void
@@ -409,8 +409,8 @@ const f7 = ({ a: string = "", b, c }: O) => { };
 >  : ^^^
 >string : string
 >       : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >b : number
 >  : ^^^^^^
 >c : number
@@ -456,10 +456,10 @@ function f12({ a: string = "" }: O): typeof string { return "a"; }
 >  : ^^^
 >string : string
 >       : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >string : string
 >       : ^^^^^^
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 

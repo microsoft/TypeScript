@@ -53,8 +53,8 @@ const r2 = Moon({
 >            : ^^^^^^^^^^^^^^^^
 >msg : string
 >    : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     render() {
 >render : () => unknown

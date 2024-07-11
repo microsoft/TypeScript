@@ -183,8 +183,8 @@ module Portal.Controls.Validators {
 >          : ^     ^^      ^^^^^      
 >value : TValue
 >      : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
     }
 }
 

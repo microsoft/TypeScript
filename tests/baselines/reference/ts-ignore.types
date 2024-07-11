@@ -5,53 +5,53 @@
 var invalidCommentedFancy: number = 'nope';
 >invalidCommentedFancy : number
 >                      : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 // @ts-ignore with additional commenting
 var validCommentedFancy: string = 'nope';
 >validCommentedFancy : string
 >                    : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 // @ts-ignore
 var invalidCommentedPlain: number = 'nope';
 >invalidCommentedPlain : number
 >                      : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 // @ts-ignore
 var validCommentedPlain: string = 'nope';
 >validCommentedPlain : string
 >                    : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 var invalidPlain: number = 'nope';
 >invalidPlain : number
 >             : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 var validPlain: string = 'nope';
 >validPlain : string
 >           : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 // @ts-ignore: with additional commenting
 var invalidCommentedFancy: number = 'nope';
 >invalidCommentedFancy : number
 >                      : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 // @ts-ignore: with additional commenting
 var validCommentedFancy: string = 'nope';
 >validCommentedFancy : string
 >                    : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 

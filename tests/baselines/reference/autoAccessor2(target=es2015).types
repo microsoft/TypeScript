@@ -34,14 +34,14 @@ class C1 {
 >  : ^
 
         this.#b = 4;
->this.#b = 4 : number
->            : ^^^^^^
+>this.#b = 4 : 4
+>            : ^
 >this.#b : number
 >        : ^^^^^^
 >this : this
 >     : ^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
     }
 
     static {
@@ -55,14 +55,14 @@ class C1 {
 >  : ^
 
         this.#d = 6;
->this.#d = 6 : number
->            : ^^^^^^
+>this.#d = 6 : 6
+>            : ^
 >this.#d : number
 >        : ^^^^^^
 >this : typeof C1
 >     : ^^^^^^^^^
->6 : number
->  : ^^^^^^
+>6 : 6
+>  : ^
     }
 }
 

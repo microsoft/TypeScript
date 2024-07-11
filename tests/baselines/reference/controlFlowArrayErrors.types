@@ -243,8 +243,8 @@ function f6() {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >push : ((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)
 >     : ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^     ^^^^^^^^^^^^^^^^      ^
->99 : number
->   : ^^^^^^
+>99 : 99
+>   : ^^
 }
 
 function f7() {
@@ -296,8 +296,8 @@ function f7() {
 >  : ^^^^^^^^
 >push : (...items: number[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 }
 
 function f8() {

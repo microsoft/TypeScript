@@ -24,8 +24,8 @@
     let l8: number = 23;
 >l8 : number
 >   : ^^^^^^
->23 : number
->   : ^^^^^^
+>23 : 23
+>   : ^^
 
     let l9 = 0, l10 :string = "", l11 = null;
 >l9 : number
@@ -34,7 +34,7 @@
 >  : ^
 >l10 : string
 >    : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >l11 : any
 

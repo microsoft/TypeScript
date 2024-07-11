@@ -16,20 +16,20 @@ class A {
     public pb: number = 2;
 >pb : number
 >   : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
     protected ptd: number = 1;
 >ptd : number
 >    : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     private pvt: number = 0;
 >pvt : number
 >    : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 function mixB<T extends Constructor<{}>>(Cls: T) {
@@ -47,14 +47,14 @@ function mixB<T extends Constructor<{}>>(Cls: T) {
         protected ptd: number = 10;
 >ptd : number
 >    : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
         private pvt: number = 0;
 >pvt : number
 >    : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     };
 }
@@ -74,8 +74,8 @@ function mixB2<T extends Constructor<A>>(Cls: T) {
         protected ptd: number = 10;
 >ptd : number
 >    : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     };
 }
@@ -116,14 +116,14 @@ function mixC<T extends Constructor<{}>>(Cls: T) {
         protected ptd: number = 100;
 >ptd : number
 >    : ^^^^^^
->100 : number
->    : ^^^^^^
+>100 : 100
+>    : ^^^
 
         private pvt: number = 0;
 >pvt : number
 >    : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     };
 }

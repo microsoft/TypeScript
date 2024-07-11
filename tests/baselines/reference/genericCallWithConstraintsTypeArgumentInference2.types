@@ -25,8 +25,8 @@ var r = foo(1); // ok
 >       : ^^^^^^
 >foo : <T, U extends T>(t: T) => U
 >    : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var r2 = foo(null); // {}
 >r2 : any

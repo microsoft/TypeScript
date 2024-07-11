@@ -65,8 +65,8 @@ var f = new Foo(1)
 >           : ^^^^^^^^^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var g = new Foo(false)
 >g : Foo<boolean>

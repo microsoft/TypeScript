@@ -10,8 +10,8 @@ function B1() {
     var ok1 = 0;
 >ok1 : number
 >    : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 function B2() {
@@ -23,8 +23,8 @@ function B2() {
     var ok2 = 'hi';
 >ok2 : string
 >    : ^^^^^^
->'hi' : string
->     : ^^^^^^
+>'hi' : "hi"
+>     : ^^^^
 }
 
 /** @type {B} */

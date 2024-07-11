@@ -732,8 +732,8 @@ a.push(10);
 >  : ^^^^^^^^
 >push : (...items: string[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 // Defer to explicit type guards, even when they're incorrect.
 function backwardsGuard(x: number|string): x is number {
@@ -949,12 +949,12 @@ function irrelevantIsNumber(x: string | number) {
 >  : ^^^^^^^^^^^^^^^
 
 	x = Math.random() < 0.5 ? "string" : 123;
->x = Math.random() < 0.5 ? "string" : 123 : string | number
->                                         : ^^^^^^^^^^^^^^^
+>x = Math.random() < 0.5 ? "string" : 123 : "string" | 123
+>                                         : ^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->Math.random() < 0.5 ? "string" : 123 : string | number
->                                     : ^^^^^^^^^^^^^^^
+>Math.random() < 0.5 ? "string" : 123 : "string" | 123
+>                                     : ^^^^^^^^^^^^^^
 >Math.random() < 0.5 : boolean
 >                    : ^^^^^^^
 >Math.random() : number
@@ -967,10 +967,10 @@ function irrelevantIsNumber(x: string | number) {
 >       : ^^^^^^      
 >0.5 : 0.5
 >    : ^^^
->"string" : string
->         : ^^^^^^
->123 : number
->    : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+>123 : 123
+>    : ^^^
 
   return typeof x === 'string';
 >typeof x === 'string' : boolean
@@ -997,8 +997,8 @@ function irrelevantIsNumberDestructuring(x: string | number) {
 >  : ^^^^^^^^^^^^^^^
 >[Math.random() < 0.5 ? "string" : 123] : [string | number]
 >                                       : ^^^^^^^^^^^^^^^^^
->Math.random() < 0.5 ? "string" : 123 : string | number
->                                     : ^^^^^^^^^^^^^^^
+>Math.random() < 0.5 ? "string" : 123 : "string" | 123
+>                                     : ^^^^^^^^^^^^^^
 >Math.random() < 0.5 : boolean
 >                    : ^^^^^^^
 >Math.random() : number
@@ -1011,10 +1011,10 @@ function irrelevantIsNumberDestructuring(x: string | number) {
 >       : ^^^^^^      
 >0.5 : 0.5
 >    : ^^^
->"string" : string
->         : ^^^^^^
->123 : number
->    : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+>123 : 123
+>    : ^^^
 
   return typeof x === 'string';
 >typeof x === 'string' : boolean
@@ -1346,8 +1346,8 @@ if (isShortString(str)) {
 >    : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 } else {
   str.charAt(0);  // should ok
@@ -1359,8 +1359,8 @@ if (isShortString(str)) {
 >    : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 function isStringFromUnknown(x: unknown) {
@@ -1396,8 +1396,8 @@ if (isStringFromUnknown(str)) {
 >    : ^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 } else {
   let t: never = str;  // should OK

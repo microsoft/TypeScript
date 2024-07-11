@@ -56,12 +56,12 @@ const v = chain({a: 1, b: 2}).mapValues(square).value();
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >mapValues : <U>(func: (v: number) => U) => Chainable<{ a: U; b: U; }>
 >          : ^ ^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >square : (x: number) => number

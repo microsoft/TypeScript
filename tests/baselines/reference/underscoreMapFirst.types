@@ -128,8 +128,8 @@ class MyView extends View {
 >      : ^ ^^^^^^^^^  ^^    ^^^^^^^^^^^^^^   ^^            ^^      ^^^^^     
 >data : IData[]
 >     : ^^^^^^^
->"series" : string
->         : ^^^^^^
+>"series" : "series"
+>         : ^^^^^^^^
 
         return _.map(allSeries, _.first);
 >_.map(allSeries, _.first) : ISeries[]

@@ -98,10 +98,10 @@ var x = EF1(1,2);
 >         : ^^^^^^
 >EF1 : (a: number, b: number) => number
 >    : ^ ^^      ^^ ^^      ^^^^^      
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
 // Point.origin declared as type Point
 Point.origin = new Point(0, 0);
@@ -117,10 +117,10 @@ Point.origin = new Point(0, 0);
 >                : ^^^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
 
 // Point.prototype declared as type Point
 // this inferred as Point because of obj.prop assignment
@@ -176,8 +176,8 @@ Point.prototype.add = function(dx, dy) {
 var f : number = 5;
 >f : number
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 // Object literal type inferred using target typing
 // this in function add inferred to be type of object literal (i.e. Point)
@@ -197,14 +197,14 @@ Point.prototype = {
     x: 0,
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     y: 0,
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     add: function(dx, dy) {
 >add : (dx: number, dy: number) => Point
@@ -338,14 +338,14 @@ C.prototype =
 >                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 		b:0, 
 >b : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 		C1M1: function(c,d) {     
 >C1M1 : (c: number, d: number) => any

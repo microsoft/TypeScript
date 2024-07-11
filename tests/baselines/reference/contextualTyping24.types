@@ -18,6 +18,6 @@ var foo:(a:{():number; (i:number):number; })=>number; foo = function(this: void,
 >     : ^^^^
 >a : string
 >  : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 

@@ -76,8 +76,8 @@ const aa1 = a1 ?? 'whatever';
 >                 : ^^^^^^
 >a1 : string | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->'whatever' : string
->           : ^^^^^^
+>'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa2 = a2 ?? 'whatever';
 >aa2 : string
@@ -86,8 +86,8 @@ const aa2 = a2 ?? 'whatever';
 >                 : ^^^^^^
 >a2 : string | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->'whatever' : string
->           : ^^^^^^
+>'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa3 = a3 ?? 'whatever';
 >aa3 : string
@@ -96,8 +96,8 @@ const aa3 = a3 ?? 'whatever';
 >                 : ^^^^^^
 >a3 : string | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->'whatever' : string
->           : ^^^^^^
+>'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const aa4 = a4 ?? 'whatever';
 >aa4 : string
@@ -106,8 +106,8 @@ const aa4 = a4 ?? 'whatever';
 >                 : ^^^^^^
 >a4 : string | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->'whatever' : string
->           : ^^^^^^
+>'whatever' : "whatever"
+>           : ^^^^^^^^^^
 
 const bb1 = b1 ?? 1;
 >bb1 : number
@@ -116,8 +116,8 @@ const bb1 = b1 ?? 1;
 >        : ^^^^^^
 >b1 : number | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const bb2 = b2 ?? 1;
 >bb2 : number
@@ -126,8 +126,8 @@ const bb2 = b2 ?? 1;
 >        : ^^^^^^
 >b2 : number | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const bb3 = b3 ?? 1;
 >bb3 : number
@@ -136,8 +136,8 @@ const bb3 = b3 ?? 1;
 >        : ^^^^^^
 >b3 : number | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const bb4 = b4 ?? 1;
 >bb4 : number
@@ -146,8 +146,8 @@ const bb4 = b4 ?? 1;
 >        : ^^^^^^
 >b4 : number | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const cc1 = c1 ?? true;
 >cc1 : boolean

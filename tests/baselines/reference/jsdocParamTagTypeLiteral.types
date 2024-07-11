@@ -54,8 +54,8 @@ foo1({x: 'abc'});
 >           : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 
 /**
  * @param {Object[]} opts2
@@ -92,8 +92,8 @@ foo2([{anotherX: "world"}]);
 >                    : ^^^^^^^^^^^^^^^^^^^^^
 >anotherX : string
 >         : ^^^^^^
->"world" : string
->        : ^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
 
 /**
  * @param {object} opts3
@@ -122,8 +122,8 @@ foo3({x: 'abc'});
 >           : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>'abc' : "abc"
+>      : ^^^^^
 
 /**
  * @param {object[]} opts4
@@ -162,8 +162,8 @@ foo4([{ x: 'hi' }]);
 >            : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->'hi' : string
->     : ^^^^^^
+>'hi' : "hi"
+>     : ^^^^
 
 /**
  * @param {object[]} opts5 - Let's test out some multiple nesting levels
@@ -229,7 +229,7 @@ foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unne
 >                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >help : string
 >     : ^^^^^^
->"help" : string
+>"help" : "help"
 >       : ^^^^^^
 >what : { a: string; bad: { idea: string; oh: false; }[]; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -237,8 +237,8 @@ foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unne
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'a' : string
->    : ^^^^^^
+>'a' : "a"
+>    : ^^^
 >bad : { idea: string; oh: false; }[]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[{ idea: 'idea', oh: false }] : { idea: string; oh: false; }[]
@@ -247,7 +247,7 @@ foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unne
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >idea : string
 >     : ^^^^^^
->'idea' : string
+>'idea' : "idea"
 >       : ^^^^^^
 >oh : false
 >   : ^^^^^
@@ -255,6 +255,6 @@ foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unne
 >      : ^^^^^
 >unnest : number
 >       : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

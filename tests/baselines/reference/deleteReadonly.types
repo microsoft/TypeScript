@@ -45,7 +45,7 @@ var b: B = {
   'test': 'test'
 >'test' : string
 >       : ^^^^^^
->'test' : string
+>'test' : "test"
 >       : ^^^^^^
 
 };

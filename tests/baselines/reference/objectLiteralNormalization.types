@@ -75,8 +75,8 @@ a1 = { a: 1 };
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 a1 = { a: 0, b: 0 };  // Error
 >a1 = { a: 0, b: 0 } : { a: number; b: number; }
@@ -87,12 +87,12 @@ a1 = { a: 0, b: 0 };  // Error
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >b : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 a1 = { b: "y" };  // Error
 >a1 = { b: "y" } : { b: string; }
@@ -103,8 +103,8 @@ a1 = { b: "y" };  // Error
 >           : ^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->"y" : string
->    : ^^^^^^
+>"y" : "y"
+>    : ^^^
 
 a1 = { c: true };  // Error
 >a1 = { c: true } : { c: true; }
@@ -171,12 +171,12 @@ a2 = { a: 10, b: 20 };
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : number
 >  : ^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
 
 a2 = { a: "def" };
 >a2 = { a: "def" } : { a: string; }
@@ -187,8 +187,8 @@ a2 = { a: "def" };
 >             : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"def" : string
->      : ^^^^^^
+>"def" : "def"
+>      : ^^^^^
 
 a2 = {};
 >a2 = {} : {}
@@ -207,12 +207,12 @@ a2 = { a: "def", b: 20 };  // Error
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"def" : string
->      : ^^^^^^
+>"def" : "def"
+>      : ^^^^^
 >b : number
 >  : ^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
 
 a2 = { a: 1 };  // Error
 >a2 = { a: 1 } : { a: number; }
@@ -223,8 +223,8 @@ a2 = { a: 1 };  // Error
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 // Object literals containing spreads are not normalized
 declare let b1: { a: string, b: string } | { b: string, c: string };
@@ -492,18 +492,18 @@ let e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >{ a: "abc" } : { a: string; }
 >             : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 >{} : {}
 >   : ^^
 
@@ -520,18 +520,18 @@ let e2 = f({}, { a: "abc" }, { a: 1, b: 2 });
 >             : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 let e3 = f(data, { a: 2 });
 >e3 : { a: 1; b: "abc"; c: true; }

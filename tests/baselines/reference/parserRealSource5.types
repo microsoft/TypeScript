@@ -139,12 +139,12 @@ module TypeScript {
 >          : ^^^^^^^^^
 
                 indentString = "";
->indentString = "" : string
->                  : ^^^^^^
+>indentString = "" : ""
+>                  : ^^
 >indentString : string
 >             : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
                 for (var i = 0; i < this.indentAmt; i++) {
 >i : number
@@ -269,16 +269,16 @@ module TypeScript {
 >        : ^^^^^^
 
             this.builder = "";
->this.builder = "" : string
->                  : ^^^^^^
+>this.builder = "" : ""
+>                  : ^^
 >this.builder : string
 >             : ^^^^^^
 >this : this
 >     : ^^^^
 >builder : string
 >        : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
         }
 
     }

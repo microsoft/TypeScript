@@ -33,8 +33,8 @@ function f01(x: string | undefined) {
 >                           : ^^^^^
 >fail : (message?: string) => never
 >     : ^       ^^^      ^^^^^     
->"undefined argument" : string
->                     : ^^^^^^
+>"undefined argument" : "undefined argument"
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
     x.length;  // string
 >x.length : number
@@ -66,8 +66,8 @@ function f02(x: number): number {
 >                        : ^^^^^
 >fail : (message?: string) => never
 >     : ^       ^^^      ^^^^^     
->"negative number" : string
->                  : ^^^^^^
+>"negative number" : "negative number"
+>                  : ^^^^^^^^^^^^^^^^^
 
     x;  // Unreachable
 >x : number
@@ -116,8 +116,8 @@ function f11(x: string | undefined, fail: (message?: string) => never) {
 >                           : ^^^^^
 >fail : (message?: string) => never
 >     : ^       ^^^      ^^^^^     
->"undefined argument" : string
->                     : ^^^^^^
+>"undefined argument" : "undefined argument"
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
     x.length;  // string
 >x.length : number
@@ -153,8 +153,8 @@ function f12(x: number, fail: (message?: string) => never): number {
 >                        : ^^^^^
 >fail : (message?: string) => never
 >     : ^       ^^^      ^^^^^     
->"negative number" : string
->                  : ^^^^^^
+>"negative number" : "negative number"
+>                  : ^^^^^^^^^^^^^^^^^
 
     x;  // Unreachable
 >x : number
@@ -218,8 +218,8 @@ function f21(x: string | undefined) {
 >      : ^^^^^^^^^^^^
 >fail : (message?: string) => never
 >     : ^       ^^^      ^^^^^     
->"undefined argument" : string
->                     : ^^^^^^
+>"undefined argument" : "undefined argument"
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
     x.length;  // string
 >x.length : number
@@ -255,8 +255,8 @@ function f22(x: number): number {
 >      : ^^^^^^^^^^^^
 >fail : (message?: string) => never
 >     : ^       ^^^      ^^^^^     
->"negative number" : string
->                  : ^^^^^^
+>"negative number" : "negative number"
+>                  : ^^^^^^^^^^^^^^^^^
 
     x;  // Unreachable
 >x : number
@@ -356,8 +356,8 @@ class Test {
 >     : ^^^^
 >fail : (message?: string) => never
 >     : ^       ^^^      ^^^^^     
->"undefined argument" : string
->                     : ^^^^^^
+>"undefined argument" : "undefined argument"
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
         x.length;  // string
 >x.length : number
@@ -392,8 +392,8 @@ class Test {
 >     : ^^^^
 >fail : (message?: string) => never
 >     : ^       ^^^      ^^^^^     
->"negative number" : string
->                  : ^^^^^^
+>"negative number" : "negative number"
+>                  : ^^^^^^^^^^^^^^^^^
 
         x;  // Unreachable
 >x : number
@@ -844,8 +844,8 @@ const Component = registerComponent('test-component', {
 >                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 >registerComponent : <T extends object>(name: string, component: ComponentDefinition<T>) => ComponentConstructor<T>
 >                  : ^ ^^^^^^^^^      ^^    ^^      ^^         ^^                      ^^^^^                       
->'test-component' : string
->                 : ^^^^^^
+>'test-component' : "test-component"
+>                 : ^^^^^^^^^^^^^^^^
 >{	schema: {		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	},	init() {		this.data.num = 0;		this.el.setAttribute('custom-attribute', 'custom-value');	},	update() {},	tick() {},	remove() {},	pause() {},	play() {},	multiply(f: number) {		// Reference to system because both were registered with the same name.		return f * this.data.num * this.system!.data.counter;	}} : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }
 >                                                                                                                                                                                                                                                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 
@@ -885,14 +885,14 @@ const Component = registerComponent('test-component', {
 >                   : ^^^^^^^^^^^^^^^^^
 >type : string
 >     : ^^^^^^
->'string' : string
->         : ^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
 
 		num: 0
 >num : number
 >    : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 	},
 	init() {
@@ -1086,7 +1086,7 @@ function foo(services: Readonly<Services>, s: string | null): string {
 >         : ^^^^^^^^^^^^^^^^^^
 >panic : (message: string) => never
 >      : ^       ^^      ^^^^^     
->"ouch" : string
+>"ouch" : "ouch"
 >       : ^^^^^^
 
     } else {

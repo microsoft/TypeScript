@@ -14,8 +14,8 @@ const boo: Foo = { bar: 'bar' };
 >               : ^^^^^^^^^^^^^^^^
 >bar : string
 >    : ^^^^^^
->'bar' : string
->      : ^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
 
 function a(aboo1?: Foo) {
 >a : (aboo1?: Foo) => void
@@ -117,8 +117,8 @@ if (typeof c === 'string') {
 >                 : ^^^^^^^^^^^^^^^^
 >bar : string
 >    : ^^^^^^
->'works' : string
->        : ^^^^^^
+>'works' : "works"
+>        : ^^^^^^^
 
     const boo2: C = { bar: 1 }; // should error
 >boo2 : { [key: string]: string; }
@@ -127,7 +127,7 @@ if (typeof c === 'string') {
 >           : ^^^^^^^^^^^^^^^^
 >bar : number
 >    : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 }
 

@@ -13,34 +13,34 @@ var y = { bye: "no" };
 >              : ^^^^^^^^^^^^^^^^
 >bye : string
 >    : ^^^^^^
->"no" : string
->     : ^^^^^^
+>"no" : "no"
+>     : ^^^^
 
 y
 >y : { [x: string]: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 y.ignoreMe = "ok but just because of the index signature"
->y.ignoreMe = "ok but just because of the index signature" : string
->                                                          : ^^^^^^
+>y.ignoreMe = "ok but just because of the index signature" : "ok but just because of the index signature"
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y.ignoreMe : string
 >           : ^^^^^^
 >y : { [x: string]: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >ignoreMe : string
 >         : ^^^^^^
->"ok but just because of the index signature" : string
->                                             : ^^^^^^
+>"ok but just because of the index signature" : "ok but just because of the index signature"
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 y['hi'] = "yes"
->y['hi'] = "yes" : string
->                : ^^^^^^
+>y['hi'] = "yes" : "yes"
+>                : ^^^^^
 >y['hi'] : string
 >        : ^^^^^^
 >y : { [x: string]: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'hi' : "hi"
 >     : ^^^^
->"yes" : string
->      : ^^^^^^
+>"yes" : "yes"
+>      : ^^^^^
 

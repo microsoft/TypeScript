@@ -204,8 +204,8 @@ class AInfo {
     a_count: number = 1;
 >a_count : number
 >        : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 }
 
 class BInfo {
@@ -215,8 +215,8 @@ class BInfo {
     b_count: number = 1;
 >b_count : number
 >        : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 }
 
 class Base {
@@ -226,8 +226,8 @@ class Base {
     id: number = 0;
 >id : number
 >   : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 class A2 extends Base {
@@ -271,8 +271,8 @@ while (target) {
 >   : ^^^^^^^^^
 
         target.info.a_count = 3;
->target.info.a_count = 3 : number
->                        : ^^^^^^
+>target.info.a_count = 3 : 3
+>                        : ^
 >target.info.a_count : number
 >                    : ^^^^^^
 >target.info : AInfo
@@ -283,8 +283,8 @@ while (target) {
 >     : ^^^^^
 >a_count : number
 >        : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
     }
     else if (target instanceof B2) {
 >target instanceof B2 : boolean

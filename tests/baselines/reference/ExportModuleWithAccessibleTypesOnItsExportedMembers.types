@@ -27,10 +27,10 @@ module A {
 >                : ^^^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
 
         export class Line {
 >Line : Line
@@ -59,12 +59,12 @@ module A {
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >p : Point
 >  : ^^^^^
             }

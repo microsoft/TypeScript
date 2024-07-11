@@ -16,8 +16,8 @@ const t1 = { a: 1 };
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const t2 = /** @satisfies T1 */ ({ a: 1 });
 >t2 : { a: number; }
@@ -28,6 +28,6 @@ const t2 = /** @satisfies T1 */ ({ a: 1 });
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

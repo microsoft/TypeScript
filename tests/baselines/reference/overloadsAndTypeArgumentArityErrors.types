@@ -24,16 +24,16 @@ Callbacks<number, string, boolean>('s'); // wrong number of type arguments
 >                                        : ^^^^
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; }
 >          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^
->'s' : string
->    : ^^^^^^
+>'s' : "s"
+>    : ^^^
 
 new Callbacks<number, string, boolean>('s'); // wrong number of type arguments
 >new Callbacks<number, string, boolean>('s') : any
 >                                            : ^^^
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; }
 >          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^
->'s' : string
->    : ^^^^^^
+>'s' : "s"
+>    : ^^^
 
 declare function f<A, B = {}>(arg: number): void;
 >f : <A, B = {}>(arg: number) => void

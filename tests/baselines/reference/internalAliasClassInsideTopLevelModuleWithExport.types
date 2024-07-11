@@ -49,6 +49,6 @@ var cReturnVal = cProp.foo(10);
 >      : ^^
 >foo : (a: number) => number
 >    : ^ ^^      ^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 

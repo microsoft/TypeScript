@@ -16,8 +16,8 @@ function b1(b1: number) {
 >   : ^^^^^^
 >toPrecision : (precision?: number) => string
 >            : ^         ^^^      ^^^^^      
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
    b1(12); // should error
 >b1(12) : any
@@ -54,8 +54,8 @@ var x = {
 >  : ^^^^^^
 >toPrecision : (precision?: number) => string
 >            : ^         ^^^      ^^^^^      
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
       b.apply(null, null); // should error
 >b.apply(null, null) : any

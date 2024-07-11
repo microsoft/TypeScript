@@ -12,8 +12,8 @@ var s = Symbol.for("add");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"add" : string
->      : ^^^^^^
+>"add" : "add"
+>      : ^^^^^
 
 var a: any;
 >a : any

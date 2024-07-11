@@ -71,8 +71,8 @@ foo(10);
 >        : ^^^^
 >foo : (a: number) => void
 >    : ^ ^^      ^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 foo(); // not ok - needs number
 >foo() : void

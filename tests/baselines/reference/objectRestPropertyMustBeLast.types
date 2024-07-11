@@ -28,8 +28,8 @@ var {...a, x } = { x: 1 };    // Error, rest must be last property
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var {...a, x, ...b } = { x: 1 };    // Error, rest must be last property
 >a : {}
@@ -62,6 +62,6 @@ var {...a, x, ...b } = { x: 1 };    // Error, rest must be last property
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

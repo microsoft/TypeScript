@@ -34,10 +34,10 @@ x.bar2(2, ""); // should error
 >  : ^^^^^^^^^
 >bar2 : <U extends number>(x: number, y: U) => number
 >     : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
->"" : string
->   : ^^^^^^
+>2 : 2
+>  : ^
+>"" : ""
+>   : ^^
 
 x.bar2<string>(2, ""); // should error
 >x.bar2<string>(2, "") : number
@@ -48,8 +48,8 @@ x.bar2<string>(2, ""); // should error
 >  : ^^^^^^^^^
 >bar2 : <U extends number>(x: number, y: U) => number
 >     : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
->"" : string
->   : ^^^^^^
+>2 : 2
+>  : ^
+>"" : ""
+>   : ^^
 

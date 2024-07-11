@@ -70,8 +70,8 @@ let t: ns.Type = "";
 >  : ^^^^^^
 >ns : any
 >   : ^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 let n: ns.nested.NestedClass = { a: '' };
 >n : ns.nested.NestedClass
@@ -84,6 +84,6 @@ let n: ns.nested.NestedClass = { a: '' };
 >          : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 

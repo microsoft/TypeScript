@@ -59,18 +59,18 @@
 }
 
 new Box(3).value = 3;
->new Box(3).value = 3 : number
->                     : ^^^^^^
+>new Box(3).value = 3 : 3
+>                     : ^
 >new Box(3).value : number
 >                 : ^^^^^^
 >new Box(3) : Box<number>
 >           : ^^^^^^^^^^^
 >Box : typeof Box
 >    : ^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >value : number
 >      : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 

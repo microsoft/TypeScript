@@ -69,8 +69,8 @@ module Foo.Bar {
 >                             : ^^^^^^^
 >Greeter : typeof Greeter
 >        : ^^^^^^^^^^^^^^
->"Hello, world!" : string
->                : ^^^^^^
+>"Hello, world!" : "Hello, world!"
+>                : ^^^^^^^^^^^^^^^
 
     var str = greeter.greet();
 >str : string
@@ -167,12 +167,12 @@ module Foo.Bar {
 >                            : ^^^^^^^^^
 >foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[]
 >     : ^        ^^      ^^^^^             ^^        ^^^^^^^^^^^^^^
->"Hello" : string
->        : ^^^^^^
->"World" : string
->        : ^^^^^^
->"!" : string
->    : ^^^^^^
+>"Hello" : "Hello"
+>        : ^^^^^^^
+>"World" : "World"
+>        : ^^^^^^^
+>"!" : "!"
+>    : ^^^
 
     for (var j = 0; j < b.length; j++) {
 >j : number

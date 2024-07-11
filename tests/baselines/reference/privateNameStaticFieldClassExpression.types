@@ -84,8 +84,8 @@ class B {
 >     : ^^^^^^
 
         B.#foo.test = 10;
->B.#foo.test = 10 : number
->                 : ^^^^^^
+>B.#foo.test = 10 : 10
+>                 : ^^
 >B.#foo.test : number
 >            : ^^^^^^
 >B.#foo : typeof (Anonymous class)
@@ -94,8 +94,8 @@ class B {
 >  : ^^^^^^^^
 >test : number
 >     : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
         new B.#foo().field;
 >new B.#foo().field : number

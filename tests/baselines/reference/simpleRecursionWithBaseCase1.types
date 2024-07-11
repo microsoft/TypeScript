@@ -87,8 +87,8 @@ function fn3(n: number) {
 >                   : ^^^^^^
 >fn1 : (n: number) => number
 >    : ^ ^^      ^^^^^^^^^^^
->"hello world" : string
->              : ^^^^^^
+>"hello world" : "hello world"
+>              : ^^^^^^^^^^^^^
     }
 }
 

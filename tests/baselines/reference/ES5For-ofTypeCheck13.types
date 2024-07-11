@@ -18,8 +18,8 @@ strSet.add('Hello')
 >       : ^^^^^^^^^^^
 >add : (value: string) => Set<string>
 >    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
->'Hello' : string
->        : ^^^^^^
+>'Hello' : "Hello"
+>        : ^^^^^^^
 
 strSet.add('World')
 >strSet.add('World') : Set<string>
@@ -30,8 +30,8 @@ strSet.add('World')
 >       : ^^^^^^^^^^^
 >add : (value: string) => Set<string>
 >    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
->'World' : string
->        : ^^^^^^
+>'World' : "World"
+>        : ^^^^^^^
 
 for (const str of strSet) { }
 >str : any

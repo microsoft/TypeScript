@@ -94,8 +94,8 @@ const a3 = await import("./a"); // { x: 0 }
 >                    : ^^^^^^^^^
 >import("./a") : Promise<typeof a1>
 >              : ^^^^^^^^^^^^^^^^^^
->"./a" : string
->      : ^^^^^^
+>"./a" : "./a"
+>      : ^^^^^
 
 a3.x;
 >a3.x : 0
@@ -128,8 +128,8 @@ const b3 = await import("./b"); // { default: 0 }
 >                    : ^^^^^^^^^
 >import("./b") : Promise<typeof b2>
 >              : ^^^^^^^^^^^^^^^^^^
->"./b" : string
->      : ^^^^^^
+>"./b" : "./b"
+>      : ^^^^^
 
 b3.default;
 >b3.default : 0
@@ -186,8 +186,8 @@ const d3 = await import("./d"); // { default: [Function: default] }
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./d") : Promise<{ default: () => void; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./d" : string
->      : ^^^^^^
+>"./d" : "./d"
+>      : ^^^^^
 
 d3.default();
 >d3.default() : void

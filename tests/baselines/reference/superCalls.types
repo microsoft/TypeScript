@@ -38,8 +38,8 @@ class Derived extends Base {
 >          : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
         //type of super call expression is void
         var p = super('');
@@ -49,8 +49,8 @@ class Derived extends Base {
 >          : ^^^^
 >super : typeof Base
 >      : ^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
         var p = v();
 >p : void

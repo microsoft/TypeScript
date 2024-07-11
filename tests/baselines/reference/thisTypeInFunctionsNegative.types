@@ -205,8 +205,8 @@ let impl: I = {
     a: 12,
 >a : number
 >  : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
     explicitVoid1() {
 >explicitVoid1 : (this: void) => any
@@ -238,16 +238,16 @@ let impl: I = {
 >                   : ^^^^^^^^^^^^
 >() => 12 : () => number
 >         : ^^^^^^^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
     explicitInterface: () => 12,
 >explicitInterface : () => number
 >                  : ^^^^^^^^^^^^
 >() => 12 : () => number
 >         : ^^^^^^^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
     explicitThis() {
 >explicitThis : (this: I) => number
@@ -376,8 +376,8 @@ let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, ex
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^ ^^      ^^^^^      ^^^
 >y : number
 >  : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >explicitStructural : (this: { y: number; }, x: number) => number
 >                   : ^    ^^              ^^ ^^      ^^^^^      
 
@@ -398,8 +398,8 @@ let wrongPropertyType: {y: string, f: (this: { y: number }, x: number) => number
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^ ^^      ^^^^^      ^^^
 >y : string
 >  : ^^^^^^
->'foo' : string
->      : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
 >explicitStructural : (this: { y: number; }, x: number) => number
 >                   : ^    ^^              ^^ ^^      ^^^^^      
 
@@ -420,8 +420,8 @@ let wrongPropertyName: {wrongName: number, f: (this: { y: number }, x: number) =
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^ ^^      ^^^^^      ^^^
 >wrongName : number
 >          : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >explicitStructural : (this: { y: number; }, x: number) => number
 >                   : ^    ^^              ^^ ^^      ^^^^^      
 
@@ -444,8 +444,8 @@ ok.f('wrong type');
 >   : ^^^^^      ^^^^^                                           ^^^
 >f : (this: { y: number; }, x: number) => number
 >  : ^    ^^              ^^ ^^      ^^^^^      
->'wrong type' : string
->             : ^^^^^^
+>'wrong type' : "wrong type"
+>             : ^^^^^^^^^^^^
 
 ok.f(13, 'too many arguments');
 >ok.f(13, 'too many arguments') : number
@@ -456,8 +456,8 @@ ok.f(13, 'too many arguments');
 >   : ^^^^^      ^^^^^                                           ^^^
 >f : (this: { y: number; }, x: number) => number
 >  : ^    ^^              ^^ ^^      ^^^^^      
->13 : number
->   : ^^^^^^
+>13 : 13
+>   : ^^
 >'too many arguments' : "too many arguments"
 >                     : ^^^^^^^^^^^^^^^^^^^^
 
@@ -470,8 +470,8 @@ wrongPropertyType.f(13);
 >                  : ^^^^^      ^^^^^                                           ^^^
 >f : (this: { y: number; }, x: number) => number
 >  : ^    ^^              ^^ ^^      ^^^^^      
->13 : number
->   : ^^^^^^
+>13 : 13
+>   : ^^
 
 wrongPropertyName.f(13);
 >wrongPropertyName.f(13) : number
@@ -482,8 +482,8 @@ wrongPropertyName.f(13);
 >                  : ^^^^^^^^^^^^^      ^^^^^                                           ^^^
 >f : (this: { y: number; }, x: number) => number
 >  : ^    ^^              ^^ ^^      ^^^^^      
->13 : number
->   : ^^^^^^
+>13 : 13
+>   : ^^
 
 let c = new C();
 >c : C
@@ -512,8 +512,8 @@ c.explicitC('wrong type');
 >  : ^
 >explicitC : (this: C, m: number) => number
 >          : ^    ^^ ^^ ^^      ^^^^^      
->'wrong type' : string
->             : ^^^^^^
+>'wrong type' : "wrong type"
+>             : ^^^^^^^^^^^^
 
 c.explicitC(13, 'too many arguments');
 >c.explicitC(13, 'too many arguments') : number
@@ -524,8 +524,8 @@ c.explicitC(13, 'too many arguments');
 >  : ^
 >explicitC : (this: C, m: number) => number
 >          : ^    ^^ ^^ ^^      ^^^^^      
->13 : number
->   : ^^^^^^
+>13 : 13
+>   : ^^
 >'too many arguments' : "too many arguments"
 >                     : ^^^^^^^^^^^^^^^^^^^^
 
@@ -548,8 +548,8 @@ c.explicitThis('wrong type 2');
 >  : ^
 >explicitThis : (this: C, m: number) => number
 >             : ^    ^^^^^ ^^      ^^^^^      
->'wrong type 2' : string
->               : ^^^^^^
+>'wrong type 2' : "wrong type 2"
+>               : ^^^^^^^^^^^^^^
 
 c.explicitThis(14, 'too many arguments 2');
 >c.explicitThis(14, 'too many arguments 2') : number
@@ -560,8 +560,8 @@ c.explicitThis(14, 'too many arguments 2');
 >  : ^
 >explicitThis : (this: C, m: number) => number
 >             : ^    ^^^^^ ^^      ^^^^^      
->14 : number
->   : ^^^^^^
+>14 : 14
+>   : ^^
 >'too many arguments 2' : "too many arguments 2"
 >                       : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -584,8 +584,8 @@ c.implicitThis('wrong type 2');
 >  : ^
 >implicitThis : (m: number) => number
 >             : ^ ^^      ^^^^^      
->'wrong type 2' : string
->               : ^^^^^^
+>'wrong type 2' : "wrong type 2"
+>               : ^^^^^^^^^^^^^^
 
 c.implicitThis(14, 'too many arguments 2');
 >c.implicitThis(14, 'too many arguments 2') : number
@@ -596,8 +596,8 @@ c.implicitThis(14, 'too many arguments 2');
 >  : ^
 >implicitThis : (m: number) => number
 >             : ^ ^^      ^^^^^      
->14 : number
->   : ^^^^^^
+>14 : 14
+>   : ^^
 >'too many arguments 2' : "too many arguments 2"
 >                       : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -620,8 +620,8 @@ c.explicitProperty('wrong type 3');
 >  : ^
 >explicitProperty : (this: { n: number; }, m: number) => number
 >                 : ^    ^^              ^^ ^^      ^^^^^      
->'wrong type 3' : string
->               : ^^^^^^
+>'wrong type 3' : "wrong type 3"
+>               : ^^^^^^^^^^^^^^
 
 c.explicitProperty(15, 'too many arguments 3');
 >c.explicitProperty(15, 'too many arguments 3') : number
@@ -632,8 +632,8 @@ c.explicitProperty(15, 'too many arguments 3');
 >  : ^
 >explicitProperty : (this: { n: number; }, m: number) => number
 >                 : ^    ^^              ^^ ^^      ^^^^^      
->15 : number
->   : ^^^^^^
+>15 : 15
+>   : ^^
 >'too many arguments 3' : "too many arguments 3"
 >                       : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -697,8 +697,8 @@ let reconstructed: {
     n: 12,
 >n : number
 >  : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
     explicitThis: c.explicitThis,
 >explicitThis : (this: C, m: number) => number

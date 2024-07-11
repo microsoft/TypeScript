@@ -120,8 +120,8 @@ var p2 = p.then(function (s) {
 >  : ^^^^^^
 
     return 34;
->34 : number
->   : ^^^^^^
+>34 : 34
+>   : ^^
 
 } );
 

@@ -62,8 +62,8 @@ if (keywordA in c) {
 let stringB: string = 'b';
 >stringB : string
 >        : ^^^^^^
->'b' : string
->    : ^^^^^^
+>'b' : "b"
+>    : ^^^
 
 if ((stringB as 'b') in c) {
 >(stringB as 'b') in c : boolean

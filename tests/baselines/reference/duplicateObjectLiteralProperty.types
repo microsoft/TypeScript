@@ -61,8 +61,8 @@ var y = {
     get a() { return 0; },
 >a : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     set a(v: number) { },
 >a : number

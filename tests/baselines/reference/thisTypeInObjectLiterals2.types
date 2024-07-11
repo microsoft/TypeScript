@@ -141,14 +141,14 @@ let p1: Point = {
     x: 10,
 >x : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     y: 20,
 >y : number
 >  : ^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
@@ -220,14 +220,14 @@ let p2: Point | null = {
     x: 10,
 >x : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     y: 20,
 >y : number
 >  : ^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
@@ -299,14 +299,14 @@ let p3: Point | undefined = {
     x: 10,
 >x : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     y: 20,
 >y : number
 >  : ^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
@@ -378,14 +378,14 @@ let p4: Point | null | undefined = {
     x: 10,
 >x : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     y: 20,
 >y : number
 >  : ^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
@@ -465,14 +465,14 @@ f1({
     x: 10,
 >x : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     y: 20,
 >y : number
 >  : ^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
@@ -552,14 +552,14 @@ f2({
     x: 10,
 >x : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     y: 20,
 >y : number
 >  : ^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
@@ -661,12 +661,12 @@ let x1 = makeObject({
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     methods: {
 >methods : { moveBy(dx: number, dy: number): void; }
@@ -748,12 +748,12 @@ let x2 = makeObject2({
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     methods: {
 >methods : { moveBy(dx: number, dy: number): void; }
@@ -857,8 +857,8 @@ let p10 = defineProp(p1, "foo", { value: 42 });
 >              : ^^^^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 p10.foo = p10.foo + 1;
 >p10.foo = p10.foo + 1 : number
@@ -967,8 +967,8 @@ let p12 = defineProps(p1, {
         value: 42
 >value : number
 >      : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     },
     bar: {
@@ -1121,12 +1121,12 @@ let vue = new Vue({
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >y : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
     methods: {
 >methods : { f(x: string): number; }
@@ -1179,8 +1179,8 @@ let vue = new Vue({
 >    : ^^^^^^^^^^^^
 
                 return "hi";
->"hi" : string
->     : ^^^^^^
+>"hi" : "hi"
+>     : ^^^^
 
             },
             set(value: string) {
@@ -1214,8 +1214,8 @@ vue.f("abc");
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (x: string) => number
 >  : ^ ^^      ^^^^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 vue.test;
 >vue.test : number

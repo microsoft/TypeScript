@@ -19,8 +19,8 @@ export const ADMIN = MetadataAccessor.create<boolean>('1');
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >create : <T, D extends import("monorepo/pkg1/dist/types").IdType = import("monorepo/pkg1/dist/types").IdType>(key: string) => MetadataAccessor<T, D>
 >       : ^ ^^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^                      
->'1' : string
->    : ^^^^^^
+>'1' : "1"
+>    : ^^^
 
 === monorepo/pkg1/dist/index.d.ts ===
 

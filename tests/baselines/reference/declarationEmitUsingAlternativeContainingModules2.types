@@ -594,10 +594,10 @@ export const useEntries = () => {
 >     : ^^^^^^^^
 >slice : (start?: number, end?: number) => IEntry[]
 >      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->10 : number
->   : ^^^^^^
+>0 : 0
+>  : ^
+>10 : 10
+>   : ^^
 
   })
 }

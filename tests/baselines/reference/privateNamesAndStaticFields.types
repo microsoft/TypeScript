@@ -15,14 +15,14 @@ class A {
 
     constructor () {
         A.#foo = 3;
->A.#foo = 3 : number
->           : ^^^^^^
+>A.#foo = 3 : 3
+>           : ^
 >A.#foo : number
 >       : ^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
         B.#foo; // Error
 >B.#foo : any
@@ -56,14 +56,14 @@ class B extends A {
 >      : ^^^^^^^^
 
         B.#foo = "some string";
->B.#foo = "some string" : string
->                       : ^^^^^^
+>B.#foo = "some string" : "some string"
+>                       : ^^^^^^^^^^^^^
 >B.#foo : string
 >       : ^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
->"some string" : string
->              : ^^^^^^
+>"some string" : "some string"
+>              : ^^^^^^^^^^^^^
     }
 }
 

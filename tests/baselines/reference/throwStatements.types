@@ -40,8 +40,8 @@ function F(x: string): number { return 42; }
 >  : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 module M {
 >M : typeof M
@@ -98,8 +98,8 @@ var aDate = new Date(12);
 >             : ^^^^
 >Date : DateConstructor
 >     : ^^^^^^^^^^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 throw aDate;
 >aDate : Date
@@ -195,8 +195,8 @@ throw aFunction('');
 >              : ^^^^^^
 >aFunction : (x: string) => number
 >          : ^ ^^      ^^^^^      
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var aLambda = (x) => 2;
 >aLambda : (x: any) => number

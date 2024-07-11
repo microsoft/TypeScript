@@ -37,19 +37,19 @@ var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "no
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"mower" : string
->        : ^^^^^^
+>"mower" : "mower"
+>        : ^^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"mowing" : string
->         : ^^^^^^
+>"mowing" : "mowing"
+>         : ^^^^^^^^
 >secondary : string
 >          : ^^^^^^
->"none" : string
+>"none" : "none"
 >       : ^^^^^^
 
 var robotB: Robot = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } };
@@ -59,20 +59,20 @@ var robotB: Robot = { name: "trimmer", skills: { primary: "trimming", secondary:
 >                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"trimmer" : string
->          : ^^^^^^
+>"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >skills : { primary: string; secondary: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >primary : string
 >        : ^^^^^^
->"trimming" : string
->           : ^^^^^^
+>"trimming" : "trimming"
+>           : ^^^^^^^^^^
 >secondary : string
 >          : ^^^^^^
->"edging" : string
->         : ^^^^^^
+>"edging" : "edging"
+>         : ^^^^^^^^
 
 var { skills: { primary: primaryA, secondary: secondaryA } } = robotA;
 >skills : any

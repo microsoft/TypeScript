@@ -15,8 +15,8 @@ x.initCustomEvent('hello', true, true, { id: 12, name: 'hello' });
 >  : ^^^^^^^^^^^^^^^^
 >initCustomEvent : (type: string, bubbles?: boolean, cancelable?: boolean, detail?: any) => void
 >                : ^    ^^      ^^       ^^^       ^^          ^^^       ^^      ^^^^^^^^^^^    
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 >true : true
 >     : ^^^^
 >true : true

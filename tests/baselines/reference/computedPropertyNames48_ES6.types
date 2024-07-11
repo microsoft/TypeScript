@@ -30,8 +30,8 @@ extractIndexer({
 >[a] : string
 >    : ^^^^^^
 >a : any
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 }); // Should return string
 
@@ -52,8 +52,8 @@ extractIndexer({
 >  : ^^^^^^^^
 >x : E
 >  : ^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 }); // Should return string
 
@@ -74,7 +74,7 @@ extractIndexer({
 >   : ^^
 >0 : 0
 >  : ^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 }); // Should return any (widened form of undefined)

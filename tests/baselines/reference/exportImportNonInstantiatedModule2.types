@@ -16,8 +16,8 @@ export function w(): e.w { // Should be OK
 >                 : ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->'value' : string
->        : ^^^^^^
+>'value' : "value"
+>        : ^^^^^^^
 }
 === w1.ts ===
 export = Widget1

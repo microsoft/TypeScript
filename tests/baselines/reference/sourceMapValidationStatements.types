@@ -146,7 +146,7 @@ function f() {
     }
     try {
         obj.q = "ohhh";
->obj.q = "ohhh" : string
+>obj.q = "ohhh" : "ohhh"
 >               : ^^^^^^
 >obj.q : string
 >      : ^^^^^^
@@ -154,7 +154,7 @@ function f() {
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >q : string
 >  : ^^^^^^
->"ohhh" : string
+>"ohhh" : "ohhh"
 >       : ^^^^^^
 
     } catch (e) {
@@ -174,29 +174,29 @@ function f() {
 >   : ^^
 
             obj.z = 12;
->obj.z = 12 : number
->           : ^^^^^^
+>obj.z = 12 : 12
+>           : ^^
 >obj.z : number
 >      : ^^^^^^
 >obj : { z: number; q: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : number
 >  : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
         } else {
             obj.q = "hmm";
->obj.q = "hmm" : string
->              : ^^^^^^
+>obj.q = "hmm" : "hmm"
+>              : ^^^^^
 >obj.q : string
 >      : ^^^^^^
 >obj : { z: number; q: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >q : string
 >  : ^^^^^^
->"hmm" : string
->      : ^^^^^^
+>"hmm" : "hmm"
+>      : ^^^^^
         }
     }
     try {
@@ -289,12 +289,12 @@ function f() {
 >  : ^
 
             x = 50;
->x = 50 : number
->       : ^^^^^^
+>x = 50 : 50
+>       : ^^
 >x : number
 >  : ^^^^^^
->50 : number
->   : ^^^^^^
+>50 : 50
+>   : ^^
 
             break;
 
@@ -396,24 +396,24 @@ function f() {
 >  : ^
 
     x = z = 40;
->x = z = 40 : number
->           : ^^^^^^
+>x = z = 40 : 40
+>           : ^^
 >x : number
 >  : ^^^^^^
->z = 40 : number
->       : ^^^^^^
+>z = 40 : 40
+>       : ^^
 >z : number
 >  : ^^^^^^
->40 : number
->   : ^^^^^^
+>40 : 40
+>   : ^^
 
     eval("y");
 >eval("y") : any
 >          : ^^^
 >eval : (x: string) => any
 >     : ^ ^^      ^^^^^   
->"y" : string
->    : ^^^^^^
+>"y" : "y"
+>    : ^^^
 
     return;
 }

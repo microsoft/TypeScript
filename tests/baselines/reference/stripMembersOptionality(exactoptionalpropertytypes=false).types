@@ -23,8 +23,8 @@ someVal.fn("");
 >        : ^^^^^^^^^^^^^^^   ^^      ^^^             ^^^^
 >fn : (key: string) => string | null
 >   : ^   ^^      ^^^^^             
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 declare const someVal2: Required<{
 >someVal2 : Required<{ fn?: (key: string) => string | null; }>
@@ -46,6 +46,6 @@ someVal2.fn("");
 >         : ^^^^^^^^^^^^^^^^                              ^^^^
 >fn : (key: string) => string | null
 >   : ^   ^^      ^^^^^             
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 

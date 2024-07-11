@@ -95,8 +95,8 @@ extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 >                     : ^^^^^^^^^^^^
 >NumCoercible : typeof NumCoercible
 >             : ^^^^^^^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >13 : 13
 >   : ^^
 >'12' : "12"

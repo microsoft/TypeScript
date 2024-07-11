@@ -182,8 +182,8 @@ const a1: readonly number[] = [1];
 >   : ^^^^^^^^^^^^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const a2: readonly boolean[] = a1;
 >a2 : readonly boolean[]
@@ -196,8 +196,8 @@ const a3: readonly number[] = [1];
 >   : ^^^^^^^^^^^^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const a4: boolean[] = a3;
 >a4 : boolean[]
@@ -210,8 +210,8 @@ const a5: number[] = [1];
 >   : ^^^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const a6: readonly boolean [] = a5;
 >a6 : readonly boolean[]
@@ -224,8 +224,8 @@ const a7: number[] = [1];
 >   : ^^^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const a8: boolean[] = a7;
 >a8 : boolean[]
@@ -294,8 +294,8 @@ const at1: readonly number[] = [1];
 >    : ^^^^^^^^^^^^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const at2: readonly [1] = at1;
 >at2 : readonly [1]
@@ -308,8 +308,8 @@ const at3: readonly number[] = [1];
 >    : ^^^^^^^^^^^^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const at4: [1] = at3;
 >at4 : [1]
@@ -322,8 +322,8 @@ const at5: number[] = [1];
 >    : ^^^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const at6: readonly [1] = at5;
 >at6 : readonly [1]
@@ -336,8 +336,8 @@ const at7: number[] = [1];
 >    : ^^^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const at8: [1] = at7;
 >at8 : [1]

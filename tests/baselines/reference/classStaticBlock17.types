@@ -137,8 +137,8 @@ const a = new A(41);
 >          : ^
 >A : typeof A
 >  : ^^^^^^^^
->41 : number
->   : ^^^^^^
+>41 : 41
+>   : ^^
 
 const b = new B(a);
 >b : B

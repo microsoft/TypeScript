@@ -2912,8 +2912,8 @@ const Base01c01 = new Base01(1);
 >              : ^^^^^^^^^^^^^^
 >Base01 : Base01Constructor
 >       : ^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const Base01c02 = new Base01<number>();
 >Base01c02 : Base01<number>
@@ -2930,8 +2930,8 @@ const Base01c03 = new Base01<number>(1);
 >                      : ^^^^^^^^^^^^^^
 >Base01 : Base01Constructor
 >       : ^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 declare class Derived01<T> extends Base01<T> { }
 >Derived01 : Derived01<T>
@@ -2954,8 +2954,8 @@ const Derived01c01 = new Derived01(1);
 >                 : ^^^^^^^^^^^^^^^^^
 >Derived01 : typeof Derived01
 >          : ^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const Derived01c02 = new Derived01<number>();
 >Derived01c02 : Derived01<number>
@@ -2972,8 +2972,8 @@ const Derived01c03 = new Derived01<number>(1);
 >                         : ^^^^^^^^^^^^^^^^^
 >Derived01 : typeof Derived01
 >          : ^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 declare class Derived02<T = string> extends Base01<T> { }
 >Derived02 : Derived02<T>
@@ -2996,8 +2996,8 @@ const Derived02c01 = new Derived02(1);
 >                 : ^^^^^^^^^^^^^^^^^
 >Derived02 : typeof Derived02
 >          : ^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const Derived02c02 = new Derived02<number>();
 >Derived02c02 : Derived02<number>
@@ -3014,8 +3014,8 @@ const Derived02c03 = new Derived02<number>(1);
 >                         : ^^^^^^^^^^^^^^^^^
 >Derived02 : typeof Derived02
 >          : ^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 // https://github.com/Microsoft/TypeScript/issues/16211
 interface Base02 {}

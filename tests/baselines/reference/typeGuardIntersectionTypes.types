@@ -261,8 +261,8 @@ function identifyBeast(beast: Beast) {
 >                               : ^^^^
 >log : (s: string) => void
 >    : ^ ^^      ^^^^^    
->`pegasus - 4 legs, wings` : string
->                          : ^^^^^^
+>`pegasus - 4 legs, wings` : "pegasus - 4 legs, wings"
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
             }
             else if (beast.legs === 2) {
 >beast.legs === 2 : boolean
@@ -281,8 +281,8 @@ function identifyBeast(beast: Beast) {
 >                            : ^^^^
 >log : (s: string) => void
 >    : ^ ^^      ^^^^^    
->`bird - 2 legs, wings` : string
->                       : ^^^^^^
+>`bird - 2 legs, wings` : "bird - 2 legs, wings"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
             }
             else {
                 log(`unknown - ${beast.legs} legs, wings`);
@@ -334,8 +334,8 @@ function identifyBeast(beast: Beast) {
 >                                     : ^^^^
 >log : (s: string) => void
 >    : ^ ^^      ^^^^^    
->`quetzalcoatl - no legs, wings` : string
->                                : ^^^^^^
+>`quetzalcoatl - no legs, wings` : "quetzalcoatl - no legs, wings"
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
         else {
             log(`snake - no legs, no wings`)
@@ -343,8 +343,8 @@ function identifyBeast(beast: Beast) {
 >                                 : ^^^^
 >log : (s: string) => void
 >    : ^ ^^      ^^^^^    
->`snake - no legs, no wings` : string
->                            : ^^^^^^
+>`snake - no legs, no wings` : "snake - no legs, no wings"
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
     }
 }

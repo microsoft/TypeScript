@@ -81,8 +81,8 @@ let a = new C(3);
 >         : ^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 let b = new C("hello");
 >b : C<string>
@@ -91,20 +91,20 @@ let b = new C("hello");
 >               : ^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 a.baz = 5                                 // OK
->a.baz = 5 : number
->          : ^^^^^^
+>a.baz = 5 : 5
+>          : ^
 >a.baz : number
 >      : ^^^^^^
 >a : C<number>
 >  : ^^^^^^^^^
 >baz : number
 >    : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 const x: number = a.baz                   // OK
 >x : number

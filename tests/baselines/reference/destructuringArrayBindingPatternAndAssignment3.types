@@ -66,8 +66,8 @@ const [f, g = f, h = i, i = f] = [1]; // error for h = i
 })([1]);
 >[1] : number[]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 (function ([c, d = c, e = e]) { // error for e = e
 >(function ([c, d = c, e = e]) { // error for e = e})([1]) : void
@@ -90,8 +90,8 @@ const [f, g = f, h = i, i = f] = [1]; // error for h = i
 })([1]);
 >[1] : number[]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 (function ([f, g = f, h = i, i = f]) { // error for h = i
 >(function ([f, g = f, h = i, i = f]) { // error for h = i})([1]) : void
@@ -118,6 +118,6 @@ const [f, g = f, h = i, i = f] = [1]; // error for h = i
 })([1])
 >[1] : number[]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

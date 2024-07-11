@@ -10,8 +10,8 @@ class MyClass
 >      : ^^^^^^
     {
         return 42;
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
     }
 
     public set Count(value: number)

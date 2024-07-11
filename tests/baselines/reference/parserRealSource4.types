@@ -1205,8 +1205,8 @@ module TypeScript {
         public itemCount: number = 0;
 >itemCount : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
         public table = new HashEntry[];
 >table : any
@@ -1239,8 +1239,8 @@ module TypeScript {
             for (var i: number = 0; i < this.size; i++) {
 >i : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >i < this.size : boolean
 >              : ^^^^^^^
 >i : number

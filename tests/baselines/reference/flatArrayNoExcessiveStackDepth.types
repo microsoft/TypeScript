@@ -58,8 +58,8 @@ const repro_43249 = (value: unknown) => {
 >                : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"No" : string
->     : ^^^^^^
+>"No" : "No"
+>     : ^^^^
     }
     const match = value.match(/anything/) || [];
 >match : [] | RegExpMatchArray

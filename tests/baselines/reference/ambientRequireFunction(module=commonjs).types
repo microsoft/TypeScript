@@ -10,8 +10,8 @@ const fs = require("fs");
 >              : ^^^^^^^^^
 >require : (moduleName: string) => any
 >        : ^          ^^      ^^^^^   
->"fs" : string
->     : ^^^^^^
+>"fs" : "fs"
+>     : ^^^^
 
 const text = fs.readFileSync("/a/b/c");
 >text : string
@@ -24,8 +24,8 @@ const text = fs.readFileSync("/a/b/c");
 >   : ^^^^^^^^^
 >readFileSync : (s: string) => string
 >             : ^ ^^      ^^^^^      
->"/a/b/c" : string
->         : ^^^^^^
+>"/a/b/c" : "/a/b/c"
+>         : ^^^^^^^^
 
 === node.d.ts ===
 declare function require(moduleName: string): any;

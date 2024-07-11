@@ -18,18 +18,18 @@ foo('foo', 1);
 >              : ^^^^
 >foo : (a: string, b?: string, c?: number, ...d: number[]) => void
 >    : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
->'foo' : string
->      : ^^^^^^
->1 : number
->  : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+>1 : 1
+>  : ^
 
 foo('foo'); 
 >foo('foo') : void
 >           : ^^^^
 >foo : (a: string, b?: string, c?: number, ...d: number[]) => void
 >    : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
->'foo' : string
->      : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
 
 foo();
 >foo() : void
@@ -42,34 +42,34 @@ foo(1, 'bar');
 >              : ^^^^
 >foo : (a: string, b?: string, c?: number, ...d: number[]) => void
 >    : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
->1 : number
->  : ^^^^^^
->'bar' : string
->      : ^^^^^^
+>1 : 1
+>  : ^
+>'bar' : "bar"
+>      : ^^^^^
 
 foo('foo', 1, 3);
 >foo('foo', 1, 3) : void
 >                 : ^^^^
 >foo : (a: string, b?: string, c?: number, ...d: number[]) => void
 >    : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
->'foo' : string
->      : ^^^^^^
->1 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+>1 : 1
+>  : ^
+>3 : 3
+>  : ^
 
 foo('foo', 'bar', 3, 4);
 >foo('foo', 'bar', 3, 4) : void
 >                        : ^^^^
 >foo : (a: string, b?: string, c?: number, ...d: number[]) => void
 >    : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^^^^^
->'foo' : string
->      : ^^^^^^
->'bar' : string
->      : ^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+>'bar' : "bar"
+>      : ^^^^^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 

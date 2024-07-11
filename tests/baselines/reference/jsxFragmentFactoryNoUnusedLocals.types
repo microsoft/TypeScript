@@ -28,8 +28,8 @@ export function Counter({ count = 0 }: CounterProps) {
 >        : ^         ^^            ^^^^^^^^^^^^^^^^
 >count : number
 >      : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     const [cnt, setCnt] = null as any;
 >cnt : any

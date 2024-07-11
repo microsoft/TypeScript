@@ -4,14 +4,14 @@
 var id: number = 10000;
 >id : number
 >   : ^^^^^^
->10000 : number
->      : ^^^^^^
+>10000 : 10000
+>      : ^^^^^
 
 var name: string = "my name";
 >name : string
 >     : ^^^^^^
->"my name" : string
->          : ^^^^^^
+>"my name" : "my name"
+>          : ^^^^^^^^^
 
 var person: { b: string; id: number } = { name, id };  // error
 >person : { b: string; id: number; }
@@ -82,8 +82,8 @@ var person2: { name: string, id: number } = bar("hello", 5);
 >                : ^^^^^^^^      ^^^^^^      ^^^
 >bar : (name: string, id: number) => { name: number; id: string; }
 >    : ^    ^^      ^^  ^^      ^^^^^                             
->"hello" : string
->        : ^^^^^^
->5 : number
->  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>5 : 5
+>  : ^
 

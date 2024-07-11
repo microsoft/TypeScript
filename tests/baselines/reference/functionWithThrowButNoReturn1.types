@@ -10,8 +10,8 @@ function fn(): number {
 >                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'NYI' : string
->      : ^^^^^^
+>'NYI' : "NYI"
+>      : ^^^^^
 
   var t;
 >t : any

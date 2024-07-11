@@ -35,7 +35,7 @@ let fooBar: FooBar = mixBar({
     fooProp: "frizzlebizzle"
 >fooProp : string
 >        : ^^^^^^
->"frizzlebizzle" : string
->                : ^^^^^^
+>"frizzlebizzle" : "frizzlebizzle"
+>                : ^^^^^^^^^^^^^^^
 
 });

@@ -23,8 +23,8 @@ function f1(x): number {
 >  : ^^^
 
         return 1
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 }
 
@@ -45,8 +45,8 @@ function f2(x): number {
 >      : ^^^^^^^^^^^^^^^^
     }
     return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 }
 
 function f3(x): number {
@@ -96,8 +96,8 @@ function f4(x): number {
 >  : ^^^
 
             return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
         }
     }
     catch (e) {
@@ -118,8 +118,8 @@ function f5(x): number {
 >  : ^^^
 
             return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
         }
     }
     catch (e) {
@@ -127,8 +127,8 @@ function f5(x): number {
 >  : ^^^
 
         return 2;
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
     }
 }
 
@@ -144,8 +144,8 @@ function f6(x): number {
 >  : ^^^
 
             return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
         }
         else 
         {
@@ -174,8 +174,8 @@ function f7(x): number {
 >  : ^^^
 
             return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
         }
         else {
             throw new Error();
@@ -190,8 +190,8 @@ function f7(x): number {
 >  : ^^^
 
         return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 }
 
@@ -214,8 +214,8 @@ function f8(x): number {
         }
         else {
             return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
         }
     }
     catch (e) {
@@ -223,8 +223,8 @@ function f8(x): number {
 >  : ^^^
 
         return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 }
 
@@ -240,8 +240,8 @@ function f9(x): number {
 >      : ^^^^^
 
             return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
         }
     }
     catch (e) {
@@ -249,8 +249,8 @@ function f9(x): number {
 >  : ^^^
 
         return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 }
 
@@ -277,8 +277,8 @@ function f10(x): number {
 >  : ^^^
 
         return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 }
 
@@ -318,7 +318,7 @@ function f11(x): number {
 >  : ^^^
 
         return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 }

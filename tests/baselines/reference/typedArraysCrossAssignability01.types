@@ -12,8 +12,8 @@ function CheckAssignability() {
 >                 : ^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let arr_Uint8Array          = new Uint8Array(1);
 >arr_Uint8Array : Uint8Array
@@ -22,8 +22,8 @@ function CheckAssignability() {
 >                  : ^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let arr_Int16Array          = new Int16Array(1);
 >arr_Int16Array : Int16Array
@@ -32,8 +32,8 @@ function CheckAssignability() {
 >                  : ^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let arr_Uint16Array         = new Uint16Array(1);
 >arr_Uint16Array : Uint16Array
@@ -42,8 +42,8 @@ function CheckAssignability() {
 >                   : ^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let arr_Int32Array          = new Int32Array(1);
 >arr_Int32Array : Int32Array
@@ -52,8 +52,8 @@ function CheckAssignability() {
 >                  : ^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let arr_Uint32Array         = new Uint32Array(1);
 >arr_Uint32Array : Uint32Array
@@ -62,8 +62,8 @@ function CheckAssignability() {
 >                   : ^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let arr_Float32Array        = new Float32Array(1);
 >arr_Float32Array : Float32Array
@@ -72,8 +72,8 @@ function CheckAssignability() {
 >                    : ^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let arr_Float64Array        = new Float64Array(1);
 >arr_Float64Array : Float64Array
@@ -82,8 +82,8 @@ function CheckAssignability() {
 >                    : ^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     let arr_Uint8ClampedArray   = new Uint8ClampedArray(1);
 >arr_Uint8ClampedArray : Uint8ClampedArray
@@ -92,8 +92,8 @@ function CheckAssignability() {
 >                         : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     arr_Int8Array = arr_Int8Array;
 >arr_Int8Array = arr_Int8Array : Int8Array

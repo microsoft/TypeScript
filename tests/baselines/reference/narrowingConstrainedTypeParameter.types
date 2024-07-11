@@ -53,8 +53,8 @@ export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string)
 >                                          : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Expected \"pet\" to be a Pet" : string
->                               : ^^^^^^
+>"Expected \"pet\" to be a Pet" : "Expected \"pet\" to be a Pet"
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     return voice(pet);
 >voice(pet) : string

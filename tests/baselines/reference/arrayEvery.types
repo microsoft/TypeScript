@@ -6,8 +6,8 @@ const foo: (number | string)[] = ['aaa'];
 >    : ^^^^^^^^^^^^^^^^^^^
 >['aaa'] : string[]
 >        : ^^^^^^^^
->'aaa' : string
->      : ^^^^^^
+>'aaa' : "aaa"
+>      : ^^^^^
 
 const isString = (x: unknown): x is string => typeof x === 'string';
 >isString : (x: unknown) => x is string
@@ -50,7 +50,7 @@ if (foo.every(isString)) {
 >  : ^
 >slice : (start?: number, end?: number) => string
 >      : ^     ^^^      ^^   ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 

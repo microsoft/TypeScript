@@ -250,16 +250,16 @@ class N {
 
 	constructor() {
 		this.p2 = 0;
->this.p2 = 0 : number
->            : ^^^^^^
+>this.p2 = 0 : 0
+>            : ^
 >this.p2 : number
 >        : ^^^^^^
 >this : this
 >     : ^^^^
 >p2 : number
 >   : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 	}
 }
 

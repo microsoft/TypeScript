@@ -102,16 +102,16 @@ const newTextChannel = makeNewChannel('text');
 
 // This should work
 newTextChannel.phoneNumber = '613-555-1234';
->newTextChannel.phoneNumber = '613-555-1234' : string
->                                            : ^^^^^^
+>newTextChannel.phoneNumber = '613-555-1234' : "613-555-1234"
+>                                            : ^^^^^^^^^^^^^^
 >newTextChannel.phoneNumber : string
 >                           : ^^^^^^
 >newTextChannel : NewChannel<TextChannel>
 >               : ^^^^^^^^^^^^^^^^^^^^^^^
 >phoneNumber : string
 >            : ^^^^^^
->'613-555-1234' : string
->               : ^^^^^^
+>'613-555-1234' : "613-555-1234"
+>               : ^^^^^^^^^^^^^^
 
 const newTextChannel2 : NewChannel<TextChannel> = makeNewChannel('text');
 >newTextChannel2 : NewChannel<TextChannel>
@@ -125,14 +125,14 @@ const newTextChannel2 : NewChannel<TextChannel> = makeNewChannel('text');
 
 // Compare with this, which ofc works.
 newTextChannel2.phoneNumber = '613-555-1234';
->newTextChannel2.phoneNumber = '613-555-1234' : string
->                                             : ^^^^^^
+>newTextChannel2.phoneNumber = '613-555-1234' : "613-555-1234"
+>                                             : ^^^^^^^^^^^^^^
 >newTextChannel2.phoneNumber : string
 >                            : ^^^^^^
 >newTextChannel2 : NewChannel<TextChannel>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^
 >phoneNumber : string
 >            : ^^^^^^
->'613-555-1234' : string
->               : ^^^^^^
+>'613-555-1234' : "613-555-1234"
+>               : ^^^^^^^^^^^^^^
 

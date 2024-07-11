@@ -141,8 +141,8 @@ let e = <Meet name={42} />;
 >     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : number
 >     : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 // Error
 let f = <Meet naaaaaaame='no' />;

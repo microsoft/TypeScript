@@ -12,12 +12,12 @@ var a = () => <Error>{ name: "foo", message: "bar" };
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >message : string
 >        : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 var b = () => (<Error>{ name: "foo", message: "bar" });    
 >b : () => Error
@@ -32,12 +32,12 @@ var b = () => (<Error>{ name: "foo", message: "bar" });
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >message : string
 >        : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 var c = () => ({ name: "foo", message: "bar" });           
 >c : () => { name: string; message: string; }
@@ -74,10 +74,10 @@ var d = () => ((<Error>({ name: "foo", message: "bar" })));
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >message : string
 >        : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 

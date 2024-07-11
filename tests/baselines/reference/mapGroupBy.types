@@ -14,12 +14,12 @@ const basic = Map.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
 >        : ^ ^^ ^^     ^^           ^^           ^^                             ^^^^^           
 >[0, 2, 8] : number[]
 >          : ^^^^^^^^
->0 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->8 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>2 : 2
+>  : ^
+>8 : 8
+>  : ^
 >x => x < 5 ? 'small' : 'large' : (x: number) => "small" | "large"
 >                               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number

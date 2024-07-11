@@ -66,16 +66,16 @@ function f4() {
 >  : ^
 
     v.x = 10;
->v.x = 10 : number
->         : ^^^^^^
+>v.x = 10 : 10
+>         : ^^
 >v.x : number
 >    : ^^^^^^
 >v : T
 >  : ^
 >x : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     if (true) {
 >true : true
@@ -90,29 +90,29 @@ function f4() {
 >  : ^
 
         v.x = "hello";
->v.x = "hello" : string
->              : ^^^^^^
+>v.x = "hello" : "hello"
+>              : ^^^^^^^
 >v.x : string
 >    : ^^^^^^
 >v : T
 >  : ^
 >x : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
     }
     else {
         v.x = 20;
->v.x = 20 : number
->         : ^^^^^^
+>v.x = 20 : 20
+>         : ^^
 >v.x : number
 >    : ^^^^^^
 >v : T
 >  : ^
 >x : number
 >  : ^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
     }
 }
 

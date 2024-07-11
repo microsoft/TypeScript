@@ -48,8 +48,8 @@ class BaseClass<V> {
 >              : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
   }
 }
 

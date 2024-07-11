@@ -73,8 +73,8 @@ class E {
 >           : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 }
 
@@ -92,8 +92,8 @@ class F {
 >           : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 }
 
@@ -115,16 +115,16 @@ class G {
 
     constructor() {
         this.test = 2;
->this.test = 2 : number
->              : ^^^^^^
+>this.test = 2 : 2
+>              : ^
 >this.test : number
 >          : ^^^^^^
 >this : this
 >     : ^^^^
 >test : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
     }
 }
 

@@ -76,8 +76,8 @@ class TestClass2 {
 >x : any
 
         return 0;
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
     }
  
     public foo(x: string): number;

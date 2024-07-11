@@ -6,8 +6,8 @@ type Foo = ({ first = 0 }: { first?: number }) => unknown;
 >    : ^^^
 >first : number
 >      : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >first : number
 >      : ^^^^^^
 
@@ -16,8 +16,8 @@ var x: (a: number = 1) => number;
 >  : ^ ^^^      ^^^^^      
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var y = <(a : string = "") => any>(undefined)
 >y : (a?: string) => any
@@ -26,8 +26,8 @@ var y = <(a : string = "") => any>(undefined)
 >                                      : ^ ^^^      ^^^^^   
 >a : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >(undefined) : undefined
 >            : ^^^^^^^^^
 >undefined : undefined

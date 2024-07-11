@@ -46,8 +46,8 @@ const obj3: {y: true, overwrite: string } = {
     overwrite: "hi"
 >overwrite : string
 >          : ^^^^^^
->"hi" : string
->     : ^^^^^^
+>"hi" : "hi"
+>     : ^^^^
 }
 
 interface Prop {
@@ -171,8 +171,8 @@ let x3 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true, x: 2, overw
 >  : ^
 >overwrite : string
 >          : ^^^^^^
->"world" : string
->        : ^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
 
 let x4 = <OverWriteAttr {...{x: 2}} {...{overwrite: "world"}} {...{y: true}} />
 >x4 : JSX.Element
@@ -191,8 +191,8 @@ let x4 = <OverWriteAttr {...{x: 2}} {...{overwrite: "world"}} {...{y: true}} />
 >                     : ^^^^^^^^^^^^^^^^^^^^^^
 >overwrite : string
 >          : ^^^^^^
->"world" : string
->        : ^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
 >{y: true} : { y: true; }
 >          : ^^^^^^^^^^^^
 >y : true

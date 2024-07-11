@@ -20,8 +20,8 @@ class Test {
 >    : ^^^^^^
 
         obj[(new class { #x = 1; readonly s = "prop"; }).s].#y = 1;
->obj[(new class { #x = 1; readonly s = "prop"; }).s].#y = 1 : number
->                                                           : ^^^^^^
+>obj[(new class { #x = 1; readonly s = "prop"; }).s].#y = 1 : 1
+>                                                           : ^
 >obj[(new class { #x = 1; readonly s = "prop"; }).s].#y : number
 >                                                       : ^^^^^^
 >obj[(new class { #x = 1; readonly s = "prop"; }).s] : Test
@@ -46,8 +46,8 @@ class Test {
 >       : ^^^^^^
 >s : "prop"
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         obj[(new class { #x = 1; readonly s = "prop"; }).s].#y += 1;
 >obj[(new class { #x = 1; readonly s = "prop"; }).s].#y += 1 : number

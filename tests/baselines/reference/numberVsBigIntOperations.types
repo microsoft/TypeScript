@@ -13,30 +13,30 @@ let bigInt = 1n, num = 2;
 >  : ^
 
 bigInt = 1n; bigInt = 2; num = 1n; num = 2;
->bigInt = 1n : bigint
->            : ^^^^^^
+>bigInt = 1n : 1n
+>            : ^^
 >bigInt : bigint
 >       : ^^^^^^
->1n : bigint
->   : ^^^^^^
->bigInt = 2 : number
->           : ^^^^^^
+>1n : 1n
+>   : ^^
+>bigInt = 2 : 2
+>           : ^
 >bigInt : bigint
 >       : ^^^^^^
->2 : number
->  : ^^^^^^
->num = 1n : bigint
->         : ^^^^^^
+>2 : 2
+>  : ^
+>num = 1n : 1n
+>         : ^^
 >num : number
 >    : ^^^^^^
->1n : bigint
->   : ^^^^^^
->num = 2 : number
->        : ^^^^^^
+>1n : 1n
+>   : ^^
+>num = 2 : 2
+>        : ^
 >num : number
 >    : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 bigInt += 1n; bigInt += 2; num += 1n; num += 2;
 >bigInt += 1n : bigint

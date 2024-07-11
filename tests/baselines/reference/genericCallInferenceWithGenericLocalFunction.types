@@ -57,8 +57,8 @@ const addP2 = withP2({ foo: 1 });
 >           : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const added2 = addP2({ bar: 2 });
 >added2 : { bar: number; } & { foo: number; }
@@ -71,6 +71,6 @@ const added2 = addP2({ bar: 2 });
 >           : ^^^^^^^^^^^^^^^^
 >bar : number
 >    : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 

@@ -29,7 +29,7 @@ class foo {
 >bar("test") : any
 >bar : { (): string; (s: string): any; }
 >    : ^^^^^^      ^^^ ^^      ^^^^^^^^^
->"test" : string
+>"test" : "test"
 >       : ^^^^^^
 
         var goo = bar();
@@ -47,7 +47,7 @@ class foo {
 >bar("test") : any
 >bar : { (): string; (s: string): any; }
 >    : ^^^^^^      ^^^ ^^      ^^^^^^^^^
->"test" : string
+>"test" : "test"
 >       : ^^^^^^
     }
  

@@ -433,8 +433,8 @@ const p19 = p.catch(() => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const p20 = p.then(undefined);
 >p20 : Promise<boolean>
@@ -574,8 +574,8 @@ const p28 = p.then(() => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const p29 = p.then(() => Promise.reject(1));
 >p29 : Promise<never>
@@ -757,8 +757,8 @@ const p38 = p.then(undefined, () => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const p39 = p.then(undefined, () => Promise.reject(1));
 >p39 : Promise<boolean>
@@ -924,8 +924,8 @@ const p48 = p.then(null, () => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const p49 = p.then(null, () => Promise.reject(1));
 >p49 : Promise<boolean>
@@ -1125,8 +1125,8 @@ const p58 = p.then(() => "1", () => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const p59 = p.then(() => "1", () => Promise.reject(1));
 >p59 : Promise<string>
@@ -1321,8 +1321,8 @@ const p68 = p.then(() => x, () => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const p69 = p.then(() => x, () => Promise.reject(1));
 >p69 : Promise<any>
@@ -1525,8 +1525,8 @@ const p78 = p.then(() => undefined, () => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const p79 = p.then(() => undefined, () => Promise.reject(1));
 >p79 : Promise<any>
@@ -1712,8 +1712,8 @@ const p88 = p.then(() => null, () => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const p89 = p.then(() => null, () => Promise.reject(1));
 >p89 : Promise<any>
@@ -1897,8 +1897,8 @@ const p98 = p.then(() => {}, () => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const p99 = p.then(() => {}, () => Promise.reject(1));
 >p99 : Promise<void>
@@ -2100,8 +2100,8 @@ const pa8 = p.then(() => {throw 1}, () => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const pa9 = p.then(() => {throw 1}, () => Promise.reject(1));
 >pa9 : Promise<never>
@@ -2152,8 +2152,8 @@ const pb0 = p.then(() => Promise.resolve("1"), undefined);
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -2178,8 +2178,8 @@ const pb1 = p.then(() => Promise.resolve("1"), null);
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 
 const pb2 = p.then(() => Promise.resolve("1"), () => 1);
 >pb2 : Promise<string | number>
@@ -2202,8 +2202,8 @@ const pb2 = p.then(() => Promise.resolve("1"), () => 1);
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 >() => 1 : () => number
 >        : ^^^^^^^^^^^^
 >1 : 1
@@ -2230,8 +2230,8 @@ const pb3 = p.then(() => Promise.resolve("1"), () => x);
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 >() => x : () => any
 >        : ^^^^^^^^^
 >x : any
@@ -2257,8 +2257,8 @@ const pb4 = p.then(() => Promise.resolve("1"), () => undefined);
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 >() => undefined : () => any
 >                : ^^^^^^^^^
 >undefined : undefined
@@ -2285,8 +2285,8 @@ const pb5 = p.then(() => Promise.resolve("1"), () => null);
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 >() => null : () => any
 >           : ^^^^^^^^^
 
@@ -2311,8 +2311,8 @@ const pb6 = p.then(() => Promise.resolve("1"), () => {});
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 >() => {} : () => void
 >         : ^^^^^^^^^^
 
@@ -2337,8 +2337,8 @@ const pb7 = p.then(() => Promise.resolve("1"), () => {throw 1});
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 >() => {throw 1} : () => never
 >                : ^^^^^^^^^^^
 >1 : 1
@@ -2365,8 +2365,8 @@ const pb8 = p.then(() => Promise.resolve("1"), () => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 >() => Promise.resolve(1) : () => Promise<number>
 >                         : ^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
@@ -2377,8 +2377,8 @@ const pb8 = p.then(() => Promise.resolve("1"), () => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const pb9 = p.then(() => Promise.resolve("1"), () => Promise.reject(1));
 >pb9 : Promise<string>
@@ -2401,8 +2401,8 @@ const pb9 = p.then(() => Promise.resolve("1"), () => Promise.reject(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 >() => Promise.reject(1) : () => Promise<never>
 >                        : ^^^^^^^^^^^^^^^^^^^^
 >Promise.reject(1) : Promise<never>
@@ -2662,8 +2662,8 @@ const pc8 = p.then(() => Promise.reject("1"), () => Promise.resolve(1));
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const pc9 = p.then(() => Promise.reject("1"), () => Promise.reject(1));
 >pc9 : Promise<never>

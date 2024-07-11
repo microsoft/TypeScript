@@ -193,8 +193,8 @@ const a = <Component foo={12} bar="yes" baz="yeah" />;
 >          : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >bar : string
 >    : ^^^^^^
 >baz : string
@@ -209,8 +209,8 @@ const b = <Component foo={12} />; // Error, missing required prop bar
 >          : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 const c = <Component bar="yes" baz="yeah" />;
 >c : JSX.Element
@@ -247,8 +247,8 @@ const e = <Component foo={12} bar={null} baz="cool" />; // bar is nullable/undef
 >          : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >bar : null
 >    : ^^^^
 >baz : string
@@ -263,8 +263,8 @@ const f = <Component foo={12} bar="yeah" baz={null} />; // Error, baz is _not_ n
 >          : ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >bar : string
 >    : ^^^^^^
 >baz : null
@@ -318,8 +318,8 @@ const g = <JustPropTypes foo={12} bar="ok" />;
 >              : ^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >bar : string
 >    : ^^^^^^
 
@@ -354,8 +354,8 @@ const j = <JustPropTypes foo={12} bar={null} />; // error, bar is required
 >              : ^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >bar : null
 >    : ^^^^
 
@@ -389,8 +389,8 @@ const k = <JustDefaultProps foo={12} />;
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 const l = <JustDefaultProps foo={12} bar="ok" />; // error, no prop named bar
 >l : JSX.Element
@@ -401,8 +401,8 @@ const l = <JustDefaultProps foo={12} bar="ok" />; // error, no prop named bar
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >bar : string
 >    : ^^^^^^
 
@@ -496,8 +496,8 @@ const n = <BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} />;
 >    : ^^^^^^
 >baz : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 const o = <BothWithSpecifiedGeneric foo="no" />; // Error, missing required prop bar
 >o : JSX.Element
@@ -520,8 +520,8 @@ const p = <BothWithSpecifiedGeneric bar="yes" baz={12} />;
 >    : ^^^^^^
 >baz : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 const q = <BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" />; // Error, baz not a valid prop
 >q : JSX.Element
@@ -534,8 +534,8 @@ const q = <BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" />; // Error, 
 >    : ^^^^^^
 >baz : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >bat : string
 >    : ^^^^^^
 
@@ -552,8 +552,8 @@ const r = <BothWithSpecifiedGeneric foo="no" bar={null} baz={0} />; // bar is nu
 >    : ^^^^
 >baz : number
 >    : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 const s = <BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} />; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
 >s : JSX.Element
@@ -628,8 +628,8 @@ const u = <JustPropTypesWithSpecifiedGeneric foo={12} />; // error, wrong type
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 const v = <JustPropTypesWithSpecifiedGeneric foo={null} bar="ok" />; // generic overrides propTypes required-ness, null isn't valid
 >v : JSX.Element
@@ -707,8 +707,8 @@ const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong typ
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 const aa = <JustDefaultPropsWithSpecifiedGeneric />;
 >aa : JSX.Element

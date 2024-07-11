@@ -85,16 +85,16 @@ new GenericComponent({ initialValues: 12, nextValues: val => 12 });
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
 >initialValues : number
 >              : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >nextValues : (val: number) => number
 >           : ^   ^^^^^^^^^^^^^^^^^^^
 >val => 12 : (val: number) => number
 >          : ^   ^^^^^^^^^^^^^^^^^^^
 >val : number
 >    : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 
 // #22149
 
@@ -191,8 +191,8 @@ const defaultState: AppState = {
     dummy: ''
 >dummy : string
 >      : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 }
 
 const NON_VOID_ACTION: ActionType<number> = 'NON_VOID_ACTION'

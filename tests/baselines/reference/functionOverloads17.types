@@ -16,6 +16,6 @@ function foo():{a:string;} { return {a:""} }
 >       : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 

@@ -25,8 +25,8 @@ x.foo(1); // no error
 >  : ^^^^^^^^^
 >foo : (x: number) => number
 >    : ^ ^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var f = <T>(x: B<T>) => { return x.foo(1); } // error
 >f : <T>(x: B<T>) => T
@@ -97,6 +97,6 @@ var f4 = (x: B<number>) => { return x.foo(1); } // no error
 >  : ^^^^^^^^^
 >foo : (x: number) => number
 >    : ^ ^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

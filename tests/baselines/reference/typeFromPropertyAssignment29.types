@@ -72,16 +72,16 @@ var n = ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length
 >            : ^^^^^^^^^^^^^^^^^^
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >ExpandoDecl(101).length : number
 >                        : ^^^^^^
 >ExpandoDecl(101) : string
 >                 : ^^^^^^
 >ExpandoDecl : typeof ExpandoDecl
 >            : ^^^^^^^^^^^^^^^^^^
->101 : number
->    : ^^^^^^
+>101 : 101
+>    : ^^^
 >length : number
 >       : ^^^^^^
 
@@ -164,10 +164,10 @@ var n = (ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length
 >                                                                        : ^^^^^^
 >(ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) : number
 >                                              : ^^^^^^
->(ExpandoExpr.prop.x || 0) : number
->                          : ^^^^^^
->ExpandoExpr.prop.x || 0 : number
->                        : ^^^^^^
+>(ExpandoExpr.prop.x || 0) : 0
+>                          : ^
+>ExpandoExpr.prop.x || 0 : 0
+>                        : ^
 >ExpandoExpr.prop.x : undefined
 >                   : ^^^^^^^^^
 >ExpandoExpr.prop : { y: string; x?: undefined; }
@@ -178,8 +178,8 @@ var n = (ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : undefined
 >  : ^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >ExpandoExpr.m(12) : number
 >                  : ^^^^^^
 >ExpandoExpr.m : (n: number) => number
@@ -188,16 +188,16 @@ var n = (ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length
 >            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
 >ExpandoExpr(101).length : number
 >                        : ^^^^^^
 >ExpandoExpr(101) : string
 >                 : ^^^^^^
 >ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
 >            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
->101 : number
->    : ^^^^^^
+>101 : 101
+>    : ^^^
 >length : number
 >       : ^^^^^^
 
@@ -387,8 +387,8 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
 >                : ^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
 >             : ^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 namespace Ns {
 >Ns : typeof Ns
@@ -502,8 +502,8 @@ var n = ExpandoExpr2.prop + ExpandoExpr2.m(12) + ExpandoExpr2(101).length
 >                  : ^^^^^^
 >ExpandoExpr2 : (n: number) => string
 >             : ^ ^^      ^^^^^^^^^^^
->101 : number
->    : ^^^^^^
+>101 : 101
+>    : ^^^
 >length : number
 >       : ^^^^^^
 

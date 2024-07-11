@@ -15,12 +15,12 @@ class Main {
 >     : ^^^^
 >register : (...names: string[]) => void
 >         : ^^^^     ^^        ^^^^^    
->"a" : string
->    : ^^^^^^
->"b" : string
->    : ^^^^^^
->"c" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
+>"b" : "b"
+>    : ^^^
+>"c" : "c"
+>    : ^^^
     }
 
     private register(...names: string[]): void {

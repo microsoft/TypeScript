@@ -11,14 +11,14 @@ class A {
 
     constructor () {
         this.#foo = 3;
->this.#foo = 3 : number
->              : ^^^^^^
+>this.#foo = 3 : 3
+>              : ^
 >this.#foo : number
 >          : ^^^^^^
 >this : this
 >     : ^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
     }
 }
 
@@ -40,14 +40,14 @@ class B extends A {
 >      : ^^^^^^^^
 
         this.#foo = "some string";
->this.#foo = "some string" : string
->                          : ^^^^^^
+>this.#foo = "some string" : "some string"
+>                          : ^^^^^^^^^^^^^
 >this.#foo : string
 >          : ^^^^^^
 >this : this
 >     : ^^^^
->"some string" : string
->              : ^^^^^^
+>"some string" : "some string"
+>              : ^^^^^^^^^^^^^
     }
 }
 

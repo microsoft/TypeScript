@@ -5,7 +5,7 @@
 var invalidCommentedFancySingle: number = 'nope';
 >invalidCommentedFancySingle : number
 >                            : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 /*
@@ -13,28 +13,28 @@ var invalidCommentedFancySingle: number = 'nope';
 var invalidCommentedFancyMulti: number = 'nope';
 >invalidCommentedFancyMulti : number
 >                           : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 // @ts-expect-error additional commenting
 var validCommentedFancySingle: string = 'nope';
 >validCommentedFancySingle : string
 >                          : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 /* @ts-expect-error additional commenting */
 var validCommentedFancyMulti: string = 'nope';
 >validCommentedFancyMulti : string
 >                         : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 // @ts-expect-error
 var invalidCommentedPlainSingle: number = 'nope';
 >invalidCommentedPlainSingle : number
 >                            : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 /*
@@ -42,21 +42,21 @@ var invalidCommentedPlainSingle: number = 'nope';
 var invalidCommentedPlainMulti: number = 'nope';
 >invalidCommentedPlainMulti : number
 >                           : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 // @ts-expect-error
 var validCommentedPlainSingle: string = 'nope';
 >validCommentedPlainSingle : string
 >                          : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 /* @ts-expect-error */
 var validCommentedPlainMulti1: string = 'nope';
 >validCommentedPlainMulti1 : string
 >                          : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 /*
@@ -64,19 +64,19 @@ var validCommentedPlainMulti1: string = 'nope';
 var validCommentedPlainMulti2: string = 'nope';
 >validCommentedPlainMulti2 : string
 >                          : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 var invalidPlain: number = 'nope';
 >invalidPlain : number
 >             : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 var validPlain: string = 'nope';
 >validPlain : string
 >           : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 // @ts-expect-error
@@ -172,7 +172,7 @@ var validPlain: string = 'nope';
 var invalidCommentedFancySingle: number = 'nope';
 >invalidCommentedFancySingle : number
 >                            : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 
 /*
@@ -180,6 +180,6 @@ var invalidCommentedFancySingle: number = 'nope';
 var invalidCommentedFancyMulti: number = 'nope';
 >invalidCommentedFancyMulti : number
 >                           : ^^^^^^
->'nope' : string
+>'nope' : "nope"
 >       : ^^^^^^
 

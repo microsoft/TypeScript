@@ -30,8 +30,8 @@ var x = fg("abc");
 >          : ^^^^^^
 >fg : F & G
 >   : ^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 var x: string;
 >x : string

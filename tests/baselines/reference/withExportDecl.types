@@ -88,10 +88,10 @@ var arrayVar: string[] = ['a', 'b'];
 >         : ^^^^^^^^
 >['a', 'b'] : string[]
 >           : ^^^^^^^^
->'a' : string
->    : ^^^^^^
->'b' : string
->    : ^^^^^^
+>'a' : "a"
+>    : ^^^
+>'b' : "b"
+>    : ^^^
 
 export var exportedArrayVar: { x: number; y: string; }[] ;
 >exportedArrayVar : { x: number; y: string; }[]
@@ -114,12 +114,12 @@ exportedArrayVar.push({ x: 30, y : 'hello world' });
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->30 : number
->   : ^^^^^^
+>30 : 30
+>   : ^^
 >y : string
 >  : ^^^^^^
->'hello world' : string
->              : ^^^^^^
+>'hello world' : "hello world"
+>              : ^^^^^^^^^^^^^
 
 function simpleFunction() {
 >simpleFunction : () => { x: string; y: string; n: number; }

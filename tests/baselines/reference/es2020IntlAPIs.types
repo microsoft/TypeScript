@@ -82,8 +82,8 @@ log("en-US");
 >             : ^^^^
 >log : (locale: string) => void
 >    : ^      ^^      ^^^^^^^^^
->"en-US" : string
->        : ^^^^^^
+>"en-US" : "en-US"
+>        : ^^^^^^^
 
 // expected output: 5/24/2012 26,254.39
 
@@ -92,8 +92,8 @@ log("de-DE");
 >             : ^^^^
 >log : (locale: string) => void
 >    : ^      ^^      ^^^^^^^^^
->"de-DE" : string
->        : ^^^^^^
+>"de-DE" : "de-DE"
+>        : ^^^^^^^
 
 // expected output: 24.5.2012 26.254,39
 
@@ -135,8 +135,8 @@ console.log(rtf1.format(3, 'quarter'));
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 >format : (value: number, unit: Intl.RelativeTimeFormatUnit) => string
 >       : ^     ^^      ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >'quarter' : "quarter"
 >          : ^^^^^^^^^
 
@@ -205,8 +205,8 @@ console.log(rtf2.format(2, 'day'));
 >     : ^^^^^^^^^^^^^^^^^^^^^^^
 >format : (value: number, unit: Intl.RelativeTimeFormatUnit) => string
 >       : ^     ^^      ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >'day' : "day"
 >      : ^^^^^
 
@@ -274,8 +274,8 @@ console.log(regionNamesInEnglish.of('US'));
 >                     : ^^^^^^^^^^^^^^^^^
 >of : (code: string) => string | undefined
 >   : ^    ^^      ^^^^^                  
->'US' : string
->     : ^^^^^^
+>'US' : "US"
+>     : ^^^^
 
 // expected output: "United States"
 
@@ -296,8 +296,8 @@ console.log(regionNamesInTraditionalChinese.of('US'));
 >                                : ^^^^^^^^^^^^^^^^^
 >of : (code: string) => string | undefined
 >   : ^    ^^      ^^^^^                  
->'US' : string
->     : ^^^^^^
+>'US' : "US"
+>     : ^^^^
 
 // expected output: "美國"
 
@@ -356,8 +356,8 @@ console.log(Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', '))
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->', ' : string
->     : ^^^^^^
+>', ' : ", "
+>     : ^^^^
 
 new Intl.Locale(); // should error
 >new Intl.Locale() : Intl.Locale
@@ -458,8 +458,8 @@ console.log((new Intl.DisplayNames(undefined, {type: 'language'})).of('en-GB'));
 >           : ^^^^^^^^^^
 >of : (code: string) => string | undefined
 >   : ^    ^^      ^^^^^                  
->'en-GB' : string
->        : ^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
 
 const localesArg = ["es-ES", new Intl.Locale("en-US")];
 >localesArg : (string | Intl.Locale)[]

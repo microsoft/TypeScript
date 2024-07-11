@@ -50,8 +50,8 @@ module M {
 >                : ^^^^^^^^^^^^^^^^^^^^^
 >anything : number
 >         : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
         }
 
         doesntWork():R {
@@ -63,8 +63,8 @@ module M {
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anything : number
 >         : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >oneI : this
 >     : ^^^^
 >this : this

@@ -24,8 +24,8 @@ f({ data: 0 }, { data(value, key) {} });
 >            : ^^^^^^^^^^^^^^^^^
 >data : number
 >     : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >{ data(value, key) {} } : { data(value: number, key: "data"): void; }
 >                        : ^^^^^^^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >data : (value: number, key: "data") => void

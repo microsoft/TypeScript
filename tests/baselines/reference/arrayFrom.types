@@ -35,8 +35,8 @@ const inputALike: ArrayLike<A> = { length: 0 };
 >              : ^^^^^^^^^^^^^^^^^^^
 >length : number
 >       : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 const inputARand = getEither(inputA, inputALike);
 >inputARand : ArrayLike<A> | Iterable<A>

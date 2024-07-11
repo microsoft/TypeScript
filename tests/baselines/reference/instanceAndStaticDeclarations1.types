@@ -86,10 +86,10 @@ class Point {
 >                : ^^^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
 
     static distance(p1: Point, p2: Point) { return p1.distance(p2); }
 >distance : (p1: Point, p2: Point) => number

@@ -30,8 +30,8 @@ export const Target = {
     OK_I_GUESS: 2
 >OK_I_GUESS : number
 >           : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 }
 /** @enum number */
 export const Second = {
@@ -50,8 +50,8 @@ export const Second = {
     FINE: 2,
 >FINE : number
 >     : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 }
 /** @enum {function(number): number} */
 export const Fs = {
@@ -140,12 +140,12 @@ export function consume(t,s,f) {
 >      : ^^^^^^
 
     v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
->v = 'something else' : string
->                     : ^^^^^^
+>v = 'something else' : "something else"
+>                     : ^^^^^^^^^^^^^^^^
 >v : string
 >  : ^^^^^^
->'something else' : string
->                 : ^^^^^^
+>'something else' : "something else"
+>                 : ^^^^^^^^^^^^^^^^
 }
 /** @param {string} s */
 export function ff(s) {

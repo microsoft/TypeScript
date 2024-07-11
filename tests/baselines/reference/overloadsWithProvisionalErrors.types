@@ -54,8 +54,8 @@ func(s => ({ a: blah, b: 3 })); // Only error inside the function, but not outsi
 >     : ^^^
 >b : number
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 func(s => ({ a: blah })); // Two errors here, one for blah not being defined, and one for the overload since it would not be applicable anyway
 >func(s => ({ a: blah })) : never

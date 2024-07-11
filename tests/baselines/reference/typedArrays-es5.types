@@ -8,8 +8,8 @@ const float32Array = new Float32Array(1);
 >                    : ^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 [...float32Array];
 >[...float32Array] : any[]
@@ -26,8 +26,8 @@ const float64Array = new Float64Array(1);
 >                    : ^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 [...float64Array];
 >[...float64Array] : any[]
@@ -44,8 +44,8 @@ const int16Array = new Int16Array(1);
 >                  : ^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 [...int16Array];
 >[...int16Array] : any[]
@@ -62,8 +62,8 @@ const int32Array = new Int32Array(1);
 >                  : ^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 [...int32Array];
 >[...int32Array] : any[]
@@ -80,8 +80,8 @@ const int8Array = new Int8Array(1);
 >                 : ^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 [...int8Array];
 >[...int8Array] : any[]
@@ -114,8 +114,8 @@ const uint16Array = new Uint16Array(1);
 >                   : ^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 [...uint16Array];
 >[...uint16Array] : any[]
@@ -132,8 +132,8 @@ const uint32Array = new Uint32Array(1);
 >                   : ^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 [...uint32Array];
 >[...uint32Array] : any[]
@@ -150,8 +150,8 @@ const uint8Array = new Uint8Array(1);
 >                  : ^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 [...uint8Array];
 >[...uint8Array] : any[]
@@ -168,8 +168,8 @@ const uint8ClampedArray = new Uint8ClampedArray(1);
 >                         : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 [...uint8ClampedArray];
 >[...uint8ClampedArray] : any[]

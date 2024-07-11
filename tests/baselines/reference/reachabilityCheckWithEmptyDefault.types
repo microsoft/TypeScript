@@ -26,6 +26,6 @@ function foo(x: any) {
 >           : ^^^^
 >print : { (): void; (s: string): void; }
 >      : ^^^^^^    ^^^ ^^      ^^^    ^^^
->'1' : string
->    : ^^^^^^
+>'1' : "1"
+>    : ^^^
 }

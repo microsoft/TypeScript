@@ -12,14 +12,14 @@ declare var a: Test;
 >  : ^^^^
 
 a.foo = 'baz';
->a.foo = 'baz' : string
->              : ^^^^^^
+>a.foo = 'baz' : "baz"
+>              : ^^^^^
 >a.foo : string
 >      : ^^^^^^
 >a : Test
 >  : ^^^^
 >foo : string
 >    : ^^^^^^
->'baz' : string
->      : ^^^^^^
+>'baz' : "baz"
+>      : ^^^^^
 

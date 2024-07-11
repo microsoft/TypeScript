@@ -59,8 +59,8 @@ var r2 = foo2('', 1); // number
 >            : ^
 >foo2 : <T, U>(t: T, u: U) => U
 >     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >1 : 1
 >  : ^
 
@@ -71,8 +71,8 @@ var r3 = foo2b(1); // {}
 >         : ^^^^^^^
 >foo2b : <T, U>(u: U) => T
 >      : ^ ^^ ^^ ^^ ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 class C<T, U> {
 >C : C<T, U>
@@ -199,10 +199,10 @@ var c = new C('', 1);
 >             : ^^^^^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->'' : string
->   : ^^^^^^
->1 : number
->  : ^^^^^^
+>'' : ""
+>   : ^^
+>1 : 1
+>  : ^
 
 var r4 = c.foo('', 1); // string
 >r4 : string
@@ -215,10 +215,10 @@ var r4 = c.foo('', 1); // string
 >  : ^^^^^^^^^^^^^^^^^
 >foo : (t: string, u: number) => string
 >    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
->1 : number
->  : ^^^^^^
+>'' : ""
+>   : ^^
+>1 : 1
+>  : ^
 
 var r5 = c.foo2('', 1); // number
 >r5 : number
@@ -231,10 +231,10 @@ var r5 = c.foo2('', 1); // number
 >  : ^^^^^^^^^^^^^^^^^
 >foo2 : (t: string, u: number) => number
 >     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
->1 : number
->  : ^^^^^^
+>'' : ""
+>   : ^^
+>1 : 1
+>  : ^
 
 var r6 = c.foo3(true, 1); // boolean
 >r6 : boolean
@@ -249,8 +249,8 @@ var r6 = c.foo3(true, 1); // boolean
 >     : ^ ^^ ^^^^^ ^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var r7 = c.foo4('', true); // string
 >r7 : string
@@ -263,8 +263,8 @@ var r7 = c.foo4('', true); // string
 >  : ^^^^^^^^^^^^^^^^^
 >foo4 : <U>(t: string, u: U) => string
 >     : ^ ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >true : true
 >     : ^^^^
 
@@ -281,8 +281,8 @@ var r8 = c.foo5(true, 1); // boolean
 >     : ^ ^^ ^^ ^^^^^ ^^^^^^^^^
 >true : true
 >     : ^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var r9 = c.foo6(); // {}
 >r9 : unknown
@@ -307,8 +307,8 @@ var r10 = c.foo7(''); // {}
 >  : ^^^^^^^^^^^^^^^^^
 >foo7 : <T, U>(u: U) => T
 >     : ^ ^^ ^^ ^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var r11 = c.foo8(); // {}
 >r11 : unknown
@@ -399,10 +399,10 @@ var r4 = i.foo('', 1); // string
 >  : ^^^^^^^^^^^^^^^^^
 >foo : (t: string, u: number) => string
 >    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
->1 : number
->  : ^^^^^^
+>'' : ""
+>   : ^^
+>1 : 1
+>  : ^
 
 var r5 = i.foo2('', 1); // number
 >r5 : number
@@ -415,10 +415,10 @@ var r5 = i.foo2('', 1); // number
 >  : ^^^^^^^^^^^^^^^^^
 >foo2 : (t: string, u: number) => number
 >     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
->1 : number
->  : ^^^^^^
+>'' : ""
+>   : ^^
+>1 : 1
+>  : ^
 
 var r6 = i.foo3(true, 1); // boolean
 >r6 : boolean
@@ -433,8 +433,8 @@ var r6 = i.foo3(true, 1); // boolean
 >     : ^ ^^ ^^^^^ ^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var r7 = i.foo4('', true); // string
 >r7 : string
@@ -447,8 +447,8 @@ var r7 = i.foo4('', true); // string
 >  : ^^^^^^^^^^^^^^^^^
 >foo4 : <U>(t: string, u: U) => string
 >     : ^ ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >true : true
 >     : ^^^^
 
@@ -465,8 +465,8 @@ var r8 = i.foo5(true, 1); // boolean
 >     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >true : true
 >     : ^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var r9 = i.foo6(); // {}
 >r9 : unknown
@@ -491,8 +491,8 @@ var r10 = i.foo7(''); // {}
 >  : ^^^^^^^^^^^^^^^^^
 >foo7 : <T, U>(u: U) => T
 >     : ^ ^^ ^^ ^^ ^^^^^ 
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var r11 = i.foo8(); // {}
 >r11 : unknown

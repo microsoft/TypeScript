@@ -49,8 +49,8 @@ class D {
 >     : ^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->" " : string
->    : ^^^^^^
+>" " : " "
+>    : ^^^
     }
 
     getData1() {
@@ -90,8 +90,8 @@ class D {
 >     : ^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->" " : string
->    : ^^^^^^
+>" " : " "
+>    : ^^^
     }
 }
 
@@ -114,8 +114,8 @@ var o: {
         prop1: "string" ,
 >prop1 : string
 >      : ^^^^^^
->"string" : string
->         : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 
         prop2: true
 >prop2 : true

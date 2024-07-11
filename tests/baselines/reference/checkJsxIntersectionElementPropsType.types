@@ -39,8 +39,8 @@ const y = new C({foobar: "example"});
 >                    : ^^^^^^^^^^^^^^^^^^^
 >foobar : string
 >       : ^^^^^^
->"example" : string
->          : ^^^^^^
+>"example" : "example"
+>          : ^^^^^^^^^
 
 const x = <C foobar="example" />
 >x : error

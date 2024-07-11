@@ -39,14 +39,14 @@ var r1b = foo((x) => 1, (x) => ''); // {} => {}
 >         : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >(x) => '' : (x: unknown) => string
 >          : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var r2 = foo((x: Object) => null, (x: string) => ''); // Object => Object
 >r2 : (x: any) => any
@@ -95,14 +95,14 @@ var r3ii = foo((x: number) => 1, (x: number) => 1); // number => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >(x: number) => 1 : (x: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var a: { x: number; y?: number; };
 >a : { x: number; y?: number; }

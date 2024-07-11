@@ -42,8 +42,8 @@ var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
 >                      : ^^^^^^^^^^^^^^^^^^^^^
 >foreword : string
 >         : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >{ forwards: "back" } : { forwards: string; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^
 >forwards : string
@@ -58,8 +58,8 @@ var b4: Book & Cover = { foreword: "hi", colour: "blue" };
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foreword : string
 >         : ^^^^^^
->"hi" : string
->     : ^^^^^^
+>"hi" : "hi"
+>     : ^^^^
 >colour : string
 >       : ^^^^^^
 >"blue" : "blue"
@@ -76,7 +76,7 @@ var b5: Book & Cover = { foreward: "hi", color: "blue" };
 >     : ^^^^
 >color : string
 >      : ^^^^^^
->"blue" : string
+>"blue" : "blue"
 >       : ^^^^^^
 
 var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
@@ -86,11 +86,11 @@ var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foreword : string
 >         : ^^^^^^
->"hi" : string
->     : ^^^^^^
+>"hi" : "hi"
+>     : ^^^^
 >color : string
 >      : ^^^^^^
->"blue" : string
+>"blue" : "blue"
 >       : ^^^^^^
 >price : number
 >      : ^^^^^^
@@ -104,8 +104,8 @@ var b7: Book & number = { foreword: "hi", price: 10.99 };
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foreword : string
 >         : ^^^^^^
->"hi" : string
->     : ^^^^^^
+>"hi" : "hi"
+>     : ^^^^
 >price : number
 >      : ^^^^^^
 >10.99 : 10.99
@@ -228,7 +228,7 @@ function test<T extends IFoo>() {
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"test" : string
+>"test" : "test"
 >       : ^^^^^^
 >prop : boolean
 >     : ^^^^^^^

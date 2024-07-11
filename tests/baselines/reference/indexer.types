@@ -24,16 +24,16 @@ var jq:JQuery={ 0: { id : "a" }, 1: { id : "b" } };
 >             : ^^^^^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 >1 : { id: string; }
 >  : ^^^^^^^^^^^^^^^
 >{ id : "b" } : { id: string; }
 >             : ^^^^^^^^^^^^^^^
 >id : string
 >   : ^^^^^^
->"b" : string
->    : ^^^^^^
+>"b" : "b"
+>    : ^^^
 
 jq[0].id;
 >jq[0].id : string

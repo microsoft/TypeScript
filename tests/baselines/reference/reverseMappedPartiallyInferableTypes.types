@@ -246,8 +246,8 @@ const obj1 = id({
         contents: ""
 >contents : string
 >         : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
     }
 });
 
@@ -272,8 +272,8 @@ const obj2 = id({
         contents: "",
 >contents : string
 >         : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
         contains(k) {
 >contains : (k: string) => boolean
@@ -366,8 +366,8 @@ inferMapped1({
 >    : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
 >                        : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >arg => arg.key > 5 : (arg: { key: number; }) => boolean
 >                   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { key: number; }
@@ -414,8 +414,8 @@ inferMapped2({
 >    : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
 >                        : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >arg => arg.key > 5 : (arg: { key: number; }) => boolean
 >                   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { key: number; }
@@ -462,8 +462,8 @@ inferMappedReadonly({
 >    : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[3, arg => arg.key > 5] : [number, (arg: { key: number; }) => boolean]
 >                        : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >arg => arg.key > 5 : (arg: { key: number; }) => boolean
 >                   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { key: number; }

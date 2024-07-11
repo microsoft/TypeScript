@@ -8,14 +8,14 @@ class A {
     x: string = 'A';
 >x : string
 >  : ^^^^^^
->'A' : string
->    : ^^^^^^
+>'A' : "A"
+>    : ^^^
 
     y: number = 0;
 >y : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 class B {
@@ -25,8 +25,8 @@ class B {
     x: string = 'B';
 >x : string
 >  : ^^^^^^
->'B' : string
->    : ^^^^^^
+>'B' : "B"
+>    : ^^^
 
     z: boolean = true;
 >z : boolean

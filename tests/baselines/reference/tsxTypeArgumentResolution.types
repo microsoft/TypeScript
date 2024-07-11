@@ -39,8 +39,8 @@ let x = <MyComp<Prop> a={10} b="hi" />; // OK
 >       : ^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : string
 >  : ^^^^^^
 
@@ -55,8 +55,8 @@ x = <MyComp<Prop> a={10} b="hi"></MyComp>; // OK
 >       : ^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : string
 >  : ^^^^^^
 >MyComp : typeof MyComp
@@ -73,12 +73,12 @@ x = <MyComp<Prop> a={10} b={20} />; // error
 >       : ^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : number
 >  : ^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
 
 x = <MyComp<Prop> a={10} b={20}></MyComp>; // error
 >x = <MyComp<Prop> a={10} b={20}></MyComp> : JSX.Element
@@ -91,12 +91,12 @@ x = <MyComp<Prop> a={10} b={20}></MyComp>; // error
 >       : ^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : number
 >  : ^^^^^^
->20 : number
->   : ^^^^^^
+>20 : 20
+>   : ^^
 >MyComp : typeof MyComp
 >       : ^^^^^^^^^^^^^
 
@@ -111,8 +111,8 @@ x = <MyComp<Prop, Prop> a={10} b="hi" />; // error
 >       : ^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : string
 >  : ^^^^^^
 
@@ -127,8 +127,8 @@ x = <MyComp<Prop, Prop> a={10} b="hi"></MyComp>; // error
 >       : ^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : string
 >  : ^^^^^^
 >MyComp : typeof MyComp
@@ -145,8 +145,8 @@ x = <MyComp<> a={10} b="hi" />; // error
 >       : ^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : string
 >  : ^^^^^^
 
@@ -161,8 +161,8 @@ x = <MyComp<> a={10} b="hi"></MyComp>; // error
 >       : ^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : string
 >  : ^^^^^^
 >MyComp : typeof MyComp
@@ -255,8 +255,8 @@ x = <MyComp2<Prop> a={10} b="hi" />; // error
 >        : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : string
 >  : ^^^^^^
 
@@ -271,8 +271,8 @@ x = <MyComp2<Prop> a={10} b="hi"></MyComp2>; // error
 >        : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >b : string
 >  : ^^^^^^
 >MyComp2 : typeof MyComp2

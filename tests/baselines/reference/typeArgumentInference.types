@@ -36,24 +36,24 @@ noGenericParams('');
 >                    : ^^^^
 >noGenericParams : <T>(n: string) => void
 >                : ^ ^^ ^^      ^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 noGenericParams<number>('');
 >noGenericParams<number>('') : void
 >                            : ^^^^
 >noGenericParams : <T>(n: string) => void
 >                : ^ ^^ ^^      ^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 noGenericParams<{}>('');
 >noGenericParams<{}>('') : void
 >                        : ^^^^
 >noGenericParams : <T>(n: string) => void
 >                : ^ ^^ ^^      ^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 // Generic call with multiple type parameters and only one used in parameter type annotation
 function someGenerics1<T, U>(n: T, m: number) { }
@@ -69,20 +69,20 @@ someGenerics1(3, 4);
 >                    : ^^^^
 >someGenerics1 : <T, U>(n: T, m: number) => void
 >              : ^ ^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
 someGenerics1<number, {}>(3, 4);
 >someGenerics1<number, {}>(3, 4) : void
 >                                : ^^^^
 >someGenerics1 : <T, U>(n: T, m: number) => void
 >              : ^ ^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
 // Generic call with argument of function type whose parameter is of type parameter type
 function someGenerics2a<T>(n: (x: T) => void) { }
@@ -134,8 +134,8 @@ someGenerics2a<string>((n) => n.substr(0));
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
 >       : ^    ^^      ^^      ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 function someGenerics2b<T, U>(n: (x: T, y: U) => void) { }
 >someGenerics2b : <T, U>(n: (x: T, y: U) => void) => void
@@ -215,8 +215,8 @@ someGenerics3(() => '');
 >              : ^ ^^        ^^       ^^^^^^^^^
 >() => '' : () => string
 >         : ^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 someGenerics3<Date>(() => undefined);
 >someGenerics3<Date>(() => undefined) : void
@@ -235,8 +235,8 @@ someGenerics3<number>(() => 3);
 >              : ^ ^^        ^^       ^^^^^^^^^
 >() => 3 : () => number
 >        : ^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
 // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
 function someGenerics4<T, U>(n: T, f: (x: U) => void) { }
@@ -254,8 +254,8 @@ someGenerics4(4, () => null);
 >                             : ^^^^
 >someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
 >              : ^ ^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 >() => null : () => any
 >           : ^^^^^^^^^
 
@@ -264,8 +264,8 @@ someGenerics4<string, number>('', () => 3);
 >                                           : ^^^^
 >someGenerics4 : <T, U>(n: T, f: (x: U) => void) => void
 >              : ^ ^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >() => 3 : () => number
 >        : ^^^^^^^^^^^^
 >3 : 3
@@ -293,8 +293,8 @@ someGenerics5(4, () => null);
 >                             : ^^^^
 >someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
 >              : ^ ^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 >() => null : () => any
 >           : ^^^^^^^^^
 
@@ -303,8 +303,8 @@ someGenerics5<number, string>('', () => 3);
 >                                           : ^^^^
 >someGenerics5 : <U, T>(n: T, f: (x: U) => void) => void
 >              : ^ ^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >() => 3 : () => number
 >        : ^^^^^^^^^^^^
 >3 : 3
@@ -565,14 +565,14 @@ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >{ b: '' } : { b: string; }
 >          : ^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var a9b: { a?: number; b?: string; };
 >a9b : { a?: number; b?: string; }
@@ -614,8 +614,8 @@ var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->6 : number
->  : ^^^^^^
+>6 : 6
+>  : ^
 >z : Date
 >  : ^^^^
 >new Date() : Date
@@ -626,12 +626,12 @@ var a9e = someGenerics9(undefined, { x: 6, z: new Date() }, { x: 6, y: '' });
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->6 : number
->  : ^^^^^^
+>6 : 6
+>  : ^
 >y : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var a9e: {};
 >a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
@@ -650,8 +650,8 @@ var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->6 : number
->  : ^^^^^^
+>6 : 6
+>  : ^
 >z : Date
 >  : ^^^^
 >new Date() : Date
@@ -662,8 +662,8 @@ var a9f = someGenerics9<A92>(undefined, { x: 6, z: new Date() }, { x: 6, y: '' }
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->6 : number
->  : ^^^^^^
+>6 : 6
+>  : ^
 >y : string
 >  : ^^^^^^
 >'' : ""
@@ -685,20 +685,20 @@ var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >{ x: 6 } : { x: number; }
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->6 : number
->  : ^^^^^^
+>6 : 6
+>  : ^
 >{ x: 6 } : { x: number; }
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->6 : number
->  : ^^^^^^
+>6 : 6
+>  : ^
 
 var a9d: { x: number; };
 >a9d : { x: number; }

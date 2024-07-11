@@ -57,8 +57,8 @@ export type LocalInterface =
 >                                                             : ^^^
 >import("pkg", {"resolution-mode": "import"}) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"pkg" : string
->      : ^^^^^^
+>"pkg" : "pkg"
+>      : ^^^^^
 >{"resolution-mode": "import"} : { "resolution-mode": string; }
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"resolution-mode" : string
@@ -148,8 +148,8 @@ export type LocalInterface =
 >                                                                 : ^^^
 >import("pkg", [ {"resolution-mode": "import"} ]) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"pkg" : string
->      : ^^^^^^
+>"pkg" : "pkg"
+>      : ^^^^^
 >[ {"resolution-mode": "import"} ] : { "resolution-mode": string; }[]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{"resolution-mode": "import"} : { "resolution-mode": string; }
@@ -228,8 +228,8 @@ export type LocalInterface =
 >                                          : ^^^
 >import("pkg", Attribute2) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"pkg" : string
->      : ^^^^^^
+>"pkg" : "pkg"
+>      : ^^^^^
 >Attribute2 : any
 >           : ^^^
 >ImportInterface : any

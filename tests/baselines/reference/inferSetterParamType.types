@@ -30,8 +30,8 @@ class Foo2 {
 >    : ^^^^^^
 
         return 0; // should be an error - can't coerce infered return type to match setter annotated type
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
     }
     set bar(n:string) {
 >bar : string

@@ -67,8 +67,8 @@ export class XmlElement2 extends Mixin(
             num: number = 0
 >num : number
 >    : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
         }
         return XmlElement2;
 >XmlElement2 : typeof XmlElement2

@@ -61,16 +61,16 @@ mod.bad3;
 
 
 mod.thing = 0;
->mod.thing = 0 : number
->              : ^^^^^^
+>mod.thing = 0 : 0
+>              : ^
 >mod.thing : number
 >          : ^^^^^^
 >mod : typeof mod
 >    : ^^^^^^^^^^
 >thing : number
 >      : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 mod.other = 0;
 >mod.other = 0 : 0
@@ -171,8 +171,8 @@ let str = /** @type {string} */("other");
 >    : ^^^^^^
 >("other") : string
 >          : ^^^^^^
->"other" : string
->        : ^^^^^^
+>"other" : "other"
+>        : ^^^^^^^
 
 Object.defineProperty(exports, str, { value: 42, writable: true });
 >Object.defineProperty(exports, str, { value: 42, writable: true }) : typeof import("mod1")

@@ -31,7 +31,7 @@ function main1() : number {
 >                : ^^^^
 >log : (s: string) => void
 >    : ^ ^^      ^^^^^    
->"in catch" : string
->           : ^^^^^^
+>"in catch" : "in catch"
+>           : ^^^^^^^^^^
     }
 }

@@ -80,10 +80,10 @@ module Shapes {
 >                : ^^^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
     }
 
 }
@@ -100,10 +100,10 @@ var p: IPoint = new Shapes.Point(3, 4);
 >       : ^^^^^^^^^^^^^
 >Point : typeof Shapes.Point
 >      : ^^^^^^^^^^^^^^^^^^^
->3 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
 
 var dist = p.getDist();
 >dist : number

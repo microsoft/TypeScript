@@ -15,28 +15,28 @@ class C {
 }
 
 C["foo"] = 1
->C["foo"] = 1 : number
->             : ^^^^^^
+>C["foo"] = 1 : 1
+>             : ^
 >C["foo"] : number
 >         : ^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 C.bar = 2;
->C.bar = 2 : number
->          : ^^^^^^
+>C.bar = 2 : 2
+>          : ^
 >C.bar : number
 >      : ^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >bar : number
 >    : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 const foo = C["foo"]
 >foo : number

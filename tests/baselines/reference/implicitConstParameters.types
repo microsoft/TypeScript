@@ -157,12 +157,12 @@ function f4(x: string | undefined) {
 >  : ^^^^^^^^^^^^^^^^^^
 
     x = "abc";
->x = "abc" : string
->          : ^^^^^^
+>x = "abc" : "abc"
+>          : ^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
     if (x) {
 >x : string
@@ -209,12 +209,12 @@ function f5(x: string | undefined) {
 >       : ^^^^^^
     }
     x = "abc";  // causes x to be considered non-const
->x = "abc" : string
->          : ^^^^^^
+>x = "abc" : "abc"
+>          : ^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 }
 
 
@@ -231,8 +231,8 @@ function f6(x: string | undefined) {
 >        : ^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     if (x) {
 >x : string | undefined

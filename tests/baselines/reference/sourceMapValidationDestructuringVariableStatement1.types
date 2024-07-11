@@ -33,12 +33,12 @@ var robotA: Robot = { name: "mower", skill: "mowing" };
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"mower" : string
->        : ^^^^^^
+>"mower" : "mower"
+>        : ^^^^^^^
 >skill : string
 >      : ^^^^^^
->"mowing" : string
->         : ^^^^^^
+>"mowing" : "mowing"
+>         : ^^^^^^^^
 
 var robotB: Robot = { name: "trimmer", skill: "trimming" };
 >robotB : Robot
@@ -47,12 +47,12 @@ var robotB: Robot = { name: "trimmer", skill: "trimming" };
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"trimmer" : string
->          : ^^^^^^
+>"trimmer" : "trimmer"
+>          : ^^^^^^^^^
 >skill : string
 >      : ^^^^^^
->"trimming" : string
->           : ^^^^^^
+>"trimming" : "trimming"
+>           : ^^^^^^^^^^
 
 var a: string, { name: nameA } = robotA;
 >a : string

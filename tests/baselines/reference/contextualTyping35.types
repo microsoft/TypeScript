@@ -12,8 +12,8 @@ var foo = <{ id: number;}> {id:4, name: "as"};
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 >name : string
 >     : ^^^^^^
 >"as" : "as"

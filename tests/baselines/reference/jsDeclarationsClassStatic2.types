@@ -41,14 +41,14 @@ class Bar extends Foo {}
 >    : ^^^
 
 Bar.foo = "foo";
->Bar.foo = "foo" : string
->                : ^^^^^^
+>Bar.foo = "foo" : "foo"
+>                : ^^^^^
 >Bar.foo : string
 >        : ^^^^^^
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 

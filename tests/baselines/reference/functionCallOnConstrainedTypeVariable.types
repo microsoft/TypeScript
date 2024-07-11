@@ -41,8 +41,8 @@ function call0(p: A | B) {
 >  : ^^^^^
 >a : ((x: number) => string) | ((x: boolean) => string)
 >  : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
->"s" : string
->    : ^^^^^^
+>"s" : "s"
+>    : ^^^
 }
 
 function callN<T extends A | B>(p: T) {
@@ -60,8 +60,8 @@ function callN<T extends A | B>(p: T) {
 >  : ^^^^^
 >a : ((x: number) => string) | ((x: boolean) => string)
 >  : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
->"s" : string
->    : ^^^^^^
+>"s" : "s"
+>    : ^^^
   
   var a: T["a"] = p.a;
 >a : T["a"]
@@ -78,16 +78,16 @@ function callN<T extends A | B>(p: T) {
 >      : ^^^^^^
 >a : ((x: number) => string) | ((x: boolean) => string)
 >  : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
   a("", "", "", ""); // Error
 >a("", "", "", "") : string
 >                  : ^^^^^^
 >a : ((x: number) => string) | ((x: boolean) => string)
 >  : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >"" : ""
 >   : ^^
 >"" : ""

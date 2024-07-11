@@ -50,8 +50,8 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >         : ^^^^^^^^
 >strOrBool : string
 >          : ^^^^^^
->"string" : string
->         : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 
 	let bool: boolean = (typeof strOrBool === 'boolean') ? strOrBool : false;
 >bool : boolean
@@ -90,8 +90,8 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >          : ^^^^^^^^^
 >strOrBool : string
 >          : ^^^^^^
->"string" : string
->         : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 
 	let bool2: boolean = (typeof strOrBool !== 'string') ? strOrBool : false;
 >bool2 : boolean
@@ -159,8 +159,8 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >         : ^^^^^^^^
 >strOrBool : string
 >          : ^^^^^^
->"string" : string
->         : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 
 	let bool: boolean = (typeof strOrBool === 'boolean') ? strOrBool : false;
 >bool : boolean
@@ -199,8 +199,8 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >          : ^^^^^^^^^
 >strOrBool : string
 >          : ^^^^^^
->"string" : string
->         : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 
 	let bool2: boolean = (typeof strOrBool !== 'string') ? strOrBool : false;
 >bool2 : boolean

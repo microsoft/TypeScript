@@ -65,8 +65,8 @@ class A {
 >       : ^ ^^      ^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->30 : number
->   : ^^^^^^
+>30 : 30
+>   : ^^
 
         A.#bar(30);
 >A.#bar(30) : Promise<void>
@@ -75,8 +75,8 @@ class A {
 >       : ^ ^^      ^^^^^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->30 : number
->   : ^^^^^^
+>30 : 30
+>   : ^^
 
         A.#bar(30);
 >A.#bar(30) : Promise<void>
@@ -85,8 +85,8 @@ class A {
 >       : ^ ^^      ^^^^^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->30 : number
->   : ^^^^^^
+>30 : 30
+>   : ^^
 
         A.#quux = A.#quux + 1;
 >A.#quux = A.#quux + 1 : number
@@ -140,8 +140,8 @@ class B extends A {
 >       : ^ ^^      ^^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
->"str" : string
->      : ^^^^^^
+>"str" : "str"
+>      : ^^^^^
     }
 }
 

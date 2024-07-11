@@ -28,8 +28,8 @@ function foo1(results: number[] | undefined, results1: number[] | undefined) {
 >   : ^^^^^^^
 >push : (...items: number[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->100 : number
->    : ^^^^^^
+>100 : 100
+>    : ^^^
 }
 
 function foo2(results: number[] | undefined, results1: number[] | undefined) {
@@ -59,8 +59,8 @@ function foo2(results: number[] | undefined, results1: number[] | undefined) {
 >   : ^^^^^^^
 >push : (...items: number[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->100 : number
->    : ^^^^^^
+>100 : 100
+>    : ^^^
 }
 
 function foo3(results: number[] | undefined, results1: number[] | undefined) {
@@ -90,7 +90,7 @@ function foo3(results: number[] | undefined, results1: number[] | undefined) {
 >   : ^^^^^^^
 >push : (...items: never[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^      
->100 : number
->    : ^^^^^^
+>100 : 100
+>    : ^^^
 }
 

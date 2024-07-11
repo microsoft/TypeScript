@@ -8,8 +8,8 @@ class C {
     public get Foo() { return "foo";} // ok
 >Foo : string
 >    : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 
     public set Foo(foo:string) {} // ok
 >Foo : string
@@ -43,8 +43,8 @@ class E {
     private get Baz():number { return 0; }
 >Baz : number
 >    : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     public set Baz(n:number) {} // error - accessors do not agree in visibility
 >Baz : number

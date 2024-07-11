@@ -123,14 +123,14 @@ class A {
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : [number]
 >  : ^^^^^^^^
 >[2] : [number]
 >    : ^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
         [this.#field, [this.#field]] = [1, [2]];
 >[this.#field, [this.#field]] = [1, [2]] : [number, [number]]
@@ -149,12 +149,12 @@ class A {
 >     : ^^^^
 >[1, [2]] : [number, [number]]
 >         : ^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >[2] : [number]
 >    : ^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
         ({ a: this.#field = 1, b: [this.#field = 1] } = { b: [] });
 >({ a: this.#field = 1, b: [this.#field = 1] } = { b: [] }) : { b: []; a?: number; }
@@ -165,26 +165,26 @@ class A {
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->this.#field = 1 : number
->                : ^^^^^^
+>this.#field = 1 : 1
+>                : ^
 >this.#field : number
 >            : ^^^^^^
 >this : this
 >     : ^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : [number]
 >  : ^^^^^^^^
 >[this.#field = 1] : [number]
 >                  : ^^^^^^^^
->this.#field = 1 : number
->                : ^^^^^^
+>this.#field = 1 : 1
+>                : ^
 >this.#field : number
 >            : ^^^^^^
 >this : this
 >     : ^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >{ b: [] } : { b: []; a?: number; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^
 >b : []
@@ -197,14 +197,14 @@ class A {
 >                       : ^^
 >[this.#field = 2] : [number]
 >                  : ^^^^^^^^
->this.#field = 2 : number
->                : ^^^^^^
+>this.#field = 2 : 2
+>                : ^
 >this.#field : number
 >            : ^^^^^^
 >this : this
 >     : ^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >[] : []
 >   : ^^
 
@@ -213,8 +213,8 @@ class A {
 >                                   : ^^
 >[this.otherObject.#field = 2] : [number]
 >                              : ^^^^^^^^
->this.otherObject.#field = 2 : number
->                            : ^^^^^^
+>this.otherObject.#field = 2 : 2
+>                            : ^
 >this.otherObject.#field : number
 >                        : ^^^^^^
 >this.otherObject : A
@@ -223,8 +223,8 @@ class A {
 >     : ^^^^
 >otherObject : A
 >            : ^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >[] : []
 >   : ^^
     }
@@ -245,8 +245,8 @@ class A {
 >   : ^
 >[2] : [number]
 >    : ^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
     }
 }
 

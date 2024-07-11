@@ -153,8 +153,8 @@ Other.Cls = class {
 var x = "ok";
 >x : string
 >  : ^^^^^^
->"ok" : string
->     : ^^^^^^
+>"ok" : "ok"
+>     : ^^^^
 
 /**
  * @type {Host.UserMetrics.Blah}
@@ -162,6 +162,6 @@ var x = "ok";
 var y = "ok";
 >y : string
 >  : ^^^^^^
->"ok" : string
->     : ^^^^^^
+>"ok" : "ok"
+>     : ^^^^
 

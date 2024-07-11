@@ -21,6 +21,6 @@ const x = { a: 1 };
 const y = "a";
 >y : number
 >  : ^^^^^^
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 

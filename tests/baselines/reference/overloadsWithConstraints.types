@@ -20,6 +20,6 @@ var v = f<string>("");
 >              : ^^^^^^
 >f : { <T extends Number>(x: T): T; <T extends String>(x: T): T; }
 >  : ^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 

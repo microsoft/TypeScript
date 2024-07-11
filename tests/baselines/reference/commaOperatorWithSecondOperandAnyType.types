@@ -129,8 +129,8 @@ var x: any;
 >         : ^^^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >[null, 1] : number[]
 >          : ^^^^^^^^
 >1 : 1
@@ -199,8 +199,8 @@ var resultIsAny9 = ("string".charAt(0), undefined);
 >         : ^^^^^^^^
 >charAt : (pos: number) => string
 >       : ^   ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >undefined : undefined
 >          : ^^^^^^^^^
 

@@ -8,8 +8,8 @@ export const kSymbol = Symbol("my-symbol");
 >                    : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"my-symbol" : string
->            : ^^^^^^
+>"my-symbol" : "my-symbol"
+>            : ^^^^^^^^^^^
 
 /**
  * @typedef {{[kSymbol]: true}} WithSymbol

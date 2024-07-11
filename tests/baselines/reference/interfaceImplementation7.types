@@ -29,7 +29,7 @@ class C1 implements i4 {
     public name(): string { return ""; }
 >name : () => string
 >     : ^^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 }
 

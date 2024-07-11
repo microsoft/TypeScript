@@ -56,8 +56,8 @@ export function decl2() {}
 decl2[c] = 0
 >decl2[c] = 0 : 0
 >             : ^
->decl2[c] : any
->         : ^^^
+>decl2[c] : number
+>         : ^^^^^^
 >decl2 : typeof decl2
 >      : ^^^^^^^^^^^^
 >c : "C"
@@ -88,8 +88,8 @@ export function decl4() {}
 decl4[num] = 0
 >decl4[num] = 0 : 0
 >               : ^
->decl4[num] : any
->           : ^^^
+>decl4[num] : number
+>           : ^^^^^^
 >decl4 : typeof decl4
 >      : ^^^^^^^^^^^^
 >num : 1
@@ -120,8 +120,8 @@ export function decl6() {}
 decl6[numStr] = 0
 >decl6[numStr] = 0 : 0
 >                  : ^
->decl6[numStr] : any
->              : ^^^
+>decl6[numStr] : number
+>              : ^^^^^^
 >decl6 : typeof decl6
 >      : ^^^^^^^^^^^^
 >numStr : "10"
@@ -152,8 +152,8 @@ export function decl8() {}
 decl8[withWhitespace] = 0
 >decl8[withWhitespace] = 0 : 0
 >                          : ^
->decl8[withWhitespace] : any
->                      : ^^^
+>decl8[withWhitespace] : number
+>                      : ^^^^^^
 >decl8 : typeof decl8
 >      : ^^^^^^^^^^^^
 >withWhitespace : "foo bar"
@@ -184,8 +184,8 @@ export function decl10() {}
 decl10[emoji] = 0
 >decl10[emoji] = 0 : 0
 >                  : ^
->decl10[emoji] : any
->              : ^^^
+>decl10[emoji] : number
+>              : ^^^^^^
 >decl10 : typeof decl10
 >       : ^^^^^^^^^^^^^
 >emoji : "🤷‍♂️"
@@ -212,18 +212,18 @@ arrow["B"] = 'bar'
 >      : ^^^^^
 
 export const arrow2 = () => {}
->arrow2 : { (): void; C: any; }
->       : ^^^^^^^^^^^^^^^^^^^^^
->() => {} : { (): void; C: any; }
->         : ^^^^^^^^^^^^^^^^^^^^^
+>arrow2 : { (): void; C: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; C: number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 arrow2[c] = 100
 >arrow2[c] = 100 : 100
 >                : ^^^
->arrow2[c] : any
->          : ^^^
->arrow2 : { (): void; C: any; }
->       : ^^^^^^^^^^^^^^^^^^^^^
+>arrow2[c] : number
+>          : ^^^^^^
+>arrow2 : { (): void; C: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >c : "C"
 >  : ^^^
 >100 : 100
@@ -248,18 +248,18 @@ arrow3[77] = 0
 >  : ^
 
 export const arrow4 = () => {}
->arrow4 : { (): void; 1: any; }
->       : ^^^^^^^^^^^^^^^^^^^^^
->() => {} : { (): void; 1: any; }
->         : ^^^^^^^^^^^^^^^^^^^^^
+>arrow4 : { (): void; 1: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; 1: number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 arrow4[num] = 0
 >arrow4[num] = 0 : 0
 >                : ^
->arrow4[num] : any
->            : ^^^
->arrow4 : { (): void; 1: any; }
->       : ^^^^^^^^^^^^^^^^^^^^^
+>arrow4[num] : number
+>            : ^^^^^^
+>arrow4 : { (): void; 1: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >num : 1
 >    : ^
 >0 : 0
@@ -284,18 +284,18 @@ arrow5["101"] = 0
 >  : ^
 
 export const arrow6 = () => {}
->arrow6 : { (): void; "10": any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^
->() => {} : { (): void; "10": any; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrow6 : { (): void; "10": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; "10": number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 arrow6[numStr] = 0
 >arrow6[numStr] = 0 : 0
 >                   : ^
->arrow6[numStr] : any
->               : ^^^
->arrow6 : { (): void; "10": any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>arrow6[numStr] : number
+>               : ^^^^^^
+>arrow6 : { (): void; "10": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numStr : "10"
 >       : ^^^^
 >0 : 0
@@ -320,18 +320,18 @@ arrow7["qwe rty"] = 0
 >  : ^
 
 export const arrow8 = () => {}
->arrow8 : { (): void; "foo bar": any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->() => {} : { (): void; "foo bar": any; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrow8 : { (): void; "foo bar": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; "foo bar": number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 arrow8[withWhitespace] = 0
 >arrow8[withWhitespace] = 0 : 0
 >                           : ^
->arrow8[withWhitespace] : any
->                       : ^^^
->arrow8 : { (): void; "foo bar": any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrow8[withWhitespace] : number
+>                       : ^^^^^^
+>arrow8 : { (): void; "foo bar": number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >withWhitespace : "foo bar"
 >               : ^^^^^^^^^
 >0 : 0
@@ -356,18 +356,18 @@ arrow9["🤪"] = 0
 >  : ^
 
 export const arrow10 = () => {}
->arrow10 : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": any; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->() => {} : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": any; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrow10 : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {} : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 arrow10[emoji] = 0
 >arrow10[emoji] = 0 : 0
 >                   : ^
->arrow10[emoji] : any
->               : ^^^
->arrow10 : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": any; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrow10[emoji] : number
+>               : ^^^^^^
+>arrow10 : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >emoji : "🤷‍♂️"
 >      : ^^^^^^^
 >0 : 0

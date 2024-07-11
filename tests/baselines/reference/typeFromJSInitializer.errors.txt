@@ -3,10 +3,10 @@ a.js(4,5): error TS7008: Member 'unknowable' implicitly has an 'any' type.
 a.js(5,5): error TS7008: Member 'empty' implicitly has an 'any[]' type.
 a.js(25,29): error TS7006: Parameter 'l' implicitly has an 'any[]' type.
 a.js(27,5): error TS2322: Type 'undefined' is not assignable to type 'null'.
-a.js(29,5): error TS2322: Type 'number' is not assignable to type 'null'.
+a.js(29,5): error TS2322: Type '1' is not assignable to type 'null'.
 a.js(30,5): error TS2322: Type 'true' is not assignable to type 'null'.
 a.js(31,5): error TS2322: Type '{}' is not assignable to type 'null'.
-a.js(32,5): error TS2322: Type 'string' is not assignable to type 'null'.
+a.js(32,5): error TS2322: Type '"ok"' is not assignable to type 'null'.
 a.js(37,5): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
@@ -51,7 +51,7 @@ a.js(37,5): error TS2322: Type 'string' is not assignable to type 'number'.
         a = null
         a = 1
         ~
-!!! error TS2322: Type 'number' is not assignable to type 'null'.
+!!! error TS2322: Type '1' is not assignable to type 'null'.
         a = true
         ~
 !!! error TS2322: Type 'true' is not assignable to type 'null'.
@@ -60,7 +60,7 @@ a.js(37,5): error TS2322: Type 'string' is not assignable to type 'number'.
 !!! error TS2322: Type '{}' is not assignable to type 'null'.
         a = 'ok'
         ~
-!!! error TS2322: Type 'string' is not assignable to type 'null'.
+!!! error TS2322: Type '"ok"' is not assignable to type 'null'.
     
         // b should be number | undefined, not any
         b = 1

@@ -8,7 +8,7 @@ const _symbol = Symbol("_sym");
 >               : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"_sym" : string
+>"_sym" : "_sym"
 >       : ^^^^^^
 
 export class MyClass {

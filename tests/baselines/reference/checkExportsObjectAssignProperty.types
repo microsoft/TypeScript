@@ -49,40 +49,40 @@ m1.setonlyAccessor;
 
 // allowed assignments
 m1.thing = 10;
->m1.thing = 10 : number
->              : ^^^^^^
+>m1.thing = 10 : 10
+>              : ^^
 >m1.thing : number
 >         : ^^^^^^
 >m1 : typeof m1
 >   : ^^^^^^^^^
 >thing : number
 >      : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 m1.rwAccessors = 11;
->m1.rwAccessors = 11 : number
->                    : ^^^^^^
+>m1.rwAccessors = 11 : 11
+>                    : ^^
 >m1.rwAccessors : number
 >               : ^^^^^^
 >m1 : typeof m1
 >   : ^^^^^^^^^
 >rwAccessors : number
 >            : ^^^^^^
->11 : number
->   : ^^^^^^
+>11 : 11
+>   : ^^
 
 m1.setonlyAccessor = "yes";
->m1.setonlyAccessor = "yes" : string
->                           : ^^^^^^
+>m1.setonlyAccessor = "yes" : "yes"
+>                           : ^^^^^
 >m1.setonlyAccessor : string
 >                   : ^^^^^^
 >m1 : typeof m1
 >   : ^^^^^^^^^
 >setonlyAccessor : string
 >                : ^^^^^^
->"yes" : string
->      : ^^^^^^
+>"yes" : "yes"
+>      : ^^^^^
 
 // disallowed assignments
 m1.readonlyProp = "name";
@@ -110,40 +110,40 @@ m1.readonlyAccessor = 12;
 >   : ^^
 
 m1.thing = "no";
->m1.thing = "no" : string
->                : ^^^^^^
+>m1.thing = "no" : "no"
+>                : ^^^^
 >m1.thing : number
 >         : ^^^^^^
 >m1 : typeof m1
 >   : ^^^^^^^^^
 >thing : number
 >      : ^^^^^^
->"no" : string
->     : ^^^^^^
+>"no" : "no"
+>     : ^^^^
 
 m1.rwAccessors = "no";
->m1.rwAccessors = "no" : string
->                      : ^^^^^^
+>m1.rwAccessors = "no" : "no"
+>                      : ^^^^
 >m1.rwAccessors : number
 >               : ^^^^^^
 >m1 : typeof m1
 >   : ^^^^^^^^^
 >rwAccessors : number
 >            : ^^^^^^
->"no" : string
->     : ^^^^^^
+>"no" : "no"
+>     : ^^^^
 
 m1.setonlyAccessor = 0;
->m1.setonlyAccessor = 0 : number
->                       : ^^^^^^
+>m1.setonlyAccessor = 0 : 0
+>                       : ^
 >m1.setonlyAccessor : string
 >                   : ^^^^^^
 >m1 : typeof m1
 >   : ^^^^^^^^^
 >setonlyAccessor : string
 >                : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 import m2 = require("./mod2");
 >m2 : typeof m2
@@ -191,40 +191,40 @@ m2.setonlyAccessor;
 
 // allowed assignments
 m2.thing = "ok";
->m2.thing = "ok" : string
->                : ^^^^^^
+>m2.thing = "ok" : "ok"
+>                : ^^^^
 >m2.thing : string
 >         : ^^^^^^
 >m2 : typeof m2
 >   : ^^^^^^^^^
 >thing : string
 >      : ^^^^^^
->"ok" : string
->     : ^^^^^^
+>"ok" : "ok"
+>     : ^^^^
 
 m2.rwAccessors = 11;
->m2.rwAccessors = 11 : number
->                    : ^^^^^^
+>m2.rwAccessors = 11 : 11
+>                    : ^^
 >m2.rwAccessors : number
 >               : ^^^^^^
 >m2 : typeof m2
 >   : ^^^^^^^^^
 >rwAccessors : number
 >            : ^^^^^^
->11 : number
->   : ^^^^^^
+>11 : 11
+>   : ^^
 
 m2.setonlyAccessor = "yes";
->m2.setonlyAccessor = "yes" : string
->                           : ^^^^^^
+>m2.setonlyAccessor = "yes" : "yes"
+>                           : ^^^^^
 >m2.setonlyAccessor : string
 >                   : ^^^^^^
 >m2 : typeof m2
 >   : ^^^^^^^^^
 >setonlyAccessor : string
 >                : ^^^^^^
->"yes" : string
->      : ^^^^^^
+>"yes" : "yes"
+>      : ^^^^^
 
 // disallowed assignments
 m2.readonlyProp = "name";
@@ -252,40 +252,40 @@ m2.readonlyAccessor = 12;
 >   : ^^
 
 m2.thing = 0;
->m2.thing = 0 : number
->             : ^^^^^^
+>m2.thing = 0 : 0
+>             : ^
 >m2.thing : string
 >         : ^^^^^^
 >m2 : typeof m2
 >   : ^^^^^^^^^
 >thing : string
 >      : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 m2.rwAccessors = "no";
->m2.rwAccessors = "no" : string
->                      : ^^^^^^
+>m2.rwAccessors = "no" : "no"
+>                      : ^^^^
 >m2.rwAccessors : number
 >               : ^^^^^^
 >m2 : typeof m2
 >   : ^^^^^^^^^
 >rwAccessors : number
 >            : ^^^^^^
->"no" : string
->     : ^^^^^^
+>"no" : "no"
+>     : ^^^^
 
 m2.setonlyAccessor = 0;
->m2.setonlyAccessor = 0 : number
->                       : ^^^^^^
+>m2.setonlyAccessor = 0 : 0
+>                       : ^
 >m2.setonlyAccessor : string
 >                   : ^^^^^^
 >m2 : typeof m2
 >   : ^^^^^^^^^
 >setonlyAccessor : string
 >                : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 === mod1.js ===
 Object.defineProperty(exports, "thing", { value: 42, writable: true });

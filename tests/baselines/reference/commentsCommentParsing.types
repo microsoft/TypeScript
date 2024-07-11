@@ -202,10 +202,10 @@ sum(10, 20);
 >            : ^^^^^^
 >sum : (a: number, b: number) => number
 >    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
->10 : number
->   : ^^^^^^
->20 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
+>20 : 20
+>   : ^^
 
 /** This is multiplication function*/
 /** @param */

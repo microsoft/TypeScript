@@ -56,10 +56,10 @@ var numStrTuple: [number, string] = [5, "foo"];
 >            : ^^^^^^^^^^^^^^^^
 >[5, "foo"] : [number, string]
 >           : ^^^^^^^^^^^^^^^^
->5 : number
->  : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>5 : 5
+>  : ^
+>"foo" : "foo"
+>      : ^^^^^
 
 var emptyObjTuple = <[{}, {}]>numStrTuple;
 >emptyObjTuple : [{}, {}]
@@ -186,8 +186,8 @@ var unionTuple: [C, string | number] = [new C(), "foo"];
 >        : ^
 >C : typeof C
 >  : ^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 
 var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
 >unionTuple2 : [C, string | number, D]
@@ -198,8 +198,8 @@ var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
 >        : ^
 >C : typeof C
 >  : ^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >new D() : D
 >        : ^
 >D : typeof D
@@ -210,10 +210,10 @@ var unionTuple3: [number, string| number] = [10, "foo"];
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[10, "foo"] : [number, string]
 >            : ^^^^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>10 : 10
+>   : ^^
+>"foo" : "foo"
+>      : ^^^^^
 
 var unionTuple4 = <[number, number]>unionTuple3; 
 >unionTuple4 : [number, number]

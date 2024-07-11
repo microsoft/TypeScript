@@ -24,16 +24,16 @@ export const Palette = /** @satisfies {Record<string, Color>} */ ({
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : number
 >  : ^^^^^^
->255 : number
->    : ^^^^^^
+>255 : 255
+>    : ^^^
 >g : number
 >  : ^^^^^^
->255 : number
->    : ^^^^^^
+>255 : 255
+>    : ^^^
 >b : number
 >  : ^^^^^^
->255 : number
->    : ^^^^^^
+>255 : 255
+>    : ^^^
 
     black: { r: 0, g: 0, d: 0 }, // <- oops! 'd' in place of 'b'
 >black : { r: number; g: number; d: number; }
@@ -42,12 +42,12 @@ export const Palette = /** @satisfies {Record<string, Color>} */ ({
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >g : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >d : number
 >  : ^^^^^^
 >0 : 0
@@ -60,16 +60,16 @@ export const Palette = /** @satisfies {Record<string, Color>} */ ({
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >g : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >b : number
 >  : ^^^^^^
->255 : number
->    : ^^^^^^
+>255 : 255
+>    : ^^^
 
 });
 

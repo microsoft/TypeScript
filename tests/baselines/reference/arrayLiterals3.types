@@ -23,8 +23,8 @@ var a1: [boolean, string, number] = ["string", 1, true];  // Error
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >true : true
 >     : ^^^^
 
@@ -39,10 +39,10 @@ var [b1, b2]: [number, number] = [1, 2, "string", true];
 >   : ^^^^^^
 >[1, 2, "string", true] : [number, number, string, boolean]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >"string" : "string"
 >         : ^^^^^^^^
 >true : true
@@ -82,18 +82,18 @@ var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >                                 : ^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
->3 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
 >["hello", "string"] : string[]
 >                    : ^^^^^^^^
->"hello" : string
->        : ^^^^^^
->"string" : string
->         : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 
 interface tup {
     0: number[]|string[];

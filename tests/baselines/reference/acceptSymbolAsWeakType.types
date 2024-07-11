@@ -8,8 +8,8 @@ const s: symbol = Symbol('s');
 >            : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->'s' : string
->    : ^^^^^^
+>'s' : "s"
+>    : ^^^
 
 const ws = new WeakSet([s]);
 >ws : WeakSet<symbol>

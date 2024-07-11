@@ -26,8 +26,8 @@ f("x").foo;
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (hdr: string, val: number) => `${string}:\t${number}\r\n`
 >  : ^   ^^      ^^   ^^      ^^^^^                           
->"x" : string
->    : ^^^^^^
+>"x" : "x"
+>    : ^^^
 >foo : any
 >    : ^^^
 

@@ -12,8 +12,8 @@ var s = Symbol.for("equal");
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
 >    : ^   ^^      ^^^^^      
->"equal" : string
->        : ^^^^^^
+>"equal" : "equal"
+>        : ^^^^^^^
 
 s == s;
 >s == s : boolean

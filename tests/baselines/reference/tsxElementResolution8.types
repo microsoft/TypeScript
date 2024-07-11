@@ -34,8 +34,8 @@ function Fact(): any { return null; }
 function Fnum(): number{ return 42; }
 >Fnum : () => number
 >     : ^^^^^^      
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 <Fnum />
 ><Fnum /> : JSX.Element

@@ -29,8 +29,8 @@ const t1 = /** @satisfies {T1} */ ({ a: 1 });
 >         : ^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const t2 = /** @satisfies {T1} */ ({ a: 1, b: 1 });
 >t2 : { a: number; b: number; }
@@ -41,8 +41,8 @@ const t2 = /** @satisfies {T1} */ ({ a: 1, b: 1 });
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : number
 >  : ^^^^^^
 >1 : 1
@@ -87,8 +87,8 @@ const t5 = /** @satisfies {T3} */((m) => m.substring(0));
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
 >          : ^     ^^      ^^   ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 const t6 = /** @satisfies {[number, number]} */ ([1, 2]);
 >t6 : [number, number]
@@ -97,10 +97,10 @@ const t6 = /** @satisfies {[number, number]} */ ([1, 2]);
 >         : ^^^^^^^^^^^^^^^^
 >[1, 2] : [number, number]
 >       : ^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
 const t7 = /** @satisfies {T4} */ ({ a: 'test' });
 >t7 : { a: string; }
@@ -111,7 +111,7 @@ const t7 = /** @satisfies {T4} */ ({ a: 'test' });
 >              : ^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'test' : string
+>'test' : "test"
 >       : ^^^^^^
 
 const t8 = /** @satisfies {T4} */ ({ a: 'test', b: 'test' });
@@ -123,7 +123,7 @@ const t8 = /** @satisfies {T4} */ ({ a: 'test', b: 'test' });
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->'test' : string
+>'test' : "test"
 >       : ^^^^^^
 >b : string
 >  : ^^^^^^

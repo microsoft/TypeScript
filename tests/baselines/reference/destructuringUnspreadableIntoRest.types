@@ -25,8 +25,8 @@ class A {
 >       : ^^^^^^
 
         return 1;
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 
     set setter(_v: number) {}

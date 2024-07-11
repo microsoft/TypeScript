@@ -144,8 +144,8 @@ export class E {
     static get s1() { return ""; }
 >s1 : string
 >   : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     /**
      * @param {string} _p
@@ -162,8 +162,8 @@ export class E {
     static get s2() { return ""; }
 >s2 : string
 >   : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     /**
      * @param {string} _p

@@ -18,6 +18,6 @@ var d = x['charAt']('invalid'); // error
 >  : ^^^^^^
 >'charAt' : "charAt"
 >         : ^^^^^^^^
->'invalid' : string
->          : ^^^^^^
+>'invalid' : "invalid"
+>          : ^^^^^^^^^
 

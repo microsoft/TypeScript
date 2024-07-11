@@ -5,14 +5,14 @@
 /** @type {String} */const a = "";
 >a : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 /** @type {Number} */const b = 0;
 >b : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 /** @type {Boolean} */const c = true;
 >c : boolean
@@ -73,8 +73,8 @@
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 /** @type {Object<string, string>} */const k = {x: "x"};
 >k : { [x: string]: string; }
@@ -83,8 +83,8 @@
 >         : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"x" : string
->    : ^^^^^^
+>"x" : "x"
+>    : ^^^
 
 
 // these are not recognized as anything and should just be lookup failures

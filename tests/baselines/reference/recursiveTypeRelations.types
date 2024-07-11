@@ -163,7 +163,7 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
     }
   });
   return "";
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 }
 

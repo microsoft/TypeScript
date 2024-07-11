@@ -81,8 +81,8 @@ throw new Error('Unreachable')
 >                         : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'Unreachable' : string
->              : ^^^^^^
+>'Unreachable' : "Unreachable"
+>              : ^^^^^^^^^^^^^
 
 /** @typedef {{ q: string }} Q */
 try {
@@ -269,8 +269,8 @@ function proof (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) {
 >                   : ^^^^^^^^^^^^^^^^^^
 >alpha : string
 >      : ^^^^^^
->"aleph" : string
->        : ^^^^^^
+>"aleph" : "aleph"
+>        : ^^^^^^^
 
     /** @typedef {{ alpha: string }} Alpha */
     return

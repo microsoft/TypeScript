@@ -192,12 +192,12 @@ f23(['a', 'b', 'c']);  // string
 >    : ^ ^^ ^^             ^^^^^ 
 >['a', 'b', 'c'] : [string, string, string]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^
->'a' : string
->    : ^^^^^^
->'b' : string
->    : ^^^^^^
->'c' : string
->    : ^^^^^^
+>'a' : "a"
+>    : ^^^
+>'b' : "b"
+>    : ^^^
+>'c' : "c"
+>    : ^^^
 
 // Inference to recursive type
 

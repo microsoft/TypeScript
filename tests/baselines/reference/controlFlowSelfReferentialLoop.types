@@ -2378,8 +2378,8 @@ function getObject(id: string | number) {
   let id: string | number = 'a'
 >id : string | number
 >   : ^^^^^^^^^^^^^^^
->'a' : string
->    : ^^^^^^
+>'a' : "a"
+>    : ^^^
 
   while (1) {
 >1 : 1

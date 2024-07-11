@@ -30,14 +30,14 @@ import { MyComponent } from './my-component'
 const MY_STRING: string = 'Ceci n\'est pas une string.'
 >MY_STRING : string
 >          : ^^^^^^
->'Ceci n\'est pas une string.' : string
->                              : ^^^^^^
+>'Ceci n\'est pas une string.' : "Ceci n'est pas une string."
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const MY_CLASSNAME: string = 'jeclass'
 >MY_CLASSNAME : string
 >             : ^^^^^^
->'jeclass' : string
->          : ^^^^^^
+>'jeclass' : "jeclass"
+>          : ^^^^^^^^^
 
 class RenderString extends React.PureComponent<any, any> {
 >RenderString : RenderString

@@ -18,50 +18,50 @@ const unreachable = (x: unknown): number => {
         case 'string': return 0
 >'string' : "string"
 >         : ^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
         case 'number': return 0
 >'number' : "number"
 >         : ^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
         case 'bigint': return 0
 >'bigint' : "bigint"
 >         : ^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
         case 'boolean': return 0
 >'boolean' : "boolean"
 >          : ^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
         case 'symbol': return 0
 >'symbol' : "symbol"
 >         : ^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
         case 'undefined': return 0
 >'undefined' : "undefined"
 >            : ^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
         case 'object': return 0
 >'object' : "object"
 >         : ^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
         case 'function': return 0
 >'function' : "function"
 >           : ^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
     }
     x;
 >x : unknown

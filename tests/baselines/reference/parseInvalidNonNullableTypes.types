@@ -66,8 +66,8 @@ const a = 1 as any!;
 const b: number! = 1;
 >b : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const c = 1 as !any;
 >c : any
@@ -80,6 +80,6 @@ const c = 1 as !any;
 const d: !number = 1;
 >d : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

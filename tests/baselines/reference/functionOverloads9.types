@@ -20,6 +20,6 @@ var x = foo('foo');
 >foo('foo') : any
 >foo : (foo: string) => any
 >    : ^   ^^      ^^^^^^^^
->'foo' : string
->      : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
 

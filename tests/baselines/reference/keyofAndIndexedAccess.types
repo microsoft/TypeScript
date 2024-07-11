@@ -357,8 +357,8 @@ function f10(shape: Shape) {
 >      : ^^^^^
 >"name" : "name"
 >       : ^^^^^^
->"rectangle" : string
->            : ^^^^^^
+>"rectangle" : "rectangle"
+>            : ^^^^^^^^^^^
 
     setProperty(shape, cond ? "width" : "height", 10);
 >setProperty(shape, cond ? "width" : "height", 10) : void
@@ -375,8 +375,8 @@ function f10(shape: Shape) {
 >        : ^^^^^^^
 >"height" : "height"
 >         : ^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     setProperty(shape, cond ? "name" : "visible", true);  // Technically not safe
 >setProperty(shape, cond ? "name" : "visible", true) : void
@@ -639,8 +639,8 @@ function f20(component: Component<Shape>) {
 >            : ^ ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^     ^^^^^^^^^^^^^^^^^^^
 >"name" : "name"
 >       : ^^^^^^
->"rectangle" : string
->            : ^^^^^^
+>"rectangle" : "rectangle"
+>            : ^^^^^^^^^^^
 
     component.setProperty(cond ? "width" : "height", 10)
 >component.setProperty(cond ? "width" : "height", 10) : void
@@ -659,8 +659,8 @@ function f20(component: Component<Shape>) {
 >        : ^^^^^^^
 >"height" : "height"
 >         : ^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     component.setProperty(cond ? "name" : "visible", true);  // Technically not safe
 >component.setProperty(cond ? "name" : "visible", true) : void
@@ -774,16 +774,16 @@ function f31<K extends keyof Shape>(key: K) {
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >width : number
 >      : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 >height : number
 >       : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >visible : true
 >        : ^^^^
 >true : true
@@ -811,16 +811,16 @@ function f32<K extends "width" | "height">(key: K) {
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >width : number
 >      : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 >height : number
 >       : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 >visible : true
 >        : ^^^^
 >true : true
@@ -1295,12 +1295,12 @@ function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >{ c: true } : { c: true; }
 >            : ^^^^^^^^^^^^
 >c : true
@@ -1356,12 +1356,12 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >{ c: true } : { c: true; }
 >            : ^^^^^^^^^^^^
 >c : true
@@ -1382,12 +1382,12 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >{ c: true } : { c: true; }
 >            : ^^^^^^^^^^^^
 >c : true
@@ -1408,12 +1408,12 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >{ c: true } : { c: true; }
 >            : ^^^^^^^^^^^^
 >c : true
@@ -1447,12 +1447,12 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >{ c: true } : { c: true; }
 >            : ^^^^^^^^^^^^
 >c : true
@@ -1473,12 +1473,12 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >{ c: true } : { c: true; }
 >            : ^^^^^^^^^^^^
 >c : true
@@ -1499,12 +1499,12 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >{ c: true } : { c: true; }
 >            : ^^^^^^^^^^^^
 >c : true
@@ -1538,18 +1538,18 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >{ a: 2, b: true } : { a: number; b: true; }
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >b : true
 >  : ^^^^
 >true : true
@@ -1568,18 +1568,18 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >{ a: 2, b: true } : { a: number; b: true; }
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >b : true
 >  : ^^^^
 >true : true
@@ -1719,8 +1719,8 @@ function f82() {
 >               : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     let x2 = f81({ a: { x: 42 } });  // number
 >x2 : number
@@ -1737,8 +1737,8 @@ function f82() {
 >          : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 }
 
 function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
@@ -1787,8 +1787,8 @@ function f84() {
 >               : ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
 
@@ -1807,8 +1807,8 @@ function f84() {
 >          : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >"bar" : "bar"
 >      : ^^^^^
 }
@@ -1906,28 +1906,28 @@ class C1 {
 >    : ^^^
 
         this.x = 42;
->this.x = 42 : number
->            : ^^^^^^
+>this.x = 42 : 42
+>            : ^^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
         this["x"] = 42;
->this["x"] = 42 : number
->               : ^^^^^^
+>this["x"] = 42 : 42
+>               : ^^
 >this["x"] : number
 >          : ^^^^^^
 >this : this
 >     : ^^^^
 >"x" : "x"
 >    : ^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
         this.set("x", 42);
 >this.set("x", 42) : void
@@ -2567,8 +2567,8 @@ let c1 = new Component1({
         hello: ""
 >hello : string
 >      : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
     }
 });
 
@@ -2697,10 +2697,10 @@ let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
 >             : ^^^^^^^^^^^^
 >["hello", 35] : [string, number]
 >              : ^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
->35 : number
->   : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>35 : 35
+>   : ^^
 
 // Repro from #13073
 
@@ -2731,8 +2731,8 @@ function addToMyThingy<S extends KeyTypes>(key: S) {
 >    : ^
 >push : (...items: string[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 }
 
 // Repro from #13102
@@ -3023,8 +3023,8 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
 >               : ^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
         super(merge(props, foo));
 >super(merge(props, foo)) : void

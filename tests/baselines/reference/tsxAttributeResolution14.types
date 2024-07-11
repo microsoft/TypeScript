@@ -60,8 +60,8 @@ function VerticalNav() {
 >                    : ^    ^^      ^^^^^^^^^^^^^^^^
 >primaryText : number
 >            : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
       <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok
 ><VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} /> : JSX.Element
@@ -70,12 +70,12 @@ function VerticalNav() {
 >                    : ^    ^^      ^^^^^^^^^^^^^^^^
 >justRandomProp : number
 >               : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >primaryText : string
 >            : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
       <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error
 ><VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} /> : JSX.Element
@@ -88,8 +88,8 @@ function VerticalNav() {
 >     : ^^^^
 >primaryText : string
 >            : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     </div>
 >div : any

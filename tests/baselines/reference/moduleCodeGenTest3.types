@@ -10,14 +10,14 @@ module Baz { export var x = "hello"; }
 >        : ^^^^^^^
 
 Baz.x = "goodbye";
->Baz.x = "goodbye" : string
->                  : ^^^^^^
+>Baz.x = "goodbye" : "goodbye"
+>                  : ^^^^^^^^^
 >Baz.x : string
 >      : ^^^^^^
 >Baz : typeof Baz
 >    : ^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"goodbye" : string
->          : ^^^^^^
+>"goodbye" : "goodbye"
+>          : ^^^^^^^^^
 

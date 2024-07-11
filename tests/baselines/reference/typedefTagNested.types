@@ -20,7 +20,7 @@ const app = {
     name: 'name',
 >name : string
 >     : ^^^^^^
->'name' : string
+>'name' : "name"
 >       : ^^^^^^
 
     icons: {
@@ -32,14 +32,14 @@ const app = {
         image32: 'x.png',
 >image32 : string
 >        : ^^^^^^
->'x.png' : string
->        : ^^^^^^
+>'x.png' : "x.png"
+>        : ^^^^^^^
 
         image64: 'y.png',
 >image64 : string
 >        : ^^^^^^
->'y.png' : string
->        : ^^^^^^
+>'y.png' : "y.png"
+>        : ^^^^^^^
     }
 }
 
@@ -74,16 +74,16 @@ var sala = { name: 'uppsala', not: 0, nested: "ok" };
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
->'uppsala' : string
->          : ^^^^^^
+>'uppsala' : "uppsala"
+>          : ^^^^^^^^^
 >not : number
 >    : ^^^^^^
 >0 : 0
 >  : ^
 >nested : string
 >       : ^^^^^^
->"ok" : string
->     : ^^^^^^
+>"ok" : "ok"
+>     : ^^^^
 
 sala.name
 >sala.name : string

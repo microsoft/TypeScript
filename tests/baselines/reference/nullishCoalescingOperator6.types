@@ -12,6 +12,6 @@ function foo(foo: string, bar = foo ?? "bar") { }
 >             : ^^^^^^
 >foo : string
 >    : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 

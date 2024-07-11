@@ -1079,8 +1079,8 @@ function f90<T extends { x: number }>() {
 >         : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 }
 
 function f<T extends { x: {} }>(): Partial<T> {

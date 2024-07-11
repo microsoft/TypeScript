@@ -166,8 +166,8 @@ function f13(x: { a: null; b: string } | { a: string, c: number }) {
 >  : ^^^^
 >b : string
 >  : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 >c : number
 >  : ^^^^^^
 >4 : 4
@@ -268,8 +268,8 @@ f15({ value: 10 });
 >              : ^^^^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 f15({ error: new Error("boom") });
 >f15({ error: new Error("boom") }) : void
@@ -284,7 +284,7 @@ f15({ error: new Error("boom") });
 >                  : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"boom" : string
+>"boom" : "boom"
 >       : ^^^^^^
 
 // Repro from #24193

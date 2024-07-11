@@ -10,8 +10,8 @@ var a = "foo" === "bar" as string;
 >      : ^^^^^
 >"bar" as string : string
 >                : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 var b = "foo" !== ("bar" as string);
 >b : boolean
@@ -24,8 +24,8 @@ var b = "foo" !== ("bar" as string);
 >                  : ^^^^^^
 >"bar" as string : string
 >                : ^^^^^^
->"bar" : string
->      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
 
 var c = "foo" == (<any>"bar");
 >c : boolean

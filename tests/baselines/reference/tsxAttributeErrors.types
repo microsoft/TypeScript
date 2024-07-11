@@ -31,8 +31,8 @@ declare namespace JSX {
 >    : ^^^
 >text : number
 >     : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 // Error, string is not assignable to number
 <div width={'foo'} />;
@@ -42,8 +42,8 @@ declare namespace JSX {
 >    : ^^^
 >width : string
 >      : ^^^^^^
->'foo' : string
->      : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
 
 // Error, number is not assignable to string
 var attribs = { text: 100 };

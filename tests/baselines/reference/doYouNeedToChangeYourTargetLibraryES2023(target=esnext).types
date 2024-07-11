@@ -117,8 +117,8 @@ export let spliced1 = array.toSpliced(2);
 >      : ^^^^^^^^
 >toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
 >          : ^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 export let spliced2 = array.toSpliced(2, 1);
 >spliced2 : number[]
@@ -131,10 +131,10 @@ export let spliced2 = array.toSpliced(2, 1);
 >      : ^^^^^^^^
 >toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
 >          : ^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
->1 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
+>1 : 1
+>  : ^
 
 export let spliced3 = array.toSpliced(2, 1, 4, 5, 6, 7);
 >spliced3 : number[]
@@ -147,18 +147,18 @@ export let spliced3 = array.toSpliced(2, 1, 4, 5, 6, 7);
 >      : ^^^^^^^^
 >toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
 >          : ^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
->1 : number
->  : ^^^^^^
->4 : number
->  : ^^^^^^
->5 : number
->  : ^^^^^^
->6 : number
->  : ^^^^^^
->7 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
+>1 : 1
+>  : ^
+>4 : 4
+>  : ^
+>5 : 5
+>  : ^
+>6 : 6
+>  : ^
+>7 : 7
+>  : ^
 
 export let spliced4 = array.toSpliced(2, undefined);
 >spliced4 : number[]
@@ -171,8 +171,8 @@ export let spliced4 = array.toSpliced(2, undefined);
 >      : ^^^^^^^^
 >toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
 >          : ^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -187,18 +187,18 @@ export let spliced5 = array.toSpliced(2, undefined, 4, 5, 6, 7);
 >      : ^^^^^^^^
 >toSpliced : { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number): number[]; }
 >          : ^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >undefined : undefined
 >          : ^^^^^^^^^
->4 : number
->  : ^^^^^^
->5 : number
->  : ^^^^^^
->6 : number
->  : ^^^^^^
->7 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
+>5 : 5
+>  : ^
+>6 : 6
+>  : ^
+>7 : 7
+>  : ^
 
 export let startsWithOne = array.with(0, 1);
 >startsWithOne : number[]
@@ -211,10 +211,10 @@ export let startsWithOne = array.with(0, 1);
 >      : ^^^^^^^^
 >with : (index: number, value: number) => number[]
 >     : ^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->1 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
 
 export let inTheEnd = array.with(-1, 1);
 >inTheEnd : number[]
@@ -231,6 +231,6 @@ export let inTheEnd = array.with(-1, 1);
 >   : ^^
 >1 : 1
 >  : ^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

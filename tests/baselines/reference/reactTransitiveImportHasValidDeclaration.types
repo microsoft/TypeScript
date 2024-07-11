@@ -67,8 +67,8 @@ const Form = styled('div')({ color: "red" })
 >              : ^ ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^             
 >styled : (tag: string) => (o: object) => import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/create-emotion-styled/index").StyledOtherComponentList["div"], any>
 >       : ^   ^^      ^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^             
->'div' : string
->      : ^^^^^^
+>'div' : "div"
+>      : ^^^^^
 >{ color: "red" } : { color: string; }
 >                 : ^^^^^^^^^^^^^^^^^^
 >color : string

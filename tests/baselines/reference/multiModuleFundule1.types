@@ -33,16 +33,16 @@ var r = C(2);
 >     : ^^^^
 >C : typeof C
 >  : ^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var r2 = new C(2); // using void returning function as constructor
 >r2 : any
 >new C(2) : any
 >C : typeof C
 >  : ^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var r3 = C.foo();
 >r3 : void

@@ -38,8 +38,8 @@ class Greeter {
     private x1: number = 10;
 >x1 : number
 >   : ^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     private fn() {
 >fn : () => string

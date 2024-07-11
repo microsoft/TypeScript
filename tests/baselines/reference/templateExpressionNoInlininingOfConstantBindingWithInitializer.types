@@ -19,8 +19,8 @@ function example(parameters: Params) {
   const { value = '123' } = parameters
 >value : string | number
 >      : ^^^^^^^^^^^^^^^
->'123' : string
->      : ^^^^^^
+>'123' : "123"
+>      : ^^^^^
 >parameters : Params
 >           : ^^^^^^
 
@@ -44,8 +44,8 @@ function example2(parameters: Params) {
   const { value = '123' } = parameters
 >value : string | number
 >      : ^^^^^^^^^^^^^^^
->'123' : string
->      : ^^^^^^
+>'123' : "123"
+>      : ^^^^^
 >parameters : Params
 >           : ^^^^^^
 

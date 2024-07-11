@@ -10,8 +10,8 @@ function f() {
 >  : ^^^^^^      
 
     return "hello";
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 }
 
 /**
@@ -22,8 +22,8 @@ function f1() {
 >   : ^^^^^^         ^^^^^^^^^
 
     return "hello world";
->"hello world" : string
->              : ^^^^^^
+>"hello world" : "hello world"
+>              : ^^^^^^^^^^^^^
 }
 
 /**
@@ -34,11 +34,11 @@ function f2() {
 >   : ^^^^^^               
 
     return 5 || "hello";
->5 || "hello" : string | number
->             : ^^^^^^^^^^^^^^^
->5 : number
->  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>5 || "hello" : "hello" | 5
+>             : ^^^^^^^^^^^
+>5 : 5
+>  : ^
+>"hello" : "hello"
+>        : ^^^^^^^
 }
 

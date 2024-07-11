@@ -53,16 +53,16 @@ var p1 = import(ValidSomeCondition() ? "./0" : "externalModule");
 >   : ^^^^^^^^^^^^
 >import(ValidSomeCondition() ? "./0" : "externalModule") : Promise<any>
 >                                                        : ^^^^^^^^^^^^
->ValidSomeCondition() ? "./0" : "externalModule" : string
->                                                : ^^^^^^
+>ValidSomeCondition() ? "./0" : "externalModule" : "./0" | "externalModule"
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >ValidSomeCondition() : boolean
 >                     : ^^^^^^^
 >ValidSomeCondition : () => boolean
 >                   : ^^^^^^       
->"./0" : string
->      : ^^^^^^
->"externalModule" : string
->                 : ^^^^^^
+>"./0" : "./0"
+>      : ^^^^^
+>"externalModule" : "externalModule"
+>                 : ^^^^^^^^^^^^^^^^
 
 var p1: Promise<any> = import(getSpecifier());
 >p1 : Promise<any>
@@ -101,8 +101,8 @@ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof 
 >               : ^^^^^^
 >getSpecifier : () => string
 >             : ^^^^^^      
->"defaulPath" : string
->             : ^^^^^^
+>"defaulPath" : "defaulPath"
+>             : ^^^^^^^^^^^^
 >defaultModule : typeof defaultModule
 >              : ^^^^^^^^^^^^^^^^^^^^
 

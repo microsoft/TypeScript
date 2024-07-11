@@ -12,8 +12,8 @@ class A1 {
 >      : ^^^^^^
 
         return "";
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
     }
     constructor(name: string) {
 >name : string
@@ -26,8 +26,8 @@ class A1 {
 >             : ^     ^^      ^^^^^      
 >this : this
 >     : ^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
         this.#method(1) // Error
 >this.#method(1) : string
@@ -36,8 +36,8 @@ class A1 {
 >             : ^     ^^      ^^^^^      
 >this : this
 >     : ^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         this.#method()  // Error 
 >this.#method() : string

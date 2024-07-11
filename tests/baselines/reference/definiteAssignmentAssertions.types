@@ -54,8 +54,8 @@ class C3 {
     b!: number = 1;
 >b : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     static c!: number;
 >c : number
@@ -163,12 +163,12 @@ function f3() {
 >                           : ^^^^^^^^^^
 
         x = 1;
->x = 1 : number
->      : ^^^^^^
+>x = 1 : 1
+>      : ^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
     g();
 >g() : void
@@ -202,8 +202,8 @@ function f4() {
     let c!: number = 1;
 >c : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 }
 
 // Definite assignment assertion not permitted in ambient context

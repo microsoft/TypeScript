@@ -32,28 +32,28 @@ function f1(obj: { a?: string, b?: string | undefined }) {
 >  : ^^^^^^^^^^^^^^^^^^
 
     obj.a = 'hello';
->obj.a = 'hello' : string
->                : ^^^^^^
+>obj.a = 'hello' : "hello"
+>                : ^^^^^^^
 >obj.a : string
 >      : ^^^^^^
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^      ^^^^^^                  ^^^
 >a : string
 >  : ^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 
     obj.b = 'hello';
->obj.b = 'hello' : string
->                : ^^^^^^
+>obj.b = 'hello' : "hello"
+>                : ^^^^^^^
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^      ^^^^^^                  ^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 
     obj.a = undefined;  // Error
 >obj.a = undefined : undefined
@@ -399,28 +399,28 @@ function f3(obj: Partial<{ a: string, b: string | undefined }>) {
 >  : ^^^^^^^^^^^^^^^^^^
 
     obj.a = 'hello';
->obj.a = 'hello' : string
->                : ^^^^^^
+>obj.a = 'hello' : "hello"
+>                : ^^^^^^^
 >obj.a : string
 >      : ^^^^^^
 >obj : Partial<{ a: string; b: string | undefined; }>
 >    : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >a : string
 >  : ^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 
     obj.b = 'hello';
->obj.b = 'hello' : string
->                : ^^^^^^
+>obj.b = 'hello' : "hello"
+>                : ^^^^^^^
 >obj.b : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >obj : Partial<{ a: string; b: string | undefined; }>
 >    : ^^^^^^^^^^^^^      ^^^^^                  ^^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 
     obj.a = undefined;  // Error
 >obj.a = undefined : undefined
@@ -464,16 +464,16 @@ function f4(t: [string?]) {
 >  : ^
 
     t[0] = 'hello';
->t[0] = 'hello' : string
->               : ^^^^^^
+>t[0] = 'hello' : "hello"
+>               : ^^^^^^^
 >t[0] : string
 >     : ^^^^^^
 >t : [string?]
 >  : ^^^^^^^^^
 >0 : 0
 >  : ^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 
     t[0] = undefined;  // Error
 >t[0] = undefined : undefined
@@ -518,8 +518,8 @@ function f5(t: [number, string?, boolean?]) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[42] : [number]
 >     : ^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     t = [42, 'abc'];
 >t = [42, 'abc'] : [number, string]
@@ -528,10 +528,10 @@ function f5(t: [number, string?, boolean?]) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[42, 'abc'] : [number, string]
 >            : ^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>42 : 42
+>   : ^^
+>'abc' : "abc"
+>      : ^^^^^
 
     t = [42, 'abc', true];
 >t = [42, 'abc', true] : [number, string, true]
@@ -540,10 +540,10 @@ function f5(t: [number, string?, boolean?]) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[42, 'abc', true] : [number, string, true]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
->'abc' : string
->      : ^^^^^^
+>42 : 42
+>   : ^^
+>'abc' : "abc"
+>      : ^^^^^
 >true : true
 >     : ^^^^
 
@@ -554,8 +554,8 @@ function f5(t: [number, string?, boolean?]) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[42, ,] : [number, never?]
 >        : ^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 > : undefined
 > : ^^^^^^^^^
 
@@ -566,8 +566,8 @@ function f5(t: [number, string?, boolean?]) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[42, , ,] : [number, never?, never?]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 > : undefined
 > : ^^^^^^^^^
 > : undefined
@@ -580,8 +580,8 @@ function f5(t: [number, string?, boolean?]) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[42, , , ,] : [number, never?, never?, never?]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 > : undefined
 > : ^^^^^^^^^
 > : undefined
@@ -610,8 +610,8 @@ function f5(t: [number, string?, boolean?]) {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[42, undefined, true] : [number, undefined, true]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >true : true
@@ -730,8 +730,8 @@ const defaultProps: Pick<Props, 'foo'> = { foo: 'foo' };
 >               : ^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->'foo' : string
->      : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
 
 const inputProps: InputProps = { foo: undefined, bar: 'bar' };
 >inputProps : InputProps
@@ -744,8 +744,8 @@ const inputProps: InputProps = { foo: undefined, bar: 'bar' };
 >          : ^^^^^^^^^
 >bar : string
 >    : ^^^^^^
->'bar' : string
->      : ^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
 
 const completeProps: Props = { ...defaultProps, ...inputProps };
 >completeProps : Props
@@ -764,16 +764,16 @@ const t1: [number, string?, boolean?] = [1];
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1] : [number]
 >    : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const t2: [number, string?, boolean?] = [1, undefined];
 >t2 : [number, string?, boolean?]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, undefined] : [number, undefined]
 >               : ^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -782,10 +782,10 @@ const t3: [number, string?, boolean?] = [1, "string", undefined];
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, "string", undefined] : [number, string, undefined]
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->"string" : string
->         : ^^^^^^
+>1 : 1
+>  : ^
+>"string" : "string"
+>         : ^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -794,8 +794,8 @@ const t4: [number, string?, boolean?] = [1, undefined, undefined];
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, undefined, undefined] : [number, undefined, undefined]
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >undefined : undefined
 >          : ^^^^^^^^^
 >undefined : undefined
@@ -824,8 +824,8 @@ const y: { foo: number } = { foo: 123, ...x };
 >                   : ^^^^^^^      ^^^
 >foo : number
 >    : ^^^^^^
->123 : number
->    : ^^^^^^
+>123 : 123
+>    : ^^^
 >x : { foo?: number; }
 >  : ^^^^^^^^      ^^^
 
@@ -1060,8 +1060,8 @@ function expectNotUndefined<T>(value: Undefinable<T>): T {
 >                                    : ^^^^^^^^^
 >TypeError : TypeErrorConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
->'value is undefined' : string
->                     : ^^^^^^
+>'value is undefined' : "value is undefined"
+>                     : ^^^^^^^^^^^^^^^^^^^^
     }
     return value;
 >value : T & ({} | null)
@@ -1174,8 +1174,8 @@ u2 = {
     name: 'hi',
 >name : string
 >     : ^^^^^^
->'hi' : string
->     : ^^^^^^
+>'hi' : "hi"
+>     : ^^^^
 
     email: undefined
 >email : undefined

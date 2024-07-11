@@ -263,8 +263,8 @@ class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedbac
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >when : P["when"]
 >     : ^^^^^^^^^
->"now" : string
->      : ^^^^^^
+>"now" : "now"
+>      : ^^^^^
 
     return <div>Hello</div>;
 ><div>Hello</div> : JSX.Element

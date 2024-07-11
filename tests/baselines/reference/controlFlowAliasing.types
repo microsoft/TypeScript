@@ -205,8 +205,8 @@ function f14(x: number | null | undefined): number | null {
 >             : ^^^^^^^
 >x : number | null
 >  : ^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 function f15(obj: { readonly x: string | number }) {
@@ -282,8 +282,8 @@ function f16(obj: { readonly x: string | number }) {
 >          : ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     if (isString) {
 >isString : boolean
@@ -368,8 +368,8 @@ function f18(obj: readonly [string | number]) {
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[42] : [number]
 >     : ^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     if (isString) {
 >isString : boolean
@@ -1257,24 +1257,24 @@ class C11 {
         }
         else {
             this.x = 10;
->this.x = 10 : number
->            : ^^^^^^
+>this.x = 10 : 10
+>            : ^^
 >this.x : string | number
 >       : ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
             x = 10;
->x = 10 : number
->       : ^^^^^^
+>x = 10 : 10
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
         }
     }
 }

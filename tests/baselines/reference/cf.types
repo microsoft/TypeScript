@@ -52,12 +52,12 @@ function f() {
 >   : ^^^
 
             x=11;
->x=11 : number
->     : ^^^^^^
+>x=11 : 11
+>     : ^^
 >x : number
 >  : ^^^^^^
->11 : number
->   : ^^^^^^
+>11 : 11
+>   : ^^
         }
         if (y==3) {
 >y==3 : boolean
@@ -99,12 +99,12 @@ function f() {
 
                 break;
                 x=12;
->x=12 : number
->     : ^^^^^^
+>x=12 : 12
+>     : ^^
 >x : number
 >  : ^^^^^^
->12 : number
->   : ^^^^^^
+>12 : 12
+>   : ^^
             }
         } while (y<41);
 >y<41 : boolean
@@ -159,12 +159,12 @@ function f() {
 >   : ^^^
 
             x=13;
->x=13 : number
->     : ^^^^^^
+>x=13 : 13
+>     : ^^
 >x : number
 >  : ^^^^^^
->13 : number
->   : ^^^^^^
+>13 : 13
+>   : ^^
         }
         else {
             break L3;
@@ -172,12 +172,12 @@ function f() {
 >   : ^^^
 
             x=14;
->x=14 : number
->     : ^^^^^^
+>x=14 : 14
+>     : ^^
 >x : number
 >  : ^^^^^^
->14 : number
->   : ^^^^^^
+>14 : 14
+>   : ^^
         }
     }
     catch (e) {
@@ -228,12 +228,12 @@ function f() {
         break;
     }
     for (k=0;k<10;k++) {
->k=0 : number
->    : ^^^^^^
+>k=0 : 0
+>    : ^
 >k : number
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >k<10 : boolean
 >     : ^^^^^^^
 >k : number

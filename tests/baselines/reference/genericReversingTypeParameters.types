@@ -39,8 +39,8 @@ var r1 = b.get('');
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >get : (key: string) => number
 >    : ^   ^^^^^^^^^^^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var i = b.inverse(); // used to get the type wrong here.
 >i : BiMap<number, string>
@@ -65,6 +65,6 @@ var r2b = i.get(1);
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >get : (key: number) => string
 >    : ^   ^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 

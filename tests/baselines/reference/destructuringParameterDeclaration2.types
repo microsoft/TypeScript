@@ -23,16 +23,16 @@ a0([1, "string", [["world"]]);      // Error
 >   : ^             ^^                            ^^^^^^^^^
 >[1, "string", [["world"]] : [number, string, string[][]]
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->"string" : string
->         : ^^^^^^
+>1 : 1
+>  : ^
+>"string" : "string"
+>         : ^^^^^^^^
 >[["world"]] : string[][]
 >            : ^^^^^^^^^^
 >["world"] : string[]
 >          : ^^^^^^^^
->"world" : string
->        : ^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
 
 a0([1, 2, [["world"]], "string"]);  // Error
 >a0([1, 2, [["world"]], "string"]) : void
@@ -41,16 +41,16 @@ a0([1, 2, [["world"]], "string"]);  // Error
 >   : ^             ^^                            ^^^^^^^^^
 >[1, 2, [["world"]], "string"] : [number, number, string[][], string]
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 >[["world"]] : string[][]
 >            : ^^^^^^^^^^
 >["world"] : string[]
 >          : ^^^^^^^^
->"world" : string
->        : ^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
@@ -166,8 +166,8 @@ b1("string", { x: "string", y: true });  // Error
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"string" : string
->         : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 >y : boolean
 >  : ^^^^^^^
 >true : true
@@ -217,8 +217,8 @@ function c3({b}: { b: number|string } = { b: "hello" }) { }
 >               : ^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 function c4([z], z: number) { }  // Error Duplicate identifier
 >c4 : ([z]: [any], z: number) => void
@@ -337,8 +337,8 @@ c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // 
 >             : ^^^^^^^^^^
 >["string"] : [string]
 >           : ^^^^^^^^
->"string" : string
->         : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 
 // A parameter can be marked optional by following its name or binding pattern with a question mark (?)
 // or by including an initializer.  Initializers (including binding property or element initializers) are

@@ -8,8 +8,8 @@ const x = Symbol("x");
 >            : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"x" : string
->    : ^^^^^^
+>"x" : "x"
+>    : ^^^
 
 const y = Symbol("y");
 >y : unique symbol
@@ -18,8 +18,8 @@ const y = Symbol("y");
 >            : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"y" : string
->    : ^^^^^^
+>"y" : "y"
+>    : ^^^
 
 class C {
 >C : C
@@ -42,16 +42,16 @@ class C {
 >  : ^^^^^^^^^^
 
         this[x] = 0; // write-only
->this[x] = 0 : number
->            : ^^^^^^
+>this[x] = 0 : 0
+>            : ^
 >this[x] : number
 >        : ^^^^^^
 >this : this
 >     : ^^^^
 >x : unique symbol
 >  : ^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
         this[y];
 >this[y] : number

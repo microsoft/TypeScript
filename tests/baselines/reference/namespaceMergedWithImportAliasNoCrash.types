@@ -34,8 +34,8 @@ namespace Lib { // should fail to merge
     export const foo: string = "";
 >foo : string
 >    : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 }
 Lib.foo; // should work
 >Lib.foo : string

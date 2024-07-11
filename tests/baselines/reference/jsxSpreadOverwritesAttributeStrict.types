@@ -31,12 +31,12 @@ const props: Props = { a: 1, b: 1 };
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const Foo = (props: Props) => <div>{ props.a }</div>;
 >Foo : (props: Props) => JSX.Element
@@ -80,8 +80,8 @@ const a2 = <Foo d={1} {...props}></Foo>;
 >    : ^     ^^     ^^^^^^^^^^^^^^^^
 >d : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >props : Props
 >      : ^^^^^
 >Foo : (props: Props) => JSX.Element
@@ -97,8 +97,8 @@ const b1 = <Foo a={1} {...props}></Foo>;
 >    : ^     ^^     ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >props : Props
 >      : ^^^^^
 >Foo : (props: Props) => JSX.Element
@@ -113,12 +113,12 @@ const b2 = <Foo a={1} b={2} {...props}></Foo>;
 >    : ^     ^^     ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >b : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >props : Props
 >      : ^^^^^
 >Foo : (props: Props) => JSX.Element
@@ -133,20 +133,20 @@ const b3 = <Foo a={1} d={1} {...props} {...{ d: 1 }}></Foo>;
 >    : ^     ^^     ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >d : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >props : Props
 >      : ^^^^^
 >{ d: 1 } : { d: number; }
 >         : ^^^^^^^^^^^^^^
 >d : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >Foo : (props: Props) => JSX.Element
 >    : ^     ^^     ^^^^^^^^^^^^^^^^
 
@@ -159,24 +159,24 @@ const b4 = <Foo a={1} d={1} {...props} {...{ a: 1, d: 1 }}></Foo>;
 >    : ^     ^^     ^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >d : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >props : Props
 >      : ^^^^^
 >{ a: 1, d: 1 } : { a: number; d: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >d : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >Foo : (props: Props) => JSX.Element
 >    : ^     ^^     ^^^^^^^^^^^^^^^^
 

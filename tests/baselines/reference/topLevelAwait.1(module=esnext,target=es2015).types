@@ -97,8 +97,8 @@ await <string> ``;
 >                  : ^^^^^^
 ><string> `` : string
 >            : ^^^^^^
->`` : string
->   : ^^^^^^
+>`` : ""
+>   : ^^
 
 // member names should be ok
 class C1 {

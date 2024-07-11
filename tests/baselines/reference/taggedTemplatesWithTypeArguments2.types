@@ -30,14 +30,14 @@ const a = new tag `${100} ${200}`<string>("hello", "world");
 >    : ^^^^^^^^^^^^^^^^^
 >`${100} ${200}` : string
 >                : ^^^^^^
->100 : number
->    : ^^^^^^
->200 : number
->    : ^^^^^^
->"hello" : string
->        : ^^^^^^
->"world" : string
->        : ^^^^^^
+>100 : 100
+>    : ^^^
+>200 : 200
+>    : ^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
 
 const b = new tag<number> `${"hello"} ${"world"}`(100, 200);
 >b : any
@@ -50,14 +50,14 @@ const b = new tag<number> `${"hello"} ${"world"}`(100, 200);
 >    : ^^^^^^^^^^^^^^^^^
 >`${"hello"} ${"world"}` : string
 >                        : ^^^^^^
->"hello" : string
->        : ^^^^^^
->"world" : string
->        : ^^^^^^
->100 : number
->    : ^^^^^^
->200 : number
->    : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
+>100 : 100
+>    : ^^^
+>200 : 200
+>    : ^^^
 
 const c = new tag<number> `${100} ${200}`<string>("hello", "world");
 >c : any
@@ -70,14 +70,14 @@ const c = new tag<number> `${100} ${200}`<string>("hello", "world");
 >    : ^^^^^^^^^^^^^^^^^
 >`${100} ${200}` : string
 >                : ^^^^^^
->100 : number
->    : ^^^^^^
->200 : number
->    : ^^^^^^
->"hello" : string
->        : ^^^^^^
->"world" : string
->        : ^^^^^^
+>100 : 100
+>    : ^^^
+>200 : 200
+>    : ^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
 
 const d = new tag<number> `${"hello"} ${"world"}`<string>(100, 200);
 >d : any
@@ -90,14 +90,14 @@ const d = new tag<number> `${"hello"} ${"world"}`<string>(100, 200);
 >    : ^^^^^^^^^^^^^^^^^
 >`${"hello"} ${"world"}` : string
 >                        : ^^^^^^
->"hello" : string
->        : ^^^^^^
->"world" : string
->        : ^^^^^^
->100 : number
->    : ^^^^^^
->200 : number
->    : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>"world" : "world"
+>        : ^^^^^^^
+>100 : 100
+>    : ^^^
+>200 : 200
+>    : ^^^
 
 /**
  * Testing ASI. This should never parse as

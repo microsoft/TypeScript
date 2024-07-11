@@ -65,8 +65,8 @@ class A {
 >          : ^ ^^      ^^^^^^^^^
 >this : this
 >     : ^^^^
->30 : number
->   : ^^^^^^
+>30 : 30
+>   : ^^
 
         this.#bar(30);
 >this.#bar(30) : Promise<void>
@@ -75,8 +75,8 @@ class A {
 >          : ^ ^^      ^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->30 : number
->   : ^^^^^^
+>30 : 30
+>   : ^^
 
         this.#baz(30);
 >this.#baz(30) : AsyncGenerator<never, number, unknown>
@@ -85,8 +85,8 @@ class A {
 >          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->30 : number
->   : ^^^^^^
+>30 : 30
+>   : ^^
 
         this.#quux = this.#quux + 1;
 >this.#quux = this.#quux + 1 : number
@@ -140,8 +140,8 @@ class B extends A {
 >          : ^ ^^      ^^^^^^^^^
 >this : this
 >     : ^^^^
->"str" : string
->      : ^^^^^^
+>"str" : "str"
+>      : ^^^^^
     }
 }
 

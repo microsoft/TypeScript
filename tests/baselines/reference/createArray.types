@@ -57,8 +57,8 @@ function f(s:string):number { return 0;
 >  : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 if (ba[14]) {
 >ba[14] : any

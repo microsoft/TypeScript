@@ -29,8 +29,8 @@ module NonGeneric {
 >          : ^
 >C : typeof C
 >  : ^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     class C2 {
 >C2 : C2
@@ -64,8 +64,8 @@ module NonGeneric {
 >           : ^^
 >C2 : typeof C2
 >   : ^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     var c5 = new C2(1); // ok
 >c5 : C2
@@ -74,8 +74,8 @@ module NonGeneric {
 >          : ^^
 >C2 : typeof C2
 >   : ^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     class D extends C2 { }
 >D : D
@@ -98,8 +98,8 @@ module NonGeneric {
 >         : ^
 >D : typeof D
 >  : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     var d3 = new D(''); // ok
 >d3 : D
@@ -108,8 +108,8 @@ module NonGeneric {
 >          : ^
 >D : typeof D
 >  : ^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 }
 
 module Generics {
@@ -140,8 +140,8 @@ module Generics {
 >          : ^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     class C2<T,U> {
 >C2 : C2<T, U>
@@ -177,8 +177,8 @@ module Generics {
 >           : ^^^^^^^^^^^^^^^^^^^
 >C2 : typeof C2
 >   : ^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     var c5 = new C2(1, 2); // ok
 >c5 : C2<number, number>
@@ -187,10 +187,10 @@ module Generics {
 >             : ^^^^^^^^^^^^^^^^^^
 >C2 : typeof C2
 >   : ^^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
     class D<T, U> extends C2<T, U> { }
 >D : D<T, U>
@@ -213,8 +213,8 @@ module Generics {
 >         : ^^^^^^^^^^^^^^^^^^
 >D : typeof D
 >  : ^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     var d3 = new D(''); // ok
 >d3 : D<string, unknown>
@@ -223,6 +223,6 @@ module Generics {
 >          : ^^^^^^^^^^^^^^^^^^
 >D : typeof D
 >  : ^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 }

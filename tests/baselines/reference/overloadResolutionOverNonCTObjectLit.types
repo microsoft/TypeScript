@@ -55,16 +55,16 @@ module Bugs {
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >startIndex : number
 >           : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >type : string
 >     : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >bracket : number
 >        : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 
                                 tokens.push(<IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }));
 >tokens.push(<IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 })) : number
@@ -83,16 +83,16 @@ module Bugs {
 >                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >startIndex : number
 >           : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >type : string
 >     : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >bracket : number
 >        : ^^^^^^
->3 : number
->  : ^^^^^^
+>3 : 3
+>  : ^
 >state : null
 >      : ^^^^
 >length : number

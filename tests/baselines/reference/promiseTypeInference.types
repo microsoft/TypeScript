@@ -45,8 +45,8 @@ var $$x = load("something").then(s => convert(s));
 >                  : ^^^^^^^^^^^^^^^^
 >load : (name: string) => CPromise<string>
 >     : ^    ^^      ^^^^^                
->"something" : string
->            : ^^^^^^
+>"something" : "something"
+>            : ^^^^^^^^^^^
 >then : <U>(success?: (value: string) => CPromise<U>) => CPromise<U>
 >     : ^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s => convert(s) : (s: string) => IPromise<number>

@@ -34,8 +34,8 @@ class D {
 >                : ^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     bar(): string {
 >bar : () => string
@@ -57,8 +57,8 @@ class D {
 >  : ^^^^^^
 
         return "HELLO";
->"HELLO" : string
->        : ^^^^^^
+>"HELLO" : "HELLO"
+>        : ^^^^^^^
     }
     static ["computedname4"]() { }
 >["computedname4"] : () => void
@@ -113,6 +113,6 @@ class D {
 >    : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 }

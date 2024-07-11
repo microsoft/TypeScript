@@ -48,8 +48,8 @@ thing({
     abc: "hello!"
 >abc : string
 >    : ^^^^^^
->"hello!" : string
->         : ^^^^^^
+>"hello!" : "hello!"
+>         : ^^^^^^^^
 
 });
 
@@ -76,8 +76,8 @@ thing({
     abc: "hello!",
 >abc : string
 >    : ^^^^^^
->"hello!" : string
->         : ^^^^^^
+>"hello!" : "hello!"
+>         : ^^^^^^^^
 
     extra: 123,
 >extra : number
@@ -110,8 +110,8 @@ thing({
     xyz: 123,
 >xyz : number
 >    : ^^^^^^
->123 : number
->    : ^^^^^^
+>123 : 123
+>    : ^^^
 
     extra: 123,
 >extra : number

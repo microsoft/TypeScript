@@ -26,8 +26,8 @@ export const none : None = { none: '' };
 >             : ^^^^^^^^^^^^^^^^^
 >none : string
 >     : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 export function isSome<a>(value: Optional<a>): value is Some<a> {
 >isSome : <a>(value: Optional<a>) => value is Some<a>
@@ -419,12 +419,12 @@ function f6() {
 >      : ^     ^^^      ^^   ^^^      ^^^^^      
 
     x = "";
->x = "" : string
->       : ^^^^^^
+>x = "" : ""
+>       : ^^
 >x : string | null | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     x!.slice();
 >x!.slice() : string
@@ -505,8 +505,8 @@ function f6() {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 ><string | undefined>"" : string | undefined
 >                       : ^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     x!.slice();
 >x!.slice() : string
@@ -527,8 +527,8 @@ function f6() {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 ><string | null>"" : string | null
 >                  : ^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     x!.slice();
 >x!.slice() : string

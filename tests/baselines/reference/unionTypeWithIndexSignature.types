@@ -146,28 +146,28 @@ declare var num: Num
 >    : ^^^
 
 num[0] = 1
->num[0] = 1 : number
->           : ^^^^^^
+>num[0] = 1 : 1
+>           : ^
 >num[0] : string | number
 >       : ^^^^^^^^^^^^^^^
 >num : Num
 >    : ^^^
 >0 : 0
 >  : ^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 num['0'] = 'ok'
->num['0'] = 'ok' : string
->                : ^^^^^^
+>num['0'] = 'ok' : "ok"
+>                : ^^^^
 >num['0'] : string | number
 >         : ^^^^^^^^^^^^^^^
 >num : Num
 >    : ^^^
 >'0' : "0"
 >    : ^^^
->'ok' : string
->     : ^^^^^^
+>'ok' : "ok"
+>     : ^^^^
 
 const sym = Symbol()
 >sym : unique symbol
@@ -198,28 +198,28 @@ declare var both: Both
 >     : ^^^^
 
 both['s'] = 'ok'
->both['s'] = 'ok' : string
->                 : ^^^^^^
+>both['s'] = 'ok' : "ok"
+>                 : ^^^^
 >both['s'] : string | number
 >          : ^^^^^^^^^^^^^^^
 >both : Both
 >     : ^^^^
 >'s' : "s"
 >    : ^^^
->'ok' : string
->     : ^^^^^^
+>'ok' : "ok"
+>     : ^^^^
 
 both[0] = 1
->both[0] = 1 : number
->            : ^^^^^^
+>both[0] = 1 : 1
+>            : ^
 >both[0] : number
 >        : ^^^^^^
 >both : Both
 >     : ^^^^
 >0 : 0
 >  : ^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 both[1] = 0 // not ok
 >both[1] = 0 : 0
@@ -234,16 +234,16 @@ both[1] = 0 // not ok
 >  : ^
 
 both[0] = 'not ok'
->both[0] = 'not ok' : string
->                   : ^^^^^^
+>both[0] = 'not ok' : "not ok"
+>                   : ^^^^^^^^
 >both[0] : number
 >        : ^^^^^^
 >both : Both
 >     : ^^^^
 >0 : 0
 >  : ^
->'not ok' : string
->         : ^^^^^^
+>'not ok' : "not ok"
+>         : ^^^^^^^^
 
 both[sym] = 'not ok'
 >both[sym] = 'not ok' : "not ok"

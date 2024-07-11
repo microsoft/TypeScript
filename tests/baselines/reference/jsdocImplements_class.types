@@ -35,8 +35,8 @@ class B2  {
     method() { return "" }
 >method : () => string
 >       : ^^^^^^      
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 }
 
 /** @implements {A} */

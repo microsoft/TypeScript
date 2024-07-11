@@ -36,8 +36,8 @@ class Recursive1 {
 >      : ^^^^^^
 >1 : 1
 >  : ^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 
 class Recursive2 {

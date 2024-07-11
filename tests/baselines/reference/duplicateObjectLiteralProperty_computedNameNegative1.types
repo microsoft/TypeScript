@@ -16,12 +16,12 @@ function bar(props: { x?: string; y?: string }) {
   const { x = "", y = "" } = props;
 >x : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >y : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >props : { x?: string; y?: string; }
 >      : ^^^^^^      ^^^^^^      ^^^
 
@@ -53,12 +53,12 @@ function foo({ x = "", y = "" }: { x?: string; y?: string }) {
 >    : ^        ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >y : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >y : string | undefined

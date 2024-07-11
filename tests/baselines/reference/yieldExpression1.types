@@ -27,7 +27,7 @@ function* b(): IterableIterator<number> {
     yield 0;
 >yield 0 : undefined
 >        : ^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 }
 

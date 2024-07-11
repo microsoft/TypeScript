@@ -131,8 +131,8 @@ c4<number>(1);
 >              : ^^^^^^
 >c4 : callable2<number>
 >   : ^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 interface callable3<T> {
     (a: T): T;
@@ -149,7 +149,7 @@ c5<string>(1); // error
 >              : ^^^^^^
 >c5 : callable3<number>
 >   : ^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 

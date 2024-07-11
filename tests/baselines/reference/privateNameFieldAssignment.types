@@ -13,14 +13,14 @@ class A {
 
     constructor() {
         this.#field = 1;
->this.#field = 1 : number
->                : ^^^^^^
+>this.#field = 1 : 1
+>                : ^
 >this.#field : number
 >            : ^^^^^^
 >this : this
 >     : ^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         this.#field += 2;
 >this.#field += 2 : number
@@ -143,8 +143,8 @@ class A {
 >   : ^^
 
         A.getInstance().#field = 1;
->A.getInstance().#field = 1 : number
->                           : ^^^^^^
+>A.getInstance().#field = 1 : 1
+>                           : ^
 >A.getInstance().#field : number
 >                       : ^^^^^^
 >A.getInstance() : A
@@ -155,8 +155,8 @@ class A {
 >  : ^^^^^^^^
 >getInstance : () => A
 >            : ^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         A.getInstance().#field += 2;
 >A.getInstance().#field += 2 : number

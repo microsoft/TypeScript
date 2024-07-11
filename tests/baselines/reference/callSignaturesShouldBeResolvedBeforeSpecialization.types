@@ -24,8 +24,8 @@ function foo() {
 >                                          : ^^^^
 >test : I1<string>
 >     : ^^^^^^^^^^
->"expects boolean instead of string" : string
->                                    : ^^^^^^
+>"expects boolean instead of string" : "expects boolean instead of string"
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     test(true); // should error - string expected
 >test(true) : void

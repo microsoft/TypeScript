@@ -12,8 +12,8 @@ var foo:{id:number;}[] = [{id:1}]; foo = [{id:1}, {id:2, name:"foo"}];
 >       : ^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >foo = [{id:1}, {id:2, name:"foo"}] : ({ id: number; } | { id: number; name: string; })[]
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : { id: number; }[]
@@ -24,14 +24,14 @@ var foo:{id:number;}[] = [{id:1}]; foo = [{id:1}, {id:2, name:"foo"}];
 >       : ^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >{id:2, name:"foo"} : { id: number; name: string; }
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
 >   : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 >name : string
 >     : ^^^^^^
 >"foo" : "foo"

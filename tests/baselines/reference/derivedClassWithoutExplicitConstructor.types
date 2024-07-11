@@ -60,8 +60,8 @@ var r2 = new Derived(1);
 >               : ^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 class Base2<T> {
 >Base2 : Base2<T>

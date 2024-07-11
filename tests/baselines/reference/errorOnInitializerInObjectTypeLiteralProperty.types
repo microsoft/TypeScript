@@ -8,8 +8,8 @@ var Foo: {
     bar: number = 5;
 >bar : number
 >    : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 };
 
@@ -20,8 +20,8 @@ let Bar: {
     bar: number = 5;
 >bar : number
 >    : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 
 };
 

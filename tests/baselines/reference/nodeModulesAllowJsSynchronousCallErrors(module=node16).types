@@ -31,8 +31,8 @@ export async function f() {
 >                             : ^^^^^^^^^^
 >import ("../index.js") : Promise<typeof mod>
 >                       : ^^^^^^^^^^^^^^^^^^^
->"../index.js" : string
->              : ^^^^^^
+>"../index.js" : "../index.js"
+>              : ^^^^^^^^^^^^^
 
     const mod4 = await import ("./index.js");
 >mod4 : { default: typeof mod2; f(): Promise<void>; }
@@ -41,8 +41,8 @@ export async function f() {
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import ("./index.js") : Promise<{ default: typeof mod2; f(): Promise<void>; }>
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./index.js" : string
->             : ^^^^^^
+>"./index.js" : "./index.js"
+>             : ^^^^^^^^^^^^
 
     h();
 >h() : Promise<void>
@@ -81,8 +81,8 @@ export async function h() {
 >                            : ^^^^^^^^^^
 >import ("./index.js") : Promise<typeof mod>
 >                      : ^^^^^^^^^^^^^^^^^^^
->"./index.js" : string
->             : ^^^^^^
+>"./index.js" : "./index.js"
+>             : ^^^^^^^^^^^^
 
     const mod4 = await import ("./subfolder/index.js");
 >mod4 : { default: typeof mod2; f(): Promise<void>; }
@@ -91,8 +91,8 @@ export async function h() {
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import ("./subfolder/index.js") : Promise<{ default: typeof mod2; f(): Promise<void>; }>
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"./subfolder/index.js" : string
->                       : ^^^^^^
+>"./subfolder/index.js" : "./subfolder/index.js"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
     f();
 >f() : Promise<void>

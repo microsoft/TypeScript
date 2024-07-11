@@ -42,8 +42,8 @@ new Builder()
     .method("a")
 >method : (param: string) => Builder
 >       : ^     ^^      ^^^^^       
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 
     .method()
 >method : (param: string) => Builder
@@ -52,8 +52,8 @@ new Builder()
     .method("a");
 >method : (param: string) => Builder
 >       : ^     ^^      ^^^^^       
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 
     
 new Builder()
@@ -77,8 +77,8 @@ new Builder()
     .method("a")
 >method : (param: string) => Builder
 >       : ^     ^^      ^^^^^       
->"a" : string
->    : ^^^^^^
+>"a" : "a"
+>    : ^^^
 
     .notMethod()
 >notMethod : string

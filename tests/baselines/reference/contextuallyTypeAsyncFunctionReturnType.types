@@ -188,8 +188,8 @@ test("windows-process-tree", async () => {
 >                                                                                                                                                                                                                                                 : ^^^^
 >test : TestFunction
 >     : ^^^^^^^^^^^^
->"windows-process-tree" : string
->                       : ^^^^^^
+>"windows-process-tree" : "windows-process-tree"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 >async () => {  return new Promise((resolve, reject) => {    getProcessTree(123, (tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    });  });} : () => Promise<void>
 >                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^
 
@@ -210,8 +210,8 @@ test("windows-process-tree", async () => {
 >                                                                                                                                                : ^^^^
 >getProcessTree : (rootPid: number, callback: (tree: ProcessTreeNode) => void) => void
 >               : ^       ^^      ^^        ^^                               ^^^^^    
->123 : number
->    : ^^^^^^
+>123 : 123
+>    : ^^^
 >(tree) => {      if (tree) {        resolve();      } else {        reject(new Error("windows-process-tree"));      }    } : (tree: ProcessTreeNode) => void
 >                                                                                                                           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tree : ProcessTreeNode
@@ -237,8 +237,8 @@ test("windows-process-tree", async () => {
 >                                  : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"windows-process-tree" : string
->                       : ^^^^^^
+>"windows-process-tree" : "windows-process-tree"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
       }
     });
   });

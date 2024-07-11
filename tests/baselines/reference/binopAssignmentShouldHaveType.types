@@ -21,7 +21,7 @@ module Test {
 >        : ^^^^^^      
 
    return "name";
->"name" : string
+>"name" : "name"
 >       : ^^^^^^
   }
   bug() {

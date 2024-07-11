@@ -20,8 +20,8 @@ export default function foo(value: string | number): string | number {
 >      : ^^^^^^^^^^^^^^^
 
     return 1
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 }
 declare class Foo {}
 >Foo : Foo

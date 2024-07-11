@@ -27,10 +27,10 @@ class B extends A {
 >                  : ^^^^
 >super : typeof A
 >      : ^^^^^^^^
->'a1' : string
->     : ^^^^^^
->'b1' : string
->     : ^^^^^^
+>'a1' : "a1"
+>     : ^^^^
+>'b1' : "b1"
+>     : ^^^^
 
 	    } else {
 	        super('a2', 'b2');
@@ -38,10 +38,10 @@ class B extends A {
 >                  : ^^^^
 >super : typeof A
 >      : ^^^^^^^^
->'a2' : string
->     : ^^^^^^
->'b2' : string
->     : ^^^^^^
+>'a2' : "a2"
+>     : ^^^^
+>'b2' : "b2"
+>     : ^^^^
 	    }
     }
 }

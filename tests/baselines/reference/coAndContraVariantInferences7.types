@@ -78,8 +78,8 @@ route({
     query: "",
 >query : string
 >      : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
   },
   handle: (req) => {

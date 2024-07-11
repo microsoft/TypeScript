@@ -115,8 +115,8 @@ function f1() {
 >                    : ^^^^^^^
 >Mixed1 : typeof M1 & typeof C1
 >       : ^^^^^^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     let x2 = new Mixed1(42);
 >x2 : M1 & C1
@@ -125,8 +125,8 @@ function f1() {
 >               : ^^^^^^^
 >Mixed1 : typeof M1 & typeof C1
 >       : ^^^^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     let x3 = new Mixed2("hello");
 >x3 : C1 & M1
@@ -135,8 +135,8 @@ function f1() {
 >                    : ^^^^^^^
 >Mixed2 : typeof C1 & typeof M1
 >       : ^^^^^^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     let x4 = new Mixed2(42);
 >x4 : C1 & M1
@@ -145,8 +145,8 @@ function f1() {
 >               : ^^^^^^^
 >Mixed2 : typeof C1 & typeof M1
 >       : ^^^^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     let x5 = new Mixed3("hello");
 >x5 : M2 & M1 & C1
@@ -155,8 +155,8 @@ function f1() {
 >                    : ^^^^^^^^^^^^
 >Mixed3 : typeof M2 & typeof M1 & typeof C1
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     let x6 = new Mixed3(42);
 >x6 : M2 & M1 & C1
@@ -165,8 +165,8 @@ function f1() {
 >               : ^^^^^^^^^^^^
 >Mixed3 : typeof M2 & typeof M1 & typeof C1
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     let x7 = new Mixed4("hello");
 >x7 : C1 & M1 & M2
@@ -175,8 +175,8 @@ function f1() {
 >                    : ^^^^^^^^^^^^
 >Mixed4 : typeof C1 & typeof M1 & typeof M2
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     let x8 = new Mixed4(42);
 >x8 : C1 & M1 & M2
@@ -185,8 +185,8 @@ function f1() {
 >               : ^^^^^^^^^^^^
 >Mixed4 : typeof C1 & typeof M1 & typeof M2
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
     let x9 = new Mixed5();
 >x9 : M1 & M2
@@ -208,8 +208,8 @@ function f2() {
 >                    : ^^^^^^^
 >Mixed1 : typeof M1 & typeof C1
 >       : ^^^^^^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     x.a;
 >x.a : number
@@ -247,8 +247,8 @@ function f3() {
 >                    : ^^^^^^^
 >Mixed2 : typeof C1 & typeof M1
 >       : ^^^^^^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     x.a;
 >x.a : number
@@ -286,8 +286,8 @@ function f4() {
 >                    : ^^^^^^^^^^^^
 >Mixed3 : typeof M2 & typeof M1 & typeof C1
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     x.a;
 >x.a : number
@@ -345,8 +345,8 @@ function f5() {
 >                    : ^^^^^^^^^^^^
 >Mixed4 : typeof C1 & typeof M1 & typeof M2
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     x.a;
 >x.a : number
@@ -454,8 +454,8 @@ class C2 extends Mixed1 {
 >               : ^^^^
 >super : typeof M1 & typeof C1
 >      : ^^^^^^^^^^^^^^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
         this.a;
 >this.a : number
@@ -495,8 +495,8 @@ class C3 extends Mixed3 {
 >          : ^^^^
 >super : typeof M2 & typeof M1 & typeof C1
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
         this.a;
 >this.a : number

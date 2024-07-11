@@ -22,8 +22,8 @@ var a: string, b: boolean[];
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^
 >0 : string
 >  : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >1 : true
 >  : ^^^^
 >true : true

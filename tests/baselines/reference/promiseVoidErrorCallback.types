@@ -36,8 +36,8 @@ function f1(): Promise<T1> {
 >                   : ^^^^^^^^^^^^^^^^^
 >__t1 : string
 >     : ^^^^^^
->"foo_t1" : string
->         : ^^^^^^
+>"foo_t1" : "foo_t1"
+>         : ^^^^^^^^
 }
 
 function f2(x: T1): T2 {

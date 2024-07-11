@@ -46,8 +46,8 @@ class Foo {
 >     : ^^^^
 >method : (a: number) => string
 >       : ^ ^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
     }
 }
 
@@ -91,8 +91,8 @@ bar.method(0);
 >    : ^^^
 >method : (a: number) => string
 >       : ^ ^^      ^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 bar.optionalMethod(1);
 >bar.optionalMethod(1) : string
@@ -103,8 +103,8 @@ bar.optionalMethod(1);
 >    : ^^^
 >optionalMethod : (a: number) => string
 >               : ^ ^^      ^^^^^      
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 bar.property;
 >bar.property : string
@@ -139,8 +139,8 @@ bar.additionalMethod(2);
 >    : ^^^
 >additionalMethod : (a: number) => string
 >                 : ^ ^^      ^^^^^      
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 var obj: {
 >obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }

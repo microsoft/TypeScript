@@ -38,10 +38,10 @@ function f1() {
 >                   : ^^^^^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->10 : number
->   : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>10 : 10
+>   : ^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     let x = v.x;
 >x : number
@@ -99,8 +99,8 @@ function f2() {
 >      : ^^^^^^^^
 >f : <X>(x: X) => typeof C
 >  : ^ ^^ ^^ ^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
     let v = new C("hello");
 >v : f<number>.C<string>
@@ -109,8 +109,8 @@ function f2() {
 >               : ^^^^^^^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     let x = v.x;
 >x : number
@@ -172,10 +172,10 @@ function f3() {
 >               : ^^^^^^^^
 >f : <X, Y>(x: X, y: Y) => typeof C
 >  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^
->10 : number
->   : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>10 : 10
+>   : ^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
     let v = new C();
 >v : f<number, string>.C

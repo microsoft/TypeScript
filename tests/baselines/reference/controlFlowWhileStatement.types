@@ -14,12 +14,12 @@ function a() {
 >  : ^^^^^^^^^^^^^^^
 
     x = "";
->x = "" : string
->       : ^^^^^^
+>x = "" : ""
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     while (cond) {
 >cond : boolean
@@ -39,12 +39,12 @@ function b() {
 >  : ^^^^^^^^^^^^^^^
 
     x = "";
->x = "" : string
->       : ^^^^^^
+>x = "" : ""
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     while (cond) {
 >cond : boolean
@@ -55,12 +55,12 @@ function b() {
 >  : ^^^^^^
 
         x = 42;
->x = 42 : number
->       : ^^^^^^
+>x = 42 : 42
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
         break;
     }
@@ -74,12 +74,12 @@ function c() {
 >  : ^^^^^^^^^^^^^^^
 
     x = "";
->x = "" : string
->       : ^^^^^^
+>x = "" : ""
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     while (cond) {
 >cond : boolean
@@ -119,12 +119,12 @@ function d() {
 >  : ^^^^^^^^^^^^^^^
 
     x = "";
->x = "" : string
->       : ^^^^^^
+>x = "" : ""
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     while (x = x.length) {
 >x = x.length : number
@@ -143,12 +143,12 @@ function d() {
 >  : ^^^^^^
 
         x = "";
->x = "" : string
->       : ^^^^^^
+>x = "" : ""
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
     }
 }
 function e() {
@@ -160,12 +160,12 @@ function e() {
 >  : ^^^^^^^^^^^^^^^
 
     x = "";
->x = "" : string
->       : ^^^^^^
+>x = "" : ""
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     while (cond) {
 >cond : boolean
@@ -176,12 +176,12 @@ function e() {
 >  : ^^^^^^^^^^^^^^^
 
         x = 42;
->x = 42 : number
->       : ^^^^^^
+>x = 42 : 42
+>       : ^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
         x; // number
 >x : number

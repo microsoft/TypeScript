@@ -48,8 +48,8 @@ const obj: PoisonedProp = {
     x: "hello world",
 >x : string
 >  : ^^^^^^
->"hello world" : string
->              : ^^^^^^
+>"hello world" : "hello world"
+>              : ^^^^^^^^^^^^^
 
     y: 2
 >y : 2

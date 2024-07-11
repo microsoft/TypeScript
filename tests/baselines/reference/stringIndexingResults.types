@@ -146,8 +146,8 @@ var b: { [x: string]: string } = { y: '' }
 >          : ^^^^^^^^^^^^^^
 >y : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
 var r10 = b['y'];
 >r10 : string

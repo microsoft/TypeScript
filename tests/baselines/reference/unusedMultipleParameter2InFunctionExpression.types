@@ -20,10 +20,10 @@ var func = function(person: string, person2: string, person3: string) {
 >   : ^^
 
     person2 = "Dummy value";
->person2 = "Dummy value" : string
->                        : ^^^^^^
+>person2 = "Dummy value" : "Dummy value"
+>                        : ^^^^^^^^^^^^^
 >person2 : string
 >        : ^^^^^^
->"Dummy value" : string
->              : ^^^^^^
+>"Dummy value" : "Dummy value"
+>              : ^^^^^^^^^^^^^
 }

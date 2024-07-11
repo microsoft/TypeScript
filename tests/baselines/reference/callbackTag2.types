@@ -20,8 +20,8 @@ var one_twenty = s => "120";
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
->"120" : string
->      : ^^^^^^
+>"120" : "120"
+>      : ^^^^^
 
 /** @template S
  * @callback SharedId

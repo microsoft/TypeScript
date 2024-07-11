@@ -3087,8 +3087,8 @@ module TypeScript {
 >                                                                       : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"initWalkers function is not up to date with enum content!" : string
->                                                            : ^^^^^^
+>"initWalkers function is not up to date with enum content!" : "initWalkers function is not up to date with enum content!"
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 }
             }
         }

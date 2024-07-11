@@ -112,8 +112,8 @@ var i2_i_foo_r = i2_i.foo(30);
 >     : ^^
 >foo : (b: number) => string
 >    : ^ ^^      ^^^^^      
->30 : number
->   : ^^^^^^
+>30 : 30
+>   : ^^
 
 var i2_i_i2_si = i2_i["hello"];
 >i2_i_i2_si : any
@@ -172,8 +172,8 @@ var i2_i_nc_foo_r = i2_i.nc_foo(30);
 >     : ^^
 >nc_foo : (b: number) => string
 >       : ^ ^^      ^^^^^      
->30 : number
->   : ^^^^^^
+>30 : 30
+>   : ^^
 
 var i2_i_r = i2_i(10, 20);
 >i2_i_r : number
@@ -182,10 +182,10 @@ var i2_i_r = i2_i(10, 20);
 >             : ^^^^^^
 >i2_i : i2
 >     : ^^
->10 : number
->   : ^^^^^^
->20 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
+>20 : 20
+>   : ^^
 
 var i2_i_fnfoo = i2_i.fnfoo;
 >i2_i_fnfoo : (b: number) => string
@@ -208,8 +208,8 @@ var i2_i_fnfoo_r = i2_i.fnfoo(10);
 >     : ^^
 >fnfoo : (b: number) => string
 >      : ^ ^^      ^^^^^      
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 var i2_i_nc_fnfoo = i2_i.nc_fnfoo;
 >i2_i_nc_fnfoo : (b: number) => string
@@ -232,8 +232,8 @@ var i2_i_nc_fnfoo_r = i2_i.nc_fnfoo(10);
 >     : ^^
 >nc_fnfoo : (b: number) => string
 >         : ^ ^^      ^^^^^      
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 interface i3 {
     /** Comment i3 x*/
@@ -357,8 +357,8 @@ i3_i.f(10);
 >     : ^^
 >f : (a: number) => string
 >  : ^ ^^      ^^^^^      
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 i3_i.l(10);
 >i3_i.l(10) : string
@@ -369,8 +369,8 @@ i3_i.l(10);
 >     : ^^
 >l : (b: number) => string
 >  : ^ ^^      ^^^^^      
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 i3_i.nc_f(10);
 >i3_i.nc_f(10) : string
@@ -381,8 +381,8 @@ i3_i.nc_f(10);
 >     : ^^
 >nc_f : (a: number) => string
 >     : ^ ^^      ^^^^^      
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 
 i3_i.nc_l(10);
 >i3_i.nc_l(10) : string
@@ -393,6 +393,6 @@ i3_i.nc_l(10);
 >     : ^^
 >nc_l : (b: number) => string
 >     : ^ ^^      ^^^^^      
->10 : number
->   : ^^^^^^
+>10 : 10
+>   : ^^
 

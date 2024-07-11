@@ -67,8 +67,8 @@ function switchToForwardSlashes(path: string) {
 >        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/\\/g : RegExp
 >      : ^^^^^^
->"/" : string
->    : ^^^^^^
+>"/" : "/"
+>    : ^^^
 }
 
 function filePath(fullPath: string) {
@@ -114,8 +114,8 @@ function filePath(fullPath: string) {
 >           : ^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
 >      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >components.length - 1 : number
 >                      : ^^^^^^
 >components.length : number
@@ -138,8 +138,8 @@ function filePath(fullPath: string) {
 >     : ^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->"/" : string
->    : ^^^^^^
+>"/" : "/"
+>    : ^^^
 >"/" : "/"
 >    : ^^^
 }
@@ -236,8 +236,8 @@ if (typeof ActiveXObject === "function") {
 >                             : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'Unknown context' : string
->                  : ^^^^^^
+>'Unknown context' : "Unknown context"
+>                  : ^^^^^^^^^^^^^^^^^
 }
 
 declare module process {
@@ -283,8 +283,8 @@ module Harness {
 >                        : ^^^^^^^^
 >Function : FunctionConstructor
 >         : ^^^^^^^^^^^^^^^^^^^
->"return this" : string
->              : ^^^^^^
+>"return this" : "return this"
+>              : ^^^^^^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^   
 
@@ -491,8 +491,8 @@ module Harness {
 >                                   : ^^^^^^
 >msg : string
 >    : ^^^^^^
->"Expected true, got false." : string
->                            : ^^^^^^
+>"Expected true, got false." : "Expected true, got false."
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
             }
         }
 
@@ -1324,8 +1324,8 @@ module Harness {
 >     : ^^^^^^
 >indexOf : (searchString: string, position?: number) => number
 >        : ^            ^^      ^^        ^^^      ^^^^^      
->'tests' : string
->        : ^^^^^^
+>'tests' : "tests"
+>        : ^^^^^^^
 >0 : 0
 >  : ^
 
@@ -2115,8 +2115,8 @@ module Harness {
 >                                                                : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Testcases may not be nested inside other testcases" : string
->                                                     : ^^^^^^
+>"Testcases may not be nested inside other testcases" : "Testcases may not be nested inside other testcases"
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
 
         /** Run the test case block and fail the test if it raised an error. If no error is raised, the test passes. */
@@ -2153,8 +2153,8 @@ module Harness {
 >                                                 : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'testStart' : string
->            : ^^^^^^
+>'testStart' : "testStart"
+>            : ^^^^^^^^^^^
 >{ desc: this.description } : { desc: string; }
 >                           : ^^^^^^^^^^^^^^^^^
 >desc : string
@@ -2225,8 +2225,8 @@ module Harness {
 >                                                             : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'error' : string
->        : ^^^^^^
+>'error' : "error"
+>        : ^^^^^^^
 >{ desc: this.description, pass: false } : { desc: any; pass: boolean; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >desc : any
@@ -2262,7 +2262,7 @@ module Harness {
 >                                                        : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'pass' : string
+>'pass' : "pass"
 >       : ^^^^^^
 >{ desc: this.description, pass: true } : { desc: any; pass: boolean; }
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2395,8 +2395,8 @@ module Harness {
 >                                                     : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'scenarioStart' : string
->                : ^^^^^^
+>'scenarioStart' : "scenarioStart"
+>                : ^^^^^^^^^^^^^^^
 >{ desc: this.description } : { desc: string; }
 >                           : ^^^^^^^^^^^^^^^^^
 >desc : string
@@ -2520,8 +2520,8 @@ module Harness {
 >                               : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'bug' : string
->      : ^^^^^^
+>'bug' : "bug"
+>      : ^^^^^
 >metadata : IScenarioMetadata
 >         : ^^^^^^^^^^^^^^^^^
 >desc : any
@@ -2532,8 +2532,8 @@ module Harness {
 >                                    : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'scenarioEnd' : string
->              : ^^^^^^
+>'scenarioEnd' : "scenarioEnd"
+>              : ^^^^^^^^^^^^^
 >metadata : IScenarioMetadata
 >         : ^^^^^^^^^^^^^^^^^
 >e : any
@@ -2760,8 +2760,8 @@ module Harness {
 >                               : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'bug' : string
->      : ^^^^^^
+>'bug' : "bug"
+>      : ^^^^^
 >metadata : IScenarioMetadata
 >         : ^^^^^^^^^^^^^^^^^
 >desc : any
@@ -2772,8 +2772,8 @@ module Harness {
 >                                 : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'scenarioEnd' : string
->              : ^^^^^^
+>'scenarioEnd' : "scenarioEnd"
+>              : ^^^^^^^^^^^^^
 >metadata : IScenarioMetadata
 >         : ^^^^^^^^^^^^^^^^^
 
@@ -2796,8 +2796,8 @@ module Harness {
 >                        : ^^^^
 >super : typeof Runnable
 >      : ^^^^^^^^^^^^^^^
->'Test Run' : string
->           : ^^^^^^
+>'Test Run' : "Test Run"
+>           : ^^^^^^^^^^
         }
 
         public run() {
@@ -2809,8 +2809,8 @@ module Harness {
 >                 : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'start' : string
->        : ^^^^^^
+>'start' : "start"
+>        : ^^^^^^^
 
             this.runChildren();
 >this.runChildren() : void
@@ -2943,8 +2943,8 @@ module Harness {
 >               : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'end' : string
->      : ^^^^^^
+>'end' : "end"
+>      : ^^^^^
         }
     }
 
@@ -3084,12 +3084,12 @@ module Harness {
                 }
 
                 resolution = 1000;
->resolution = 1000 : number
->                  : ^^^^^^
+>resolution = 1000 : 1000
+>                  : ^^^^
 >resolution : number
 >           : ^^^^^^
->1000 : number
->     : ^^^^^^
+>1000 : 1000
+>     : ^^^^
             }
         }
 
@@ -3112,16 +3112,16 @@ module Harness {
 >      : ^^^^^^^^^^
 
                 this.time = 0;
->this.time = 0 : number
->              : ^^^^^^
+>this.time = 0 : 0
+>              : ^
 >this.time : number
 >          : ^^^^^^
 >this : this
 >     : ^^^^
 >time : number
 >     : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
                 this.startTime = Clock.now();
 >this.startTime = Clock.now() : number
@@ -3525,8 +3525,8 @@ module Harness {
 >  : ^^^^^^
 >sampleMean : number
 >           : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
                 }
 
                 return Math.sqrt(sumOfSquares / this.data.length);
@@ -3721,8 +3721,8 @@ module Harness {
             name: string = '',
 >name : string
 >     : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
             f = benchmark.bench
 >f : (bench?: { (): void; }) => void
@@ -3976,8 +3976,8 @@ module Harness {
 >                                            : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'testStart' : string
->            : ^^^^^^
+>'testStart' : "testStart"
+>            : ^^^^^^^^^^^
 >{ desc: description } : { desc: string; }
 >                      : ^^^^^^^^^^^^^^^^^
 >desc : string
@@ -3990,7 +3990,7 @@ module Harness {
 >                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^^^^
 >emitLog : (field: string, ...params: any[]) => void
 >        : ^     ^^      ^^^^^      ^^     ^^^^^^^^^
->'pass' : string
+>'pass' : "pass"
 >       : ^^^^^^
 >{                        desc: description, pass: true, perfResults: {                            mean: b.results[prop].mean(),                            min: b.results[prop].min(),                            max: b.results[prop].max(),                            stdDev: b.results[prop].stdDev(),                            trials: b.results[prop].data                        }                    } : { desc: string; pass: boolean; perfResults: { mean: number; min: number; max: number; stdDev: number; trials: number[]; }; }
 >                                                                                                                                                                                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -4211,16 +4211,16 @@ module Harness {
 >    : ^^^
 
                 this.currentLine = "";
->this.currentLine = "" : string
->                      : ^^^^^^
+>this.currentLine = "" : ""
+>                      : ^^
 >this.currentLine : string
 >                 : ^^^^^^
 >this : this
 >     : ^^^^
 >currentLine : string
 >            : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
             }
 
             public Close() {
@@ -4262,16 +4262,16 @@ module Harness {
 >            : ^^^^^^
 
                 this.currentLine = "";
->this.currentLine = "" : string
->                      : ^^^^^^
+>this.currentLine = "" : ""
+>                      : ^^
 >this.currentLine : string
 >                 : ^^^^^^
 >this : this
 >     : ^^^^
 >currentLine : string
 >            : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
             }
 
             public reset() {
@@ -4291,16 +4291,16 @@ module Harness {
 >   : ^^^^^^^^^^^
 
                 this.currentLine = "";
->this.currentLine = "" : string
->                      : ^^^^^^
+>this.currentLine = "" : ""
+>                      : ^^
 >this.currentLine : string
 >                 : ^^^^^^
 >this : this
 >     : ^^^^
 >currentLine : string
 >            : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
             }
         }
 
@@ -5081,8 +5081,8 @@ module Harness {
 >              : ^    ^^      ^^        ^^      ^^        ^^                                      ^^       ^^^                  ^^          ^^^                           ^^^^^^^^^
 >testCode : any
 >         : ^^^
->'test.ts' : string
->          : ^^^^^^
+>'test.ts' : "test.ts"
+>          : ^^^^^^^^^
 >function (compilerResult) {                    errors = compilerResult.errors;                } : (compilerResult: CompilerResult) => void
 >                                                                                                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^
 >compilerResult : CompilerResult
@@ -5947,8 +5947,8 @@ module Harness {
 >     : ^^^^
 >get : (code: string, target: any) => Type
 >    : ^    ^^      ^^      ^^   ^^^^^^^^^
->'var x : any' : string
->              : ^^^^^^
+>'var x : any' : "var x : any"
+>              : ^^^^^^^^^^^^^
 >'x' : "x"
 >    : ^^^
 
@@ -5969,8 +5969,8 @@ module Harness {
 >     : ^^^^
 >get : (code: string, target: any) => Type
 >    : ^    ^^      ^^      ^^   ^^^^^^^^^
->'var x : number' : string
->                 : ^^^^^^
+>'var x : number' : "var x : number"
+>                 : ^^^^^^^^^^^^^^^^
 >'x' : "x"
 >    : ^^^
 
@@ -5991,8 +5991,8 @@ module Harness {
 >     : ^^^^
 >get : (code: string, target: any) => Type
 >    : ^    ^^      ^^      ^^   ^^^^^^^^^
->'var x : string' : string
->                 : ^^^^^^
+>'var x : string' : "var x : string"
+>                 : ^^^^^^^^^^^^^^^^
 >'x' : "x"
 >    : ^^^
 
@@ -6013,8 +6013,8 @@ module Harness {
 >     : ^^^^
 >get : (code: string, target: any) => Type
 >    : ^    ^^      ^^      ^^   ^^^^^^^^^
->'var x : boolean' : string
->                  : ^^^^^^
+>'var x : boolean' : "var x : boolean"
+>                  : ^^^^^^^^^^^^^^^^^
 >'x' : "x"
 >    : ^^^
             }
@@ -6106,8 +6106,8 @@ module Harness {
 >              : ^    ^^      ^^        ^^      ^^        ^^                                      ^^       ^^^                  ^^          ^^^                           ^^^^^^^^^
 >code : string
 >     : ^^^^^^
->'test.ts' : string
->          : ^^^^^^
+>'test.ts' : "test.ts"
+>          : ^^^^^^^^^
 >function (compilerResult) {                    errors = compilerResult.errors;                } : (compilerResult: CompilerResult) => void
 >                                                                                                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^
 >compilerResult : CompilerResult
@@ -7229,8 +7229,8 @@ module Harness {
 >    : ^^^^^^^^^^^^^^
 >name : any
 >     : ^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 >(<TypeScript.FuncDecl>ast).name.actualText : any
 >                                           : ^^^
 >(<TypeScript.FuncDecl>ast).name : any
@@ -7322,8 +7322,8 @@ module Harness {
 >  : ^^^
 >text : any
 >     : ^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
                         break;
                 }
@@ -7671,8 +7671,8 @@ module Harness {
 >   : ^^^^^^
 >indexOf : (searchString: string, position?: number) => number
 >        : ^            ^^      ^^        ^^^      ^^^^^      
->'.d.ts' : string
->        : ^^^^^^
+>'.d.ts' : ".d.ts"
+>        : ^^^^^^^
 >0 : 0
 >  : ^
 
@@ -7719,8 +7719,8 @@ module Harness {
 >      : ^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->'\n' : string
->     : ^^^^^^
+>'\n' : "\n"
+>     : ^^^^
 
                         if (verifyNoDeclFile && results != "") {
 >verifyNoDeclFile && results != "" : boolean
@@ -7769,8 +7769,8 @@ module Harness {
 >                                                     : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'Compilation did not produce .d.ts files' : string
->                                          : ^^^^^^
+>'Compilation did not produce .d.ts files' : "Compilation did not produce .d.ts files"
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 }
             } finally {
                 compiler.settings.generateDeclarationFiles = false;
@@ -7847,7 +7847,7 @@ module Harness {
 >                   : ^^^^^^
 >unitName : string
 >         : ^^^^^^
->'0.ts' : string
+>'0.ts' : "0.ts"
 >       : ^^^^^^
 
                 updateUnit('', uName);
@@ -7855,15 +7855,15 @@ module Harness {
 >                      : ^^^^
 >updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
 >           : ^    ^^      ^^        ^^      ^^           ^^^       ^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >uName : string
 >      : ^^^^^^
             }
 
             return '';
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
         }
 
         /** Contains the code and errors of a compilation and some helper methods to check its status. */
@@ -7953,8 +7953,8 @@ module Harness {
 >      : ^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->"\n" : string
->     : ^^^^^^
+>"\n" : "\n"
+>     : ^^^^
 
                 this.errors = [];
 >this.errors = [] : undefined[]
@@ -8031,10 +8031,10 @@ module Harness {
 >    : ^^^
 >filename : any
 >         : ^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
 >err.message : any
 >            : ^^^
 >err : any
@@ -8453,8 +8453,8 @@ module Harness {
 >                      : ^^^^
 >updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
 >           : ^    ^^      ^^        ^^      ^^           ^^^       ^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >fname : any
 >      : ^^^
                     }
@@ -9103,8 +9103,8 @@ module Harness {
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >slice : (start?: number, end?: number) => TestCaseParser.TestUnitData[]
 >      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >units.length - 1 : number
 >                 : ^^^^^^
 >units.length : number
@@ -9284,9 +9284,9 @@ module Harness {
 >        : ^^^^^^^^^^^^^^^^^^
 >unitName : string
 >         : ^^^^^^
->((isDeclareFile) ? '0.d.ts' : '0.ts') : "0.d.ts" | "0.ts"
+>((isDeclareFile) ? '0.d.ts' : '0.ts') : "0.ts" | "0.d.ts"
 >                                      : ^^^^^^^^^^^^^^^^^
->(isDeclareFile) ? '0.d.ts' : '0.ts' : "0.d.ts" | "0.ts"
+>(isDeclareFile) ? '0.d.ts' : '0.ts' : "0.ts" | "0.d.ts"
 >                                    : ^^^^^^^^^^^^^^^^^
 >(isDeclareFile) : boolean
 >                : ^^^^^^^
@@ -9576,8 +9576,8 @@ module Harness {
 >                     : ^^^^
 >updateUnit : (code: string, unitName: string, setRecovery?: boolean) => void
 >           : ^    ^^      ^^        ^^      ^^           ^^^       ^^^^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 >file : any
 >     : ^^^
 
@@ -10040,8 +10040,8 @@ module Harness {
 >                  : ^^^^^^^^
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->', ' : string
->     : ^^^^^^
+>', ' : ", "
+>     : ^^^^
 
                     } else if (fileNameIndex == 0) {
 >fileNameIndex == 0 : boolean
@@ -10190,12 +10190,12 @@ module Harness {
 >                   : ^^^^^^
 
                         currentFileContent = '';
->currentFileContent = '' : string
->                        : ^^^^^^
+>currentFileContent = '' : ""
+>                        : ^^
 >currentFileContent : string
 >                   : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
                     } else {
                         // End-of-line
@@ -10262,8 +10262,8 @@ module Harness {
 >                         : ^^^^^^
 >currentFileContent : string
 >                   : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
                 name: currentFileName,
 >name : any
@@ -10347,16 +10347,16 @@ module Harness {
 >                  : ^^^^^^
 
             this.version = 1;
->this.version = 1 : number
->                 : ^^^^^^
+>this.version = 1 : 1
+>                 : ^
 >this.version : number
 >             : ^^^^^^
 >this : this
 >     : ^^^^
 >version : number
 >        : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
         }
 
         public updateContent(content: string, isResident: boolean) {
@@ -10440,8 +10440,8 @@ module Harness {
 >        : ^^^^^^
 >substring : (start: number, end?: number) => string
 >          : ^     ^^      ^^   ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >minChar : number
 >        : ^^^^^^
 
@@ -10587,8 +10587,8 @@ module Harness {
 >           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
 >       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >this.maxScriptVersions - this.editRanges.length : number
 >                                                : ^^^^^^
 >this.maxScriptVersions : number
@@ -10950,8 +10950,8 @@ module Harness {
 >     : ^^^^
 >addScript : (name: string, content: string, isResident?: boolean) => void
 >          : ^    ^^      ^^       ^^      ^^          ^^^^^^^^^^^^^^^^^^^
->"lib.d.ts" : string
->           : ^^^^^^
+>"lib.d.ts" : "lib.d.ts"
+>           : ^^^^^^^^^^
 >Harness.Compiler.libText : any
 >                         : ^^^
 >Harness.Compiler : typeof Compiler
@@ -11327,8 +11327,8 @@ module Harness {
 >                       : ^^^^^^      
 
             return ""; // i.e. default settings
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
         }
 
         public getScriptCount(): number {
@@ -12131,8 +12131,8 @@ module Harness {
 >       : ^^^^^^
 >substring : (start: number, end?: number) => string
 >          : ^     ^^      ^^   ^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 >edit.minChar : any
 >             : ^^^
 >edit : Services.TextEdit
@@ -12532,8 +12532,8 @@ module Harness {
 >                                               : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->"Trying to apply overlapping edits" : string
->                                    : ^^^^^^
+>"Trying to apply overlapping edits" : "Trying to apply overlapping edits"
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 }
             }
 
@@ -12726,8 +12726,8 @@ module Harness {
 >        : ^^^^^^^^^^^^^^
 >on : (event: string, listener: Function) => any
 >   : ^     ^^      ^^        ^^        ^^^^^^^^
->'uncaughtException' : string
->                    : ^^^^^^
+>'uncaughtException' : "uncaughtException"
+>                    : ^^^^^^^^^^^^^^^^^^^
 >Runnable.handleError : (e: Error) => void
 >                     : ^ ^^     ^^^^^^^^^
 >Runnable : typeof Runnable
@@ -13399,8 +13399,8 @@ module Harness {
 >        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >htmlTrailer : string
 >            : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
             } else {
                 reportContent = htmlLeader;
@@ -13520,8 +13520,8 @@ module Harness {
 >                                                                                                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'The generated content was "undefined". Return "null" if no baselining is required."' : string
->                                                                                      : ^^^^^^
+>'The generated content was "undefined". Return "null" if no baselining is required."' : "The generated content was \"undefined\". Return \"null\" if no baselining is required.\""
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             }
 
             // Store the content in the 'local' folder so we
@@ -13593,12 +13593,12 @@ module Harness {
 >       : ^^^^^^
 
                 actual = '<no content>';
->actual = '<no content>' : string
->                        : ^^^^^^
+>actual = '<no content>' : "<no content>"
+>                        : ^^^^^^^^^^^^^^
 >actual : string
 >       : ^^^^^^
->'<no content>' : string
->               : ^^^^^^
+>'<no content>' : "<no content>"
+>               : ^^^^^^^^^^^^^^
             }
 
             var expected = '<no content>';
@@ -13671,8 +13671,8 @@ module Harness {
 >        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/\r\n?/g : RegExp
 >         : ^^^^^^
->'\n' : string
->     : ^^^^^^
+>'\n' : "\n"
+>     : ^^^^
 
                 actual = actual.replace(/\r\n?/g, '\n')
 >actual = actual.replace(/\r\n?/g, '\n') : string
@@ -13689,8 +13689,8 @@ module Harness {
 >        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/\r\n?/g : RegExp
 >         : ^^^^^^
->'\n' : string
->     : ^^^^^^
+>'\n' : "\n"
+>     : ^^^^
             }
 
             return { expected: expected, actual: actual };
@@ -14008,8 +14008,8 @@ module Harness {
 >                                                                                                                                                            : ^^^^
 >it : (description: string, block: () => void) => void
 >   : ^           ^^      ^^     ^^          ^^^^^^^^^
->'Can generate the content without error' : string
->                                         : ^^^^^^
+>'Can generate the content without error' : "Can generate the content without error"
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {                        actual = generateActual(actualFilename, generateContent);                    } : () => void
 >                                                                                                              : ^^^^^^^^^^
 
@@ -14034,8 +14034,8 @@ module Harness {
 >                                                                                                                                                                                                                                                                                                   : ^^^^
 >it : (description: string, block: () => void) => void
 >   : ^           ^^      ^^     ^^          ^^^^^^^^^
->'Matches the baseline file' : string
->                            : ^^^^^^
+>'Matches the baseline file' : "Matches the baseline file"
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {                        var comparison = compareToBaseline(actual, relativeFilename, opts);                        writeComparison(comparison.expected, comparison.actual, relativeFilename, actualFilename, descriptionForDescribe);                    } : () => void
 >                                                                                                                                                                                                                                                                  : ^^^^^^^^^^
 

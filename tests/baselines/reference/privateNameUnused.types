@@ -72,8 +72,8 @@ export class A3 {
     get #used() { return 0 };
 >#used : number
 >      : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     set #used(value: number) {  };
 >#used : number
@@ -84,8 +84,8 @@ export class A3 {
     get #unused() { return 0 };
 >#unused : number
 >        : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     set #unused(value: number) {  };
 >#unused : number

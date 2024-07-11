@@ -51,8 +51,8 @@ export const y = sepsis({ low: 1, sign: { kind: 'a', a: 3 }});
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >low : number
 >    : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >sign : { kind: "a"; a: 3; }
 >     : ^^^^^^^^^^^^^^^^^^^^
 >{ kind: 'a', a: 3 } : { kind: "a"; a: 3; }
@@ -93,8 +93,8 @@ export const yone = unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 }}));
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >low : number
 >    : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 >sign : { kind: "a"; a: 3; }
 >     : ^^^^^^^^^^^^^^^^^^^^
 >{ kind: 'a', a: 3 } : { kind: "a"; a: 3; }

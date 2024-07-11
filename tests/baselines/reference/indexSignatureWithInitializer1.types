@@ -8,6 +8,6 @@ class C {
   [a: number = 1]: number;
 >a : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 }

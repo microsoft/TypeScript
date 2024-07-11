@@ -39,8 +39,8 @@ let obj: { 3: string } = { 3: "three" };
 >               : ^^^^^^^^^^^^^^
 >3 : string
 >  : ^^^^^^
->"three" : string
->        : ^^^^^^
+>"three" : "three"
+>        : ^^^^^^^
 
 obj[x];
 >obj[x] : any

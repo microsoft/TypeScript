@@ -8,8 +8,8 @@ const customSymbol = Symbol("custom");
 >                 : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"custom" : string
->         : ^^^^^^
+>"custom" : "custom"
+>         : ^^^^^^^^
 
 // This is a common pattern in Node’s built-in modules:
 module.exports = {
@@ -43,6 +43,6 @@ exports.customSymbol2 = Symbol("custom");
 >                 : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"custom" : string
->         : ^^^^^^
+>"custom" : "custom"
+>         : ^^^^^^^^
 

@@ -21,14 +21,14 @@ const ok: Properties = {
     property1: "",
 >property1 : string
 >          : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     __property2: ""
 >__property2 : string
 >            : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 };
 
@@ -58,14 +58,14 @@ const partial: Partial<Properties> = {
     property1: "",
 >property1 : string
 >          : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     __property2: ""
 >__property2 : string
 >            : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 };
 

@@ -29,8 +29,8 @@ class A {
     get #acc() { return ""; }
 >#acc : string
 >     : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     set #acc(x: string) {}
 >#acc : string
@@ -41,8 +41,8 @@ class A {
     static get #sAcc() { return 0; }
 >#sAcc : number
 >      : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     static set #sAcc(x: number) {}
 >#sAcc : number

@@ -14,8 +14,8 @@ function foo(callback: (x: string) => void) {
 >                  : ^^^^
 >callback : (x: string) => void
 >         : ^ ^^      ^^^^^    
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 }
 
 foo(function(x) { x });

@@ -69,10 +69,10 @@ module X.Y {
 >                : ^^^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
->0 : number
->  : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
+>0 : 0
+>  : ^
     }
 }
 
@@ -93,10 +93,10 @@ var cl = new X.Y.Point(1,1);
 >  : ^^^^^^^^^^
 >Point : typeof X.Y.Point
 >      : ^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
 
 var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
 >cl : X.Y.Point

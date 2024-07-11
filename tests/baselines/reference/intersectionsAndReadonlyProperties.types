@@ -15,16 +15,16 @@ declare let i1: Intersection1;
 >   : ^^^^^^^^^^^^^
 
 i1.a = 2;
->i1.a = 2 : number
->         : ^^^^^^
+>i1.a = 2 : 2
+>         : ^
 >i1.a : number
 >     : ^^^^^^
 >i1 : Intersection1
 >   : ^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 // getter and setter
 type Intersection2 = { get a(): number } & { set a(v: number) };
@@ -42,16 +42,16 @@ declare let i2: Intersection2;
 >   : ^^^^^^^^^^^^^
 
 i2.a = 2;
->i2.a = 2 : number
->         : ^^^^^^
+>i2.a = 2 : 2
+>         : ^
 >i2.a : number
 >     : ^^^^^^
 >i2 : Intersection2
 >   : ^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 // assignment to an all read-only property should still be disallowed
 type IntersectionAllReadonly = { readonly a: number } & { get a(): number };

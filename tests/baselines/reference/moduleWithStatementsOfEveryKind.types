@@ -71,8 +71,8 @@ module A {
 >  : ^^^^^^
 
         return 2;
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
     }
     var array: I[] = null;
 >array : I[]
@@ -192,8 +192,8 @@ module Y {
 >  : ^^^^^^
 
         return 2;
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
     }
     export var array: I[] = null;
 >array : I[]

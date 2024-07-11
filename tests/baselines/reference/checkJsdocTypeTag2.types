@@ -13,8 +13,8 @@ var S = true;
 var n = "hello";
 >n : number
 >  : ^^^^^^
->"hello" : string
->        : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
 
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
@@ -36,8 +36,8 @@ x1("string");
 >             : ^^^
 >x1 : (arg0: number) => any
 >   : ^^^^^^^      ^^^^^^^^
->"string" : string
->         : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
 
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
@@ -68,8 +68,8 @@ a = x2(0);
 >      : ^^^^^^
 >x2 : (arg0: number) => number
 >   : ^^^^^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 /** @type {function (number): number} */
 const x3 = (a) => a.concat("hi");
@@ -95,8 +95,8 @@ x3(0);
 >      : ^^^^^^
 >x3 : (arg0: number) => number
 >   : ^^^^^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 /** @type {function (number): string} */
 const x4 = (a) => a + 1;
@@ -118,6 +118,6 @@ x4(0);
 >      : ^^^^^^
 >x4 : (arg0: number) => string
 >   : ^^^^^^^      ^^^^^      
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 

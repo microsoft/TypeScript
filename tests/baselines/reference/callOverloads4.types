@@ -38,8 +38,8 @@ var f1 = new Foo("hey");
 >               : ^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->"hey" : string
->      : ^^^^^^
+>"hey" : "hey"
+>      : ^^^^^
 
 
 f1.bar1();
@@ -63,6 +63,6 @@ Foo("s");
 >         : ^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->"s" : string
->    : ^^^^^^
+>"s" : "s"
+>    : ^^^
 

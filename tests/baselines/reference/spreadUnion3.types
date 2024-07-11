@@ -16,8 +16,8 @@ function f(x: { y: string } | undefined): { y: string } {
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
->123 : number
->    : ^^^^^^
+>123 : 123
+>    : ^^^
 >x : { y: string; } | undefined
 >  : ^^^^^      ^^^^^^^^^^^^^^^
 }

@@ -186,8 +186,8 @@ export let oWithAccessor = {
     get getSetOk(): number { return 0 },
 >getSetOk : number
 >         : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     set getSetOk(value) { },
 >getSetOk : number
@@ -198,8 +198,8 @@ export let oWithAccessor = {
     get getSetOk2() { return 0 },
 >getSetOk2 : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     set getSetOk2(value: number) { },
 >getSetOk2 : number
@@ -210,8 +210,8 @@ export let oWithAccessor = {
     get getSetOk3(): number { return 0 },
 >getSetOk3 : number
 >          : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
     set getSetOk3(value: number) { },
 >getSetOk3 : number
@@ -239,8 +239,8 @@ const s: unique symbol = Symbol();
 const str: string = "";
 >str : string
 >    : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 enum E {
 >E : E

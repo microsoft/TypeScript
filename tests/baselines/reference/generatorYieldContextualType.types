@@ -191,8 +191,8 @@ namespace StepResult {
 >                    : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->"BreakStep" : string
->            : ^^^^^^
+>"BreakStep" : "BreakStep"
+>            : ^^^^^^^^^^^
 }
 type StepResult<T> = typeof StepResult.Break | T;
 >StepResult : StepResult<T>
@@ -326,14 +326,14 @@ function* showStep<
     title: "",
 >title : string
 >      : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     placeholder: "",
 >placeholder : string
 >            : ^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
   });
   const selection: StepSelection<typeof step> = yield step;

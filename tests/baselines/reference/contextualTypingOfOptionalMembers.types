@@ -44,8 +44,8 @@ app({
     state: 100,
 >state : number
 >      : ^^^^^^
->100 : number
->    : ^^^^^^
+>100 : 100
+>    : ^^^
 
     actions: {
 >actions : { foo: (s: number) => number; }
@@ -147,8 +147,8 @@ app2({
     state: 100,
 >state : number
 >      : ^^^^^^
->100 : number
->    : ^^^^^^
+>100 : 100
+>    : ^^^
 
     actions: {
 >actions : { foo: (s: number) => number; }
@@ -206,8 +206,8 @@ app3({
     state: 100,
 >state : number
 >      : ^^^^^^
->100 : number
->    : ^^^^^^
+>100 : 100
+>    : ^^^
 
     actions: [
 >actions : ((s: number) => number)[]
@@ -271,8 +271,8 @@ const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number
 >     : ^     ^^       ^^^^^^^^^                      ^^     ^^                                                      ^^^^^           
 >state : number
 >      : ^^^^^^
->100 : number
->    : ^^^^^^
+>100 : 100
+>    : ^^^
 >foo : (s: number) => number
 >    : ^ ^^^^^^^^^^^^^^^^^^^
 >s => s : (s: number) => number

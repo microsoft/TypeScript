@@ -37,6 +37,6 @@ let i1 = <MyComponent1 values={5}/>;
 >             : ^ ^^^^^^^^^               ^^    ^^ ^^^^^^^^^^^^^^^^
 >values : number
 >       : ^^^^^^
->5 : number
->  : ^^^^^^
+>5 : 5
+>  : ^
 

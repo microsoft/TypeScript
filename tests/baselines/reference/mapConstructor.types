@@ -16,16 +16,16 @@ const potentiallyUndefinedIterable = [['1', 1], ['2', 2]] as Iterable<[string, n
 >                     : ^^^^^^^^^^^^^^^^^^
 >['1', 1] : [string, number]
 >         : ^^^^^^^^^^^^^^^^
->'1' : string
->    : ^^^^^^
->1 : number
->  : ^^^^^^
+>'1' : "1"
+>    : ^^^
+>1 : 1
+>  : ^
 >['2', 2] : [string, number]
 >         : ^^^^^^^^^^^^^^^^
->'2' : string
->    : ^^^^^^
->2 : number
->  : ^^^^^^
+>'2' : "2"
+>    : ^^^
+>2 : 2
+>  : ^
 
 new Map(potentiallyUndefinedIterable);
 >new Map(potentiallyUndefinedIterable) : Map<string, number>
@@ -44,16 +44,16 @@ const potentiallyNullIterable = [['1', 1], ['2', 2]] as Iterable<[string, number
 >                     : ^^^^^^^^^^^^^^^^^^
 >['1', 1] : [string, number]
 >         : ^^^^^^^^^^^^^^^^
->'1' : string
->    : ^^^^^^
->1 : number
->  : ^^^^^^
+>'1' : "1"
+>    : ^^^
+>1 : 1
+>  : ^
 >['2', 2] : [string, number]
 >         : ^^^^^^^^^^^^^^^^
->'2' : string
->    : ^^^^^^
->2 : number
->  : ^^^^^^
+>'2' : "2"
+>    : ^^^
+>2 : 2
+>  : ^
 
 new Map(potentiallyNullIterable);
 >new Map(potentiallyNullIterable) : Map<string, number>

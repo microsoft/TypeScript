@@ -26,8 +26,8 @@ let n = f(1)()
 >     : ^^^^^^^^^^^^
 >f : <T>(a: T) => () => T
 >  : ^ ^^ ^^ ^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 /**
  * @param {T} a
@@ -55,8 +55,8 @@ let s = g('hi')()
 >        : ^^^^^^^^^^^^
 >g : <T>(a: T) => () => T
 >  : ^ ^^ ^^ ^^^^^       
->'hi' : string
->     : ^^^^^^
+>'hi' : "hi"
+>     : ^^^^
 
 /**
  * @param {Array.<Object>} keyframes - Can't look up types on Element since it's a global in another file. (But it shouldn't crash).

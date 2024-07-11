@@ -195,8 +195,8 @@ TabbedShowLayout.defaultProps = {
     tabs: "default value"
 >tabs : string
 >     : ^^^^^^
->"default value" : string
->                : ^^^^^^
+>"default value" : "default value"
+>                : ^^^^^^^^^^^^^^^
 
 };
 

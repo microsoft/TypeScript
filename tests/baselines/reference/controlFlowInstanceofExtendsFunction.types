@@ -29,8 +29,8 @@ Function.prototype.now = function () {
 >                               : ^^^^^^^^^^^^
 
     return "now"
->"now" : string
->      : ^^^^^^
+>"now" : "now"
+>      : ^^^^^
 }
 
 class X {

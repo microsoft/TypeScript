@@ -35,10 +35,10 @@ var m1 = new BasicMonster("1", 100);
 >                           : ^^^^^^^^^^^^
 >BasicMonster : typeof BasicMonster
 >             : ^^^^^^^^^^^^^^^^^^^
->"1" : string
->    : ^^^^^^
->100 : number
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
+>100 : 100
+>    : ^^^
 
 var m2 = new BasicMonster("2", 100);
 >m2 : BasicMonster
@@ -47,10 +47,10 @@ var m2 = new BasicMonster("2", 100);
 >                           : ^^^^^^^^^^^^
 >BasicMonster : typeof BasicMonster
 >             : ^^^^^^^^^^^^^^^^^^^
->"2" : string
->    : ^^^^^^
->100 : number
->    : ^^^^^^
+>"2" : "2"
+>    : ^^^
+>100 : 100
+>    : ^^^
 
 m1.attack(m2);
 >m1.attack(m2) : void
@@ -65,16 +65,16 @@ m1.attack(m2);
 >   : ^^^^^^^^^^^^
 
 m1.health = 0;
->m1.health = 0 : number
->              : ^^^^^^
+>m1.health = 0 : 0
+>              : ^
 >m1.health : number
 >          : ^^^^^^
 >m1 : BasicMonster
 >   : ^^^^^^^^^^^^
 >health : number
 >       : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 console.log((<any>m5.isAlive).toString());
 >console.log((<any>m5.isAlive).toString()) : void
@@ -158,8 +158,8 @@ class GetSetMonster {
 >                                          : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'Health must be non-negative.' : string
->                               : ^^^^^^
+>'Health must be non-negative.' : "Health must be non-negative."
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
         this._health = value
 >this._health = value : number
@@ -182,10 +182,10 @@ var m3 = new BasicMonster("1", 100);
 >                           : ^^^^^^^^^^^^
 >BasicMonster : typeof BasicMonster
 >             : ^^^^^^^^^^^^^^^^^^^
->"1" : string
->    : ^^^^^^
->100 : number
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
+>100 : 100
+>    : ^^^
 
 var m4 = new BasicMonster("2", 100);
 >m4 : BasicMonster
@@ -194,10 +194,10 @@ var m4 = new BasicMonster("2", 100);
 >                           : ^^^^^^^^^^^^
 >BasicMonster : typeof BasicMonster
 >             : ^^^^^^^^^^^^^^^^^^^
->"2" : string
->    : ^^^^^^
->100 : number
->    : ^^^^^^
+>"2" : "2"
+>    : ^^^
+>100 : 100
+>    : ^^^
 
 m3.attack(m4);
 >m3.attack(m4) : void
@@ -212,16 +212,16 @@ m3.attack(m4);
 >   : ^^^^^^^^^^^^
 
 m3.health = 0;
->m3.health = 0 : number
->              : ^^^^^^
+>m3.health = 0 : 0
+>              : ^
 >m3.health : number
 >          : ^^^^^^
 >m3 : BasicMonster
 >   : ^^^^^^^^^^^^
 >health : number
 >       : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 var x = (<any>m5.isAlive).toString()
 >x : any
@@ -286,8 +286,8 @@ var m5 = new OverloadedMonster("1");
 >                           : ^^^^^^^^^^^^^^^^^
 >OverloadedMonster : typeof OverloadedMonster
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
->"1" : string
->    : ^^^^^^
+>"1" : "1"
+>    : ^^^
 
 var m6 = new OverloadedMonster("2");
 >m6 : OverloadedMonster
@@ -296,8 +296,8 @@ var m6 = new OverloadedMonster("2");
 >                           : ^^^^^^^^^^^^^^^^^
 >OverloadedMonster : typeof OverloadedMonster
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
->"2" : string
->    : ^^^^^^
+>"2" : "2"
+>    : ^^^
 
 m5.attack(m6);
 >m5.attack(m6) : any
@@ -311,16 +311,16 @@ m5.attack(m6);
 >   : ^^^^^^^^^^^^^^^^^
 
 m5.health = 0;
->m5.health = 0 : number
->              : ^^^^^^
+>m5.health = 0 : 0
+>              : ^
 >m5.health : number
 >          : ^^^^^^
 >m5 : OverloadedMonster
 >   : ^^^^^^^^^^^^^^^^^
 >health : number
 >       : ^^^^^^
->0 : number
->  : ^^^^^^
+>0 : 0
+>  : ^
 
 var y = (<any>m5.isAlive).toString()
 >y : any
@@ -369,8 +369,8 @@ class PrototypeMonster {
     age: number = 1;
 >age : number
 >    : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     name: string;
 >name : string
@@ -422,8 +422,8 @@ class SuperChild extends SuperParent {
 >         : ^^^^
 >super : typeof SuperParent
 >      : ^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 
     b() {
@@ -439,8 +439,8 @@ class SuperChild extends SuperParent {
 >      : ^^^^^^^^^^^
 >b : (b: string) => void
 >  : ^ ^^      ^^^^^^^^^
->'str' : string
->      : ^^^^^^
+>'str' : "str"
+>      : ^^^^^
     }
 
     c() {
@@ -515,28 +515,28 @@ class ImplementsInterface implements IFoo {
 
     constructor() {
         this.x = 1;
->this.x = 1 : number
->           : ^^^^^^
+>this.x = 1 : 1
+>           : ^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         this.z = "foo";
->this.z = "foo" : string
->               : ^^^^^^
+>this.z = "foo" : "foo"
+>               : ^^^^^
 >this.z : string
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >z : string
 >  : ^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
     }
 }
 
@@ -566,28 +566,28 @@ class Visibility {
 
     constructor() {
         this.x = 1;
->this.x = 1 : number
->           : ^^^^^^
+>this.x = 1 : 1
+>           : ^
 >this.x : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
         this.y = 2;
->this.y = 2 : number
->           : ^^^^^^
+>this.y = 2 : 2
+>           : ^
 >this.y : number
 >       : ^^^^^^
 >this : this
 >     : ^^^^
 >y : number
 >  : ^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
     }
 }
 
@@ -617,9 +617,9 @@ var ccwc = new ChildClassWithoutConstructor(1, "s");
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ChildClassWithoutConstructor : typeof ChildClassWithoutConstructor
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
->"s" : string
->    : ^^^^^^
+>1 : 1
+>  : ^
+>"s" : "s"
+>    : ^^^
 
 

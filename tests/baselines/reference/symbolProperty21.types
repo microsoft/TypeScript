@@ -50,8 +50,8 @@ foo({
 >       : ^^^^^^^^^^^^^^^^^
 >isConcatSpreadable : unique symbol
 >                   : ^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
     [Symbol.toPrimitive]: 0,
 >[Symbol.toPrimitive] : number

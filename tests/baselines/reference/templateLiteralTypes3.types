@@ -533,8 +533,8 @@ type Templated = `${string} ${string}`;
 const value1: string = "abc";
 >value1 : string
 >       : ^^^^^^
->"abc" : string
->      : ^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
 
 const templated1: Templated = `${value1} abc` as const;
 >templated1 : `${string} ${string}`
@@ -829,14 +829,14 @@ noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]);
 >                       : ^^^^^^^^^^^^^^^
 >'2' as string : string
 >              : ^^^^^^
->'2' : string
->    : ^^^^^^
+>'2' : "2"
+>    : ^^^
 >`1.${'2' as string}.4` : `1.${string}.4`
 >                       : ^^^^^^^^^^^^^^^
 >'2' as string : string
 >              : ^^^^^^
->'2' : string
->    : ^^^^^^
+>'2' : "2"
+>    : ^^^
 
 spread(`1.${'2'}.3`, `1.${'2'}.4`);
 >spread(`1.${'2'}.3`, `1.${'2'}.4`) : "1.2.3" | "1.2.4"
@@ -861,14 +861,14 @@ spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
 >                       : ^^^^^^^^^^^^^^^
 >'2' as string : string
 >              : ^^^^^^
->'2' : string
->    : ^^^^^^
+>'2' : "2"
+>    : ^^^
 >`1.${'2' as string}.4` : `1.${string}.4`
 >                       : ^^^^^^^^^^^^^^^
 >'2' as string : string
 >              : ^^^^^^
->'2' : string
->    : ^^^^^^
+>'2' : "2"
+>    : ^^^
 
 function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) {
 >ft1 : <T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) => void

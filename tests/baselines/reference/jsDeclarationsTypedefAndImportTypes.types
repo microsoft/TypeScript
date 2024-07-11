@@ -66,16 +66,16 @@ class Wrap {
 
         /** @type {import("./conn").Whatever} */
         this.another = "";
->this.another = "" : string
->                  : ^^^^^^
+>this.another = "" : ""
+>                  : ^^
 >this.another : import("conn").Whatever
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >another : import("conn").Whatever
 >        : ^^^^^^^^^^^^^^^^^^^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
     }
 }
 

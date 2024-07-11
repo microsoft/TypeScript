@@ -16,8 +16,8 @@ const objWithValMaybeNull: { val: number | null } = { val: 1 };
 >           : ^^^^^^^^^^^^^^^^
 >val : number
 >    : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 const addOne = function (num: number) {
 >addOne : (num: number) => number

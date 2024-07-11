@@ -28,8 +28,8 @@ var y = x.split(4);
 >  : ^^^^^^^^
 >split : (parts: number) => string[][]
 >      : ^     ^^      ^^^^^^^^^^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 
 var y: string[][]; // Expect no error here
 >y : string[][]

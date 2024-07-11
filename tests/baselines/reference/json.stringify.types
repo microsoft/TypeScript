@@ -18,8 +18,8 @@ JSON.stringify(value, undefined, 2);
 >      : ^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 JSON.stringify(value, null, 2);
 >JSON.stringify(value, null, 2) : string
@@ -32,8 +32,8 @@ JSON.stringify(value, null, 2);
 >          : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^      ^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^      ^^^
 >value : null
 >      : ^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 JSON.stringify(value, ["a", 1], 2);
 >JSON.stringify(value, ["a", 1], 2) : string
@@ -48,12 +48,12 @@ JSON.stringify(value, ["a", 1], 2);
 >      : ^^^^
 >["a", 1] : (string | number)[]
 >         : ^^^^^^^^^^^^^^^^^^^
->"a" : string
->    : ^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>"a" : "a"
+>    : ^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
 JSON.stringify(value, (k) => undefined, 2);
 >JSON.stringify(value, (k) => undefined, 2) : string
@@ -72,8 +72,8 @@ JSON.stringify(value, (k) => undefined, 2);
 >  : ^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 
 JSON.stringify(value, undefined, 2);
 >JSON.stringify(value, undefined, 2) : string
@@ -88,6 +88,6 @@ JSON.stringify(value, undefined, 2);
 >      : ^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->2 : number
->  : ^^^^^^
+>2 : 2
+>  : ^
 

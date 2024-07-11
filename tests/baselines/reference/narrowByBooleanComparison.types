@@ -248,8 +248,8 @@ function test3(foo: unknown) {
 >                                      : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'Not a string or an array' : string
->                           : ^^^^^^
+>'Not a string or an array' : "Not a string or an array"
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     foo;
 >foo : string | any[]

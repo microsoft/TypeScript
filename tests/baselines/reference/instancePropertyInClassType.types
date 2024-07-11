@@ -47,10 +47,10 @@ module NonGeneric {
 >            : ^
 >C : typeof C
 >  : ^^^^^^^^
->1 : number
->  : ^^^^^^
->2 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
 
     var r = c.fn();
 >r : C
@@ -85,16 +85,16 @@ module NonGeneric {
 >  : ^^^^^^
 
     r.y = 4;
->r.y = 4 : number
->        : ^^^^^^
+>r.y = 4 : 4
+>        : ^
 >r.y : number
 >    : ^^^^^^
 >r : C
 >  : ^
 >y : number
 >  : ^^^^^^
->4 : number
->  : ^^^^^^
+>4 : 4
+>  : ^
 
     var r6 = c.y(); // error
 >r6 : any
@@ -154,10 +154,10 @@ module Generic {
 >             : ^^^^^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->1 : number
->  : ^^^^^^
->'' : string
->   : ^^^^^^
+>1 : 1
+>  : ^
+>'' : ""
+>   : ^^
 
     var r = c.fn();
 >r : C<number, string>
@@ -192,16 +192,16 @@ module Generic {
 >  : ^^^^^^
 
     r.y = '';
->r.y = '' : string
->         : ^^^^^^
+>r.y = '' : ""
+>         : ^^
 >r.y : string
 >    : ^^^^^^
 >r : C<number, string>
 >  : ^^^^^^^^^^^^^^^^^
 >y : string
 >  : ^^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 
     var r6 = c.y(); // error
 >r6 : any

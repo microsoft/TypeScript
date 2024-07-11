@@ -46,8 +46,8 @@ var r: string = c['foo'](1);
 >  : ^
 >'foo' : "foo"
 >      : ^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 var r2: number = c['foo']('');
 >r2 : number
@@ -60,6 +60,6 @@ var r2: number = c['foo']('');
 >  : ^
 >'foo' : "foo"
 >      : ^^^^^
->'' : string
->   : ^^^^^^
+>'' : ""
+>   : ^^
 

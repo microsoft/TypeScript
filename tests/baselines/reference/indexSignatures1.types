@@ -269,8 +269,8 @@ dom = { data123: 'hello' };
 >                     : ^^^^^^^^^^^^^^^^^^^^
 >data123 : string
 >        : ^^^^^^
->'hello' : string
->        : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
 
 dom = { date123: 'hello' };  // Error
 >dom = { date123: 'hello' } : { date123: string; }
@@ -1196,8 +1196,8 @@ const system = Symbol('system');
 >                 : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->'system' : string
->         : ^^^^^^
+>'system' : "system"
+>         : ^^^^^^^^
 
 const SomeSytePlugin = Symbol('SomeSytePlugin');
 >SomeSytePlugin : unique symbol
@@ -1206,8 +1206,8 @@ const SomeSytePlugin = Symbol('SomeSytePlugin');
 >                         : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->'SomeSytePlugin' : string
->                 : ^^^^^^
+>'SomeSytePlugin' : "SomeSytePlugin"
+>                 : ^^^^^^^^^^^^^^^^
 
 interface Plugs {
     [key: symbol]: (...args: any) => unknown;
@@ -1290,8 +1290,8 @@ var theAnswer: symbol = Symbol('secret');
 >                 : ^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->'secret' : string
->         : ^^^^^^
+>'secret' : "secret"
+>         : ^^^^^^^^
 
 var obj = {} as Record<symbol, number>;
 >obj : Record<symbol, number>
@@ -1302,16 +1302,16 @@ var obj = {} as Record<symbol, number>;
 >   : ^^
 
 obj[theAnswer] = 42;
->obj[theAnswer] = 42 : number
->                    : ^^^^^^
+>obj[theAnswer] = 42 : 42
+>                    : ^^
 >obj[theAnswer] : number
 >               : ^^^^^^
 >obj : Record<symbol, number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 >theAnswer : symbol
 >          : ^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 // Repro from #26470
 
@@ -1322,8 +1322,8 @@ const directive = Symbol('directive');
 >                    : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
->'directive' : string
->            : ^^^^^^
+>'directive' : "directive"
+>            : ^^^^^^^^^^^
 
 declare function foo<TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet } & { [directive]?: TDir }): void;
 >foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
@@ -1456,8 +1456,8 @@ let case3 = foo({
 >            : ^^^^^^
 >directive : unique symbol
 >          : ^^^^^^^^^^^^^
->'str' : string
->      : ^^^^^^
+>'str' : "str"
+>      : ^^^^^
 
     addOne: (x: number) => x + 1,
 >addOne : (x: number) => number
@@ -1570,7 +1570,7 @@ const a: A = { [id]: 'test' }
 >     : ^^^^^^
 >id : `${number}-${number}-${number}-${number}`
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->'test' : string
+>'test' : "test"
 >       : ^^^^^^
 
 let aid = a[id];
@@ -1608,8 +1608,8 @@ const aa: AA = { [sym]: '123' };
 >      : ^^^^^^
 >sym : unique symbol
 >    : ^^^^^^^^^^^^^
->'123' : string
->      : ^^^^^^
+>'123' : "123"
+>      : ^^^^^
 
 const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
 >obj1 : { [key: symbol]: string; }
@@ -1622,8 +1622,8 @@ const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
 >      : ^^^^^^
 >sym : unique symbol
 >    : ^^^^^^^^^^^^^
->'hello ' : string
->         : ^^^^^^
+>'hello ' : "hello "
+>         : ^^^^^^^^
 
 const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
 >obj2 : { [key: string]: string; }

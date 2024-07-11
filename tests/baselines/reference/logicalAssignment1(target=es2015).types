@@ -39,53 +39,53 @@ declare let i: 0 | 1 | 42
 
 
 a &&= "foo"
->a &&= "foo" : string | undefined
->            : ^^^^^^^^^^^^^^^^^^
+>a &&= "foo" : "" | "foo" | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 
 b ||= "foo"
 >b ||= "foo" : string
 >            : ^^^^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 
 c ??= "foo"
 >c ??= "foo" : string
 >            : ^^^^^^
 >c : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->"foo" : string
->      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
 
 
 d &&= 42
->d &&= 42 : number | undefined
+>d &&= 42 : 0 | 42 | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >d : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 e ||= 42
 >e ||= 42 : number
 >         : ^^^^^^
 >e : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 f ??= 42
 >f ??= 42 : number
 >         : ^^^^^^
 >f : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->42 : number
->   : ^^^^^^
+>42 : 42
+>   : ^^
 
 g &&= 42
 >g &&= 42 : 0 | 42

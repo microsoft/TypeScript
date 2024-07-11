@@ -142,12 +142,12 @@ function f3() {
 >  : ^^^^^^
 >z : number
 >  : ^^^^^^
->y = 1 : number
->      : ^^^^^^
+>y = 1 : 1
+>      : ^
 >y : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
     }
 }
 
@@ -166,12 +166,12 @@ let maybeNumber: number | undefined;
 >                                   : ^^^^^^^^^^
 
     maybeNumber = 1;
->maybeNumber = 1 : number
->                : ^^^^^^
+>maybeNumber = 1 : 1
+>                : ^
 >maybeNumber : number | undefined
 >            : ^^^^^^^^^^^^^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 })();
 maybeNumber++;
@@ -210,8 +210,8 @@ if (!test) {
 >                                 : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
->'Test is not defined' : string
->                      : ^^^^^^
+>'Test is not defined' : "Test is not defined"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 }
 (() => {
 >(() => {    test.slice(1); // No error})() : void
@@ -230,8 +230,8 @@ if (!test) {
 >     : ^^^^^^
 >slice : (start?: number, end?: number) => string
 >      : ^     ^^^      ^^   ^^^      ^^^^^      
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
 })();
 
@@ -254,12 +254,12 @@ function f4() {
 >                                : ^^^^^^^^^^
 
         v = 1;
->v = 1 : number
->      : ^^^^^^
+>v = 1 : 1
+>      : ^
 >v : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     })();
     v;
@@ -290,12 +290,12 @@ function f5() {
 >  : ^
 
         v = 1;
->v = 1 : number
->      : ^^^^^^
+>v = 1 : 1
+>      : ^
 >v : number
 >  : ^^^^^^
->1 : number
->  : ^^^^^^
+>1 : 1
+>  : ^
 
     })();
     v; // still undefined

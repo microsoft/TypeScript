@@ -4,8 +4,8 @@
 var a: object & string = ""; // error
 >a : never
 >  : ^^^^^
->"" : string
->   : ^^^^^^
+>"" : ""
+>   : ^^
 
 var b: object | string = ""; // ok
 >b : string | object

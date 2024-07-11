@@ -34,8 +34,8 @@ const foo2 = a ?? 'foo' ? 1 : 2;
 >           : ^^^^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->'foo' : string
->      : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -50,24 +50,24 @@ const foo3 = a ?? 'foo' ? (b ?? 'bar') : (c ?? 'baz');
 >           : ^^^^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->'foo' : string
->      : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
 >(b ?? 'bar') : string
 >             : ^^^^^^
 >b ?? 'bar' : string
 >           : ^^^^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->'bar' : string
->      : ^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
 >(c ?? 'baz') : string
 >             : ^^^^^^
 >c ?? 'baz' : string
 >           : ^^^^^^
 >c : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->'baz' : string
->      : ^^^^^^
+>'baz' : "baz"
+>      : ^^^^^
 
 function f () {
 >f : () => void
@@ -82,19 +82,19 @@ function f () {
 >           : ^^^^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->'foo' : string
->      : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
 >b ?? 'bar' : string
 >           : ^^^^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->'bar' : string
->      : ^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
 >c ?? 'baz' : string
 >           : ^^^^^^
 >c : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->'baz' : string
->      : ^^^^^^
+>'baz' : "baz"
+>      : ^^^^^
 }
 
