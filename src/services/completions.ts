@@ -272,7 +272,6 @@ import {
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeTag,
-    JsTyping,
     JsxAttribute,
     JsxAttributes,
     JsxClosingElement,
@@ -307,6 +306,7 @@ import {
     Node,
     NodeArray,
     NodeBuilderFlags,
+    nodeCoreModules,
     NodeFlags,
     nodeIsMissing,
     NumericLiteral,
@@ -4149,7 +4149,7 @@ function getCompletionData(
             const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
             if (!moduleFile) {
                 const moduleName = stripQuotes(info.moduleSymbol.name);
-                if (JsTyping.nodeCoreModules.has(moduleName) && startsWith(moduleName, "node:") !== shouldUseUriStyleNodeCoreModules(sourceFile, program)) {
+                if (nodeCoreModules.has(moduleName) && startsWith(moduleName, "node:") !== shouldUseUriStyleNodeCoreModules(sourceFile, program)) {
                     return false;
                 }
                 return packageJsonFilter

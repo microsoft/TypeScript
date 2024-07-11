@@ -75,7 +75,6 @@ import {
     isExternalModuleNameRelative,
     isInsideNodeModules,
     JSDocParsingMode,
-    JsTyping,
     LanguageService,
     LanguageServiceHost,
     LanguageServiceMode,
@@ -903,9 +902,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getGlobalCache() {
         return this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined;
     }
-
-    /** @internal */
-    globalCacheResolutionModuleName = JsTyping.nonRelativeModuleNameForTypingCache;
 
     /** @internal */
     fileIsOpen(filePath: Path) {

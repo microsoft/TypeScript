@@ -525,6 +525,69 @@ function getCandidateFromTypeRoot(typeRoot: string, typeReferenceDirectiveName: 
     return combinePaths(typeRoot, nameForLookup);
 }
 
+const unprefixedNodeCoreModuleList = [
+    "assert",
+    "assert/strict",
+    "async_hooks",
+    "buffer",
+    "child_process",
+    "cluster",
+    "console",
+    "constants",
+    "crypto",
+    "dgram",
+    "diagnostics_channel",
+    "dns",
+    "dns/promises",
+    "domain",
+    "events",
+    "fs",
+    "fs/promises",
+    "http",
+    "https",
+    "http2",
+    "inspector",
+    "module",
+    "net",
+    "os",
+    "path",
+    "perf_hooks",
+    "process",
+    "punycode",
+    "querystring",
+    "readline",
+    "repl",
+    "stream",
+    "stream/promises",
+    "string_decoder",
+    "timers",
+    "timers/promises",
+    "tls",
+    "trace_events",
+    "tty",
+    "url",
+    "util",
+    "util/types",
+    "v8",
+    "vm",
+    "wasi",
+    "worker_threads",
+    "zlib",
+];
+
+const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
+
+/** @internal */
+export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];
+
+/** @internal */
+export const nodeCoreModules = new Set(nodeCoreModuleList);
+
+/** @internal */
+export function nonRelativeModuleNameForTypingCache(moduleName: string) {
+    return nodeCoreModules.has(moduleName) ? "node" : moduleName;
+}
+
 /**
  * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
  * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups

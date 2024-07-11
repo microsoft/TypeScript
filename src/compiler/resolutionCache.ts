@@ -49,6 +49,7 @@ import {
     ModuleResolutionCache,
     moduleResolutionNameAndModeGetter,
     mutateMap,
+    nonRelativeModuleNameForTypingCache,
     noopFileWatcher,
     normalizePath,
     packageIdToString,
@@ -195,7 +196,6 @@ export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
     getCachedDirectoryStructureHost(): CachedDirectoryStructureHost | undefined;
     projectName?: string;
     getGlobalCache?(): string | undefined;
-    globalCacheResolutionModuleName?(externalModuleName: string): string;
     writeLog(s: string): void;
     getCurrentProgram(): Program | undefined;
     fileIsOpen(filePath: Path): boolean;
@@ -542,7 +542,7 @@ function resolveModuleNameUsingGlobalCache(
         // create different collection of failed lookup locations for second pass
         // if it will fail and we've already found something during the first pass - we don't want to pollute its results
         const { resolvedModule, failedLookupLocations, affectingLocations, resolutionDiagnostics } = loadModuleFromGlobalCache(
-            Debug.checkDefined(resolutionHost.globalCacheResolutionModuleName)(moduleName),
+            nonRelativeModuleNameForTypingCache(moduleName),
             resolutionHost.projectName,
             compilerOptions,
             host,

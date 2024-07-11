@@ -507,7 +507,6 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         getCompilationSettings: project.getCompilationSettings.bind(project),
         projectName: project.projectName,
         getGlobalCache: project.getGlobalCache.bind(project),
-        globalCacheResolutionModuleName: project.globalCacheResolutionModuleName.bind(project),
         fileIsOpen: project.fileIsOpen.bind(project),
         getCurrentProgram: () => project.getCurrentProgram(),
 
