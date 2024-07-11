@@ -2178,6 +2178,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /** Key is "/path/to/a.ts|/path/to/b.ts". */
     var amalgamatedDuplicates: Map<string, DuplicateInfoForFiles> | undefined;
     var reverseMappedCache = new Map<string, Type | undefined>();
+    var reverseHomomorphicMappedCache = new Map<string, Type | undefined>();
     var ambientModulesCache: Symbol[] | undefined;
     /**
      * List of every ambient module with a "*" wildcard.
@@ -25163,12 +25164,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
      */
     function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
-        const cacheKey = "H" + source.id + "," + target.id + "," + constraint.id;
-        if (reverseMappedCache.has(cacheKey)) {
-            return reverseMappedCache.get(cacheKey);
+        const cacheKey = source.id + "," + target.id + "," + constraint.id;
+        if (reverseHomomorphicMappedCache.has(cacheKey)) {
+            return reverseHomomorphicMappedCache.get(cacheKey);
         }
         const type = createReverseMappedType(source, target, constraint);
-        reverseMappedCache.set(cacheKey, type);
+        reverseHomomorphicMappedCache.set(cacheKey, type);
         return type;
     }
 
