@@ -32,23 +32,23 @@ class L {
     "5n" = 0;
 }
 
-const g : G = { 2n: "hello" };
-const g2 : G = { "2n": "hello2" };
+const g : G = { 2n: "propertyNameError2" };
+const g2 : G = { "2n": "ok2" };
 g[2n];
 g2[2n];
 
-const h : H = { 3n: "hello2" };
-const h2 : H = { "3n": "hello2" };
+const h : H = { 3n: "propertyNameErrorAndMissingProperty3" };
+const h2 : H = { "3n": "ok3" };
 h[3n];
 h2[3n];
 
-const k : K = { 4n: "hello" };
-const k2 : K = { "4n": "hello2" };
+const k : K = { 4n: "propertyNameError4" };
+const k2 : K = { "4n": "ok4" };
 k[4n];
 k2[4n];
 
-const l : L = { 5n: "hello2" };
-const l2 : L = { "5n": "hello2" };
+const l : L = { 5n: "propertyNameErrorAndMissingProperty5" };
+const l2 : L = { "5n": "ok4" };
 l[5n];
 l2[5n];
 
@@ -82,20 +82,20 @@ class K {
 class L {
     "5n" = 0;
 }
-const g = { 2n: "hello" };
-const g2 = { "2n": "hello2" };
+const g = { 2n: "propertyNameError2" };
+const g2 = { "2n": "ok2" };
 g[2n];
 g2[2n];
-const h = { 3n: "hello2" };
-const h2 = { "3n": "hello2" };
+const h = { 3n: "propertyNameErrorAndMissingProperty3" };
+const h2 = { "3n": "ok3" };
 h[3n];
 h2[3n];
-const k = { 4n: "hello" };
-const k2 = { "4n": "hello2" };
+const k = { 4n: "propertyNameError4" };
+const k2 = { "4n": "ok4" };
 k[4n];
 k2[4n];
-const l = { 5n: "hello2" };
-const l2 = { "5n": "hello2" };
+const l = { 5n: "propertyNameErrorAndMissingProperty5" };
+const l2 = { "5n": "ok4" };
 l[5n];
 l2[5n];
 g;

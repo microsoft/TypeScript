@@ -128,25 +128,25 @@ class L {
 >  : ^
 }
 
-const g : G = { 2n: "hello" };
+const g : G = { 2n: "propertyNameError2" };
 >g : G
 >  : ^
->{ 2n: "hello" } : {}
->                : ^^
+>{ 2n: "propertyNameError2" } : {}
+>                             : ^^
 >2n : string
 >   : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"propertyNameError2" : "propertyNameError2"
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
-const g2 : G = { "2n": "hello2" };
+const g2 : G = { "2n": "ok2" };
 >g2 : G
 >   : ^
->{ "2n": "hello2" } : { "2n": string; }
->                   : ^^^^^^^^^^^^^^^^^
+>{ "2n": "ok2" } : { "2n": string; }
+>                : ^^^^^^^^^^^^^^^^^
 >"2n" : string
 >     : ^^^^^^
->"hello2" : "hello2"
->         : ^^^^^^^^
+>"ok2" : "ok2"
+>      : ^^^^^
 
 g[2n];
 >g[2n] : any
@@ -164,25 +164,25 @@ g2[2n];
 >2n : 2n
 >   : ^^
 
-const h : H = { 3n: "hello2" };
+const h : H = { 3n: "propertyNameErrorAndMissingProperty3" };
 >h : H
 >  : ^
->{ 3n: "hello2" } : {}
->                 : ^^
+>{ 3n: "propertyNameErrorAndMissingProperty3" } : {}
+>                                               : ^^
 >3n : string
 >   : ^^^^^^
->"hello2" : "hello2"
->         : ^^^^^^^^
+>"propertyNameErrorAndMissingProperty3" : "propertyNameErrorAndMissingProperty3"
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-const h2 : H = { "3n": "hello2" };
+const h2 : H = { "3n": "ok3" };
 >h2 : H
 >   : ^
->{ "3n": "hello2" } : { "3n": string; }
->                   : ^^^^^^^^^^^^^^^^^
+>{ "3n": "ok3" } : { "3n": string; }
+>                : ^^^^^^^^^^^^^^^^^
 >"3n" : string
 >     : ^^^^^^
->"hello2" : "hello2"
->         : ^^^^^^^^
+>"ok3" : "ok3"
+>      : ^^^^^
 
 h[3n];
 >h[3n] : any
@@ -200,25 +200,25 @@ h2[3n];
 >3n : 3n
 >   : ^^
 
-const k : K = { 4n: "hello" };
+const k : K = { 4n: "propertyNameError4" };
 >k : K
 >  : ^
->{ 4n: "hello" } : {}
->                : ^^
+>{ 4n: "propertyNameError4" } : {}
+>                             : ^^
 >4n : string
 >   : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"propertyNameError4" : "propertyNameError4"
+>                     : ^^^^^^^^^^^^^^^^^^^^
 
-const k2 : K = { "4n": "hello2" };
+const k2 : K = { "4n": "ok4" };
 >k2 : K
 >   : ^
->{ "4n": "hello2" } : { "4n": string; }
->                   : ^^^^^^^^^^^^^^^^^
+>{ "4n": "ok4" } : { "4n": string; }
+>                : ^^^^^^^^^^^^^^^^^
 >"4n" : string
 >     : ^^^^^^
->"hello2" : "hello2"
->         : ^^^^^^^^
+>"ok4" : "ok4"
+>      : ^^^^^
 
 k[4n];
 >k[4n] : any
@@ -236,25 +236,25 @@ k2[4n];
 >4n : 4n
 >   : ^^
 
-const l : L = { 5n: "hello2" };
+const l : L = { 5n: "propertyNameErrorAndMissingProperty5" };
 >l : L
 >  : ^
->{ 5n: "hello2" } : {}
->                 : ^^
+>{ 5n: "propertyNameErrorAndMissingProperty5" } : {}
+>                                               : ^^
 >5n : string
 >   : ^^^^^^
->"hello2" : "hello2"
->         : ^^^^^^^^
+>"propertyNameErrorAndMissingProperty5" : "propertyNameErrorAndMissingProperty5"
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-const l2 : L = { "5n": "hello2" };
+const l2 : L = { "5n": "ok4" };
 >l2 : L
 >   : ^
->{ "5n": "hello2" } : { "5n": string; }
->                   : ^^^^^^^^^^^^^^^^^
+>{ "5n": "ok4" } : { "5n": string; }
+>                : ^^^^^^^^^^^^^^^^^
 >"5n" : string
 >     : ^^^^^^
->"hello2" : "hello2"
->         : ^^^^^^^^
+>"ok4" : "ok4"
+>      : ^^^^^
 
 l[5n];
 >l[5n] : any
