@@ -26,7 +26,7 @@ declare function configureStore<S = any, A extends Action = UnknownAction>(
 
 {
   const reducer: Reducer<number> = () => 0;
-  const store1 = configureStore({ reducer }); // comment it out to see the error go away
+  const store1 = configureStore({ reducer });
 }
 
 const counterReducer1: Reducer<number> = () => 0;

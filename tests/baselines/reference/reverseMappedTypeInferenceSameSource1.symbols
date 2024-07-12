@@ -89,7 +89,7 @@ declare function configureStore<S = any, A extends Action = UnknownAction>(
 >reducer : Symbol(reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 24, 7))
 >Reducer : Symbol(Reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 5, 1))
 
-  const store1 = configureStore({ reducer }); // comment it out to see the error go away
+  const store1 = configureStore({ reducer });
 >store1 : Symbol(store1, Decl(reverseMappedTypeInferenceSameSource1.ts, 25, 7))
 >configureStore : Symbol(configureStore, Decl(reverseMappedTypeInferenceSameSource1.ts, 17, 1))
 >reducer : Symbol(reducer, Decl(reverseMappedTypeInferenceSameSource1.ts, 25, 33))
@@ -114,3 +114,4 @@ const store2 = configureStore({
 });
 
 export {}
+

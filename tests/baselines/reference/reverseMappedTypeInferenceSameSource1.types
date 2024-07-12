@@ -61,7 +61,7 @@ declare function configureStore<S = any, A extends Action = UnknownAction>(
 >0 : 0
 >  : ^
 
-  const store1 = configureStore({ reducer }); // comment it out to see the error go away
+  const store1 = configureStore({ reducer });
 >store1 : void
 >       : ^^^^
 >configureStore({ reducer }) : void
@@ -108,3 +108,4 @@ const store2 = configureStore({
 });
 
 export {}
+
