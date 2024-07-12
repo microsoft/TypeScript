@@ -1,0 +1,180 @@
+//// [tests/cases/compiler/declarationEmitIsolatedDeclarationErrorNotEmittedForNonEmittedFile.ts] ////
+
+=== node_modules/@trpc/server/internals/config.d.ts ===
+export interface RootConfig<T> {
+>RootConfig : Symbol(RootConfig, Decl(config.d.ts, 0, 0))
+>T : Symbol(T, Decl(config.d.ts, 0, 28))
+
+    prop: T;
+>prop : Symbol(RootConfig.prop, Decl(config.d.ts, 0, 32))
+>T : Symbol(T, Decl(config.d.ts, 0, 28))
+}
+=== node_modules/@trpc/server/internals/utils.d.ts ===
+export interface ErrorFormatterShape<T={}> {
+>ErrorFormatterShape : Symbol(ErrorFormatterShape, Decl(utils.d.ts, 0, 0))
+>T : Symbol(T, Decl(utils.d.ts, 0, 37))
+
+    prop: T;
+>prop : Symbol(ErrorFormatterShape.prop, Decl(utils.d.ts, 0, 44))
+>T : Symbol(T, Decl(utils.d.ts, 0, 37))
+}
+export type PickFirstDefined<TType, TPick> = undefined extends TType
+>PickFirstDefined : Symbol(PickFirstDefined, Decl(utils.d.ts, 2, 1))
+>TType : Symbol(TType, Decl(utils.d.ts, 3, 29))
+>TPick : Symbol(TPick, Decl(utils.d.ts, 3, 35))
+>TType : Symbol(TType, Decl(utils.d.ts, 3, 29))
+
+  ? undefined extends TPick
+>TPick : Symbol(TPick, Decl(utils.d.ts, 3, 35))
+
+    ? never
+    : TPick
+>TPick : Symbol(TPick, Decl(utils.d.ts, 3, 35))
+
+  : TType;
+>TType : Symbol(TType, Decl(utils.d.ts, 3, 29))
+
+export interface ErrorFormatter<T={},U={}> {
+>ErrorFormatter : Symbol(ErrorFormatter, Decl(utils.d.ts, 7, 10))
+>T : Symbol(T, Decl(utils.d.ts, 8, 32))
+>U : Symbol(U, Decl(utils.d.ts, 8, 37))
+
+    prop: [T, U];
+>prop : Symbol(ErrorFormatter.prop, Decl(utils.d.ts, 8, 44))
+>T : Symbol(T, Decl(utils.d.ts, 8, 32))
+>U : Symbol(U, Decl(utils.d.ts, 8, 37))
+}
+export interface DefaultErrorShape<T={}> {
+>DefaultErrorShape : Symbol(DefaultErrorShape, Decl(utils.d.ts, 10, 1))
+>T : Symbol(T, Decl(utils.d.ts, 11, 35))
+
+    prop: T;
+>prop : Symbol(DefaultErrorShape.prop, Decl(utils.d.ts, 11, 42))
+>T : Symbol(T, Decl(utils.d.ts, 11, 35))
+}
+=== node_modules/@trpc/server/middleware.d.ts ===
+export interface MiddlewareFunction<T={},U={}> {
+>MiddlewareFunction : Symbol(MiddlewareFunction, Decl(middleware.d.ts, 0, 0))
+>T : Symbol(T, Decl(middleware.d.ts, 0, 36))
+>U : Symbol(U, Decl(middleware.d.ts, 0, 41))
+
+    prop: [T, U];
+>prop : Symbol(MiddlewareFunction.prop, Decl(middleware.d.ts, 0, 48))
+>T : Symbol(T, Decl(middleware.d.ts, 0, 36))
+>U : Symbol(U, Decl(middleware.d.ts, 0, 41))
+}
+export interface MiddlewareBuilder<T={},U={}> {
+>MiddlewareBuilder : Symbol(MiddlewareBuilder, Decl(middleware.d.ts, 2, 1))
+>T : Symbol(T, Decl(middleware.d.ts, 3, 35))
+>U : Symbol(U, Decl(middleware.d.ts, 3, 40))
+
+    prop: [T, U];
+>prop : Symbol(MiddlewareBuilder.prop, Decl(middleware.d.ts, 3, 47))
+>T : Symbol(T, Decl(middleware.d.ts, 3, 35))
+>U : Symbol(U, Decl(middleware.d.ts, 3, 40))
+}
+=== node_modules/@trpc/server/index.d.ts ===
+import { RootConfig } from './internals/config';
+>RootConfig : Symbol(RootConfig, Decl(index.d.ts, 0, 8))
+
+import { ErrorFormatterShape, PickFirstDefined, ErrorFormatter, DefaultErrorShape } from './internals/utils';
+>ErrorFormatterShape : Symbol(ErrorFormatterShape, Decl(index.d.ts, 1, 8))
+>PickFirstDefined : Symbol(PickFirstDefined, Decl(index.d.ts, 1, 29))
+>ErrorFormatter : Symbol(ErrorFormatter, Decl(index.d.ts, 1, 47))
+>DefaultErrorShape : Symbol(DefaultErrorShape, Decl(index.d.ts, 1, 63))
+
+declare class TRPCBuilder<TParams> {
+>TRPCBuilder : Symbol(TRPCBuilder, Decl(index.d.ts, 1, 109))
+>TParams : Symbol(TParams, Decl(index.d.ts, 2, 26))
+
+    create<TOptions extends Record<string, any>>(): {
+>create : Symbol(TRPCBuilder.create, Decl(index.d.ts, 2, 36))
+>TOptions : Symbol(TOptions, Decl(index.d.ts, 3, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+        procedure: {};
+>procedure : Symbol(procedure, Decl(index.d.ts, 3, 53))
+
+        middleware: <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{
+>middleware : Symbol(middleware, Decl(index.d.ts, 4, 22))
+>TNewParams : Symbol(TNewParams, Decl(index.d.ts, 5, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(index.d.ts, 5, 61))
+>MiddlewareFunction : Symbol(MiddlewareFunction, Decl(middleware.d.ts, 0, 0))
+
+            _config: RootConfig<{
+>_config : Symbol(_config, Decl(index.d.ts, 5, 108))
+>RootConfig : Symbol(RootConfig, Decl(index.d.ts, 0, 8))
+
+                errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>;
+>errorShape : Symbol(errorShape, Decl(index.d.ts, 6, 33))
+>ErrorFormatterShape : Symbol(ErrorFormatterShape, Decl(index.d.ts, 1, 8))
+>PickFirstDefined : Symbol(PickFirstDefined, Decl(index.d.ts, 1, 29))
+>TOptions : Symbol(TOptions, Decl(index.d.ts, 3, 11))
+>ErrorFormatter : Symbol(ErrorFormatter, Decl(index.d.ts, 1, 47))
+>TParams : Symbol(TParams, Decl(index.d.ts, 2, 26))
+>TParams : Symbol(TParams, Decl(index.d.ts, 2, 26))
+>DefaultErrorShape : Symbol(DefaultErrorShape, Decl(index.d.ts, 1, 63))
+
+            }>;
+        }, TNewParams>) => import("./middleware").MiddlewareBuilder<{
+>TNewParams : Symbol(TNewParams, Decl(index.d.ts, 5, 21))
+>MiddlewareBuilder : Symbol(MiddlewareBuilder, Decl(middleware.d.ts, 2, 1))
+
+            _config: RootConfig<{
+>_config : Symbol(_config, Decl(index.d.ts, 9, 69))
+>RootConfig : Symbol(RootConfig, Decl(index.d.ts, 0, 8))
+
+                errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>;
+>errorShape : Symbol(errorShape, Decl(index.d.ts, 10, 33))
+>ErrorFormatterShape : Symbol(ErrorFormatterShape, Decl(index.d.ts, 1, 8))
+>PickFirstDefined : Symbol(PickFirstDefined, Decl(index.d.ts, 1, 29))
+>TOptions : Symbol(TOptions, Decl(index.d.ts, 3, 11))
+>ErrorFormatter : Symbol(ErrorFormatter, Decl(index.d.ts, 1, 47))
+>TParams : Symbol(TParams, Decl(index.d.ts, 2, 26))
+>TParams : Symbol(TParams, Decl(index.d.ts, 2, 26))
+>DefaultErrorShape : Symbol(DefaultErrorShape, Decl(index.d.ts, 1, 63))
+
+            }>;
+        }, TNewParams>;
+>TNewParams : Symbol(TNewParams, Decl(index.d.ts, 5, 21))
+
+        router: {};
+>router : Symbol(router, Decl(index.d.ts, 13, 23))
+
+    };
+} 
+
+export declare const initTRPC: TRPCBuilder<object>;
+>initTRPC : Symbol(initTRPC, Decl(index.d.ts, 18, 20))
+>TRPCBuilder : Symbol(TRPCBuilder, Decl(index.d.ts, 1, 109))
+
+export {};
+=== index.ts ===
+import { initTRPC } from "@trpc/server";
+>initTRPC : Symbol(initTRPC, Decl(index.ts, 0, 8))
+
+const trpc = initTRPC.create();
+>trpc : Symbol(trpc, Decl(index.ts, 2, 5))
+>initTRPC.create : Symbol(TRPCBuilder.create, Decl(index.d.ts, 2, 36))
+>initTRPC : Symbol(initTRPC, Decl(index.ts, 0, 8))
+>create : Symbol(TRPCBuilder.create, Decl(index.d.ts, 2, 36))
+
+export const middleware = trpc.middleware;
+>middleware : Symbol(middleware, Decl(index.ts, 4, 12))
+>trpc.middleware : Symbol(middleware, Decl(index.d.ts, 4, 22))
+>trpc : Symbol(trpc, Decl(index.ts, 2, 5))
+>middleware : Symbol(middleware, Decl(index.d.ts, 4, 22))
+
+export const router = trpc.router;
+>router : Symbol(router, Decl(index.ts, 5, 12))
+>trpc.router : Symbol(router, Decl(index.d.ts, 13, 23))
+>trpc : Symbol(trpc, Decl(index.ts, 2, 5))
+>router : Symbol(router, Decl(index.d.ts, 13, 23))
+
+export const publicProcedure = trpc.procedure;
+>publicProcedure : Symbol(publicProcedure, Decl(index.ts, 6, 12))
+>trpc.procedure : Symbol(procedure, Decl(index.d.ts, 3, 53))
+>trpc : Symbol(trpc, Decl(index.ts, 2, 5))
+>procedure : Symbol(procedure, Decl(index.d.ts, 3, 53))
+

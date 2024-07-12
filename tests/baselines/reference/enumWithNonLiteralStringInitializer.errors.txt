@@ -1,0 +1,24 @@
+bad.ts(3,8): error TS18055: 'A.a' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.
+
+
+==== ./helpers.ts (0 errors) ====
+    export const foo = 2;
+    export const bar = "bar";
+    
+==== ./bad.ts (1 errors) ====
+    import { bar } from "./helpers";
+    enum A {
+       a = bar,
+           ~~~
+!!! error TS18055: 'A.a' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.
+    }
+    
+==== ./good.ts (0 errors) ====
+    import { foo } from "./helpers";
+    enum A {
+       a = `${foo}`,
+       b = "" + 2,
+       c = 2 + "",
+       d = ("foo"),
+    }
+    

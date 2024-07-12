@@ -6,10 +6,12 @@ declare var x;
 
 async function empty() {
 >empty : () => Promise<void>
+>      : ^^^^^^^^^^^^^^^^^^^
 }
 
 async function singleAwait() {
 >singleAwait : () => Promise<void>
+>            : ^^^^^^^^^^^^^^^^^^^
 
     await x;
 >await x : any

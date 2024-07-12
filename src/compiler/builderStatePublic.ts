@@ -1,12 +1,12 @@
 import {
     Diagnostic,
     WriteFileCallbackData,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface EmitOutput {
     outputFiles: OutputFile[];
     emitSkipped: boolean;
-    /** @internal */ diagnostics: readonly Diagnostic[];
+    diagnostics: readonly Diagnostic[];
 }
 
 export interface OutputFile {

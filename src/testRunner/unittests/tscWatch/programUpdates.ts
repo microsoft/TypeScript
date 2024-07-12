@@ -1,14 +1,8 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    commandLineCallbacks,
-} from "../helpers/baseline";
-import {
-    compilerOptionsToConfigJson,
-} from "../helpers/contents";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { commandLineCallbacks } from "../helpers/baseline.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import {
     commonFile1,
     commonFile2,
@@ -19,14 +13,14 @@ import {
     TscWatchCompileChange,
     verifyTscWatch,
     watchBaseline,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
     SymLink,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: program updates", () => {
     const scenario = "programUpdates";
@@ -2140,6 +2134,48 @@ import { x } from "../b";`,
             const module2: File = {
                 path: `/user/username/projects/myproject/b.ts`,
                 content: `import "./a.ts";`,
+            };
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        noEmit: true,
+                        allowImportingTsExtensions: false,
+                    },
+                }),
+            };
+            return createWatchedSystem([module1, module2, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+        },
+        edits: [
+            {
+                caption: "Change allowImportingTsExtensions to true",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: {
+                                noEmit: true,
+                                allowImportingTsExtensions: true,
+                            },
+                        }),
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "when changing `allowImportingTsExtensions` of config file 2",
+        commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+        sys: () => {
+            const module1: File = {
+                path: `/user/username/projects/myproject/a.ts`,
+                content: `export const foo = 10;`,
+            };
+            const module2: File = {
+                path: `/user/username/projects/myproject/b.ts`,
+                content: `export * as a from "./a.ts";`,
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,

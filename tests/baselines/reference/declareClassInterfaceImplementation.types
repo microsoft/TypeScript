@@ -4,10 +4,12 @@
 interface IBuffer {
     [index: number]: number;
 >index : number
+>      : ^^^^^^
 }
 
 declare class Buffer implements IBuffer {
 >Buffer : Buffer
+>       : ^^^^^^
 
 }
 

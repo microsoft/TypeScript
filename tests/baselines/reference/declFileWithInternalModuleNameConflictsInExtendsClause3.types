@@ -7,17 +7,27 @@ module X.A.C {
 }
 module X.A.B.C {
 >X : typeof X
+>  : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
     export class W implements X.A.C.Z { // This needs to be referred as X.A.C.Z as A has conflict
 >W : W
+>  : ^
 >X.A.C : any
+>      : ^^^
 >X.A : typeof A
+>    : ^^^^^^^^
 >X : typeof X
+>  : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >C : any
+>  : ^^^
     }
 }
 

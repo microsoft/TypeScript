@@ -1,6 +1,13 @@
+import { getModuleSpecifierPreferences } from "../compiler/moduleSpecifiers.js";
 import {
-    getModuleSpecifierPreferences,
-} from "../compiler/moduleSpecifiers";
+    CompletionKind,
+    createCompletionDetails,
+    createCompletionDetailsForSymbol,
+    getCompletionEntriesFromSymbols,
+    getPropertiesForObjectExpression,
+    Log,
+    SortText,
+} from "./_namespaces/ts.Completions.js";
 import {
     addToSeen,
     altDirectorySeparator,
@@ -70,7 +77,9 @@ import {
     hasProperty,
     hasTrailingDirectorySeparator,
     hostGetCanonicalFileName,
+    ImportOrExportSpecifier,
     IndexedAccessTypeNode,
+    InternalSymbolName,
     isApplicableVersionedTypesKey,
     isArray,
     isCallExpression,
@@ -97,6 +106,7 @@ import {
     LiteralTypeNode,
     mapDefined,
     MapLike,
+    moduleExportNameTextEscaped,
     moduleResolutionUsesNodeModules,
     ModuleSpecifierEnding,
     moduleSpecifiers,
@@ -150,16 +160,7 @@ import {
     UserPreferences,
     walkUpParenthesizedExpressions,
     walkUpParenthesizedTypes,
-} from "./_namespaces/ts";
-import {
-    CompletionKind,
-    createCompletionDetails,
-    createCompletionDetailsForSymbol,
-    getCompletionEntriesFromSymbols,
-    getPropertiesForObjectExpression,
-    Log,
-    SortText,
-} from "./_namespaces/ts.Completions";
+} from "./_namespaces/ts.js";
 
 interface NameAndKindSet {
     add(value: NameAndKind): void;
@@ -225,7 +226,7 @@ function convertStringLiteralCompletions(
         return undefined;
     }
 
-    const optionalReplacementSpan = createTextSpanFromStringLiteralLikeContent(contextToken);
+    const optionalReplacementSpan = createTextSpanFromStringLiteralLikeContent(contextToken, position);
     switch (completion.kind) {
         case StringLiteralCompletionKind.Paths:
             return convertPathCompletions(completion.paths);
@@ -272,7 +273,7 @@ function convertStringLiteralCompletions(
                 kindModifiers: ScriptElementKindModifier.none,
                 kind: ScriptElementKind.string,
                 sortText: SortText.LocationPriority,
-                replacementSpan: getReplacementSpanForContextToken(contextToken),
+                replacementSpan: getReplacementSpanForContextToken(contextToken, position),
             }));
             return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, optionalReplacementSpan, entries };
         }
@@ -420,6 +421,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
         case SyntaxKind.ExternalModuleReference:
+        case SyntaxKind.JSDocImportTag:
             // Get all known external module names or complete a path to a module
             // i.e. import * as ns from "/*completion position*/";
             //      var y = import("/*completion position*/");
@@ -435,6 +437,24 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
             }
             const literals = contextualTypes.types.filter(literal => !tracker.hasValue(literal.value));
             return { kind: StringLiteralCompletionKind.Types, types: literals, isNewIdentifier: false };
+
+        case SyntaxKind.ImportSpecifier:
+        case SyntaxKind.ExportSpecifier:
+            // Complete string aliases in `import { "|" } from` and `export { "|" } from`
+            const specifier = parent as ImportOrExportSpecifier;
+            if (specifier.propertyName && node !== specifier.propertyName) {
+                return; // Don't complete in `export { "..." as "|" } from`
+            }
+            const namedImportsOrExports = specifier.parent;
+            const { moduleSpecifier } = namedImportsOrExports.kind === SyntaxKind.NamedImports ? namedImportsOrExports.parent.parent : namedImportsOrExports.parent;
+            if (!moduleSpecifier) return;
+            const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(moduleSpecifier); // TODO: GH#18217
+            if (!moduleSpecifierSymbol) return;
+            const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
+            const existing = new Set(namedImportsOrExports.elements.map(n => moduleExportNameTextEscaped(n.propertyName || n.name)));
+            const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
+            return { kind: StringLiteralCompletionKind.Properties, symbols: uniques, hasIndexSignature: false };
+
         default:
             return fromContextualType() || fromContextualType(ContextFlags.None);
     }
@@ -966,7 +986,7 @@ function getCompletionEntriesForNonRelativeModules(
                         const packageJson = readJson(packageFile, host);
                         const exports = (packageJson as any).exports;
                         if (exports) {
-                            if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-null/no-null
+                            if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-restricted-syntax
                                 return; // null exports or entrypoint only, no sub-modules available
                             }
                             const keys = getOwnKeys(exports);
@@ -1253,7 +1273,7 @@ function isPathRelativeToScript(path: string) {
  *
  * /// <reference path="fragment"
  */
-const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
+const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\x03"]*)$/;
 
 const nodeModulesDependencyKeys: readonly string[] = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
 

@@ -4,27 +4,34 @@
 // https://github.com/microsoft/TypeScript/issues/55383
 
 type LiteralType = string | number | boolean;
->LiteralType : string | number | boolean
+>LiteralType : LiteralType
+>            : ^^^^^^^^^^^
 
 type ValueGetter<ValueType extends LiteralType = LiteralType> = () => ValueType;
 >ValueGetter : ValueGetter<ValueType>
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 
 type Schema = SchemaArray | SchemaObject | LiteralType;
->Schema : LiteralType | SchemaArray | SchemaObject
+>Schema : Schema
+>       : ^^^^^^
 
 type SchemaArray = Array<SchemaObject | SchemaArray | LiteralType>;
->SchemaArray : (LiteralType | SchemaArray | SchemaObject)[]
+>SchemaArray : SchemaArray
+>            : ^^^^^^^^^^^
 
 type SchemaObject = {
->SchemaObject : { [key: string]: LiteralType | SchemaArray | SchemaObject; }
+>SchemaObject : SchemaObject
+>             : ^^^^^^^^^^^^
 
   [key: string]: SchemaObject | SchemaArray | LiteralType;
 >key : string
+>    : ^^^^^^
 
 };
 
 type InferValuesFromSchema<S extends Schema> = S extends LiteralType
 >InferValuesFromSchema : InferValuesFromSchema<S>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
   ? ValueGetter<S>
   : S extends SchemaArray
