@@ -37,11 +37,11 @@ test.fail(arg => foo.reject(arg));
 >test.fail(arg => foo.reject(arg)) : void
 >                                  : ^^^^
 >test.fail : (func: (arg: string) => void) => void
->          : ^    ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^    ^^^   ^^^^^^^^^^^^^    ^^^^^    
 >test : bar<string>
 >     : ^^^^^^^^^^^
 >fail : (func: (arg: string) => void) => void
->     : ^    ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^^   ^^^^^^^^^^^^^    ^^^^^    
 >arg => foo.reject(arg) : (arg: string) => void
 >                       : ^   ^^^^^^^^^^^^^^^^^
 >arg : string
@@ -49,11 +49,11 @@ test.fail(arg => foo.reject(arg));
 >foo.reject(arg) : void
 >                : ^^^^
 >foo.reject : (arg: string) => void
->           : ^   ^^^^^^^^^^^^^^^^^
+>           : ^   ^^^^^^^^^^^^^    
 >foo : Foo<string>
 >    : ^^^^^^^^^^^
 >reject : (arg: string) => void
->       : ^   ^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^    
 >arg : string
 >    : ^^^^^^
 
@@ -61,11 +61,11 @@ test.fail2(arg => foo.reject(arg)); // Error: Supplied parameters do not match a
 >test.fail2(arg => foo.reject(arg)) : void
 >                                   : ^^^^
 >test.fail2 : (func2: (arg: string) => void) => void
->           : ^     ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^   ^^^^^^^^^^^^^    ^^^^^    
 >test : bar<string>
 >     : ^^^^^^^^^^^
 >fail2 : (func2: (arg: string) => void) => void
->      : ^     ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^   ^^^^^^^^^^^^^    ^^^^^    
 >arg => foo.reject(arg) : (arg: string) => void
 >                       : ^   ^^^^^^^^^^^^^^^^^
 >arg : string
@@ -73,11 +73,11 @@ test.fail2(arg => foo.reject(arg)); // Error: Supplied parameters do not match a
 >foo.reject(arg) : void
 >                : ^^^^
 >foo.reject : (arg: string) => void
->           : ^   ^^^^^^^^^^^^^^^^^
+>           : ^   ^^^^^^^^^^^^^    
 >foo : Foo<string>
 >    : ^^^^^^^^^^^
 >reject : (arg: string) => void
->       : ^   ^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^    
 >arg : string
 >    : ^^^^^^
 

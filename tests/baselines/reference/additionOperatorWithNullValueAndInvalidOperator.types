@@ -111,7 +111,7 @@ var r10 = null + foo();
 >foo() : void
 >      : ^^^^
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 var r11 = null + (() => { });
 >r11 : any

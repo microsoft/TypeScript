@@ -11,7 +11,7 @@ function doSomething(cb: () => void) {
 >cb() : void
 >     : ^^^^
 >cb : () => void
->   : ^^^^^^^^^^
+>   : ^^^^^^    
 }
 
 function fn(x: number | string) {
@@ -40,11 +40,11 @@ function fn(x: number | string) {
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
   }
 }
 

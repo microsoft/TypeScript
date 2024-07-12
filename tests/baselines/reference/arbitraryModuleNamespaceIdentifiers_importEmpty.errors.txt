@@ -1,0 +1,21 @@
+arbitraryModuleNamespaceIdentifiers_importEmpty.ts(4,3): error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"missing"'.
+arbitraryModuleNamespaceIdentifiers_importEmpty.ts(5,3): error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"(missing)"'.
+arbitraryModuleNamespaceIdentifiers_importEmpty.ts(6,3): error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '""'.
+
+
+==== arbitraryModuleNamespaceIdentifiers_importEmpty.ts (3 errors) ====
+    // These should all be errors. In particular, the empty string is a now a valid
+    // module export name, and should be treated as such here.
+    import {
+      "missing" as x,
+      ~~~~~~~~~
+!!! error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"missing"'.
+      "(missing)" as y,
+      ~~~~~~~~~~~
+!!! error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '"(missing)"'.
+      "" as z,
+      ~~
+!!! error TS2305: Module '"./arbitraryModuleNamespaceIdentifiers_importEmpty"' has no exported member '""'.
+    } from "./arbitraryModuleNamespaceIdentifiers_importEmpty";
+    const xyz = [x, y, z];
+    

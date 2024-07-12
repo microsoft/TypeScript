@@ -9,7 +9,7 @@ function f(n: any) { return null; }
 
 function g<A, B>(x: any) { return null; }
 >g : <A, B>(x: any) => any
->  : ^^^^^^^ ^^   ^^^^^^^^
+>  : ^ ^^ ^^ ^^   ^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -29,7 +29,7 @@ f(g<A, B>(7));
 >g<A, B>(7) : any
 >           : ^^^
 >g : <A, B>(x: any) => any
->  : ^^^^^^^ ^^   ^^^^^^^^
+>  : ^ ^^ ^^ ^^   ^^^^^^^^
 >7 : 7
 >  : ^
 
@@ -41,7 +41,7 @@ f(g < A, B > 7); // Should error
 >g < A : boolean
 >      : ^^^^^^^
 >g : <A, B>(x: any) => any
->  : ^^^^^^^ ^^   ^^^^^^^^
+>  : ^ ^^ ^^ ^^   ^^^^^^^^
 >A : any
 >  : ^^^
 >B > 7 : boolean
@@ -59,7 +59,7 @@ f(g < A, B > +(7)); // Should error
 >g < A : boolean
 >      : ^^^^^^^
 >g : <A, B>(x: any) => any
->  : ^^^^^^^ ^^   ^^^^^^^^
+>  : ^ ^^ ^^ ^^   ^^^^^^^^
 >A : any
 >  : ^^^
 >B > +(7) : boolean

@@ -32,13 +32,13 @@ const a = new A().a(1);
 >new A().a(1) : void
 >             : ^^^^
 >new A().a : (x: typeof this.x) => void
->          : ^ ^^             ^^^^^^^^^
+>          : ^ ^^             ^^^^^    
 >new A() : A
 >        : ^
 >A : typeof A
 >  : ^^^^^^^^
 >a : (x: typeof this.x) => void
->  : ^ ^^             ^^^^^^^^^
+>  : ^ ^^             ^^^^^    
 >1 : 1
 >  : ^
 

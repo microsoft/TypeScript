@@ -60,9 +60,9 @@ class MyClass {
 >assert(params) : void
 >               : ^^^^
 >assert : (condition: unknown) => asserts condition
->       : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^         ^^       ^^^^^                 
 >params : { a: { key: string; }; } | null
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^                ^^^^^^^^^^
 
         type Key = keyof typeof this.map;
 >Key : "my_key"
@@ -88,11 +88,11 @@ class MyClass {
 >params.a.key : string
 >             : ^^^^^^
 >params.a : { key: string; }
->         : ^^^^^^^^^^^^^^^^
+>         : ^^^^^^^      ^^^
 >params : { a: { key: string; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^                ^^^
 >a : { key: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >key : string
 >    : ^^^^^^
     }

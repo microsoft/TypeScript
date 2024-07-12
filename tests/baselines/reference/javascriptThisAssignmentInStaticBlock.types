@@ -40,13 +40,13 @@ class ElementsArray extends Array {
     static {
         const superisArray = super.isArray;
 >superisArray : (arg: any) => arg is any[]
->             : ^   ^^   ^^^^^^^^^^^^^^^^^
+>             : ^   ^^   ^^^^^            
 >super.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >super : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 
         const customIsArray = (arg)=> superisArray(arg);
 >customIsArray : (arg: any) => arg is any[]
@@ -57,7 +57,7 @@ class ElementsArray extends Array {
 >superisArray(arg) : boolean
 >                  : ^^^^^^^
 >superisArray : (arg: any) => arg is any[]
->             : ^   ^^   ^^^^^^^^^^^^^^^^^
+>             : ^   ^^   ^^^^^            
 >arg : any
 
         this.isArray = customIsArray;

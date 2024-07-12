@@ -42,7 +42,7 @@ interface IPromise2<T, V> {
 interface Promise2<T, V> {
     then<U, W>(callback: (x: T) => Promise2<string, any>): Promise2<any, any>; // Uses string instead of any!
 >then : <U, W>(callback: (x: T) => Promise2<string, any>) => Promise2<any, any>
->     : ^^^^^^^        ^^                               ^^^^^                  
+>     : ^ ^^ ^^        ^^                               ^^^^^                  
 >callback : (x: T) => Promise2<string, any>
 >         : ^ ^^ ^^^^^                     
 >x : T

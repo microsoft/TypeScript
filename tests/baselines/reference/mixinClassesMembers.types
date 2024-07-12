@@ -309,11 +309,11 @@ function f4() {
 >x.f() : number
 >      : ^^^^^^
 >x.f : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >x : M2 & M1 & C1
 >  : ^^^^^^^^^^^^
 >f : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
     Mixed3.p;
 >Mixed3.p : number
@@ -327,11 +327,11 @@ function f4() {
 >Mixed3.f() : number
 >           : ^^^^^^
 >Mixed3.f : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >Mixed3 : typeof M2 & typeof M1 & typeof C1
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 }
 
 function f5() {
@@ -368,11 +368,11 @@ function f5() {
 >x.f() : number
 >      : ^^^^^^
 >x.f : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >x : C1 & M1 & M2
 >  : ^^^^^^^^^^^^
 >f : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
     Mixed4.p;
 >Mixed4.p : number
@@ -386,11 +386,11 @@ function f5() {
 >Mixed4.f() : number
 >           : ^^^^^^
 >Mixed4.f : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >Mixed4 : typeof C1 & typeof M1 & typeof M2
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 }
 
 function f6() {
@@ -417,11 +417,11 @@ function f6() {
 >x.f() : number
 >      : ^^^^^^
 >x.f : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >x : M1 & M2
 >  : ^^^^^^^
 >f : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
     Mixed5.p;
 >Mixed5.p : number
@@ -435,11 +435,11 @@ function f6() {
 >Mixed5.f() : number
 >           : ^^^^^^
 >Mixed5.f : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >Mixed5 : typeof M1 & typeof M2
 >       : ^^^^^^^^^^^^^^^^^^^^^
 >f : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 }
 
 class C2 extends Mixed1 {
@@ -538,10 +538,10 @@ class C3 extends Mixed3 {
 >super.f() : number
 >          : ^^^^^^
 >super.f : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >super : M2 & M1 & C1
 >      : ^^^^^^^^^^^^
 >f : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 }
 

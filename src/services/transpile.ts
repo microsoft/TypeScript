@@ -26,9 +26,10 @@ import {
     optionDeclarations,
     parseCustomTypeOption,
     ScriptTarget,
+    SourceFile,
     toPath,
     transpileOptionValueCompilerOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface TranspileOptions {
     compilerOptions?: CompilerOptions;
@@ -59,6 +60,7 @@ const optionsRedundantWithVerbatimModuleSyntax = new Set([
  * - noLib = true
  * - noResolve = true
  * - declaration = false
+ * - noCheck = true
  */
 export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
     return transpileWorker(input, transpileOptions, /*declaration*/ false);
@@ -108,9 +110,11 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }`;
 const barebonesLibName = "lib.d.ts";
-const barebonesLibSourceFile = createSourceFile(barebonesLibName, barebonesLibContent, { languageVersion: ScriptTarget.Latest });
+let barebonesLibSourceFile: SourceFile | undefined;
 
 function transpileWorker(input: string, transpileOptions: TranspileOptions, declaration?: boolean): TranspileOutput {
+    barebonesLibSourceFile ??= createSourceFile(barebonesLibName, barebonesLibContent, { languageVersion: ScriptTarget.Latest });
+
     const diagnostics: Diagnostic[] = [];
 
     const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : {};
@@ -142,7 +146,6 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
         options.declaration = true;
         options.emitDeclarationOnly = true;
         options.isolatedDeclarations = true;
-        options.noCheck = true;
     }
     else {
         options.declaration = false;

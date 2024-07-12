@@ -97,6 +97,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /Library/Caches/typescript/node_modules/@types/jsconfig.json: *new*
@@ -220,7 +231,6 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -274,6 +284,18 @@ Info seq  [hh:mm:ss:mss] 	FileName: /Library/Caches/typescript/node_modules/@typ
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /project/index.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /Library/Caches/typescript/node_modules/@types/jsconfig.json:
@@ -282,7 +304,6 @@ watchedFiles::
   {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json:
   {"pollingInterval":2000}
-  {"pollingInterval":2000} *new*
 /Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json:
   {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/tsconfig.json:
@@ -1008,7 +1029,6 @@ watchedFiles::
 /Library/Caches/typescript/node_modules/@types/react-router-dom/jsconfig.json:
   {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json:
-  {"pollingInterval":2000}
   {"pollingInterval":2000}
 /Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json:
   {"pollingInterval":2000}

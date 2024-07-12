@@ -114,11 +114,11 @@ declare namespace Foo {
 >Foo.bla = { foo: 1} : { foo: number; }
 >                    : ^^^^^^^^^^^^^^^^
 >Foo.bla : { foo: number; }
->        : ^^^^^^^^^^^^^^^^
+>        : ^^^^^^^      ^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >bla : { foo: number; }
->    : ^^^^^^^^^^^^^^^^
+>    : ^^^^^^^      ^^^
 >{ foo: 1} : { foo: number; }
 >          : ^^^^^^^^^^^^^^^^
 >foo : number

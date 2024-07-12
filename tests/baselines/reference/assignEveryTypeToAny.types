@@ -177,10 +177,10 @@ var i: { (): string };
 
 x = i;
 >x = i : () => string
->      : ^^^^^^^^^^^^
+>      : ^^^^^^      
 >x : any
 >i : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
 x = { f() { return 1; } }
 >x = { f() { return 1; } } : { f(): number; }

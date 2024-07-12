@@ -65,11 +65,11 @@ if (aFoo.bar && aFoo.nested.b) {
 >aFoo.nested.b : string | null
 >              : ^^^^^^^^^^^^^
 >aFoo.nested : { a: number; b: string | null; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^      ^^^^^             ^^^
 >aFoo : foo
 >     : ^^^
 >nested : { a: number; b: string | null; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^^^             ^^^
 >b : string | null
 >  : ^^^^^^^^^^^^^
 
@@ -176,7 +176,7 @@ if (bBar.elem2 && bBar.elem2.bar && bBar.elem2.nested.b) {
 >bBar.elem2.nested.b : string | null
 >                    : ^^^^^^^^^^^^^
 >bBar.elem2.nested : { a: number; b: string | null; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^      ^^^^^             ^^^
 >bBar.elem2 : foo
 >           : ^^^
 >bBar : { elem1: number; elem2: foo; }
@@ -184,7 +184,7 @@ if (bBar.elem2 && bBar.elem2.bar && bBar.elem2.nested.b) {
 >elem2 : foo
 >      : ^^^
 >nested : { a: number; b: string | null; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^      ^^^^^             ^^^
 >b : string | null
 >  : ^^^^^^^^^^^^^
 

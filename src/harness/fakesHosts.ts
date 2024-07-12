@@ -1,10 +1,10 @@
-import * as collections from "./_namespaces/collections";
-import * as documents from "./_namespaces/documents";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+import * as collections from "./_namespaces/collections.js";
+import * as documents from "./_namespaces/documents.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 /**
  * Fake implementations of various compiler dependencies.
@@ -381,6 +381,9 @@ export class CompilerHost implements ts.CompilerHost {
             }
         }
 
+        // Set ParseForTypeErrors like tsc.
+        languageVersionOrOptions = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions : { languageVersion: languageVersionOrOptions };
+        languageVersionOrOptions = { ...languageVersionOrOptions, jsDocParsingMode: ts.JSDocParsingMode.ParseForTypeErrors };
         const parsed = ts.createSourceFile(fileName, content, languageVersionOrOptions, this._setParentNodes || this.shouldAssertInvariants);
         if (this.shouldAssertInvariants) {
             Utils.assertInvariants(parsed, /*parent*/ undefined);

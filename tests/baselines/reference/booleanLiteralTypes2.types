@@ -191,7 +191,7 @@ function f4(t: true, f: false) {
 
 declare function g(x: true): string;
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
->  : ^^^ ^^    ^^^      ^^^ ^^     ^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >x : true
 >  : ^^^^
 >true : true
@@ -199,7 +199,7 @@ declare function g(x: true): string;
 
 declare function g(x: false): boolean;
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
->  : ^^^ ^^    ^^^^^^^^^^^^ ^^     ^^^       ^^^ ^^       ^^^^^^^^^^^^
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >x : false
 >  : ^^^^^
 >false : false
@@ -207,7 +207,7 @@ declare function g(x: false): boolean;
 
 declare function g(x: boolean): number;
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
->  : ^^^ ^^    ^^^^^^^^^^^^ ^^     ^^^^^^^^^^^^^ ^^       ^^^      ^^^
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -223,7 +223,7 @@ function f5(b: boolean) {
 >g(true) : string
 >        : ^^^^^^
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
->  : ^^^ ^^    ^^^^^^^^^^^^ ^^     ^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >true : true
 >     : ^^^^
 
@@ -233,7 +233,7 @@ function f5(b: boolean) {
 >g(false) : boolean
 >         : ^^^^^^^
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
->  : ^^^ ^^    ^^^^^^^^^^^^ ^^     ^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >false : false
 >      : ^^^^^
 
@@ -243,7 +243,7 @@ function f5(b: boolean) {
 >g(b) : number
 >     : ^^^^^^
 >g : { (x: true): string; (x: false): boolean; (x: boolean): number; }
->  : ^^^ ^^    ^^^^^^^^^^^^ ^^     ^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^
+>  : ^^^ ^^    ^^^      ^^^ ^^     ^^^       ^^^ ^^       ^^^      ^^^
 >b : boolean
 >  : ^^^^^^^
 }
@@ -321,7 +321,7 @@ function f11(x: true | false) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^ ^^     ^^^^^^^^^^
+>            : ^ ^^     ^^^^^     
 >x : never
 >  : ^^^^^
 }
@@ -420,7 +420,7 @@ function f20(x: Item) {
 >x.a : string
 >    : ^^^^^^
 >x : { kind: true; a: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 
@@ -430,7 +430,7 @@ function f20(x: Item) {
 >x.b : string
 >    : ^^^^^^
 >x : { kind: false; b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^     ^^^^^      ^^^
 >b : string
 >  : ^^^^^^
     }
@@ -456,7 +456,7 @@ function f21(x: Item) {
 >x.a : string
 >    : ^^^^^^
 >x : { kind: true; a: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 
@@ -466,7 +466,7 @@ function f21(x: Item) {
 >x.b : string
 >    : ^^^^^^
 >x : { kind: false; b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^     ^^^^^      ^^^
 >b : string
 >  : ^^^^^^
     }
@@ -474,7 +474,7 @@ function f21(x: Item) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^ ^^     ^^^^^^^^^^
+>            : ^ ^^     ^^^^^     
 >x : never
 >  : ^^^^^
 }

@@ -21,7 +21,7 @@ joinedPath("foo/bar");
 >joinedPath("foo/bar") : void
 >                      : ^^^^
 >joinedPath : (p: JoinedPath) => void
->           : ^ ^^          ^^^^^^^^^
+>           : ^ ^^          ^^^^^    
 >"foo/bar" : "foo/bar"
 >          : ^^^^^^^^^
 
@@ -33,7 +33,7 @@ joinedPath(`${somePath}/${somePath}`);
 >joinedPath(`${somePath}/${somePath}`) : void
 >                                      : ^^^^
 >joinedPath : (p: JoinedPath) => void
->           : ^ ^^          ^^^^^^^^^
+>           : ^ ^^          ^^^^^    
 >`${somePath}/${somePath}` : `${Path}/${Path}`
 >                          : ^^^^^^^^^^^^^^^^^
 >somePath : Path
@@ -61,7 +61,7 @@ withinAs("");
 >withinAs("") : void
 >             : ^^^^
 >withinAs : (p: StartsWithA & EndsWithA) => void
->         : ^ ^^                       ^^^^^^^^^
+>         : ^ ^^                       ^^^^^    
 >"" : ""
 >   : ^^
 
@@ -69,7 +69,7 @@ withinAs("a");
 >withinAs("a") : void
 >              : ^^^^
 >withinAs : (p: StartsWithA & EndsWithA) => void
->         : ^ ^^                       ^^^^^^^^^
+>         : ^ ^^                       ^^^^^    
 >"a" : "a"
 >    : ^^^
 
@@ -77,7 +77,7 @@ withinAs("ab");
 >withinAs("ab") : void
 >               : ^^^^
 >withinAs : (p: StartsWithA & EndsWithA) => void
->         : ^ ^^                       ^^^^^^^^^
+>         : ^ ^^                       ^^^^^    
 >"ab" : "ab"
 >     : ^^^^
 
@@ -85,7 +85,7 @@ withinAs("aba");
 >withinAs("aba") : void
 >                : ^^^^
 >withinAs : (p: StartsWithA & EndsWithA) => void
->         : ^ ^^                       ^^^^^^^^^
+>         : ^ ^^                       ^^^^^    
 >"aba" : "aba"
 >      : ^^^^^
 
@@ -93,7 +93,7 @@ withinAs("abavvvva");
 >withinAs("abavvvva") : void
 >                     : ^^^^
 >withinAs : (p: StartsWithA & EndsWithA) => void
->         : ^ ^^                       ^^^^^^^^^
+>         : ^ ^^                       ^^^^^    
 >"abavvvva" : "abavvvva"
 >           : ^^^^^^^^^^
 

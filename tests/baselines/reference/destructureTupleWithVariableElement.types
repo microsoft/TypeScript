@@ -31,31 +31,31 @@ s0.toUpperCase()
 >s0.toUpperCase() : string
 >                 : ^^^^^^
 >s0.toUpperCase : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >s0 : string
 >   : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 s1.toUpperCase() 
 >s1.toUpperCase() : string
 >                 : ^^^^^^
 >s1.toUpperCase : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >s1 : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 s2.toUpperCase()
 >s2.toUpperCase() : string
 >                 : ^^^^^^
 >s2.toUpperCase : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >s2 : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 declare const strings2: [string, ...Array<string>, string]
 >strings2 : [string, ...string[], string]
@@ -75,29 +75,29 @@ s3.toUpperCase()
 >s3.toUpperCase() : string
 >                 : ^^^^^^
 >s3.toUpperCase : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >s3 : string
 >   : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 s4.toUpperCase() 
 >s4.toUpperCase() : string
 >                 : ^^^^^^
 >s4.toUpperCase : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >s4 : string
 >   : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 s5.toUpperCase()
 >s5.toUpperCase() : string
 >                 : ^^^^^^
 >s5.toUpperCase : () => string
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >s5 : string | undefined
 >   : ^^^^^^^^^^^^^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 

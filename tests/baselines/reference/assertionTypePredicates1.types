@@ -59,7 +59,7 @@ function f01(x: unknown) {
 >assert(typeof x === "string") : void
 >                              : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -89,7 +89,7 @@ function f01(x: unknown) {
 >assert(x instanceof Error) : void
 >                           : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >x instanceof Error : boolean
 >                   : ^^^^^^^
 >x : unknown
@@ -117,7 +117,7 @@ function f01(x: unknown) {
 >assert(typeof x === "boolean" || typeof x === "number") : void
 >                                                        : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >typeof x === "boolean" || typeof x === "number" : boolean
 >                                                : ^^^^^^^
 >typeof x === "boolean" : boolean
@@ -139,11 +139,11 @@ function f01(x: unknown) {
 
         x.toLocaleString;
 >x.toLocaleString : ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string) | (() => string)
->                 : ^^       ^^^                 ^^       ^^^                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^       ^^^                 ^^       ^^^                        ^^^^^      ^^^^^^^^^^^      ^
 >x : number | boolean
 >  : ^^^^^^^^^^^^^^^^
 >toLocaleString : ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string) | (() => string)
->               : ^^       ^^^                 ^^       ^^^                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^       ^^^                 ^^       ^^^                        ^^^^^      ^^^^^^^^^^^      ^
     }
     if (!!true) {
 >!!true : true
@@ -157,11 +157,11 @@ function f01(x: unknown) {
 >assert(isArrayOfStrings(x)) : void
 >                            : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >isArrayOfStrings(x) : boolean
 >                    : ^^^^^^^
 >isArrayOfStrings : (value: unknown) => value is string[]
->                 : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^       ^^^^^                 
 >x : unknown
 >  : ^^^^^^^
 
@@ -189,7 +189,7 @@ function f01(x: unknown) {
 >assertIsArrayOfStrings(x) : void
 >                          : ^^^^
 >assertIsArrayOfStrings : (value: unknown) => asserts value is string[]
->                       : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^       ^^^^^                         
 >x : unknown
 >  : ^^^^^^^
 
@@ -217,7 +217,7 @@ function f01(x: unknown) {
 >assertIsArrayOfStrings(false) : void
 >                              : ^^^^
 >assertIsArrayOfStrings : (value: unknown) => asserts value is string[]
->                       : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^       ^^^^^                         
 >false : false
 >      : ^^^^^
 
@@ -237,7 +237,7 @@ function f01(x: unknown) {
 >assert(x === undefined || typeof x === "string") : void
 >                                                 : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >x === undefined || typeof x === "string" : boolean
 >                                         : ^^^^^^^
 >x === undefined : boolean
@@ -263,7 +263,7 @@ function f01(x: unknown) {
 >assertDefined(x) : void
 >                 : ^^^^
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^     ^^ ^^^^^                               
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -283,7 +283,7 @@ function f01(x: unknown) {
 >assert(false) : void
 >              : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >false : false
 >      : ^^^^^
 
@@ -303,7 +303,7 @@ function f01(x: unknown) {
 >assert(false && x === undefined) : void
 >                                 : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >false && x === undefined : false
 >                         : ^^^^^
 >false : false
@@ -339,7 +339,7 @@ function f02(x: string | undefined) {
 >assert(x) : void
 >          : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -363,7 +363,7 @@ function f02(x: string | undefined) {
 >assert(x !== undefined) : void
 >                        : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >x !== undefined : boolean
 >                : ^^^^^^^
 >x : string | undefined
@@ -391,7 +391,7 @@ function f02(x: string | undefined) {
 >assertDefined(x) : void
 >                 : ^^^^
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^     ^^ ^^^^^                               
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -419,7 +419,7 @@ function f03(x: string | undefined, assert: (value: unknown) => asserts value) {
 >assert(x) : void
 >          : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -469,11 +469,11 @@ function f10(x: string | undefined) {
 >Debug.assert(x) : void
 >                : ^^^^
 >Debug.assert : (value: unknown, message?: string) => asserts value
->             : ^     ^^       ^^       ^^^      ^^^^^^^^^^^^^^^^^^
+>             : ^     ^^       ^^       ^^^      ^^^^^             
 >Debug : typeof Debug
 >      : ^^^^^^^^^^^^
 >assert : (value: unknown, message?: string) => asserts value
->       : ^     ^^       ^^       ^^^      ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^       ^^^      ^^^^^             
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -497,11 +497,11 @@ function f10(x: string | undefined) {
 >Debug.assert(x !== undefined) : void
 >                              : ^^^^
 >Debug.assert : (value: unknown, message?: string) => asserts value
->             : ^     ^^       ^^       ^^^      ^^^^^^^^^^^^^^^^^^
+>             : ^     ^^       ^^       ^^^      ^^^^^             
 >Debug : typeof Debug
 >      : ^^^^^^^^^^^^
 >assert : (value: unknown, message?: string) => asserts value
->       : ^     ^^       ^^       ^^^      ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^       ^^^      ^^^^^             
 >x !== undefined : boolean
 >                : ^^^^^^^
 >x : string | undefined
@@ -529,11 +529,11 @@ function f10(x: string | undefined) {
 >Debug.assertDefined(x) : void
 >                       : ^^^^
 >Debug.assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->                    : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^     ^^ ^^^^^                               
 >Debug : typeof Debug
 >      : ^^^^^^^^^^^^
 >assertDefined : <T>(value: T) => asserts value is NonNullable<T>
->              : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^     ^^ ^^^^^                               
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -557,11 +557,11 @@ function f10(x: string | undefined) {
 >Debug.assert(false) : void
 >                    : ^^^^
 >Debug.assert : (value: unknown, message?: string) => asserts value
->             : ^     ^^       ^^       ^^^      ^^^^^^^^^^^^^^^^^^
+>             : ^     ^^       ^^       ^^^      ^^^^^             
 >Debug : typeof Debug
 >      : ^^^^^^^^^^^^
 >assert : (value: unknown, message?: string) => asserts value
->       : ^     ^^       ^^       ^^^      ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^       ^^^      ^^^^^             
 >false : false
 >      : ^^^^^
 
@@ -645,11 +645,11 @@ class Test {
 >this.assertThis() : void
 >                  : ^^^^
 >this.assertThis : () => asserts this
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^            
 >this : this
 >     : ^^^^
 >assertThis : () => asserts this
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^            
 
         this;
 >this : this
@@ -665,11 +665,11 @@ class Test {
 >this.assert(typeof x === "string") : void
 >                                   : ^^^^
 >this.assert : (value: unknown) => asserts value
->            : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>            : ^     ^^       ^^^^^             
 >this : this
 >     : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -691,11 +691,11 @@ class Test {
 >this.isTest2() : boolean
 >               : ^^^^^^^
 >this.isTest2 : () => this is Test2
->             : ^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^             
 >this : this
 >     : ^^^^
 >isTest2 : () => this is Test2
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^             
 
             this.z;
 >this.z : number
@@ -709,11 +709,11 @@ class Test {
 >this.assertIsTest2() : void
 >                     : ^^^^
 >this.assertIsTest2 : () => asserts this is Test2
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^                     
 >this : this
 >     : ^^^^
 >assertIsTest2 : () => asserts this is Test2
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^                     
 
         this.z;
 >this.z : number
@@ -733,11 +733,11 @@ class Test {
 >this.assert(false) : void
 >                   : ^^^^
 >this.assert : (value: unknown) => asserts value
->            : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>            : ^     ^^       ^^^^^             
 >this : this
 >     : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >false : false
 >      : ^^^^^
 
@@ -776,11 +776,11 @@ class Derived extends Test {
 >super.assert(typeof x === "string") : void
 >                                    : ^^^^
 >super.assert : (value: unknown) => asserts value
->             : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>             : ^     ^^       ^^^^^             
 >super : Test
 >      : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -808,11 +808,11 @@ class Derived extends Test {
 >super.assert(false) : void
 >                    : ^^^^
 >super.assert : (value: unknown) => asserts value
->             : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>             : ^     ^^       ^^^^^             
 >super : Test
 >      : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >false : false
 >      : ^^^^^
 
@@ -838,11 +838,11 @@ function f11(items: Test[]) {
 >item.isTest2() : boolean
 >               : ^^^^^^^
 >item.isTest2 : () => this is Test2
->             : ^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^             
 >item : Test
 >     : ^^^^
 >isTest2 : () => this is Test2
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^             
 
             item.z;
 >item.z : number
@@ -856,11 +856,11 @@ function f11(items: Test[]) {
 >item.assertIsTest2() : void
 >                     : ^^^^
 >item.assertIsTest2 : () => asserts this is Test2
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^                     
 >item : Test
 >     : ^^^^
 >assertIsTest2 : () => asserts this is Test2
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^                     
 
         item.z;
 >item.z : number
@@ -935,7 +935,7 @@ function f20(x: unknown) {
 >assert(typeof x === "string") : void
 >                              : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -947,19 +947,19 @@ function f20(x: unknown) {
 
     const a = [assert];
 >a : ((value: unknown) => asserts value)[]
->  : ^^     ^^       ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^     ^^       ^^^^^             ^^^
 >[assert] : ((value: unknown) => asserts value)[]
->         : ^^     ^^       ^^^^^^^^^^^^^^^^^^^^^
+>         : ^^     ^^       ^^^^^             ^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 
     a[0](typeof x === "string");  // Error
 >a[0](typeof x === "string") : void
 >                            : ^^^^
 >a[0] : (value: unknown) => asserts value
->     : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>     : ^     ^^       ^^^^^             
 >a : ((value: unknown) => asserts value)[]
->  : ^^     ^^       ^^^^^^^^^^^^^^^^^^^^^
+>  : ^^     ^^       ^^^^^             ^^^
 >0 : 0
 >  : ^
 >typeof x === "string" : boolean
@@ -983,11 +983,11 @@ function f20(x: unknown) {
 >t1.assert(typeof x === "string") : void
 >                                 : ^^^^
 >t1.assert : (value: unknown) => asserts value
->          : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>          : ^     ^^       ^^^^^             
 >t1 : Test
 >   : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -1009,11 +1009,11 @@ function f20(x: unknown) {
 >t2.assert(typeof x === "string") : void
 >                                 : ^^^^
 >t2.assert : (value: unknown) => asserts value
->          : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>          : ^     ^^       ^^^^^             
 >t2 : Test
 >   : ^^^^
 >assert : (value: unknown) => asserts value
->       : ^     ^^       ^^^^^^^^^^^^^^^^^^
+>       : ^     ^^       ^^^^^             
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -1060,11 +1060,11 @@ function example1(things: Thing[]) {
 >thing.isGood() : void
 >               : ^^^^
 >thing.isGood : () => asserts this is GoodThing
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^                         
 >thing : Thing
 >      : ^^^^^
 >isGood : () => asserts this is GoodThing
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^                         
 
         thing.good;
 >thing.good : true

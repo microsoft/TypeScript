@@ -23,7 +23,7 @@ type B<T> = T extends any[]
 
 function foo<T>() {
 >foo : <T>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
     `${a}` as B<T>;
 >`${a}` as B<T> : B<T>

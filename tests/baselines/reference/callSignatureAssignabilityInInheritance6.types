@@ -73,7 +73,7 @@ interface A { // T
 
     a6: <T extends Base>(x: (arg: T) => Derived) => T;
 >a6 : <T extends Base>(x: (arg: T) => Derived) => T
->   : ^ ^^^^^^^^^^^^^^^ ^^                   ^^^^^ 
+>   : ^ ^^^^^^^^^    ^^ ^^                   ^^^^^ 
 >x : (arg: T) => Derived
 >  : ^   ^^ ^^^^^       
 >arg : T
@@ -105,7 +105,7 @@ interface A { // T
 
     a16: <T extends Base>(x: { a: T; b: T }) => T[];
 >a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
->    : ^ ^^^^^^^^^^^^^^^ ^^               ^^^^^   
+>    : ^ ^^^^^^^^^    ^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T

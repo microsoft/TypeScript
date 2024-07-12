@@ -219,13 +219,13 @@ var aa = obj.x;
 // Dotted property access of property that exists on value's apparent type
 var bb = obj.hasOwnProperty;
 >bb : (v: PropertyKey) => boolean
->   : ^ ^^           ^^^^^^^^^^^^
+>   : ^ ^^           ^^^^^       
 >obj.hasOwnProperty : (v: PropertyKey) => boolean
->                   : ^ ^^           ^^^^^^^^^^^^
+>                   : ^ ^^           ^^^^^       
 >obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^           ^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^       
 
 // Dotted property access of property that doesn't exist on value's apparent type
 var cc = obj.qqq; // error
@@ -371,7 +371,7 @@ var ll = numIndex[someObject]; // Error
 >numIndex : { [n: number]: string; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >someObject : { name: string; }
->           : ^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^      ^^^
 
 // Bracket notation property access using string value on type with string index signature and no numeric index signature
 var mm = strIndex['N'];
@@ -524,7 +524,7 @@ var uu = noIndex[someObject]; // Error
 >noIndex : () => void
 >        : ^^^^^^^^^^
 >someObject : { name: string; }
->           : ^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^      ^^^
 
 // Bracket notation property access using numeric value on type with numeric index signature and string index signature
 var vv = noIndex[32];
@@ -614,7 +614,7 @@ var zzzz = bothIndex[someObject]; // Error
 >bothIndex : { [n: string]: A; [m: number]: B; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someObject : { name: string; }
->           : ^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^      ^^^
 
 var x1 = numIndex[stringOrNumber];
 >x1 : any

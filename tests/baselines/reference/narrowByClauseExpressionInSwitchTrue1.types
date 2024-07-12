@@ -69,7 +69,7 @@ function test1(x: AorB) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: AorB) => x is A
->    : ^ ^^    ^^^^^^^^^^^
+>    : ^ ^^    ^^^^^      
 >x : AorB
 >  : ^^^^
 
@@ -82,7 +82,7 @@ function test1(x: AorB) {
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: AorB) => x is B
->    : ^ ^^    ^^^^^^^^^^^
+>    : ^ ^^    ^^^^^      
 >x : AorB
 >  : ^^^^
 
@@ -108,7 +108,7 @@ function test2(x: AorB) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: AorB) => x is A
->    : ^ ^^    ^^^^^^^^^^^
+>    : ^ ^^    ^^^^^      
 >x : AorB
 >  : ^^^^
 
@@ -121,7 +121,7 @@ function test2(x: AorB) {
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: AorB) => x is B
->    : ^ ^^    ^^^^^^^^^^^
+>    : ^ ^^    ^^^^^      
 >x : AorB
 >  : ^^^^
 
@@ -155,11 +155,11 @@ switch (true) {
 >x.trim() : string
 >         : ^^^^^^
 >x.trim : () => string
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >x : string
 >  : ^^^^^^
 >trim : () => string
->     : ^^^^^^^^^^^^
+>     : ^^^^^^      
 }
 
 type SomeType = { type: "SomeType" };
@@ -216,7 +216,7 @@ function processInput(input: string | RegExp | SomeType) {
 >isSomeType(input) : boolean
 >                  : ^^^^^^^
 >isSomeType : (x: unknown) => x is SomeType
->           : ^ ^^       ^^^^^^^^^^^^^^^^^^
+>           : ^ ^^       ^^^^^             
 >input : string | RegExp | SomeType
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

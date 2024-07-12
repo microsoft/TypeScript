@@ -129,7 +129,7 @@ var obj0 = new objLit(1);
 >new objLit(1) : any
 >              : ^^^
 >objLit : new (n: number) => any
->       : ^^^^^ ^^      ^^^^^^^^
+>       : ^^^^^ ^^      ^^^^^   
 >1 : 1
 >  : ^
 
@@ -139,5 +139,5 @@ var obj1 = anyReturnFunc();
 >anyReturnFunc() : any
 >                : ^^^
 >anyReturnFunc : () => any
->              : ^^^^^^^^^
+>              : ^^^^^^   
 
