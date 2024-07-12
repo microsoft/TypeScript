@@ -43773,6 +43773,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return;
         }
 
+        if (node.name.kind === SyntaxKind.BigIntLiteral) {
+            error(node.name, Diagnostics.A_bigint_literal_may_not_be_used_as_a_property_name);
+        }
+
         const type = convertAutoToAny(getTypeOfSymbol(symbol));
         if (node === symbol.valueDeclaration) {
             // Node is the primary declaration of the symbol, just validate the initializer

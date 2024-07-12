@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/bigintPropertyName.ts] ////
 
-=== bigintPropertyName.ts ===
+=== a.ts ===
+// BigInt cannot be used as an object literal property
 { ({1n: 123}); };
 >({1n: 123}) : {}
 >            : ^^
@@ -9,6 +10,46 @@
 >1n : number
 >   : ^^^^^^
 >123 : 123
+>    : ^^^
+
+const bigNum: bigint = 0n;
+>bigNum : bigint
+>       : ^^^^^^
+>0n : 0n
+>   : ^^
+
+const a = { 1n: 123 };
+>a : {}
+>  : ^^
+>{ 1n: 123 } : {}
+>            : ^^
+>1n : number
+>   : ^^^^^^
+>123 : 123
+>    : ^^^
+
+const b = { [1n]: 456 };
+>b : {}
+>  : ^^
+>{ [1n]: 456 } : {}
+>              : ^^
+>[1n] : number
+>     : ^^^^^^
+>1n : 1n
+>   : ^^
+>456 : 456
+>    : ^^^
+
+const c = { [bigNum]: 789 };
+>c : {}
+>  : ^^
+>{ [bigNum]: 789 } : {}
+>                  : ^^
+>[bigNum] : number
+>         : ^^^^^^
+>bigNum : bigint
+>       : ^^^^^^
+>789 : 789
 >    : ^^^
 
 const arr = [1, 2, 3] as const;
@@ -25,12 +66,6 @@ const arr = [1, 2, 3] as const;
 >3 : 3
 >  : ^
 
-const { 0n: f } = arr; // bigint should give an index error
->f : any
->  : ^^^
->arr : readonly [1, 2, 3]
->    : ^^^^^^^^^^^^^^^^^^
-
 const { 0: d } = arr;
 >d : 1
 >  : ^
@@ -42,4 +77,213 @@ const { "0": e } = arr;
 >  : ^
 >arr : readonly [1, 2, 3]
 >    : ^^^^^^^^^^^^^^^^^^
+
+const { 0n: f } = arr; // bigint should give an index error
+>f : any
+>  : ^^^
+>arr : readonly [1, 2, 3]
+>    : ^^^^^^^^^^^^^^^^^^
+
+// BigInt cannot be used as an property name
+const x = { 0n: 123 };
+>x : {}
+>  : ^^
+>{ 0n: 123 } : {}
+>            : ^^
+>0n : number
+>   : ^^^^^^
+>123 : 123
+>    : ^^^
+
+=== g.ts ===
+interface G {
+    2n: string;
+>2n : string
+>   : ^^^^^^
+}
+interface H {
+    "3n": string;
+>"3n" : string
+>     : ^^^^^^
+}
+class K {
+>K : K
+>  : ^
+
+    4n = 0;
+>4n : number
+>   : ^^^^^^
+>0 : 0
+>  : ^
+}
+ 
+class L {
+>L : L
+>  : ^
+
+    "5n" = 0;
+>"5n" : number
+>     : ^^^^^^
+>0 : 0
+>  : ^
+}
+
+const g : G = { 2n: "hello" };
+>g : G
+>  : ^
+>{ 2n: "hello" } : {}
+>                : ^^
+>2n : string
+>   : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+const g2 : G = { "2n": "hello2" };
+>g2 : G
+>   : ^
+>{ "2n": "hello2" } : { "2n": string; }
+>                   : ^^^^^^^^^^^^^^^^^
+>"2n" : string
+>     : ^^^^^^
+>"hello2" : "hello2"
+>         : ^^^^^^^^
+
+g[2n];
+>g[2n] : any
+>      : ^^^
+>g : G
+>  : ^
+>2n : 2n
+>   : ^^
+
+g2[2n];
+>g2[2n] : any
+>       : ^^^
+>g2 : G
+>   : ^
+>2n : 2n
+>   : ^^
+
+const h : H = { 3n: "hello2" };
+>h : H
+>  : ^
+>{ 3n: "hello2" } : {}
+>                 : ^^
+>3n : string
+>   : ^^^^^^
+>"hello2" : "hello2"
+>         : ^^^^^^^^
+
+const h2 : H = { "3n": "hello2" };
+>h2 : H
+>   : ^
+>{ "3n": "hello2" } : { "3n": string; }
+>                   : ^^^^^^^^^^^^^^^^^
+>"3n" : string
+>     : ^^^^^^
+>"hello2" : "hello2"
+>         : ^^^^^^^^
+
+h[3n];
+>h[3n] : any
+>      : ^^^
+>h : H
+>  : ^
+>3n : 3n
+>   : ^^
+
+h2[3n];
+>h2[3n] : any
+>       : ^^^
+>h2 : H
+>   : ^
+>3n : 3n
+>   : ^^
+
+const k : K = { 4n: "hello" };
+>k : K
+>  : ^
+>{ 4n: "hello" } : {}
+>                : ^^
+>4n : string
+>   : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+
+const k2 : K = { "4n": "hello2" };
+>k2 : K
+>   : ^
+>{ "4n": "hello2" } : { "4n": string; }
+>                   : ^^^^^^^^^^^^^^^^^
+>"4n" : string
+>     : ^^^^^^
+>"hello2" : "hello2"
+>         : ^^^^^^^^
+
+k[4n];
+>k[4n] : any
+>      : ^^^
+>k : K
+>  : ^
+>4n : 4n
+>   : ^^
+
+k2[4n];
+>k2[4n] : any
+>       : ^^^
+>k2 : K
+>   : ^
+>4n : 4n
+>   : ^^
+
+const l : L = { 5n: "hello2" };
+>l : L
+>  : ^
+>{ 5n: "hello2" } : {}
+>                 : ^^
+>5n : string
+>   : ^^^^^^
+>"hello2" : "hello2"
+>         : ^^^^^^^^
+
+const l2 : L = { "5n": "hello2" };
+>l2 : L
+>   : ^
+>{ "5n": "hello2" } : { "5n": string; }
+>                   : ^^^^^^^^^^^^^^^^^
+>"5n" : string
+>     : ^^^^^^
+>"hello2" : "hello2"
+>         : ^^^^^^^^
+
+l[5n];
+>l[5n] : any
+>      : ^^^
+>l : L
+>  : ^
+>5n : 5n
+>   : ^^
+
+l2[5n];
+>l2[5n] : any
+>       : ^^^
+>l2 : L
+>   : ^
+>5n : 5n
+>   : ^^
+
+g.2n; // not valid JS
+>g : G
+>  : ^
+>.2n : 0.2
+>    : ^^^
+
+=== q.ts ===
+type Q = 6n | 7n | 8n;
+>Q : Q
+>  : ^
+
+type T = { [t in  Q]: string };
+>T : T
+>  : ^
 

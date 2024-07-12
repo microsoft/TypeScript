@@ -67,19 +67,3 @@ typedArray["1"] = 0xBB;
 typedArray[2] = 0xCC;
 >typedArray : Symbol(typedArray, Decl(a.ts, 18, 5))
 
-// {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
-=== b.ts ===
-// BigInt cannot be used as an object literal property
-const a = {1n: 123};
->a : Symbol(a, Decl(b.ts, 1, 5))
->1n : Symbol(1n, Decl(b.ts, 1, 11))
-
-const b = {[1n]: 456};
->b : Symbol(b, Decl(b.ts, 2, 5))
->[1n] : Symbol([1n], Decl(b.ts, 2, 11))
-
-const c = {[bigNum]: 789};
->c : Symbol(c, Decl(b.ts, 3, 5))
->[bigNum] : Symbol([bigNum], Decl(b.ts, 3, 11))
->bigNum : Symbol(bigNum, Decl(a.ts, 17, 5))
-

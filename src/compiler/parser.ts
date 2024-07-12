@@ -8058,6 +8058,7 @@ namespace Parser {
             tokenIsIdentifierOrKeyword(token()) ||
             token() === SyntaxKind.StringLiteral ||
             token() === SyntaxKind.NumericLiteral ||
+            token() === SyntaxKind.BigIntLiteral ||
             token() === SyntaxKind.AsteriskToken ||
             token() === SyntaxKind.OpenBracketToken
         ) {
