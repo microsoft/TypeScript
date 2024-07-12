@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/bigintPropertyName.ts] ////
+
+=== bigintPropertyName.ts ===
+{ ({1n: 123}); };
+>1n : Symbol(1n, Decl(bigintPropertyName.ts, 0, 4))
+
+const arr = [1, 2, 3] as const;
+>arr : Symbol(arr, Decl(bigintPropertyName.ts, 1, 5))
+>const : Symbol(const)
+
+const { 0n: f } = arr; // bigint should give an index error
+>f : Symbol(f, Decl(bigintPropertyName.ts, 3, 7))
+>arr : Symbol(arr, Decl(bigintPropertyName.ts, 1, 5))
+
+const { 0: d } = arr;
+>d : Symbol(d, Decl(bigintPropertyName.ts, 4, 7))
+>arr : Symbol(arr, Decl(bigintPropertyName.ts, 1, 5))
+
+const { "0": e } = arr;
+>e : Symbol(e, Decl(bigintPropertyName.ts, 5, 7))
+>arr : Symbol(arr, Decl(bigintPropertyName.ts, 1, 5))
+

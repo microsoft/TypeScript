@@ -31,11 +31,3 @@ typedArray[2] = 0xCC;
 const a = {1n: 123};
 const b = {[1n]: 456};
 const c = {[bigNum]: 789};
-{ ({1n: 123}); };
-
-// @filename: c.ts
-const crr = [1, 2, 3] as const;
-
-const { 0n: f } = crr; // bigint should give an index error
-const { 0: d } = crr;
-const { "0": e } = crr;

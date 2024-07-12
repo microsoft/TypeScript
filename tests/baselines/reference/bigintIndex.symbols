@@ -83,23 +83,3 @@ const c = {[bigNum]: 789};
 >[bigNum] : Symbol([bigNum], Decl(b.ts, 3, 11))
 >bigNum : Symbol(bigNum, Decl(a.ts, 17, 5))
 
-{ ({1n: 123}); };
->1n : Symbol(1n, Decl(b.ts, 4, 4))
-
-=== c.ts ===
-const crr = [1, 2, 3] as const;
->crr : Symbol(crr, Decl(c.ts, 0, 5))
->const : Symbol(const)
-
-const { 0n: f } = crr; // bigint should give an index error
->f : Symbol(f, Decl(c.ts, 2, 7))
->crr : Symbol(crr, Decl(c.ts, 0, 5))
-
-const { 0: d } = crr;
->d : Symbol(d, Decl(c.ts, 3, 7))
->crr : Symbol(crr, Decl(c.ts, 0, 5))
-
-const { "0": e } = crr;
->e : Symbol(e, Decl(c.ts, 4, 7))
->crr : Symbol(crr, Decl(c.ts, 0, 5))
-

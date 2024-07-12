@@ -1,0 +1,16 @@
+bigintPropertyName.ts(1,5): error TS1538: A `bigint` literal may not be used as a property name.
+bigintPropertyName.ts(4,9): error TS2538: Type 'bigint' cannot be used as an index type.
+
+
+==== bigintPropertyName.ts (2 errors) ====
+    { ({1n: 123}); };
+        ~~
+!!! error TS1538: A `bigint` literal may not be used as a property name.
+    const arr = [1, 2, 3] as const;
+    
+    const { 0n: f } = arr; // bigint should give an index error
+            ~~
+!!! error TS2538: Type 'bigint' cannot be used as an index type.
+    const { 0: d } = arr;
+    const { "0": e } = arr;
+    

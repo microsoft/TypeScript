@@ -6,8 +6,6 @@ a.ts(20,12): error TS2538: Type 'bigint' cannot be used as an index type.
 b.ts(2,12): error TS1538: A `bigint` literal may not be used as a property name.
 b.ts(3,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 b.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-b.ts(5,5): error TS1538: A `bigint` literal may not be used as a property name.
-c.ts(3,9): error TS2538: Type 'bigint' cannot be used as an index type.
 
 
 ==== a.ts (5 errors) ====
@@ -46,7 +44,7 @@ c.ts(3,9): error TS2538: Type 'bigint' cannot be used as an index type.
     typedArray[2] = 0xCC;
     
     // {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
-==== b.ts (4 errors) ====
+==== b.ts (3 errors) ====
     // BigInt cannot be used as an object literal property
     const a = {1n: 123};
                ~~
@@ -57,16 +55,4 @@ c.ts(3,9): error TS2538: Type 'bigint' cannot be used as an index type.
     const c = {[bigNum]: 789};
                ~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-    { ({1n: 123}); };
-        ~~
-!!! error TS1538: A `bigint` literal may not be used as a property name.
-    
-==== c.ts (1 errors) ====
-    const crr = [1, 2, 3] as const;
-    
-    const { 0n: f } = crr; // bigint should give an index error
-            ~~
-!!! error TS2538: Type 'bigint' cannot be used as an index type.
-    const { 0: d } = crr;
-    const { "0": e } = crr;
     
