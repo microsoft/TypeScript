@@ -43,8 +43,8 @@ interface ConfigureStoreOptions<S = any, A extends Action = UnknownAction> {
 }
 
 declare function configureStore<S = any, A extends Action = UnknownAction>(
->configureStore : <S = any, A extends Action<string> = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
->               : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                           ^^^^^    
+>configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
+>               : ^ ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^       ^^                           ^^^^^    
 
   options: ConfigureStoreOptions<S, A>,
 >options : ConfigureStoreOptions<S, A>
@@ -66,8 +66,8 @@ declare function configureStore<S = any, A extends Action = UnknownAction>(
 >       : ^^^^
 >configureStore({ reducer }) : void
 >                            : ^^^^
->configureStore : <S = any, A extends Action<string> = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
->               : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                           ^^^^^^^^^
+>configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
+>               : ^ ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^       ^^                           ^^^^^    
 >{ reducer } : { reducer: Reducer<number, UnknownAction>; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >reducer : Reducer<number, UnknownAction>
@@ -87,8 +87,8 @@ const store2 = configureStore({
 >       : ^^^^
 >configureStore({  reducer: {    counter1: counterReducer1,  },}) : void
 >                                                                 : ^^^^
->configureStore : <S = any, A extends Action<string> = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
->               : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                           ^^^^^^^^^
+>configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
+>               : ^ ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^       ^^                           ^^^^^    
 >{  reducer: {    counter1: counterReducer1,  },} : { reducer: { counter1: Reducer<number, UnknownAction>; }; }
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
