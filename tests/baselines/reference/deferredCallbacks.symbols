@@ -1,0 +1,627 @@
+//// [tests/cases/compiler/deferredCallbacks.ts] ////
+
+=== deferredCallbacks.ts ===
+declare function immediate(cb: () => void): void;
+>immediate : Symbol(immediate, Decl(deferredCallbacks.ts, 0, 0))
+>cb : Symbol(cb, Decl(deferredCallbacks.ts, 0, 27))
+
+declare function deferred1(deferred cb: () => void): void;
+>deferred1 : Symbol(deferred1, Decl(deferredCallbacks.ts, 0, 49))
+>cb : Symbol(cb, Decl(deferredCallbacks.ts, 1, 27))
+
+declare function deferred2(/** @deferred */ cb: () => void): void;
+>deferred2 : Symbol(deferred2, Decl(deferredCallbacks.ts, 1, 58))
+>cb : Symbol(cb, Decl(deferredCallbacks.ts, 2, 27))
+
+declare function deferred3(/** @deferred */ deferred cb: () => void): void;
+>deferred3 : Symbol(deferred3, Decl(deferredCallbacks.ts, 2, 66))
+>cb : Symbol(cb, Decl(deferredCallbacks.ts, 3, 27))
+
+function f01() {
+>f01 : Symbol(f01, Decl(deferredCallbacks.ts, 3, 75))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(deferredCallbacks.ts, 6, 7))
+
+    immediate(() => {
+>immediate : Symbol(immediate, Decl(deferredCallbacks.ts, 0, 0))
+
+        x = 42;
+>x : Symbol(x, Decl(deferredCallbacks.ts, 6, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(deferredCallbacks.ts, 6, 7))
+}
+
+function f02() {
+>f02 : Symbol(f02, Decl(deferredCallbacks.ts, 11, 1))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(deferredCallbacks.ts, 14, 7))
+
+    deferred1(() => {
+>deferred1 : Symbol(deferred1, Decl(deferredCallbacks.ts, 0, 49))
+
+        x = 42;
+>x : Symbol(x, Decl(deferredCallbacks.ts, 14, 7))
+
+    });
+    x;  // string
+>x : Symbol(x, Decl(deferredCallbacks.ts, 14, 7))
+}
+
+function f03() {
+>f03 : Symbol(f03, Decl(deferredCallbacks.ts, 19, 1))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(deferredCallbacks.ts, 22, 7))
+
+    deferred2(() => {
+>deferred2 : Symbol(deferred2, Decl(deferredCallbacks.ts, 1, 58))
+
+        x = 42;
+>x : Symbol(x, Decl(deferredCallbacks.ts, 22, 7))
+
+    });
+    x;  // string
+>x : Symbol(x, Decl(deferredCallbacks.ts, 22, 7))
+}
+
+function f04() {
+>f04 : Symbol(f04, Decl(deferredCallbacks.ts, 27, 1))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(deferredCallbacks.ts, 30, 7))
+
+    deferred3(() => {
+>deferred3 : Symbol(deferred3, Decl(deferredCallbacks.ts, 2, 66))
+
+        x = 42;
+>x : Symbol(x, Decl(deferredCallbacks.ts, 30, 7))
+
+    });
+    x;  // string
+>x : Symbol(x, Decl(deferredCallbacks.ts, 30, 7))
+}
+
+// Parameter is considered deferred if one or more overloads defer that parameter
+
+declare function overloaded<T>(cb: (x: T) => T): void;
+>overloaded : Symbol(overloaded, Decl(deferredCallbacks.ts, 35, 1), Decl(deferredCallbacks.ts, 39, 54), Decl(deferredCallbacks.ts, 40, 60))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 39, 28))
+>cb : Symbol(cb, Decl(deferredCallbacks.ts, 39, 31))
+>x : Symbol(x, Decl(deferredCallbacks.ts, 39, 36))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 39, 28))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 39, 28))
+
+declare function overloaded<T>(cb: (x: T, y: T) => T): void;
+>overloaded : Symbol(overloaded, Decl(deferredCallbacks.ts, 35, 1), Decl(deferredCallbacks.ts, 39, 54), Decl(deferredCallbacks.ts, 40, 60))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 40, 28))
+>cb : Symbol(cb, Decl(deferredCallbacks.ts, 40, 31))
+>x : Symbol(x, Decl(deferredCallbacks.ts, 40, 36))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 40, 28))
+>y : Symbol(y, Decl(deferredCallbacks.ts, 40, 41))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 40, 28))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 40, 28))
+
+declare function overloaded(deferred cb: (...args: any) => any): void;
+>overloaded : Symbol(overloaded, Decl(deferredCallbacks.ts, 35, 1), Decl(deferredCallbacks.ts, 39, 54), Decl(deferredCallbacks.ts, 40, 60))
+>cb : Symbol(cb, Decl(deferredCallbacks.ts, 41, 28))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 41, 42))
+
+function f05() {
+>f05 : Symbol(f05, Decl(deferredCallbacks.ts, 41, 70))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(deferredCallbacks.ts, 44, 7))
+
+    overloaded(() => {
+>overloaded : Symbol(overloaded, Decl(deferredCallbacks.ts, 35, 1), Decl(deferredCallbacks.ts, 39, 54), Decl(deferredCallbacks.ts, 40, 60))
+
+        x = 42;
+>x : Symbol(x, Decl(deferredCallbacks.ts, 44, 7))
+
+    });
+    x.length;
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(deferredCallbacks.ts, 44, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+// deferred is permitted on a rest parameter
+
+declare function invokeImmediate(...args: ((...args: any) => any)[]): void;
+>invokeImmediate : Symbol(invokeImmediate, Decl(deferredCallbacks.ts, 49, 1))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 53, 33))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 53, 44))
+
+declare function invokeDeferred(deferred ...args: ((...args: any) => any)[]): void;
+>invokeDeferred : Symbol(invokeDeferred, Decl(deferredCallbacks.ts, 53, 75))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 54, 32))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 54, 52))
+
+function f06() {
+>f06 : Symbol(f06, Decl(deferredCallbacks.ts, 54, 83))
+
+    let a = [];
+>a : Symbol(a, Decl(deferredCallbacks.ts, 57, 7))
+
+    a.push("abc");
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(deferredCallbacks.ts, 57, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    a;  // string[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 57, 7))
+
+    invokeImmediate(
+>invokeImmediate : Symbol(invokeImmediate, Decl(deferredCallbacks.ts, 49, 1))
+
+        () => {
+            a;  // string[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 57, 7))
+
+            a.push(42);
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(deferredCallbacks.ts, 57, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+            a;  // (string | number)[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 57, 7))
+
+        },
+        () => {
+            a;  // string[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 57, 7))
+
+            a.push(true);
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(deferredCallbacks.ts, 57, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+            a;  // (string | boolean)[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 57, 7))
+        }
+    );
+    a;  // (string | number | boolean)[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 57, 7))
+}
+
+function f07() {
+>f07 : Symbol(f07, Decl(deferredCallbacks.ts, 73, 1))
+
+    let a = [];
+>a : Symbol(a, Decl(deferredCallbacks.ts, 76, 7))
+
+    a.push("abc");
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(deferredCallbacks.ts, 76, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    a;  // string[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 76, 7))
+
+    invokeDeferred(
+>invokeDeferred : Symbol(invokeDeferred, Decl(deferredCallbacks.ts, 53, 75))
+
+        () => {
+            a;  // string[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 76, 7))
+
+            a.push(42);
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(deferredCallbacks.ts, 76, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+            a;  // (string | number)[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 76, 7))
+
+        },
+        () => {
+            a;  // string[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 76, 7))
+
+            a.push(true);
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(deferredCallbacks.ts, 76, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+            a;  // (string | boolean)[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 76, 7))
+        }
+    );
+    a;  // string[]
+>a : Symbol(a, Decl(deferredCallbacks.ts, 76, 7))
+}
+
+// deferred modifier must precede public/private/protected/readonly
+
+class CC {
+>CC : Symbol(CC, Decl(deferredCallbacks.ts, 92, 1))
+
+    constructor(deferred public readonly x: () => void) {}
+>x : Symbol(CC.x, Decl(deferredCallbacks.ts, 97, 16))
+}
+
+// deferred requires parameter to have type that permits functions
+
+declare function f10(deferred f: () => void): void;
+>f10 : Symbol(f10, Decl(deferredCallbacks.ts, 98, 1))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 102, 21))
+
+declare function f11(deferred f: Function): void;
+>f11 : Symbol(f11, Decl(deferredCallbacks.ts, 102, 51))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 103, 21))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+declare function f12(deferred f: any): void;
+>f12 : Symbol(f12, Decl(deferredCallbacks.ts, 103, 49))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 104, 21))
+
+declare function f13(deferred f: object): void;
+>f13 : Symbol(f13, Decl(deferredCallbacks.ts, 104, 44))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 105, 21))
+
+declare function f14(deferred f: {}): void;
+>f14 : Symbol(f14, Decl(deferredCallbacks.ts, 105, 47))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 106, 21))
+
+declare function f15(deferred f: unknown): void;
+>f15 : Symbol(f15, Decl(deferredCallbacks.ts, 106, 43))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 107, 21))
+
+declare function f16<T extends Function>(deferred f: T): void;
+>f16 : Symbol(f16, Decl(deferredCallbacks.ts, 107, 48))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 108, 21))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 108, 41))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 108, 21))
+
+declare function f17<T extends (...args: any) => any>(deferred f: T): void;
+>f17 : Symbol(f17, Decl(deferredCallbacks.ts, 108, 62))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 109, 21))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 109, 32))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 109, 54))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 109, 21))
+
+declare function f18<T extends string | (() => void)>(deferred f: T): void;
+>f18 : Symbol(f18, Decl(deferredCallbacks.ts, 109, 75))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 110, 21))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 110, 54))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 110, 21))
+
+declare function f20(deferred ...funcs: Function[]): void;
+>f20 : Symbol(f20, Decl(deferredCallbacks.ts, 110, 75))
+>funcs : Symbol(funcs, Decl(deferredCallbacks.ts, 112, 21))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+declare function f21<T extends ((...args: any) => any)[]>(deferred ...funcs: T): void;
+>f21 : Symbol(f21, Decl(deferredCallbacks.ts, 112, 58))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 113, 21))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 113, 33))
+>funcs : Symbol(funcs, Decl(deferredCallbacks.ts, 113, 58))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 113, 21))
+
+declare function f22<T extends (string | (() => void))[]>(deferred ...funcs: T): void;
+>f22 : Symbol(f22, Decl(deferredCallbacks.ts, 113, 86))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 114, 21))
+>funcs : Symbol(funcs, Decl(deferredCallbacks.ts, 114, 58))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 114, 21))
+
+declare function f23<T extends string[] | (() => void)[]>(deferred ...funcs: T): void;
+>f23 : Symbol(f23, Decl(deferredCallbacks.ts, 114, 86))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 115, 21))
+>funcs : Symbol(funcs, Decl(deferredCallbacks.ts, 115, 58))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 115, 21))
+
+declare function f24<T extends (() => void)[]>(deferred ...funcs: T | string[]): void;
+>f24 : Symbol(f24, Decl(deferredCallbacks.ts, 115, 86))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 116, 21))
+>funcs : Symbol(funcs, Decl(deferredCallbacks.ts, 116, 47))
+>T : Symbol(T, Decl(deferredCallbacks.ts, 116, 21))
+
+declare function f30(deferred f: { foo(): void }): void;
+>f30 : Symbol(f30, Decl(deferredCallbacks.ts, 116, 86))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 118, 21))
+>foo : Symbol(foo, Decl(deferredCallbacks.ts, 118, 34))
+
+declare function f31(deferred f: number): void;
+>f31 : Symbol(f31, Decl(deferredCallbacks.ts, 118, 56))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 119, 21))
+
+declare function f32(deferred ...funcs: number[]): void;
+>f32 : Symbol(f32, Decl(deferredCallbacks.ts, 119, 47))
+>funcs : Symbol(funcs, Decl(deferredCallbacks.ts, 120, 21))
+
+type T10 = (deferred f: () => void) => void;
+>T10 : Symbol(T10, Decl(deferredCallbacks.ts, 120, 56))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 122, 12))
+
+type T11 = (deferred f: { (): void }) => void;
+>T11 : Symbol(T11, Decl(deferredCallbacks.ts, 122, 44))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 123, 12))
+
+type T12 = (deferred f: Function) => void;
+>T12 : Symbol(T12, Decl(deferredCallbacks.ts, 123, 46))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 124, 12))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+type T13 = (deferred f: any) => void;
+>T13 : Symbol(T13, Decl(deferredCallbacks.ts, 124, 42))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 125, 12))
+
+type T20 = (deferred f: { foo(): void }) => void;
+>T20 : Symbol(T20, Decl(deferredCallbacks.ts, 125, 37))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 127, 12))
+>foo : Symbol(foo, Decl(deferredCallbacks.ts, 127, 25))
+
+type T21 = (deferred f: number) => void;
+>T21 : Symbol(T21, Decl(deferredCallbacks.ts, 127, 49))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 128, 12))
+
+type T22 = (deferred ...funcs: number[]) => void;
+>T22 : Symbol(T22, Decl(deferredCallbacks.ts, 128, 40))
+>funcs : Symbol(funcs, Decl(deferredCallbacks.ts, 129, 12))
+
+type T23 = { deferred x: () => void };
+>T23 : Symbol(T23, Decl(deferredCallbacks.ts, 129, 49))
+>x : Symbol(x, Decl(deferredCallbacks.ts, 130, 12))
+
+// deferred modifier is not captured in argument list tuples
+
+declare function doStuff(deferred f: () => void): void;
+>doStuff : Symbol(doStuff, Decl(deferredCallbacks.ts, 130, 38))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 134, 25))
+
+declare function recreate<A extends unknown[], R>(f: (...args: A) => R): (...args: A) => R;
+>recreate : Symbol(recreate, Decl(deferredCallbacks.ts, 134, 55))
+>A : Symbol(A, Decl(deferredCallbacks.ts, 136, 26))
+>R : Symbol(R, Decl(deferredCallbacks.ts, 136, 46))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 136, 50))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 136, 54))
+>A : Symbol(A, Decl(deferredCallbacks.ts, 136, 26))
+>R : Symbol(R, Decl(deferredCallbacks.ts, 136, 46))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 136, 74))
+>A : Symbol(A, Decl(deferredCallbacks.ts, 136, 26))
+>R : Symbol(R, Decl(deferredCallbacks.ts, 136, 46))
+
+declare function recreateDeferred1<A extends unknown[], R>(f: (deferred ...args: A) => R): (...args: A) => R;
+>recreateDeferred1 : Symbol(recreateDeferred1, Decl(deferredCallbacks.ts, 136, 91))
+>A : Symbol(A, Decl(deferredCallbacks.ts, 137, 35))
+>R : Symbol(R, Decl(deferredCallbacks.ts, 137, 55))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 137, 59))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 137, 63))
+>A : Symbol(A, Decl(deferredCallbacks.ts, 137, 35))
+>R : Symbol(R, Decl(deferredCallbacks.ts, 137, 55))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 137, 92))
+>A : Symbol(A, Decl(deferredCallbacks.ts, 137, 35))
+>R : Symbol(R, Decl(deferredCallbacks.ts, 137, 55))
+
+declare function recreateDeferred2<A extends unknown[], R>(f: (...args: A) => R): (deferred ...args: A) => R;
+>recreateDeferred2 : Symbol(recreateDeferred2, Decl(deferredCallbacks.ts, 137, 109))
+>A : Symbol(A, Decl(deferredCallbacks.ts, 138, 35))
+>R : Symbol(R, Decl(deferredCallbacks.ts, 138, 55))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 138, 59))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 138, 63))
+>A : Symbol(A, Decl(deferredCallbacks.ts, 138, 35))
+>R : Symbol(R, Decl(deferredCallbacks.ts, 138, 55))
+>args : Symbol(args, Decl(deferredCallbacks.ts, 138, 83))
+>A : Symbol(A, Decl(deferredCallbacks.ts, 138, 35))
+>R : Symbol(R, Decl(deferredCallbacks.ts, 138, 55))
+
+function ff1() {
+>ff1 : Symbol(ff1, Decl(deferredCallbacks.ts, 138, 109))
+
+    let x: string | number;
+>x : Symbol(x, Decl(deferredCallbacks.ts, 141, 7))
+
+    x = 123;
+>x : Symbol(x, Decl(deferredCallbacks.ts, 141, 7))
+
+    doStuff(() => {
+>doStuff : Symbol(doStuff, Decl(deferredCallbacks.ts, 130, 38))
+
+        x = "hi";
+>x : Symbol(x, Decl(deferredCallbacks.ts, 141, 7))
+
+    });
+    x;  // number
+>x : Symbol(x, Decl(deferredCallbacks.ts, 141, 7))
+}
+
+function ff2() {
+>ff2 : Symbol(ff2, Decl(deferredCallbacks.ts, 147, 1))
+
+    let y: string | number;
+>y : Symbol(y, Decl(deferredCallbacks.ts, 150, 7))
+
+    y = 123;
+>y : Symbol(y, Decl(deferredCallbacks.ts, 150, 7))
+
+    recreate(doStuff)(() => {
+>recreate : Symbol(recreate, Decl(deferredCallbacks.ts, 134, 55))
+>doStuff : Symbol(doStuff, Decl(deferredCallbacks.ts, 130, 38))
+
+        y = "hi";
+>y : Symbol(y, Decl(deferredCallbacks.ts, 150, 7))
+
+    });
+    y;  // string | number
+>y : Symbol(y, Decl(deferredCallbacks.ts, 150, 7))
+}
+
+function ff3() {
+>ff3 : Symbol(ff3, Decl(deferredCallbacks.ts, 156, 1))
+
+    let z: string | number;
+>z : Symbol(z, Decl(deferredCallbacks.ts, 159, 7))
+
+    z = 123;
+>z : Symbol(z, Decl(deferredCallbacks.ts, 159, 7))
+
+    recreateDeferred1(doStuff)(() => {
+>recreateDeferred1 : Symbol(recreateDeferred1, Decl(deferredCallbacks.ts, 136, 91))
+>doStuff : Symbol(doStuff, Decl(deferredCallbacks.ts, 130, 38))
+
+        z = "hi";
+>z : Symbol(z, Decl(deferredCallbacks.ts, 159, 7))
+
+    });
+    z;  // string | number
+>z : Symbol(z, Decl(deferredCallbacks.ts, 159, 7))
+}
+
+function ff4() {
+>ff4 : Symbol(ff4, Decl(deferredCallbacks.ts, 165, 1))
+
+    let z: string | number;
+>z : Symbol(z, Decl(deferredCallbacks.ts, 168, 7))
+
+    z = 123;
+>z : Symbol(z, Decl(deferredCallbacks.ts, 168, 7))
+
+    recreateDeferred2(doStuff)(() => {
+>recreateDeferred2 : Symbol(recreateDeferred2, Decl(deferredCallbacks.ts, 137, 109))
+>doStuff : Symbol(doStuff, Decl(deferredCallbacks.ts, 130, 38))
+
+        z = "hi";
+>z : Symbol(z, Decl(deferredCallbacks.ts, 168, 7))
+
+    });
+    z;  // number
+>z : Symbol(z, Decl(deferredCallbacks.ts, 168, 7))
+}
+
+// https://github.com/microsoft/TypeScript/issues/11498
+
+declare function mystery(cb: () => void): void;
+>mystery : Symbol(mystery, Decl(deferredCallbacks.ts, 174, 1))
+>cb : Symbol(cb, Decl(deferredCallbacks.ts, 178, 25))
+
+function fx1() {
+>fx1 : Symbol(fx1, Decl(deferredCallbacks.ts, 178, 47))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(deferredCallbacks.ts, 181, 7))
+
+    x;  // string
+>x : Symbol(x, Decl(deferredCallbacks.ts, 181, 7))
+
+    mystery(() => {
+>mystery : Symbol(mystery, Decl(deferredCallbacks.ts, 174, 1))
+
+        x = 10;
+>x : Symbol(x, Decl(deferredCallbacks.ts, 181, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(deferredCallbacks.ts, 181, 7))
+
+    if (x === 10) {}
+>x : Symbol(x, Decl(deferredCallbacks.ts, 181, 7))
+}
+
+// https://github.com/microsoft/TypeScript/issues/15380
+
+class Foo {
+>Foo : Symbol(Foo, Decl(deferredCallbacks.ts, 188, 1))
+
+  public bar: string = "";
+>bar : Symbol(Foo.bar, Decl(deferredCallbacks.ts, 192, 11))
+}
+
+function fx2() {
+>fx2 : Symbol(fx2, Decl(deferredCallbacks.ts, 194, 1))
+
+  let foo: Foo | null = null;
+>foo : Symbol(foo, Decl(deferredCallbacks.ts, 197, 5))
+>Foo : Symbol(Foo, Decl(deferredCallbacks.ts, 188, 1))
+
+  [1].forEach((item) => {
+>[1].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(deferredCallbacks.ts, 198, 15))
+
+      foo = new Foo();
+>foo : Symbol(foo, Decl(deferredCallbacks.ts, 197, 5))
+>Foo : Symbol(Foo, Decl(deferredCallbacks.ts, 188, 1))
+
+  });
+  if (foo) {
+>foo : Symbol(foo, Decl(deferredCallbacks.ts, 197, 5))
+
+      foo.bar;
+>foo.bar : Symbol(Foo.bar, Decl(deferredCallbacks.ts, 192, 11))
+>foo : Symbol(foo, Decl(deferredCallbacks.ts, 197, 5))
+>bar : Symbol(Foo.bar, Decl(deferredCallbacks.ts, 192, 11))
+  }
+}
+
+// https://github.com/microsoft/TypeScript/issues/57880
+
+const call = (f: () => void) => f();
+>call : Symbol(call, Decl(deferredCallbacks.ts, 208, 5))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 208, 14))
+>f : Symbol(f, Decl(deferredCallbacks.ts, 208, 14))
+
+const fx3 = () => {
+>fx3 : Symbol(fx3, Decl(deferredCallbacks.ts, 210, 5))
+
+    let a: undefined | number = undefined;
+>a : Symbol(a, Decl(deferredCallbacks.ts, 211, 7))
+>undefined : Symbol(undefined)
+
+    call(() => { a = 1; });
+>call : Symbol(call, Decl(deferredCallbacks.ts, 208, 5))
+>a : Symbol(a, Decl(deferredCallbacks.ts, 211, 7))
+
+    if (a !== undefined) {
+>a : Symbol(a, Decl(deferredCallbacks.ts, 211, 7))
+>undefined : Symbol(undefined)
+
+        a.toString();
+>a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(deferredCallbacks.ts, 211, 7))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+    }
+};
+
+// https://github.com/microsoft/TypeScript/issues/58291
+
+async function execute(onError: (_err: Error | undefined) => void) {
+>execute : Symbol(execute, Decl(deferredCallbacks.ts, 216, 2))
+>onError : Symbol(onError, Decl(deferredCallbacks.ts, 220, 23))
+>_err : Symbol(_err, Decl(deferredCallbacks.ts, 220, 33))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    onError(new Error("a"));
+>onError : Symbol(onError, Decl(deferredCallbacks.ts, 220, 23))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+async function run() {
+>run : Symbol(run, Decl(deferredCallbacks.ts, 222, 1))
+
+    let result: boolean = true;
+>result : Symbol(result, Decl(deferredCallbacks.ts, 225, 7))
+
+    await execute(() => {
+>execute : Symbol(execute, Decl(deferredCallbacks.ts, 216, 2))
+
+        result = false;
+>result : Symbol(result, Decl(deferredCallbacks.ts, 225, 7))
+
+    });
+    if (result === false) {
+>result : Symbol(result, Decl(deferredCallbacks.ts, 225, 7))
+
+        console.log("error");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+    return result;
+>result : Symbol(result, Decl(deferredCallbacks.ts, 225, 7))
+}
+

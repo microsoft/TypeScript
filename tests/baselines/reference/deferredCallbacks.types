@@ -1,0 +1,1035 @@
+//// [tests/cases/compiler/deferredCallbacks.ts] ////
+
+=== deferredCallbacks.ts ===
+declare function immediate(cb: () => void): void;
+>immediate : (cb: () => void) => void
+>          : ^  ^^          ^^^^^    
+>cb : () => void
+>   : ^^^^^^    
+
+declare function deferred1(deferred cb: () => void): void;
+>deferred1 : (cb: () => void) => void
+>          : ^  ^^          ^^^^^    
+>cb : () => void
+>   : ^^^^^^    
+
+declare function deferred2(/** @deferred */ cb: () => void): void;
+>deferred2 : (cb: () => void) => void
+>          : ^  ^^          ^^^^^    
+>cb : () => void
+>   : ^^^^^^    
+
+declare function deferred3(/** @deferred */ deferred cb: () => void): void;
+>deferred3 : (cb: () => void) => void
+>          : ^  ^^          ^^^^^    
+>cb : () => void
+>   : ^^^^^^    
+
+function f01() {
+>f01 : () => void
+>    : ^^^^^^^^^^
+
+    let x: string | number = "OK";
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"OK" : "OK"
+>     : ^^^^
+
+    immediate(() => {
+>immediate(() => {        x = 42;    }) : void
+>                                       : ^^^^
+>immediate : (cb: () => void) => void
+>          : ^  ^^          ^^^^^    
+>() => {        x = 42;    } : () => void
+>                            : ^^^^^^^^^^
+
+        x = 42;
+>x = 42 : 42
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+    });
+    x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+
+function f02() {
+>f02 : () => void
+>    : ^^^^^^^^^^
+
+    let x: string | number = "OK";
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"OK" : "OK"
+>     : ^^^^
+
+    deferred1(() => {
+>deferred1(() => {        x = 42;    }) : void
+>                                       : ^^^^
+>deferred1 : (cb: () => void) => void
+>          : ^  ^^          ^^^^^    
+>() => {        x = 42;    } : () => void
+>                            : ^^^^^^^^^^
+
+        x = 42;
+>x = 42 : 42
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+    });
+    x;  // string
+>x : string
+>  : ^^^^^^
+}
+
+function f03() {
+>f03 : () => void
+>    : ^^^^^^^^^^
+
+    let x: string | number = "OK";
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"OK" : "OK"
+>     : ^^^^
+
+    deferred2(() => {
+>deferred2(() => {        x = 42;    }) : void
+>                                       : ^^^^
+>deferred2 : (cb: () => void) => void
+>          : ^  ^^          ^^^^^    
+>() => {        x = 42;    } : () => void
+>                            : ^^^^^^^^^^
+
+        x = 42;
+>x = 42 : 42
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+    });
+    x;  // string
+>x : string
+>  : ^^^^^^
+}
+
+function f04() {
+>f04 : () => void
+>    : ^^^^^^^^^^
+
+    let x: string | number = "OK";
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"OK" : "OK"
+>     : ^^^^
+
+    deferred3(() => {
+>deferred3(() => {        x = 42;    }) : void
+>                                       : ^^^^
+>deferred3 : (cb: () => void) => void
+>          : ^  ^^          ^^^^^    
+>() => {        x = 42;    } : () => void
+>                            : ^^^^^^^^^^
+
+        x = 42;
+>x = 42 : 42
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+    });
+    x;  // string
+>x : string
+>  : ^^^^^^
+}
+
+// Parameter is considered deferred if one or more overloads defer that parameter
+
+declare function overloaded<T>(cb: (x: T) => T): void;
+>overloaded : { <T>(cb: (x: T) => T): void; <T_1>(cb: (x: T_1, y: T_1) => T_1): void; (cb: (...args: any) => any): void; }
+>           : ^^^ ^^  ^^           ^^^    ^^^^^^^^  ^^                       ^^^    ^^^  ^^                     ^^^    ^^^
+>cb : (x: T) => T
+>   : ^ ^^ ^^^^^ 
+>x : T
+>  : ^
+
+declare function overloaded<T>(cb: (x: T, y: T) => T): void;
+>overloaded : { <T_1>(cb: (x: T_1) => T_1): void; <T>(cb: (x: T, y: T) => T): void; (cb: (...args: any) => any): void; }
+>           : ^^^^^^^^  ^^               ^^^    ^^^ ^^  ^^                 ^^^    ^^^  ^^                     ^^^    ^^^
+>cb : (x: T, y: T) => T
+>   : ^ ^^ ^^ ^^ ^^^^^ 
+>x : T
+>  : ^
+>y : T
+>  : ^
+
+declare function overloaded(deferred cb: (...args: any) => any): void;
+>overloaded : { <T>(cb: (x: T) => T): void; <T>(cb: (x: T, y: T) => T): void; (cb: (...args: any) => any): void; }
+>           : ^^^ ^^  ^^           ^^^    ^^^ ^^  ^^                 ^^^    ^^^  ^^                     ^^^    ^^^
+>cb : (...args: any) => any
+>   : ^^^^    ^^   ^^^^^   
+>args : any
+>     : ^^^
+
+function f05() {
+>f05 : () => void
+>    : ^^^^^^^^^^
+
+    let x: string | number = "OK";
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"OK" : "OK"
+>     : ^^^^
+
+    overloaded(() => {
+>overloaded(() => {        x = 42;    }) : void
+>                                        : ^^^^
+>overloaded : { <T>(cb: (x: T) => T): void; <T>(cb: (x: T, y: T) => T): void; (cb: (...args: any) => any): void; }
+>           : ^^^ ^^  ^^           ^^^    ^^^ ^^  ^^                 ^^^    ^^^  ^^                     ^^^    ^^^
+>() => {        x = 42;    } : () => void
+>                            : ^^^^^^^^^^
+
+        x = 42;
+>x = 42 : 42
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+    });
+    x.length;
+>x.length : number
+>         : ^^^^^^
+>x : string
+>  : ^^^^^^
+>length : number
+>       : ^^^^^^
+}
+
+// deferred is permitted on a rest parameter
+
+declare function invokeImmediate(...args: ((...args: any) => any)[]): void;
+>invokeImmediate : (...args: ((...args: any) => any)[]) => void
+>                : ^^^^    ^^                         ^^^^^    
+>args : ((...args: any) => any)[]
+>     : ^^^^^    ^^   ^^^^^   ^^^
+>args : any
+>     : ^^^
+
+declare function invokeDeferred(deferred ...args: ((...args: any) => any)[]): void;
+>invokeDeferred : (...args: ((...args: any) => any)[]) => void
+>               : ^^^^    ^^                         ^^^^^    
+>args : ((...args: any) => any)[]
+>     : ^^^^^    ^^   ^^^^^   ^^^
+>args : any
+>     : ^^^
+
+function f06() {
+>f06 : () => void
+>    : ^^^^^^^^^^
+
+    let a = [];
+>a : any[]
+>  : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+    a.push("abc");
+>a.push("abc") : number
+>              : ^^^^^^
+>a.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
+>a : any[]
+>  : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>"abc" : "abc"
+>      : ^^^^^
+
+    a;  // string[]
+>a : string[]
+>  : ^^^^^^^^
+
+    invokeImmediate(
+>invokeImmediate(        () => {            a;  // string[]            a.push(42);            a;  // (string | number)[]        },        () => {            a;  // string[]            a.push(true);            a;  // (string | boolean)[]        }    ) : void
+>                                                                                                                                                                                                                                                          : ^^^^
+>invokeImmediate : (...args: ((...args: any) => any)[]) => void
+>                : ^^^^    ^^                         ^^^^^    
+
+        () => {
+>() => {            a;  // string[]            a.push(42);            a;  // (string | number)[]        } : () => void
+>                                                                                                         : ^^^^^^^^^^
+
+            a;  // string[]
+>a : string[]
+>  : ^^^^^^^^
+
+            a.push(42);
+>a.push(42) : number
+>           : ^^^^^^
+>a.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
+>a : any[]
+>  : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>42 : 42
+>   : ^^
+
+            a;  // (string | number)[]
+>a : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
+
+        },
+        () => {
+>() => {            a;  // string[]            a.push(true);            a;  // (string | boolean)[]        } : () => void
+>                                                                                                            : ^^^^^^^^^^
+
+            a;  // string[]
+>a : string[]
+>  : ^^^^^^^^
+
+            a.push(true);
+>a.push(true) : number
+>             : ^^^^^^
+>a.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
+>a : any[]
+>  : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>true : true
+>     : ^^^^
+
+            a;  // (string | boolean)[]
+>a : (string | boolean)[]
+>  : ^^^^^^^^^^^^^^^^^^^^
+        }
+    );
+    a;  // (string | number | boolean)[]
+>a : (string | number | boolean)[]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function f07() {
+>f07 : () => void
+>    : ^^^^^^^^^^
+
+    let a = [];
+>a : any[]
+>  : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+    a.push("abc");
+>a.push("abc") : number
+>              : ^^^^^^
+>a.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
+>a : any[]
+>  : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>"abc" : "abc"
+>      : ^^^^^
+
+    a;  // string[]
+>a : string[]
+>  : ^^^^^^^^
+
+    invokeDeferred(
+>invokeDeferred(        () => {            a;  // string[]            a.push(42);            a;  // (string | number)[]        },        () => {            a;  // string[]            a.push(true);            a;  // (string | boolean)[]        }    ) : void
+>                                                                                                                                                                                                                                                         : ^^^^
+>invokeDeferred : (...args: ((...args: any) => any)[]) => void
+>               : ^^^^    ^^                         ^^^^^    
+
+        () => {
+>() => {            a;  // string[]            a.push(42);            a;  // (string | number)[]        } : () => void
+>                                                                                                         : ^^^^^^^^^^
+
+            a;  // string[]
+>a : string[]
+>  : ^^^^^^^^
+
+            a.push(42);
+>a.push(42) : number
+>           : ^^^^^^
+>a.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
+>a : any[]
+>  : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>42 : 42
+>   : ^^
+
+            a;  // (string | number)[]
+>a : (string | number)[]
+>  : ^^^^^^^^^^^^^^^^^^^
+
+        },
+        () => {
+>() => {            a;  // string[]            a.push(true);            a;  // (string | boolean)[]        } : () => void
+>                                                                                                            : ^^^^^^^^^^
+
+            a;  // string[]
+>a : string[]
+>  : ^^^^^^^^
+
+            a.push(true);
+>a.push(true) : number
+>             : ^^^^^^
+>a.push : (...items: any[]) => number
+>       : ^^^^     ^^^^^^^^^^^^      
+>a : any[]
+>  : ^^^^^
+>push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
+>true : true
+>     : ^^^^
+
+            a;  // (string | boolean)[]
+>a : (string | boolean)[]
+>  : ^^^^^^^^^^^^^^^^^^^^
+        }
+    );
+    a;  // string[]
+>a : string[]
+>  : ^^^^^^^^
+}
+
+// deferred modifier must precede public/private/protected/readonly
+
+class CC {
+>CC : CC
+>   : ^^
+
+    constructor(deferred public readonly x: () => void) {}
+>x : () => void
+>  : ^^^^^^    
+}
+
+// deferred requires parameter to have type that permits functions
+
+declare function f10(deferred f: () => void): void;
+>f10 : (f: () => void) => void
+>    : ^ ^^          ^^^^^    
+>f : () => void
+>  : ^^^^^^    
+
+declare function f11(deferred f: Function): void;
+>f11 : (f: Function) => void
+>    : ^ ^^        ^^^^^    
+>f : Function
+>  : ^^^^^^^^
+
+declare function f12(deferred f: any): void;
+>f12 : (f: any) => void
+>    : ^ ^^   ^^^^^    
+>f : any
+>  : ^^^
+
+declare function f13(deferred f: object): void;
+>f13 : (f: object) => void
+>    : ^ ^^      ^^^^^    
+>f : object
+>  : ^^^^^^
+
+declare function f14(deferred f: {}): void;
+>f14 : (f: {}) => void
+>    : ^ ^^  ^^^^^    
+>f : {}
+>  : ^^
+
+declare function f15(deferred f: unknown): void;
+>f15 : (f: unknown) => void
+>    : ^ ^^       ^^^^^    
+>f : unknown
+>  : ^^^^^^^
+
+declare function f16<T extends Function>(deferred f: T): void;
+>f16 : <T extends Function>(f: T) => void
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^    
+>f : T
+>  : ^
+
+declare function f17<T extends (...args: any) => any>(deferred f: T): void;
+>f17 : <T extends (...args: any) => any>(f: T) => void
+>    : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^    
+>args : any
+>     : ^^^
+>f : T
+>  : ^
+
+declare function f18<T extends string | (() => void)>(deferred f: T): void;
+>f18 : <T extends string | (() => void)>(f: T) => void
+>    : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^    
+>f : T
+>  : ^
+
+declare function f20(deferred ...funcs: Function[]): void;
+>f20 : (...funcs: Function[]) => void
+>    : ^^^^     ^^          ^^^^^    
+>funcs : Function[]
+>      : ^^^^^^^^^^
+
+declare function f21<T extends ((...args: any) => any)[]>(deferred ...funcs: T): void;
+>f21 : <T extends ((...args: any) => any)[]>(...funcs: T) => void
+>    : ^ ^^^^^^^^^                         ^^^^^     ^^ ^^^^^    
+>args : any
+>     : ^^^
+>funcs : T
+>      : ^
+
+declare function f22<T extends (string | (() => void))[]>(deferred ...funcs: T): void;
+>f22 : <T extends (string | (() => void))[]>(...funcs: T) => void
+>    : ^ ^^^^^^^^^                         ^^^^^     ^^ ^^^^^    
+>funcs : T
+>      : ^
+
+declare function f23<T extends string[] | (() => void)[]>(deferred ...funcs: T): void;
+>f23 : <T extends string[] | (() => void)[]>(...funcs: T) => void
+>    : ^ ^^^^^^^^^                         ^^^^^     ^^ ^^^^^    
+>funcs : T
+>      : ^
+
+declare function f24<T extends (() => void)[]>(deferred ...funcs: T | string[]): void;
+>f24 : <T extends (() => void)[]>(...funcs: T | string[]) => void
+>    : ^ ^^^^^^^^^              ^^^^^     ^^            ^^^^^    
+>funcs : string[] | T
+>      : ^^^^^^^^^^^^
+
+declare function f30(deferred f: { foo(): void }): void;
+>f30 : (f: { foo(): void; }) => void
+>    : ^ ^^                ^^^^^    
+>f : { foo(): void; }
+>  : ^^^^^^^^^    ^^^
+>foo : () => void
+>    : ^^^^^^    
+
+declare function f31(deferred f: number): void;
+>f31 : (f: number) => void
+>    : ^ ^^      ^^^^^    
+>f : number
+>  : ^^^^^^
+
+declare function f32(deferred ...funcs: number[]): void;
+>f32 : (...funcs: number[]) => void
+>    : ^^^^     ^^        ^^^^^    
+>funcs : number[]
+>      : ^^^^^^^^
+
+type T10 = (deferred f: () => void) => void;
+>T10 : T10
+>    : ^^^
+>f : () => void
+>  : ^^^^^^    
+
+type T11 = (deferred f: { (): void }) => void;
+>T11 : T11
+>    : ^^^
+>f : () => void
+>  : ^^^^^^    
+
+type T12 = (deferred f: Function) => void;
+>T12 : T12
+>    : ^^^
+>f : Function
+>  : ^^^^^^^^
+
+type T13 = (deferred f: any) => void;
+>T13 : T13
+>    : ^^^
+>f : any
+>  : ^^^
+
+type T20 = (deferred f: { foo(): void }) => void;
+>T20 : T20
+>    : ^^^
+>f : { foo(): void; }
+>  : ^^^^^^^^^    ^^^
+>foo : () => void
+>    : ^^^^^^    
+
+type T21 = (deferred f: number) => void;
+>T21 : T21
+>    : ^^^
+>f : number
+>  : ^^^^^^
+
+type T22 = (deferred ...funcs: number[]) => void;
+>T22 : T22
+>    : ^^^
+>funcs : number[]
+>      : ^^^^^^^^
+
+type T23 = { deferred x: () => void };
+>T23 : T23
+>    : ^^^
+>x : () => void
+>  : ^^^^^^    
+
+// deferred modifier is not captured in argument list tuples
+
+declare function doStuff(deferred f: () => void): void;
+>doStuff : (f: () => void) => void
+>        : ^ ^^          ^^^^^    
+>f : () => void
+>  : ^^^^^^    
+
+declare function recreate<A extends unknown[], R>(f: (...args: A) => R): (...args: A) => R;
+>recreate : <A extends unknown[], R>(f: (...args: A) => R) => (...args: A) => R
+>         : ^ ^^^^^^^^^         ^^ ^^ ^^                 ^^^^^                 
+>f : (...args: A) => R
+>  : ^^^^    ^^ ^^^^^ 
+>args : A
+>     : ^
+>args : A
+>     : ^
+
+declare function recreateDeferred1<A extends unknown[], R>(f: (deferred ...args: A) => R): (...args: A) => R;
+>recreateDeferred1 : <A extends unknown[], R>(f: (deferred ...args: A) => R) => (...args: A) => R
+>                  : ^ ^^^^^^^^^         ^^ ^^ ^^                          ^^^^^                 
+>f : (...args: A) => R
+>  : ^^^^    ^^ ^^^^^ 
+>args : A
+>     : ^
+>args : A
+>     : ^
+
+declare function recreateDeferred2<A extends unknown[], R>(f: (...args: A) => R): (deferred ...args: A) => R;
+>recreateDeferred2 : <A extends unknown[], R>(f: (...args: A) => R) => (deferred ...args: A) => R
+>                  : ^ ^^^^^^^^^         ^^ ^^ ^^                 ^^^^^                          
+>f : (...args: A) => R
+>  : ^^^^    ^^ ^^^^^ 
+>args : A
+>     : ^
+>args : A
+>     : ^
+
+function ff1() {
+>ff1 : () => void
+>    : ^^^^^^^^^^
+
+    let x: string | number;
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    x = 123;
+>x = 123 : 123
+>        : ^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+
+    doStuff(() => {
+>doStuff(() => {        x = "hi";    }) : void
+>                                       : ^^^^
+>doStuff : (f: () => void) => void
+>        : ^ ^^          ^^^^^    
+>() => {        x = "hi";    } : () => void
+>                              : ^^^^^^^^^^
+
+        x = "hi";
+>x = "hi" : "hi"
+>         : ^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"hi" : "hi"
+>     : ^^^^
+
+    });
+    x;  // number
+>x : number
+>  : ^^^^^^
+}
+
+function ff2() {
+>ff2 : () => void
+>    : ^^^^^^^^^^
+
+    let y: string | number;
+>y : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    y = 123;
+>y = 123 : 123
+>        : ^^^
+>y : string | number
+>  : ^^^^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+
+    recreate(doStuff)(() => {
+>recreate(doStuff)(() => {        y = "hi";    }) : void
+>                                                 : ^^^^
+>recreate(doStuff) : (f: () => void) => void
+>                  : ^^^^^^^^^^    ^^^^^^^^^
+>recreate : <A extends unknown[], R>(f: (...args: A) => R) => (...args: A) => R
+>         : ^ ^^^^^^^^^         ^^ ^^ ^^                 ^^^^^                 
+>doStuff : (f: () => void) => void
+>        : ^ ^^          ^^^^^    
+>() => {        y = "hi";    } : () => void
+>                              : ^^^^^^^^^^
+
+        y = "hi";
+>y = "hi" : "hi"
+>         : ^^^^
+>y : string | number
+>  : ^^^^^^^^^^^^^^^
+>"hi" : "hi"
+>     : ^^^^
+
+    });
+    y;  // string | number
+>y : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+
+function ff3() {
+>ff3 : () => void
+>    : ^^^^^^^^^^
+
+    let z: string | number;
+>z : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    z = 123;
+>z = 123 : 123
+>        : ^^^
+>z : string | number
+>  : ^^^^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+
+    recreateDeferred1(doStuff)(() => {
+>recreateDeferred1(doStuff)(() => {        z = "hi";    }) : void
+>                                                          : ^^^^
+>recreateDeferred1(doStuff) : (f: () => void) => void
+>                           : ^^^^^^^^^^    ^^^^^^^^^
+>recreateDeferred1 : <A extends unknown[], R>(f: (deferred ...args: A) => R) => (...args: A) => R
+>                  : ^ ^^^^^^^^^         ^^ ^^ ^^                          ^^^^^                 
+>doStuff : (f: () => void) => void
+>        : ^ ^^          ^^^^^    
+>() => {        z = "hi";    } : () => void
+>                              : ^^^^^^^^^^
+
+        z = "hi";
+>z = "hi" : "hi"
+>         : ^^^^
+>z : string | number
+>  : ^^^^^^^^^^^^^^^
+>"hi" : "hi"
+>     : ^^^^
+
+    });
+    z;  // string | number
+>z : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+
+function ff4() {
+>ff4 : () => void
+>    : ^^^^^^^^^^
+
+    let z: string | number;
+>z : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    z = 123;
+>z = 123 : 123
+>        : ^^^
+>z : string | number
+>  : ^^^^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+
+    recreateDeferred2(doStuff)(() => {
+>recreateDeferred2(doStuff)(() => {        z = "hi";    }) : void
+>                                                          : ^^^^
+>recreateDeferred2(doStuff) : (f: () => void) => void
+>                           : ^^^^^^^^^^    ^^^^^^^^^
+>recreateDeferred2 : <A extends unknown[], R>(f: (...args: A) => R) => (deferred ...args: A) => R
+>                  : ^ ^^^^^^^^^         ^^ ^^ ^^                 ^^^^^                          
+>doStuff : (f: () => void) => void
+>        : ^ ^^          ^^^^^    
+>() => {        z = "hi";    } : () => void
+>                              : ^^^^^^^^^^
+
+        z = "hi";
+>z = "hi" : "hi"
+>         : ^^^^
+>z : string | number
+>  : ^^^^^^^^^^^^^^^
+>"hi" : "hi"
+>     : ^^^^
+
+    });
+    z;  // number
+>z : number
+>  : ^^^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/11498
+
+declare function mystery(cb: () => void): void;
+>mystery : (cb: () => void) => void
+>        : ^  ^^          ^^^^^    
+>cb : () => void
+>   : ^^^^^^    
+
+function fx1() {
+>fx1 : () => void
+>    : ^^^^^^^^^^
+
+    let x: string | number = "OK";
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"OK" : "OK"
+>     : ^^^^
+
+    x;  // string
+>x : string
+>  : ^^^^^^
+
+    mystery(() => {
+>mystery(() => {        x = 10;    }) : void
+>                                     : ^^^^
+>mystery : (cb: () => void) => void
+>        : ^  ^^          ^^^^^    
+>() => {        x = 10;    } : () => void
+>                            : ^^^^^^^^^^
+
+        x = 10;
+>x = 10 : 10
+>       : ^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+
+    });
+    x;  // string | number
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    if (x === 10) {}
+>x === 10 : boolean
+>         : ^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>10 : 10
+>   : ^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/15380
+
+class Foo {
+>Foo : Foo
+>    : ^^^
+
+  public bar: string = "";
+>bar : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+}
+
+function fx2() {
+>fx2 : () => void
+>    : ^^^^^^^^^^
+
+  let foo: Foo | null = null;
+>foo : Foo | null
+>    : ^^^^^^^^^^
+
+  [1].forEach((item) => {
+>[1].forEach((item) => {      foo = new Foo();  }) : void
+>                                                  : ^^^^
+>[1].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>            : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>[1] : number[]
+>    : ^^^^^^^^
+>1 : 1
+>  : ^
+>forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>(item) => {      foo = new Foo();  } : (item: number) => void
+>                                     : ^    ^^^^^^^^^^^^^^^^^
+>item : number
+>     : ^^^^^^
+
+      foo = new Foo();
+>foo = new Foo() : Foo
+>                : ^^^
+>foo : Foo | null
+>    : ^^^^^^^^^^
+>new Foo() : Foo
+>          : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+  });
+  if (foo) {
+>foo : Foo | null
+>    : ^^^^^^^^^^
+
+      foo.bar;
+>foo.bar : string
+>        : ^^^^^^
+>foo : Foo
+>    : ^^^
+>bar : string
+>    : ^^^^^^
+  }
+}
+
+// https://github.com/microsoft/TypeScript/issues/57880
+
+const call = (f: () => void) => f();
+>call : (f: () => void) => void
+>     : ^ ^^          ^^^^^^^^^
+>(f: () => void) => f() : (f: () => void) => void
+>                       : ^ ^^          ^^^^^^^^^
+>f : () => void
+>  : ^^^^^^    
+>f() : void
+>    : ^^^^
+>f : () => void
+>  : ^^^^^^    
+
+const fx3 = () => {
+>fx3 : () => void
+>    : ^^^^^^^^^^
+>() => {    let a: undefined | number = undefined;    call(() => { a = 1; });    if (a !== undefined) {        a.toString();    }} : () => void
+>                                                                                                                                  : ^^^^^^^^^^
+
+    let a: undefined | number = undefined;
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    call(() => { a = 1; });
+>call(() => { a = 1; }) : void
+>                       : ^^^^
+>call : (f: () => void) => void
+>     : ^ ^^          ^^^^^^^^^
+>() => { a = 1; } : () => void
+>                 : ^^^^^^^^^^
+>a = 1 : 1
+>      : ^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+    if (a !== undefined) {
+>a !== undefined : boolean
+>                : ^^^^^^^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        a.toString();
+>a.toString() : string
+>             : ^^^^^^
+>a.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
+>a : number
+>  : ^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+    }
+};
+
+// https://github.com/microsoft/TypeScript/issues/58291
+
+async function execute(onError: (_err: Error | undefined) => void) {
+>execute : (onError: (_err: Error | undefined) => void) => Promise<void>
+>        : ^       ^^                                 ^^^^^^^^^^^^^^^^^^
+>onError : (_err: Error | undefined) => void
+>        : ^    ^^                 ^^^^^    
+>_err : Error | undefined
+>     : ^^^^^^^^^^^^^^^^^
+
+    onError(new Error("a"));
+>onError(new Error("a")) : void
+>                        : ^^^^
+>onError : (_err: Error | undefined) => void
+>        : ^    ^^                 ^^^^^    
+>new Error("a") : Error
+>               : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+}
+
+async function run() {
+>run : () => Promise<boolean>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+    let result: boolean = true;
+>result : boolean
+>       : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    await execute(() => {
+>await execute(() => {        result = false;    }) : void
+>                                                   : ^^^^
+>execute(() => {        result = false;    }) : Promise<void>
+>                                             : ^^^^^^^^^^^^^
+>execute : (onError: (_err: Error | undefined) => void) => Promise<void>
+>        : ^       ^^                                 ^^^^^^^^^^^^^^^^^^
+>() => {        result = false;    } : () => void
+>                                    : ^^^^^^^^^^
+
+        result = false;
+>result = false : false
+>               : ^^^^^
+>result : boolean
+>       : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+    });
+    if (result === false) {
+>result === false : boolean
+>                 : ^^^^^^^
+>result : boolean
+>       : ^^^^^^^
+>false : false
+>      : ^^^^^
+
+        console.log("error");
+>console.log("error") : void
+>                     : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"error" : "error"
+>        : ^^^^^^^
+    }
+    return result;
+>result : boolean
+>       : ^^^^^^^
+}
+
