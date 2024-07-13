@@ -26893,17 +26893,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfTypeParameter(inference.typeParameter);
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                if (!inferredType) {
-                    inference.inferredType = instantiatedConstraint;
+                if (inference.priority! & InferencePriority.ReturnType) {
+                    inference.inferredType = (inferredType && filterContextualInferredType(inferredType, instantiatedConstraint)) ?? (fallbackType && filterContextualInferredType(fallbackType, instantiatedConstraint)) ?? instantiatedConstraint;
                 }
-                else {
-                    if (inference.priority! & InferencePriority.ReturnType) {
-                        inference.inferredType = filterContextualInferredType(inferredType, instantiatedConstraint) ?? (fallbackType && filterContextualInferredType(fallbackType, instantiatedConstraint)) ?? instantiatedConstraint;
-                    }
-                    else if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                        // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
-                        inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
-                    }
+                else if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                    // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
+                    inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
             }
         }
