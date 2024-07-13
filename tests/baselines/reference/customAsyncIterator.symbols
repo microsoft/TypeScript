@@ -5,7 +5,7 @@
 class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> {
 >ConstantIterator : Symbol(ConstantIterator, Decl(customAsyncIterator.ts, 0, 0))
 >T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
->AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --), Decl(lib.esnext.disposable.d.ts, --, --))
 >T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
 >T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
 
@@ -33,5 +33,13 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
 >this : Symbol(ConstantIterator, Decl(customAsyncIterator.ts, 0, 0))
 >constant : Symbol(ConstantIterator.constant, Decl(customAsyncIterator.ts, 2, 16))
 >done : Symbol(done, Decl(customAsyncIterator.ts, 8, 38))
+    }
+    async [Symbol.dispose]() {
+>[Symbol.dispose] : Symbol(ConstantIterator[Symbol.dispose], Decl(customAsyncIterator.ts, 9, 5))
+>Symbol.dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+
+        return;
     }
 }

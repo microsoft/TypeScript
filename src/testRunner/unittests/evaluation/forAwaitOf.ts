@@ -8,6 +8,7 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
         let i = 0;
         const iterator: IterableIterator<any> = {
             [Symbol.iterator]() { return this; },
+            [Symbol.dispose]() { },
             next() {
                 switch (i++) {
                     case 0: return { value: 1, done: false };
@@ -37,6 +38,7 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
         let i = 0;
         const iterator: IterableIterator<any> = {
             [Symbol.iterator]() { return this; },
+            [Symbol.dispose]() { },
             next() {
                 switch (i++) {
                     case 0: return { value: 1, done: false };

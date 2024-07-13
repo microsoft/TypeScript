@@ -11,6 +11,9 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
         }
         return { value: this.constant, done: false };
     }
+    async [Symbol.dispose]() {
+        return;
+    }
 }
 
 //// [customAsyncIterator.js]
@@ -24,5 +27,8 @@ class ConstantIterator {
             throw new Error("ConstantIterator.prototype.next may not take any values");
         }
         return { value: this.constant, done: false };
+    }
+    async [Symbol.dispose]() {
+        return;
     }
 }

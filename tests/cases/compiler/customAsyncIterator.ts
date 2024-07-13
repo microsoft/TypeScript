@@ -11,4 +11,7 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
         }
         return { value: this.constant, done: false };
     }
+    async [Symbol.dispose]() {
+        return;
+    }
 }

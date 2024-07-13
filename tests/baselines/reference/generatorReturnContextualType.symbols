@@ -14,7 +14,7 @@ function* f1(): Generator<any, { x: 'x' }, any> {
 
 function* g1(): Iterator<any, { x: 'x' }, any> {
 >g1 : Symbol(g1, Decl(generatorReturnContextualType.ts, 4, 1))
->Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.disposable.d.ts, --, --))
 >x : Symbol(x, Decl(generatorReturnContextualType.ts, 6, 31))
 
   return { x: 'x' };
@@ -32,7 +32,7 @@ async function* f2(): AsyncGenerator<any, { x: 'x' }, any> {
 
 async function* g2(): AsyncIterator<any, { x: 'x' }, any> {
 >g2 : Symbol(g2, Decl(generatorReturnContextualType.ts, 12, 1))
->AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --), Decl(lib.esnext.disposable.d.ts, --, --))
 >x : Symbol(x, Decl(generatorReturnContextualType.ts, 14, 42))
 
   return { x: 'x' };
@@ -53,7 +53,7 @@ async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
 
 async function* g3(): AsyncIterator<any, { x: 'x' }, any> {
 >g3 : Symbol(g3, Decl(generatorReturnContextualType.ts, 20, 1))
->AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --), Decl(lib.esnext.disposable.d.ts, --, --))
 >x : Symbol(x, Decl(generatorReturnContextualType.ts, 22, 42))
 
   return Promise.resolve({ x: 'x' });
@@ -81,7 +81,7 @@ async function* f4(): AsyncGenerator<any, { x: 'x' }, any> {
 
 async function* g4(): AsyncIterator<any, { x: 'x' }, any> {
 >g4 : Symbol(g4, Decl(generatorReturnContextualType.ts, 29, 1))
->AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --), Decl(lib.esnext.disposable.d.ts, --, --))
 >x : Symbol(x, Decl(generatorReturnContextualType.ts, 31, 42))
 
   const ret = { x: 'x' };

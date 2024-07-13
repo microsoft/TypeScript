@@ -50,6 +50,9 @@ function mapAsyncIterable<T, U, R = undefined>(
     [Symbol.asyncIterator]() {
       return this;
     },
+    async [Symbol.dispose]() {
+      return;
+    },
   };
 }
 
@@ -67,6 +70,9 @@ const iterable = {
       value,
     });
   },
+  async [Symbol.dispose]() {
+    return;
+  }
 };
 
 const doubles = mapAsyncIterable(iterable, (x) => x + x);

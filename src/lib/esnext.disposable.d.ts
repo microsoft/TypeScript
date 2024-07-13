@@ -1,4 +1,6 @@
 /// <reference lib="es2015.symbol" />
+/// <reference lib="es2015.iterable" />
+/// <reference lib="es2018.asynciterable" />
 
 interface SymbolConstructor {
     /**
@@ -165,3 +167,10 @@ interface AsyncDisposableStackConstructor {
     readonly prototype: AsyncDisposableStack;
 }
 declare var AsyncDisposableStack: AsyncDisposableStackConstructor;
+
+interface Iterator<T, TReturn = any, TNext = undefined> {
+    [Symbol.dispose](): void;
+}
+interface AsyncIterator<T, TReturn = any, TNext = undefined> {
+    [Symbol.dispose](): Promise<void>;
+}

@@ -125,8 +125,8 @@ function mapAsyncIterable<T, U, R = undefined>(
   }
 
   return {
->{    async next() {      return mapResult(await iterator.next());    },    async return(): Promise<IteratorResult<U, R>> {      return typeof iterator.return === "function"        ? mapResult(await iterator.return())        : { value: undefined as any, done: true };    },    async throw(error?: unknown) {      if (typeof iterator.throw === "function") {        return mapResult(await iterator.throw(error));      }      throw error;    },    [Symbol.asyncIterator]() {      return this;    },  } : { next(): Promise<IteratorResult<U, R>>; return(): Promise<IteratorResult<U, R>>; throw(error?: unknown): Promise<IteratorResult<U, R>>; [Symbol.asyncIterator](): AsyncGenerator<U, R, void>; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                             ^^^^^^^^     ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    async next() {      return mapResult(await iterator.next());    },    async return(): Promise<IteratorResult<U, R>> {      return typeof iterator.return === "function"        ? mapResult(await iterator.return())        : { value: undefined as any, done: true };    },    async throw(error?: unknown) {      if (typeof iterator.throw === "function") {        return mapResult(await iterator.throw(error));      }      throw error;    },    [Symbol.asyncIterator]() {      return this;    },    async [Symbol.dispose]() {      return;    },  } : { next(): Promise<IteratorResult<U, R>>; return(): Promise<IteratorResult<U, R>>; throw(error?: unknown): Promise<IteratorResult<U, R>>; [Symbol.asyncIterator](): AsyncGenerator<U, R, void>; [Symbol.dispose](): Promise<void>; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                             ^^^^^^^^     ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     async next() {
 >next : () => Promise<IteratorResult<U, R>>
@@ -256,6 +256,18 @@ function mapAsyncIterable<T, U, R = undefined>(
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     },
+    async [Symbol.dispose]() {
+>[Symbol.dispose] : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+
+      return;
+    },
   };
 }
 
@@ -272,14 +284,14 @@ const items = [1, 2, 3];
 >  : ^
 
 const iterable = {
->iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{  [Symbol.asyncIterator]() {    return this;  },  next() {    const value = items[0];    items.shift();    return Promise.resolve({      done: items.length === 0,      value,    });  },} : { [Symbol.asyncIterator](): { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }; next(): Promise<{ done: boolean; value: number; }>; }
->                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; [Symbol.dispose](): Promise<void>; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  [Symbol.asyncIterator]() {    return this;  },  next() {    const value = items[0];    items.shift();    return Promise.resolve({      done: items.length === 0,      value,    });  },  async [Symbol.dispose]() {    return;  }} : { [Symbol.asyncIterator](): { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; [Symbol.dispose](): Promise<void>; }; next(): Promise<{ done: boolean; value: number; }>; [Symbol.dispose](): Promise<void>; }
+>                                                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   [Symbol.asyncIterator]() {
->[Symbol.asyncIterator] : () => { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.asyncIterator] : () => { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; [Symbol.dispose](): Promise<void>; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.asyncIterator : unique symbol
 >                     : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -288,8 +300,8 @@ const iterable = {
 >              : ^^^^^^^^^^^^^
 
     return this;
->this : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; [Symbol.dispose](): Promise<void>; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   },
   next() {
@@ -348,6 +360,18 @@ const iterable = {
 
     });
   },
+  async [Symbol.dispose]() {
+>[Symbol.dispose] : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+
+    return;
+  }
 };
 
 const doubles = mapAsyncIterable(iterable, (x) => x + x);
@@ -357,8 +381,8 @@ const doubles = mapAsyncIterable(iterable, (x) => x + x);
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapAsyncIterable : <T, U, R = undefined>(iterable: AsyncGenerator<T, R, void> | AsyncIterable<T>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
 >                 : ^ ^^ ^^ ^^^^^^^^^^^^^^        ^^                                             ^^        ^^                               ^^^^^                          
->iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; [Symbol.dispose](): Promise<void>; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x) => x + x : (x: number) => number
 >             : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number

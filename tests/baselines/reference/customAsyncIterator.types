@@ -46,4 +46,16 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
 >false : false
 >      : ^^^^^
     }
+    async [Symbol.dispose]() {
+>[Symbol.dispose] : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+
+        return;
+    }
 }

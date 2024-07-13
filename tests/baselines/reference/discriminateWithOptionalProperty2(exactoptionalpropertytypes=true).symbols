@@ -163,35 +163,43 @@ function mapAsyncIterable<T, U, R = undefined>(
 >this : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
 
     },
+    async [Symbol.dispose]() {
+>[Symbol.dispose] : Symbol([Symbol.dispose], Decl(discriminateWithOptionalProperty2.ts, 46, 6))
+>Symbol.dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+
+      return;
+    },
   };
 }
 
 const items = [1, 2, 3];
->items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 50, 5))
+>items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
 
 const iterable = {
->iterable : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 52, 5))
+>iterable : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 55, 5))
 
   [Symbol.asyncIterator]() {
->[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(discriminateWithOptionalProperty2.ts, 52, 18))
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(discriminateWithOptionalProperty2.ts, 55, 18))
 >Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
 
     return this;
->this : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 52, 16))
+>this : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 55, 16))
 
   },
   next() {
->next : Symbol(next, Decl(discriminateWithOptionalProperty2.ts, 55, 4))
+>next : Symbol(next, Decl(discriminateWithOptionalProperty2.ts, 58, 4))
 
     const value = items[0];
->value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 57, 9))
->items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 50, 5))
+>value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 60, 9))
+>items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
 
     items.shift();
 >items.shift : Symbol(Array.shift, Decl(lib.es5.d.ts, --, --))
->items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 50, 5))
+>items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
 >shift : Symbol(Array.shift, Decl(lib.es5.d.ts, --, --))
 
     return Promise.resolve({
@@ -200,23 +208,31 @@ const iterable = {
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
       done: items.length === 0,
->done : Symbol(done, Decl(discriminateWithOptionalProperty2.ts, 59, 28))
+>done : Symbol(done, Decl(discriminateWithOptionalProperty2.ts, 62, 28))
 >items.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
->items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 50, 5))
+>items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
 >length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
       value,
->value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 60, 31))
+>value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 63, 31))
 
     });
   },
+  async [Symbol.dispose]() {
+>[Symbol.dispose] : Symbol([Symbol.dispose], Decl(discriminateWithOptionalProperty2.ts, 66, 4))
+>Symbol.dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>dispose : Symbol(SymbolConstructor.dispose, Decl(lib.esnext.disposable.d.ts, --, --))
+
+    return;
+  }
 };
 
 const doubles = mapAsyncIterable(iterable, (x) => x + x);
->doubles : Symbol(doubles, Decl(discriminateWithOptionalProperty2.ts, 66, 5))
+>doubles : Symbol(doubles, Decl(discriminateWithOptionalProperty2.ts, 72, 5))
 >mapAsyncIterable : Symbol(mapAsyncIterable, Decl(discriminateWithOptionalProperty2.ts, 2, 40))
->iterable : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 52, 5))
->x : Symbol(x, Decl(discriminateWithOptionalProperty2.ts, 66, 44))
->x : Symbol(x, Decl(discriminateWithOptionalProperty2.ts, 66, 44))
->x : Symbol(x, Decl(discriminateWithOptionalProperty2.ts, 66, 44))
+>iterable : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 55, 5))
+>x : Symbol(x, Decl(discriminateWithOptionalProperty2.ts, 72, 44))
+>x : Symbol(x, Decl(discriminateWithOptionalProperty2.ts, 72, 44))
+>x : Symbol(x, Decl(discriminateWithOptionalProperty2.ts, 72, 44))
 
