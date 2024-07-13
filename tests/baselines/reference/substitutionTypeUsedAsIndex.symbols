@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/substitutionTypeUsedAsIndex.ts] ////
+
+=== substitutionTypeUsedAsIndex.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54886
+
+interface Dict_54886 {
+>Dict_54886 : Symbol(Dict_54886, Decl(substitutionTypeUsedAsIndex.ts, 0, 0))
+
+  foo: 1;
+>foo : Symbol(Dict_54886.foo, Decl(substitutionTypeUsedAsIndex.ts, 2, 22))
+
+  bar: 1;
+>bar : Symbol(Dict_54886.bar, Decl(substitutionTypeUsedAsIndex.ts, 3, 9))
+}
+
+type FF_54886 = "foo" extends "foo" | "bar" ? "foo" : never;
+>FF_54886 : Symbol(FF_54886, Decl(substitutionTypeUsedAsIndex.ts, 5, 1))
+
+type C_54886 = Dict_54886[FF_54886]; // ok
+>C_54886 : Symbol(C_54886, Decl(substitutionTypeUsedAsIndex.ts, 7, 60))
+>Dict_54886 : Symbol(Dict_54886, Decl(substitutionTypeUsedAsIndex.ts, 0, 0))
+>FF_54886 : Symbol(FF_54886, Decl(substitutionTypeUsedAsIndex.ts, 5, 1))
+
