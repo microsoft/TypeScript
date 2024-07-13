@@ -210,15 +210,15 @@ function multiply(a, b) { return a * b; }
   "semanticDiagnosticsPerFile": [
     [
       "../../../../../a/lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./index.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./some_decl.d.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "latestChangedDtsFile": "./index.d.ts",

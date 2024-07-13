@@ -335,7 +335,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/lib/lib.es5.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
 /home/src/lib/lib.webworker.d.ts (used version)
 /home/src/lib/lib.scripthost.d.ts (used version)
 /home/src/projects/project1/core.d.ts (used version)
@@ -344,6 +343,7 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project1/index.ts (computed .d.ts during emit)
 /home/src/projects/project1/utils.d.ts (used version)
 /home/src/projects/project1/typeroot1/sometype/index.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
 
 
 //// [/home/src/projects/project1/file.d.ts]

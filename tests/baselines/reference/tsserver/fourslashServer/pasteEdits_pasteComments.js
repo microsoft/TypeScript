@@ -98,6 +98,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /target.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -218,24 +229,7 @@ Info seq  [hh:mm:ss:mss] response:
         "updateGraphDurationMs": *
       },
       "body": {
-        "edits": [
-          {
-            "fileName": "/target.ts",
-            "textChanges": [
-              {
-                "start": {
-                  "line": 2,
-                  "offset": 14
-                },
-                "end": {
-                  "line": 2,
-                  "offset": 14
-                },
-                "newText": "/**\n* Testing comment line 1\n* line 2\n* line 3\n* line 4\n*/"
-              }
-            ]
-          }
-        ],
+        "edits": [],
         "fixId": "providePostPasteEdits"
       }
     }
