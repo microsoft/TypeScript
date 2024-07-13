@@ -1,8 +1,5 @@
 //// [tests/cases/compiler/recursiveConditionalCrash4.ts] ////
 
-=== Performance Stats ===
-Instantiation count: 2,500
-
 === recursiveConditionalCrash4.ts ===
 // Repros from #53783
 

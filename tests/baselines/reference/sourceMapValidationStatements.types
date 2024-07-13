@@ -411,7 +411,7 @@ function f() {
 >eval("y") : any
 >          : ^^^
 >eval : (x: string) => any
->     : ^ ^^      ^^^^^^^^
+>     : ^ ^^      ^^^^^   
 >"y" : "y"
 >    : ^^^
 

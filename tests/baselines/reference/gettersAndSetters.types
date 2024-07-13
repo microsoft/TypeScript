@@ -188,7 +188,7 @@ var ofg = o.Foo;
 >o.Foo : number
 >      : ^^^^^^
 >o : { Foo: number; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >Foo : number
 >    : ^^^^^^
 
@@ -198,7 +198,7 @@ o.Foo = 0;
 >o.Foo : number
 >      : ^^^^^^
 >o : { Foo: number; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >Foo : number
 >    : ^^^^^^
 >0 : 0
@@ -232,11 +232,11 @@ const x: string | number = Math.random() < 0.5 ? "str" : 123;
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 >Math : Math
 >     : ^^^^
 >random : () => number
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >0.5 : 0.5
 >    : ^^^
 >"str" : "str"
@@ -268,11 +268,11 @@ if (typeof x === "string") {
 >x.toUpperCase() : string
 >                : ^^^^^^
 >x.toUpperCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >x : string
 >  : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
     get prop() { return x.toUpperCase() },
 >prop : any
@@ -280,11 +280,11 @@ if (typeof x === "string") {
 >x.toUpperCase() : string
 >                : ^^^^^^
 >x.toUpperCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >x : string
 >  : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
     method() { return x.toUpperCase() }
 >method : () => string
@@ -292,11 +292,11 @@ if (typeof x === "string") {
 >x.toUpperCase() : string
 >                : ^^^^^^
 >x.toUpperCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >x : string
 >  : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
   }
 }
 

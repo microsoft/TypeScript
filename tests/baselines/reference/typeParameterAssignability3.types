@@ -11,7 +11,7 @@ class Foo { foo: string; }
 
 function foo<T extends Foo, U extends Foo>(t: T, u: U) {
 >foo : <T extends Foo, U extends Foo>(t: T, u: U) => void
->    : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^   ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U

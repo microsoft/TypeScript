@@ -23,7 +23,7 @@ function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
 >obj.kind : "a" | 1
 >         : ^^^^^^^
 >obj : { kind: "a"; data: string; } | { kind: 1; data: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^^^ ^^^^^^^^      ^^^
 >kind : "a" | 1
 >     : ^^^^^^^
 >"string" : "string"
@@ -31,12 +31,12 @@ function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
 
         obj;  // { kind: 'a', data: string }
 >obj : { kind: "a"; data: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^   ^^^^^^^^      ^^^
     }
     else {
         obj;  // { kind: 1, data: number }
 >obj : { kind: 1; data: number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^ ^^^^^^^^      ^^^
     }
 }
 
@@ -62,7 +62,7 @@ function f2(obj: { kind: 'a', data: string } | { kind: 1, data: number } | undef
 >obj?.kind : "a" | 1 | undefined
 >          : ^^^^^^^^^^^^^^^^^^^
 >obj : { kind: "a"; data: string; } | { kind: 1; data: number; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^
 >kind : "a" | 1 | undefined
 >     : ^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
@@ -70,12 +70,12 @@ function f2(obj: { kind: 'a', data: string } | { kind: 1, data: number } | undef
 
         obj;  // { kind: 'a', data: string }
 >obj : { kind: "a"; data: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^   ^^^^^^^^      ^^^
     }
     else {
         obj;  // { kind: 1, data: number } | undefined
 >obj : { kind: 1; data: number; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^
     }
 }
 
@@ -145,8 +145,8 @@ function booleanBad(wrapped: WrappedStringOr<boolean> | null) {
     return wrapped.value;
 >wrapped.value : string
 >              : ^^^^^^
->wrapped : { value?: string | undefined; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>wrapped : { value?: string; }
+>        : ^^^^^^^^^^      ^^^
 >value : string
 >      : ^^^^^^
 }
@@ -178,8 +178,8 @@ function booleanFixed(wrapped: WrappedStringOr<boolean> | null) {
     return wrapped.value;
 >wrapped.value : string
 >              : ^^^^^^
->wrapped : { value?: string | undefined; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>wrapped : { value?: string; }
+>        : ^^^^^^^^^^      ^^^
 >value : string
 >      : ^^^^^^
 }

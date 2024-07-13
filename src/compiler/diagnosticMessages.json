@@ -967,10 +967,6 @@
         "category": "Error",
         "code": 1292
     },
-    "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
-        "category": "Error",
-        "code": 1293
-    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1032,7 +1028,7 @@
         "category": "Error",
         "code": 1323
     },
-    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 1324
     },
@@ -1789,13 +1785,21 @@
         "category": "Error",
         "code": 1533
     },
-    "This backreference is invalid because the containing regular expression contains no capturing groups.": {
+    "This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.": {
         "category": "Error",
         "code": 1534
     },
     "This character cannot be escaped in a regular expression.": {
         "category": "Error",
         "code": 1535
+    },
+    "Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '{0}' instead.": {
+        "category": "Error",
+        "code": 1536
+    },
+    "Decimal escape sequences and backreferences are not allowed in a character class.": {
+        "category": "Error",
+        "code": 1537
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -4200,10 +4204,6 @@
         "category": "Error",
         "code": 4085
     },
-    "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
-        "category": "Error",
-        "code": 4090
-    },
     "Parameter '{0}' of index signature from exported interface has or is using name '{1}' from private module '{2}'.": {
         "category": "Error",
         "code": 4091
@@ -4212,7 +4212,7 @@
         "category": "Error",
         "code": 4092
     },
-    "Property '{0}' of exported class expression may not be private or protected.": {
+    "Property '{0}' of exported anonymous class type may not be private or protected.": {
         "category": "Error",
         "code": 4094
     },
@@ -4360,10 +4360,6 @@
     "Cannot read file '{0}': {1}.": {
         "category": "Error",
         "code": 5012
-    },
-    "Failed to parse file '{0}': {1}.": {
-        "category": "Error",
-        "code": 5014
     },
     "Unknown compiler option '{0}'.": {
         "category": "Error",
@@ -4612,6 +4608,10 @@
     "Option 'module' must be set to '{0}' when option 'moduleResolution' is set to '{1}'.": {
         "category": "Error",
         "code": 5110
+    },
+    "Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.": {
+        "category": "Error",
+        "code": 5111
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -5688,14 +5688,6 @@
         "category": "Message",
         "code": 6361
     },
-    "Skipping build of project '{0}' because its dependency '{1}' has errors": {
-        "category": "Message",
-        "code": 6362
-    },
-    "Project '{0}' can't be built because its dependency '{1}' has errors": {
-        "category": "Message",
-        "code": 6363
-    },
     "Build one or more projects and their dependencies, if out of date": {
         "category": "Message",
         "code": 6364
@@ -5739,14 +5731,6 @@
     "Project '{0}' is out of date because output for it was generated with version '{1}' that differs with current version '{2}'": {
         "category": "Message",
         "code": 6381
-    },
-    "Skipping build of project '{0}' because its dependency '{1}' was not built": {
-        "category": "Message",
-        "code": 6382
-    },
-    "Project '{0}' can't be built because its dependency '{1}' was not built": {
-        "category": "Message",
-        "code": 6383
     },
     "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
         "category": "Message",
@@ -5889,6 +5873,14 @@
     "Searching all ancestor node_modules directories for fallback extensions: {0}.": {
         "category": "Message",
         "code": 6418
+    },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that program needs to report errors.": {
+        "category": "Message",
+        "code": 6419
+    },
+    "Project '{0}' is out of date because {1}.": {
+        "category": "Message",
+        "code": 6420
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -7017,6 +7009,14 @@
     "Default exports can't be inferred with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9037
+    },
+    "Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9038
+    },
+    "Type containing private name '{0}' can't be used with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9039
     },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
@@ -8313,5 +8313,9 @@
     "Enum member following a non-literal numeric member must have an initializer when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 18056
+    },
+    "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.": {
+        "category": "Error",
+        "code": 18057
     }
 }

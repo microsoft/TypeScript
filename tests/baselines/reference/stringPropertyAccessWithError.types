@@ -13,7 +13,7 @@ var d = x['charAt']('invalid'); // error
 >x['charAt']('invalid') : string
 >                       : ^^^^^^
 >x['charAt'] : (pos: number) => string
->            : ^   ^^      ^^^^^^^^^^^
+>            : ^   ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 >'charAt' : "charAt"

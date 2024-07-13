@@ -2,50 +2,50 @@
 
 === stringLiteralTypesOverloads02.ts ===
 function getFalsyPrimitive(x: "string"): string;
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >x : "string"
 >  : ^^^^^^^^
 
 function getFalsyPrimitive(x: "number"): number;
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^      ^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >x : "number"
 >  : ^^^^^^^^
 
 function getFalsyPrimitive(x: "boolean"): boolean;
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^       ^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >x : "boolean"
 >  : ^^^^^^^^^
 
 function getFalsyPrimitive(x: "boolean" | "string"): boolean | string;
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^                ^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >x : "string" | "boolean"
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 function getFalsyPrimitive(x: "boolean" | "number"): boolean | number;
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^                ^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >x : "number" | "boolean"
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 function getFalsyPrimitive(x: "number" | "string"): number | string;
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^               ^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >x : "string" | "number"
 >  : ^^^^^^^^^^^^^^^^^^^
 
 function getFalsyPrimitive(x: "number" | "string" | "boolean"): number | string | boolean;
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): number | string | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^                         ^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >x : "string" | "number" | "boolean"
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function getFalsyPrimitive(x: string): string | number | boolean {
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >x : string
 >  : ^^^^^^
 
@@ -101,8 +101,8 @@ namespace Consts1 {
 >             : ^^^^^^
 >getFalsyPrimitive("string") : string
 >                            : ^^^^^^
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
@@ -111,8 +111,8 @@ namespace Consts1 {
 >     : ^^^^^^
 >getFalsyPrimitive('number') : number
 >                            : ^^^^^^
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >'number' : "number"
 >         : ^^^^^^^^
 
@@ -121,8 +121,8 @@ namespace Consts1 {
 >      : ^^^^^^^
 >getFalsyPrimitive("boolean") : boolean
 >                             : ^^^^^^^
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >"boolean" : "boolean"
 >          : ^^^^^^^^^
 }
@@ -194,8 +194,8 @@ namespace Consts2 {
 >             : ^^^^^^
 >getFalsyPrimitive(string) : string
 >                          : ^^^^^^
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >string : "string"
 >       : ^^^^^^^^
 
@@ -204,8 +204,8 @@ namespace Consts2 {
 >     : ^^^^^^
 >getFalsyPrimitive(number) : number
 >                          : ^^^^^^
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >number : "number"
 >       : ^^^^^^^^
 
@@ -214,8 +214,8 @@ namespace Consts2 {
 >      : ^^^^^^^
 >getFalsyPrimitive(boolean) : boolean
 >                           : ^^^^^^^
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >boolean : "boolean"
 >        : ^^^^^^^^^
 
@@ -224,8 +224,8 @@ namespace Consts2 {
 >  : ^^^^^^^^^^^^^^^
 >getFalsyPrimitive(stringOrNumber) : string | number
 >                                  : ^^^^^^^^^^^^^^^
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >stringOrNumber : "string" | "number"
 >               : ^^^^^^^^^^^^^^^^^^^
 
@@ -234,8 +234,8 @@ namespace Consts2 {
 >  : ^^^^^^^^^^^^^^^^
 >getFalsyPrimitive(stringOrBoolean) : string | boolean
 >                                   : ^^^^^^^^^^^^^^^^
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >stringOrBoolean : "string" | "boolean"
 >                : ^^^^^^^^^^^^^^^^^^^^
 
@@ -244,8 +244,8 @@ namespace Consts2 {
 >  : ^^^^^^^^^^^^^^^^
 >getFalsyPrimitive(booleanOrNumber) : number | boolean
 >                                   : ^^^^^^^^^^^^^^^^
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >booleanOrNumber : "number" | "boolean"
 >                : ^^^^^^^^^^^^^^^^^^^^
 
@@ -254,8 +254,8 @@ namespace Consts2 {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >getFalsyPrimitive(stringOrBooleanOrNumber) : string | number | boolean
 >                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
->getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): string | boolean; (x: "boolean" | "number"): number | boolean; (x: "number" | "string"): string | number; (x: "number" | "string" | "boolean"): string | number | boolean; }
->                  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^ ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getFalsyPrimitive : { (x: "string"): string; (x: "number"): number; (x: "boolean"): boolean; (x: "boolean" | "string"): boolean | string; (x: "boolean" | "number"): boolean | number; (x: "number" | "string"): number | string; (x: "number" | "string" | "boolean"): number | string | boolean; }
+>                  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^ ^^         ^^^       ^^^ ^^                    ^^^                ^^^ ^^                    ^^^                ^^^ ^^                   ^^^               ^^^ ^^                               ^^^                         ^^^
 >stringOrBooleanOrNumber : "string" | "number" | "boolean"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

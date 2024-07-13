@@ -86,8 +86,8 @@ import {
     WatchCompilerHost,
     WatchOfConfigFile,
     WatchOptions,
-} from "./_namespaces/ts";
-import * as performance from "./performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./performance.js";
 
 interface Statistic {
     name: string;

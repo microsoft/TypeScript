@@ -21,7 +21,7 @@ export declare function makeThing(): Thing;
 === index.ts ===
 import { makeThing } from "umd";
 >makeThing : () => import("node_modules/umd").Thing
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^       ^^^^^^^^^^^^^^^^^^  ^^^^^
 
 export const thing = makeThing();
 >thing : import("node_modules/umd").Thing
@@ -29,5 +29,5 @@ export const thing = makeThing();
 >makeThing() : import("node_modules/umd").Thing
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >makeThing : () => import("node_modules/umd").Thing
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^       ^^^^^^^^^^^^^^^^^^  ^^^^^
 

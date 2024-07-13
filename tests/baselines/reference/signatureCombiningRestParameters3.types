@@ -193,7 +193,7 @@ const extendMarkSchema = getExtensionField<AnyConfig["extendMarkSchema"]>(
 >getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : ((extension: Mark<any>) => Record<string, any>) | ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
 >                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getExtensionField : <T = any>(extension: AnyExtension, field: string) => RemoveThis<T>
->                  : ^^^^^^^^^^         ^^            ^^     ^^      ^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^^^^^^^         ^^            ^^     ^^      ^^^^^             
 
   e,
 >e : AnyExtension

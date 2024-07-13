@@ -19,7 +19,7 @@ foo("", function* () { yield x => x.length }, p => undefined); // T is fixed, sh
 >foo("", function* () { yield x => x.length }, p => undefined) : string
 >                                                              : ^^^^^^
 >foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T) => T
->    : ^ ^^ ^^ ^^ ^^   ^^                           ^^    ^^           ^^^^^^
+>    : ^ ^^ ^^ ^^ ^^   ^^                           ^^    ^^           ^^^^^ 
 >"" : ""
 >   : ^^
 >function* () { yield x => x.length } : () => Generator<(x: string) => number, void, undefined>

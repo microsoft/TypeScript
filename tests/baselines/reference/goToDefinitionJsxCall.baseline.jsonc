@@ -1,0 +1,29 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/test.tsx ===
+// interface FC<P = {}> {
+//     (props: P, context?: any): string;
+// }
+// 
+// <|const [|Thing|]: FC = (props) => <div></div>;|>
+// const HelloWorld = () => <Thing />;
+
+// === /tests/cases/fourslash/./test.tsx ===
+// interface FC<P = {}> {
+//     (props: P, context?: any): string;
+// }
+// 
+// const Thing: FC = (props) => <div></div>;
+// const HelloWorld = () => </*GOTO DEF*/[|Thing|] />;
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "Thing",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

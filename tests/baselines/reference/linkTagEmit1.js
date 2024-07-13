@@ -63,7 +63,7 @@ declare var see3: boolean;
 type N = number;
 type D1 = {
     /**
-     * Just link to {@link NS.R } this time
+     * Just link to {@link NS.R} this time
      */
     e: 1;
     /**

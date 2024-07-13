@@ -9,11 +9,11 @@ function Graphic() {
 Object.defineProperty(Graphic.prototype, "instance", {
 >Object.defineProperty(Graphic.prototype, "instance", {  get: function() {    return this;  }}) : any
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Graphic.prototype : any
 >Graphic : typeof Graphic
 >        : ^^^^^^^^^^^^^^

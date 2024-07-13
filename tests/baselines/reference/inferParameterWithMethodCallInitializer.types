@@ -29,11 +29,11 @@ class Example {
 >this.getNumber() : number
 >                 : ^^^^^^
 >this.getNumber : () => number
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >this : this
 >     : ^^^^
 >getNumber : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >a : number
 >  : ^^^^^^
 
@@ -52,11 +52,11 @@ function weird(this: Example, a = this.getNumber()) {
 >this.getNumber() : number
 >                 : ^^^^^^
 >this.getNumber : () => number
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >this : Example
 >     : ^^^^^^^
 >getNumber : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 
     return a;
 >a : number
@@ -76,11 +76,11 @@ class Weird {
 >this.getNumber() : number
 >                 : ^^^^^^
 >this.getNumber : () => number
->               : ^^^^^^^^^^^^
+>               : ^^^^^^      
 >this : Example
 >     : ^^^^^^^
 >getNumber : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 
         return a;
 >a : number

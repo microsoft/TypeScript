@@ -16,9 +16,9 @@ const cache = new Map()
  */
 const getStringGetter = (key) => {
 >getStringGetter : (key: string) => () => string
->                : ^   ^^      ^^^^^^^^^^^^^^^^^
+>                : ^   ^^      ^^^^^            
 >(key) => {  return () => {    return /** @type {string} */ (cache.get(key))  }} : (key: string) => () => string
->                                                                                : ^   ^^      ^^^^^^^^^^^^^^^^^
+>                                                                                : ^   ^^      ^^^^^            
 >key : string
 >    : ^^^^^^
 

@@ -6,6 +6,9 @@ import fs from "fs";
 import JSONC from "jsonc-parser";
 import which from "which";
 
+/** @import { CancelToken } from "@esfx/canceltoken" */
+void 0;
+
 /**
  * Executes the provided command once with the supplied arguments.
  * @param {string} cmd
@@ -17,7 +20,7 @@ import which from "which";
  * @property {boolean} [hidePrompt]
  * @property {boolean} [waitForExit=true]
  * @property {boolean} [ignoreStdout]
- * @property {import("@esfx/canceltoken").CancelToken} [token]
+ * @property {CancelToken} [token]
  */
 export async function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode?: number}>}*/ (new Promise((resolve, reject) => {

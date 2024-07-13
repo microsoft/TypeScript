@@ -160,7 +160,7 @@ var ResultIsBoolean9 = !foo();
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsBoolean10 = !A.foo();
 >ResultIsBoolean10 : boolean
@@ -198,11 +198,11 @@ var ResultIsBoolean12 = !STRING.charAt(0);
 >STRING.charAt(0) : string
 >                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
->              : ^   ^^      ^^^^^^^^^^^
+>              : ^   ^^      ^^^^^      
 >STRING : string
 >       : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >0 : 0
 >  : ^
 
@@ -260,7 +260,7 @@ var ResultIsBoolean14 = !!!(STRING + STRING);
 >foo() : string
 >      : ^^^^^^
 >foo : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 !objA.a,M.n;
 >!objA.a,M.n : string

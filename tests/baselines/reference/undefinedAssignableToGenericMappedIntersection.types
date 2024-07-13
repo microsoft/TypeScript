@@ -9,7 +9,7 @@ type Errors<T> = { [P in keyof T]: string | undefined } & {all: string | undefin
 
 function foo<T>() {
 >foo : <T>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
     let obj!: Errors<T>
 >obj : Errors<T>

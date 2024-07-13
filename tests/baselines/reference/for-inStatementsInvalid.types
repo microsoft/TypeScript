@@ -47,7 +47,7 @@ for (var x in fn()) { }
 >fn() : void
 >     : ^^^^
 >fn : () => void
->   : ^^^^^^^^^^
+>   : ^^^^^^    
 
 var c : string, d:string, e;
 >c : string
@@ -175,21 +175,21 @@ class A {
 >this.biz() : number
 >           : ^^^^^^
 >this.biz : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : this
 >     : ^^^^
 >biz : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
         for (var x in this.biz) { }
 >x : string
 >  : ^^^^^^
 >this.biz : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : this
 >     : ^^^^
 >biz : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
         for (var x in this) { }
 >x : string
@@ -214,11 +214,11 @@ class A {
 >x : string
 >  : ^^^^^^
 >this.baz : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : typeof A
 >     : ^^^^^^^^
 >baz : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
         for (var x in this.baz()) { }
 >x : string
@@ -226,11 +226,11 @@ class A {
 >this.baz() : number
 >           : ^^^^^^
 >this.baz : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : typeof A
 >     : ^^^^^^^^
 >baz : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
         return null;
     }
@@ -252,21 +252,21 @@ class B extends A {
 >this.biz() : number
 >           : ^^^^^^
 >this.biz : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : this
 >     : ^^^^
 >biz : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
         for (var x in this.biz) { }
 >x : string
 >  : ^^^^^^
 >this.biz : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >this : this
 >     : ^^^^
 >biz : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
         for (var x in this) { }
 >x : string
@@ -278,11 +278,11 @@ class B extends A {
 >x : string
 >  : ^^^^^^
 >super.biz : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >super : A
 >      : ^
 >biz : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
         for (var x in super.biz()) { }
 >x : string
@@ -290,11 +290,11 @@ class B extends A {
 >super.biz() : number
 >            : ^^^^^^
 >super.biz : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >super : A
 >      : ^
 >biz : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
         return null;
     }
