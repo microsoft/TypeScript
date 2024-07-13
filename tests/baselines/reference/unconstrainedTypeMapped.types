@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/unconstrainedTypeMapped.ts] ////
+
+=== unconstrainedTypeMapped.ts ===
+function f<T, K extends keyof T>(obj: T, key: K) {
+>f : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>  : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
+
+    return obj[key];
+>obj[key] : T[K]
+>         : ^^^^
+>obj : T
+>    : ^
+>key : K
+>    : ^
+}
+

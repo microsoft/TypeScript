@@ -481,8 +481,8 @@ function f23<T>(x: T | undefined | null) {
 >          : ^^^^^^^^^
 
         x;  // T & {} | null
->x : (T & {}) | null
->  : ^^^^^^^^^^^^^^^
+>x : (T & ({} | null)) | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
     }
     if (x !== null) {
 >x !== null : boolean
@@ -491,8 +491,8 @@ function f23<T>(x: T | undefined | null) {
 >  : ^^^^^^^^^^^^^^^^^^^^
 
         x;  // T & {} | undefined
->x : (T & {}) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^
+>x : (T & ({} | undefined)) | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     if (x != undefined) {
 >x != undefined : boolean

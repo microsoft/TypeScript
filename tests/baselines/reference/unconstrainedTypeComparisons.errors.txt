@@ -1,0 +1,36 @@
+unconstrainedTypeComparisons.ts(2,10): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparisons.ts(2,14): error TS18049: 'b' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparisons.ts(6,10): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparisons.ts(6,14): error TS18049: 'b' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparisons.ts(14,10): error TS18047: 'a' is possibly 'null'.
+unconstrainedTypeComparisons.ts(14,14): error TS18049: 'b' is possibly 'null' or 'undefined'.
+
+
+==== unconstrainedTypeComparisons.ts (6 errors) ====
+    export function f<T extends {} | undefined | null>(a: T, b: T): boolean {
+      return a > b;
+             ~
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
+                 ~
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
+    }
+    
+    export function g<T>(a: T, b: T): boolean {
+      return a > b;
+             ~
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
+                 ~
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
+    }
+    
+    function h<T>(a: T, b: T): boolean {
+      if (a === undefined) {
+          return true;
+      }
+    
+      return a > b;
+             ~
+!!! error TS18047: 'a' is possibly 'null'.
+                 ~
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
+    }

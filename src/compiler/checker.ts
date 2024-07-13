@@ -27366,7 +27366,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeFactsWorker(type: Type, callerOnlyNeeds: TypeFacts): TypeFacts {
         if (type.flags & (TypeFlags.Intersection | TypeFlags.Instantiable)) {
-            type = getBaseConstraintOfType(type) || unknownType;
+            const constraintType = getBaseConstraintOfType(type) || unknownType;
+            if (strictNullChecks && type.flags & TypeFlags.Instantiable && constraintType === unknownType) {
+                return callerOnlyNeeds;
+            }
+            type = constraintType;
         }
         const flags = type.flags;
         if (flags & (TypeFlags.String | TypeFlags.StringMapping)) {
@@ -27500,7 +27504,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // For each constituent type that can compare equal to the target nullable, intersect with the above union
         // if the type doesn't already include the opppsite nullable and the constituent can compare equal to the
         // opposite nullable; otherwise, just intersect with {}.
-        return mapType(type, t => hasTypeFacts(t, targetFacts) ? getIntersectionType([t, !(facts & otherIncludesFacts) && hasTypeFacts(t, otherFacts) ? emptyAndOtherUnion : emptyObjectType]) : t);
+        return mapType(type, t => hasTypeFacts(t, targetFacts) ? getIntersectionType([t, (strictNullChecks || !(facts & otherIncludesFacts)) && hasTypeFacts(t, otherFacts) ? emptyAndOtherUnion : emptyObjectType]) : t);
     }
 
     function recombineUnknownType(type: Type) {
@@ -34579,8 +34583,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkIndexedAccess(node: ElementAccessExpression, checkMode: CheckMode | undefined): Type {
-        return node.flags & NodeFlags.OptionalChain ? checkElementAccessChain(node as ElementAccessChain, checkMode) :
-            checkElementAccessExpression(node, checkNonNullExpression(node.expression), checkMode);
+        if (node.flags & NodeFlags.OptionalChain) {
+            return checkElementAccessChain(node as ElementAccessChain, checkMode);
+        }
+        if (shouldDeferIndexType(getTypeOfNode(node.expression))) {
+            return checkElementAccessExpression(node, checkExpression(node.expression), checkMode);
+        }
+        return checkElementAccessExpression(node, checkNonNullExpression(node.expression), checkMode);
     }
 
     function checkElementAccessChain(node: ElementAccessChain, checkMode: CheckMode | undefined) {

@@ -1738,7 +1738,7 @@ export class TestState {
 
             for (const key in actual) {
                 if (ts.hasProperty(actual as any, key)) {
-                    const ak = actual[key], ek = expected[key];
+                    const ak = actual[key], ek = (expected as typeof actual)[key];
                     if (typeof ak === "object" && typeof ek === "object") {
                         recur(ak, ek, path ? path + "." + key : key);
                     }

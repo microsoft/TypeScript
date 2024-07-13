@@ -1120,8 +1120,8 @@ function f54<T>(obj: T, key: keyof T) {
 >    : ^^^^^^^
 
     for (let s in obj[key]) {
->s : Extract<keyof T[keyof T], string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>s : Extract<keyof NonNullable<T[keyof T]>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj[key] : T[keyof T]
 >         : ^^^^^^^^^^
 >obj : T
@@ -1153,8 +1153,8 @@ function f55<T, K extends keyof T>(obj: T, key: K) {
 >    : ^
 
     for (let s in obj[key]) {
->s : Extract<keyof T[K], string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>s : Extract<keyof NonNullable<T[K]>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj[key] : T[K]
 >         : ^^^^
 >obj : T
@@ -1186,26 +1186,26 @@ function f60<T>(source: T, target: T) {
 >       : ^
 
     for (let k in source) {
->k : Extract<keyof T, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>k : Extract<keyof NonNullable<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >source : T
 >       : ^
 
         target[k] = source[k];
->target[k] = source[k] : T[Extract<keyof T, string>]
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->target[k] : T[Extract<keyof T, string>]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>target[k] = source[k] : NonNullable<T>[Extract<keyof NonNullable<T>, string>]
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>target[k] : any
+>          : ^^^
 >target : T
 >       : ^
->k : Extract<keyof T, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
->source[k] : T[Extract<keyof T, string>]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->source : T
->       : ^
->k : Extract<keyof T, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>k : Extract<keyof NonNullable<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>source[k] : NonNullable<T>[Extract<keyof NonNullable<T>, string>]
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>source : NonNullable<T>
+>       : ^^^^^^^^^^^^^^
+>k : Extract<keyof NonNullable<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -3082,28 +3082,28 @@ function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void {
 >   : ^^^^
 
     for (let key in t) {
->key : Extract<keyof T, string>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>key : Extract<keyof NonNullable<T>, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
 >  : ^
 
         key = k // ok, K ==> keyof T
 >key = k : K
 >        : ^
->key : Extract<keyof T, string>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>key : Extract<keyof NonNullable<T>, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : K
 >  : ^
 
         t[key] = tk; // ok, T[K] ==> T[keyof T]
 >t[key] = tk : T[K]
 >            : ^^^^
->t[key] : T[Extract<keyof T, string>]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->t : T
->  : ^
->key : Extract<keyof T, string>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>t[key] : NonNullable<T>[Extract<keyof NonNullable<T>, string>]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : NonNullable<T>
+>  : ^^^^^^^^^^^^^^
+>key : Extract<keyof NonNullable<T>, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tk : T[K]
 >   : ^^^^
     }
