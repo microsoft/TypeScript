@@ -26916,7 +26916,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const constraintWithThisArgument = getTypeWithThisArgument(constraint, inferredType);
             const applicableByConstraint = filterType(inferredType, t => !!context.compareTypes(t, constraintWithThisArgument));
-            return !(applicableByConstraint.flags & TypeFlags.Never) ? inferredType : undefined;
+            return !(applicableByConstraint.flags & TypeFlags.Never) ? applicableByConstraint : undefined;
         }
     }
 
