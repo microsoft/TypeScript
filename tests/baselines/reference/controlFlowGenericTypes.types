@@ -596,10 +596,10 @@ function fx1<T, K extends keyof T>(obj: T, key: K) {
 >    : ^
 
     const x1 = obj[key];
->x1 : NonNullable<T>[K]
->   : ^^^^^^^^^^^^^^^^^
->obj[key] : NonNullable<T>[K]
->         : ^^^^^^^^^^^^^^^^^
+>x1 : T[K]
+>   : ^^^^
+>obj[key] : T[K]
+>         : ^^^^
 >obj : T
 >    : ^
 >key : K

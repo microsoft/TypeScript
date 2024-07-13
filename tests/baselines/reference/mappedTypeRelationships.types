@@ -2,16 +2,16 @@
 
 === mappedTypeRelationships.ts ===
 function f1<T>(x: T, k: keyof T) {
->f1 : <T>(x: T, k: keyof T) => NonNullable<T>[keyof T]
->   : ^ ^^ ^^ ^^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f1 : <T>(x: T, k: keyof T) => T[keyof T]
+>   : ^ ^^ ^^ ^^ ^^       ^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
 >  : ^^^^^^^
 
     return x[k];
->x[k] : NonNullable<T>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
@@ -19,16 +19,16 @@ function f1<T>(x: T, k: keyof T) {
 }
 
 function f2<T, K extends keyof T>(x: T, k: K) {
->f2 : <T, K extends keyof T>(x: T, k: K) => NonNullable<T>[K]
->   : ^ ^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^
+>f2 : <T, K extends keyof T>(x: T, k: K) => T[K]
+>   : ^ ^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >k : K
 >  : ^
 
     return x[k];
->x[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>x[k] : T[K]
+>     : ^^^^
 >x : T
 >  : ^
 >k : K
@@ -46,32 +46,32 @@ function f3<T, U extends T>(x: T, y: U, k: keyof T) {
 >  : ^^^^^^^
 
     x[k] = y[k];
->x[k] = y[k] : NonNullable<U>[keyof T]
->            : ^^^^^^^^^^^^^^^^^^^^^^^
->x[k] : NonNullable<T>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] = y[k] : U[keyof T]
+>            : ^^^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
 >  : ^^^^^^^
->y[k] : NonNullable<U>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>y[k] : U[keyof T]
+>     : ^^^^^^^^^^
 >y : U
 >  : ^
 >k : keyof T
 >  : ^^^^^^^
 
     y[k] = x[k];  // Error
->y[k] = x[k] : NonNullable<T>[keyof T]
->            : ^^^^^^^^^^^^^^^^^^^^^^^
->y[k] : NonNullable<U>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>y[k] = x[k] : T[keyof T]
+>            : ^^^^^^^^^^
+>y[k] : U[keyof T]
+>     : ^^^^^^^^^^
 >y : U
 >  : ^
 >k : keyof T
 >  : ^^^^^^^
->x[k] : NonNullable<T>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
@@ -89,32 +89,32 @@ function f4<T, U extends T, K extends keyof T>(x: T, y: U, k: K) {
 >  : ^
 
     x[k] = y[k];
->x[k] = y[k] : NonNullable<U>[K]
->            : ^^^^^^^^^^^^^^^^^
->x[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>x[k] = y[k] : U[K]
+>            : ^^^^
+>x[k] : T[K]
+>     : ^^^^
 >x : T
 >  : ^
 >k : K
 >  : ^
->y[k] : NonNullable<U>[K]
->     : ^^^^^^^^^^^^^^^^^
+>y[k] : U[K]
+>     : ^^^^
 >y : U
 >  : ^
 >k : K
 >  : ^
 
     y[k] = x[k];  // Error
->y[k] = x[k] : NonNullable<T>[K]
->            : ^^^^^^^^^^^^^^^^^
->y[k] : NonNullable<U>[K]
->     : ^^^^^^^^^^^^^^^^^
+>y[k] = x[k] : T[K]
+>            : ^^^^
+>y[k] : U[K]
+>     : ^^^^
 >y : U
 >  : ^
 >k : K
 >  : ^
->x[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>x[k] : T[K]
+>     : ^^^^
 >x : T
 >  : ^
 >k : K
@@ -132,16 +132,16 @@ function f5<T, U extends T>(x: T, y: U, k: keyof U) {
 >  : ^^^^^^^
 
     x[k] = y[k];  // Error
->x[k] = y[k] : NonNullable<U>[keyof U]
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] = y[k] : U[keyof U]
+>            : ^^^^^^^^^^
 >x[k] : any
 >     : ^^^
 >x : T
 >  : ^
 >k : keyof U
 >  : ^^^^^^^
->y[k] : NonNullable<U>[keyof U]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>y[k] : U[keyof U]
+>     : ^^^^^^^^^^
 >y : U
 >  : ^
 >k : keyof U
@@ -150,8 +150,8 @@ function f5<T, U extends T>(x: T, y: U, k: keyof U) {
     y[k] = x[k];  // Error
 >y[k] = x[k] : any
 >            : ^^^
->y[k] : NonNullable<U>[keyof U]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>y[k] : U[keyof U]
+>     : ^^^^^^^^^^
 >y : U
 >  : ^
 >k : keyof U
@@ -175,16 +175,16 @@ function f6<T, U extends T, K extends keyof U>(x: T, y: U, k: K) {
 >  : ^
 
     x[k] = y[k];  // Error
->x[k] = y[k] : NonNullable<U>[K]
->            : ^^^^^^^^^^^^^^^^^
+>x[k] = y[k] : U[K]
+>            : ^^^^
 >x[k] : any
 >     : ^^^
 >x : T
 >  : ^
 >k : K
 >  : ^
->y[k] : NonNullable<U>[K]
->     : ^^^^^^^^^^^^^^^^^
+>y[k] : U[K]
+>     : ^^^^
 >y : U
 >  : ^
 >k : K
@@ -193,8 +193,8 @@ function f6<T, U extends T, K extends keyof U>(x: T, y: U, k: K) {
     y[k] = x[k];  // Error
 >y[k] = x[k] : any
 >            : ^^^
->y[k] : NonNullable<U>[K]
->     : ^^^^^^^^^^^^^^^^^
+>y[k] : U[K]
+>     : ^^^^
 >y : U
 >  : ^
 >k : K
@@ -220,8 +220,8 @@ function f10<T>(x: T, y: Partial<T>, k: keyof T) {
     x[k] = y[k];  // Error
 >x[k] = y[k] : Partial<T>[keyof T]
 >            : ^^^^^^^^^^^^^^^^^^^
->x[k] : NonNullable<T>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
@@ -234,16 +234,16 @@ function f10<T>(x: T, y: Partial<T>, k: keyof T) {
 >  : ^^^^^^^
 
     y[k] = x[k];
->y[k] = x[k] : NonNullable<T>[keyof T]
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>y[k] = x[k] : T[keyof T]
+>            : ^^^^^^^^^^
 >y[k] : Partial<T>[keyof T]
 >     : ^^^^^^^^^^^^^^^^^^^
 >y : Partial<T>
 >  : ^^^^^^^^^^
 >k : keyof T
 >  : ^^^^^^^
->x[k] : NonNullable<T>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
@@ -263,8 +263,8 @@ function f11<T, K extends keyof T>(x: T, y: Partial<T>, k: K) {
     x[k] = y[k];  // Error
 >x[k] = y[k] : Partial<T>[K]
 >            : ^^^^^^^^^^^^^
->x[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>x[k] : T[K]
+>     : ^^^^
 >x : T
 >  : ^
 >k : K
@@ -277,16 +277,16 @@ function f11<T, K extends keyof T>(x: T, y: Partial<T>, k: K) {
 >  : ^
 
     y[k] = x[k];
->y[k] = x[k] : NonNullable<T>[K]
->            : ^^^^^^^^^^^^^^^^^
+>y[k] = x[k] : T[K]
+>            : ^^^^
 >y[k] : Partial<T>[K]
 >     : ^^^^^^^^^^^^^
 >y : Partial<T>
 >  : ^^^^^^^^^^
 >k : K
 >  : ^
->x[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>x[k] : T[K]
+>     : ^^^^
 >x : T
 >  : ^
 >k : K
@@ -306,8 +306,8 @@ function f12<T, U extends T>(x: T, y: Partial<U>, k: keyof T) {
     x[k] = y[k];  // Error
 >x[k] = y[k] : Partial<U>[keyof T]
 >            : ^^^^^^^^^^^^^^^^^^^
->x[k] : NonNullable<T>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
@@ -320,16 +320,16 @@ function f12<T, U extends T>(x: T, y: Partial<U>, k: keyof T) {
 >  : ^^^^^^^
 
     y[k] = x[k];  // Error
->y[k] = x[k] : NonNullable<T>[keyof T]
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>y[k] = x[k] : T[keyof T]
+>            : ^^^^^^^^^^
 >y[k] : Partial<U>[keyof T]
 >     : ^^^^^^^^^^^^^^^^^^^
 >y : Partial<U>
 >  : ^^^^^^^^^^
 >k : keyof T
 >  : ^^^^^^^
->x[k] : NonNullable<T>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
@@ -349,8 +349,8 @@ function f13<T, U extends T, K extends keyof T>(x: T, y: Partial<U>, k: K) {
     x[k] = y[k];  // Error
 >x[k] = y[k] : Partial<U>[K]
 >            : ^^^^^^^^^^^^^
->x[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>x[k] : T[K]
+>     : ^^^^
 >x : T
 >  : ^
 >k : K
@@ -363,16 +363,16 @@ function f13<T, U extends T, K extends keyof T>(x: T, y: Partial<U>, k: K) {
 >  : ^
 
     y[k] = x[k];  // Error
->y[k] = x[k] : NonNullable<T>[K]
->            : ^^^^^^^^^^^^^^^^^
+>y[k] = x[k] : T[K]
+>            : ^^^^
 >y[k] : Partial<U>[K]
 >     : ^^^^^^^^^^^^^
 >y : Partial<U>
 >  : ^^^^^^^^^^
 >k : K
 >  : ^
->x[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>x[k] : T[K]
+>     : ^^^^
 >x : T
 >  : ^
 >k : K
@@ -392,8 +392,8 @@ function f20<T>(x: T, y: Readonly<T>, k: keyof T) {
     x[k] = y[k];
 >x[k] = y[k] : Readonly<T>[keyof T]
 >            : ^^^^^^^^^^^^^^^^^^^^
->x[k] : NonNullable<T>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
@@ -406,16 +406,16 @@ function f20<T>(x: T, y: Readonly<T>, k: keyof T) {
 >  : ^^^^^^^
 
     y[k] = x[k];  // Error
->y[k] = x[k] : NonNullable<T>[keyof T]
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>y[k] = x[k] : T[keyof T]
+>            : ^^^^^^^^^^
 >y[k] : Readonly<T>[keyof T]
 >     : ^^^^^^^^^^^^^^^^^^^^
 >y : Readonly<T>
 >  : ^^^^^^^^^^^
 >k : keyof T
 >  : ^^^^^^^
->x[k] : NonNullable<T>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
@@ -435,8 +435,8 @@ function f21<T, K extends keyof T>(x: T, y: Readonly<T>, k: K) {
     x[k] = y[k];
 >x[k] = y[k] : Readonly<T>[K]
 >            : ^^^^^^^^^^^^^^
->x[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>x[k] : T[K]
+>     : ^^^^
 >x : T
 >  : ^
 >k : K
@@ -449,16 +449,16 @@ function f21<T, K extends keyof T>(x: T, y: Readonly<T>, k: K) {
 >  : ^
 
     y[k] = x[k];  // Error
->y[k] = x[k] : NonNullable<T>[K]
->            : ^^^^^^^^^^^^^^^^^
+>y[k] = x[k] : T[K]
+>            : ^^^^
 >y[k] : Readonly<T>[K]
 >     : ^^^^^^^^^^^^^^
 >y : Readonly<T>
 >  : ^^^^^^^^^^^
 >k : K
 >  : ^
->x[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>x[k] : T[K]
+>     : ^^^^
 >x : T
 >  : ^
 >k : K
@@ -478,8 +478,8 @@ function f22<T, U extends T>(x: T, y: Readonly<U>, k: keyof T) {
     x[k] = y[k];
 >x[k] = y[k] : Readonly<U>[keyof T]
 >            : ^^^^^^^^^^^^^^^^^^^^
->x[k] : NonNullable<T>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
@@ -492,16 +492,16 @@ function f22<T, U extends T>(x: T, y: Readonly<U>, k: keyof T) {
 >  : ^^^^^^^
 
     y[k] = x[k];  // Error
->y[k] = x[k] : NonNullable<T>[keyof T]
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>y[k] = x[k] : T[keyof T]
+>            : ^^^^^^^^^^
 >y[k] : Readonly<U>[keyof T]
 >     : ^^^^^^^^^^^^^^^^^^^^
 >y : Readonly<U>
 >  : ^^^^^^^^^^^
 >k : keyof T
 >  : ^^^^^^^
->x[k] : NonNullable<T>[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
 >x : T
 >  : ^
 >k : keyof T
@@ -521,8 +521,8 @@ function f23<T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K) {
     x[k] = y[k];
 >x[k] = y[k] : Readonly<U>[K]
 >            : ^^^^^^^^^^^^^^
->x[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>x[k] : T[K]
+>     : ^^^^
 >x : T
 >  : ^
 >k : K
@@ -535,16 +535,16 @@ function f23<T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K) {
 >  : ^
 
     y[k] = x[k];  // Error
->y[k] = x[k] : NonNullable<T>[K]
->            : ^^^^^^^^^^^^^^^^^
+>y[k] = x[k] : T[K]
+>            : ^^^^
 >y[k] : Readonly<U>[K]
 >     : ^^^^^^^^^^^^^^
 >y : Readonly<U>
 >  : ^^^^^^^^^^^
 >k : K
 >  : ^
->x[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>x[k] : T[K]
+>     : ^^^^
 >x : T
 >  : ^
 >k : K
@@ -1030,8 +1030,8 @@ function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]> {
 >  : ^
 
     return t[k];
->t[k] : NonNullable<T>[K]
->     : ^^^^^^^^^^^^^^^^^
+>t[k] : T[K]
+>     : ^^^^
 >t : T
 >  : ^
 >k : K
@@ -1049,10 +1049,10 @@ function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2
 >   : ^^
 
     return t[k1][k2];
->t[k1][k2] : NonNullable<NonNullable<T>[K1]>[K2]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->t[k1] : NonNullable<T>[K1]
->      : ^^^^^^^^^^^^^^^^^^
+>t[k1][k2] : T[K1][K2]
+>          : ^^^^^^^^^
+>t[k1] : T[K1]
+>      : ^^^^^
 >t : T
 >  : ^
 >k1 : K1

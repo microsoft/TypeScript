@@ -34560,8 +34560,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkIndexedAccess(node: ElementAccessExpression, checkMode: CheckMode | undefined): Type {
-        return node.flags & NodeFlags.OptionalChain ? checkElementAccessChain(node as ElementAccessChain, checkMode) :
-            checkElementAccessExpression(node, checkNonNullExpression(node.expression), checkMode);
+        if (node.flags & NodeFlags.OptionalChain) {
+            return checkElementAccessChain(node as ElementAccessChain, checkMode);
+        }
+        if (shouldDeferIndexType(getTypeOfNode(node.expression))) {
+            return checkElementAccessExpression(node, checkExpression(node.expression), checkMode);
+        }
+        return checkElementAccessExpression(node, checkNonNullExpression(node.expression), checkMode);
     }
 
     function checkElementAccessChain(node: ElementAccessChain, checkMode: CheckMode | undefined) {

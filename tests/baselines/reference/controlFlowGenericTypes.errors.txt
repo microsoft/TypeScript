@@ -5,13 +5,12 @@ controlFlowGenericTypes.ts(81,11): error TS2339: Property 'foo' does not exist o
 controlFlowGenericTypes.ts(90,44): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 controlFlowGenericTypes.ts(91,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
   Property 'foo' does not exist on type 'AA'.
-controlFlowGenericTypes.ts(146,16): error TS18049: 'obj' is possibly 'null' or 'undefined'.
 controlFlowGenericTypes.ts(156,16): error TS18048: 'obj' is possibly 'undefined'.
 controlFlowGenericTypes.ts(167,9): error TS18048: 'iSpec' is possibly 'undefined'.
 controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined'.
 
 
-==== controlFlowGenericTypes.ts (9 errors) ====
+==== controlFlowGenericTypes.ts (8 errors) ====
     function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
         if (x) {
             x;
@@ -170,8 +169,6 @@ controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined
     
     function fx1<T, K extends keyof T>(obj: T, key: K) {
         const x1 = obj[key];
-                   ~~~
-!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
         const x2 = obj && obj[key];
     }
     

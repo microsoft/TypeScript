@@ -348,8 +348,8 @@ function f() {
 
 
 //// [mappedTypeRelationships.d.ts]
-declare function f1<T>(x: T, k: keyof T): NonNullable<T>[keyof T];
-declare function f2<T, K extends keyof T>(x: T, k: K): NonNullable<T>[K];
+declare function f1<T>(x: T, k: keyof T): T[keyof T];
+declare function f2<T, K extends keyof T>(x: T, k: K): T[K];
 declare function f3<T, U extends T>(x: T, y: U, k: keyof T): void;
 declare function f4<T, U extends T, K extends keyof T>(x: T, y: U, k: K): void;
 declare function f5<T, U extends T>(x: T, y: U, k: keyof U): void;

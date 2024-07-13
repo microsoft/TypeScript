@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/unconstrainedTypeMapped.ts] ////
+
+=== unconstrainedTypeMapped.ts ===
+function f<T, K extends keyof T>(obj: T, key: K) {
+>f : Symbol(f, Decl(unconstrainedTypeMapped.ts, 0, 0))
+>T : Symbol(T, Decl(unconstrainedTypeMapped.ts, 0, 11))
+>K : Symbol(K, Decl(unconstrainedTypeMapped.ts, 0, 13))
+>T : Symbol(T, Decl(unconstrainedTypeMapped.ts, 0, 11))
+>obj : Symbol(obj, Decl(unconstrainedTypeMapped.ts, 0, 33))
+>T : Symbol(T, Decl(unconstrainedTypeMapped.ts, 0, 11))
+>key : Symbol(key, Decl(unconstrainedTypeMapped.ts, 0, 40))
+>K : Symbol(K, Decl(unconstrainedTypeMapped.ts, 0, 13))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeMapped.ts, 0, 33))
+>key : Symbol(key, Decl(unconstrainedTypeMapped.ts, 0, 40))
+}
+
