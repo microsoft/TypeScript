@@ -1576,13 +1576,10 @@ export let sys: System = (() => {
                 return process.memoryUsage().heapUsed;
             },
             getFileSize(path) {
-                try {
-                    const stat = statSync(path);
-                    if (stat?.isFile()) {
-                        return stat.size;
-                    }
+                const stat = statSync(path);
+                if (stat?.isFile()) {
+                    return stat.size;
                 }
-                catch { /*ignore*/ }
                 return 0;
             },
             exit(exitCode?: number): void {
@@ -1626,14 +1623,22 @@ export let sys: System = (() => {
         };
         return nodeSystem;
 
-        /**
-         * `throwIfNoEntry` was added so recently that it's not in the node types.
-         * This helper encapsulates the mitigating usage of `any`.
-         * See https://github.com/nodejs/node/pull/33716
-         */
+        /** Calls fs.statSync, returning undefined if any errors are thrown */
         function statSync(path: string): import("fs").Stats | undefined {
-            // throwIfNoEntry will be ignored by older versions of node
-            return (_fs as any).statSync(path, { throwIfNoEntry: false });
+            // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
+            // the CPU time performance.
+            const originalStackTraceLimit = Error.stackTraceLimit;
+            Error.stackTraceLimit = 0;
+
+            try {
+                return _fs.statSync(path, { throwIfNoEntry: false });
+            }
+            catch {
+                return undefined;
+            }
+            finally {
+                Error.stackTraceLimit = originalStackTraceLimit;
+            }
         }
 
         /**
@@ -1693,13 +1698,8 @@ export let sys: System = (() => {
                 const s = activeSession;
                 activeSession.post("Profiler.stop", (err, { profile }) => {
                     if (!err) {
-                        try {
-                            if (statSync(profilePath)?.isDirectory()) {
-                                profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}+P${process.pid}.cpuprofile`);
-                            }
-                        }
-                        catch {
-                            // do nothing and ignore fallible fs operation
+                        if (statSync(profilePath)?.isDirectory()) {
+                            profilePath = _path.join(profilePath, `${(new Date()).toISOString().replace(/:/g, "-")}+P${process.pid}.cpuprofile`);
                         }
                         try {
                             _fs.mkdirSync(_path.dirname(profilePath), { recursive: true });
@@ -1857,13 +1857,8 @@ export let sys: System = (() => {
                     if (typeof dirent === "string" || dirent.isSymbolicLink()) {
                         const name = combinePaths(path, entry);
 
-                        try {
-                            stat = statSync(name);
-                            if (!stat) {
-                                continue;
-                            }
-                        }
-                        catch (e) {
+                        stat = statSync(name);
+                        if (!stat) {
                             continue;
                         }
                     }
@@ -1892,30 +1887,17 @@ export let sys: System = (() => {
         }
 
         function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
-            // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
-            // the CPU time performance.
-            const originalStackTraceLimit = Error.stackTraceLimit;
-            Error.stackTraceLimit = 0;
-
-            try {
-                const stat = statSync(path);
-                if (!stat) {
-                    return false;
-                }
-                switch (entryKind) {
-                    case FileSystemEntryKind.File:
-                        return stat.isFile();
-                    case FileSystemEntryKind.Directory:
-                        return stat.isDirectory();
-                    default:
-                        return false;
-                }
-            }
-            catch (e) {
+            const stat = statSync(path);
+            if (!stat) {
                 return false;
             }
-            finally {
-                Error.stackTraceLimit = originalStackTraceLimit;
+            switch (entryKind) {
+                case FileSystemEntryKind.File:
+                    return stat.isFile();
+                case FileSystemEntryKind.Directory:
+                    return stat.isDirectory();
+                default:
+                    return false;
             }
         }
 
@@ -1945,19 +1927,7 @@ export let sys: System = (() => {
         }
 
         function getModifiedTime(path: string) {
-            // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
-            // the CPU time performance.
-            const originalStackTraceLimit = Error.stackTraceLimit;
-            Error.stackTraceLimit = 0;
-            try {
-                return statSync(path)?.mtime;
-            }
-            catch (e) {
-                return undefined;
-            }
-            finally {
-                Error.stackTraceLimit = originalStackTraceLimit;
-            }
+            return statSync(path)?.mtime;
         }
 
         function setModifiedTime(path: string, time: Date) {
