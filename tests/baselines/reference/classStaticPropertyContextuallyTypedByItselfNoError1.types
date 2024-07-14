@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/classStaticPropertyContextuallyTypedByItselfNoError1.ts] ////
+
+=== classStaticPropertyContextuallyTypedByItselfNoError1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59271
+
+declare function returnInput<T>(input: T): T;
+>returnInput : <T>(input: T) => T
+>            : ^ ^^     ^^ ^^^^^ 
+>input : T
+>      : ^
+
+const a = returnInput(
+>a : typeof A
+>  : ^^^^^^^^
+>returnInput(  class A {    static foo = {};  },) : typeof A
+>                                                 : ^^^^^^^^
+>returnInput : <T>(input: T) => T
+>            : ^ ^^     ^^ ^^^^^ 
+
+  class A {
+>class A {    static foo = {};  } : typeof A
+>                                 : ^^^^^^^^
+>A : typeof A
+>  : ^^^^^^^^
+
+    static foo = {};
+>foo : {}
+>    : ^^
+>{} : {}
+>   : ^^
+
+  },
+);
+
