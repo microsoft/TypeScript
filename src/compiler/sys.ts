@@ -1604,7 +1604,11 @@ export let sys: System = (() => {
             setTimeout,
             clearTimeout,
             clearScreen: () => {
-                process.stdout.write("\x1Bc");
+                process.stdout.write(
+                    platform === "win32"
+                        ? "\u001B[2J\u001B[0f"
+                        : "\u001B[2J\u001B[3J\u001B[H",
+                );
             },
             setBlocking: () => {
                 const handle = (process.stdout as any)?._handle as { setBlocking?: (value: boolean) => void; };
