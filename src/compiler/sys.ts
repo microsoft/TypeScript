@@ -1625,20 +1625,8 @@ export let sys: System = (() => {
 
         /** Calls fs.statSync, returning undefined if any errors are thrown */
         function statSync(path: string): import("fs").Stats | undefined {
-            // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
-            // the CPU time performance.
-            const originalStackTraceLimit = Error.stackTraceLimit;
-            Error.stackTraceLimit = 0;
-
-            try {
-                return _fs.statSync(path, { throwIfNoEntry: false });
-            }
-            catch {
-                return undefined;
-            }
-            finally {
-                Error.stackTraceLimit = originalStackTraceLimit;
-            }
+            // throwIfNoEntry is available in Node 14.17 and above, which matches our supported range.
+            return _fs.statSync(path, { throwIfNoEntry: false });
         }
 
         /**
