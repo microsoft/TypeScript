@@ -1,4 +1,5 @@
 // @strict: true
+// @useDefineForClassFields: false
 // @target: es2021
 
 class Test {
