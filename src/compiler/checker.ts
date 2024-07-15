@@ -22362,7 +22362,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function shouldCheckAsExcessProperty(prop: Symbol, container: Symbol) {
             if (!container.valueDeclaration) return false;
             if (prop.valueDeclaration?.parent === container.valueDeclaration) return true;
-            if (isObjectLiteralExpression(container.valueDeclaration) && hasOnlyExpressionInitializer(container.valueDeclaration.parent)) return true;
+            if (
+                isObjectLiteralExpression(container.valueDeclaration)
+                && hasOnlyExpressionInitializer(container.valueDeclaration.parent)
+                && !findAncestor(container.valueDeclaration.parent, isJsxOpeningLikeElement)
+            ) return true;
             return false;
         }
 
