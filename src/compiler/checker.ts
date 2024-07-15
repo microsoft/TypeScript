@@ -21464,7 +21464,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const id = getSymbolId(sourceSymbol) + "," + getSymbolId(targetSymbol);
         const entry = enumRelation.get(id);
-        if (entry !== undefined && !(!(entry & RelationComparisonResult.Reported) && entry & RelationComparisonResult.Failed && errorReporter)) {
+        if (entry !== undefined && !(entry & RelationComparisonResult.Failed && errorReporter)) {
             return !!(entry & RelationComparisonResult.Succeeded);
         }
         const targetEnumType = getTypeOfSymbol(targetSymbol);
@@ -21474,11 +21474,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!targetProperty || !(targetProperty.flags & SymbolFlags.EnumMember)) {
                     if (errorReporter) {
                         errorReporter(Diagnostics.Property_0_is_missing_in_type_1, symbolName(sourceProperty), typeToString(getDeclaredTypeOfSymbol(targetSymbol), /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
-                        enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                     }
-                    else {
-                        enumRelation.set(id, RelationComparisonResult.Failed);
-                    }
+                    enumRelation.set(id, RelationComparisonResult.Failed);
                     return false;
                 }
                 const sourceValue = getEnumMemberValue(getDeclarationOfKind(sourceProperty, SyntaxKind.EnumMember)!).value;
@@ -21489,15 +21486,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                     // If we have 2 enums with *known* values that differ, they are incompatible.
                     if (sourceValue !== undefined && targetValue !== undefined) {
-                        if (!errorReporter) {
-                            enumRelation.set(id, RelationComparisonResult.Failed);
-                        }
-                        else {
+                        if (errorReporter) {
                             const escapedSource = sourceIsString ? `"${escapeString(sourceValue)}"` : sourceValue;
                             const escapedTarget = targetIsString ? `"${escapeString(targetValue)}"` : targetValue;
                             errorReporter(Diagnostics.Each_declaration_of_0_1_differs_in_its_value_where_2_was_expected_but_3_was_given, symbolName(targetSymbol), symbolName(targetProperty), escapedTarget, escapedSource);
-                            enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                         }
+                        enumRelation.set(id, RelationComparisonResult.Failed);
                         return false;
                     }
 
@@ -21508,16 +21502,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Either way, we can assume that it's numeric.
                     // If the other is a string, we have a mismatch in types.
                     if (sourceIsString || targetIsString) {
-                        if (!errorReporter) {
-                            enumRelation.set(id, RelationComparisonResult.Failed);
-                        }
-                        else {
+                        if (errorReporter) {
                             const knownStringValue = sourceValue ?? targetValue;
                             Debug.assert(typeof knownStringValue === "string");
                             const escapedValue = `"${escapeString(knownStringValue)}"`;
                             errorReporter(Diagnostics.One_value_of_0_1_is_the_string_2_and_the_other_is_assumed_to_be_an_unknown_numeric_value, symbolName(targetSymbol), symbolName(targetProperty), escapedValue);
-                            enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                         }
+                        enumRelation.set(id, RelationComparisonResult.Failed);
                         return false;
                     }
                 }
@@ -21716,7 +21707,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (overflow) {
             // Record this relation as having failed such that we don't attempt the overflowing operation again.
             const id = getRelationKey(source, target, /*intersectionState*/ IntersectionState.None, relation, /*ignoreConstraints*/ false);
-            relation.set(id, RelationComparisonResult.Reported | RelationComparisonResult.Failed);
+            relation.set(id, RelationComparisonResult.Failed | (relationCount <= 0 ? RelationComparisonResult.ComplexityOverflow : RelationComparisonResult.StackDepthOverflow));
             tracing?.instant(tracing.Phase.CheckTypes, "checkTypeRelatedTo_DepthLimit", { sourceId: source.id, targetId: target.id, depth: sourceDepth, targetDepth });
             const message = relationCount <= 0 ?
                 Diagnostics.Excessive_complexity_comparing_types_0_and_1 :
@@ -22617,9 +22608,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const id = getRelationKey(source, target, intersectionState, relation, /*ignoreConstraints*/ false);
             const entry = relation.get(id);
             if (entry !== undefined) {
-                if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Reported)) {
-                    // We are elaborating errors and the cached result is an unreported failure. The result will be reported
-                    // as a failure, and should be updated as a reported failure by the bottom of this function.
+                if (reportErrors && entry & RelationComparisonResult.Failed && !(entry & RelationComparisonResult.Overflow)) {
+                    // We are elaborating errors and the cached result is a failure not due to a comparison overflow,
+                    // so we will do the comparison again to generate an error message.
                 }
                 else {
                     if (outofbandVarianceMarkerHandler) {
@@ -22631,6 +22622,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (saved & RelationComparisonResult.ReportsUnreliable) {
                             instantiateType(source, reportUnreliableMapper);
                         }
+                    }
+                    if (reportErrors && entry & RelationComparisonResult.Overflow) {
+                        const message = entry & RelationComparisonResult.ComplexityOverflow ?
+                            Diagnostics.Excessive_complexity_comparing_types_0_and_1 :
+                            Diagnostics.Excessive_stack_depth_comparing_types_0_and_1;
+                        reportError(message, typeToString(source), typeToString(target));
+                        overrideNextErrorInfo++;
                     }
                     return entry & RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                 }
@@ -22735,7 +22733,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 // A false result goes straight into global cache (when something is false under
                 // assumptions it will also be false without assumptions)
-                relation.set(id, (reportErrors ? RelationComparisonResult.Reported : 0) | RelationComparisonResult.Failed | propagatingVarianceFlags);
+                relation.set(id, RelationComparisonResult.Failed | propagatingVarianceFlags);
                 relationCount--;
                 resetMaybeStack(/*markAllAsSucceeded*/ false);
             }

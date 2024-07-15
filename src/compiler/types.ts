@@ -913,11 +913,14 @@ export const enum RelationComparisonResult {
     None                = 0,
     Succeeded           = 1 << 0, // Should be truthy
     Failed              = 1 << 1,
-    Reported            = 1 << 2,
 
     ReportsUnmeasurable = 1 << 3,
     ReportsUnreliable   = 1 << 4,
     ReportsMask         = ReportsUnmeasurable | ReportsUnreliable,
+
+    ComplexityOverflow  = 1 << 5,
+    StackDepthOverflow  = 1 << 6,
+    Overflow            = ComplexityOverflow | StackDepthOverflow,
 }
 
 /** @internal */
