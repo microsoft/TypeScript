@@ -14,4 +14,4 @@ var x = 10; // Error reported
 
 //// [out.d.ts]
 declare var x: string;
-declare var x: string;
+declare var x: number;

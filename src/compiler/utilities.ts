@@ -242,6 +242,7 @@ import {
     InterfaceDeclaration,
     InternalEmitFlags,
     InternalSymbolName,
+    IntroducesNewScopeNode,
     isAccessor,
     isAnyDirectorySeparator,
     isArray,
@@ -315,6 +316,7 @@ import {
     isLeftHandSideExpression,
     isLineBreak,
     isLiteralTypeNode,
+    isMappedTypeNode,
     isMemberName,
     isMetaProperty,
     isMethodDeclaration,
@@ -11680,9 +11682,18 @@ export function hasInferredType(node: Node): node is HasInferredType {
         case SyntaxKind.VariableDeclaration:
         case SyntaxKind.ExportAssignment:
         case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.JSDocParameterTag:
+        case SyntaxKind.JSDocPropertyTag:
             return true;
         default:
             assertType<never>(node);
             return false;
     }
+}
+/** @internal */
+export function isNewScopeNode(node: Node): node is IntroducesNewScopeNode {
+    return isFunctionLike(node)
+        || isJSDocSignature(node)
+        || isMappedTypeNode(node);
 }

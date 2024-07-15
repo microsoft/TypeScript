@@ -532,9 +532,9 @@ var g1 = { get a(): number { return 4; }, set a(n: string) { } };
 
 var g2 = { get a() { return 4; }, set a(n: string) { } };
 >g2 : { a: string; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >{ get a() { return 4; }, set a(n: string) { } } : { a: string; }
->                                                : ^^^^^^^^^^^^^^
+>                                                : ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 >4 : 4

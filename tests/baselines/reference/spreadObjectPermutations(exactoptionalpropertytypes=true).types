@@ -74,10 +74,10 @@ const v_ba = { ...b, ...a };
 >  : ^^^^^               ^^^
 
 const v_bc = { ...b, ...c };
->v_bc : { x?: string | number; }
->     : ^^^^^^               ^^^
->{ ...b, ...c } : { x?: string | number; }
->               : ^^^^^^               ^^^
+>v_bc : { x?: string | number | undefined; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...b, ...c } : { x?: string | number | undefined; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { x?: string | number; }
 >  : ^^^^^^               ^^^
 >c : { x?: string | number | undefined; }
@@ -95,9 +95,9 @@ const v_ca = { ...c, ...a };
 
 const v_cb = { ...c, ...b };
 >v_cb : { x?: string | number | undefined; }
->     : ^^^^^^                           ^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...c, ...b } : { x?: string | number | undefined; }
->               : ^^^^^^                           ^^^
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : { x?: string | number | undefined; }
 >  : ^^^^^^                           ^^^
 >b : { x?: string | number; }

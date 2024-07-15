@@ -20,11 +20,11 @@ types.asyncGenerators.es2018.2.ts(22,7): error TS2322: Type '() => AsyncGenerato
   Type 'AsyncGenerator<string, void, undefined>' is not assignable to type 'AsyncIterable<number>'.
 types.asyncGenerators.es2018.2.ts(25,7): error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterable<number>'.
   Type 'AsyncGenerator<string, void, undefined>' is not assignable to type 'AsyncIterable<number>'.
-types.asyncGenerators.es2018.2.ts(28,7): error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number, any, undefined>'.
+types.asyncGenerators.es2018.2.ts(28,7): error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number>'.
   Type 'AsyncGenerator<string, void, undefined>' is not assignable to type 'AsyncIterator<number, any, undefined>'.
-types.asyncGenerators.es2018.2.ts(31,7): error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number, any, undefined>'.
+types.asyncGenerators.es2018.2.ts(31,7): error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number>'.
   Type 'AsyncGenerator<string, void, undefined>' is not assignable to type 'AsyncIterator<number, any, undefined>'.
-types.asyncGenerators.es2018.2.ts(34,7): error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number, any, undefined>'.
+types.asyncGenerators.es2018.2.ts(34,7): error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number>'.
   Type 'AsyncGenerator<string, void, undefined>' is not assignable to type 'AsyncIterator<number, any, undefined>'.
 types.asyncGenerators.es2018.2.ts(38,11): error TS2322: Type 'string' is not assignable to type 'number'.
 types.asyncGenerators.es2018.2.ts(41,12): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -104,19 +104,19 @@ types.asyncGenerators.es2018.2.ts(74,12): error TS2504: Type '{}' must have a '[
     };
     const assignability7: () => AsyncIterator<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number, any, undefined>'.
+!!! error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number>'.
 !!! error TS2322:   Type 'AsyncGenerator<string, void, undefined>' is not assignable to type 'AsyncIterator<number, any, undefined>'.
         yield "a";
     };
     const assignability8: () => AsyncIterator<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number, any, undefined>'.
+!!! error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number>'.
 !!! error TS2322:   Type 'AsyncGenerator<string, void, undefined>' is not assignable to type 'AsyncIterator<number, any, undefined>'.
         yield* ["a", "b"];
     };
     const assignability9: () => AsyncIterator<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number, any, undefined>'.
+!!! error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterator<number>'.
 !!! error TS2322:   Type 'AsyncGenerator<string, void, undefined>' is not assignable to type 'AsyncIterator<number, any, undefined>'.
         yield* (async function * () { yield "a"; })();
     };

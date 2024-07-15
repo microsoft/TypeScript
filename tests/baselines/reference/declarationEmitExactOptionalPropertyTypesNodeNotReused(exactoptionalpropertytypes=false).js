@@ -32,7 +32,7 @@ exports.baddts = foo();
 
 //// [declarationEmitExactOptionalPropertyTypesNodeNotReused.d.ts]
 export declare const baddts: (x: {
-    foo?: string | undefined;
+    foo?: string;
     baz?: undefined;
 } & {
     bar: number;

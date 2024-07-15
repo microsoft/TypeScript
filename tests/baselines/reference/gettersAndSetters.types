@@ -170,7 +170,7 @@ var o : {Foo:number;} = {get Foo() {return 0;}, set Foo(val:number){val}}; // o
 >Foo : number
 >    : ^^^^^^
 >{get Foo() {return 0;}, set Foo(val:number){val}} : { Foo: number; }
->                                                  : ^^^^^^^^^^^^^^^^
+>                                                  : ^^^^^^^      ^^^
 >Foo : number
 >    : ^^^^^^
 >0 : 0
@@ -256,9 +256,9 @@ if (typeof x === "string") {
 
   let obj = {
 >obj : { prop: any; method(): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 >{    set prop(_: any) { x.toUpperCase(); },    get prop() { return x.toUpperCase() },    method() { return x.toUpperCase() }  } : { prop: any; method(): string; }
->                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 
     set prop(_: any) { x.toUpperCase(); },
 >prop : any

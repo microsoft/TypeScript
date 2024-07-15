@@ -5376,7 +5376,6 @@ export const enum NodeBuilderFlags {
     AllowUniqueESSymbolType                 = 1 << 20,
     AllowEmptyIndexInfoType                 = 1 << 21,
     /** @internal */ WriteComputedProps      = 1 << 30, // { [E.A]: 1 }
-    /** @internal */ NoSyntacticPrinter     = 1 << 31,
     // Errors (cont.)
     AllowNodeModulesRelativePaths           = 1 << 26,
     /** @internal */ DoNotIncludeSymbolChain = 1 << 27,    // Skip looking up and printing an accessible symbol chain
@@ -5723,9 +5722,9 @@ export interface EmitResolver {
     requiresAddingImplicitUndefined(node: ParameterDeclaration): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration | VariableDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
+    createTypeOfDeclaration(declaration: HasInferredType, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
-    createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
+    createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
     isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags | undefined, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
@@ -10249,6 +10248,7 @@ export interface EvaluationResolver {
 /** @internal */
 export type HasInferredType =
     | PropertyAssignment
+    | ShorthandPropertyAssignment
     | PropertyAccessExpression
     | BinaryExpression
     | ElementAccessExpression
@@ -10257,20 +10257,53 @@ export type HasInferredType =
     | BindingElement
     | PropertyDeclaration
     | PropertySignature
-    | ExportAssignment;
+    | ExportAssignment
+    | JSDocPropertyTag
+    | JSDocParameterTag;
 
 /** @internal */
 export interface SyntacticTypeNodeBuilderContext {
+    flags: NodeBuilderFlags;
     tracker: Required<Pick<SymbolTracker, "reportInferenceFallback">>;
+    enclosingFile: SourceFile | undefined;
     enclosingDeclaration: Node | undefined;
+    approximateLength: number;
+    noInferenceFallback?: boolean;
 }
 
 /** @internal */
 export interface SyntacticTypeNodeBuilderResolver {
+    isOptionalParameter(p: ParameterDeclaration): boolean;
     isUndefinedIdentifierExpression(name: Identifier): boolean;
     isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
-    isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
     requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
+    isEntityNameVisible(context: SyntacticTypeNodeBuilderContext, entityName: EntityNameOrEntityNameExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
+    serializeExistingTypeNode(context: SyntacticTypeNodeBuilderContext, node: TypeNode, addUndefined?: boolean): TypeNode | undefined;
+    serializeReturnTypeForSignature(context: SyntacticTypeNodeBuilderContext, signatureDeclaration: SignatureDeclaration | JSDocSignature): TypeNode | undefined;
+    serializeTypeOfExpression(context: SyntacticTypeNodeBuilderContext, expr: Expression): TypeNode;
+    serializeTypeOfDeclaration(context: SyntacticTypeNodeBuilderContext, node: HasInferredType): TypeNode | undefined;
+    serializeNameOfParameter(context: SyntacticTypeNodeBuilderContext, parameter: ParameterDeclaration): BindingName | string;
+    serializeTypeName(context: SyntacticTypeNodeBuilderContext, node: EntityName, isTypeOf?: boolean, typeArguments?: readonly TypeNode[]): TypeNode | undefined;
+    serializeEntityName(context: SyntacticTypeNodeBuilderContext, node: EntityNameExpression): Expression | undefined;
+    getJsDocPropertyOverride(context: SyntacticTypeNodeBuilderContext, jsDocTypeLiteral: JSDocTypeLiteral, jsDocProperty: JSDocPropertyLikeTag): TypeNode | undefined;
+    enterNewScope(context: SyntacticTypeNodeBuilderContext, node: IntroducesNewScopeNode | ConditionalTypeNode): () => void;
+    markNodeReuse<T extends Node>(context: SyntacticTypeNodeBuilderContext, range: T, location: Node | undefined): T;
+    trackExistingEntityName<T extends EntityNameOrEntityNameExpression>(context: SyntacticTypeNodeBuilderContext, node: T): { introducesError: boolean; node: T; };
+    trackComputedName(context: SyntacticTypeNodeBuilderContext, accessExpression: EntityNameOrEntityNameExpression): void;
+    evaluateEntityNameExpression(expression: EntityNameExpression): EvaluatorResult;
+    getModuleSpecifierOverride(context: SyntacticTypeNodeBuilderContext, parent: ImportTypeNode, lit: StringLiteral): string | undefined;
+    canReuseTypeNode(context: SyntacticTypeNodeBuilderContext, existing: TypeNode): boolean;
+    shouldRemoveDeclaration(context: SyntacticTypeNodeBuilderContext, node: DynamicNamedDeclaration): boolean;
+    hasLateBindableName(node: Declaration): node is LateBoundDeclaration | LateBoundBinaryExpressionDeclaration;
+    createRecoveryBoundary(context: SyntacticTypeNodeBuilderContext): {
+        startRecoveryScope(): () => void;
+        finalizeBoundary(): boolean;
+        markError(): void;
+        hadError(): boolean;
+    };
 }
+
+/** @internal */
+export type IntroducesNewScopeNode = SignatureDeclaration | JSDocSignature | MappedTypeNode;

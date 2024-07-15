@@ -1,6 +1,6 @@
 nestedExcessPropertyChecking.ts(6,7): error TS2322: Type 'C1' is not assignable to type 'A1 & B1'.
   Types of property 'x' are incompatible.
-    Type '{ c: string; }' has no properties in common with type '{ a?: string | undefined; } & { b?: string | undefined; }'.
+    Type '{ c: string; }' has no properties in common with type '{ a?: string; } & { b?: string; }'.
 nestedExcessPropertyChecking.ts(13,7): error TS2559: Type 'C2' has no properties in common with type 'A2 & B2'.
 nestedExcessPropertyChecking.ts(17,5): error TS2559: Type 'E' has no properties in common with type '{ nope?: any; }'.
 nestedExcessPropertyChecking.ts(18,5): error TS2559: Type '"A"' has no properties in common with type '{ nope?: any; }'.
@@ -18,7 +18,7 @@ nestedExcessPropertyChecking.ts(40,9): error TS2559: Type 'false' has no propert
           ~~~
 !!! error TS2322: Type 'C1' is not assignable to type 'A1 & B1'.
 !!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type '{ c: string; }' has no properties in common with type '{ a?: string | undefined; } & { b?: string | undefined; }'.
+!!! error TS2322:     Type '{ c: string; }' has no properties in common with type '{ a?: string; } & { b?: string; }'.
     
     type A2 = { a?: string };
     type B2 = { b?: string };
@@ -51,7 +51,7 @@ nestedExcessPropertyChecking.ts(40,9): error TS2559: Type 'false' has no propert
     }>} = { variables: { overrides: false } };  // Error
                          ~~~~~~~~~
 !!! error TS2559: Type 'false' has no properties in common with type 'OverridesInput'.
-!!! related TS6500 nestedExcessPropertyChecking.ts:27:5: The expected type comes from property 'overrides' which is declared here on type '{ overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>'
+!!! related TS6500 nestedExcessPropertyChecking.ts:27:5: The expected type comes from property 'overrides' which is declared here on type '{ overrides?: OverridesInput; } & Partial<{ overrides?: OverridesInput; }>'
     
     
     interface Unrelated { _?: any }

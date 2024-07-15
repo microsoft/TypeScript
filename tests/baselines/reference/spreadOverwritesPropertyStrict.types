@@ -41,9 +41,9 @@ var unused2 = { ...ab, ...ab } // ok, overwritten error doesn't apply to spreads
 
 var unused3 = { b: 1, ...abq } // ok, abq might have b: undefined
 >unused3 : { a: number; b: number; }
->        : ^^^^^      ^^^^^      ^^^
+>        : ^^^^^      ^^^^^^^^^^^^^^
 >{ b: 1, ...abq } : { a: number; b: number; }
->                 : ^^^^^      ^^^^^      ^^^
+>                 : ^^^^^      ^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 >1 : 1
@@ -232,7 +232,7 @@ function l(anyrequired: { a: any }) {
 }
 function m(anyoptional: { a?: any }) {
 >m : (anyoptional: { a?: any; }) => { a: any; }
->  : ^           ^^            ^^^^^^^^^^   ^^^
+>  : ^           ^^            ^^^^^^^^^^^^^^^^
 >anyoptional : { a?: any; }
 >            : ^^^^^^   ^^^
 >a : any
@@ -240,7 +240,7 @@ function m(anyoptional: { a?: any }) {
 
     return { a: 'zzz', ...anyoptional } // ok
 >{ a: 'zzz', ...anyoptional } : { a: any; }
->                             : ^^^^^   ^^^
+>                             : ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >'zzz' : "zzz"

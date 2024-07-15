@@ -21,11 +21,11 @@ class Foo {
 
   get foo() {
 >foo : { content: Foo | Box; }
->    : ^^^^^^^^^^^         ^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
 
     return {
 >{      content: this as Foo | Box,      ...b,    } : { content: Foo | Box; }
->                                                   : ^^^^^^^^^^^         ^^^
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^
 
       content: this as Foo | Box,
 >content : Foo | Box

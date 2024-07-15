@@ -104,9 +104,9 @@ declare namespace Consts1 {
 declare const string = "string";
 declare const number = "number";
 declare const boolean = "boolean";
-declare const stringOrNumber: string;
-declare const stringOrBoolean: string;
-declare const booleanOrNumber: string;
-declare const stringOrBooleanOrNumber: string;
+declare const stringOrNumber: "string" | "number";
+declare const stringOrBoolean: "string" | "boolean";
+declare const booleanOrNumber: "number" | "boolean";
+declare const stringOrBooleanOrNumber: "string" | "number" | "boolean";
 declare namespace Consts2 {
 }

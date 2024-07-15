@@ -5,15 +5,15 @@
 
 const a = {
 >a : { b: { foo: string; }; foo: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
 >{    b: {        get foo(): string {            return a.foo;        },        set foo(value: string) {            a.foo = value;        }    },    foo: ''} : { b: { foo: string; }; foo: string; }
->                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                             : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
 
     b: {
 >b : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >{        get foo(): string {            return a.foo;        },        set foo(value: string) {            a.foo = value;        }    } : { foo: string; }
->                                                                                                                                        : ^^^^^^^^^^^^^^^^
+>                                                                                                                                        : ^^^^^^^      ^^^
 
         get foo(): string {
 >foo : string
@@ -23,7 +23,7 @@ const a = {
 >a.foo : string
 >      : ^^^^^^
 >a : { b: { foo: string; }; foo: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 
@@ -40,7 +40,7 @@ const a = {
 >a.foo : string
 >      : ^^^^^^
 >a : { b: { foo: string; }; foo: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 >value : string

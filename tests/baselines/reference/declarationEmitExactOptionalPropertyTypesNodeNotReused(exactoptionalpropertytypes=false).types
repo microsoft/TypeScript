@@ -40,14 +40,14 @@ const foo = <A = {}>() => (x: Out & A) => null
 >                                   : ^ ^^^^^^^^^^^^^ ^^       ^^^^^^^^^
 >(x: Out & A) => null : (x: Out & A) => null
 >                     : ^ ^^       ^^^^^^^^^
->x : { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A
->  : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^      ^^^^^^^
+>x : { foo?: string; baz?: undefined; } & { bar: number; } & A
+>  : ^^^^^^^^      ^^^^^^^^         ^^^^^^^^^^^^^      ^^^^^^^
 
 export const baddts = foo()
->baddts : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; }) => null
->       : ^ ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^      ^^^^^^^^^^^^
->foo() : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; }) => null
->      : ^ ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>baddts : (x: { foo?: string; baz?: undefined; } & { bar: number; }) => null
+>       : ^ ^^^^^^^^^^      ^^^^^^^^         ^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>foo() : (x: { foo?: string; baz?: undefined; } & { bar: number; }) => null
+>      : ^ ^^^^^^^^^^      ^^^^^^^^         ^^^^^^^^^^^^^      ^^^^^^^^^^^^
 >foo : <A = {}>() => (x: Out & A) => null
 >    : ^ ^^^^^^^^^^^^^ ^^       ^^^^^^^^^
 

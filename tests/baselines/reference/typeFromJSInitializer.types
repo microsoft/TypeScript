@@ -215,8 +215,8 @@ var n;
 
 // should get any on parameter initialisers
 function f(a = null, b = n, l = []) {
->f : (a?: null, b?: number | undefined, l?: any[]) => void
->  : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>f : (a?: null, b?: number | undefined, l?: never[]) => void
+>  : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : null
 >  : ^^^^
 >b : number | undefined

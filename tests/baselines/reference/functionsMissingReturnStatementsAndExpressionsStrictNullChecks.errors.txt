@@ -1,6 +1,6 @@
 functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(5,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(9,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
-functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(17,7): error TS2322: Type '() => void' is not assignable to type '() => number | undefined'.
+functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(17,7): error TS2322: Type '() => void' is not assignable to type '() => undefined | number'.
   Type 'void' is not assignable to type 'number | undefined'.
 functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(21,7): error TS2322: Type '() => void' is not assignable to type '() => number'.
   Type 'void' is not assignable to type 'number'.
@@ -33,7 +33,7 @@ functionsMissingReturnStatementsAndExpressionsStrictNullChecks.ts(52,3): error T
     
     const f21: () => undefined | number = () => {
           ~~~
-!!! error TS2322: Type '() => void' is not assignable to type '() => number | undefined'.
+!!! error TS2322: Type '() => void' is not assignable to type '() => undefined | number'.
 !!! error TS2322:   Type 'void' is not assignable to type 'number | undefined'.
         // Error, regular void function because contextual type for implicit return isn't just undefined
     }

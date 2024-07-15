@@ -215,9 +215,9 @@ declare let x22: { a: number | undefined, b?: string[] };
 
 let y22 = nonpartial(x22);
 >y22 : { a: number; b: string[]; }
->    : ^^^^^^^^^^^^^^^^        ^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nonpartial(x22) : { a: number; b: string[]; }
->                : ^^^^^^^^^^^^^^^^        ^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nonpartial : <T>(x: Partial<T>) => T
 >           : ^ ^^ ^^          ^^^^^ 
 >x22 : { a: number | undefined; b?: string[]; }

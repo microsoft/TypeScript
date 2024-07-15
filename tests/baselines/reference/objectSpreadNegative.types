@@ -463,12 +463,12 @@ spreadFunc(); // error, no call signature
 
 // write-only properties get skipped
 let setterOnly = { ...{ set b (bad: number) { } } };
->setterOnly : { b: undefined; }
->           : ^^^^^^^^^^^^^^^^^
->{ ...{ set b (bad: number) { } } } : { b: undefined; }
->                                   : ^^^^^^^^^^^^^^^^^
+>setterOnly : { b: number; }
+>           : ^^^^^      ^^^
+>{ ...{ set b (bad: number) { } } } : { b: number; }
+>                                   : ^^^^^      ^^^
 >{ set b (bad: number) { } } : { b: number; }
->                            : ^^^^^^^^^^^^^^
+>                            : ^^^^^      ^^^
 >b : number
 >  : ^^^^^^
 >bad : number
@@ -479,8 +479,8 @@ setterOnly.b = 12; // error, 'b' does not exist
 >                  : ^^
 >setterOnly.b : undefined
 >             : ^^^^^^^^^
->setterOnly : { b: undefined; }
->           : ^^^^^^^^^^^^^^^^^
+>setterOnly : { b: number; }
+>           : ^^^^^      ^^^
 >b : undefined
 >  : ^^^^^^^^^
 >12 : 12

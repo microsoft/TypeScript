@@ -46,9 +46,9 @@ var o1 = {get Foo(){return 0;}, set Foo(val){}}; // ok - types agree (inference)
 
 var o2 = {get Foo(){return 0;}, set Foo(val:number){}}; // ok - types agree
 >o2 : { Foo: number; }
->   : ^^^^^^^^^^^^^^^^
+>   : ^^^^^^^      ^^^
 >{get Foo(){return 0;}, set Foo(val:number){}} : { Foo: number; }
->                                              : ^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^^      ^^^
 >Foo : number
 >    : ^^^^^^
 >0 : 0

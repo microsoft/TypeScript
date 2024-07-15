@@ -84,7 +84,7 @@ module.exports = {
  */
 function jstypes(a, b, c, d, e, f, g) {
 >jstypes : (a: Thing, b: AnotherThing, c: () => number, d: () => number, e: () => number, f: import("./mod").buz, g: string) => number
->        : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^ ^^      ^^^^^^^^ ^^      ^^^^^^^^ ^^                   ^^ ^^      ^^^^^^^^^^^
+>        : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^                   ^^ ^^^^^^^^^^^^^^^^^^^
 >a : Thing
 >  : ^^^^^
 >b : AnotherThing

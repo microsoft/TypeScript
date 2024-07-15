@@ -224,7 +224,7 @@ mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type
     let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
                                           ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 mappedTypeErrors.ts:126:13: The expected type comes from property 'a' which is declared here on type '{ [x: string]: any; a?: number | undefined; }'
+!!! related TS6500 mappedTypeErrors.ts:126:13: The expected type comes from property 'a' which is declared here on type '{ [x: string]: any; a?: number; }'
     
     // Repro from #13044
     

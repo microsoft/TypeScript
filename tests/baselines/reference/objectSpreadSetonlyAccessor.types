@@ -8,14 +8,14 @@ const o1: { foo: number, bar: undefined } = { foo: 1, ... { set bar(_v: number) 
 >    : ^^^^^^
 >bar : undefined
 >    : ^^^^^^^^^
->{ foo: 1, ... { set bar(_v: number) { } } } : { bar: undefined; foo: number; }
->                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ foo: 1, ... { set bar(_v: number) { } } } : { bar: number; foo: number; }
+>                                            : ^^^^^^^      ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >1 : 1
 >  : ^
 >{ set bar(_v: number) { } } : { bar: number; }
->                            : ^^^^^^^^^^^^^^^^
+>                            : ^^^^^^^      ^^^
 >bar : number
 >    : ^^^^^^
 >_v : number
@@ -26,14 +26,14 @@ const o2: { foo: undefined } = { foo: 1, ... { set foo(_v: number) { } } }
 >   : ^^^^^^^         ^^^
 >foo : undefined
 >    : ^^^^^^^^^
->{ foo: 1, ... { set foo(_v: number) { } } } : { foo: undefined; }
->                                            : ^^^^^^^^^^^^^^^^^^^
+>{ foo: 1, ... { set foo(_v: number) { } } } : { foo: number; }
+>                                            : ^^^^^^^      ^^^
 >foo : number
 >    : ^^^^^^
 >1 : 1
 >  : ^
 >{ set foo(_v: number) { } } : { foo: number; }
->                            : ^^^^^^^^^^^^^^^^
+>                            : ^^^^^^^      ^^^
 >foo : number
 >    : ^^^^^^
 >_v : number

@@ -45,9 +45,9 @@ const v_c = { ...c };
 
 const v_ab = { ...a, ...b };
 >v_ab : { x: string | number; }
->     : ^^^^^               ^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...a, ...b } : { x: string | number; }
->               : ^^^^^               ^^^
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string | number; }
 >  : ^^^^^               ^^^
 >b : { x?: string | number; }
@@ -55,9 +55,9 @@ const v_ab = { ...a, ...b };
 
 const v_ac = { ...a, ...c };
 >v_ac : { x: string | number; }
->     : ^^^^^               ^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...a, ...c } : { x: string | number; }
->               : ^^^^^               ^^^
+>               : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string | number; }
 >  : ^^^^^               ^^^
 >c : { x?: string | number | undefined; }
@@ -105,9 +105,9 @@ const v_cb = { ...c, ...b };
 
 const v_abc = { ...a, ...b, ...c };
 >v_abc : { x: string | number; }
->      : ^^^^^               ^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...a, ...b, ...c } : { x: string | number; }
->                     : ^^^^^               ^^^
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string | number; }
 >  : ^^^^^               ^^^
 >b : { x?: string | number; }
@@ -117,9 +117,9 @@ const v_abc = { ...a, ...b, ...c };
 
 const v_acb = { ...a, ...c, ...b };
 >v_acb : { x: string | number; }
->      : ^^^^^               ^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...a, ...c, ...b } : { x: string | number; }
->                     : ^^^^^               ^^^
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string | number; }
 >  : ^^^^^               ^^^
 >c : { x?: string | number | undefined; }
@@ -129,9 +129,9 @@ const v_acb = { ...a, ...c, ...b };
 
 const v_bac = { ...b, ...a, ...c };
 >v_bac : { x: string | number; }
->      : ^^^^^               ^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...b, ...a, ...c } : { x: string | number; }
->                     : ^^^^^               ^^^
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >b : { x?: string | number; }
 >  : ^^^^^^               ^^^
 >a : { x: string | number; }
@@ -153,9 +153,9 @@ const v_bca = { ...b, ...c, ...a };
 
 const v_cab = { ...c, ...a, ...b };
 >v_cab : { x: string | number; }
->      : ^^^^^               ^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...c, ...a, ...b } : { x: string | number; }
->                     : ^^^^^               ^^^
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >c : { x?: string | number | undefined; }
 >  : ^^^^^^                           ^^^
 >a : { x: string | number; }

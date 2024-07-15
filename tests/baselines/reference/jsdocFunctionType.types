@@ -46,11 +46,11 @@ function id2(c) {
 >id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
 >    : ^ ^^         ^^                              ^^^^^         ^^                              
 >c : new (arg1: number) => { length: number; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^^^^^^^      ^^^^^                   
 
     return c
 >c : new (arg1: number) => { length: number; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^^^^^^^      ^^^^^                   
 }
 
 class C {
@@ -78,9 +78,9 @@ class C {
 
 var y = id2(C);
 >y : new (arg1: number) => { length: number; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^^^^^^^      ^^^^^                   
 >id2(C) : new (arg1: number) => { length: number; }
->       : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
+>       : ^^^^^^^^^^^      ^^^^^                   
 >id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
 >    : ^ ^^         ^^                              ^^^^^         ^^                              
 >C : typeof C
@@ -92,7 +92,7 @@ var z = new y(12);
 >new y(12) : { length: number; }
 >          : ^^^^^^^^^^      ^^^
 >y : new (arg1: number) => { length: number; }
->  : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^^^^^^^      ^^^^^                   
 >12 : 12
 >   : ^^
 
@@ -153,9 +153,9 @@ function D(n) {
 
 var y2 = id2(D);
 >y2 : new (arg1: number) => { length: number; }
->   : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
+>   : ^^^^^^^^^^^      ^^^^^                   
 >id2(D) : new (arg1: number) => { length: number; }
->       : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
+>       : ^^^^^^^^^^^      ^^^^^                   
 >id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
 >    : ^ ^^         ^^                              ^^^^^         ^^                              
 >D : typeof D
@@ -167,7 +167,7 @@ var z2 = new y2(33);
 >new y2(33) : { length: number; }
 >           : ^^^^^^^^^^      ^^^
 >y2 : new (arg1: number) => { length: number; }
->   : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
+>   : ^^^^^^^^^^^      ^^^^^                   
 >33 : 33
 >   : ^^
 
@@ -190,11 +190,11 @@ var construct = function(dref) { return new dref(33); }
 >function(dref) { return new dref(33); } : (dref: new (arg1: number) => D) => D
 >                                        : ^    ^^         ^^            ^^^^^ 
 >dref : new (arg1: number) => D
->     : ^^^^^^^^^^^      ^^^^^^
+>     : ^^^^^^^^^^^      ^^^^^ 
 >new dref(33) : D
 >             : ^
 >dref : new (arg1: number) => D
->     : ^^^^^^^^^^^      ^^^^^^
+>     : ^^^^^^^^^^^      ^^^^^ 
 >33 : 33
 >   : ^^
 
@@ -246,9 +246,9 @@ var E = function(n) {
 
 var y3 = id2(E);
 >y3 : new (arg1: number) => { length: number; }
->   : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
+>   : ^^^^^^^^^^^      ^^^^^                   
 >id2(E) : new (arg1: number) => { length: number; }
->       : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
+>       : ^^^^^^^^^^^      ^^^^^                   
 >id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
 >    : ^ ^^         ^^                              ^^^^^         ^^                              
 >E : typeof E

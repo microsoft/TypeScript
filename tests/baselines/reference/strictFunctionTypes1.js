@@ -82,7 +82,7 @@ declare function fs(x: string): void;
 declare function fx(f: (x: "def") => void): void;
 declare const x1: (x: string) => void;
 declare const x2 = "abc";
-declare const x3: string;
+declare const x3: "def" | "abc";
 declare const x4: Func<string>;
 declare const never: never;
 declare const x10: string;
@@ -107,3 +107,21 @@ declare function coAndContraArray<T>(value: T[], func: (t: T) => void): T[];
 declare const t4: A[];
 declare const t5: B[];
 declare const t6: A[];
+
+
+!!!! File strictFunctionTypes1.d.ts differs from original emit in noCheck emit
+//// [strictFunctionTypes1.d.ts]
+===================================================================
+--- Expected	The full check baseline
++++ Actual	with noCheck set
+@@ -9,9 +9,9 @@
+ declare function fs(x: string): void;
+ declare function fx(f: (x: "def") => void): void;
+ declare const x1: (x: string) => void;
+ declare const x2 = "abc";
+-declare const x3: "def" | "abc";
++declare const x3: "abc" | "def";
+ declare const x4: Func<string>;
+ declare const never: never;
+ declare const x10: string;
+ declare const x11: "def";

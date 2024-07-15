@@ -1,6 +1,6 @@
-strictSubtypeAndNarrowing.ts(123,27): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
-strictSubtypeAndNarrowing.ts(124,27): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
-strictSubtypeAndNarrowing.ts(129,26): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
+strictSubtypeAndNarrowing.ts(123,27): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number; }'.
+strictSubtypeAndNarrowing.ts(124,27): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number; }'.
+strictSubtypeAndNarrowing.ts(129,26): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number; }'.
 
 
 ==== strictSubtypeAndNarrowing.ts (3 errors) ====
@@ -128,17 +128,17 @@ strictSubtypeAndNarrowing.ts(129,26): error TS2353: Object literal may only spec
     function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
         obj1 = obj2 = { x: 1, y: 2 };
                               ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number; }'.
         obj2 = obj1 = { x: 1, y: 2 };
                               ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number; }'.
     }
     
     function fx11(): { x?: number } {
         let obj: { x?: number, y?: number };
         return obj = { x: 1, y: 2 };
                              ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number; }'.
     }
     
     // Repros from #52827

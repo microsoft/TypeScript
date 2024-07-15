@@ -17,7 +17,7 @@ export class Wizard {
 >{      wizard: this as Wizard,      ...props,    } as WizardStepProps : WizardStepProps
 >                                                                      : ^^^^^^^^^^^^^^^
 >{      wizard: this as Wizard,      ...props,    } : { wizard: Wizard; }
->                                                   : ^^^^^^^^^^      ^^^
+>                                                   : ^^^^^^^^^^^^^^^^^^^
 
       wizard: this as Wizard,
 >wizard : Wizard

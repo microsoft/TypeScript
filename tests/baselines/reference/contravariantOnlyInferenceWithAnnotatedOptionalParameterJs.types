@@ -28,8 +28,8 @@ const a = filter(
    * @param {number} [pose]
    */
   (pose) => true
->(pose) => true : (pose?: number | undefined) => true
->               : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(pose) => true : (pose?: number) => true
+>               : ^    ^^^      ^^^^^^^^^
 >pose : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 >true : true
@@ -50,8 +50,8 @@ const b = filter(
    * @param {number} [_]
    */
   (pose, _) => true
->(pose, _) => true : (pose?: number | undefined, _?: number | undefined) => true
->                  : ^    ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(pose, _) => true : (pose?: number, _?: number) => true
+>                  : ^    ^^^      ^^ ^^^      ^^^^^^^^^
 >pose : number | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 >_ : number | undefined

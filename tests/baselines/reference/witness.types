@@ -14,7 +14,7 @@ var pInit: any;
 
 function fn(pInit = pInit) {
 >fn : (pInit?: any) => void
->   : ^     ^^^   ^^^^^^^^^
+>   : ^     ^^^^^^^^^^^^^^^
 >pInit : any
 >      : ^^^
 >pInit : any
