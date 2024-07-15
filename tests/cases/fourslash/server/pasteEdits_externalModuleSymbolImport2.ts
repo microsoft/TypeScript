@@ -1,15 +1,10 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /src/folder/c.ts
-//// import type * as test from "../a";
-////
-//// function foo(abc: test.abc, def: test.def) {
-//// console.log(abc);
-//// }
+// @Filename: /folder/c.ts
 //// [||]
-////
 
-// @Filename: /src/a.ts
+
+// @Filename: /a.ts
 //// const abc = 10;
 //// const def = 20;
 //// export interface testInterface {
@@ -17,8 +12,8 @@
 ////     def: number;
 //// }
 
-// @Filename: /src/b.ts
-//// import type * as test from "./a";
+// @Filename: /b.mts
+//// import test from "./a.js";
 ////
 //// [|function foo(abc: test.testInterface, def: test.testInterface) {
 ////    console.log(abc);
@@ -27,7 +22,7 @@
 //// 
 
 // @Filename: /tsconfig.json
-////{ "files": ["/src/folder/c.ts", "/src/a.ts", "/src/b.ts"] }
+////{ "compilerOptions": { "module": "nodenext" }, "files": ["/folder/c.ts", "/a.ts", "/b.mts"] }
 
 const range = test.ranges();
 verify.pasteEdits({
@@ -37,20 +32,15 @@ console.log(abc);
 console.log(def);
 }`],
         pasteLocations: [range[0]],
-        copiedFrom: { file: "/src/b.ts", range: [range[1]] },
+        copiedFrom: { file: "/b.mts", range: [range[1]] },
     },
     newFileContents: {
-        "/src/folder/c.ts":
-`import type * as test from "../a";
+        "/folder/c.ts":
+`import test from "../a";
 
-function foo(abc: test.abc, def: test.def) {
-console.log(abc);
-}
 function foo(abc: test.abc, def: test.def) {
 console.log(abc);
 console.log(def);
-}
-`
+}`
     }
 });
-

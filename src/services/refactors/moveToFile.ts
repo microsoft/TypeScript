@@ -964,7 +964,7 @@ function inferNewFileName(importsFromNewFile: Map<Symbol, unknown>, movedSymbols
 function forEachReference(node: Node, checker: TypeChecker, enclosingRange: TextRange | undefined, onReference: (s: Symbol, isValidTypeOnlyUseSite: boolean) => void) {
     node.forEachChild(function cb(node) {
         if (isIdentifier(node) && !isDeclarationName(node)) {
-            if (enclosingRange && !rangeContainsRange(enclosingRange, node)) {
+            if (enclosingRange && !rangeContainsRange(enclosingRange, { pos: node.getStart(), end: node.getEnd() })) {
                 return;
             }
             const sym = checker.getSymbolAtLocation(node);
