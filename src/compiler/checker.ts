@@ -16298,7 +16298,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeArguments(type: TypeReference): readonly Type[] {
         if (!type.resolvedTypeArguments) {
             if (!pushTypeResolution(type, TypeSystemPropertyName.ResolvedTypeArguments)) {
-                return concatenate(type.target.outerTypeParameters, type.target.localTypeParameters?.map(() => errorType) || emptyArray);
+                return concatenate(type.target.outerTypeParameters, type.target.localTypeParameters?.map(() => errorType)) || emptyArray;
             }
             const node = type.node;
             const typeArguments = !node ? emptyArray :
