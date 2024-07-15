@@ -3,45 +3,45 @@
 === declFileTypeofFunction.ts ===
 function f(n: typeof f): string;
 >f : { (n: typeof f): string; (n: typeof g): string; }
->  : ^^^ ^^        ^^^      ^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >n : { (n: typeof f): string; (n: typeof g): string; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >f : { (n: typeof f): string; (n: typeof g): string; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 
 function f(n: typeof g): string;
 >f : { (n: typeof f): string; (n: typeof g): string; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^      ^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >n : { (n: typeof g): number; (n: typeof f): number; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >g : { (n: typeof g): number; (n: typeof f): number; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 
 function f() { return undefined; }
 >f : { (n: typeof f): string; (n: typeof g): string; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 function g(n: typeof g): number;
 >g : { (n: typeof g): number; (n: typeof f): number; }
->  : ^^^ ^^        ^^^      ^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >n : { (n: typeof g): number; (n: typeof f): number; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >g : { (n: typeof g): number; (n: typeof f): number; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 
 function g(n: typeof f): number;
 >g : { (n: typeof g): number; (n: typeof f): number; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^      ^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >n : { (n: typeof f): string; (n: typeof g): string; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >f : { (n: typeof f): string; (n: typeof g): string; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 
 function g() { return undefined; }
 >g : { (n: typeof g): number; (n: typeof f): number; }
->  : ^^^ ^^        ^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
+>  : ^^^ ^^        ^^^      ^^^ ^^        ^^^      ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -70,15 +70,15 @@ function foo(): typeof foo {
 }
 var foo1: typeof foo;
 >foo1 : () => typeof foo
->     : ^^^^^^^^^^^^^^^^
+>     : ^^^^^^          
 >foo : () => typeof foo
->    : ^^^^^^^^^^^^^^^^
+>    : ^^^^^^          
 
 var foo2 = foo;
 >foo2 : () => typeof foo
->     : ^^^^^^^^^^^^^^^^
+>     : ^^^^^^          
 >foo : () => typeof foo
->    : ^^^^^^^^^^^^^^^^
+>    : ^^^^^^          
 
 var foo3 = function () {
 >foo3 : () => any

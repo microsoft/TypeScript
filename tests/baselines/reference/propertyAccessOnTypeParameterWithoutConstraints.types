@@ -19,7 +19,7 @@ class C<T> {
 >x['toString']() : string
 >                : ^^^^^^
 >x['toString'] : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >x : T
 >  : ^
 >'toString' : "toString"
@@ -33,11 +33,11 @@ class C<T> {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : T
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
     }
 }
 
@@ -72,7 +72,7 @@ var r2 = i.foo.toString();
 >i.foo.toString() : string
 >                 : ^^^^^^
 >i.foo.toString : (radix?: number) => string
->               : ^     ^^^      ^^^^^^^^^^^
+>               : ^     ^^^      ^^^^^      
 >i.foo : number
 >      : ^^^^^^
 >i : I<number>
@@ -80,7 +80,7 @@ var r2 = i.foo.toString();
 >foo : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 var r2b = i.foo['toString']();
 >r2b : string
@@ -88,7 +88,7 @@ var r2b = i.foo['toString']();
 >i.foo['toString']() : string
 >                    : ^^^^^^
 >i.foo['toString'] : (radix?: number) => string
->                  : ^     ^^^      ^^^^^^^^^^^
+>                  : ^     ^^^      ^^^^^      
 >i.foo : number
 >      : ^^^^^^
 >i : I<number>
@@ -110,13 +110,13 @@ var r3: string = a().toString();
 >a().toString() : string
 >               : ^^^^^^
 >a().toString : () => string
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 >a() : unknown
 >    : ^^^^^^^
 >a : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 var r3b: string = a()['toString']();
 >r3b : string
@@ -124,11 +124,11 @@ var r3b: string = a()['toString']();
 >a()['toString']() : string
 >                  : ^^^^^^
 >a()['toString'] : () => string
->                : ^^^^^^^^^^^^
+>                : ^^^^^^      
 >a() : unknown
 >    : ^^^^^^^
 >a : <T>() => T
->  : ^^^^^^^^^^
+>  : ^ ^^^^^^^ 
 >'toString' : "toString"
 >           : ^^^^^^^^^^
 
@@ -152,7 +152,7 @@ var b = {
 >x['toString']() : string
 >                : ^^^^^^
 >x['toString'] : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >x : T
 >  : ^
 >'toString' : "toString"
@@ -166,11 +166,11 @@ var b = {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >x : T
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
     }
 }
 

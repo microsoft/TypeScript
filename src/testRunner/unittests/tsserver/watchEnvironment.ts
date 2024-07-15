@@ -1,13 +1,13 @@
 import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
+} from "../../../harness/tsserverLogger.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     commonFile1,
     commonFile2,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     baselineTsserverLogs,
     openExternalProjectForSession,
@@ -17,14 +17,14 @@ import {
     TestSession,
     toExternalFiles,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
     TestServerHostOsFlavor,
     Tsc_WatchDirectory,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchDirectories implementation", () => {
     function verifyCompletionListWithNewFileInSubFolder(scenario: string, tscWatchDirectory: Tsc_WatchDirectory) {

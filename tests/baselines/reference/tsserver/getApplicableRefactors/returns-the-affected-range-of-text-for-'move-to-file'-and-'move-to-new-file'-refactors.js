@@ -38,7 +38,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -76,14 +83,7 @@ Info seq  [hh:mm:ss:mss] response:
       "type": "response",
       "command": "configure",
       "request_seq": 2,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
+      "success": true
     }
 After request
 
@@ -107,13 +107,13 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
-          "name": "Move to a new file",
-          "description": "Move to a new file",
+          "name": "Move to file",
+          "description": "Move to file",
           "actions": [
             {
-              "name": "Move to a new file",
-              "description": "Move to a new file",
-              "kind": "refactor.move.newFile",
+              "name": "Move to file",
+              "description": "Move to file",
+              "kind": "refactor.move.file",
               "range": {
                 "start": {
                   "line": 1,
@@ -128,13 +128,13 @@ Info seq  [hh:mm:ss:mss] response:
           ]
         },
         {
-          "name": "Move to file",
-          "description": "Move to file",
+          "name": "Move to a new file",
+          "description": "Move to a new file",
           "actions": [
             {
-              "name": "Move to file",
-              "description": "Move to file",
-              "kind": "refactor.move.file",
+              "name": "Move to a new file",
+              "description": "Move to a new file",
+              "kind": "refactor.move.newFile",
               "range": {
                 "start": {
                   "line": 1,

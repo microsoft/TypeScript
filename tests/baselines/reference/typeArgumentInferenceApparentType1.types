@@ -16,7 +16,7 @@ var res: string = method("test");
 >method("test") : string
 >               : ^^^^^^
 >method : <T>(iterable: Iterable<T>) => T
->       : ^ ^^        ^^           ^^^^^^
+>       : ^ ^^        ^^           ^^^^^ 
 >"test" : "test"
 >       : ^^^^^^
 

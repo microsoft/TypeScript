@@ -12,10 +12,14 @@ declare var foo: any;
 
 === /node_modules/foo/node_modules/alpha/index.d.ts ===
 declare var alpha: any;
->alpha : Symbol(alpha, Decl(index.d.ts, 0, 11))
+>alpha : Symbol(alpha, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 11))
 
 === /node_modules/bar/index.d.ts ===
 /// <reference types="alpha" />
 declare var bar: any;
 >bar : Symbol(bar, Decl(index.d.ts, 1, 11))
+
+=== /node_modules/bar/node_modules/alpha/index.d.ts ===
+declare var alpha: any;
+>alpha : Symbol(alpha, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 11))
 

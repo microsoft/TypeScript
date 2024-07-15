@@ -35,9 +35,9 @@ function withReturn() : string{
 }
 var withReturnVar = withReturn;
 >withReturnVar : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >withReturn : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 
 function withParams(a : string) : string{
 >withParams : (a: string) => string
@@ -51,9 +51,9 @@ function withParams(a : string) : string{
 }
 var withparamsVar = withParams;
 >withparamsVar : (a: string) => string
->              : ^ ^^      ^^^^^^^^^^^
+>              : ^ ^^      ^^^^^      
 >withParams : (a: string) => string
->           : ^ ^^      ^^^^^^^^^^^
+>           : ^ ^^      ^^^^^      
 
 function withMultiParams(a : number, b, c: Object) {
 >withMultiParams : (a: number, b: any, c: Object) => number
@@ -143,19 +143,19 @@ var withRestParamsVar = withRestParams;
 
 function overload1(n: number) : string;
 >overload1 : { (n: number): string; (s: string): string; }
->          : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>          : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
 >  : ^^^^^^
 
 function overload1(s: string) : string;
 >overload1 : { (n: number): string; (s: string): string; }
->          : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>          : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 
 function overload1(ns: any) {
 >overload1 : { (n: number): string; (s: string): string; }
->          : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>          : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >ns : any
 
     return ns.toString();
@@ -168,9 +168,9 @@ function overload1(ns: any) {
 }
 var withOverloadSignature = overload1;
 >withOverloadSignature : { (n: number): string; (s: string): string; }
->                      : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>                      : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >overload1 : { (n: number): string; (s: string): string; }
->          : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>          : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 
 function f(n: () => void) { }
 >f : (n: () => void) => void
@@ -224,13 +224,13 @@ declare function fooAmbient(n: number): string;
 
 declare function overloadAmbient(n: number): string;
 >overloadAmbient : { (n: number): string; (s: string): string; }
->                : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
+>                : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
 >  : ^^^^^^
 
 declare function overloadAmbient(s: string): string;
 >overloadAmbient : { (n: number): string; (s: string): string; }
->                : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 

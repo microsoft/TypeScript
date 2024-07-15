@@ -48,7 +48,7 @@ f(x);
 >f(x) : any
 >     : ^^^
 >f : (x: Foo | Other) => any
->  : ^ ^^           ^^^^^^^^
+>  : ^ ^^           ^^^^^   
 >x : { a: string; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -56,7 +56,7 @@ f({ a: '', b: '' })
 >f({ a: '', b: '' }) : any
 >                    : ^^^
 >f : (x: Foo | Other) => any
->  : ^ ^^           ^^^^^^^^
+>  : ^ ^^           ^^^^^   
 >{ a: '', b: '' } : { a: string; b: string; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
@@ -78,7 +78,7 @@ g(x);
 >g(x) : any
 >     : ^^^
 >g : (x: Bar | Other) => any
->  : ^ ^^           ^^^^^^^^
+>  : ^ ^^           ^^^^^   
 >x : { a: string; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -86,7 +86,7 @@ g({ a: '', b: '' })
 >g({ a: '', b: '' }) : any
 >                    : ^^^
 >g : (x: Bar | Other) => any
->  : ^ ^^           ^^^^^^^^
+>  : ^ ^^           ^^^^^   
 >{ a: '', b: '' } : { a: string; b: string; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
@@ -108,7 +108,7 @@ h(x);
 >h(x) : any
 >     : ^^^
 >h : (x: Foo | Bar | Other) => any
->  : ^ ^^                 ^^^^^^^^
+>  : ^ ^^                 ^^^^^   
 >x : { a: string; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -116,7 +116,7 @@ h({ a: '', b: '' })
 >h({ a: '', b: '' }) : any
 >                    : ^^^
 >h : (x: Foo | Bar | Other) => any
->  : ^ ^^                 ^^^^^^^^
+>  : ^ ^^                 ^^^^^   
 >{ a: '', b: '' } : { a: string; b: string; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
@@ -164,7 +164,7 @@ addToZoo({ dog: "Barky McBarkface" });
 >addToZoo({ dog: "Barky McBarkface" }) : void
 >                                      : ^^^^
 >addToZoo : (animal: ExoticAnimal) => void
->         : ^      ^^            ^^^^^^^^^
+>         : ^      ^^            ^^^^^    
 >{ dog: "Barky McBarkface" } : { dog: string; }
 >                            : ^^^^^^^^^^^^^^^^
 >dog : string
@@ -176,7 +176,7 @@ addToZoo({ man: "Manny", bear: "Coffee" });
 >addToZoo({ man: "Manny", bear: "Coffee" }) : void
 >                                           : ^^^^
 >addToZoo : (animal: ExoticAnimal) => void
->         : ^      ^^            ^^^^^^^^^
+>         : ^      ^^            ^^^^^    
 >{ man: "Manny", bear: "Coffee" } : { man: string; bear: string; }
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >man : string
@@ -206,7 +206,7 @@ addToZoo({ man: "Manny", beer: "Coffee" });
 >addToZoo({ man: "Manny", beer: "Coffee" }) : void
 >                                           : ^^^^
 >addToZoo : (animal: ExoticAnimal) => void
->         : ^      ^^            ^^^^^^^^^
+>         : ^      ^^            ^^^^^    
 >{ man: "Manny", beer: "Coffee" } : { man: string; beer: string; }
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >man : string
@@ -222,7 +222,7 @@ addToZoo(manBeer);
 >addToZoo(manBeer) : void
 >                  : ^^^^
 >addToZoo : (animal: ExoticAnimal) => void
->         : ^      ^^            ^^^^^^^^^
+>         : ^      ^^            ^^^^^    
 >manBeer : { man: string; beer: string; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

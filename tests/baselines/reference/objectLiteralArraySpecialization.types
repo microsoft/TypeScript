@@ -30,7 +30,7 @@ var thing = create([ { name: "bob", id: 24 }, { name: "doug", id: 32 } ]); // sh
 >create([ { name: "bob", id: 24 }, { name: "doug", id: 32 } ]) : MyArrayWrapper<{ name: string; id: number; }>
 >                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create : <T>(initialValues?: T[]) => MyArrayWrapper<T>
->       : ^ ^^             ^^^   ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^             ^^^   ^^^^^                 
 >[ { name: "bob", id: 24 }, { name: "doug", id: 32 } ] : { name: string; id: number; }[]
 >                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ name: "bob", id: 24 } : { name: string; id: number; }
@@ -58,11 +58,11 @@ thing.doSomething((x, y) => x.name === "bob"); // should not error
 >thing.doSomething((x, y) => x.name === "bob") : void
 >                                              : ^^^^
 >thing.doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => boolean) => void
->                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^    
 >thing : MyArrayWrapper<{ name: string; id: number; }>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >doSomething : (predicate: (x: { name: string; id: number; }, y: { name: string; id: number; }) => boolean) => void
->            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^    
 >(x, y) => x.name === "bob" : (x: { name: string; id: number; }, y: { name: string; id: number; }) => boolean
 >                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { name: string; id: number; }

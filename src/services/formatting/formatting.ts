@@ -1,4 +1,15 @@
 import {
+    FormattingContext,
+    FormattingRequestKind,
+    FormattingScanner,
+    getFormattingScanner,
+    Rule,
+    RuleAction,
+    RuleFlags,
+    RulesMap,
+    SmartIndenter,
+} from "../_namespaces/ts.formatting.js";
+import {
     Block,
     CallExpression,
     canHaveModifiers,
@@ -65,18 +76,7 @@ import {
     TextRange,
     TriviaSyntaxKind,
     TypeReferenceNode,
-} from "../_namespaces/ts";
-import {
-    FormattingContext,
-    FormattingRequestKind,
-    FormattingScanner,
-    getFormattingScanner,
-    Rule,
-    RuleAction,
-    RuleFlags,
-    RulesMap,
-    SmartIndenter,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export interface FormatContext {

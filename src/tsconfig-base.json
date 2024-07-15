@@ -13,7 +13,6 @@
         "declarationMap": true,
         "sourceMap": true,
         "composite": true,
-        "noEmitOnError": true,
         "emitDeclarationOnly": true,
 
         "strict": true,

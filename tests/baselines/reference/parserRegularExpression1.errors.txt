@@ -1,7 +1,0 @@
-parserRegularExpression1.ts(1,34): error TS1516: A character class range must not be bounded by another character class.
-
-
-==== parserRegularExpression1.ts (1 errors) ====
-    return /(#?-?\d*\.\d\w*%?)|(@?#?[\w-?]+%?)/g;
-                                     ~~
-!!! error TS1516: A character class range must not be bounded by another character class.

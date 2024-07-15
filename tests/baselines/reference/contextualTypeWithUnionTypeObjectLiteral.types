@@ -39,11 +39,11 @@ var objStrOrNum1: { prop: string } | { prop: number } = objStr || objNum;
 >prop : number
 >     : ^^^^^^
 >objStr || objNum : { prop: string; } | { prop: number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
 >objStr : { prop: string; }
->       : ^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^      ^^^
 >objNum : { prop: number; }
->       : ^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^      ^^^
 
 var objStrOrNum2: { prop: string | number } = objStr || objNum;
 >objStrOrNum2 : { prop: string | number; }
@@ -51,11 +51,11 @@ var objStrOrNum2: { prop: string | number } = objStr || objNum;
 >prop : string | number
 >     : ^^^^^^^^^^^^^^^
 >objStr || objNum : { prop: string; } | { prop: number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^
 >objStr : { prop: string; }
->       : ^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^      ^^^
 >objNum : { prop: number; }
->       : ^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^      ^^^
 
 // Below is error because :
 // Spec says:
@@ -256,11 +256,11 @@ var i11Ori21: I11 | I21 = { // Like i1
 >a.charAt(b) : string
 >            : ^^^^^^
 >a.charAt : (pos: number) => string
->         : ^   ^^      ^^^^^^^^^^^
+>         : ^   ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >b : number
 >  : ^^^^^^
 
@@ -292,11 +292,11 @@ var i11Ori21: I11 | I21 = { // Like i2
 >a.charCodeAt(b) : number
 >                : ^^^^^^
 >a.charCodeAt : (index: number) => number
->             : ^     ^^      ^^^^^^^^^^^
+>             : ^     ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
->           : ^     ^^      ^^^^^^^^^^^
+>           : ^     ^^      ^^^^^      
 >b : number
 >  : ^^^^^^
 

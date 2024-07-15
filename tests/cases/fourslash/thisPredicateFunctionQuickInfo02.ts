@@ -37,15 +37,15 @@ verify.quickInfos({
     3: `(method) Crate<T>.isPackedTight(): this is (this & {
     extraContents: T;
 })`,
-    4: `(method) Crate<any>.isPackedTight(): this is (this & {
-    extraContents: T;
+    4: `(method) Crate<any>.isPackedTight(): this is (Crate<any> & {
+    extraContents: any;
 })`,
     5: "(method) Crate<any>.isSundries(): this is Crate<Sundries>",
-    6: `(method) Crate<Sundries>.isPackedTight(): this is (this & {
-    extraContents: T;
+    6: `(method) Crate<Sundries>.isPackedTight(): this is (Crate<Sundries> & {
+    extraContents: Sundries;
 })`,
     7: "(method) Crate<any>.isSupplies(): this is Crate<Supplies>",
-    8: `(method) Crate<Supplies>.isPackedTight(): this is (this & {
-    extraContents: T;
+    8: `(method) Crate<Supplies>.isPackedTight(): this is (Crate<Supplies> & {
+    extraContents: Supplies;
 })`
 });

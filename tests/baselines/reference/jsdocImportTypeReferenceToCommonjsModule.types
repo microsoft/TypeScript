@@ -11,21 +11,21 @@ declare var config: {
 }
 export = config;
 >config : { fix: boolean; }
->       : ^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^       ^^^
 
 === test.js ===
 /** @param {import('./ex')} a */
 function demo(a) {
 >demo : (a: { fix: boolean; }) => void
->     : ^ ^^  ^^^^^^^^^^^^^  ^^^^^^^^^
+>     : ^ ^^  ^^^^^       ^  ^^^^^^^^^
 >a : { fix: boolean; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^       ^^^
 
     a.fix
 >a.fix : boolean
 >      : ^^^^^^^
 >a : { fix: boolean; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^       ^^^
 >fix : boolean
 >    : ^^^^^^^
 }

@@ -105,7 +105,7 @@ import {
     TypeChecker,
     usingSingleLineStringWriter,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export type NamedExpression =

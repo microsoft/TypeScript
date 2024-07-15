@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/override/override21.ts] ////
+
+=== override21.ts ===
+const foo = Symbol();
+>foo : Symbol(foo, Decl(override21.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+class A { }
+>A : Symbol(A, Decl(override21.ts, 0, 21))
+
+class B extends A {
+>B : Symbol(B, Decl(override21.ts, 1, 11))
+>A : Symbol(A, Decl(override21.ts, 0, 21))
+
+    override [foo]() { }
+>[foo] : Symbol(B[foo], Decl(override21.ts, 3, 19))
+>foo : Symbol(foo, Decl(override21.ts, 0, 5))
+}
+

@@ -70,6 +70,7 @@ import {
     getResolvedExternalModuleName,
     getSetAccessorValueParameter,
     getSourceFileOfNode,
+    getSourceFilesToEmit,
     GetSymbolAccessibilityDiagnostic,
     getTextOfNode,
     getThisParameter,
@@ -138,6 +139,7 @@ import {
     isTupleTypeNode,
     isTypeAliasDeclaration,
     isTypeElement,
+    isTypeLiteralNode,
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
@@ -209,13 +211,27 @@ import {
     visitNode,
     visitNodes,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
-export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
+export function getDeclarationDiagnostics(
+    host: EmitHost,
+    resolver: EmitResolver,
+    file: SourceFile,
+): DiagnosticWithLocation[] | undefined {
     const compilerOptions = host.getCompilerOptions();
-    const result = transformNodes(resolver, host, factory, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
-    return result.diagnostics;
+    const files = filter(getSourceFilesToEmit(host, file), isSourceFileNotJson);
+    return contains(files, file) ?
+        transformNodes(
+            resolver,
+            host,
+            factory,
+            compilerOptions,
+            [file],
+            [transformDeclarations],
+            /*allowDtsFiles*/ false,
+        ).diagnostics :
+        undefined;
 }
 
 const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals |
@@ -223,6 +239,7 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     NodeBuilderFlags.UseTypeOfFunction |
     NodeBuilderFlags.UseStructuralFallback |
     NodeBuilderFlags.AllowEmptyTuple |
+    NodeBuilderFlags.AllowUnresolvedNames |
     NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
     NodeBuilderFlags.NoTruncation;
 
@@ -291,6 +308,7 @@ export function transformDeclarations(context: TransformationContext) {
     }
     function reportInferenceFallback(node: Node) {
         if (!isolatedDeclarations || isSourceFileJS(currentSourceFile)) return;
+        if (getSourceFileOfNode(node) !== currentSourceFile) return; // Nested error on a declaration in another file - ignore, will be reemitted if file is in the output file set
         if (isVariableDeclaration(node) && resolver.isExpandoFunctionDeclaration(node)) {
             reportExpandoFunctionErrors(node);
         }
@@ -313,7 +331,8 @@ export function transformDeclarations(context: TransformationContext) {
             }
             // TODO: Do all these accessibility checks inside/after the first pass in the checker when declarations are enabled, if possible
         }
-        else {
+        // The checker should issue errors on unresolvable names, skip the declaration emit error for using a private/unreachable name for those
+        else if (symbolAccessibilityResult.accessibility !== SymbolAccessibility.NotResolved) {
             // Report error
             const errorInfo = getSymbolAccessibilityDiagnostic(symbolAccessibilityResult);
             if (errorInfo) {
@@ -338,7 +357,10 @@ export function transformDeclarations(context: TransformationContext) {
     function reportPrivateInBaseOfClassExpression(propertyName: string) {
         if (errorNameNode || errorFallbackNode) {
             context.addDiagnostic(
-                createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Property_0_of_exported_class_expression_may_not_be_private_or_protected, propertyName),
+                addRelatedInfo(
+                    createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Property_0_of_exported_anonymous_class_type_may_not_be_private_or_protected, propertyName),
+                    ...(isVariableDeclaration((errorNameNode || errorFallbackNode)!.parent) ? [createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Add_a_type_annotation_to_the_variable_0, errorDeclarationNameWithFallback())] : []),
+                ),
             );
         }
     }
@@ -983,20 +1005,28 @@ export function transformDeclarations(context: TransformationContext) {
         if (shouldStripInternal(input)) return;
         if (isDeclaration(input)) {
             if (isDeclarationAndNotVisible(input)) return;
-            if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
-                if (
-                    isolatedDeclarations
-                    // Classes usually elide properties with computed names that are not of a literal type
+            if (hasDynamicName(input)) {
+                if (isolatedDeclarations) {
+                    // Classes and object literals usually elide properties with computed names that are not of a literal type
                     // In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
-                    && isClassDeclaration(input.parent)
-                    && isEntityNameExpression(input.name.expression)
-                    // If the symbol is not accessible we get another TS error no need to add to that
-                    && resolver.isEntityNameVisible(input.name.expression, input.parent).accessibility === SymbolAccessibility.Accessible
-                    && !resolver.isNonNarrowedBindableName(input.name)
-                ) {
-                    context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
+                    if (!resolver.isDefinitelyReferenceToGlobalSymbolObject(input.name.expression)) {
+                        if (isClassDeclaration(input.parent) || isObjectLiteralExpression(input.parent)) {
+                            context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_property_names_on_class_or_object_literals_cannot_be_inferred_with_isolatedDeclarations));
+                            return;
+                        }
+                        else if (
+                            // Type declarations just need to double-check that the input computed name is an entity name expression
+                            (isInterfaceDeclaration(input.parent) || isTypeLiteralNode(input.parent))
+                            && !isEntityNameExpression(input.name.expression)
+                        ) {
+                            context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
+                            return;
+                        }
+                    }
                 }
-                return;
+                else if (!resolver.isLateBound(getParseTreeNode(input) as Declaration) || !isEntityNameExpression(input.name.expression)) {
+                    return;
+                }
             }
         }
 
@@ -1768,7 +1798,7 @@ export function transformDeclarations(context: TransformationContext) {
             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNodeName(node);
         }
         errorNameNode = (node as NamedDeclaration).name;
-        Debug.assert(resolver.isLateBound(getParseTreeNode(node) as Declaration)); // Should only be called with dynamic names
+        Debug.assert(hasDynamicName(node as NamedDeclaration)); // Should only be called with dynamic names
         const decl = node as NamedDeclaration as LateBoundDeclaration;
         const entityName = decl.name.expression;
         checkEntityNameVisibility(entityName, enclosingDeclaration);

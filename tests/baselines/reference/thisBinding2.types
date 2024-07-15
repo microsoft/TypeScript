@@ -74,7 +74,7 @@ class C {
 }
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
 >setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
->           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^      ^^^
+>           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^      ^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^      ^^^
 >expression : any
 >           : ^^^
 >msec : number
@@ -104,7 +104,7 @@ var messenger = {
 >setTimeout(() => { var x = this.message; }, 3000) : number
 >                                                  : ^^^^^^
 >setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
->           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^^^^^^^^^^
+>           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^      ^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^      ^^^
 >() => { var x = this.message; } : () => void
 >                                : ^^^^^^^^^^
 >x : string

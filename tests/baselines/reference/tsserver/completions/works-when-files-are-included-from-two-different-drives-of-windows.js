@@ -114,10 +114,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -146,11 +142,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/src/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -192,8 +186,6 @@ e:/myproject/src/node_modules: *new*
   {"pollingInterval":500}
 e:/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
-e:/myproject/src/package.json: *new*
-  {"pollingInterval":2000}
 e:/myproject/src/tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -209,8 +201,6 @@ e:/myproject/node_modules/@types/prop-types/package.json: *new*
 e:/myproject/node_modules/@types/react/package.json: *new*
   {}
 e:/myproject/node_modules/react-router-dom/package.json: *new*
-  {}
-e:/myproject/package.json: *new*
   {}
 
 FsWatchesRecursive::
@@ -385,7 +375,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: e:/myproject/src/app.js ProjectRootPath: und
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -398,8 +395,6 @@ e:/myproject/src/node_modules:
   {"pollingInterval":500}
 e:/myproject/src/node_modules/@types:
   {"pollingInterval":500}
-e:/myproject/src/package.json:
-  {"pollingInterval":2000}
 e:/myproject/src/tsconfig.json:
   {"pollingInterval":2000}
 
@@ -416,7 +411,7 @@ e:/myproject/node_modules/@types/react/package.json:
   {}
 e:/myproject/node_modules/react-router-dom/package.json:
   {}
-e:/myproject/package.json:
+e:/myproject/package.json: *new*
   {}
 
 FsWatchesRecursive::

@@ -1,7 +1,11 @@
 const { AST_NODE_TYPES } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 
-/** @typedef {import("@typescript-eslint/utils").TSESTree.FunctionDeclaration | import("@typescript-eslint/utils").TSESTree.FunctionExpression} FunctionDeclarationOrExpression */
+/**
+ * @import { TSESTree } from "@typescript-eslint/utils"
+ * @typedef {TSESTree.FunctionDeclaration | TSESTree.FunctionExpression} FunctionDeclarationOrExpression
+ */
+void 0;
 
 module.exports = createRule({
     name: "only-arrow-functions",
@@ -32,7 +36,7 @@ module.exports = createRule({
         /** @type {(node: FunctionDeclarationOrExpression) => boolean} */
         const isThisParameter = node => !!node.params.length && !!node.params.find(param => param.type === AST_NODE_TYPES.Identifier && param.name === "this");
 
-        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
+        /** @type {(node: TSESTree.Node) => boolean} */
         const isMethodType = node => {
             const types = [
                 AST_NODE_TYPES.MethodDefinition,

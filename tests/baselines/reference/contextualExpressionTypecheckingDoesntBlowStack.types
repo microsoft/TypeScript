@@ -27,11 +27,11 @@ export default class Operation {
 >Object.keys(parameterValues) : string[]
 >                             : ^^^^^^^^
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
->            : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
+>            : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : { (o: object): string[]; (o: {}): string[]; }
->     : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^        ^^^ ^^  ^^^        ^^^
 >parameterValues : any
 
             const parameter: any = (this as any).getParameter();;

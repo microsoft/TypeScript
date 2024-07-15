@@ -22,16 +22,16 @@ function f() {
     x.a;
 >x.a : string | number | undefined
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 >a : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x.b;
 >x.b : string | number
 >    : ^^^^^^^^^^^^^^^
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 >b : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -40,8 +40,8 @@ function f() {
 >        : ^
 >x.a : string | number | undefined
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 >a : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -52,8 +52,8 @@ function f() {
 >        : ^
 >x.b : string | number
 >    : ^^^^^^^^^^^^^^^
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 >b : string | number
 >  : ^^^^^^^^^^^^^^^
 >1 : 1
@@ -62,16 +62,16 @@ function f() {
     x.a;
 >x.a : number
 >    : ^^^^^^
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 >a : number
 >  : ^^^^^^
 
     x.b;
 >x.b : number
 >    : ^^^^^^
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 >b : number
 >  : ^^^^^^
 
@@ -80,8 +80,8 @@ function f() {
 >           : ^^^^^^^
 >x.a : number
 >    : ^^^^^^
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 >a : number
 >  : ^^^^^^
 
@@ -90,38 +90,38 @@ function f() {
 >           : ^^^^^^^
 >x.b : number
 >    : ^^^^^^
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 >b : number
 >  : ^^^^^^
 
     x.a;
 >x.a : undefined
 >    : ^^^^^^^^^
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 >a : undefined
 >  : ^^^^^^^^^
 
     x.b;
 >x.b : string | number
 >    : ^^^^^^^^^^^^^^^
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 >b : string | number
 >  : ^^^^^^^^^^^^^^^
 
     x;
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 
     delete x;  // No effect
 >delete x : boolean
 >         : ^^^^^^^
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 
     x;
->x : { a?: string | number | undefined; b: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: number | string; b: number | string; }
+>  : ^^^^^^               ^^^^^               ^^^
 }

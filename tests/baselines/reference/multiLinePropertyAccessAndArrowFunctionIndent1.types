@@ -21,7 +21,7 @@ return this.edit(role)
 >then : any
 >     : ^^^
 >(role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : (role: Role) => any
->                                                                                                                          : ^    ^^^^^^^^^^^^^^
+>                                                                                                                          : ^    ^^    ^^^^^^^^
 >role : Role
 >     : ^^^^
 
@@ -49,7 +49,7 @@ return this.edit(role)
 >then : any
 >     : ^^^
 >(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: ng.IHttpPromiseCallbackArg<Role>) => any
->                                                      : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      : ^    ^^                                ^^^^^^^^
 >data : ng.IHttpPromiseCallbackArg<Role>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ng : any

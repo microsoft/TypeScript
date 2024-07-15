@@ -14,11 +14,11 @@ interface i2 extends i1 { name: number; yo: string; }
 interface foo {
  bar():any;
 >bar : { (): any; (): any; }
->    : ^^^^^^   ^^^^^^^^^^^^
+>    : ^^^^^^   ^^^^^^   ^^^
 
  bar():any;
 >bar : { (): any; (): any; }
->    : ^^^^^^^^^^^^^^^   ^^^
+>    : ^^^^^^   ^^^^^^   ^^^
 
  new():void;
  new():void;

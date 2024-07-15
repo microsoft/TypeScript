@@ -25,35 +25,35 @@ function f1(mp: { x: string }, rp: { readonly x: string }, mx: { [x: string]: st
 
     mp = rp;  // Error
 >mp = rp : { readonly x: string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^      ^^^
 >mp : { x: string; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 >rp : { readonly x: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^      ^^^
 
     rp = mp;
 >rp = mp : { x: string; }
->        : ^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^
 >rp : { readonly x: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^      ^^^
 >mp : { x: string; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 
     mx = mp;
 >mx = mp : { x: string; }
->        : ^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^
 >mx : { [x: string]: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >mp : { x: string; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 
     mx = rp;
 >mx = rp : { readonly x: string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^      ^^^
 >mx : { [x: string]: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >rp : { readonly x: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^      ^^^
 
     mx = rx;  // Error
 >mx = rx : { readonly [x: string]: string; }
@@ -65,19 +65,19 @@ function f1(mp: { x: string }, rp: { readonly x: string }, mx: { [x: string]: st
 
     rx = mp;
 >rx = mp : { x: string; }
->        : ^^^^^^^^^^^^^^
+>        : ^^^^^      ^^^
 >rx : { readonly [x: string]: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mp : { x: string; }
->   : ^^^^^^^^^^^^^^
+>   : ^^^^^      ^^^
 
     rx = rp;
 >rx = rp : { readonly x: string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^      ^^^
 >rx : { readonly [x: string]: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rp : { readonly x: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^      ^^^
 
     rx = mx;
 >rx = mx : { [x: string]: string; }
@@ -171,19 +171,19 @@ function f3(m: { foo(): void }, p: { foo: () => void }, r: { readonly foo: () =>
 
     m = r;
 >m = r : { readonly foo: () => void; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^          ^^^
 >m : { foo(): void; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^    ^^^
 >r : { readonly foo: () => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^          ^^^
 
     p = r;  // Error
 >p = r : { readonly foo: () => void; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^          ^^^
 >p : { foo: () => void; }
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^          ^^^
 >r : { readonly foo: () => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^          ^^^
 }
 
 type Paths = string[] & { __brand__: "Paths" };
@@ -383,7 +383,7 @@ declare function f11<const T>(obj: T): T;
 
 declare function f12<const T extends { a: string, b: number }>(obj: T): T;
 >f12 : <const T extends { a: string; b: number; }>(obj: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^   ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                         ^^   ^^ ^^^^^ 
 >a : string
 >  : ^^^^^^
 >b : number
@@ -393,7 +393,7 @@ declare function f12<const T extends { a: string, b: number }>(obj: T): T;
 
 declare function f13<const T extends { a: string, readonly b: number }>(obj: T): T;
 >f13 : <const T extends { a: string; readonly b: number; }>(obj: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^   ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                                  ^^   ^^ ^^^^^ 
 >a : string
 >  : ^^^^^^
 >b : number
@@ -403,13 +403,13 @@ declare function f13<const T extends { a: string, readonly b: number }>(obj: T):
 
 declare function f14<const T extends Record<string, unknown>>(obj: T): T;
 >f14 : <const T extends Record<string, unknown>>(obj: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                       ^^   ^^ ^^^^^ 
 >obj : T
 >    : ^
 
 declare function f15<const T extends Readonly<Record<string, unknown>>>(obj: T): T;
 >f15 : <const T extends Readonly<Record<string, unknown>>>(obj: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                                 ^^   ^^ ^^^^^ 
 >obj : T
 >    : ^
 
@@ -417,7 +417,7 @@ f10({ a: "hello", b: 42 });  // { a: string; b: number; }
 >f10({ a: "hello", b: 42 }) : { a: string; b: number; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f10 : <T>(obj: T) => T
->    : ^ ^^   ^^ ^^^^^^
+>    : ^ ^^   ^^ ^^^^^ 
 >{ a: "hello", b: 42 } : { a: string; b: number; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
@@ -433,7 +433,7 @@ f11({ a: "hello", b: 42 });  // { readonly a: "hello"; readonly b: 42; }
 >f11({ a: "hello", b: 42 }) : { readonly a: "hello"; readonly b: 42; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f11 : <const T>(obj: T) => T
->    : ^^^^^^^ ^^   ^^ ^^^^^^
+>    : ^^^^^^^ ^^   ^^ ^^^^^ 
 >{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : "hello"
@@ -449,7 +449,7 @@ f12({ a: "hello", b: 42 });  // { a: "hello"; b: 42; }
 >f12({ a: "hello", b: 42 }) : { a: "hello"; b: 42; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^
 >f12 : <const T extends { a: string; b: number; }>(obj: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                         ^^   ^^ ^^^^^ 
 >{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : "hello"
@@ -465,7 +465,7 @@ f13({ a: "hello", b: 42 });  // { a: "hello"; readonly b: 42; }
 >f13({ a: "hello", b: 42 }) : { a: "hello"; readonly b: 42; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f13 : <const T extends { a: string; readonly b: number; }>(obj: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                                  ^^   ^^ ^^^^^ 
 >{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : "hello"
@@ -481,7 +481,7 @@ f14({ a: "hello", b: 42 });  // { a: "hello"; b: 42; }
 >f14({ a: "hello", b: 42 }) : { a: "hello"; b: 42; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^
 >f14 : <const T extends Record<string, unknown>>(obj: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                       ^^   ^^ ^^^^^ 
 >{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : "hello"
@@ -497,7 +497,7 @@ f15({ a: "hello", b: 42 });  // { readonly a: "hello"; readonly b: 42; }
 >f15({ a: "hello", b: 42 }) : { readonly a: "hello"; readonly b: 42; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f15 : <const T extends Readonly<Record<string, unknown>>>(obj: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                                 ^^   ^^ ^^^^^ 
 >{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : "hello"

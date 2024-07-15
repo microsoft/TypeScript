@@ -25,11 +25,11 @@ module Bugs {
 >message.replace(/\{(\d+)\}/g, function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    }) : string
 >                                                                                                                                                                            : ^^^^^^
 >message.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>                : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >message : string
 >        : ^^^^^^
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^      ^^^           ^^               ^^        ^^                                             ^^^      ^^^
 >/\{(\d+)\}/g : RegExp
 >             : ^^^^^^
 >function(match, ...rest) {      var index= rest[0];      return typeof args[index] !== 'undefined'        ? args[index]        : match;    } : (match: string, ...rest: any[]) => any
@@ -87,7 +87,7 @@ function bug3(f:(x:string)=>string) { return f("s") }
 >f("s") : string
 >       : ^^^^^^
 >f : (x: string) => string
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >"s" : "s"
 >    : ^^^
 
@@ -105,7 +105,7 @@ bug3(fprime);
 >bug3 : (f: (x: string) => string) => string
 >     : ^ ^^                     ^^^^^^^^^^^
 >fprime : (x: string) => string
->       : ^ ^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^      
 
 bug3(function(x:string):string { return x; });
 >bug3(function(x:string):string { return x; }) : string

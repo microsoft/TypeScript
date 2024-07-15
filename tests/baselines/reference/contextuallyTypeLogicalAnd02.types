@@ -17,7 +17,7 @@ x = y && (a => {
 >x = y && (a => {    const b: number = a;    return b;}) : (a: string) => number
 >                                                        : ^ ^^^^^^^^^^^^^^^^^^^
 >x : (a: string) => string
->  : ^ ^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^      
 >y && (a => {    const b: number = a;    return b;}) : (a: string) => number
 >                                                    : ^ ^^^^^^^^^^^^^^^^^^^
 >y : true

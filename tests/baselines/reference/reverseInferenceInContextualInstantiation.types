@@ -19,11 +19,11 @@ x.sort(compare); // Error, but shouldn't be
 >x.sort(compare) : number[]
 >                : ^^^^^^^^
 >x.sort : (compareFn?: (a: number, b: number) => number) => number[]
->       : ^         ^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^         ^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^      ^^^^^^^^^^^^^
 >x : number[]
 >  : ^^^^^^^^
 >sort : (compareFn?: (a: number, b: number) => number) => number[]
->     : ^         ^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^      ^^^^^^^^^^^^^
 >compare : <T>(a: T, b: T) => number
->        : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>        : ^ ^^ ^^ ^^ ^^ ^^^^^      
 

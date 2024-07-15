@@ -11,16 +11,16 @@ declare function bar(): any;
 
 export { foo, bar as baz };
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 >bar : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 >baz : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 === b.ts ===
 import { foo, bar } from "./a";
 >foo : () => any
->    : ^^^^^^^^^
+>    : ^^^^^^   
 >bar : any
 >    : ^^^
 

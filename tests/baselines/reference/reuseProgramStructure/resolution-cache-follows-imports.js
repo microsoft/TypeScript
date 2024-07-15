@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: b.ts
 
 
@@ -27,7 +27,7 @@ a.ts(2,17): error TS2306: File 'b.ts' is not a module.
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: b.ts
 
 
@@ -56,7 +56,7 @@ a.ts(2,17): error TS2306: File 'b.ts' is not a module.
 
 
 
-Program Reused:: SafeModules
+Program 3 Reused:: SafeModules
 File: a.ts
 
 
@@ -70,7 +70,7 @@ MissingPaths:: [
 
 
 
-Program Reused:: SafeModules
+Program 4 Reused:: SafeModules
 File: b.ts
 
 

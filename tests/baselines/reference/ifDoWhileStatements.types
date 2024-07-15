@@ -89,11 +89,11 @@ module M {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 
 module N {
@@ -117,11 +117,11 @@ module N {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^      ^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 }
 
 // literals
@@ -550,31 +550,31 @@ if (fn()) { }
 >fn() : I
 >     : ^
 >fn : (x?: string) => I
->   : ^ ^^^      ^^^^^^
+>   : ^ ^^^      ^^^^^ 
 
 while (fn()) { }
 >fn() : I
 >     : ^
 >fn : (x?: string) => I
->   : ^ ^^^      ^^^^^^
+>   : ^ ^^^      ^^^^^ 
 
 do { }while(fn())
 >fn() : I
 >     : ^
 >fn : (x?: string) => I
->   : ^ ^^^      ^^^^^^
+>   : ^ ^^^      ^^^^^ 
 
 if (fn) { }
 >fn : (x?: string) => I
->   : ^ ^^^      ^^^^^^
+>   : ^ ^^^      ^^^^^ 
 
 while (fn) { }
 >fn : (x?: string) => I
->   : ^ ^^^      ^^^^^^
+>   : ^ ^^^      ^^^^^ 
 
 do { }while(fn)
 >fn : (x?: string) => I
->   : ^ ^^^      ^^^^^^
+>   : ^ ^^^      ^^^^^ 
 
 
 
