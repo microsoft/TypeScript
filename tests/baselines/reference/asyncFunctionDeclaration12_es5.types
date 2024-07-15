@@ -5,7 +5,7 @@ var v = async function await(): Promise<void> { }
 >v : () => Promise<void>
 >  : ^^^^^^             
 >async function await(): Promise<void> { } : () => Promise<void>
->                                          :                    
+>                                          : ^^^^^^             
 >await : () => Promise<void>
 >      : ^^^^^^             
 

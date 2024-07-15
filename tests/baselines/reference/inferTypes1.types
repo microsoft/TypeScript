@@ -116,7 +116,7 @@ type T14 = ReturnType<typeof f1>;  // { a: number, b: string }
 >T14 : { a: number; b: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1 : (s: string) => { a: number; b: string; }
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T15 = ReturnType<any>;  // any
 >T15 : any
@@ -561,15 +561,15 @@ const z2: string = ex.obj.nested.attr;
 >ex.obj.nested.attr : string
 >                   : ^^^^^^
 >ex.obj.nested : JsonifiedObject<{ attr: Date; }>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^
 >ex.obj : JsonifiedObject<{ prop: "property"; clz: MyClass; nested: { attr: Date; }; }>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^       ^^^^^^^^^^               ^^^^
 >ex : JsonifiedObject<Example>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : JsonifiedObject<{ prop: "property"; clz: MyClass; nested: { attr: Date; }; }>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^       ^^^^^^^^^^               ^^^^
 >nested : JsonifiedObject<{ attr: Date; }>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^
 >attr : string
 >     : ^^^^^^
 
@@ -657,7 +657,7 @@ type Test2 = EnsureIsString<42>;  // never
 
 function invoker <K extends string | number | symbol, A extends any[]> (key: K, ...args: A) {
 >invoker : <K extends string | number | symbol, A extends any[]>(key: K, ...args: A) => <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>
->        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^    ^^ ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^   ^^^   ^^ ^^^^^                
+>        : ^ ^^^^^^^^^                        ^^ ^^^^^^^^^     ^^   ^^ ^^^^^    ^^ ^^^^^^ ^^^^^^^^^                              ^^   ^^ ^^^^^                
 >key : K
 >    : ^
 >args : A
@@ -665,7 +665,7 @@ function invoker <K extends string | number | symbol, A extends any[]> (key: K, 
 
     return <T extends Record<K, (...args: A) => any>> (obj: T): ReturnType<T[K]> => obj[key](...args)
 ><T extends Record<K, (...args: A) => any>> (obj: T): ReturnType<T[K]> => obj[key](...args) : <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>
->                                                                                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^   ^^^   ^^ ^^^^^                
+>                                                                                           : ^ ^^^^^^^^^                              ^^   ^^ ^^^^^                
 >args : A
 >     : ^
 >obj : T
@@ -690,9 +690,9 @@ const result = invoker('test', true)({ test: (a: boolean) => 123 })
 >invoker('test', true)({ test: (a: boolean) => 123 }) : number
 >                                                     : ^^^^^^
 >invoker('test', true) : <T extends Record<"test", (args_0: boolean) => any>>(obj: T) => ReturnType<T["test"]>
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >invoker : <K extends string | number | symbol, A extends any[]>(key: K, ...args: A) => <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^                        ^^ ^^^^^^^^^     ^^   ^^ ^^^^^    ^^ ^^^^^^ ^^^^^^^^^                              ^^   ^^ ^^^^^                
 >'test' : "test"
 >       : ^^^^^^
 >true : true
@@ -702,7 +702,7 @@ const result = invoker('test', true)({ test: (a: boolean) => 123 })
 >test : (a: boolean) => number
 >     : ^ ^^       ^^^^^^^^^^^
 >(a: boolean) => 123 : (a: boolean) => number
->                    :                       
+>                    : ^ ^^       ^^^^^^^^^^^
 >a : boolean
 >  : ^^^^^^^
 >123 : 123

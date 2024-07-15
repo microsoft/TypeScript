@@ -34,7 +34,7 @@ declare module Sample.Thing {
   
   		getDomNode(): Element;
 >getDomNode : () => Element
->           : ^^^^^^^^^^^^^
+>           : ^^^^^^       
 		
 		addWidget(widgetId:string, widget:IWidget);
 >addWidget : (widgetId: string, widget: IWidget) => any
@@ -141,8 +141,8 @@ module Sample.Thing.Widgets {
 >     : ^^^^
 >runner(this) : any
 >             : ^^^
->runner : (widget: IWidget) => any
->       : ^      ^^^^^^^^^^^^^^^^^
+>runner : (widget: Sample.Thing.IWidget) => any
+>       : ^      ^^                    ^^^^^   
 >this : this
 >     : ^^^^
 			
@@ -163,11 +163,11 @@ module Sample.Thing.Widgets {
 >codeThing.addWidget("addWidget", this) : any
 >                                       : ^^^
 >codeThing.addWidget : (widgetId: string, widget: IWidget) => any
->                    : ^        ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
+>                    : ^        ^^      ^^      ^^       ^^^^^^^^
 >codeThing : ICodeThing
 >          : ^^^^^^^^^^
 >addWidget : (widgetId: string, widget: IWidget) => any
->          : ^        ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
+>          : ^        ^^      ^^      ^^       ^^^^^^^^
 >"addWidget" : "addWidget"
 >            : ^^^^^^^^^^^
 >this : this

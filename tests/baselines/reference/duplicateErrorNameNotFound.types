@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/duplicateErrorNameNotFound.ts] ////
+
+=== duplicateErrorNameNotFound.ts ===
+type RoomInterfae = {};
+>RoomInterfae : RoomInterfae
+>             : ^^^^^^^^^^^^
+
+export type {
+    RoomInterface
+>RoomInterface : any
+>              : ^^^
+}

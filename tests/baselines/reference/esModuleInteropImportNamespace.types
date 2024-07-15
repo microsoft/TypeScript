@@ -8,18 +8,18 @@ declare function foo(): void;
 declare namespace foo {}
 export = foo;
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
 === index.ts ===
 import * as foo from "./foo";
 >foo : { default: () => void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^    ^^^
 
 foo.default;
 >foo.default : () => void
->            : ^^^^^^^^^^
+>            : ^^^^^^    
 >foo : { default: () => void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^    ^^^
 >default : () => void
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 

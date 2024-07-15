@@ -201,7 +201,7 @@ sum(10, 20);
 >sum(10, 20) : number
 >            : ^^^^^^
 >sum : (a: number, b: number) => number
->    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >20 : 20
@@ -231,20 +231,20 @@ function multiply(a: number, b: number, c?: number, d?, e?) {
 */
 function f1(a: number);
 >f1 : { (a: number): any; (b: string): any; }
->   : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
 function f1(b: string);
 >f1 : { (a: number): any; (b: string): any; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >b : string
 >  : ^^^^^^
 
 /**@param opt optional parameter*/
 function f1(aOrb, opt?) {
 >f1 : { (a: number): any; (b: string): any; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >aOrb : any
 >opt : any
 

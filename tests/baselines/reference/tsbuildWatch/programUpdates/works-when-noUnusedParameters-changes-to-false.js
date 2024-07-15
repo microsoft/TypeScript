@@ -38,6 +38,23 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/index.js]
+var fn = function (a, b) { return b; };
+
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"root":["./index.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./index.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 63
+}
+
 
 FsWatches::
 /user/username/projects/myproject/index.ts: *new*
@@ -55,6 +72,7 @@ Program root files: [
 Program options: {
   "noUnusedParameters": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
@@ -89,6 +107,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -98,9 +117,18 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/index.js]
-var fn = function (a, b) { return b; };
+//// [/user/username/projects/myproject/index.js] file changed its modified time
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"root":["./index.ts"],"version":"FakeTSVersion"}
 
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 49
+}
 
 
 
@@ -110,6 +138,7 @@ Program root files: [
 Program options: {
   "noUnusedParameters": false,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not

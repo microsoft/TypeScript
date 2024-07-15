@@ -90,7 +90,7 @@ function test2(a: 0 | TrivialIntersection) {
 >want0(a) : void
 >         : ^^^^
 >want0 : (x: 0) => void
->      : ^ ^^^^^^^^^^^^
+>      : ^ ^^ ^^^^^^^^^
 >a : 0
 >  : ^
     }

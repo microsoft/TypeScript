@@ -23,7 +23,7 @@ const addOne = function (num: number) {
 >addOne : (num: number) => number
 >       : ^   ^^      ^^^^^^^^^^^
 >function (num: number) {    return num + 1;} : (num: number) => number
->                                             :                        
+>                                             : ^   ^^      ^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
 
@@ -42,7 +42,7 @@ if (objWithValMaybeNull.val !== null)
 >objWithValMaybeNull.val : number | null
 >                        : ^^^^^^^^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number | null
 >    : ^^^^^^^^^^^^^
 
@@ -50,11 +50,11 @@ if (objWithValMaybeNull.val !== null)
 >addOne(objWithValMaybeNull.val) : number
 >                                : ^^^^^^
 >addOne : (num: number) => number
->       : ^   ^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >objWithValMaybeNull.val : number
 >                        : ^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number
 >    : ^^^^^^
 
@@ -64,7 +64,7 @@ if (objWithValMaybeNull.val !== myNull)
 >objWithValMaybeNull.val : number | null
 >                        : ^^^^^^^^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number | null
 >    : ^^^^^^^^^^^^^
 >myNull : null
@@ -74,11 +74,11 @@ if (objWithValMaybeNull.val !== myNull)
 >addOne(objWithValMaybeNull.val) : number
 >                                : ^^^^^^
 >addOne : (num: number) => number
->       : ^   ^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >objWithValMaybeNull.val : number
 >                        : ^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number
 >    : ^^^^^^
 
@@ -88,7 +88,7 @@ if (objWithValMaybeNull.val === null)
 >objWithValMaybeNull.val : number | null
 >                        : ^^^^^^^^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number | null
 >    : ^^^^^^^^^^^^^
 
@@ -96,11 +96,11 @@ if (objWithValMaybeNull.val === null)
 >addOne(objWithValMaybeNull.val) : number
 >                                : ^^^^^^
 >addOne : (num: number) => number
->       : ^   ^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >objWithValMaybeNull.val : null
 >                        : ^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : null
 >    : ^^^^
 
@@ -110,7 +110,7 @@ if (objWithValMaybeNull.val === myNull)
 >objWithValMaybeNull.val : number | null
 >                        : ^^^^^^^^^^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : number | null
 >    : ^^^^^^^^^^^^^
 >myNull : null
@@ -120,11 +120,11 @@ if (objWithValMaybeNull.val === myNull)
 >addOne(objWithValMaybeNull.val) : number
 >                                : ^^^^^^
 >addOne : (num: number) => number
->       : ^   ^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >objWithValMaybeNull.val : null
 >                        : ^^^^
 >objWithValMaybeNull : { val: number | null; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^             ^^^
 >val : null
 >    : ^^^^
 

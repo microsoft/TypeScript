@@ -77,7 +77,7 @@ testFunctionExprC2((v1, v2) => 1);
 >testFunctionExprC2((v1, v2) => 1) : void
 >                                  : ^^^^
 >testFunctionExprC2 : (eq: (v1: any, v2: any) => number) => void
->                   : ^  ^^^  ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^  ^^                            ^^^^^^^^^
 >(v1, v2) => 1 : (v1: any, v2: any) => number
 >              : ^  ^^^^^^^  ^^^^^^^^^^^^^^^^
 >v1 : any
@@ -91,7 +91,7 @@ testObjLiteral(objL);
 >testObjLiteral(objL) : void
 >                     : ^^^^
 >testObjLiteral : (objLit: { v: any; w: any; }) => void
->               : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^      ^^                   ^^^^^^^^^
 >objL : { v: any; w: any; }
 >     : ^^^^^^^^^^^^^^^^^^^
 
@@ -99,9 +99,9 @@ testFuncLiteral(funcL);
 >testFuncLiteral(funcL) : void
 >                       : ^^^^
 >testFuncLiteral : (funcLit: (y2: any) => number) => void
->                : ^       ^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^       ^^     ^^^           ^^^^^^^^^
 >funcL : (y2: any) => number
->      : ^  ^^^^^^^^^^^^^^^^
+>      : ^  ^^^^^^^^^^      
 
 var k = temp1(null);
 >k : void
@@ -143,7 +143,7 @@ noError(null, []);
 >noError(null, []) : void
 >                  : ^^^^
 >noError : (variable: any, array?: any) => void
->        : ^        ^^^^^^^     ^^^^^^^^^^^^^^^
+>        : ^        ^^   ^^     ^^^   ^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -151,7 +151,7 @@ noError(undefined, <any>[]);
 >noError(undefined, <any>[]) : void
 >                            : ^^^^
 >noError : (variable: any, array?: any) => void
->        : ^        ^^^^^^^     ^^^^^^^^^^^^^^^
+>        : ^        ^^   ^^     ^^^   ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 ><any>[] : any
@@ -163,7 +163,7 @@ noError(null, [null, undefined]);
 >noError(null, [null, undefined]) : void
 >                                 : ^^^^
 >noError : (variable: any, array?: any) => void
->        : ^        ^^^^^^^     ^^^^^^^^^^^^^^^
+>        : ^        ^^   ^^     ^^^   ^^^^^^^^^
 >[null, undefined] : null[]
 >                  : ^^^^^^
 >undefined : undefined
@@ -173,7 +173,7 @@ noError(undefined, anyArray);
 >noError(undefined, anyArray) : void
 >                             : ^^^^
 >noError : (variable: any, array?: any) => void
->        : ^        ^^^^^^^     ^^^^^^^^^^^^^^^
+>        : ^        ^^   ^^     ^^^   ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >anyArray : any[]

@@ -137,7 +137,7 @@ var {1: c0} = foo();
 >foo() : F
 >      : ^
 >foo : () => F
->    : ^^^^^^^
+>    : ^^^^^^ 
 
 var {1: c1} = bar();
 >c1 : boolean
@@ -145,7 +145,7 @@ var {1: c1} = bar();
 >bar() : F
 >      : ^
 >bar : () => F
->    : ^^^^^^^
+>    : ^^^^^^ 
 
 // V is an object assignment pattern and, for each assignment property P in V,
 //      S has a string index signature of a type that is assignable to the target given in P
@@ -178,7 +178,7 @@ var {"prop1": d1} = foo1();
 >foo1() : F1
 >       : ^^
 >foo1 : () => F1
->     : ^^^^^^^^
+>     : ^^^^^^  
 
 var {"prop2": d1} = foo1();
 >d1 : number
@@ -186,5 +186,5 @@ var {"prop2": d1} = foo1();
 >foo1() : F1
 >       : ^^
 >foo1 : () => F1
->     : ^^^^^^^^
+>     : ^^^^^^  
 

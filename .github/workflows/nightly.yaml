@@ -21,7 +21,7 @@ jobs:
     if: github.repository == 'microsoft/TypeScript'
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: 'lts/*'
@@ -42,7 +42,7 @@ jobs:
     if: github.repository == 'microsoft/TypeScript'
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: 'lts/*'
@@ -59,6 +59,7 @@ jobs:
           npm ci
           npx hereby configure-nightly
           npx hereby LKG
+          node ./scripts/addPackageJsonGitHead.mjs package.json
           npm publish --tag next
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

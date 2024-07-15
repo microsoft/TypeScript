@@ -1,9 +1,12 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import { commandLineCallbacks } from "../helpers/baseline";
-import { libContent } from "../helpers/contents";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { commandLineCallbacks } from "../helpers/baseline.js";
+import {
+    compilerOptionsToConfigJson,
+    libContent,
+} from "../helpers/contents.js";
 import {
     applyEdit,
     createBaseline,
@@ -12,12 +15,12 @@ import {
     runWatchBaseline,
     TscWatchSystem,
     watchBaseline,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
     it("verify that module resolution with json extension works when returned without extension", () => {
@@ -46,7 +49,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
             system: sys,
             cb,
         });
-        const parsedCommandResult = ts.parseJsonConfigFileContent(configFileJson, sys, config.path);
+        const parsedCommandResult = ts.parseJsonConfigFileContent(configFileJson, sys, ts.getDirectoryPath(config.path));
         host.resolveModuleNames = (moduleNames, containingFile) =>
             moduleNames.map(m => {
                 const result = ts.resolveModuleName(m, containingFile, parsedCommandResult.options, host);
@@ -337,152 +340,161 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
         verifyOutputs(baseline, sys, emitSys);
     }
 
-    it("verifies that noEmit is handled on createSemanticDiagnosticsBuilderProgram and typechecking happens only on affected files", () => {
-        const { sys, baseline, cb, getPrograms, config, mainFile } = createSystem("{}", "export const x = 10;");
-        const host = createWatchCompilerHostOfConfigFileForBaseline({
-            configFileName: config.path,
-            optionsToExtend: { noEmit: true },
-            createProgram: ts.createSemanticDiagnosticsBuilderProgram,
-            system: sys,
-            cb,
+    function verify(outFileOptions: ts.CompilerOptions | undefined) {
+        function scenarioName(scenario: string) {
+            return `${outFileOptions ? "outFile" : "multiFile"}/${scenario}`;
+        }
+        function baselineName(baseline: string) {
+            return `tscWatch/watchApi/${outFileOptions ? "outFile" : "multiFile"}/${baseline}.js`;
+        }
+        it(scenarioName("verifies that noEmit is handled on createSemanticDiagnosticsBuilderProgram and typechecking happens only on affected files"), () => {
+            const { sys, baseline, cb, getPrograms, config, mainFile } = createSystem("{}", "export const x = 10;");
+            const host = createWatchCompilerHostOfConfigFileForBaseline({
+                configFileName: config.path,
+                optionsToExtend: { noEmit: true, ...outFileOptions },
+                createProgram: ts.createSemanticDiagnosticsBuilderProgram,
+                system: sys,
+                cb,
+            });
+            const watch = ts.createWatchProgram(host);
+            runWatchBaseline({
+                scenario: "watchApi",
+                subScenario: scenarioName("verifies that noEmit is handled on createSemanticDiagnosticsBuilderProgram"),
+                commandLineArgs: ["--w", "--p", config.path],
+                sys,
+                baseline,
+                getPrograms,
+                edits: [{
+                    caption: "Modify a file",
+                    edit: sys => sys.appendFile(mainFile.path, "\n// SomeComment"),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                }],
+                watchOrSolution: watch,
+            });
         });
-        const watch = ts.createWatchProgram(host);
-        runWatchBaseline({
-            scenario: "watchApi",
-            subScenario: "verifies that noEmit is handled on createSemanticDiagnosticsBuilderProgram",
-            commandLineArgs: ["--w", "--p", config.path],
-            sys,
-            baseline,
-            getPrograms,
-            edits: [{
-                caption: "Modify a file",
-                edit: sys => sys.appendFile(mainFile.path, "\n// SomeComment"),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }],
-            watchOrSolution: watch,
-        });
-    });
+        describe(scenarioName("noEmit with composite writes the tsbuildinfo with pending affected files correctly"), () => {
+            let baseline: string[];
+            let emitBaseline: string[];
+            before(() => {
+                const configText = jsonToReadableText({ compilerOptions: { composite: true, ...outFileOptions ? compilerOptionsToConfigJson(outFileOptions) : undefined } });
+                const mainText = "export const x = 10;";
+                const result = createSystemForBuilderTest(configText, mainText);
+                baseline = result.baseline;
+                emitBaseline = result.emitBaseline;
+                const { sys, config, mainFile, emitSys } = result;
 
-    describe("noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
-        let baseline: string[];
-        let emitBaseline: string[];
-        before(() => {
-            const configText = jsonToReadableText({ compilerOptions: { composite: true } });
-            const mainText = "export const x = 10;";
-            const result = createSystemForBuilderTest(configText, mainText);
-            baseline = result.baseline;
-            emitBaseline = result.emitBaseline;
-            const { sys, config, mainFile, emitSys } = result;
+                // No Emit
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram, { noEmit: true });
 
-            // No Emit
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram, { noEmit: true });
+                // Emit on both sys should result in same output
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram);
 
-            // Emit on both sys should result in same output
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram);
+                // Change file
+                applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
 
-            // Change file
-            applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
+                // Verify noEmit results in same output
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram, { noEmit: true });
 
-            // Verify noEmit results in same output
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram, { noEmit: true });
+                // Emit on both sys should result in same output
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram);
 
-            // Emit on both sys should result in same output
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createEmitAndSemanticDiagnosticsBuilderProgram);
+                // Change file
+                applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
 
-            // Change file
-            applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
-
-            // Emit on both the builders should result in same files
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
-        });
-        after(() => {
-            baseline = undefined!;
-            emitBaseline = undefined!;
-        });
-        it("noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
-            Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmit-with-composite-with-semantic-builder.js`, baseline.join("\r\n"));
-        });
-        it("baseline in createEmitAndSemanticDiagnosticsBuilderProgram:: noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
-            Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmit-with-composite-with-emit-builder.js`, emitBaseline.join("\r\n"));
-        });
-    });
-
-    describe("noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
-        let baseline: string[];
-        let emitBaseline: string[];
-        before(() => {
-            const configText = jsonToReadableText({ compilerOptions: { composite: true, noEmitOnError: true } });
-            const mainText = "export const x: string = 10;";
-            const result = createSystemForBuilderTest(configText, mainText);
-            baseline = result.baseline;
-            emitBaseline = result.emitBaseline;
-            const { sys, config, mainFile, emitSys } = result;
-
-            // Verify noEmit results in same output
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
-
-            // Change file
-            applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
-
-            // Verify noEmit results in same output
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
-
-            // Fix error
-            const fixed = "export const x = 10;";
-            applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.writeFile(mainFile.path, fixed), "Fix error");
-
-            // Emit on both the builders should result in same files
-            verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
+                // Emit on both the builders should result in same files
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
+            });
+            after(() => {
+                baseline = undefined!;
+                emitBaseline = undefined!;
+            });
+            it("noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
+                Harness.Baseline.runBaseline(baselineName("noEmit-with-composite-with-semantic-builder"), baseline.join("\r\n"));
+            });
+            it("baseline in createEmitAndSemanticDiagnosticsBuilderProgram:: noEmit with composite writes the tsbuildinfo with pending affected files correctly", () => {
+                Harness.Baseline.runBaseline(baselineName("noEmit-with-composite-with-emit-builder"), emitBaseline.join("\r\n"));
+            });
         });
 
-        it("noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
-            Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmitOnError-with-composite-with-semantic-builder.js`, baseline.join("\r\n"));
-        });
-        it("baseline in createEmitAndSemanticDiagnosticsBuilderProgram:: noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
-            Harness.Baseline.runBaseline(`tscWatch/watchApi/noEmitOnError-with-composite-with-emit-builder.js`, emitBaseline.join("\r\n"));
-        });
-    });
+        describe(scenarioName("noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly"), () => {
+            let baseline: string[];
+            let emitBaseline: string[];
+            before(() => {
+                const configText = jsonToReadableText({ compilerOptions: { composite: true, noEmitOnError: true, ...outFileOptions ? compilerOptionsToConfigJson(outFileOptions) : undefined } });
+                const mainText = "export const x: string = 10;";
+                const result = createSystemForBuilderTest(configText, mainText);
+                baseline = result.baseline;
+                emitBaseline = result.emitBaseline;
+                const { sys, config, mainFile, emitSys } = result;
 
-    it("SemanticDiagnosticsBuilderProgram emitDtsOnly does not update affected files pending emit", () => {
-        // Initial
-        const { sys, baseline, config, mainFile } = createSystem(jsonToReadableText({ compilerOptions: { composite: true, noEmitOnError: true } }), "export const x: string = 10;");
-        createWatch(baseline, config, sys, ts.createSemanticDiagnosticsBuilderProgram);
+                // Verify noEmit results in same output
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
 
-        // Fix error and emit
-        applyEdit(sys, baseline, sys => sys.writeFile(mainFile.path, "export const x = 10;"), "Fix error");
+                // Change file
+                applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.appendFile(mainFile.path, "\n// SomeComment"), "Add comment");
 
-        const { cb, getPrograms } = commandLineCallbacks(sys);
-        const reportDiagnostic = ts.createDiagnosticReporter(sys, /*pretty*/ true);
-        const reportWatchStatus = ts.createWatchStatusReporter(sys, /*pretty*/ true);
-        const host = ts.createWatchCompilerHostOfConfigFile({
-            configFileName: config.path,
-            createProgram: ts.createSemanticDiagnosticsBuilderProgram,
-            system: sys,
-            reportDiagnostic,
-            reportWatchStatus,
+                // Verify noEmit results in same output
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
+
+                // Fix error
+                const fixed = "export const x = 10;";
+                applyChangeForBuilderTest(baseline, emitBaseline, sys, emitSys, sys => sys.writeFile(mainFile.path, fixed), "Fix error");
+
+                // Emit on both the builders should result in same files
+                verifyBuilder(baseline, emitBaseline, config, sys, emitSys, ts.createSemanticDiagnosticsBuilderProgram);
+            });
+
+            it("noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
+                Harness.Baseline.runBaseline(baselineName("noEmitOnError-with-composite-with-semantic-builder"), baseline.join("\r\n"));
+            });
+            it("baseline in createEmitAndSemanticDiagnosticsBuilderProgram:: noEmitOnError with composite writes the tsbuildinfo with pending affected files correctly", () => {
+                Harness.Baseline.runBaseline(baselineName("noEmitOnError-with-composite-with-emit-builder"), emitBaseline.join("\r\n"));
+            });
         });
-        host.afterProgramCreate = program => {
-            const diagnostics = ts.sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics());
-            diagnostics.forEach(reportDiagnostic);
-            // Buildinfo should still have affectedFilesPendingEmit since we are only emitting dts files
-            program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
-            reportWatchStatus(
-                ts.createCompilerDiagnostic(ts.getWatchErrorSummaryDiagnosticMessage(diagnostics.length), diagnostics.length),
-                sys.newLine,
-                program.getCompilerOptions(),
-                diagnostics.length,
-            );
-            cb(program);
-        };
-        ts.createWatchProgram(host);
-        watchBaseline({
-            baseline,
-            getPrograms,
-            oldPrograms: ts.emptyArray,
-            sys,
+
+        it(scenarioName("SemanticDiagnosticsBuilderProgram emitDtsOnly does not update affected files pending emit"), () => {
+            // Initial
+            const { sys, baseline, config, mainFile } = createSystem(jsonToReadableText({ compilerOptions: { composite: true, noEmitOnError: true, ...outFileOptions ? compilerOptionsToConfigJson(outFileOptions) : undefined } }), "export const x: string = 10;");
+            createWatch(baseline, config, sys, ts.createSemanticDiagnosticsBuilderProgram);
+
+            // Fix error and emit
+            applyEdit(sys, baseline, sys => sys.writeFile(mainFile.path, "export const x = 10;"), "Fix error");
+
+            const { cb, getPrograms } = commandLineCallbacks(sys);
+            const reportDiagnostic = ts.createDiagnosticReporter(sys, /*pretty*/ true);
+            const reportWatchStatus = ts.createWatchStatusReporter(sys, /*pretty*/ true);
+            const host = ts.createWatchCompilerHostOfConfigFile({
+                configFileName: config.path,
+                createProgram: ts.createSemanticDiagnosticsBuilderProgram,
+                system: sys,
+                reportDiagnostic,
+                reportWatchStatus,
+            });
+            host.afterProgramCreate = program => {
+                const diagnostics = ts.sortAndDeduplicateDiagnostics(program.getSemanticDiagnostics());
+                diagnostics.forEach(reportDiagnostic);
+                // Buildinfo should still have affectedFilesPendingEmit since we are only emitting dts files
+                program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+                reportWatchStatus(
+                    ts.createCompilerDiagnostic(ts.getWatchErrorSummaryDiagnosticMessage(diagnostics.length), diagnostics.length),
+                    sys.newLine,
+                    program.getCompilerOptions(),
+                    diagnostics.length,
+                );
+                cb(program);
+            };
+            ts.createWatchProgram(host);
+            watchBaseline({
+                baseline,
+                getPrograms,
+                oldPrograms: ts.emptyArray,
+                sys,
+            });
+            Harness.Baseline.runBaseline(baselineName("semantic-builder-emitOnlyDts"), baseline.join("\r\n"));
         });
-        Harness.Baseline.runBaseline(`tscWatch/watchApi/semantic-builder-emitOnlyDts.js`, baseline.join("\r\n"));
-    });
+    }
+    verify(/*outFileOptions*/ undefined);
+    verify({ outFile: "../outFile.js", module: ts.ModuleKind.AMD });
 });
 
 describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implemented", () => {
@@ -710,8 +722,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
             }
         });
     }
-    verify("when emitting with emitOnlyDtsFiles");
-    verify("when emitting with emitOnlyDtsFiles with outFile", "outFile.js");
+    verify("multiFile/when emitting with emitOnlyDtsFiles");
+    verify("outFile/when emitting with emitOnlyDtsFiles", "outFile.js");
 });
 
 describe("unittests:: tsc-watch:: watchAPI:: when creating program with project references but not config file", () => {

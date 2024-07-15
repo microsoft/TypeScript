@@ -73,11 +73,11 @@ module M {
 >C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : string
 >                                        : ^^^^^^
 >C.f : (n: number) => string
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >f : (n: number) => string
->  : ^ ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >this.x+C.y+v+this.c1+this.c2+C.pub : number
 >                                   : ^^^^^^
 >this.x+C.y+v+this.c1+this.c2 : number
@@ -248,11 +248,11 @@ module M {
 >C.f(10) : string
 >        : ^^^^^^
 >C.f : (n: number) => string
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >f : (n: number) => string
->  : ^ ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >10 : 10
 >   : ^^
 

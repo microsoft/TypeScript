@@ -67,7 +67,7 @@ bar({ name, id });  // error
 >bar({ name, id }) : void
 >                  : ^^^^
 >bar : (obj: { name: string; id: boolean; }) => void
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^                              ^^^^^^^^^
 >{ name, id } : { name: string; id: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string

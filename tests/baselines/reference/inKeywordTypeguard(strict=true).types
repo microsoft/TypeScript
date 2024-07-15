@@ -1,9 +1,7 @@
 //// [tests/cases/compiler/inKeywordTypeguard.ts] ////
 
 === Performance Stats ===
-Assignability cache: 100 / 100 (nearest 100)
-Type Count: 1,200 / 1,300 (nearest 100)
-Symbol count: 27,500 / 27,500 (nearest 500)
+Type Count: 1,000
 
 === inKeywordTypeguard.ts ===
 class A { a: string; }
@@ -193,11 +191,11 @@ function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
 >x.a() : string
 >      : ^^^^^^
 >x.a : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >x : AWithMethod
 >  : ^^^^^^^^^^^
 >a : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
         x.b();
 >x.b() : any
@@ -484,7 +482,7 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
 >"a" : "a"
 >    : ^^^
 >x : { a: string; } & { b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
         let s: string = x.a;
 >s : string
@@ -492,7 +490,7 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
 >x.a : string
 >    : ^^^^^^
 >x : { a: string; } & { b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
 >  : ^^^^^^
 
@@ -548,7 +546,7 @@ function narrowsToNever(x: { l: number } | { r: number }) {
 >"l" : "l"
 >    : ^^^
 >x : { l: number; } | { r: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
         v = x.l;
 >v = x.l : number
@@ -558,7 +556,7 @@ function narrowsToNever(x: { l: number } | { r: number }) {
 >x.l : number
 >    : ^^^^^^
 >x : { l: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >l : number
 >  : ^^^^^^
     }
@@ -568,7 +566,7 @@ function narrowsToNever(x: { l: number } | { r: number }) {
 >"r" : "r"
 >    : ^^^
 >x : { r: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
         v = x.r;
 >v = x.r : number
@@ -578,7 +576,7 @@ function narrowsToNever(x: { l: number } | { r: number }) {
 >x.r : number
 >    : ^^^^^^
 >x : { r: number; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >r : number
 >  : ^^^^^^
     }
@@ -618,7 +616,7 @@ if (isAOrB(x)) {
 >isAOrB(x) : boolean
 >          : ^^^^^^^
 >isAOrB : (x: unknown) => x is AOrB
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^       ^^^^^         
 >x : unknown
 >  : ^^^^^^^
 
@@ -634,7 +632,7 @@ if (isAOrB(x)) {
 >x.aProp : number
 >        : ^^^^^^
 >x : { aProp: number; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 >aProp : number
 >      : ^^^^^^
     }
@@ -644,13 +642,13 @@ if (isAOrB(x)) {
 >"bProp" : "bProp"
 >        : ^^^^^^^
 >x : { bProp: number; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 
         x.bProp;
 >x.bProp : number
 >        : ^^^^^^
 >x : { bProp: number; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^      ^^^
 >bProp : number
 >      : ^^^^^^
     }
@@ -685,20 +683,20 @@ function negativeIntersectionTest() {
 
         window.ontouchstart
 >window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->                    : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->             : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 
     } else {
         window.ontouchstart
 >window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->                    : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->             : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -1060,13 +1058,13 @@ function f4(x: { a: string }) {
 >"a" : "a"
 >    : ^^^
 >x : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
         x.a;
 >x.a : string
 >    : ^^^^^^
 >x : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >a : string
 >  : ^^^^^^
     }
@@ -1080,25 +1078,25 @@ function f4(x: { a: string }) {
 >"a" : "a"
 >    : ^^^
 >x : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >"b" in x : boolean
 >         : ^^^^^^^
 >"b" : "b"
 >    : ^^^
 >x : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 >"c" in x : boolean
 >         : ^^^^^^^
 >"c" : "c"
 >    : ^^^
 >x : { a: string; } & Record<"b", unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x.a;
 >x.a : string
 >    : ^^^^^^
 >x : { a: string; } & Record<"b", unknown> & Record<"c", unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -1106,7 +1104,7 @@ function f4(x: { a: string }) {
 >x.b : unknown
 >    : ^^^^^^^
 >x : { a: string; } & Record<"b", unknown> & Record<"c", unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : unknown
 >  : ^^^^^^^
 
@@ -1114,7 +1112,7 @@ function f4(x: { a: string }) {
 >x.c : unknown
 >    : ^^^^^^^
 >x : { a: string; } & Record<"b", unknown> & Record<"c", unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : unknown
 >  : ^^^^^^^
     }
@@ -1136,11 +1134,11 @@ function f5(x: { a: string } | { b: string }) {
 >"a" : "a"
 >    : ^^^
 >x : { a: string; } | { b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
         x;  // { a: string }
 >x : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
     }
     else if ("b" in x) {
 >"b" in x : boolean
@@ -1148,11 +1146,11 @@ function f5(x: { a: string } | { b: string }) {
 >"b" : "b"
 >    : ^^^
 >x : { b: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
         x;  // { b: string }
 >x : { b: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
     }
     else {
         x;  // never
@@ -1177,11 +1175,11 @@ function f6(x: { a: string } | { b: string }) {
 >"a" : "a"
 >    : ^^^
 >x : { a: string; } | { b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
         x;  // { a: string }
 >x : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
     }
     else if ("a" in x) {
 >"a" in x : boolean
@@ -1189,16 +1187,16 @@ function f6(x: { a: string } | { b: string }) {
 >"a" : "a"
 >    : ^^^
 >x : { b: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
         x;  // { b: string } & Record<"a", unknown>
 >x : { b: string; } & Record<"a", unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     else {
         x;  // { b: string }
 >x : { b: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
     }
 }
 
@@ -1226,11 +1224,11 @@ function f7(x: { a: string, b: number }, y: { a: string } & { b: number }) {
 >"a" : "a"
 >    : ^^^
 >x : { a: string; b: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 
         x;
 >x : { a: string; b: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
     }
     else {
         x;  // never
@@ -1243,11 +1241,11 @@ function f7(x: { a: string, b: number }, y: { a: string } & { b: number }) {
 >"a" : "a"
 >    : ^^^
 >y : { a: string; } & { b: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
 
         y;
 >y : { a: string; } & { b: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
     }
     else {
         y;  // never
@@ -1422,11 +1420,11 @@ function f10(x: { a: unknown }) {
 >"a" : "a"
 >    : ^^^
 >x : { a: unknown; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^       ^^^
 
         x;
 >x : { a: unknown; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^       ^^^
     }
     else {
         x;
@@ -1449,11 +1447,11 @@ function f11(x: { a: any }) {
 >"a" : "a"
 >    : ^^^
 >x : { a: any; }
->  : ^^^^^^^^^^^
+>  : ^^^^^   ^^^
 
         x;
 >x : { a: any; }
->  : ^^^^^^^^^^^
+>  : ^^^^^   ^^^
     }
     else {
         x;
@@ -1476,11 +1474,11 @@ function f12(x: { a: string }) {
 >"a" : "a"
 >    : ^^^
 >x : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
 
         x;
 >x : { a: string; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^
     }
     else {
         x;
@@ -1502,17 +1500,17 @@ function f13(x: { a?: string }) {
 >         : ^^^^^^^
 >"a" : "a"
 >    : ^^^
->x : { a?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
 
         x;
->x : { a?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
     }
     else {
         x;
->x : { a?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
     }
 }
 
@@ -1530,11 +1528,11 @@ function f14(x: { a: string | undefined }) {
 >"a" : "a"
 >    : ^^^
 >x : { a: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 
         x;
 >x : { a: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
     }
     else {
         x;
@@ -1557,16 +1555,16 @@ function f15(x: { a?: string | undefined }) {
 >"a" : "a"
 >    : ^^^
 >x : { a?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^                  ^^^
 
         x;
 >x : { a?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^                  ^^^
     }
     else {
         x;
 >x : { a?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^                  ^^^
     }
 }
 
@@ -1635,7 +1633,7 @@ const checkIsTouchDevice = () =>
 >checkIsTouchDevice : () => boolean
 >                   : ^^^^^^^^^^^^^
 >() =>    "ontouchstart" in window || "msMaxTouchPoints" in window.navigator : () => boolean
->                                                                            :              
+>                                                                            : ^^^^^^^^^^^^^
 
     "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
 >"ontouchstart" in window || "msMaxTouchPoints" in window.navigator : boolean
@@ -1661,7 +1659,7 @@ const checkIsTouchDevice = () =>
 
 function isHTMLTable<T extends object | null>(table: T): boolean {
 >isHTMLTable : <T extends object | null>(table: T) => boolean
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^       
+>            : ^ ^^^^^^^^^             ^^     ^^ ^^^^^       
 >table : T
 >      : ^
 
@@ -1686,9 +1684,9 @@ function isHTMLTable<T extends object | null>(table: T): boolean {
 
 const f = <P extends object>(a: P & {}) => {
 >f : <P extends object>(a: P & {}) => void
->  : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>  : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 ><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
->                                                   :                                      
+>                                                   : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 >a : P
 >  : ^
 
@@ -1706,7 +1704,7 @@ const f = <P extends object>(a: P & {}) => {
 
 function test1<T extends any[] | Record<string, any>>(obj: T) {
 >test1 : <T extends any[] | Record<string, any>>(obj: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^                           ^^   ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 
@@ -1716,11 +1714,11 @@ function test1<T extends any[] | Record<string, any>>(obj: T) {
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >obj : any[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'length' in obj : boolean
@@ -1743,7 +1741,7 @@ function test1<T extends any[] | Record<string, any>>(obj: T) {
 
 function test2<T extends any[] | Record<string, any>>(obj: T) {
 >test2 : <T extends any[] | Record<string, any>>(obj: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^                           ^^   ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 
@@ -1751,11 +1749,11 @@ function test2<T extends any[] | Record<string, any>>(obj: T) {
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >obj : any[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1772,7 +1770,7 @@ function test2<T extends any[] | Record<string, any>>(obj: T) {
 
 function test3<T extends any[] | Record<string, any>>(obj: T) {
 >test3 : <T extends any[] | Record<string, any>>(obj: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^                           ^^   ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 

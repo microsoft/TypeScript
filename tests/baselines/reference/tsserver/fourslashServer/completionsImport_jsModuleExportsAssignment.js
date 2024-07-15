@@ -42,8 +42,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /tsconfig.json :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -128,6 +127,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -159,6 +159,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /index.ts: *new*
@@ -267,8 +278,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /index.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
@@ -282,6 +292,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -1105,6 +1123,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 5,
+      "success": true
+    }
 After Request
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -1157,6 +1183,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "d"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 6,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -2140,6 +2174,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "import { defaults } from \"./third_party/marked/src/defaults\";\n\n"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 11,
+      "success": true
     }
 After Request
 Projects::

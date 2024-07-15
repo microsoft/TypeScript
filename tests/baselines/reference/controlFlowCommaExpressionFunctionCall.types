@@ -5,7 +5,7 @@ const otherValue = () => true;
 >otherValue : () => boolean
 >           : ^^^^^^^^^^^^^
 >() => true : () => boolean
->           :              
+>           : ^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -29,7 +29,7 @@ if (isNumber((otherValue(), value))) {
 >isNumber((otherValue(), value)) : boolean
 >                                : ^^^^^^^
 >isNumber : (obj: any) => obj is number
->         : ^   ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^   ^^   ^^^^^             
 >(otherValue(), value) : string | number
 >                      : ^^^^^^^^^^^^^^^
 >otherValue(), value : string | number

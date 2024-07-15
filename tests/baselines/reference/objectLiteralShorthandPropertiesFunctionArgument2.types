@@ -37,7 +37,7 @@ foo(person);  // error
 >foo(person) : void
 >            : ^^^^
 >foo : (p: { a: string; id: number; }) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                          ^^^^^^^^^
 >person : { name: string; id: number; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

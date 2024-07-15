@@ -6,7 +6,7 @@ var x = function () { return; };
 >x : () => void
 >  : ^^^^^^^^^^
 >function () { return; } : () => void
->                        :           
+>                        : ^^^^^^^^^^
 
 var r1 = x<number>();
 >r1 : void
@@ -64,7 +64,7 @@ class C implements Function {
 >caller : () => void
 >       : ^^^^^^^^^^
 >() => { } : () => void
->          :           
+>          : ^^^^^^^^^^
 }
 
 var c2: C;

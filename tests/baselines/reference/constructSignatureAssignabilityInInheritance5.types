@@ -210,7 +210,7 @@ interface I extends B {
 
     a6: new <T extends Base, U extends Derived>(x: (arg: T) => U) => T; // ok, same as a5 but with object type hierarchy
 >a6 : new <T extends Base, U extends Derived>(x: (arg: T) => U) => T
->   : ^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^^^^ 
+>   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^^^^ 
 >x : (arg: T) => U
 >  : ^   ^^ ^^^^^ 
 >arg : T
@@ -218,7 +218,7 @@ interface I extends B {
 
     a7: new <T extends Base, U extends Derived>(x: (arg: T) => U) => (r: T) => U; // ok
 >a7 : new <T extends Base, U extends Derived>(x: (arg: T) => U) => (r: T) => U
->   : ^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^^^^           
+>   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^^^^           
 >x : (arg: T) => U
 >  : ^   ^^ ^^^^^ 
 >arg : T
@@ -228,7 +228,7 @@ interface I extends B {
 
     a8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U; // ok
 >a8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: T) => U) => (r: T) => U
->   : ^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^ ^^              ^^^^^           
+>   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^ ^^              ^^^^^           
 >x : (arg: T) => U
 >  : ^   ^^ ^^^^^ 
 >arg : T
@@ -242,7 +242,7 @@ interface I extends B {
 
     a9: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number }) => U) => (r: T) => U; // ok, same as a8 with compatible object literal
 >a9 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U
->   : ^^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^ ^^                                           ^^^^^           
+>   : ^^^^^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^ ^^                                           ^^^^^           
 >x : (arg: T) => U
 >  : ^   ^^ ^^^^^ 
 >arg : T
@@ -260,29 +260,29 @@ interface I extends B {
 
     a10: new <T extends Derived>(...x: T[]) => T; // ok
 >a10 : new <T extends Derived>(...x: T[]) => T
->    : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^ 
+>    : ^^^^^ ^^^^^^^^^       ^^^^^ ^^   ^^^^^ 
 >x : T[]
 >  : ^^^
 
     a11: new <T extends Base>(x: T, y: T) => T; // ok
 >a11 : new <T extends Base>(x: T, y: T) => T
->    : ^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^ 
+>    : ^^^^^ ^^^^^^^^^    ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
 >  : ^
 
     a12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; // ok, less specific parameter type
->a12 : new <T extends Base[]>(x: Array<Base>, y: T) => Array<Derived>
->    : ^^^^^ ^^^^^^^^^^^^^^^^^ ^^           ^^ ^^ ^^^^^              
+>a12 : new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>
+>    : ^^^^^ ^^^^^^^^^           ^^ ^^           ^^ ^^ ^^^^^              
 >x : Base[]
 >  : ^^^^^^
 >y : T
 >  : ^
 
     a13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; // ok, T = Array<Derived>, satisfies constraint, contextual signature instantiation succeeds
->a13 : new <T extends Derived[]>(x: Array<Base>, y: T) => T
->    : ^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^           ^^ ^^ ^^^^^ 
+>a13 : new <T extends Array<Derived>>(x: Array<Base>, y: T) => T
+>    : ^^^^^ ^^^^^^^^^              ^^ ^^           ^^ ^^ ^^^^^ 
 >x : Base[]
 >  : ^^^^^^
 >y : T

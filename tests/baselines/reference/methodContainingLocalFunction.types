@@ -22,7 +22,7 @@ class BugExhibition<T> {
 >x = localFunction : () => void
 >                  : ^^^^^^^^^^
 >x : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >localFunction : () => void
 >              : ^^^^^^^^^^
     }
@@ -47,7 +47,7 @@ class BugExhibition2<T> {
 >x = localFunction : () => void
 >                  : ^^^^^^^^^^
 >x : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >localFunction : () => void
 >              : ^^^^^^^^^^
 
@@ -75,11 +75,11 @@ class BugExhibition3<T> {
 
         x = localGenericFunction;
 >x = localGenericFunction : <U>(u?: U) => void
->                         : ^^^^ ^^^^^^^^^^^^^
+>                         : ^ ^^ ^^^ ^^^^^^^^^
 >x : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >localGenericFunction : <U>(u?: U) => void
->                     : ^^^^ ^^^^^^^^^^^^^
+>                     : ^ ^^ ^^^ ^^^^^^^^^
     }
 }
 
@@ -95,7 +95,7 @@ class C {
 >funcExpr : <U>(u?: U) => void
 >         : ^ ^^ ^^^ ^^^^^^^^^
 ><U>(u?: U) => { } : <U>(u?: U) => void
->                  :      ^            
+>                  : ^ ^^ ^^^ ^^^^^^^^^
 >u : U
 >  : ^
 
@@ -105,11 +105,11 @@ class C {
 
         x = funcExpr;
 >x = funcExpr : <U>(u?: U) => void
->             : ^^^^ ^^^^^^^^^^^^^
+>             : ^ ^^ ^^^ ^^^^^^^^^
 >x : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >funcExpr : <U>(u?: U) => void
->         : ^^^^ ^^^^^^^^^^^^^
+>         : ^ ^^ ^^^ ^^^^^^^^^
     }
 }
 
@@ -133,7 +133,7 @@ module M {
 >x = localFunction : () => void
 >                  : ^^^^^^^^^^
 >x : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >localFunction : () => void
 >              : ^^^^^^^^^^
     }
@@ -165,7 +165,7 @@ enum E {
 >x = localFunction : () => void
 >                  : ^^^^^^^^^^
 >x : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
 >localFunction : () => void
 >              : ^^^^^^^^^^
 

@@ -5,7 +5,7 @@ const j = require("./obj.json");
 >j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require("./obj.json") : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
->                      :                                                      ^                ^                                            ^                                             ^                       
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >"./obj.json" : "./obj.json"
 >             : ^^^^^^^^^^^^
@@ -18,9 +18,9 @@ module.exports = j;
 >module : { exports: { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^                ^                                            ^                                             ^                    ^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >j : { x: number; y: number; obj: { items: ({ x: number; y?: undefined; err?: undefined; } | { x: number; y: number; err?: undefined; } | { x: number; err: boolean; y?: undefined; })[]; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^                ^                                            ^                                             ^                    ^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === obj.json ===
 {

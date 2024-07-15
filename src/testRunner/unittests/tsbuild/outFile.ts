@@ -1,21 +1,21 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
-import * as vfs from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
-import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
+import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder.js";
 import {
     noChangeOnlyRuns,
     testTscCompileLike,
     TscCompileSystem,
     verifyTsc,
     verifyTscCompileLike,
-} from "../helpers/tsc";
+} from "../helpers/tsc.js";
 import {
     appendText,
     loadProjectFromFiles,
     replaceText,
-} from "../helpers/vfs";
+} from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: outFile::", () => {
     let outFileFs: vfs.FileSystem;
@@ -249,6 +249,10 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 caption: "Make non incremental build with change in file that doesnt affect dts",
                 edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                 commandLineArgs: ["--b", "/src/third", "--verbose"],
+                discrepancyExplanation: () => [
+                    "Clean build is non incremental so it will have non incremental tsbuildInfo for third project",
+                    "The incremental build does not build third so will only update timestamps for third tsbuildInfo and hence its from incremental build before",
+                ],
             },
             {
                 caption: "Make incremental build with change in file that doesnt affect dts",

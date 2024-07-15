@@ -262,11 +262,11 @@ strOrNum = typeof obj1.method(strOrNum) === "string" && obj1.method(strOrNum);
 >obj1.method(strOrNum) : string | number
 >                      : ^^^^^^^^^^^^^^^
 >obj1.method : (param: string | number) => string | number
->            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^               ^^^^^^^^^^^^^^^^^^^^
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
->     : ^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^     ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >method : (param: string | number) => string | number
->       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^               ^^^^^^^^^^^^^^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
 >"string" : "string"
@@ -274,11 +274,11 @@ strOrNum = typeof obj1.method(strOrNum) === "string" && obj1.method(strOrNum);
 >obj1.method(strOrNum) : string | number
 >                      : ^^^^^^^^^^^^^^^
 >obj1.method : (param: string | number) => string | number
->            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^               ^^^^^^^^^^^^^^^^^^^^
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
->     : ^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^     ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >method : (param: string | number) => string | number
->       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^               ^^^^^^^^^^^^^^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
 
@@ -297,7 +297,7 @@ strOrNum = typeof obj1.prop === "string" && obj1.prop;
 >obj1.prop : string | number
 >          : ^^^^^^^^^^^^^^^
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
->     : ^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^     ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : string | number
 >     : ^^^^^^^^^^^^^^^
 >"string" : "string"
@@ -305,7 +305,7 @@ strOrNum = typeof obj1.prop === "string" && obj1.prop;
 >obj1.prop : string
 >          : ^^^^^^
 >obj1 : { method(param: string | number): string | number; prop: string | number; }
->     : ^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^     ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : string
 >     : ^^^^^^
 

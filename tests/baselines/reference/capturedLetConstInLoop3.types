@@ -43,7 +43,7 @@ function foo0(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 }
 
@@ -92,7 +92,7 @@ function foo0_1(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : string
 >  : ^^^^^^
 }
@@ -152,7 +152,7 @@ function foo1(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -210,7 +210,7 @@ function foo2(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -256,7 +256,7 @@ function foo3(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 }
 
@@ -321,7 +321,7 @@ function foo4(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -393,7 +393,7 @@ function foo5(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -446,7 +446,7 @@ function foo6(x) {
     use(v)
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 }
 
@@ -497,7 +497,7 @@ function foo7(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 }
 
@@ -571,7 +571,7 @@ function foo8(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -612,7 +612,7 @@ function foo0_c(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 }
 
@@ -661,7 +661,7 @@ function foo0_1_c(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : string
 >  : ^^^^^^
 }
@@ -717,7 +717,7 @@ function foo1_c(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -775,7 +775,7 @@ function foo2_c(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -826,7 +826,7 @@ function foo3_c(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : any
 }
 
@@ -887,7 +887,7 @@ function foo4_c(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -955,7 +955,7 @@ function foo5_c(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -1026,7 +1026,7 @@ function foo6_c(x) {
     use(v)
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -1096,7 +1096,7 @@ function foo7_c(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }
@@ -1167,7 +1167,7 @@ function foo8_c(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >v : number
 >  : ^^^^^^
 }

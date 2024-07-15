@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/es6ImportWithJsDocTags.ts] ////
+
+=== ./a.js ===
+export const foo = 1;
+>foo : Symbol(foo, Decl(a.js, 0, 12))
+
+=== ./b.js ===
+'use strict';
+
+/** @private */
+
+import { foo } from './a.js';
+>foo : Symbol(foo, Decl(b.js, 4, 8))
+
+console.log(foo);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>foo : Symbol(foo, Decl(b.js, 4, 8))
+

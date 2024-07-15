@@ -47,7 +47,7 @@ export const result = id`hello world`;
 >id`hello world` : TemplateStringsArray
 >                : ^^^^^^^^^^^^^^^^^^^^
 >id : <T>(x: T) => T
->   : ^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^
 >`hello world` : "hello world"
 >              : ^^^^^^^^^^^^^
 
@@ -98,7 +98,7 @@ const result = id`hello world`;
 >id`hello world` : TemplateStringsArray
 >                : ^^^^^^^^^^^^^^^^^^^^
 >id : <T>(x: T) => T
->   : ^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^
 >`hello world` : "hello world"
 >              : ^^^^^^^^^^^^^
 

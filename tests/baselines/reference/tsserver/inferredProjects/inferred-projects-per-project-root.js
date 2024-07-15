@@ -69,8 +69,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/file1.ts ProjectRootPath: /a:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -219,7 +218,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/file1.ts ProjectRootPath: /a
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -250,8 +256,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/file2.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/file2.ts ProjectRootPath: /a:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -360,7 +365,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/file2.ts ProjectRootPath: /a
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -393,8 +405,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/file2.ts ProjectRootPath: /b:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -514,7 +525,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /b/file2.ts ProjectRootPath: /b
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 5,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -567,8 +585,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 6,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/file3.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/file3.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject3*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject3* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -694,7 +711,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /c/file3.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject3*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 6,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

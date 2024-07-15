@@ -46,7 +46,7 @@ const b = <Button></Button>
 >b : error
 ><Button></Button> : error
 >Button : (attributes: Attributes | undefined, contents: string[]) => string
->       : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^
+>       : ^          ^^                      ^^        ^^        ^^^^^^^^^^^
 >Button : (attributes: Attributes | undefined, contents: string[]) => string
->       : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^
+>       : ^          ^^                      ^^        ^^        ^^^^^^^^^^^
 

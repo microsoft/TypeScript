@@ -183,17 +183,17 @@ if (val.predicate()) {
 >val.predicate() : boolean
 >                : ^^^^^^^
 >val.predicate : (() => this is HasAttribute<Type1>) | (() => boolean)
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^                           ^^^^^^^^^^^       ^
 >val : Type1 | Type2
 >    : ^^^^^^^^^^^^^
 >predicate : (() => this is HasAttribute<Type1>) | (() => boolean)
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^                           ^^^^^^^^^^^       ^
 
     assertType<number>(val.attribute);  // Error
 >assertType<number>(val.attribute) : void
 >                                  : ^^^^
 >assertType : <T>(_val: T) => void
->           : ^^^^    ^^^^^^^^^^^^
+>           : ^ ^^    ^^ ^^^^^^^^^
 >val.attribute : number | null
 >              : ^^^^^^^^^^^^^
 >val : Type1 | Type2

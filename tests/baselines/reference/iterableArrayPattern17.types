@@ -72,7 +72,7 @@ fun(new FooIterator);
 >fun(new FooIterator) : void
 >                     : ^^^^
 >fun : (...[a, b]: Bar[]) => void
->    : ^^^^      ^^^^^^^^^^^^^^^^
+>    : ^^^^      ^^     ^^^^^^^^^
 >new FooIterator : FooIterator
 >                : ^^^^^^^^^^^
 >FooIterator : typeof FooIterator

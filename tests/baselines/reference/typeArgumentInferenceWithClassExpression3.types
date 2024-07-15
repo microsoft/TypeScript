@@ -22,7 +22,7 @@ foo(class { prop = "hello" }).length;
 >foo(class { prop = "hello" }) : string
 >                              : ^^^^^^
 >foo : <T>(x?: typeof (Anonymous class)) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 >class { prop = "hello" } : typeof (Anonymous class)
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : string

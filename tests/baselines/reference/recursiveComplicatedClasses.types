@@ -41,7 +41,7 @@ class Symbol {
 >aEnclosesB(b) : boolean
 >              : ^^^^^^^
 >aEnclosesB : (a: Symbol) => boolean
->           : ^ ^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^^
 >b : TypeSymbol
 >  : ^^^^^^^^^^
     }

@@ -8,7 +8,7 @@ const test = dibbity => dibbity
 >test : Test<number>
 >     : ^^^^^^^^^^^^
 >dibbity => dibbity : <T1 extends number>(dibbity: T1) => T1
->                   : ^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^
+>                   : ^  ^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^
 >dibbity : T1
 >        : ^^
 >dibbity : T1
