@@ -2807,11 +2807,6 @@ export function isVariableLike(node: Node): node is VariableLikeDeclaration {
 }
 
 /** @internal */
-export function isVariableLikeOrAccessor(node: Node): node is AccessorDeclaration | VariableLikeDeclaration {
-    return isVariableLike(node) || isAccessor(node);
-}
-
-/** @internal */
 export function isVariableDeclarationInVariableStatement(node: VariableDeclaration) {
     return node.parent.kind === SyntaxKind.VariableDeclarationList
         && node.parent.parent.kind === SyntaxKind.VariableStatement;

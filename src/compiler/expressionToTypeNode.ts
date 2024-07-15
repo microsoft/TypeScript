@@ -614,7 +614,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
         return result;
     }
     function serializeExistingTypeAnnotationWithFallback(typeNode: TypeNode | undefined, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, targetNode?: Node) {
-        if (!typeNode) return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        if (!typeNode) return undefined;
         const result = serializeExistingTypeAnnotation(typeNode, context, addUndefined);
         if (result !== undefined) {
             return result;
