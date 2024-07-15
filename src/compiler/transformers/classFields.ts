@@ -2420,7 +2420,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 ),
                 multiLine,
             ),
-            /*location*/ constructor?.body
+            /*location*/ constructor?.body,
         );
     }
 
