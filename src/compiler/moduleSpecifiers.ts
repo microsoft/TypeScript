@@ -737,7 +737,7 @@ function getAllModulePathsWorker(info: Info, importedFileName: string, host: Mod
         // This should populate all the relevant symlinks in the symlink cache, and most, if not all, of these resolutions
         // should get (re)used.
         const state = getTemporaryModuleResolutionState(cache.getPackageJsonInfoCache(), host, {});
-        const packageJson = getPackageScopeForPath(info.importingSourceFileName, state);
+        const packageJson = getPackageScopeForPath(getDirectoryPath(info.importingSourceFileName), state);
         if (packageJson) {
             const toResolve = getAllRuntimeDependencies(packageJson.contents.packageJsonContent);
             for (const depName of (toResolve || emptyArray)) {
