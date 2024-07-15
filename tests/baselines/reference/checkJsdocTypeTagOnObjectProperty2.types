@@ -61,8 +61,8 @@ const obj = {
 
   /** @type {string} */
   lol
->lol : string
->    : ^^^^^^
+>lol : undefined
+>    : ^^^^^^^^^
 }
 lol = "string"
 >lol = "string" : "string"
