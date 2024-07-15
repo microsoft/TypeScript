@@ -37,6 +37,6 @@ var c = new C<Date,Date>();
 
 interface I<T> {}
 var i: I<number,number>;
->i : any
->  : ^^^
+>i : I<number, number>
+>  : ^^^^^^^^^^^^^^^^^
 

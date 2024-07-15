@@ -11,48 +11,48 @@ interface I<T> {
 }
 
 var c: I;
->c : any
->  : ^^^
+>c : I
+>  : ^
 
 var a: { x: I };
 >a : { x: I; }
 >  : ^^^^^ ^^^
->x : any
->  : ^^^
+>x : I
+>  : ^
 
 var b: { (x: I): I };
 >b : (x: I) => I
 >  : ^ ^^ ^^^^^ 
->x : any
->  : ^^^
+>x : I
+>  : ^
 
 var d: { [x: I]: I };
 >d : {}
 >  : ^^
->x : any
->  : ^^^
+>x : I
+>  : ^
 
 var e = (x: I) => { var y: I; return y; }
->e : (x: I) => any
->  : ^ ^^ ^^^^^^^^
->(x: I) => { var y: I; return y; } : (x: I) => any
->                                  : ^ ^^ ^^^^^^^^
->x : any
->  : ^^^
->y : any
->  : ^^^
->y : any
->  : ^^^
+>e : (x: I) => I
+>  : ^ ^^ ^^^^^^
+>(x: I) => { var y: I; return y; } : (x: I) => I
+>                                  : ^ ^^ ^^^^^^
+>x : I
+>  : ^
+>y : I
+>  : ^
+>y : I
+>  : ^
 
 function f(x: I): I { var y: I; return y; }
 >f : (x: I) => I
 >  : ^ ^^ ^^^^^ 
->x : any
->  : ^^^
->y : any
->  : ^^^
->y : any
->  : ^^^
+>x : I
+>  : ^
+>y : I
+>  : ^
+>y : I
+>  : ^
 
 var g = function f(x: I): I { var y: I; return y; }
 >g : (x: I) => I
@@ -61,12 +61,12 @@ var g = function f(x: I): I { var y: I; return y; }
 >                                            : ^ ^^ ^^^^^ 
 >f : (x: I) => I
 >  : ^ ^^ ^^^^^ 
->x : any
->  : ^^^
->y : any
->  : ^^^
->y : any
->  : ^^^
+>x : I
+>  : ^
+>y : I
+>  : ^
+>y : I
+>  : ^
 
 class D extends I {
 >D : D
@@ -122,9 +122,9 @@ var j = <C>null;
 >        : ^
 
 var k = <M.E>null;
->k : any
+>k : M.E
 >  : ^^^
-><M.E>null : any
+><M.E>null : M.E
 >          : ^^^
 >M : any
 >  : ^^^

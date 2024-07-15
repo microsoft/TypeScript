@@ -16367,7 +16367,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(node, diag, typeStr, minTypeArgumentCount, typeParameters.length);
                 if (!isJs) {
                     // TODO: Adopt same permissive behavior in TS as in JS to reduce follow-on editing experience failures (requires editing fillMissingTypeArguments)
-                    return errorType;
+                    return getTypeReferenceErrorType(node, symbol, typeParameters, minTypeArgumentCount);
                 }
             }
             if (node.kind === SyntaxKind.TypeReference && isDeferredTypeReferenceNode(node as TypeReferenceNode, length(node.typeArguments) !== typeParameters.length)) {
@@ -16400,6 +16400,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return instantiation;
     }
 
+    function getTypeReferenceErrorType(node: NodeWithTypeArguments, symbol: Symbol, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number) {
+        const isJs = isInJSFile(node);
+        const typeArguments = typeArgumentsFromTypeReferenceNode(node);
+        const effectiveTypeArguments = typeParameters ? fillMissingTypeArguments(typeArguments, typeParameters, minTypeArgumentCount, isJs) : typeArguments;
+        const id = getAliasId(symbol, effectiveTypeArguments);
+        let errorType = errorTypes.get(id);
+        if (!errorType) {
+            errorType = createIntrinsicType(TypeFlags.Any, "error", /*objectFlags*/ undefined, `alias ${id}`);
+            errorType.aliasSymbol = symbol;
+            errorType.aliasTypeArguments = effectiveTypeArguments;
+            errorTypes.set(id, errorType);
+        }
+        return errorType;
+    }
+
     /**
      * Get type from reference to type alias. When a type alias is generic, the declared type of the type alias may include
      * references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
@@ -16407,16 +16422,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getTypeFromTypeAliasReference(node: NodeWithTypeArguments, symbol: Symbol): Type {
         if (getCheckFlags(symbol) & CheckFlags.Unresolved) {
-            const typeArguments = typeArgumentsFromTypeReferenceNode(node);
-            const id = getAliasId(symbol, typeArguments);
-            let errorType = errorTypes.get(id);
-            if (!errorType) {
-                errorType = createIntrinsicType(TypeFlags.Any, "error", /*objectFlags*/ undefined, `alias ${id}`);
-                errorType.aliasSymbol = symbol;
-                errorType.aliasTypeArguments = typeArguments;
-                errorTypes.set(id, errorType);
-            }
-            return errorType;
+            return getTypeReferenceErrorType(node, symbol, /*typeParameters*/ undefined, /*minTypeArgumentCount*/ 0);
         }
         const type = getDeclaredTypeOfSymbol(symbol);
         const typeParameters = getSymbolLinks(symbol).typeParameters;
@@ -16433,7 +16439,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     minTypeArgumentCount,
                     typeParameters.length,
                 );
-                return errorType;
+                return getTypeReferenceErrorType(node, symbol, /*typeParameters*/ undefined, /*minTypeArgumentCount*/ 0);
             }
             // We refrain from associating a local type alias with an instantiation of a top-level type alias
             // because the local alias may end up being referenced in an inferred return type where it is not
@@ -34619,12 +34625,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode), node);
     }
 
-    function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement {
+    function isCallLikeExpressionMayHaveTypeArguments(node: Node): node is CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement {
         return isCallOrNewExpression(node) || isTaggedTemplateExpression(node) || isJsxOpeningLikeElement(node);
     }
 
     function resolveUntypedCall(node: CallLikeExpression): Signature {
-        if (callLikeExpressionMayHaveTypeArguments(node)) {
+        if (isCallLikeExpressionMayHaveTypeArguments(node)) {
             // Check type arguments even though we will give an error that untyped calls may not accept type arguments.
             // This gets us diagnostics for the type arguments and marks them as referenced.
             forEach(node.typeArguments, checkSourceElement);
@@ -35978,7 +35984,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return candidate;
         }
 
-        const typeArgumentNodes: readonly TypeNode[] | undefined = callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments : undefined;
+        const typeArgumentNodes: readonly TypeNode[] | undefined = isCallLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments : undefined;
         const instantiated = typeArgumentNodes
             ? createSignatureInstantiation(candidate, getTypeArgumentsFromNodes(typeArgumentNodes, typeParameters, isInJSFile(node)))
             : inferSignatureInstantiationForOverloadFailure(node, typeParameters, candidate, args, checkMode);
@@ -41452,22 +41458,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeParametersForTypeAndSymbol(type: Type, symbol: Symbol) {
-        if (!isErrorType(type)) {
-            return symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters ||
-                (getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).target.localTypeParameters : undefined);
-        }
-        return undefined;
+        return symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) && getDeclaredTypeOfClassOrInterface(symbol).localTypeParameters ||
+            symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters ||
+            (getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).target.localTypeParameters : undefined);
     }
 
     function getTypeParametersForTypeReferenceOrImport(node: TypeReferenceNode | ExpressionWithTypeArguments | ImportTypeNode) {
         const type = getTypeFromTypeNode(node);
-        if (!isErrorType(type)) {
-            const symbol = getNodeLinks(node).resolvedSymbol;
-            if (symbol) {
-                return getTypeParametersForTypeAndSymbol(type, symbol);
-            }
-        }
-        return undefined;
+        const symbol = getNodeLinks(node).resolvedSymbol;
+        return symbol && getTypeParametersForTypeAndSymbol(type, symbol);
     }
 
     function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
@@ -41508,12 +41507,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeArgumentConstraint(node: TypeNode): Type | undefined {
-        const typeReferenceNode = tryCast(node.parent, isTypeReferenceType);
-        if (!typeReferenceNode) return undefined;
-        const typeParameters = getTypeParametersForTypeReferenceOrImport(typeReferenceNode);
-        if (!typeParameters) return undefined;
-        const constraint = getConstraintOfTypeParameter(typeParameters[typeReferenceNode.typeArguments!.indexOf(node)]);
-        return constraint && instantiateType(constraint, createTypeMapper(typeParameters, getEffectiveTypeArguments(typeReferenceNode, typeParameters)));
+        if (isTypeReferenceType(node.parent)) {
+            const typeParameters = getTypeParametersForTypeReferenceOrImport(node.parent);
+            if (!typeParameters) return undefined;
+            const constraint = getConstraintOfTypeParameter(typeParameters[node.parent.typeArguments!.indexOf(node)]);
+            return constraint && instantiateType(constraint, createTypeMapper(typeParameters, getEffectiveTypeArguments(node.parent, typeParameters)));
+        }
+        if (isCallLikeExpressionMayHaveTypeArguments(node.parent)) {
+            const signature = getResolvedSignature(node.parent);
+            const typeParameters = signature.target?.typeParameters;
+            if (!typeParameters) return undefined;
+            const isJavascript = isInJSFile(signature.declaration);
+            const constraint = getConstraintOfTypeParameter(typeParameters[node.parent.typeArguments!.indexOf(node)]);
+            const typeArguments = fillMissingTypeArguments(map(node.parent.typeArguments, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
+            return constraint && instantiateType(constraint, createTypeMapper(typeParameters, typeArguments));
+        }
     }
 
     function checkTypeQuery(node: TypeQueryNode) {

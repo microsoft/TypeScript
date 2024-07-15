@@ -14,8 +14,8 @@ class C<T> {
 >     : ^^^^
 
     get x(): A {
->x : any
->  : ^^^
+>x : A
+>  : ^
 
         return this.data;
 >this.data : A<T>

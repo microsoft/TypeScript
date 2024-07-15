@@ -17,42 +17,42 @@ interface I<T> {
 }
 
 var c1: C;
->c1 : any
->   : ^^^
+>c1 : C
+>   : ^
 
 var i1: I;
->i1 : any
->   : ^^^
+>i1 : I
+>   : ^
 
 var c2: C<I>;
->c2 : C<any>
->   : ^^^^^^
+>c2 : C<I>
+>   : ^^^^
 
 var i2: I<C>;
->i2 : I<any>
->   : ^^^^^^
+>i2 : I<C>
+>   : ^^^^
 
 function foo(x: C, y: I) { }
 >foo : (x: C, y: I) => void
 >    : ^ ^^ ^^ ^^ ^^^^^^^^^
->x : any
->  : ^^^
->y : any
->  : ^^^
+>x : C
+>  : ^
+>y : I
+>  : ^
 
 function foo2(x: C<I>, y: I<C>) { }
 >foo2 : (x: C<I>, y: I<C>) => void
 >     : ^ ^^    ^^ ^^    ^^^^^^^^^
->x : C<any>
->  : ^^^^^^
->y : I<any>
->  : ^^^^^^
+>x : C<I>
+>  : ^^^^
+>y : I<C>
+>  : ^^^^
 
 var x: { a: C } = { a: new C<number>() };
 >x : { a: C; }
 >  : ^^^^^ ^^^
->a : any
->  : ^^^
+>a : C
+>  : ^
 >{ a: new C<number>() } : { a: C<number>; }
 >                       : ^^^^^^^^^^^^^^^^^
 >a : C<number>
@@ -65,8 +65,8 @@ var x: { a: C } = { a: new C<number>() };
 var x2: { a: I } = { a: { bar() { return 1 } } };
 >x2 : { a: I; }
 >   : ^^^^^ ^^^
->a : any
->  : ^^^
+>a : I
+>  : ^
 >{ a: { bar() { return 1 } } } : { a: { bar(): number; }; }
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { bar(): number; }
@@ -83,22 +83,22 @@ class D<T> {
 >  : ^^^^
 
     x: C;
->x : any
->  : ^^^
+>x : C
+>  : ^
 
     y: D;
->y : any
->  : ^^^
+>y : D
+>  : ^
 }
 
 interface J<T> {
     x: I;
->x : any
->  : ^^^
+>x : I
+>  : ^
 
     y: J;
->y : any
->  : ^^^
+>y : J
+>  : ^
 }
 
 class A<T> { }
