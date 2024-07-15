@@ -37,7 +37,7 @@ interface AnotherComponentProps {
     AnotherProperty1: string;
 >AnotherProperty1 : Symbol(AnotherComponentProps.AnotherProperty1, Decl(file.tsx, 15, 22))
 
-    property2: boolean;
+    property2: number;
 >property2 : Symbol(AnotherComponentProps.property2, Decl(file.tsx, 16, 29))
 }
 

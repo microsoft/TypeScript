@@ -76,6 +76,16 @@ let obj: object = { a: 123 };
 let spreadObj = { ...obj };
 spreadObj.a; // error 'a' is not in {}
 
+// repro from #51376
+type Item = { attribute: string; };
+declare const result: Partial<Record<'attribute', string | null>>;
+const item: Item = { attribute: "", ...result }; // error reported only on spread and not on the compatible property
+
+// repro from #52850#discussion_r1136291508
+interface A { a?: string; }
+declare var a: A;
+const o5: { a: boolean; } = { a: 12, ...a }; // error reported on both spread and the overriden property
+
 
 //// [objectSpreadNegative.js]
 var __assign = (this && this.__assign) || function () {
@@ -154,3 +164,5 @@ spreadC.m(); // error 'm' is not in '{ ... c }'
 var obj = { a: 123 };
 var spreadObj = __assign({}, obj);
 spreadObj.a; // error 'a' is not in {}
+var item = __assign({ attribute: "" }, result); // error reported only on spread and not on the compatible property
+var o5 = __assign({ a: 12 }, a); // error reported on both spread and the overriden property

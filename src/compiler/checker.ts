@@ -20847,14 +20847,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
             if (!sourcePropType) continue;
             const propName = getPropertyNameFromIndex(nameType, /*accessNode*/ undefined);
-            if (!checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
+            // Use the expression type, if available
+            const specificSource = next
+                ? isSpreadAssignment(prop) || isJsxSpreadAttribute(prop)
+                    ? getIndexedAccessType(checkExpressionForMutableLocation(next, CheckMode.Contextual), nameType)
+                    : checkExpressionForMutableLocationWithContextualType(next, sourcePropType)
+                : sourcePropType;
+            if (!checkTypeRelatedTo(specificSource, targetPropType, relation, /*errorNode*/ undefined)) {
                 const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined, containingMessageChain, errorOutputContainer);
                 reportedError = true;
                 if (!elaborated) {
                     // Issue error on the prop itself, since the prop couldn't elaborate the error
                     const resultObj: { errors?: Diagnostic[]; } = errorOutputContainer || {};
-                    // Use the expression type, if available
-                    const specificSource = next ? checkExpressionForMutableLocationWithContextualType(next, sourcePropType) : sourcePropType;
                     if (exactOptionalPropertyTypes && isExactOptionalPropertyMismatch(specificSource, targetPropType)) {
                         const diag = createDiagnosticForNode(prop, Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target, typeToString(specificSource), typeToString(targetPropType));
                         diagnostics.add(diag);
@@ -20967,10 +20971,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return reportedError;
     }
 
+    function* generateSpreadProperties(node: SpreadAssignment | JsxSpreadAttribute): ElaborationIterator {
+        for (const propOfSpread of getPropertiesOfType(getTypeOfExpression(node.expression))) {
+            const type = getLiteralTypeFromProperty(propOfSpread, TypeFlags.StringOrNumberLiteralOrUnique);
+            if (type.flags & TypeFlags.Never) {
+                continue;
+            }
+            yield { errorNode: node, innerExpression: node.expression, nameType: type };
+        }
+    }
+
     function* generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
         if (!length(node.properties)) return;
         for (const prop of node.properties) {
-            if (isJsxSpreadAttribute(prop) || isHyphenatedJsxName(getTextOfJsxAttributeName(prop.name))) continue;
+            if (isJsxSpreadAttribute(prop)) {
+                yield* generateSpreadProperties(prop);
+                continue;
+            }
+            if (isHyphenatedJsxName(getTextOfJsxAttributeName(prop.name))) continue;
             yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: getStringLiteralType(getTextOfJsxAttributeName(prop.name)) };
         }
     }
@@ -21115,11 +21133,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function* generateLimitedTupleElements(node: ArrayLiteralExpression, target: Type): ElaborationIterator {
         const len = length(node.elements);
         if (!len) return;
+        const isTupleLikeTarget = isTupleLikeType(target);
         for (let i = 0; i < len; i++) {
             // Skip elements which do not exist in the target - a length error on the tuple overall is likely better than an error on a mismatched index signature
-            if (isTupleLikeType(target) && !getPropertyOfType(target, ("" + i) as __String)) continue;
+            if (isTupleLikeTarget && !getPropertyOfType(target, ("" + i) as __String)) continue;
             const elem = node.elements[i];
             if (isOmittedExpression(elem)) continue;
+            // Spread elements might "target" multiple tuple elements - that results in union types on specific positions
+            // in such situations prop-based elaborations are more confusing than helpful, full tuple-oriented elaborations are likely better here
+            if (isTupleLikeTarget && isSpreadElement(elem)) return;
             const nameType = getNumberLiteralType(i);
             const checkNode = getEffectiveCheckNode(elem);
             yield { errorNode: checkNode, innerExpression: checkNode, nameType };
@@ -21152,9 +21174,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function* generateObjectLiteralElements(node: ObjectLiteralExpression): ElaborationIterator {
         if (!length(node.properties)) return;
         for (const prop of node.properties) {
-            if (isSpreadAssignment(prop)) continue;
+            if (isSpreadAssignment(prop)) {
+                yield* generateSpreadProperties(prop);
+                continue;
+            }
             const type = getLiteralTypeFromProperty(getSymbolOfDeclaration(prop), TypeFlags.StringOrNumberLiteralOrUnique);
-            if (!type || (type.flags & TypeFlags.Never)) {
+            if (type.flags & TypeFlags.Never) {
                 continue;
             }
             switch (prop.kind) {

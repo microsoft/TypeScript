@@ -131,3 +131,23 @@ let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
 >X : string
 >  : ^^^^^^
 
+let w2 = <Poisoned {...{x: 'foo', y: "2"}} X="hi" />;
+>w2 : JSX.Element
+>   : ^^^^^^^^^^^
+><Poisoned {...{x: 'foo', y: "2"}} X="hi" /> : JSX.Element
+>                                            : ^^^^^^^^^^^
+>Poisoned : typeof Poisoned
+>         : ^^^^^^^^^^^^^^^
+>{x: 'foo', y: "2"} : { x: string; y: "2"; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+>y : "2"
+>  : ^^^
+>"2" : "2"
+>    : ^^^
+>X : string
+>  : ^^^^^^
+

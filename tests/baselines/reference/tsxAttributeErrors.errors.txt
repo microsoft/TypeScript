@@ -1,8 +1,6 @@
 tsxAttributeErrors.tsx(14,6): error TS2322: Type 'number' is not assignable to type 'string'.
 tsxAttributeErrors.tsx(17,6): error TS2322: Type 'string' is not assignable to type 'number'.
-tsxAttributeErrors.tsx(21,2): error TS2322: Type '{ text: number; }' is not assignable to type '{ text?: string; width?: number; }'.
-  Types of property 'text' are incompatible.
-    Type 'number' is not assignable to type 'string'.
+tsxAttributeErrors.tsx(21,6): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
 ==== tsxAttributeErrors.tsx (3 errors) ====
@@ -33,10 +31,9 @@ tsxAttributeErrors.tsx(21,2): error TS2322: Type '{ text: number; }' is not assi
     // Error, number is not assignable to string
     var attribs = { text: 100 };
     <div {...attribs} />;
-     ~~~
-!!! error TS2322: Type '{ text: number; }' is not assignable to type '{ text?: string; width?: number; }'.
-!!! error TS2322:   Types of property 'text' are incompatible.
-!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+         ~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tsxAttributeErrors.tsx:5:4: The expected type comes from property 'text' which is declared here on type '{ text?: string; width?: number; }'
     
     // No errors here
     <span foo='bar' bar={'foo'} />;

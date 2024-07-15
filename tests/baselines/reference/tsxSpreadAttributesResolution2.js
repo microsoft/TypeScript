@@ -25,6 +25,7 @@ let y = <Poisoned />;
 let z = <Poisoned x y/>;
 let w = <Poisoned {...{x: 5, y: "2"}}/>;
 let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
+let w2 = <Poisoned {...{x: 'foo', y: "2"}} X="hi" />;
 
 //// [file.jsx]
 "use strict";
@@ -64,3 +65,4 @@ var y = <Poisoned />;
 var z = <Poisoned x y/>;
 var w = <Poisoned {...{ x: 5, y: "2" }}/>;
 var w1 = <Poisoned {...{ x: 5, y: "2" }} X="hi"/>;
+var w2 = <Poisoned {...{ x: 'foo', y: "2" }} X="hi"/>;

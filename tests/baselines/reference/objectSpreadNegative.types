@@ -550,3 +550,49 @@ spreadObj.a; // error 'a' is not in {}
 >a : any
 >  : ^^^
 
+// repro from #51376
+type Item = { attribute: string; };
+>Item : Item
+>     : ^^^^
+>attribute : string
+>          : ^^^^^^
+
+declare const result: Partial<Record<'attribute', string | null>>;
+>result : Partial<Record<"attribute", string | null>>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const item: Item = { attribute: "", ...result }; // error reported only on spread and not on the compatible property
+>item : Item
+>     : ^^^^
+>{ attribute: "", ...result } : { attribute: string | null; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>attribute : string
+>          : ^^^^^^
+>"" : ""
+>   : ^^
+>result : Partial<Record<"attribute", string | null>>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// repro from #52850#discussion_r1136291508
+interface A { a?: string; }
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+declare var a: A;
+>a : A
+>  : ^
+
+const o5: { a: boolean; } = { a: 12, ...a }; // error reported on both spread and the overriden property
+>o5 : { a: boolean; }
+>   : ^^^^^       ^^^
+>a : boolean
+>  : ^^^^^^^
+>{ a: 12, ...a } : { a: string | number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>12 : 12
+>   : ^^
+>a : A
+>  : ^
+

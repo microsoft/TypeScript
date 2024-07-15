@@ -28,9 +28,7 @@ file.tsx(17,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ yy: boolean; yy1: string; }' has no properties in common with type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
-    Type '{ yy: boolean; yy1: string; }' is not assignable to type '{ yy: number; yy1: string; }'.
-      Types of property 'yy' are incompatible.
-        Type 'boolean' is not assignable to type 'number'.
+    Type 'boolean' is not assignable to type 'number'.
 file.tsx(25,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
     Type '{ "extra-data": true; }' is not assignable to type '{ "extra-data": string; }'.
@@ -133,9 +131,8 @@ file.tsx(36,13): error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(): Element', gave the following error.
 !!! error TS2769:     Type '{ yy: boolean; yy1: string; }' has no properties in common with type 'IntrinsicAttributes'.
 !!! error TS2769:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
-!!! error TS2769:     Type '{ yy: boolean; yy1: string; }' is not assignable to type '{ yy: number; yy1: string; }'.
-!!! error TS2769:       Types of property 'yy' are incompatible.
-!!! error TS2769:         Type 'boolean' is not assignable to type 'number'.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'number'.
+!!! related TS6500 file.tsx:3:31: The expected type comes from property 'yy' which is declared here on type 'IntrinsicAttributes & { yy: number; yy1: string; }'
     const c6 = <OneThing {...obj2} {...{extra: "extra attr"}} />;  // Should error as there is extra attribute that doesn't match any. Current it is not
     const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribute that doesn't match any. Current it is not
     
