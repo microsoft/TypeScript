@@ -22360,7 +22360,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function shouldCheckAsExcessProperty(prop: Symbol, container: Symbol) {
-            return prop.valueDeclaration && container.valueDeclaration && prop.valueDeclaration.parent === container.valueDeclaration;
+            if (!container.valueDeclaration) return false;
+            if (prop.valueDeclaration?.parent === container.valueDeclaration) return true;
+            if (isObjectLiteralExpression(container.valueDeclaration) && hasOnlyExpressionInitializer(container.valueDeclaration.parent)) return true;
+            return false;
         }
 
         function unionOrIntersectionRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
