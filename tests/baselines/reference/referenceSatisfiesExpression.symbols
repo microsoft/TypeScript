@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/referenceSatisfiesExpression.ts] ////
+
+=== referenceSatisfiesExpression.ts ===
+let a = 10;
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 0, 3))
+
+--(a satisfies number);
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 0, 3))
+
+++(a satisfies number);
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 0, 3))
+
+(a satisfies number)++;
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 0, 3))
+
+(a satisfies number)--;
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 0, 3))
+
+let b: number;
+>b : Symbol(b, Decl(referenceSatisfiesExpression.ts, 7, 3))
+
+(b satisfies number) = 10;
+>b : Symbol(b, Decl(referenceSatisfiesExpression.ts, 7, 3))
+
+let c: number;
+>c : Symbol(c, Decl(referenceSatisfiesExpression.ts, 10, 3))
+
+[(c satisfies number)] = [10];
+>c : Symbol(c, Decl(referenceSatisfiesExpression.ts, 10, 3))
+
+let d: number, e = 1;
+>d : Symbol(d, Decl(referenceSatisfiesExpression.ts, 13, 3))
+>e : Symbol(e, Decl(referenceSatisfiesExpression.ts, 13, 14))
+
+({ d: (e satisfies number) } = { d: 10 });
+>d : Symbol(d, Decl(referenceSatisfiesExpression.ts, 14, 2))
+>e : Symbol(e, Decl(referenceSatisfiesExpression.ts, 13, 14))
+>d : Symbol(d, Decl(referenceSatisfiesExpression.ts, 14, 32))
+
+let g = 1
+>g : Symbol(g, Decl(referenceSatisfiesExpression.ts, 16, 3))
+
+for ((g satisfies number) of [10]) {
+>g : Symbol(g, Decl(referenceSatisfiesExpression.ts, 16, 3))
+
+  console.log(g)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>g : Symbol(g, Decl(referenceSatisfiesExpression.ts, 16, 3))
+}
+
+let x: string = "hello"
+>x : Symbol(x, Decl(referenceSatisfiesExpression.ts, 21, 3))
+
+for ((x satisfies string) in { a: 10 }) {
+>x : Symbol(x, Decl(referenceSatisfiesExpression.ts, 21, 3))
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 22, 30))
+
+  console.log(x)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(referenceSatisfiesExpression.ts, 21, 3))
+}
+

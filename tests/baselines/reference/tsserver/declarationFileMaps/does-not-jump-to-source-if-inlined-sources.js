@@ -65,8 +65,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user
-Info seq  [hh:mm:ss:mss] For info: /user/user.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/user.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/bin/b.d.ts 500 undefined WatchType: Closed Script info
@@ -96,7 +95,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/user.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -194,13 +200,23 @@ FsWatches::
 /b/bin/b.d.ts:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /a/bin/a.d.ts: identitySourceMapConsumer *new*
+
 ScriptInfos::
-/a/bin/a.d.ts
+/a/bin/a.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    documentPositionMapper: false
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
@@ -281,28 +297,47 @@ FsWatches::
 /b/bin/b.d.ts.map: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 2 *changed*
+        /a/bin/a.d.ts: identitySourceMapConsumer
+        /b/bin/b.d.ts: DocumentPositionMapper1 *new*
+
 ScriptInfos::
 /a/bin/a.d.ts
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    documentPositionMapper: false
     containingProjects: 0
 /b/b.ts *new*
     version: Text-1
     containingProjects: 0
-/b/bin/b.d.ts
+/b/bin/b.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /b/bin/b.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    sourceInfos: 1
+        /b/b.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/user.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Before request
 
@@ -323,7 +358,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 4,
+      "success": true
     }
 After request
 
@@ -349,24 +388,34 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/bin/a.d.ts
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    documentPositionMapper: false
     containingProjects: 0
 /b/b.ts
     version: Text-1
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map
     containingProjects: 1
         /dev/null/inferredProject1*
 /b/bin/b.d.ts.map
     version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    sourceInfos: 1
+        /b/b.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/user.ts *changed*
     open: false *changed*
@@ -385,8 +434,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /dummy
-Info seq  [hh:mm:ss:mss] For info: /dummy/dummy.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /dummy/dummy.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -431,7 +479,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 5,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -457,6 +512,12 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+    documentPositionMappers: 0 *changed*
+        /a/bin/a.d.ts: identitySourceMapConsumer *deleted*
+        /b/bin/b.d.ts: DocumentPositionMapper1 *deleted*
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -464,20 +525,28 @@ Projects::
 ScriptInfos::
 /a/bin/a.d.ts *deleted*
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
 /a/bin/a.d.ts.map *deleted*
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    documentPositionMapper: false
     containingProjects: 0
 /b/b.ts *deleted*
     version: Text-1
     containingProjects: 0
 /b/bin/b.d.ts *deleted*
     version: Text-1
+    sourceMapFilePath: /b/bin/b.d.ts.map
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
 /b/bin/b.d.ts.map *deleted*
     version: Text-1
+    declarationInfoPath: /b/bin/b.d.ts
+    sourceInfos: 1
+        /b/b.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /dummy/dummy.ts (Open) *new*
     version: SVC-1-0
@@ -486,3 +555,6 @@ ScriptInfos::
 /user/user.ts *deleted*
     version: SVC-1-0
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *deleted*

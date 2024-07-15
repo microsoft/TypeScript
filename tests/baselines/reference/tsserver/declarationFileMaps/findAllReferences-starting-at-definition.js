@@ -82,8 +82,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/a.ts :: Config file name: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/a.ts ProjectRootPath: undefined:: Result: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -234,8 +233,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
@@ -245,7 +243,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -307,7 +312,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 2,
+      "success": true
     }
 After request
 
@@ -324,6 +333,12 @@ FsWatches::
 FsWatchesRecursive::
 /a:
   {}
+
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/a.ts *changed*
@@ -343,8 +358,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/b.ts :: Config file name: /b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/b.ts ProjectRootPath: undefined:: Result: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/tsconfig.json 2000 undefined Project: /b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -495,8 +509,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -521,7 +534,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /b/b.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -551,6 +571,8 @@ Projects::
 /a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -600,7 +622,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 4,
+      "success": true
     }
 After request
 
@@ -618,6 +644,12 @@ FsWatchesRecursive::
 /b:
   {}
 
+Projects::
+/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /b/b.ts *changed*
     open: false *changed*
@@ -626,7 +658,6 @@ ScriptInfos::
         /b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /b/b.ts 2:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /b/b.ts 2:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /b/b.ts :: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
@@ -635,22 +666,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /b/b.ts
 Before request
 //// [/b/b.ts] deleted
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/b/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/b/b.ts:
-  {}
-
-FsWatchesRecursive::
-/b:
-  {}
-
 Timeout callback:: count: 1
 2: /b/tsconfig.json *new*
 
@@ -658,10 +673,14 @@ Projects::
 /b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    noOpenRef: true
 
 ScriptInfos::
-/b/b.ts *deleted*
+/b/b.ts *changed*
     version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /b/tsconfig.json *deleted*
 
@@ -674,8 +693,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user
-Info seq  [hh:mm:ss:mss] For info: /user/user.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/user.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/bin/b.d.ts 500 undefined WatchType: Closed Script info
@@ -710,6 +728,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b 1 undefined Co
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/tsconfig.json 2000 undefined Project: /b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -719,7 +738,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/user.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 5,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -734,6 +760,8 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
+/b/b.ts:
+  {}
 /b/tsconfig.json:
   {}
 
@@ -745,6 +773,9 @@ Projects::
 /b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -754,6 +785,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
+/b/b.ts *deleted*
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 /b/bin/b.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -774,8 +810,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 6,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/a.ts :: Config file name: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/a.ts ProjectRootPath: undefined:: Result: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -880,8 +915,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
@@ -897,7 +931,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 6,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -959,10 +1000,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Finding references to /a/a.ts position 16 in project /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finding references to /a/bin/a.d.ts position 24 in project /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/a.ts :: Config file name: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1030,17 +1067,36 @@ FsWatchesRecursive::
 /a:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /a/bin/a.d.ts: DocumentPositionMapper1 *new*
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /a/bin/a.d.ts: DocumentPositionMapper1 *new*
+    originalConfiguredProjects: 1 *changed*
+        /a/tsconfig.json *new*
+
 ScriptInfos::
 /a/a.ts (Open)
     version: SVC-2-0
     containingProjects: 1
         /a/tsconfig.json *default*
-/a/bin/a.d.ts
+/a/bin/a.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
@@ -1050,6 +1106,9 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Before request
 
@@ -1076,7 +1135,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 8,
+      "success": true
     }
 After request
 
@@ -1107,6 +1170,10 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+    originalConfiguredProjects: 1
+        /a/tsconfig.json
 
 ScriptInfos::
 /a/a.ts (Open)
@@ -1115,10 +1182,15 @@ ScriptInfos::
         /a/tsconfig.json *default*
 /a/bin/a.d.ts
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
@@ -1141,8 +1213,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 9,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /dummy
-Info seq  [hh:mm:ss:mss] For info: /dummy/dummy.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /dummy/dummy.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -1189,7 +1260,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 9,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1222,6 +1300,13 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+    documentPositionMappers: 0 *changed*
+        /a/bin/a.d.ts: DocumentPositionMapper1 *deleted*
+    originalConfiguredProjects: 1
+        /a/tsconfig.json
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1233,10 +1318,15 @@ ScriptInfos::
         /a/tsconfig.json *default*
 /a/bin/a.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
 /a/bin/a.d.ts.map
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts *deleted*
     version: Text-1

@@ -5,18 +5,21 @@ import {
     AssignmentDeclarationKind,
     BaseType,
     BinaryExpression,
+    BlockLike,
     BreakpointResolver,
     CallHierarchy,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
     CallHierarchyOutgoingCall,
     CancellationToken,
+    canIncludeBindAndCheckDiagnostics,
     changeCompilerHostLikeToUseCache,
     CharacterCodes,
     CheckJsDirective,
     Classifications,
     ClassifiedSpan,
     ClassifiedSpan2020,
+    ClassLikeDeclaration,
     CodeActionCommand,
     codefix,
     CodeFixAction,
@@ -58,6 +61,7 @@ import {
     EditorOptions,
     EditorSettings,
     ElementAccessExpression,
+    EmitNode,
     EmitTextWriter,
     emptyArray,
     emptyOptions,
@@ -75,6 +79,7 @@ import {
     findAncestor,
     findChildOfKind,
     findPrecedingToken,
+    findTokenOnLeftOfPosition,
     first,
     firstDefined,
     firstOrOnly,
@@ -105,6 +110,7 @@ import {
     getNameFromPropertyName,
     getNewLineCharacter,
     getNewLineOrDefaultFromHost,
+    getNodeChildren,
     getNonAssignedNameOfDeclaration,
     getNormalizedAbsolutePath,
     getObjectFlags,
@@ -143,6 +149,8 @@ import {
     IntersectionType,
     isArray,
     isBindingPattern,
+    isBlockLike,
+    isClassLike,
     isComputedPropertyName,
     isConstTypeReference,
     IScriptSnapshot,
@@ -151,6 +159,7 @@ import {
     isIdentifier,
     isImportMeta,
     isInComment,
+    isInJSFile,
     isInsideJsxElement,
     isInsideJsxElementOrAttribute,
     isInString,
@@ -181,6 +190,8 @@ import {
     isRightSideOfPropertyAccess,
     isRightSideOfQualifiedName,
     isSetAccessor,
+    isSourceElement,
+    isSourceFile,
     isStringOrNumericLiteralLike,
     isTagName,
     isTextWhiteSpaceLike,
@@ -208,6 +219,7 @@ import {
     LinkedEditingInfo,
     LiteralType,
     map,
+    MapCode,
     mapDefined,
     MapLike,
     mapOneOrMany,
@@ -223,6 +235,7 @@ import {
     NodeFlags,
     noop,
     normalizePath,
+    normalizeSpans,
     NumberLiteralType,
     NumericLiteral,
     ObjectAllocator,
@@ -238,6 +251,9 @@ import {
     ParseConfigFileHost,
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
+    PasteEdits,
+    pasteEdits,
+    PasteEditsArgs,
     Path,
     positionIsSynthesized,
     PossibleProgramFileInfo,
@@ -245,6 +261,7 @@ import {
     PrivateIdentifier,
     Program,
     PropertyName,
+    PropertySignature,
     QuickInfo,
     refactor,
     RefactorContext,
@@ -252,6 +269,7 @@ import {
     RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
+    RegionDiagnosticsResult,
     Rename,
     RenameInfo,
     RenameInfoOptions,
@@ -265,6 +283,7 @@ import {
     ScriptTarget,
     SelectionRange,
     SemanticClassificationFormat,
+    setNodeChildren,
     setObjectAllocator,
     Signature,
     SignatureDeclaration,
@@ -274,7 +293,9 @@ import {
     SignatureHelpItemsOptions,
     SignatureKind,
     singleElementArray,
+    skipTypeChecking,
     SmartSelectionRange,
+    some,
     SortedArray,
     SourceFile,
     SourceFileLike,
@@ -288,7 +309,9 @@ import {
     SymbolDisplay,
     SymbolDisplayPart,
     SymbolFlags,
+    SymbolLinks,
     symbolName,
+    SymbolTable,
     SyntaxKind,
     SyntaxList,
     sys,
@@ -297,7 +320,10 @@ import {
     TextChangeRange,
     TextInsertion,
     TextRange,
+    textRangeContainsTextSpan,
+    textRangeIntersectsWithTextSpan,
     TextSpan,
+    textSpanContainsTextRange,
     textSpanEnd,
     timestamp,
     TodoComment,
@@ -319,19 +345,21 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
-} from "./_namespaces/ts";
-import * as NavigateTo from "./_namespaces/ts.NavigateTo";
-import * as NavigationBar from "./_namespaces/ts.NavigationBar";
+} from "./_namespaces/ts.js";
+import * as NavigateTo from "./_namespaces/ts.NavigateTo.js";
+import * as NavigationBar from "./_namespaces/ts.NavigationBar.js";
 import {
+    containsJsx,
     createNewFileName,
-} from "./_namespaces/ts.refactor";
-import * as classifier from "./classifier";
-import * as classifier2020 from "./classifier2020";
+    getStatementsToMove,
+} from "./_namespaces/ts.refactor.js";
+import * as classifier from "./classifier.js";
+import * as classifier2020 from "./classifier2020.js";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";
 
-function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
+function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject<TKind> | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
     const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
         kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
         kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
@@ -341,8 +369,8 @@ function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: num
     return node;
 }
 
-class NodeObject implements Node {
-    public kind: SyntaxKind;
+class NodeObject<TKind extends SyntaxKind> implements Node {
+    public kind: TKind;
     public pos: number;
     public end: number;
     public flags: NodeFlags;
@@ -352,16 +380,21 @@ class NodeObject implements Node {
     public symbol!: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
     public jsDoc?: JSDoc[];
     public original?: Node;
-    private _children: Node[] | undefined;
+    public id?: number;
+    public emitNode?: EmitNode;
 
-    constructor(kind: SyntaxKind, pos: number, end: number) {
+    constructor(kind: TKind, pos: number, end: number) {
+        // Note: if modifying this, be sure to update Node in src/compiler/utilities.ts
         this.pos = pos;
         this.end = end;
+        this.kind = kind;
+        this.id = 0;
         this.flags = NodeFlags.None;
         this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
-        this.kind = kind;
+        this.original = undefined;
+        this.emitNode = undefined;
     }
 
     private assertHasRealPosition(message?: string) {
@@ -424,9 +457,9 @@ class NodeObject implements Node {
         return this.getChildren(sourceFile)[index];
     }
 
-    public getChildren(sourceFile?: SourceFileLike): Node[] {
+    public getChildren(sourceFile: SourceFileLike = getSourceFileOfNode(this)): readonly Node[] {
         this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-        return this._children || (this._children = createChildren(this, sourceFile));
+        return getNodeChildren(this, sourceFile) ?? setNodeChildren(this, sourceFile, createChildren(this, sourceFile));
     }
 
     public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
@@ -459,11 +492,7 @@ class NodeObject implements Node {
     }
 }
 
-function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Node[] {
-    if (!isNodeKind(node.kind)) {
-        return emptyArray;
-    }
-
+function createChildren(node: Node, sourceFile: SourceFileLike | undefined): readonly Node[] {
     const children: Node[] = [];
 
     if (isJSDocCommentContainingNode(node)) {
@@ -521,36 +550,41 @@ function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node
 
 function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
     const list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, parent) as any as SyntaxList;
-    list._children = [];
+    const children: Node[] = [];
     let pos = nodes.pos;
     for (const node of nodes) {
-        addSyntheticNodes(list._children, pos, node.pos, parent);
-        list._children.push(node);
+        addSyntheticNodes(children, pos, node.pos, parent);
+        children.push(node);
         pos = node.end;
     }
-    addSyntheticNodes(list._children, pos, nodes.end, parent);
+    addSyntheticNodes(children, pos, nodes.end, parent);
+    list._children = children;
     return list;
 }
 
-class TokenOrIdentifierObject implements Node {
-    public kind!: SyntaxKind;
+class TokenOrIdentifierObject<TKind extends SyntaxKind> implements Node {
+    public kind: TKind;
     public pos: number;
     public end: number;
     public flags: NodeFlags;
-    public modifierFlagsCache: ModifierFlags;
+    public modifierFlagsCache!: ModifierFlags;
     public transformFlags: TransformFlags;
     public parent: Node;
     public symbol!: Symbol;
     public jsDocComments?: JSDoc[];
+    public id?: number;
+    public emitNode?: EmitNode | undefined;
 
-    constructor(pos: number, end: number) {
-        // Set properties in same order as NodeObject
+    constructor(kind: TKind, pos: number, end: number) {
+        // Note: if modifying this, be sure to update Token and Identifier in src/compiler/utilities.ts
         this.pos = pos;
         this.end = end;
+        this.kind = kind;
+        this.id = 0;
         this.flags = NodeFlags.None;
-        this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
+        this.emitNode = undefined;
     }
 
     public getSourceFile(): SourceFile {
@@ -620,11 +654,18 @@ class TokenOrIdentifierObject implements Node {
 class SymbolObject implements Symbol {
     flags: SymbolFlags;
     escapedName: __String;
-    declarations!: Declaration[];
-    valueDeclaration!: Declaration;
-    id = 0;
-    mergeId = 0;
+    declarations?: Declaration[];
+    valueDeclaration?: Declaration;
+    members?: SymbolTable;
+    exports?: SymbolTable;
+    id: number;
+    mergeId: number;
+    parent?: Symbol;
+    exportSymbol?: Symbol;
     constEnumOnlyModule: boolean | undefined;
+    isReferenced?: SymbolFlags;
+    lastAssignmentPos?: number;
+    links?: SymbolLinks;
 
     // Undefined is used to indicate the value has not been computed. If, after computing, the
     // symbol has no doc comment, then the empty array will be returned.
@@ -638,8 +679,21 @@ class SymbolObject implements Symbol {
     contextualSetAccessorTags?: JSDocTagInfo[];
 
     constructor(flags: SymbolFlags, name: __String) {
+        // Note: if modifying this, be sure to update Symbol in src/compiler/types.ts
         this.flags = flags;
         this.escapedName = name;
+        this.declarations = undefined;
+        this.valueDeclaration = undefined;
+        this.id = 0;
+        this.mergeId = 0;
+        this.parent = undefined;
+        this.members = undefined;
+        this.exports = undefined;
+        this.exportSymbol = undefined;
+        this.constEnumOnlyModule = undefined;
+        this.isReferenced = undefined;
+        this.lastAssignmentPos = undefined;
+        this.links = undefined; // used by TransientSymbol
     }
 
     getFlags(): SymbolFlags {
@@ -701,6 +755,7 @@ class SymbolObject implements Symbol {
 
     getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
         if (this.tags === undefined) {
+            this.tags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
             this.tags = getJsDocTagsOfDeclarations(this.declarations, checker);
         }
 
@@ -730,17 +785,13 @@ class SymbolObject implements Symbol {
     }
 }
 
-class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
-    public override kind: TKind;
-
+class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject<TKind> implements Token<TKind> {
     constructor(kind: TKind, pos: number, end: number) {
-        super(pos, end);
-        this.kind = kind;
+        super(kind, pos, end);
     }
 }
 
-class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
-    public override kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
+class IdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Identifier> implements Identifier {
     public escapedText!: __String;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
@@ -751,18 +802,17 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
-    /** @internal */ typeArguments!: NodeArray<TypeNode>;
-    constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
-        super(pos, end);
+    typeArguments!: NodeArray<TypeNode>;
+    constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
+        super(kind, pos, end);
     }
 
     get text(): string {
         return idText(this);
     }
 }
-IdentifierObject.prototype.kind = SyntaxKind.Identifier;
-class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
-    public override kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
+
+class PrivateIdentifierObject extends TokenOrIdentifierObject<SyntaxKind.PrivateIdentifier> implements PrivateIdentifier {
     public escapedText!: __String;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
@@ -770,15 +820,14 @@ class PrivateIdentifierObject extends TokenOrIdentifierObject implements Private
     declare _updateExpressionBrand: any;
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
-    constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
-        super(pos, end);
+    constructor(kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
+        super(kind, pos, end);
     }
 
     get text(): string {
         return idText(this);
     }
 }
-PrivateIdentifierObject.prototype.kind = SyntaxKind.PrivateIdentifier;
 
 class TypeObject implements Type {
     checker: TypeChecker;
@@ -787,8 +836,9 @@ class TypeObject implements Type {
     id!: number;
     symbol!: Symbol;
     constructor(checker: TypeChecker, flags: TypeFlags) {
-        this.checker = checker;
+        // Note: if modifying this, be sure to update Type in src/compiler/types.ts
         this.flags = flags;
+        this.checker = checker;
     }
     getFlags(): TypeFlags {
         return this.flags;
@@ -895,8 +945,9 @@ class SignatureObject implements Signature {
     jsDocTags?: JSDocTagInfo[]; // same
 
     constructor(checker: TypeChecker, flags: SignatureFlags) {
-        this.checker = checker;
+        // Note: if modifying this, be sure to update Signature in src/compiler/types.ts
         this.flags = flags;
+        this.checker = checker;
     }
 
     getDeclaration(): SignatureDeclaration {
@@ -953,7 +1004,7 @@ function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, che
                     if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
                         return symbol.getContextualJsDocTags(declaration, checker);
                     }
-                    return symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined;
+                    return symbol.declarations?.length === 1 ? symbol.getJsDocTags(checker) : undefined;
                 }
             });
             if (inheritedTags) {
@@ -1000,8 +1051,7 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
     });
 }
 
-class SourceFileObject extends NodeObject implements SourceFile {
-    public override kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
+class SourceFileObject extends NodeObject<SyntaxKind.SourceFile> implements SourceFile {
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
     public fileName!: string;
@@ -1051,7 +1101,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public localJsxFactory: EntityName | undefined;
     public localJsxNamespace: __String | undefined;
 
-    constructor(kind: SyntaxKind, pos: number, end: number) {
+    constructor(kind: SyntaxKind.SourceFile, pos: number, end: number) {
         super(kind, pos, end);
     }
 
@@ -1246,8 +1296,17 @@ class SourceFileObject extends NodeObject implements SourceFile {
 }
 
 class SourceMapSourceObject implements SourceMapSource {
+    fileName: string;
+    text: string;
+    skipTrivia?: ((pos: number) => number) | undefined;
     lineMap!: number[];
-    constructor(public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) {}
+
+    constructor(fileName: string, text: string, skipTrivia?: (pos: number) => number) {
+        // Note: if modifying this, be sure to update SourceMapSource in src/compiler/types.ts
+        this.fileName = fileName;
+        this.text = text;
+        this.skipTrivia = skipTrivia || (pos => pos);
+    }
 
     public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
         return getLineAndCharacterOfPosition(this, pos);
@@ -1533,6 +1592,7 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "provideCallHierarchyOutgoingCalls",
     "provideInlayHints",
     "getSupportedCodeFixes",
+    "getPasteEdits",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -1556,7 +1616,7 @@ const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
 ];
 export function createLanguageService(
     host: LanguageServiceHost,
-    documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
+    documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory(), host.jsDocParsingMode),
     syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode,
 ): LanguageService {
     let languageServiceMode: LanguageServiceMode;
@@ -1806,15 +1866,20 @@ export function createLanguageService(
                 host.onReleaseParsedCommandLine?.(configFileName, oldResolvedRef, oldOptions);
             }
             else if (oldResolvedRef) {
-                onReleaseOldSourceFile(oldResolvedRef.sourceFile, oldOptions);
+                releaseOldSourceFile(oldResolvedRef.sourceFile, oldOptions);
             }
         }
 
         // Release any files we have acquired in the old program but are
         // not part of the new program.
-        function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
+        function releaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
             const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
             documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
+        }
+
+        function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean, newSourceFileByResolvedPath: SourceFile | undefined) {
+            releaseOldSourceFile(oldSourceFile, oldOptions);
+            host.onReleaseOldSourceFile?.(oldSourceFile, oldOptions, hasSourceFileByPath, newSourceFileByResolvedPath);
         }
 
         function getOrCreateSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
@@ -1999,6 +2064,152 @@ export function createLanguageService(
         return [...semanticDiagnostics, ...declarationDiagnostics];
     }
 
+    function getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined {
+        synchronizeHostData();
+
+        const sourceFile = getValidSourceFile(fileName);
+
+        const options = program.getCompilerOptions();
+        // This is an optimization to avoid computing the nodes in the range if either
+        // we will skip semantic diagnostics for this file or if we already semantic diagnostics for it.
+        if (
+            skipTypeChecking(sourceFile, options, program) ||
+            !canIncludeBindAndCheckDiagnostics(sourceFile, options) ||
+            program.getCachedSemanticDiagnostics(sourceFile)
+        ) {
+            return undefined;
+        }
+
+        const nodes = getNodesForRanges(sourceFile, ranges);
+        if (!nodes) {
+            return undefined;
+        }
+        const checkedSpans = normalizeSpans(nodes.map(node => createTextSpanFromBounds(node.getFullStart(), node.getEnd())));
+        const semanticDiagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken, nodes);
+        return {
+            diagnostics: semanticDiagnostics.slice(),
+            spans: checkedSpans,
+        };
+    }
+
+    function getNodesForRanges(file: SourceFile, ranges: TextRange[]): Node[] | undefined {
+        const nodes: Node[] = [];
+        const spans = normalizeSpans(ranges.map(range => createTextSpanFromRange(range)));
+        for (const span of spans) {
+            const nodesForSpan = getNodesForSpan(file, span);
+            if (!nodesForSpan) {
+                return undefined;
+            }
+            nodes.push(...nodesForSpan);
+        }
+        if (!nodes.length) {
+            return undefined;
+        }
+        return nodes;
+    }
+
+    /**
+     * Gets nodes that overlap the given span to be partially checked.
+     * @returns an array of nodes that overlap the span and are source element nodes (c.f. {@link isSourceElement}),
+     * or undefined if a partial check would be the same as a whole file check.
+     */
+    function getNodesForSpan(file: SourceFile, span: TextSpan): Node[] | undefined {
+        // Span is the whole file
+        if (textSpanContainsTextRange(span, file)) {
+            return undefined;
+        }
+
+        const endToken = findTokenOnLeftOfPosition(file, textSpanEnd(span)) || file;
+        const enclosingNode = findAncestor(endToken, node => textRangeContainsTextSpan(node, span))!;
+
+        const nodes: Node[] = [];
+        chooseOverlappingNodes(span, enclosingNode, nodes);
+
+        if (file.end === span.start + span.length) {
+            nodes.push(file.endOfFileToken);
+        }
+
+        // Span would include the whole file
+        if (some(nodes, isSourceFile)) {
+            return undefined;
+        }
+
+        return nodes;
+    }
+
+    // The algorithm is the following:
+    // Starting from a node that contains the whole input span, we consider its children.
+    // If a child node is completely contained in the input span, then it or its source element ancestor should be included.
+    // If a child node does not overlap the input span, it should not be included.
+    // The interesting case is for nodes that overlap but are not contained by the span, i.e. nodes in the span boundary.
+    // For those boundary nodes, if it is a block-like node (i.e. it contains statements),
+    // we try to filter out the child statements that do not overlap the span.
+    // For boundary nodes that are not block-like or class-like,
+    // we simply include them (or their source element ancestor).
+    /** @returns whether the argument node was included in the result */
+    function chooseOverlappingNodes(span: TextSpan, node: Node, result: Node[]): boolean {
+        if (!nodeOverlapsWithSpan(node, span)) {
+            return false;
+        }
+        if (textSpanContainsTextRange(span, node)) {
+            addSourceElement(node, result);
+            return true;
+        }
+        if (isBlockLike(node)) {
+            return chooseOverlappingBlockLike(span, node, result);
+        }
+        if (isClassLike(node)) {
+            return chooseOverlappingClassLike(span, node, result);
+        }
+        addSourceElement(node, result);
+        return true;
+    }
+
+    /** Similar to {@link textRangeIntersectsWithTextSpan}, but treats ends as actually exclusive. */
+    function nodeOverlapsWithSpan(node: Node, span: TextSpan): boolean {
+        const spanEnd = span.start + span.length;
+        return node.pos < spanEnd && node.end > span.start;
+    }
+
+    function addSourceElement(node: Node, result: Node[]): void {
+        while (node.parent && !isSourceElement(node)) {
+            node = node.parent;
+        }
+        result.push(node);
+    }
+
+    function chooseOverlappingBlockLike(span: TextSpan, node: BlockLike, result: Node[]): boolean {
+        const childResult: Node[] = [];
+        const stmts = node.statements.filter(stmt => chooseOverlappingNodes(span, stmt, childResult));
+        if (stmts.length === node.statements.length) {
+            addSourceElement(node, result);
+            return true;
+        }
+        result.push(...childResult);
+        return false;
+    }
+
+    function chooseOverlappingClassLike(span: TextSpan, node: ClassLikeDeclaration, result: Node[]): boolean {
+        const overlaps = (n: Node) => textRangeIntersectsWithTextSpan(n, span);
+        if (
+            node.modifiers?.some(overlaps)
+            || node.name && overlaps(node.name)
+            || node.typeParameters?.some(overlaps)
+            || node.heritageClauses?.some(overlaps)
+        ) {
+            addSourceElement(node, result);
+            return true;
+        }
+        const childResult: Node[] = [];
+        const members = node.members.filter(member => chooseOverlappingNodes(span, member, childResult));
+        if (members.length === node.members.length) {
+            addSourceElement(node, result);
+            return true;
+        }
+        result.push(...childResult);
+        return false;
+    }
+
     function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {
         synchronizeHostData();
         return computeSuggestionDiagnostics(getValidSourceFile(fileName), program, cancellationToken);
@@ -2065,7 +2276,6 @@ export function createLanguageService(
         const typeChecker = program.getTypeChecker();
         const nodeForQuickInfo = getNodeForQuickInfo(node);
         const symbol = getSymbolAtLocationForQuickInfo(nodeForQuickInfo, typeChecker);
-
         if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
             const type = shouldGetType(sourceFile, nodeForQuickInfo, position) ? typeChecker.getTypeAtLocation(nodeForQuickInfo) : undefined;
             return type && {
@@ -2089,6 +2299,23 @@ export function createLanguageService(
         };
     }
 
+    function getPasteEdits(
+        args: PasteEditsArgs,
+        formatOptions: FormatCodeSettings,
+    ): PasteEdits {
+        synchronizeHostData();
+        return pasteEdits.pasteEditsProvider(
+            getValidSourceFile(args.targetFile),
+            args.pastedText,
+            args.pasteLocations,
+            args.copiedFrom ? { file: getValidSourceFile(args.copiedFrom.file), range: args.copiedFrom.range } : undefined,
+            host,
+            args.preferences,
+            formatting.getFormatContext(formatOptions, host),
+            cancellationToken,
+        );
+    }
+
     function getNodeForQuickInfo(node: Node): Node {
         if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
             return node.parent.expression;
@@ -2108,6 +2335,14 @@ export function createLanguageService(
     function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
         switch (node.kind) {
             case SyntaxKind.Identifier:
+                if (
+                    node.flags & NodeFlags.JSDoc && !isInJSFile(node) &&
+                    ((node.parent.kind === SyntaxKind.PropertySignature && (node.parent as PropertySignature).name === node) ||
+                        findAncestor(node, n => n.kind === SyntaxKind.Parameter))
+                ) {
+                    // if we'd request type at those locations we'd get `errorType` that displays confusingly as `any`
+                    return false;
+                }
                 return !isLabelName(node) && !isTagName(node) && !isConstTypeReference(node.parent);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.QualifiedName:
@@ -2856,7 +3091,7 @@ export function createLanguageService(
         if (descriptors.length > 0 && !isNodeModulesFile(sourceFile.fileName)) {
             const regExp = getTodoCommentsRegExp();
 
-            let matchArray: RegExpExecArray | null;
+            let matchArray: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
             while (matchArray = regExp.exec(fileContents)) {
                 cancellationToken.throwIfCancellationRequested();
 
@@ -3030,13 +3265,20 @@ export function createLanguageService(
         const sourceFile = getValidSourceFile(fileName);
         const allFiles = Debug.checkDefined(program.getSourceFiles());
         const extension = extensionFromPath(fileName);
-        const files = mapDefined(allFiles, file =>
-            !program?.isSourceFileFromExternalLibrary(sourceFile) &&
-                !(sourceFile === getValidSourceFile(file.fileName) || extension === Extension.Ts && extensionFromPath(file.fileName) === Extension.Dts || extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && extensionFromPath(file.fileName) === Extension.Dts)
-                && extension === extensionFromPath(file.fileName) ? file.fileName : undefined);
+        const toMove = getStatementsToMove(getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions));
+        const toMoveContainsJsx = containsJsx(toMove?.all);
 
-        const newFileName = createNewFileName(sourceFile, program, getRefactorContext(sourceFile, positionOrRange, preferences, emptyOptions), host);
-        return { newFileName, files };
+        const files = mapDefined(allFiles, file => {
+            const fileNameExtension = extensionFromPath(file.fileName);
+            const isValidSourceFile = !program?.isSourceFileFromExternalLibrary(sourceFile) && !(
+                sourceFile === getValidSourceFile(file.fileName) ||
+                extension === Extension.Ts && fileNameExtension === Extension.Dts ||
+                extension === Extension.Dts && startsWith(getBaseFileName(file.fileName), "lib.") && fileNameExtension === Extension.Dts
+            );
+            return isValidSourceFile && (extension === fileNameExtension || (extension === Extension.Tsx && fileNameExtension === Extension.Ts || extension === Extension.Jsx && fileNameExtension === Extension.Js) && !toMoveContainsJsx) ? file.fileName : undefined;
+        });
+
+        return { newFileName: createNewFileName(sourceFile, program, host, toMove), files };
     }
 
     function getEditsForRefactor(
@@ -3090,11 +3332,23 @@ export function createLanguageService(
         return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));
     }
 
+    function mapCode(sourceFile: string, contents: string[], focusLocations: TextSpan[][] | undefined, formatOptions: FormatCodeSettings, preferences: UserPreferences): FileTextChanges[] {
+        return MapCode.mapCode(
+            syntaxTreeCache.getCurrentSourceFile(sourceFile),
+            contents,
+            focusLocations,
+            host,
+            formatting.getFormatContext(formatOptions, host),
+            preferences,
+        );
+    }
+
     const ls: LanguageService = {
         dispose,
         cleanupSemanticCache,
         getSyntacticDiagnostics,
         getSemanticDiagnostics,
+        getRegionSemanticDiagnostics,
         getSuggestionDiagnostics,
         getCompilerOptionsDiagnostics,
         getSyntacticClassifications,
@@ -3160,6 +3414,8 @@ export function createLanguageService(
         uncommentSelection,
         provideInlayHints,
         getSupportedCodeFixes,
+        getPasteEdits,
+        mapCode,
     };
 
     switch (languageServiceMode) {

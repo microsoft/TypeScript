@@ -77,8 +77,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: c:/temp/test/project1
-Info seq  [hh:mm:ss:mss] For info: c:/temp/test/project1/index.ts :: Config file name: c:/temp/test/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/test/project1/index.ts ProjectRootPath: undefined:: Result: c:/temp/test/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project c:/temp/test/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/project1/tsconfig.json 2000 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -187,12 +186,10 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: c:/temp/test/project1
-Info seq  [hh:mm:ss:mss] For info: c:/temp/test/project1/tsconfig.json :: Config file name: c:/temp/test/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/test/project1/tsconfig.json ProjectRootPath: undefined:: Result: c:/temp/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project c:/temp/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/tsconfig.json 2000 undefined Project: c:/temp/test/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Search path: c:/temp/test
-Info seq  [hh:mm:ss:mss] For info: c:/temp/test/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/temp/test/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project 'c:/temp/test/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -206,7 +203,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: c:/temp/test/project1/index.ts ProjectRootPa
 Info seq  [hh:mm:ss:mss] 		Projects: c:/temp/test/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -239,6 +243,7 @@ c:/temp/test/project1/tsconfig.json (Configured) *new*
 c:/temp/test/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 
 ScriptInfos::
 C:/a/lib/lib.d.ts *new*
@@ -263,7 +268,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Loading configured project c:/temp/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -471,9 +475,18 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "c:/temp/test/project2/tsconfig.json",
+        "configFile": "c:/temp/test/project2/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/project1/index.d.ts 2000 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Missing generated file
-Info seq  [hh:mm:ss:mss] Search path: C:/temp/test/project1
-Info seq  [hh:mm:ss:mss] For info: C:/temp/test/project1/index.ts :: Config file name: C:/temp/test/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -553,7 +566,10 @@ Info seq  [hh:mm:ss:mss] response:
           }
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -594,15 +610,21 @@ c:/temp/test/project2: *new*
   {}
 
 Projects::
-c:/temp/test/project1/tsconfig.json (Configured)
+c:/temp/test/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        c:/temp/test/project1/index.d.ts: identitySourceMapConsumer *new*
 c:/temp/test/project2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        c:/temp/test/project1/tsconfig.json
+        c:/temp/test/project2/tsconfig.json
 c:/temp/test/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 C:/a/lib/lib.d.ts *changed*

@@ -151,7 +151,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -200,11 +203,6 @@ Info seq  [hh:mm:ss:mss] request:
             "options": {
               "allowNonTsExtensions": true,
               "noEmitForJsFiles": true
-            },
-            "typeAcquisition": {
-              "include": [],
-              "exclude": [],
-              "enable": false
             }
           },
           {
@@ -297,7 +295,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -320,6 +321,7 @@ Projects::
 /b/app.ts.csproj (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 /c/app.ts.csproj (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -395,9 +397,11 @@ Projects::
 /a/app.ts.csproj (External) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    isClosed: true *changed*
 /c/app.ts.csproj (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 
 ScriptInfos::
 /a/app.ts *changed*
@@ -429,11 +433,6 @@ Info seq  [hh:mm:ss:mss] request:
             "options": {
               "allowNonTsExtensions": true,
               "noEmitForJsFiles": true
-            },
-            "typeAcquisition": {
-              "include": [],
-              "exclude": [],
-              "enable": false
             }
           }
         ]
@@ -461,7 +460,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

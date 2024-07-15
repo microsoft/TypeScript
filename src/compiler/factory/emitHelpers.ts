@@ -1,7 +1,6 @@
 import {
     __String,
     ArrayLiteralExpression,
-    arrayToMap,
     BindingOrAssignmentElement,
     Block,
     compareValues,
@@ -36,7 +35,7 @@ import {
     TextRange,
     TransformationContext,
     UnscopedEmitHelper,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export const enum PrivateIdentifierKind {
@@ -129,7 +128,6 @@ export interface EmitHelperFactory {
     // ES2015 Generator Helpers
     createGeneratorHelper(body: FunctionExpression): Expression;
     // ES Module Helpers
-    createCreateBindingHelper(module: Expression, inputName: Expression, outputName: Expression | undefined): Expression;
     createImportStarHelper(expression: Expression): Expression;
     createImportStarCallbackHelper(): Expression;
     createImportDefaultHelper(expression: Expression): Expression;
@@ -180,7 +178,6 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         // ES2015 Generator Helpers
         createGeneratorHelper,
         // ES Module Helpers
-        createCreateBindingHelper,
         createImportStarHelper,
         createImportStarCallbackHelper,
         createImportDefaultHelper,
@@ -608,15 +605,6 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
 
     // ES Module Helpers
 
-    function createCreateBindingHelper(module: Expression, inputName: Expression, outputName: Expression | undefined) {
-        context.requestEmitHelper(createBindingHelper);
-        return factory.createCallExpression(
-            getUnscopedHelperName("__createBinding"),
-            /*typeArguments*/ undefined,
-            [factory.createIdentifier("exports"), module, inputName, ...(outputName ? [outputName] : [])],
-        );
-    }
-
     function createImportStarHelper(expression: Expression) {
         context.requestEmitHelper(importStarHelper);
         return factory.createCallExpression(
@@ -708,10 +696,8 @@ export function compareEmitHelpers(x: EmitHelper, y: EmitHelper) {
 /**
  * @param input Template string input strings
  * @param args Names which need to be made file-level unique
- *
- * @internal
  */
-export function helperString(input: TemplateStringsArray, ...args: string[]) {
+function helperString(input: TemplateStringsArray, ...args: string[]) {
     return (uniqueName: EmitHelperUniqueNameCallback) => {
         let result = "";
         for (let i = 0; i < args.length; i++) {
@@ -725,8 +711,7 @@ export function helperString(input: TemplateStringsArray, ...args: string[]) {
 
 // TypeScript Helpers
 
-/** @internal */
-export const decorateHelper: UnscopedEmitHelper = {
+const decorateHelper: UnscopedEmitHelper = {
     name: "typescript:decorate",
     importName: "__decorate",
     scoped: false,
@@ -740,8 +725,7 @@ export const decorateHelper: UnscopedEmitHelper = {
             };`,
 };
 
-/** @internal */
-export const metadataHelper: UnscopedEmitHelper = {
+const metadataHelper: UnscopedEmitHelper = {
     name: "typescript:metadata",
     importName: "__metadata",
     scoped: false,
@@ -752,8 +736,7 @@ export const metadataHelper: UnscopedEmitHelper = {
             };`,
 };
 
-/** @internal */
-export const paramHelper: UnscopedEmitHelper = {
+const paramHelper: UnscopedEmitHelper = {
     name: "typescript:param",
     importName: "__param",
     scoped: false,
@@ -765,8 +748,7 @@ export const paramHelper: UnscopedEmitHelper = {
 };
 
 // ES Decorators Helpers
-/** @internal */
-export const esDecorateHelper: UnscopedEmitHelper = {
+const esDecorateHelper: UnscopedEmitHelper = {
     name: "typescript:esDecorate",
     importName: "__esDecorate",
     scoped: false,
@@ -801,8 +783,7 @@ export const esDecorateHelper: UnscopedEmitHelper = {
         };`,
 };
 
-/** @internal */
-export const runInitializersHelper: UnscopedEmitHelper = {
+const runInitializersHelper: UnscopedEmitHelper = {
     name: "typescript:runInitializers",
     importName: "__runInitializers",
     scoped: false,
@@ -819,8 +800,7 @@ export const runInitializersHelper: UnscopedEmitHelper = {
 
 // ES2018 Helpers
 
-/** @internal */
-export const assignHelper: UnscopedEmitHelper = {
+const assignHelper: UnscopedEmitHelper = {
     name: "typescript:assign",
     importName: "__assign",
     scoped: false,
@@ -839,8 +819,7 @@ export const assignHelper: UnscopedEmitHelper = {
             };`,
 };
 
-/** @internal */
-export const awaitHelper: UnscopedEmitHelper = {
+const awaitHelper: UnscopedEmitHelper = {
     name: "typescript:await",
     importName: "__await",
     scoped: false,
@@ -848,8 +827,7 @@ export const awaitHelper: UnscopedEmitHelper = {
             var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`,
 };
 
-/** @internal */
-export const asyncGeneratorHelper: UnscopedEmitHelper = {
+const asyncGeneratorHelper: UnscopedEmitHelper = {
     name: "typescript:asyncGenerator",
     importName: "__asyncGenerator",
     scoped: false,
@@ -869,8 +847,7 @@ export const asyncGeneratorHelper: UnscopedEmitHelper = {
         };`,
 };
 
-/** @internal */
-export const asyncDelegator: UnscopedEmitHelper = {
+const asyncDelegator: UnscopedEmitHelper = {
     name: "typescript:asyncDelegator",
     importName: "__asyncDelegator",
     scoped: false,
@@ -883,8 +860,7 @@ export const asyncDelegator: UnscopedEmitHelper = {
             };`,
 };
 
-/** @internal */
-export const asyncValues: UnscopedEmitHelper = {
+const asyncValues: UnscopedEmitHelper = {
     name: "typescript:asyncValues",
     importName: "__asyncValues",
     scoped: false,
@@ -900,8 +876,7 @@ export const asyncValues: UnscopedEmitHelper = {
 
 // ES2018 Destructuring Helpers
 
-/** @internal */
-export const restHelper: UnscopedEmitHelper = {
+const restHelper: UnscopedEmitHelper = {
     name: "typescript:rest",
     importName: "__rest",
     scoped: false,
@@ -921,8 +896,7 @@ export const restHelper: UnscopedEmitHelper = {
 
 // ES2017 Helpers
 
-/** @internal */
-export const awaiterHelper: UnscopedEmitHelper = {
+const awaiterHelper: UnscopedEmitHelper = {
     name: "typescript:awaiter",
     importName: "__awaiter",
     scoped: false,
@@ -941,8 +915,7 @@ export const awaiterHelper: UnscopedEmitHelper = {
 
 // ES2015 Helpers
 
-/** @internal */
-export const extendsHelper: UnscopedEmitHelper = {
+const extendsHelper: UnscopedEmitHelper = {
     name: "typescript:extends",
     importName: "__extends",
     scoped: false,
@@ -966,8 +939,7 @@ export const extendsHelper: UnscopedEmitHelper = {
             })();`,
 };
 
-/** @internal */
-export const templateObjectHelper: UnscopedEmitHelper = {
+const templateObjectHelper: UnscopedEmitHelper = {
     name: "typescript:makeTemplateObject",
     importName: "__makeTemplateObject",
     scoped: false,
@@ -979,8 +951,7 @@ export const templateObjectHelper: UnscopedEmitHelper = {
             };`,
 };
 
-/** @internal */
-export const readHelper: UnscopedEmitHelper = {
+const readHelper: UnscopedEmitHelper = {
     name: "typescript:read",
     importName: "__read",
     scoped: false,
@@ -1003,8 +974,7 @@ export const readHelper: UnscopedEmitHelper = {
             };`,
 };
 
-/** @internal */
-export const spreadArrayHelper: UnscopedEmitHelper = {
+const spreadArrayHelper: UnscopedEmitHelper = {
     name: "typescript:spreadArray",
     importName: "__spreadArray",
     scoped: false,
@@ -1020,8 +990,7 @@ export const spreadArrayHelper: UnscopedEmitHelper = {
             };`,
 };
 
-/** @internal */
-export const propKeyHelper: UnscopedEmitHelper = {
+const propKeyHelper: UnscopedEmitHelper = {
     name: "typescript:propKey",
     importName: "__propKey",
     scoped: false,
@@ -1032,8 +1001,7 @@ export const propKeyHelper: UnscopedEmitHelper = {
 };
 
 // https://tc39.es/ecma262/#sec-setfunctionname
-/** @internal */
-export const setFunctionNameHelper: UnscopedEmitHelper = {
+const setFunctionNameHelper: UnscopedEmitHelper = {
     name: "typescript:setFunctionName",
     importName: "__setFunctionName",
     scoped: false,
@@ -1046,8 +1014,7 @@ export const setFunctionNameHelper: UnscopedEmitHelper = {
 
 // ES2015 Destructuring Helpers
 
-/** @internal */
-export const valuesHelper: UnscopedEmitHelper = {
+const valuesHelper: UnscopedEmitHelper = {
     name: "typescript:values",
     importName: "__values",
     scoped: false,
@@ -1128,8 +1095,7 @@ export const valuesHelper: UnscopedEmitHelper = {
 //                        entering a finally block.
 //
 // For examples of how these are used, see the comments in ./transformers/generators.ts
-/** @internal */
-export const generatorHelper: UnscopedEmitHelper = {
+const generatorHelper: UnscopedEmitHelper = {
     name: "typescript:generator",
     importName: "__generator",
     scoped: false,
@@ -1166,8 +1132,7 @@ export const generatorHelper: UnscopedEmitHelper = {
 
 // ES Module Helpers
 
-/** @internal */
-export const createBindingHelper: UnscopedEmitHelper = {
+const createBindingHelper: UnscopedEmitHelper = {
     name: "typescript:commonjscreatebinding",
     importName: "__createBinding",
     scoped: false,
@@ -1186,8 +1151,7 @@ export const createBindingHelper: UnscopedEmitHelper = {
             }));`,
 };
 
-/** @internal */
-export const setModuleDefaultHelper: UnscopedEmitHelper = {
+const setModuleDefaultHelper: UnscopedEmitHelper = {
     name: "typescript:commonjscreatevalue",
     importName: "__setModuleDefault",
     scoped: false,
@@ -1201,8 +1165,7 @@ export const setModuleDefaultHelper: UnscopedEmitHelper = {
 };
 
 // emit helper for `import * as Name from "foo"`
-/** @internal */
-export const importStarHelper: UnscopedEmitHelper = {
+const importStarHelper: UnscopedEmitHelper = {
     name: "typescript:commonjsimportstar",
     importName: "__importStar",
     scoped: false,
@@ -1219,8 +1182,7 @@ export const importStarHelper: UnscopedEmitHelper = {
 };
 
 // emit helper for `import Name from "foo"`
-/** @internal */
-export const importDefaultHelper: UnscopedEmitHelper = {
+const importDefaultHelper: UnscopedEmitHelper = {
     name: "typescript:commonjsimportdefault",
     importName: "__importDefault",
     scoped: false,
@@ -1230,8 +1192,7 @@ export const importDefaultHelper: UnscopedEmitHelper = {
             };`,
 };
 
-/** @internal */
-export const exportStarHelper: UnscopedEmitHelper = {
+const exportStarHelper: UnscopedEmitHelper = {
     name: "typescript:export-star",
     importName: "__exportStar",
     scoped: false,
@@ -1290,10 +1251,8 @@ export const exportStarHelper: UnscopedEmitHelper = {
  *
  * Reading from a private static method (TS 4.3+):
  *      __classPrivateFieldGet(<any>, <constructor>, "m", <function>)
- *
- * @internal
  */
-export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
+const classPrivateFieldGetHelper: UnscopedEmitHelper = {
     name: "typescript:classPrivateFieldGet",
     importName: "__classPrivateFieldGet",
     scoped: false,
@@ -1355,10 +1314,8 @@ export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
  * Writing to a private static method (TS 4.3+):
  *      __classPrivateFieldSet(<any>, <constructor>, <any>, "m", <function>)
  *      NOTE: This always results in a runtime error.
- *
- * @internal
  */
-export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
+const classPrivateFieldSetHelper: UnscopedEmitHelper = {
     name: "typescript:classPrivateFieldSet",
     importName: "__classPrivateFieldSet",
     scoped: false,
@@ -1382,10 +1339,8 @@ export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
  * Usage:
  * This helper is used to transform `#field in expression` to
  *      `__classPrivateFieldIn(<weakMap/weakSet/constructor>, expression)`
- *
- * @internal
  */
-export const classPrivateFieldInHelper: UnscopedEmitHelper = {
+const classPrivateFieldInHelper: UnscopedEmitHelper = {
     name: "typescript:classPrivateFieldIn",
     importName: "__classPrivateFieldIn",
     scoped: false,
@@ -1396,10 +1351,7 @@ export const classPrivateFieldInHelper: UnscopedEmitHelper = {
             };`,
 };
 
-/**
- * @internal
- */
-export const addDisposableResourceHelper: UnscopedEmitHelper = {
+const addDisposableResourceHelper: UnscopedEmitHelper = {
     name: "typescript:addDisposableResource",
     importName: "__addDisposableResource",
     scoped: false,
@@ -1407,7 +1359,7 @@ export const addDisposableResourceHelper: UnscopedEmitHelper = {
         var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
             if (value !== null && value !== void 0) {
                 if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
-                var dispose;
+                var dispose, inner;
                 if (async) {
                     if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
                     dispose = value[Symbol.asyncDispose];
@@ -1415,8 +1367,10 @@ export const addDisposableResourceHelper: UnscopedEmitHelper = {
                 if (dispose === void 0) {
                     if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
                     dispose = value[Symbol.dispose];
+                    if (async) inner = dispose;
                 }
                 if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+                if (inner) dispose = function() { try { inner.call(this); } catch (e) { return Promise.reject(e); } };
                 env.stack.push({ value: value, dispose: dispose, async: async });
             }
             else if (async) {
@@ -1427,9 +1381,11 @@ export const addDisposableResourceHelper: UnscopedEmitHelper = {
 };
 
 /**
- * @internal
+ * The `s` variable represents two boolean flags from the `DisposeResources` algorithm:
+ * - `needsAwait` (`1`) — Indicates that an `await using` for a `null` or `undefined` resource was encountered.
+ * - `hasAwaited` (`2`) — Indicates that the algorithm has performed an Await.
  */
-export const disposeResourcesHelper: UnscopedEmitHelper = {
+const disposeResourcesHelper: UnscopedEmitHelper = {
     name: "typescript:disposeResources",
     importName: "__disposeResources",
     scoped: false,
@@ -1440,17 +1396,22 @@ export const disposeResourcesHelper: UnscopedEmitHelper = {
                     env.error = env.hasError ? new SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
                     env.hasError = true;
                 }
+                var r, s = 0;
                 function next() {
-                    while (env.stack.length) {
-                        var rec = env.stack.pop();
+                    while (r = env.stack.pop()) {
                         try {
-                            var result = rec.dispose && rec.dispose.call(rec.value);
-                            if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                            if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
+                            if (r.dispose) {
+                                var result = r.dispose.call(r.value);
+                                if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+                            }
+                            else s |= 1;
                         }
                         catch (e) {
                             fail(e);
                         }
                     }
+                    if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
                     if (env.hasError) throw env.error;
                 }
                 return next();
@@ -1460,44 +1421,6 @@ export const disposeResourcesHelper: UnscopedEmitHelper = {
             return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
         });`,
 };
-
-let allUnscopedEmitHelpers: ReadonlyMap<string, UnscopedEmitHelper> | undefined;
-
-/** @internal */
-export function getAllUnscopedEmitHelpers() {
-    return allUnscopedEmitHelpers || (allUnscopedEmitHelpers = arrayToMap([
-        decorateHelper,
-        metadataHelper,
-        paramHelper,
-        esDecorateHelper,
-        runInitializersHelper,
-        assignHelper,
-        awaitHelper,
-        asyncGeneratorHelper,
-        asyncDelegator,
-        asyncValues,
-        restHelper,
-        awaiterHelper,
-        extendsHelper,
-        templateObjectHelper,
-        spreadArrayHelper,
-        valuesHelper,
-        readHelper,
-        propKeyHelper,
-        setFunctionNameHelper,
-        generatorHelper,
-        importStarHelper,
-        importDefaultHelper,
-        exportStarHelper,
-        classPrivateFieldGetHelper,
-        classPrivateFieldSetHelper,
-        classPrivateFieldInHelper,
-        createBindingHelper,
-        setModuleDefaultHelper,
-        addDisposableResourceHelper,
-        disposeResourcesHelper,
-    ], helper => helper.name));
-}
 
 /** @internal */
 export const asyncSuperHelper: EmitHelper = {

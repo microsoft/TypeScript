@@ -1,23 +1,21 @@
-import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
-import {
-    patchServiceForStateBaseline,
-} from "../../../harness/projectServiceStateLogger";
+import path from "path";
+import { incrementalVerifier } from "../../../harness/incrementalUtils.js";
+import { patchServiceForStateBaseline } from "../../../harness/projectServiceStateLogger.js";
 import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import {
-    ensureErrorFreeBuild,
-} from "./solutionBuilder";
+} from "../../../harness/tsserverLogger.js";
+import { FileRangesRequestArgs } from "../../../server/protocol.js";
+import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { ensureErrorFreeBuild } from "./solutionBuilder.js";
+import { TscWatchCompileChange } from "./tscWatch.js";
 import {
     customTypesMap,
     TestTypingsInstallerAdapter,
     TestTypingsInstallerOptions,
-} from "./typingsInstaller";
+} from "./typingsInstaller.js";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
@@ -25,20 +23,12 @@ import {
     FileOrFolderOrSymLink,
     libFile,
     SerializeOutputOrder,
-    StateLogger,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
 export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
     Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
-}
-
-export function appendAllScriptInfos(session: TestSession) {
-    session.logger.log("");
-    session.logger.log(`ScriptInfos:`);
-    session.getProjectService().filenameToScriptInfo.forEach(info => session.logger.log(`path: ${info.path} fileName: ${info.fileName}`));
-    session.logger.log("");
 }
 
 export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
@@ -68,24 +58,138 @@ export function patchHostTimeouts(
         return host;
     }
 
-    const originalSetTime = host.setTime;
-
-    host.timeoutCallbacks.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
-    host.immediateCallbacks.switchToBaseliningInvoke(logger as StateLogger, SerializeOutputOrder.None);
-    host.pendingInstalls.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
-    host.setTime = setTime;
+    host.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
     host.baselineHost = baselineHost;
     host.patched = true;
     return host;
 
-    function setTime(time: number) {
-        logger.log(`Host is moving to new time`);
-        return originalSetTime.call(host, time);
-    }
-
     function baselineHost(title: string) {
         logger.log(title);
         host.serializeState(logger.logs, SerializeOutputOrder.None);
+    }
+}
+
+function patchSessionToHandleWatchEvents(session: TestSession) {
+    const event = session.event;
+    const idToClose = new Map<number, () => void>();
+    session.event = (data, eventName) => {
+        event.call(session, data, eventName);
+        switch (eventName) {
+            case ts.server.CreateFileWatcherEvent:
+                watchFile(data as ts.server.protocol.CreateFileWatcherEventBody);
+                break;
+            case ts.server.CreateDirectoryWatcherEvent:
+                watchDirectory(data as ts.server.protocol.CreateDirectoryWatcherEventBody);
+                break;
+            case ts.server.CloseFileWatcherEvent:
+                closeWatcher(data as ts.server.protocol.CloseFileWatcherEventBody);
+                break;
+            default:
+                break;
+        }
+    };
+
+    function watchFile(event: ts.server.protocol.CreateFileWatcherEventBody) {
+        createWatcher(
+            "watchFile",
+            event,
+            recordChange =>
+                session.host.watchUtils.pollingWatch(
+                    session.host.toNormalizedAbsolutePath(event.path),
+                    {
+                        cb: (fileName, eventKind) =>
+                            recordChange(
+                                event.id,
+                                session.host.windowsStyleRoot ?
+                                    path.win32.resolve(fileName) :
+                                    path.posix.resolve(fileName),
+                                eventKind === ts.FileWatcherEventKind.Created ?
+                                    "created" :
+                                    eventKind === ts.FileWatcherEventKind.Deleted ? "deleted" : "updated",
+                                /*ignoreUpdate*/ false,
+                            ),
+                        pollingInterval: undefined!,
+                        event,
+                    },
+                ),
+        );
+    }
+
+    function watchDirectory(event: ts.server.protocol.CreateDirectoryWatcherEventBody) {
+        createWatcher(
+            "watchDirectory",
+            event,
+            recordChange =>
+                session.host.watchUtils.fsWatch(
+                    session.host.toNormalizedAbsolutePath(event.path),
+                    event.recursive,
+                    {
+                        cb: (eventName, relativeFileName) => {
+                            if (!relativeFileName) return;
+                            const fileName = session.host.windowsStyleRoot ?
+                                path.win32.join(event.path, relativeFileName) :
+                                path.posix.join(event.path, relativeFileName);
+                            if (eventName === "change") {
+                                recordChange(
+                                    event.id,
+                                    fileName,
+                                    "updated",
+                                    !!event.ignoreUpdate,
+                                );
+                            }
+                            else {
+                                recordChange(
+                                    event.id,
+                                    fileName,
+                                    session.host.fileExists(fileName) || session.host.directoryExists(fileName) ?
+                                        "created" :
+                                        "deleted",
+                                    !!event.ignoreUpdate,
+                                );
+                            }
+                        },
+                        inode: undefined,
+                        event,
+                    },
+                ),
+        );
+    }
+
+    function createWatcher(
+        watchType: string,
+        event: ts.server.protocol.CreateFileWatcherEventBody | ts.server.protocol.CreateDirectoryWatcherEventBody,
+        create: (
+            recordChange: (
+                id: number,
+                file: string,
+                eventType: "created" | "deleted" | "updated",
+                ignoreUpdate: boolean,
+            ) => void,
+        ) => ts.FileWatcher,
+    ) {
+        session.logger.log(`Custom ${watchType}:: Added:: ${JSON.stringify(event)}`);
+        ts.Debug.assert(!idToClose.has(event.id));
+        const result = create((id, file, eventType, ignoreUpdate) => {
+            const ignored = eventType === "updated" && ignoreUpdate;
+            session.logger.log(`Custom ${watchType}:: Triggered${ignoreUpdate ? " Ignored" : ""}:: ${JSON.stringify(event)}:: ${file} ${eventType}`);
+            if (!ignored) {
+                let watchChange = session.watchChanges.get(id);
+                if (!watchChange) session.watchChanges.set(id, watchChange = { id });
+                (watchChange[eventType] ??= []).push(file);
+            }
+        });
+        idToClose.set(event.id, () => {
+            session.logger.log(`Custom ${watchType}:: Close:: ${JSON.stringify(event)}`);
+            result.close();
+        });
+    }
+
+    function closeWatcher(data: ts.server.protocol.CloseFileWatcherEventBody) {
+        const close = idToClose.get(data.id);
+        if (close) {
+            idToClose.delete(data.id);
+            close();
+        }
     }
 }
 
@@ -94,6 +198,7 @@ export interface TestSessionOptions extends ts.server.SessionOptions, TestTyping
     logger: LoggerWithInMemoryLogs;
     disableAutomaticTypingAcquisition?: boolean;
     useCancellationToken?: boolean | number;
+    regionDiagLineCountThreshold?: number;
 }
 export type TestSessionPartialOptionsAndHost = Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">> & Pick<TestSessionOptions, "host">;
 export type TestSessionConstructorOptions = TestServerHost | TestSessionPartialOptionsAndHost;
@@ -111,6 +216,7 @@ export class TestSession extends ts.server.Session {
     public override logger!: LoggerWithInMemoryLogs;
     public override readonly typingsInstaller!: TestTypingsInstallerAdapter;
     public serverCancellationToken: TestServerCancellationToken;
+    public watchChanges = new Map<number, ts.server.protocol.WatchChangeRequestArgs>();
 
     constructor(optsOrHost: TestSessionConstructorOptions) {
         const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
@@ -139,10 +245,14 @@ export class TestSession extends ts.server.Session {
         if (typingsInstaller) typingsInstaller.session = this;
         this.serverCancellationToken = cancellationToken as TestServerCancellationToken;
         patchHostTimeouts(
-            changeToHostTrackingWrittenFiles(this.host),
+            changeToHostTrackingWrittenFiles(patchHostForBuildInfoReadWrite(this.host)),
             this,
             this.logger,
         );
+        if (opts.regionDiagLineCountThreshold !== undefined) {
+            this.regionDiagLineCountThreshold = opts.regionDiagLineCountThreshold;
+        }
+        if (opts.canUseWatchEvents) patchSessionToHandleWatchEvents(this);
     }
 
     getProjectService() {
@@ -164,7 +274,7 @@ export class TestSession extends ts.server.Session {
         }
         const response = super.executeCommand(request);
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-            this.logger.info(`response:${ts.server.stringifyIndented(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response)}`);
+            if (response.responseRequired) this.logger.info(`response:${ts.server.stringifyIndented(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response)}`);
             this.host.baselineHost("After request");
         }
         return response;
@@ -176,6 +286,15 @@ export class TestSession extends ts.server.Session {
         request.seq = this.seq;
         request.type = "request";
         return this.executeCommand(request);
+    }
+
+    public invokeWatchChanges() {
+        const changes = ts.singleOrMany(ts.arrayFrom(this.watchChanges.values()));
+        this.watchChanges.clear();
+        this.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
+            command: ts.server.protocol.CommandTypes.WatchChange,
+            arguments: changes,
+        });
     }
 }
 
@@ -241,6 +360,15 @@ export function textSpanFromSubstring(str: string, substring: string, options?: 
     const start = nthIndexOf(str, substring, options ? options.index : 0);
     ts.Debug.assert(start !== -1);
     return ts.createTextSpan(start, substring.length);
+}
+
+export function protocolTextSpanToFileRange(span: ts.server.protocol.TextSpan): ts.server.protocol.FileRange {
+    return {
+        startLine: span.start.line,
+        startOffset: span.start.offset,
+        endLine: span.end.line,
+        endOffset: span.end.offset,
+    };
 }
 
 export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.FileLocationRequestArgs {
@@ -378,14 +506,22 @@ export interface VerifyGetErrRequestBase {
     existingTimeouts?: boolean;
 }
 export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
-    files: readonly (string | File)[];
+    files: readonly (string | File | FileRangesRequestArgs)[];
     skip?: CheckAllErrors["skip"];
 }
 export function verifyGetErrRequest(request: VerifyGetErrRequest) {
     const { session, files } = request;
     session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
         command: ts.server.protocol.CommandTypes.Geterr,
-        arguments: { delay: 0, files: files.map(filePath) },
+        arguments: {
+            delay: 0,
+            files: files.map(file => {
+                if (typeof file !== "string" && !(file as FileRangesRequestArgs).ranges) {
+                    return filePath(file as File);
+                }
+                return file as string | FileRangesRequestArgs;
+            }),
+        },
     });
     checkAllErrors(request);
 }
@@ -393,6 +529,8 @@ export function verifyGetErrRequest(request: VerifyGetErrRequest) {
 interface SkipErrors {
     semantic?: true;
     suggestion?: true;
+    /** Region semantic checking will only happen if this is */
+    regionSemantic?: false;
 }
 export interface CheckAllErrors extends VerifyGetErrRequestBase {
     files: readonly any[];
@@ -401,6 +539,7 @@ export interface CheckAllErrors extends VerifyGetErrRequestBase {
 function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErrors) {
     for (let i = 0; i < files.length; i++) {
         session.host.runQueuedTimeoutCallbacks(existingTimeouts ? session.host.getNextTimeoutId() - 1 : undefined);
+        if (skip?.[i]?.regionSemantic === false) session.host.runQueuedImmediateCallbacks();
         if (!skip?.[i]?.semantic) session.host.runQueuedImmediateCallbacks();
         if (!skip?.[i]?.suggestion) session.host.runQueuedImmediateCallbacks();
     }
@@ -486,10 +625,6 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
     verifyErrorsUsingSyncMethods(scenario);
 }
 
-export function verifyDynamic(session: TestSession, path: string) {
-    session.logger.log(`${path} isDynamic:: ${session.getProjectService().filenameToScriptInfo.get(path)!.isDynamic}`);
-}
-
 export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
     const host = createServerHost(files);
     // ts build should succeed
@@ -497,10 +632,16 @@ export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLin
     return host;
 }
 
-export function logInferredProjectsOrphanStatus(session: TestSession) {
-    session.getProjectService().inferredProjects.forEach(inferredProject => session.logger.log(`Inferred project: ${inferredProject.projectName} isOrphan:: ${inferredProject.isOrphan()} isClosed: ${inferredProject.isClosed()}`));
-}
-
-export function logConfiguredProjectsHasOpenRefStatus(session: TestSession) {
-    session.getProjectService().configuredProjects.forEach(configuredProject => session.logger.log(`Configured project: ${configuredProject.projectName} hasOpenRef:: ${configuredProject.hasOpenRef()} isClosed: ${configuredProject.isClosed()}`));
+export function forEachTscWatchEdit(
+    session: TestSession,
+    edits: readonly TscWatchCompileChange[],
+    action: () => void,
+) {
+    edits.forEach(edit => {
+        session.logger.log(edit.caption);
+        edit.edit(session.host);
+        if (session.watchChanges.size) session.invokeWatchChanges();
+        edit.timeouts(session.host, undefined!, undefined!);
+        action();
+    });
 }

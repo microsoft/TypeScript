@@ -3,4 +3,5 @@
 === exportClassNameWithObjectCommonJS.ts ===
 export class Object {}
 >Object : Object
+>       : ^^^^^^
 

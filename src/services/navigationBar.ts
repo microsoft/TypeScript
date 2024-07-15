@@ -111,7 +111,7 @@ import {
     TypeElement,
     unescapeLeadingUnderscores,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Matches all whitespace characters in a string. Eg:

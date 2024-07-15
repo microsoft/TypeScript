@@ -61,8 +61,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/app
-Info seq  [hh:mm:ss:mss] For info: /packages/app/package.json :: Config file name: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/package.json ProjectRootPath: undefined:: Result: /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/app/tsconfig.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -172,6 +171,46 @@ Info seq  [hh:mm:ss:mss] event:
         "projectName": "/packages/app/tsconfig.json"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/packages/app/package.json",
+        "configFile": "/packages/app/tsconfig.json",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 12,
+              "offset": 18
+            },
+            "end": {
+              "line": 12,
+              "offset": 38
+            },
+            "text": "Referenced project '/packages/dep' must have setting \"composite\": true.",
+            "code": 6306,
+            "category": "error",
+            "fileName": "/packages/app/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 12,
+              "offset": 3
+            },
+            "end": {
+              "line": 12,
+              "offset": 15
+            },
+            "text": "',' expected.",
+            "code": 1005,
+            "category": "error",
+            "fileName": "/packages/app/tsconfig.json"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/dep/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -225,50 +264,11 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "configFileDiag",
       "body": {
         "triggerFile": "/packages/app/package.json",
-        "configFile": "/packages/app/tsconfig.json",
-        "diagnostics": [
-          {
-            "start": {
-              "line": 12,
-              "offset": 18
-            },
-            "end": {
-              "line": 12,
-              "offset": 38
-            },
-            "text": "Referenced project '/packages/dep' must have setting \"composite\": true.",
-            "code": 6306,
-            "category": "error",
-            "fileName": "/packages/app/tsconfig.json"
-          },
-          {
-            "start": {
-              "line": 12,
-              "offset": 3
-            },
-            "end": {
-              "line": 12,
-              "offset": 15
-            },
-            "text": "',' expected.",
-            "code": 1005,
-            "category": "error",
-            "fileName": "/packages/app/tsconfig.json"
-          }
-        ]
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/packages/app/package.json",
         "configFile": "/packages/dep/tsconfig.json",
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -305,6 +305,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -346,9 +357,11 @@ Projects::
 /packages/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /packages/dep/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /lib.d.ts *new*
@@ -406,8 +419,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/app/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /packages/app/src
-Info seq  [hh:mm:ss:mss] For info: /packages/app/src/index.ts :: Config file name: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/src/index.ts ProjectRootPath: undefined:: Result: /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
 
@@ -425,6 +437,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/package.json ProjectRootPath: 
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -460,6 +480,19 @@ watchedDirectoriesRecursive::
 /packages/dep/src:
   {}
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/packages/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+/packages/dep/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /lib.d.ts
@@ -660,6 +693,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 7,
+      "success": true
+    }
 After Request
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -668,6 +709,7 @@ Projects::
 /packages/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /packages/dep/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -732,6 +774,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 8,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -789,8 +839,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/app/src/utils.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /packages/app/src
-Info seq  [hh:mm:ss:mss] For info: /packages/app/src/utils.ts :: Config file name: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/src/utils.ts ProjectRootPath: undefined:: Result: /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/app/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
@@ -824,6 +873,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/src/index.ts ProjectRootPath: 
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/app/src/utils.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 9,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -857,6 +917,18 @@ watchedDirectoriesRecursive::
 /packages/dep/src:
   {}
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/packages/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+/packages/dep/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
 /lib.d.ts
@@ -1057,6 +1129,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 15,
+      "success": true
+    }
 After Request
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -1065,6 +1145,7 @@ Projects::
 /packages/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /packages/dep/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1128,6 +1209,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 16,
+      "success": true
     }
 After Request
 ScriptInfos::

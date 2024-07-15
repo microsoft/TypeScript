@@ -38,8 +38,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/package.json :: Config file name: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/package.json ProjectRootPath: undefined:: Result: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -103,50 +102,6 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingFinish",
       "body": {
         "projectName": "/a/tsconfig.json"
-      }
-    }
-Info seq  [hh:mm:ss:mss] Creating configuration project /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/b/tsconfig.json",
-        "reason": "Creating project referenced in solution /a/tsconfig.json to find possible configured project for /a/package.json to open"
-      }
-    }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/b/index.ts Text-1 "export class Shape {}"
-
-
-	../lib.d.ts
-	  Default library for target 'es5'
-	../lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../lib.d.ts'
-	../lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../lib.d.ts'
-	index.ts
-	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingFinish",
-      "body": {
-        "projectName": "/b/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -224,6 +179,50 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+Info seq  [hh:mm:ss:mss] Creating configuration project /b/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/b/tsconfig.json",
+        "reason": "Creating project referenced in solution /a/tsconfig.json to find possible configured project for /a/package.json to open"
+      }
+    }
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+	/lib.d.ts Text-1 lib.d.ts-Text
+	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/b/index.ts Text-1 "export class Shape {}"
+
+
+	../lib.d.ts
+	  Default library for target 'es5'
+	../lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../lib.d.ts'
+	../lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../lib.d.ts'
+	index.ts
+	  Matched by default include pattern '**/*'
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/b/tsconfig.json"
+      }
+    }
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -235,6 +234,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -256,7 +256,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
@@ -287,6 +287,18 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /a/index.ts: *new*
@@ -318,9 +330,11 @@ Projects::
 /a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -369,8 +383,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/index.ts :: Config file name: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/index.ts ProjectRootPath: undefined:: Result: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
@@ -392,6 +405,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true
+    }
 After Request
 watchedFiles::
 /a/package.json:
@@ -420,6 +441,23 @@ watchedDirectoriesRecursive::
   {}
 /b:
   {}
+
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
 /a/index.ts (Open) *changed*
@@ -558,7 +596,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "getCodeFixes"
     }
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject2*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
@@ -700,11 +738,20 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 7,
+      "success": true
+    }
 After Request
 Projects::
 /a/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject2*
 /b/tsconfig.json (Configured)
     projectStateVersion: 1
@@ -764,6 +811,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 8,
+      "success": true
     }
 After Request
 ScriptInfos::

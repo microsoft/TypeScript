@@ -3,26 +3,37 @@
 === classAbstractCrashedOnce.ts ===
 abstract class foo {
 >foo : foo
+>    : ^^^
 
     protected abstract test();
 >test : () => any
+>     : ^^^^^^^^^
 }
 
 class bar extends foo {
 >bar : bar
+>    : ^^^
 >foo : foo
+>    : ^^^
 
     test() {
 >test : () => void
+>     : ^^^^^^^^^^
 
         this.
 >this. : any
+>      : ^^^
 >this : this
+>     : ^^^^
     }
 > : any
+> : ^^^
 }
 var x = new bar();
 >x : bar
+>  : ^^^
 >new bar() : bar
+>          : ^^^
 >bar : typeof bar
+>    : ^^^^^^^^^^
 

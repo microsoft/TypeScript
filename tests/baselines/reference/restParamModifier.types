@@ -3,8 +3,11 @@
 === restParamModifier.ts ===
 class C {
 >C : C
+>  : ^
 
     constructor(...public rest: string[]) {}
 >public : any[]
+>       : ^^^^^
 >rest : string[]
+>     : ^^^^^^^^
 }

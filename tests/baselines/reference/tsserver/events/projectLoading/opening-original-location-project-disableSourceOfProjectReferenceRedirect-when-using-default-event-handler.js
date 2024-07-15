@@ -63,8 +63,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/b/b.ts :: Config file name: /user/username/projects/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/b/b.ts ProjectRootPath: undefined:: Result: /user/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/b/tsconfig.json 2000 undefined Project: /user/username/projects/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -216,7 +215,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/b/b.ts ProjectRootPa
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -277,8 +283,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/b/b.ts position 30 in project /user/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/a.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/a/a.ts :: Config file name: /user/username/projects/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/a/a.ts ProjectRootPath: undefined:: Result: /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -358,8 +363,18 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/a/a.ts :: Config file name: /user/username/projects/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/a/tsconfig.json",
+        "configFile": "/user/username/projects/a/tsconfig.json",
+        "diagnostics": []
+      }
+    }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/a/a.ts ProjectRootPath: undefined:: Result: /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/a/a.ts position 13 in project /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -425,7 +440,10 @@ Info seq  [hh:mm:ss:mss] response:
         "symbolStartOffset": 31,
         "symbolDisplayString": "(alias) new A(): A\nimport A"
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -461,9 +479,13 @@ Projects::
 /user/username/projects/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/b/tsconfig.json (Configured)
+/user/username/projects/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/a/a.d.ts: DocumentPositionMapper1 *new*
+    originalConfiguredProjects: 1 *changed*
+        /user/username/projects/a/tsconfig.json *new*
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -471,12 +493,17 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /user/username/projects/b/tsconfig.json
         /user/username/projects/a/tsconfig.json *new*
-/user/username/projects/a/a.d.ts
+/user/username/projects/a/a.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/a/a.d.ts.map *changed*
     containingProjects: 1
         /user/username/projects/b/tsconfig.json
 /user/username/projects/a/a.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/a/a.d.ts
+    sourceInfos: 1
+        /user/username/projects/a/a.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /user/username/projects/a/a.ts *new*
     version: Text-1
@@ -486,3 +513,6 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/b/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*

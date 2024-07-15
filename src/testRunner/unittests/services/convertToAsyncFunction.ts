@@ -1,15 +1,15 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 import {
     createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 import {
     extractTest,
     newLineCharacter,
     notImplementedHost,
     TestProjectService,
-} from "./extract/helpers";
+} from "./extract/helpers.js";
 
 const libFile: File = {
     path: "/a/lib/lib.d.ts",
@@ -364,7 +364,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         const actions = ts.codefix.getFixes(context);
         const action = ts.find(actions, action => action.description === ts.Diagnostics.Convert_to_async_function.message);
 
-        let outputText: string | null;
+        let outputText: string | null; // eslint-disable-line no-restricted-syntax
         if (action?.changes.length) {
             const data: string[] = [];
             data.push(`// ==ORIGINAL==`);
@@ -381,7 +381,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
             outputText = data.join(newLineCharacter);
         }
         else {
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             outputText = null;
         }
 

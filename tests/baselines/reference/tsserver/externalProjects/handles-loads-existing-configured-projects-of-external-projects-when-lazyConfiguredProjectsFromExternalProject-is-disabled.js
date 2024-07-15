@@ -27,10 +27,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -75,6 +71,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 
 Before request
 
@@ -89,7 +86,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Loading configured project /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -241,10 +237,6 @@ Info seq  [hh:mm:ss:mss] response:
         "updateGraphDurationMs": *
       }
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 PolledWatches::
@@ -265,6 +257,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/b/app.ts *new*
@@ -325,6 +318,8 @@ Projects::
 /a/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*
@@ -395,6 +390,63 @@ Info seq  [hh:mm:ss:mss] event:
         "projectName": "/a/b/tsconfig.json"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/a/b/tsconfig.json",
+        "configFile": "/a/b/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
@@ -403,7 +455,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

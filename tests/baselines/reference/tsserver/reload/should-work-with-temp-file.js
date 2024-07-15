@@ -17,8 +17,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b
-Info seq  [hh:mm:ss:mss] For info: /a/b/app.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/app.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -40,7 +39,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -73,17 +79,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-      "seq": 0,
-      "type": "response",
-      "command": "reload",
-      "request_seq": 2,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
       "response": {
         "reloadFinished": true
       },
@@ -95,6 +90,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/b/app.ts (Open) *changed*
@@ -119,17 +115,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 3,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "reload",
-      "request_seq": 3,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {

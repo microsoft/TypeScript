@@ -31,8 +31,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b
-Info seq  [hh:mm:ss:mss] For info: /a/b/app.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/app.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -57,7 +56,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -100,7 +106,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 2,
+      "success": true
     }
 After request
 
@@ -114,6 +124,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*
@@ -128,8 +140,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of closed file:: Content of /a/b/app.ts:: let x = 1
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 
 Before request
 
 ScriptInfos::
@@ -154,17 +164,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-      "seq": 0,
-      "type": "response",
-      "command": "reload",
-      "request_seq": 3,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
       "response": {
         "reloadFinished": true
       },
@@ -182,8 +181,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of temp file:: Content of /a/b/app.ts:: const y = 42
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -194,17 +191,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 4,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "reload",
-      "request_seq": 4,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -225,8 +211,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of closed file:: Content of /a/b/app.ts:: let x = 1
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -239,8 +223,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a/b
-Info seq  [hh:mm:ss:mss] For info: /a/b/app.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/app.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -264,7 +247,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 5,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -275,6 +265,13 @@ FsWatches::
 FsWatches *deleted*::
 /a/b/app.ts:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+    isOrphan: false *changed*
 
 ScriptInfos::
 /a/b/app.ts (Open) *changed*
@@ -307,7 +304,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 6,
+      "success": true
     }
 After request
 
@@ -321,6 +322,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*
@@ -334,8 +337,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of closed file:: Content of /a/b/app.ts:: let x = 1
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -347,17 +348,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 7,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "reload",
-      "request_seq": 7,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -378,8 +368,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of temp file:: Content of /a/b/app.ts:: const y = 42
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -390,17 +378,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 8,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "reload",
-      "request_seq": 8,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -421,5 +398,3 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of closed file:: Content of /a/b/app.ts:: let x = 1
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 

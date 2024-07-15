@@ -1,9 +1,9 @@
 /* Generated file to emulate the Harness namespace. */
 
-export * from "../runnerbase";
-export * from "../harnessIO";
-export * from "../typeWriter";
-import * as LanguageService from "./Harness.LanguageService";
+export * from "../runnerbase.js";
+export * from "../harnessIO.js";
+export * from "../typeWriter.js";
+import * as LanguageService from "./Harness.LanguageService.js";
 export { LanguageService };
-import * as SourceMapRecorder from "./Harness.SourceMapRecorder";
+import * as SourceMapRecorder from "./Harness.SourceMapRecorder.js";
 export { SourceMapRecorder };

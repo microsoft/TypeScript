@@ -3,23 +3,34 @@
 === symbolProperty44.ts ===
 class C {
 >C : C
+>  : ^
 
     get [Symbol.hasInstance]() {
 >[Symbol.hasInstance] : string
+>                     : ^^^^^^
 >Symbol.hasInstance : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >hasInstance : unique symbol
+>            : ^^^^^^^^^^^^^
 
         return "";
 >"" : ""
+>   : ^^
     }
     get [Symbol.hasInstance]() {
 >[Symbol.hasInstance] : string
+>                     : ^^^^^^
 >Symbol.hasInstance : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >hasInstance : unique symbol
+>            : ^^^^^^^^^^^^^
 
         return "";
 >"" : ""
+>   : ^^
     }
 }

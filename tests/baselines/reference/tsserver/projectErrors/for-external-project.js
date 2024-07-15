@@ -219,7 +219,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -271,7 +274,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ],
         "options": {
-          "module": "CommonJS"
+          "module": "commonjs"
         }
       },
       "seq": 3,
@@ -293,7 +296,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

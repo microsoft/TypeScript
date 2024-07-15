@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance2.ts] ////
+
+=== classAbstractInheritance2.ts ===
+abstract class A {
+>A : Symbol(A, Decl(classAbstractInheritance2.ts, 0, 0))
+
+    abstract m1(): number;
+>m1 : Symbol(A.m1, Decl(classAbstractInheritance2.ts, 0, 18))
+
+    abstract m2(): number;
+>m2 : Symbol(A.m2, Decl(classAbstractInheritance2.ts, 1, 26))
+
+    abstract m3(): number;
+>m3 : Symbol(A.m3, Decl(classAbstractInheritance2.ts, 2, 26))
+
+    abstract m4(): number;
+>m4 : Symbol(A.m4, Decl(classAbstractInheritance2.ts, 3, 26))
+
+    abstract m5(): number;
+>m5 : Symbol(A.m5, Decl(classAbstractInheritance2.ts, 4, 26))
+
+    abstract m6(): number;
+>m6 : Symbol(A.m6, Decl(classAbstractInheritance2.ts, 5, 26))
+}
+
+class B extends A { }
+>B : Symbol(B, Decl(classAbstractInheritance2.ts, 7, 1))
+>A : Symbol(A, Decl(classAbstractInheritance2.ts, 0, 0))
+
+const C = class extends A {}
+>C : Symbol(C, Decl(classAbstractInheritance2.ts, 10, 5))
+>A : Symbol(A, Decl(classAbstractInheritance2.ts, 0, 0))
+

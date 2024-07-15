@@ -76,8 +76,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/main
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/main/main.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -213,8 +212,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/main
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/main/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/main/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -224,7 +222,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/main/main.
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -285,8 +290,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -383,8 +387,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/dependency/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -400,7 +403,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/dependency
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/main/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -470,8 +480,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/random
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -596,7 +605,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/random/ran
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -937,8 +953,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 9,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 2000 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Missing generated file
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -1057,6 +1071,22 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: identitySourceMapConsumer *new*
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/myproject/dependency/tsconfig.json *new*
+        /user/username/projects/myproject/main/tsconfig.json *new*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1070,8 +1100,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 10,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1168,8 +1196,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 11,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1266,8 +1292,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 12,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1364,8 +1388,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 13,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1480,7 +1502,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/dependency
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/main/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 14,
+      "success": true
     }
 After request
 
@@ -1520,6 +1546,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/main/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -1554,8 +1595,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/random
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -1577,7 +1617,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/random/ran
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 15,
+      "success": true
     }
 After request
 
@@ -1618,6 +1662,21 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/random:
   {}
+
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/main/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1672,7 +1731,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/random/ran
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 16,
+      "success": true
     }
 After request
 
@@ -1763,7 +1826,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/random/ran
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 17,
+      "success": true
     }
 After request
 
@@ -1804,6 +1871,22 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/random:
   {}
+
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+    originalConfiguredProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1854,7 +1937,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 18,
+      "success": true
     }
 After request
 
@@ -1898,6 +1985,23 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/myproject/main/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -1932,8 +2036,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/random
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -1995,7 +2098,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/random/ran
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 19,
+      "success": true
     }
 After request
 
@@ -2049,12 +2156,22 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
+    documentPositionMappers: 0 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts: identitySourceMapConsumer *deleted*
 /user/username/projects/myproject/main/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/random/tsconfig.json (Configured)
+    isClosed: true *changed*
+    noOpenRef: true
+    originalConfiguredProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

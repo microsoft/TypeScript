@@ -1,9 +1,7 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { libContent } from "../helpers/contents.js";
 import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    appendAllScriptInfos,
     baselineTsserverLogs,
     closeFilesForSession,
     openExternalProjectForSession,
@@ -14,13 +12,14 @@ import {
     toExternalFiles,
     verifyGetErrRequest,
     verifyGetErrScenario,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     Folder,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHostOsFlavor,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projectErrors::", () => {
     it("external project - diagnostics for missing files", () => {
@@ -241,7 +240,6 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
                     projectRootPath: useProjectRoot ? folderPath : undefined,
                 },
             });
-            appendAllScriptInfos(session);
 
             // Since this is not js project so no typings are queued
             verifyGetErrRequest({ session, files: [untitledFile] });
@@ -810,5 +808,55 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
 
     it("timeout occurs after installation", () => {
         verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
+    });
+});
+
+describe("unittests:: tsserver:: projectErrors:: with file rename on wsl2::", () => {
+    it("rename a file", () => {
+        const host = createServerHost({
+            "/home/username/project/src/a.ts": `export const a = 10;`,
+            "/home/username/project/src/b.ts": `export const b = 10;`,
+            "/home/username/project/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    strictNullChecks: true,
+                },
+                include: ["src/**/*.ts"],
+            }),
+            [libFile.path]: libFile.content,
+        }, { osFlavor: TestServerHostOsFlavor.Linux });
+        const session = new TestSession(host);
+        openFilesForSession([{ file: "/home/username/project/src/a.ts", projectRootPath: "/home/username/project" }], session);
+        host.renameFile("/home/username/project/src/b.ts", "/home/username/project/src/c.ts");
+        openFilesForSession([{ file: "/home/username/project/src/c.ts", content: `export const b = 10;`, projectRootPath: "/home/username/project" }], session);
+        host.runQueuedTimeoutCallbacks(); // Updates the project that c.ts now exists on the disk and schedules one more update
+        host.runQueuedTimeoutCallbacks();
+        closeFilesForSession(["/home/username/project/src/c.ts"], session);
+        baselineTsserverLogs("projectErrors", "file rename on wsl2", session);
+    });
+});
+
+describe("unittests:: tsserver:: projectErrors:: dts errors when files dont belong to common root", () => {
+    [undefined, "decls"].forEach(declarationDir => {
+        it(`dts errors when files dont belong to common root${declarationDir ? " with declarationDir" : ""}`, () => {
+            const host = createServerHost({
+                "/home/src/projects/project/src/file.ts": `import { a } from "../a";`,
+                "/home/src/projects/project/a.ts": `export const a = 10;`,
+                "/home/src/projects/project/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        noEmit: true,
+                        declarationDir,
+                    },
+                }),
+                [libFile.path]: libContent,
+            });
+            const session = new TestSession(host);
+            openFilesForSession(["/home/src/projects/project/src/file.ts"], session);
+            verifyGetErrRequest({
+                session,
+                files: ["/home/src/projects/project/src/file.ts"],
+            });
+            baselineTsserverLogs("projectErrors", `dts errors when files dont belong to common root${declarationDir ? " with declarationDir" : ""}`, session);
+        });
     });
 });

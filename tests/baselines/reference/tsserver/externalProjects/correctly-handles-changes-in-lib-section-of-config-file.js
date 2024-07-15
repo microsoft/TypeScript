@@ -33,8 +33,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /src
-Info seq  [hh:mm:ss:mss] For info: /src/app.ts :: Config file name: /src/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /src/app.ts ProjectRootPath: undefined:: Result: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/tsconfig.json 2000 undefined Project: /src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -198,7 +197,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /src/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -229,6 +235,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /src/tsconfig.json 1:: WatchInfo: /src/tsconfig.json 2000 undefined Project: /src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /src/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /src/app.ts ProjectRootPath: undefined:: Result: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /src/tsconfig.json 1:: WatchInfo: /src/tsconfig.json 2000 undefined Project: /src/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
@@ -257,9 +264,9 @@ Projects::
 /src/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /src/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -412,6 +419,7 @@ Projects::
 /src/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /compiler/lib.es2015.promise.d.ts *new*

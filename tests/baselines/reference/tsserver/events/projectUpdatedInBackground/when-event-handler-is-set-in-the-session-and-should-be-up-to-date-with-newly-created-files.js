@@ -17,8 +17,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/project
-Info seq  [hh:mm:ss:mss] For info: /users/username/projects/project/file1Consumer1.ts :: Config file name: /users/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/file1Consumer1.ts ProjectRootPath: undefined:: Result: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -174,7 +173,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/file1Consum
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -303,6 +309,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
@@ -384,6 +391,17 @@ Info seq  [hh:mm:ss:mss] 	Files (7)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::configFileDiag",
+      "body": {
+        "configFileName": "/users/username/projects/project/tsconfig.json",
+        "diagnostics": [],
+        "triggerFile": "/users/username/projects/project/tsconfig.json"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
@@ -452,6 +470,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*

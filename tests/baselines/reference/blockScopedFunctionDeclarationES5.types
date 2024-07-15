@@ -3,15 +3,21 @@
 === blockScopedFunctionDeclarationES5.ts ===
 if (true) {
 >true : true
+>     : ^^^^
 
     function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 foo();
 >foo() : void
+>      : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 

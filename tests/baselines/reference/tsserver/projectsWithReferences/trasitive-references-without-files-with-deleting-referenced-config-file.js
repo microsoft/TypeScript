@@ -83,8 +83,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/c/index.ts :: Config file name: /user/username/projects/myproject/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -271,7 +270,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/c/index.ts
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -363,6 +369,7 @@ Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
@@ -401,6 +408,32 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/c/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/c/tsconfig.json",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 11,
+              "offset": 5
+            },
+            "end": {
+              "line": 13,
+              "offset": 6
+            },
+            "text": "File '/user/username/projects/myproject/b' not found.",
+            "code": 6053,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/c/tsconfig.json"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
@@ -479,6 +512,7 @@ Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -541,6 +575,7 @@ Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
@@ -604,6 +639,17 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/c/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/c/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
@@ -678,6 +724,7 @@ Projects::
 /user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

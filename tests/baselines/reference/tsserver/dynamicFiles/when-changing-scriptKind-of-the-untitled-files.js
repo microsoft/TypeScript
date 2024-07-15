@@ -27,8 +27,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: 
-Info seq  [hh:mm:ss:mss] For info: untitled:^Untitled-1 :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: untitled:^Untitled-1 ProjectRootPath: /user/username/projects/myproject:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -57,7 +56,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: untitled:^Untitled-1 ProjectRootPath: /user/
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -81,7 +87,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-untitled:^Untitled-1 (Open) *new*
+untitled:^Untitled-1 (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -104,7 +110,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 2,
+      "success": true
     }
 After request
 
@@ -112,13 +122,15 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-untitled:^Untitled-1 *deleted*
+untitled:^Untitled-1 (Dynamic) *deleted*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*
@@ -138,8 +150,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: 
-Info seq  [hh:mm:ss:mss] For info: untitled:^Untitled-1 :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: untitled:^Untitled-1 ProjectRootPath: /user/username/projects/myproject:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -163,16 +174,30 @@ Info seq  [hh:mm:ss:mss] 	FileName: untitled:^Untitled-1 ProjectRootPath: /user/
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+    isOrphan: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-untitled:^Untitled-1 (Open) *new*
+untitled:^Untitled-1 (Dynamic) (Open) *new*
     version: SVC-2-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*

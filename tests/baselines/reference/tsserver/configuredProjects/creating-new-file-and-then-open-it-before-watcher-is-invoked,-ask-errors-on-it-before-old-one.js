@@ -39,8 +39,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/foo.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/foo.ts ProjectRootPath: /user/username/projects/myproject:: Result: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -157,7 +156,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/foo.ts
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -211,8 +217,8 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/sub
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/sub/fooBar.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/sub/fooBar.ts ProjectRootPath: /user/username/projects/myproject:: Result: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: /user/username/projects/myproject:: Result: undefined
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -266,7 +272,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/sub/fo
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -349,6 +362,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -362,10 +376,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 3,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -517,9 +527,12 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -578,7 +591,24 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3
+        "request_seq": 3,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/user/username/projects/myproject/src/sub/fooBar.ts"
+            },
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/user/username/projects/myproject/src/foo.ts"
+            }
+          ],
+          "updateGraphDurationMs": *
+        }
       }
     }
 After running Immedidate callback:: count: 0

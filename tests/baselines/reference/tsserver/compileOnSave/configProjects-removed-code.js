@@ -24,8 +24,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b
-Info seq  [hh:mm:ss:mss] For info: /a/b/referenceFile1.ts :: Config file name: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/referenceFile1.ts ProjectRootPath: undefined:: Result: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -182,7 +181,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/referenceFile1.ts ProjectRootPath: unde
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -216,7 +222,6 @@ ScriptInfos::
         /a/b/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/moduleFile1.ts 2:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile1.ts 2:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
@@ -227,22 +232,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/mo
 Before request
 //// [/a/b/moduleFile1.ts] deleted
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/a/b/moduleFile1.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Timeout callback:: count: 2
 3: /a/b/tsconfig.json *new*
 4: *ensureProjectForOpenFiles* *new*
@@ -251,10 +240,13 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
-/a/b/moduleFile1.ts *deleted*
+/a/b/moduleFile1.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /a/b/tsconfig.json *deleted*
 /a/b/referenceFile1.ts (Open)
@@ -310,28 +302,18 @@ Info seq  [hh:mm:ss:mss] response:
           "projectUsesOutFile": false
         }
       ],
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
-
-PolledWatches::
-/a/b/moduleFile1.ts: *new*
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 Before request
 

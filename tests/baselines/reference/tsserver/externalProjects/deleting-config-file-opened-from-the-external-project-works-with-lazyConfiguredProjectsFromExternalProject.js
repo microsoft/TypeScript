@@ -40,10 +40,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -97,6 +93,7 @@ Projects::
 /user/someuser/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 
 Before request
 
@@ -129,24 +126,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/someuser/project/tsconfig.json 2:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/someuser/project/tsconfig.json 2:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
 Before request
 //// [/user/someuser/project/tsconfig.json] deleted
 
-FsWatches *deleted*::
-/user/someuser/project/tsconfig.json:
-  {}
-
 Projects::
-/user/someuser/project/tsconfig.json (Configured) *deleted*
+/user/someuser/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    isOrphan: true *changed*
+    deferredClose: true *changed*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -190,9 +180,7 @@ Info seq  [hh:mm:ss:mss] request:
               "allowJs": false
             },
             "typeAcquisition": {
-              "include": [],
-              "exclude": [],
-              "enable": true
+              "include": []
             }
           }
         ]
@@ -229,11 +217,20 @@ FsWatches::
   {}
 /user/someuser/project/js/site.js: *new*
   {}
+/user/someuser/project/tsconfig.json:
+  {}
 
 Projects::
 /user/someuser/project/WebApplication6.csproj (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+/user/someuser/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+    dirty: true
+    isOrphan: true
+    noOpenRef: true *changed*
+    deferredClose: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -395,6 +392,12 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] `remove Project::
+Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/WebApplication6.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -403,7 +406,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -421,6 +427,10 @@ FsWatches::
 /user/someuser/project/js/site.js:
   {}
 
+FsWatches *deleted*::
+/user/someuser/project/tsconfig.json:
+  {}
+
 FsWatchesRecursive::
 /user/someuser/project/js: *new*
   {}
@@ -429,3 +439,11 @@ Projects::
 /user/someuser/project/WebApplication6.csproj (External) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+/user/someuser/project/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+    noOpenRef: true
+    deferredClose: true

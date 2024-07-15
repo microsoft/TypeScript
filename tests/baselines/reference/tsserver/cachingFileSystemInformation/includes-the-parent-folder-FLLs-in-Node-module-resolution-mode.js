@@ -39,8 +39,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/proj/foo/boo
-Info seq  [hh:mm:ss:mss] For info: /users/username/projects/proj/foo/boo/app.ts :: Config file name: /users/username/projects/proj/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/proj/foo/boo/app.ts ProjectRootPath: undefined:: Result: /users/username/projects/proj/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/proj/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/proj/tsconfig.json 2000 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -176,7 +175,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/proj/foo/boo/app.ts
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/proj/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -287,6 +293,7 @@ Projects::
 /users/username/projects/proj/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 5: /users/username/projects/proj/tsconfig.json
@@ -377,6 +384,7 @@ Projects::
 /users/username/projects/proj/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

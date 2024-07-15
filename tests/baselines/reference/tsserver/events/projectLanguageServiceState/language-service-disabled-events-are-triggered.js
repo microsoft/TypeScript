@@ -20,8 +20,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/app.js :: Config file name: /a/jsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/app.js ProjectRootPath: undefined:: Result: /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/jsconfig.json 2000 undefined Project: /a/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -206,7 +205,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -238,6 +244,7 @@ ScriptInfos::
 Language service enabled: false
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/jsconfig.json 1:: WatchInfo: /a/jsconfig.json 2000 undefined Project: /a/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /a/jsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/app.js ProjectRootPath: undefined:: Result: /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/jsconfig.json 1:: WatchInfo: /a/jsconfig.json 2000 undefined Project: /a/jsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
@@ -259,9 +266,9 @@ Projects::
 /a/jsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /a/jsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -323,6 +330,12 @@ FsWatches::
 FsWatchesRecursive::
 /a: *new*
   {}
+
+Projects::
+/a/jsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 ScriptInfos::
 /a/app.js (Open)
@@ -398,6 +411,7 @@ Projects::
 /a/jsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -582,5 +596,11 @@ FsWatches::
 FsWatchesRecursive::
 /a:
   {}
+
+Projects::
+/a/jsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 Language service enabled: true

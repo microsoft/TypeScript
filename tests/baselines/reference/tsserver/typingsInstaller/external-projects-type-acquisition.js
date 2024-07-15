@@ -320,7 +320,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -344,10 +347,10 @@ FsWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/jquery@ts5.4",
-  "@types/moment@ts5.4",
-  "@types/commander@ts5.4",
-  "@types/express@ts5.4"
+  "@types/jquery@tsFakeMajor.Minor",
+  "@types/moment@tsFakeMajor.Minor",
+  "@types/commander@tsFakeMajor.Minor",
+  "@types/express@tsFakeMajor.Minor"
 ] *new*
 
 Projects::
@@ -489,6 +492,7 @@ Projects::
 /a/app/test.csproj (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 1
 1: /a/app/test.csproj
@@ -650,6 +654,7 @@ Projects::
 /a/app/test.csproj (External) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/b/file3.d.ts

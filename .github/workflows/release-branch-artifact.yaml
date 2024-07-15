@@ -19,8 +19,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      - uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: 'lts/*'
       - run: |
           npm --version
           # corepack enable npm
@@ -38,10 +40,11 @@ jobs:
         run: |
           npx hereby LKG
           npx hereby clean
+          node ./scripts/addPackageJsonGitHead.mjs package.json
           npm pack ./
           mv typescript-*.tgz typescript.tgz
       - name: Upload built tarfile
-        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
+        uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
         with:
           name: tgz
           path: typescript.tgz

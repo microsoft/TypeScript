@@ -64,8 +64,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/users/projects/myproject
-Info seq  [hh:mm:ss:mss] For info: /user/users/projects/myproject/index.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/users/projects/myproject/index.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -109,7 +108,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/users/projects/myproject/index.ts Proj
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -231,7 +237,10 @@ Info seq  [hh:mm:ss:mss] response:
           "unverified": true
         }
       ],
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -266,6 +275,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts: identitySourceMapConsumer *new*
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::
@@ -278,8 +289,9 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1* *default*
         /dev/null/auxiliaryProject1* *new*
-/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts
+/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/users/projects/myproject/node_modules/@types/yargs/index.d.ts
@@ -375,3 +387,44 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/dev/null/auxiliaryProject1* (Auxiliary)
+    projectStateVersion: 2
+    projectProgramVersion: 2
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 2 *changed*
+        /user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts: identitySourceMapConsumer
+        /user/users/projects/myproject/node_modules/@types/yargs/index.d.ts: identitySourceMapConsumer *new*
+    noDtsResolutionProject: /dev/null/auxiliaryProject1*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/users/projects/myproject/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 2
+        /dev/null/inferredProject1* *default*
+        /dev/null/auxiliaryProject1*
+/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts
+    version: Text-1
+    sourceMapFilePath: false
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/users/projects/myproject/node_modules/@types/yargs/index.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: false *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/users/projects/myproject/node_modules/yargs/callback.js
+    version: Text-1
+    containingProjects: 1
+        /dev/null/auxiliaryProject1*
+/user/users/projects/myproject/node_modules/yargs/index.js
+    version: Text-1
+    containingProjects: 1
+        /dev/null/auxiliaryProject1*

@@ -1,5 +1,5 @@
 // @filename: input.js
-// @out: output.js
+// @outFile: output.js
 // @allowJs: true
 function C() {
     this.m = null;

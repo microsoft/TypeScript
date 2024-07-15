@@ -12,7 +12,7 @@ import {
     CompilerHost,
     CompilerOptions,
     ConfigFileDiagnosticsReporter,
-    createBuilderProgramUsingProgramBuildInfo,
+    createBuilderProgramUsingIncrementalBuildInfo,
     createCachedDirectoryStructureHost,
     createCompilerDiagnostic,
     createCompilerHostFromProgramHost,
@@ -51,6 +51,7 @@ import {
     HasInvalidatedResolutions,
     isArray,
     isIgnoredFileFromWildCardWatching,
+    isIncrementalBuildInfo,
     isProgramUptoDate,
     JSDocParsingMode,
     MapLike,
@@ -61,7 +62,6 @@ import {
     parseConfigHostFromCompilerHostLike,
     ParsedCommandLine,
     Path,
-    perfLogger,
     PollingInterval,
     ProgramUpdateLevel,
     ProjectReference,
@@ -94,7 +94,7 @@ import {
     WatchType,
     WatchTypeRegistry,
     WildcardDirectoryWatcher,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface ReadBuildProgramHost {
     useCaseSensitiveFileNames(): boolean;
@@ -116,14 +116,14 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
         if (!content) return undefined;
         buildInfo = getBuildInfo(buildInfoPath, content);
     }
-    if (!buildInfo || buildInfo.version !== version || !buildInfo.program) return undefined;
-    return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
+    if (!buildInfo || buildInfo.version !== version || !isIncrementalBuildInfo(buildInfo)) return undefined;
+    return createBuilderProgramUsingIncrementalBuildInfo(buildInfo, buildInfoPath, host);
 }
 
 export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
     host.createHash = maybeBind(system, system.createHash);
-    host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
+    host.storeSignatureInfo = system.storeSignatureInfo;
     setGetSourceFileAsHashVersioned(host);
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
     return host;
@@ -169,6 +169,7 @@ export interface WatchHost {
     setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
     /** If provided, will be used to reset existing delayed compilation */
     clearTimeout?(timeoutId: any): void;
+    preferNonRecursiveWatch?: boolean;
 }
 export interface ProgramHost<T extends BuilderProgram> {
     /**
@@ -268,7 +269,7 @@ export interface ProgramHost<T extends BuilderProgram> {
     writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
     // For testing
     /** @internal */
-    storeFilesChangingSignatureDuringEmit?: boolean;
+    storeSignatureInfo?: boolean;
     /** @internal */
     now?(): Date;
 }
@@ -498,6 +499,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     compilerHost.toPath = toPath;
     compilerHost.getCompilationSettings = () => compilerOptions!;
     compilerHost.useSourceOfProjectReferenceRedirect = maybeBind(host, host.useSourceOfProjectReferenceRedirect);
+    compilerHost.preferNonRecursiveWatch = host.preferNonRecursiveWatch;
     compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
     compilerHost.watchAffectingFileLocation = (file, cb) => watchFile(file, cb, PollingInterval.High, watchOptions, WatchType.AffectingFileLocation);
     compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.TypeRoots);
@@ -594,6 +596,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             });
             parsedConfigs = undefined;
         }
+        builderProgram = undefined!;
     }
 
     function getResolutionCache() {
@@ -889,19 +892,15 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     function updateProgram() {
         switch (updateLevel) {
             case ProgramUpdateLevel.RootNamesAndUpdate:
-                perfLogger?.logStartUpdateProgram("PartialConfigReload");
                 reloadFileNamesFromConfigFile();
                 break;
             case ProgramUpdateLevel.Full:
-                perfLogger?.logStartUpdateProgram("FullConfigReload");
                 reloadConfigFile();
                 break;
             default:
-                perfLogger?.logStartUpdateProgram("SynchronizeProgram");
                 synchronizeProgram();
                 break;
         }
-        perfLogger?.logStopUpdateProgram("Done");
         return getCurrentBuilderProgram();
     }
 

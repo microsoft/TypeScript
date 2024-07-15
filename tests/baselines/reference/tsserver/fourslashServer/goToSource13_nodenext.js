@@ -51,8 +51,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /node_modules/left-pad
-Info seq  [hh:mm:ss:mss] For info: /node_modules/left-pad/package.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /node_modules/left-pad/package.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
@@ -83,6 +82,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/left-pad/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -124,8 +134,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /index.mts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.mts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -214,6 +223,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/left-pad/package.json ProjectR
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /index.mts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -356,6 +376,8 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/left-pad/index.d.ts: identitySourceMapConsumer *new*
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::
@@ -379,8 +401,9 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/inferredProject1*
         /tsconfig.json
-/node_modules/left-pad/index.d.ts
+/node_modules/left-pad/index.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 1
         /tsconfig.json
 /node_modules/left-pad/index.js *new*

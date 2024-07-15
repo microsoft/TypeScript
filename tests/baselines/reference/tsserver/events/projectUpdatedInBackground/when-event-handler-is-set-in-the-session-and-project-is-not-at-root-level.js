@@ -37,8 +37,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/rootfolder/otherfolder/a/b/project
-Info seq  [hh:mm:ss:mss] For info: /user/username/rootfolder/otherfolder/a/b/project/file1.ts :: Config file name: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined:: Result: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -161,7 +160,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/rootfolder/otherfolder/a/b/pr
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -227,6 +233,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -282,6 +289,12 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -357,6 +370,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 6: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
@@ -451,6 +465,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

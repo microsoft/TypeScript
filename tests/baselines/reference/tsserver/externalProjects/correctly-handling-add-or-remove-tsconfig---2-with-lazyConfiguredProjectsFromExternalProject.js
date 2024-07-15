@@ -36,10 +36,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -117,7 +113,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -163,6 +162,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/c/tsconfig.json 2000 undefined Project: /a/b/c/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/d/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/d/tsconfig.json 2000 undefined Project: /a/b/d/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -174,10 +177,6 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/c/tsconfig.json 2000 undefined Project: /a/b/c/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/d/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/d/tsconfig.json 2000 undefined Project: /a/b/d/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Project '/a/b/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
 
@@ -210,12 +209,15 @@ Projects::
 /a/b/c/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 /a/b/d/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 /a/b/proj1 (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*
@@ -223,7 +225,6 @@ ScriptInfos::
     containingProjects: 0 *changed*
         /a/b/proj1 *deleted*
 
-Info seq  [hh:mm:ss:mss] Loading configured project /a/b/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -366,7 +367,6 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Loading configured project /a/b/d/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -561,9 +561,11 @@ Projects::
 /a/b/c/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 /a/b/d/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/b/app.ts
@@ -660,6 +662,8 @@ Projects::
 /a/b/c/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 /a/b/d/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -694,6 +698,18 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj1
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+	/a/b/app.ts Text-1 "let x = 1;"
+
+
+	app.ts
+	  Root file specified for compilation
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/a/b/d/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -710,18 +726,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/d/tsconfig.json 2
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/d/node_modules/@types 1 undefined Project: /a/b/d/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/d/node_modules/@types 1 undefined Project: /a/b/d/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/d/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj1
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/app.ts Text-1 "let x = 1;"
-
-
-	app.ts
-	  Root file specified for compilation
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
@@ -730,18 +734,19 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
-  {"pollingInterval":500} *new*
+  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /a/b/d/node_modules/@types:
-  {"pollingInterval":500}
-/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -764,6 +769,8 @@ Projects::
 /a/b/d/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 /a/b/proj1 (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -804,6 +811,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 6,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/c/tsconfig.json 2000 undefined Project: /a/b/c/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/d/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/d/tsconfig.json 2000 undefined Project: /a/b/d/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -815,10 +826,6 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/c/tsconfig.json 2000 undefined Project: /a/b/c/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/d/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/d/tsconfig.json 2000 undefined Project: /a/b/d/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Project '/a/b/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
 
@@ -855,12 +862,15 @@ Projects::
 /a/b/c/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 /a/b/d/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 /a/b/proj1 (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*
@@ -874,7 +884,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0
 
-Info seq  [hh:mm:ss:mss] Loading configured project /a/b/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -975,7 +984,6 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Loading configured project /a/b/d/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1128,9 +1136,11 @@ Projects::
 /a/b/c/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 /a/b/d/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/b/app.ts
@@ -1226,9 +1236,13 @@ Projects::
 /a/b/c/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 /a/b/d/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/b/app.ts

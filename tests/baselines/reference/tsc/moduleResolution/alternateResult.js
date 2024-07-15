@@ -200,6 +200,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -252,6 +253,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -285,6 +287,7 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar/index.mjs', result '/home/src/projects/project/node_modules/bar/index.mjs'.
 ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 ======== Resolving module 'foo2' from '/home/src/projects/project/index.mts'. ========
@@ -302,6 +305,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -331,6 +335,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -339,10 +344,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -379,87 +387,97 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../lib/lib.d.ts",
+  "fileNames": [
+    "../../../../lib/lib.d.ts",
+    "./node_modules/foo2/index.d.ts",
+    "./node_modules/@types/bar2/index.d.ts",
+    "./index.mts"
+  ],
+  "fileIdsList": [
+    [
       "./node_modules/foo2/index.d.ts",
-      "./node_modules/@types/bar2/index.d.ts",
-      "./index.mts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "./node_modules/@types/bar2/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo2/index.d.ts": {
-        "original": {
-          "version": "-1622383150-export declare const foo2: number;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo2/index.d.ts": {
+      "original": {
         "version": "-1622383150-export declare const foo2: number;",
-        "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar2/index.d.ts": {
-        "original": {
-          "version": "-7439170493-export declare const bar2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-1622383150-export declare const foo2: number;",
+      "signature": "-1622383150-export declare const foo2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar2/index.d.ts": {
+      "original": {
         "version": "-7439170493-export declare const bar2: number;",
-        "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.mts": {
-        "original": {
-          "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-          "impliedFormat": 99
-        },
+      "version": "-7439170493-export declare const bar2: number;",
+      "signature": "-7439170493-export declare const bar2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./index.mts": {
+      "original": {
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-        "signature": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        4,
-        "./index.mts"
-      ]
-    ],
-    "options": {
-      "strict": true
-    },
-    "referencedMap": {
-      "./index.mts": [
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    },
-    "exportedModulesMap": {
-      "./index.mts": [
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
+        "impliedFormat": 99
+      },
+      "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "signature": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "impliedFormat": "esnext"
     }
   },
+  "root": [
+    [
+      4,
+      "./index.mts"
+    ]
+  ],
+  "options": {
+    "strict": true
+  },
+  "referencedMap": {
+    "./index.mts": [
+      "./node_modules/foo2/index.d.ts",
+      "./node_modules/@types/bar2/index.d.ts"
+    ]
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.mts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1118
+  "size": 1116
 }
 
 
@@ -502,6 +520,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -554,6 +573,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -617,6 +637,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -646,6 +667,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -654,10 +676,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -724,6 +749,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -789,6 +815,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -852,6 +879,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -881,6 +909,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -889,10 +918,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -961,6 +993,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1026,6 +1059,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1059,6 +1093,7 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar/index.mjs', result '/home/src/projects/project/node_modules/bar/index.mjs'.
 ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 ======== Resolving module 'foo2' from '/home/src/projects/project/index.mts'. ========
@@ -1076,6 +1111,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -1105,6 +1141,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -1113,10 +1150,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -1185,6 +1225,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1237,6 +1278,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1270,6 +1312,7 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar/index.mjs', result '/home/src/projects/project/node_modules/bar/index.mjs'.
 ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 ======== Resolving module 'foo2' from '/home/src/projects/project/index.mts'. ========
@@ -1287,6 +1330,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -1316,6 +1360,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -1324,10 +1369,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -1406,6 +1454,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1448,6 +1497,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -1467,6 +1517,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -1496,6 +1547,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -1505,10 +1557,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -1540,95 +1595,114 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../lib/lib.d.ts",
+  "fileNames": [
+    "../../../../lib/lib.d.ts",
+    "./node_modules/@types/bar/index.d.ts",
+    "./node_modules/foo2/index.d.ts",
+    "./node_modules/@types/bar2/index.d.ts",
+    "./index.mts"
+  ],
+  "fileIdsList": [
+    [
       "./node_modules/@types/bar/index.d.ts",
       "./node_modules/foo2/index.d.ts",
-      "./node_modules/@types/bar2/index.d.ts",
-      "./index.mts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "./node_modules/@types/bar2/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar/index.d.ts": {
-        "original": {
-          "version": "-9556021903-export declare const bar: number;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar/index.d.ts": {
+      "original": {
         "version": "-9556021903-export declare const bar: number;",
-        "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo2/index.d.ts": {
-        "original": {
-          "version": "-1622383150-export declare const foo2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-9556021903-export declare const bar: number;",
+      "signature": "-9556021903-export declare const bar: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo2/index.d.ts": {
+      "original": {
         "version": "-1622383150-export declare const foo2: number;",
-        "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar2/index.d.ts": {
-        "original": {
-          "version": "-7439170493-export declare const bar2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-1622383150-export declare const foo2: number;",
+      "signature": "-1622383150-export declare const foo2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar2/index.d.ts": {
+      "original": {
         "version": "-7439170493-export declare const bar2: number;",
-        "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.mts": {
-        "original": {
-          "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 99
-        },
+      "version": "-7439170493-export declare const bar2: number;",
+      "signature": "-7439170493-export declare const bar2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./index.mts": {
+      "original": {
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        5,
-        "./index.mts"
-      ]
-    ],
-    "options": {
-      "strict": true
-    },
-    "referencedMap": {
-      "./index.mts": [
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    },
-    "exportedModulesMap": {}
+        "impliedFormat": 99
+      },
+      "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "esnext"
+    }
   },
+  "root": [
+    [
+      5,
+      "./index.mts"
+    ]
+  ],
+  "options": {
+    "strict": true
+  },
+  "referencedMap": {
+    "./index.mts": [
+      "./node_modules/@types/bar/index.d.ts",
+      "./node_modules/foo2/index.d.ts",
+      "./node_modules/@types/bar2/index.d.ts"
+    ]
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.mts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1271
+  "size": 1276
 }
 
 
@@ -1669,6 +1743,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -1698,6 +1773,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -1717,6 +1793,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -1746,6 +1823,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -1756,10 +1834,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -1792,107 +1873,130 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"fileIdsList":[[2,3,4,5]],"referencedMap":[[6,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4,5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"referencedMap":[[6,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../lib/lib.d.ts",
+  "fileNames": [
+    "../../../../lib/lib.d.ts",
+    "./node_modules/foo/index.d.ts",
+    "./node_modules/@types/bar/index.d.ts",
+    "./node_modules/foo2/index.d.ts",
+    "./node_modules/@types/bar2/index.d.ts",
+    "./index.mts"
+  ],
+  "fileIdsList": [
+    [
       "./node_modules/foo/index.d.ts",
       "./node_modules/@types/bar/index.d.ts",
       "./node_modules/foo2/index.d.ts",
-      "./node_modules/@types/bar2/index.d.ts",
-      "./index.mts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "./node_modules/@types/bar2/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo/index.d.ts": {
-        "original": {
-          "version": "-5214938848-export declare const foo: number;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo/index.d.ts": {
+      "original": {
         "version": "-5214938848-export declare const foo: number;",
-        "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar/index.d.ts": {
-        "original": {
-          "version": "-9556021903-export declare const bar: number;",
-          "impliedFormat": 1
-        },
+      "version": "-5214938848-export declare const foo: number;",
+      "signature": "-5214938848-export declare const foo: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar/index.d.ts": {
+      "original": {
         "version": "-9556021903-export declare const bar: number;",
-        "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo2/index.d.ts": {
-        "original": {
-          "version": "-1622383150-export declare const foo2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-9556021903-export declare const bar: number;",
+      "signature": "-9556021903-export declare const bar: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo2/index.d.ts": {
+      "original": {
         "version": "-1622383150-export declare const foo2: number;",
-        "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar2/index.d.ts": {
-        "original": {
-          "version": "-7439170493-export declare const bar2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-1622383150-export declare const foo2: number;",
+      "signature": "-1622383150-export declare const foo2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar2/index.d.ts": {
+      "original": {
         "version": "-7439170493-export declare const bar2: number;",
-        "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.mts": {
-        "original": {
-          "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 99
-        },
+      "version": "-7439170493-export declare const bar2: number;",
+      "signature": "-7439170493-export declare const bar2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./index.mts": {
+      "original": {
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        6,
-        "./index.mts"
-      ]
-    ],
-    "options": {
-      "strict": true
-    },
-    "referencedMap": {
-      "./index.mts": [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    },
-    "exportedModulesMap": {}
+        "impliedFormat": 99
+      },
+      "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "esnext"
+    }
   },
+  "root": [
+    [
+      6,
+      "./index.mts"
+    ]
+  ],
+  "options": {
+    "strict": true
+  },
+  "referencedMap": {
+    "./index.mts": [
+      "./node_modules/foo/index.d.ts",
+      "./node_modules/@types/bar/index.d.ts",
+      "./node_modules/foo2/index.d.ts",
+      "./node_modules/@types/bar2/index.d.ts"
+    ]
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.mts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1383
+  "size": 1390
 }
 
 
@@ -1930,6 +2034,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -1959,6 +2064,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -1978,6 +2084,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -2017,6 +2124,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2050,6 +2158,7 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
@@ -2057,10 +2166,13 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -2091,95 +2203,114 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../lib/lib.d.ts",
+  "fileNames": [
+    "../../../../lib/lib.d.ts",
+    "./node_modules/foo/index.d.ts",
+    "./node_modules/@types/bar/index.d.ts",
+    "./node_modules/foo2/index.d.ts",
+    "./index.mts"
+  ],
+  "fileIdsList": [
+    [
       "./node_modules/foo/index.d.ts",
       "./node_modules/@types/bar/index.d.ts",
-      "./node_modules/foo2/index.d.ts",
-      "./index.mts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "./node_modules/foo2/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo/index.d.ts": {
-        "original": {
-          "version": "-5214938848-export declare const foo: number;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo/index.d.ts": {
+      "original": {
         "version": "-5214938848-export declare const foo: number;",
-        "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar/index.d.ts": {
-        "original": {
-          "version": "-9556021903-export declare const bar: number;",
-          "impliedFormat": 1
-        },
+      "version": "-5214938848-export declare const foo: number;",
+      "signature": "-5214938848-export declare const foo: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar/index.d.ts": {
+      "original": {
         "version": "-9556021903-export declare const bar: number;",
-        "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo2/index.d.ts": {
-        "original": {
-          "version": "-1622383150-export declare const foo2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-9556021903-export declare const bar: number;",
+      "signature": "-9556021903-export declare const bar: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo2/index.d.ts": {
+      "original": {
         "version": "-1622383150-export declare const foo2: number;",
-        "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.mts": {
-        "original": {
-          "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 99
-        },
+      "version": "-1622383150-export declare const foo2: number;",
+      "signature": "-1622383150-export declare const foo2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./index.mts": {
+      "original": {
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        5,
-        "./index.mts"
-      ]
-    ],
-    "options": {
-      "strict": true
-    },
-    "referencedMap": {
-      "./index.mts": [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts"
-      ]
-    },
-    "exportedModulesMap": {}
+        "impliedFormat": 99
+      },
+      "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "esnext"
+    }
   },
+  "root": [
+    [
+      5,
+      "./index.mts"
+    ]
+  ],
+  "options": {
+    "strict": true
+  },
+  "referencedMap": {
+    "./index.mts": [
+      "./node_modules/foo/index.d.ts",
+      "./node_modules/@types/bar/index.d.ts",
+      "./node_modules/foo2/index.d.ts"
+    ]
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.mts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1262
+  "size": 1267
 }
 
 
@@ -2219,6 +2350,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -2248,6 +2380,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -2283,6 +2416,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2335,6 +2469,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2368,16 +2503,20 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -2407,83 +2546,98 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../lib/lib.d.ts",
+  "fileNames": [
+    "../../../../lib/lib.d.ts",
+    "./node_modules/foo/index.d.ts",
+    "./node_modules/@types/bar/index.d.ts",
+    "./index.mts"
+  ],
+  "fileIdsList": [
+    [
       "./node_modules/foo/index.d.ts",
-      "./node_modules/@types/bar/index.d.ts",
-      "./index.mts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "./node_modules/@types/bar/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo/index.d.ts": {
-        "original": {
-          "version": "-5214938848-export declare const foo: number;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo/index.d.ts": {
+      "original": {
         "version": "-5214938848-export declare const foo: number;",
-        "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar/index.d.ts": {
-        "original": {
-          "version": "-9556021903-export declare const bar: number;",
-          "impliedFormat": 1
-        },
+      "version": "-5214938848-export declare const foo: number;",
+      "signature": "-5214938848-export declare const foo: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar/index.d.ts": {
+      "original": {
         "version": "-9556021903-export declare const bar: number;",
-        "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.mts": {
-        "original": {
-          "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 99
-        },
+      "version": "-9556021903-export declare const bar: number;",
+      "signature": "-9556021903-export declare const bar: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./index.mts": {
+      "original": {
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        4,
-        "./index.mts"
-      ]
-    ],
-    "options": {
-      "strict": true
-    },
-    "referencedMap": {
-      "./index.mts": [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts"
-      ]
-    },
-    "exportedModulesMap": {}
+        "impliedFormat": 99
+      },
+      "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "esnext"
+    }
   },
+  "root": [
+    [
+      4,
+      "./index.mts"
+    ]
+  ],
+  "options": {
+    "strict": true
+  },
+  "referencedMap": {
+    "./index.mts": [
+      "./node_modules/foo/index.d.ts",
+      "./node_modules/@types/bar/index.d.ts"
+    ]
+  },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.mts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1148
+  "size": 1151
 }
 
 
@@ -2510,6 +2664,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -2539,6 +2694,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -2574,6 +2730,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2626,6 +2783,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2678,10 +2836,13 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -2732,6 +2893,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -2761,6 +2923,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -2796,6 +2959,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2861,6 +3025,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2913,10 +3078,13 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -2969,6 +3137,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -2998,6 +3167,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -3033,6 +3203,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -3098,6 +3269,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -3131,16 +3303,20 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -3193,6 +3369,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -3222,6 +3399,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -3257,6 +3435,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -3309,6 +3488,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -3342,16 +3522,20 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [

@@ -1,13 +1,18 @@
 //// [tests/cases/compiler/circularBaseConstraint.ts] ////
 
+=== Performance Stats ===
+Instantiation count: 2,500
+
 === circularBaseConstraint.ts ===
 // Repro from #54610
 
 type A<T> = T;
 >A : T
+>  : ^
 
 type B<T> = T extends any[]
 >B : B<T>
+>  : ^^^^
 
     ? never
     : A<T> extends infer key
@@ -18,10 +23,14 @@ type B<T> = T extends any[]
 
 function foo<T>() {
 >foo : <T>() => void
+>    : ^ ^^^^^^^^^^^
 
     `${a}` as B<T>;
 >`${a}` as B<T> : B<T>
+>               : ^^^^
 >`${a}` : string
+>       : ^^^^^^
 >a : any
+>  : ^^^
 }
 

@@ -37,7 +37,8 @@ class TestClass1 {
     "typeRoots": [
       "../lib/@types",
       "../lib/@app"
-    ]
+    ],
+    "traceResolution": true
   }
 }
 
@@ -64,8 +65,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/test
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/test/test.ts :: Config file name: /user/username/projects/myproject/test/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/test/test.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -88,16 +88,39 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/test/tsconfig
    "/user/username/projects/myproject/lib/@types",
    "/user/username/projects/myproject/lib/@app"
   ],
+  "traceResolution": true,
   "configFilePath": "/user/username/projects/myproject/test/tsconfig.json"
  }
 }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test 1 undefined Config: /user/username/projects/myproject/test/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test 1 undefined Config: /user/username/projects/myproject/test/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json
+Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'UpperCasePackage', containing file '/user/username/projects/myproject/test/__inferred type names__.ts', root directory '/user/username/projects/myproject/lib/@types,/user/username/projects/myproject/lib/@app'. ========
+Info seq  [hh:mm:ss:mss] Resolving with primary search path '/user/username/projects/myproject/lib/@types, /user/username/projects/myproject/lib/@app'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', result '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts'.
+Info seq  [hh:mm:ss:mss] ======== Type reference directive 'UpperCasePackage' was successfully resolved to '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib 1 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib 1 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'lib', containing file '/user/username/projects/myproject/test/__inferred type names__.ts', root directory '/user/username/projects/myproject/lib/@types,/user/username/projects/myproject/lib/@app'. ========
+Info seq  [hh:mm:ss:mss] Resolving with primary search path '/user/username/projects/myproject/lib/@types, /user/username/projects/myproject/lib/@app'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/lib.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@app/lib.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@app/lib/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@app/lib/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/lib/@app/lib/index.d.ts', result '/user/username/projects/myproject/lib/@app/lib/index.d.ts'.
+Info seq  [hh:mm:ss:mss] ======== Type reference directive 'lib' was successfully resolved to '/user/username/projects/myproject/lib/@app/lib/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/@app/lib/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'UpperCasePackage', containing file '/user/username/projects/myproject/lib/@app/lib/index.d.ts', root directory '/user/username/projects/myproject/lib/@types,/user/username/projects/myproject/lib/@app'. ========
+Info seq  [hh:mm:ss:mss] Resolving with primary search path '/user/username/projects/myproject/lib/@types, /user/username/projects/myproject/lib/@app'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', result '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts'.
+Info seq  [hh:mm:ss:mss] ======== Type reference directive 'UpperCasePackage' was successfully resolved to '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/@types 1 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/@types 1 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Type roots
@@ -160,7 +183,8 @@ Info seq  [hh:mm:ss:mss] event:
             "typeRoots": [
               "",
               ""
-            ]
+            ],
+            "traceResolution": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -199,7 +223,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/test/test.
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -270,6 +301,7 @@ Projects::
 /user/username/projects/myproject/test/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -292,6 +324,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json
+Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'UpperCasePackage' from '/user/username/projects/myproject/lib/@app/lib/index.d.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/test/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -331,6 +364,12 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/user/username/projects/myproject/test/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

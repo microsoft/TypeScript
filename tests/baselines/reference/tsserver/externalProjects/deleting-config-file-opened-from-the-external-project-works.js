@@ -40,10 +40,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -153,6 +149,23 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/someuser/project/tsconfig.json",
+        "configFile": "/user/someuser/project/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "No inputs were found in config file '/user/someuser/project/tsconfig.json'. Specified 'include' paths were '[\"**/*\"]' and 'exclude' paths were '[]'.",
+            "code": 18003,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
@@ -161,7 +174,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -224,38 +240,19 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/someuser/project/tsconfig.json 2:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (0)
-
-
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/someuser/project/tsconfig.json 2:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/someuser/project/tsconfig.json :: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Project: /user/someuser/project/tsconfig.json Detected file add/remove of non supported extension: /user/someuser/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/someuser/project/tsconfig.json :: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
 Before request
 //// [/user/someuser/project/tsconfig.json] deleted
 
-PolledWatches *deleted*::
-/user/someuser/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches *deleted*::
-/user/someuser/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive *deleted*::
-/user/someuser/project:
-  {}
-
 Projects::
-/user/someuser/project/tsconfig.json (Configured) *deleted*
+/user/someuser/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isOrphan: true *changed*
+    deferredClose: true *changed*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -302,9 +299,7 @@ Info seq  [hh:mm:ss:mss] request:
               "allowJs": false
             },
             "typeAcquisition": {
-              "include": [],
-              "exclude": [],
-              "enable": true
+              "include": []
             }
           }
         ]
@@ -333,7 +328,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/user/someuser/project/node_modules/@types: *new*
+/user/someuser/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -341,11 +336,23 @@ FsWatches::
   {}
 /user/someuser/project/js/site.js: *new*
   {}
+/user/someuser/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/someuser/project:
+  {}
 
 Projects::
 /user/someuser/project/WebApplication6.csproj (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+/user/someuser/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isOrphan: true
+    noOpenRef: true *changed*
+    deferredClose: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -507,6 +514,18 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] `remove Project::
+Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/WebApplication6.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -515,7 +534,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -533,11 +555,26 @@ FsWatches::
 /user/someuser/project/js/site.js:
   {}
 
+FsWatches *deleted*::
+/user/someuser/project/tsconfig.json:
+  {}
+
 FsWatchesRecursive::
 /user/someuser/project/js: *new*
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/someuser/project:
   {}
 
 Projects::
 /user/someuser/project/WebApplication6.csproj (External) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+/user/someuser/project/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isClosed: true *changed*
+    isOrphan: true
+    noOpenRef: true
+    deferredClose: true

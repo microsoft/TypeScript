@@ -95,15 +95,39 @@ export function foo() {}
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "command": "open",
+      "command": "configure",
       "arguments": {
-        "file": "e:/myproject/src/app.js"
+        "preferences": {
+          "includePackageJsonAutoImports": "auto",
+          "includeCompletionsForModuleExports": true,
+          "includeCompletionsWithInsertText": true
+        }
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: e:/myproject/src
-Info seq  [hh:mm:ss:mss] For info: e:/myproject/src/app.js :: No config files found.
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "e:/myproject/src/app.js"
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: e:/myproject/src/app.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -118,9 +142,9 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -351,7 +375,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: e:/myproject/src/app.js ProjectRootPath: und
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -404,11 +435,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "e:/myproject/src/app.js",
         "line": 5,
-        "offset": 1,
-        "includeExternalModuleExports": true,
-        "includeInsertTextCompletions": true
+        "offset": 1
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
@@ -679,6 +708,12 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "undefined",
             "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
           },

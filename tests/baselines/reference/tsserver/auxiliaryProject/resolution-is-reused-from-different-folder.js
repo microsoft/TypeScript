@@ -69,8 +69,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/users/projects/myproject/some
-Info seq  [hh:mm:ss:mss] For info: /user/users/projects/myproject/some/index.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/users/projects/myproject/some/index.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/some/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/users/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -127,7 +126,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/users/projects/myproject/some/index.ts
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -258,7 +264,10 @@ Info seq  [hh:mm:ss:mss] response:
           "unverified": true
         }
       ],
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -305,6 +314,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts: identitySourceMapConsumer *new*
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
 
 ScriptInfos::
@@ -317,8 +328,9 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/auxiliaryProject1* *new*
-/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts
+/user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/users/projects/myproject/node_modules/@types/yargs/index.d.ts

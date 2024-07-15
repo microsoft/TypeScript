@@ -64,10 +64,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -81,8 +77,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/rootfolder/otherfolder/a/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/rootfolder/otherfolder/a/b/app.ts :: Config file name: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/rootfolder/otherfolder/a/b/app.ts ProjectRootPath: undefined:: Result: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/rootfolder/otherfolder/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/tsconfig.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -206,7 +201,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/rootfolder/otherfolder/a/b/ap
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/rootfolder/otherfolder/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -732,6 +734,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
@@ -792,6 +795,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/lib :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/typescript-8493ea5d/lib :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -1330,6 +1334,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
@@ -1355,6 +1360,23 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	/user/username/rootfolder/otherfolder/a/b/app.ts SVC-1-0 "import _ from 'lodash';"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/rootfolder/otherfolder/a/b/tsconfig.json",
+        "configFile": "/user/username/rootfolder/otherfolder/a/b/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "Cannot find type definition file for 'lodash'.\n  The file is in the program because:\n    Entry point for implicit type library 'lodash'",
+            "code": 2688,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/rootfolder/otherfolder/a/b/tsconfig.json' (Configured)
@@ -1390,6 +1412,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules/.staging/@types/lodash-e56c4fe7/index.d.ts :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
@@ -2156,6 +2179,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.json, Cancelled earlier one
@@ -2201,6 +2225,17 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/rootfolder/otherfolder/a/b/tsconfig.json",
+        "configFile": "/user/username/rootfolder/otherfolder/a/b/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/rootfolder/otherfolder/a/b/tsconfig.json' (Configured)
@@ -2270,6 +2305,7 @@ Projects::
 /user/username/rootfolder/otherfolder/a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 4 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

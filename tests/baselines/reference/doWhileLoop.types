@@ -3,6 +3,7 @@
 === doWhileLoop.ts ===
 do { } while (false);
 >false : false
+>      : ^^^^^
 
 var n;
 >n : any

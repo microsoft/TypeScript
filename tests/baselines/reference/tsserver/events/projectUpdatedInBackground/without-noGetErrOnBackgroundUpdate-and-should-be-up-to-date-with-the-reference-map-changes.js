@@ -17,8 +17,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/project
-Info seq  [hh:mm:ss:mss] For info: /users/username/projects/project/file1Consumer1.ts :: Config file name: /users/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/file1Consumer1.ts ProjectRootPath: undefined:: Result: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.json 2000 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -177,7 +176,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/file1Consum
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -306,6 +312,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
@@ -336,7 +343,11 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 2,
+      "success": true
     }
 After request
 
@@ -383,6 +394,17 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/users/username/projects/project/tsconfig.json",
+        "configFile": "/users/username/projects/project/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
@@ -450,6 +472,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -498,6 +521,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -586,6 +610,12 @@ Timeout callback:: count: 1
 
 Immedidate callback:: count: 0
 
+Projects::
+/users/username/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 2
+    dirty: false *changed*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -631,7 +661,11 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 3,
+      "success": true
     }
 After request
 
@@ -639,6 +673,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -801,6 +836,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -847,7 +883,11 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 4,
+      "success": true
     }
 After request
 
@@ -855,6 +895,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 5 *changed*
     projectProgramVersion: 3
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -978,6 +1019,7 @@ Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 5
     projectProgramVersion: 4 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

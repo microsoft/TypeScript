@@ -55,8 +55,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/a/index.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -238,8 +237,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/a/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/a/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -249,7 +247,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/a/index.ts
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -306,8 +311,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/b/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -398,8 +402,64 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/b/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/b/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/b/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/b/index.ts position 13 in project /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -525,7 +585,10 @@ Info seq  [hh:mm:ss:mss] response:
         "symbolStartOffset": 10,
         "symbolDisplayString": "(alias) class B\nimport B"
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -560,9 +623,12 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/a/tsconfig.json (Configured)
+/user/username/projects/myproject/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/myproject/b/tsconfig.json *new*
+        /user/username/projects/myproject/a/tsconfig.json *new*
 /user/username/projects/myproject/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

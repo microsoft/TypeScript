@@ -31,8 +31,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: ^walkThroughSnippet:/Users/UserName/projects/someProject/out
-Info seq  [hh:mm:ss:mss] For info: ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js ProjectRootPath: /user/username/projects/myproject:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -74,7 +73,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open) *new*
+^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -208,7 +207,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: ^walkThroughSnippet:/Users/UserName/projects
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -233,7 +239,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
 
-/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js isDynamic:: true
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -264,8 +269,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: ^walkThroughSnippet:/Users/UserName/projects/someProject/out
-Info seq  [hh:mm:ss:mss] For info: ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
@@ -395,7 +399,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: ^walkThroughSnippet:/Users/UserName/projects
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -435,11 +446,11 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/inferredProject2* *new*
-^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open)
+^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Dynamic) (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js (Open) *new*
+^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2* *default*

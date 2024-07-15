@@ -92,8 +92,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /node_modules/lodash
-Info seq  [hh:mm:ss:mss] For info: /node_modules/lodash/package.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /node_modules/lodash/package.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/lodash/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/lodash/index.d.ts 500 undefined WatchType: Closed Script info
@@ -134,6 +133,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/lodash/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -189,8 +199,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /index.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/lodash/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -233,6 +242,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/lodash/package.json ProjectRoo
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -478,3 +498,58 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+Projects::
+/dev/null/auxiliaryProject1* (Auxiliary)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/@types/lodash/index.d.ts: identitySourceMapConsumer *new*
+    noDtsResolutionProject: /dev/null/auxiliaryProject1*
+
+ScriptInfos::
+/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 2
+        /dev/null/inferredProject2* *default*
+        /dev/null/auxiliaryProject1*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/node_modules/@types/lodash/common/math.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/node_modules/@types/lodash/index.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: false *changed*
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/node_modules/lodash/lodash.js
+    version: Text-1
+    containingProjects: 1
+        /dev/null/auxiliaryProject1*
+/node_modules/lodash/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*

@@ -25,11 +25,11 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: ^memfs:
-Info seq  [hh:mm:ss:mss] For info: ^memfs:/foo.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^memfs:/foo.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Loading global plugin plugin-a
 Info seq  [hh:mm:ss:mss] Enabling plugin plugin-a from candidate paths: /a/lib/tsc.js/../../..
 Info seq  [hh:mm:ss:mss] Dynamically importing plugin-a from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
+request import plugin-a
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -54,7 +54,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: ^memfs:/foo.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -72,12 +79,13 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-^memfs:/foo.ts (Open) *new*
+^memfs:/foo.ts (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
 External files before plugin is loaded: 
+fulfill import plugin-a
 Info seq  [hh:mm:ss:mss] Plugin validation succeeded
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] got projects updated in background ^memfs:/foo.ts
@@ -102,11 +110,18 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 After running Timeout callback:: count: 0
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 External files before plugin after plugin is loaded: external.txt

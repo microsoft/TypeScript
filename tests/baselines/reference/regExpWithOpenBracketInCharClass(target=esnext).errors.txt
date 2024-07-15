@@ -1,0 +1,12 @@
+regExpWithOpenBracketInCharClass.ts(4,7): error TS1005: ']' expected.
+
+
+==== regExpWithOpenBracketInCharClass.ts (1 errors) ====
+    const regexes: RegExp[] = [
+      /[[]/,  // Valid
+      /[[]/u, // Valid
+      /[[]/v, // Well-terminated regex with an incomplete character class
+          
+!!! error TS1005: ']' expected.
+    ];
+    

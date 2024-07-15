@@ -1,25 +1,38 @@
 //// [tests/cases/conformance/salsa/jsContainerMergeJsContainer.ts] ////
 
 === a.js ===
-// #24131
 const a = {};
 >a : typeof a
+>  : ^^^^^^^^
 >{} : {}
+>   : ^^
 
 a.d = function() {};
 >a.d = function() {} : typeof d
+>                    : ^^^^^^^^
 >a.d : typeof d
+>    : ^^^^^^^^
 >a : typeof a
+>  : ^^^^^^^^
 >d : typeof d
+>  : ^^^^^^^^
 >function() {} : typeof d
+>              : ^^^^^^^^
 
 === b.js ===
 a.d.prototype = {};
 >a.d.prototype = {} : {}
+>                   : ^^
 >a.d.prototype : {}
+>              : ^^
 >a.d : typeof d
+>    : ^^^^^^^^
 >a : typeof a
+>  : ^^^^^^^^
 >d : typeof d
+>  : ^^^^^^^^
 >prototype : {}
+>          : ^^
 >{} : {}
+>   : ^^
 

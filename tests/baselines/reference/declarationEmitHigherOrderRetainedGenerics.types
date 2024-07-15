@@ -1,0 +1,436 @@
+//// [tests/cases/compiler/declarationEmitHigherOrderRetainedGenerics.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500 -> 5,000
+
+=== declarationEmitHigherOrderRetainedGenerics.ts ===
+export interface TypeLambda {
+    readonly In: unknown
+>In : unknown
+>   : ^^^^^^^
+
+    readonly Out2: unknown
+>Out2 : unknown
+>     : ^^^^^^^
+
+    readonly Out1: unknown
+>Out1 : unknown
+>     : ^^^^^^^
+
+    readonly Target: unknown
+>Target : unknown
+>       : ^^^^^^^
+}
+export namespace Types {
+    export type Invariant<A> = (_: A) => A
+>Invariant : Invariant<A>
+>          : ^^^^^^^^^^^^
+>_ : A
+>  : ^
+
+    export type Covariant<A> = (_: never) => A
+>Covariant : Covariant<A>
+>          : ^^^^^^^^^^^^
+>_ : never
+>  : ^^^^^
+
+    export type Contravariant<A> = (_: A) => void
+>Contravariant : Contravariant<A>
+>              : ^^^^^^^^^^^^^^^^
+>_ : A
+>  : ^
+}
+
+export declare const URI: unique symbol;
+>URI : unique symbol
+>    : ^^^^^^^^^^^^^
+
+export interface TypeClass<F extends TypeLambda> {
+    readonly [URI]?: F
+>[URI] : F
+>      : ^
+>URI : unique symbol
+>    : ^^^^^^^^^^^^^
+}
+
+export interface Invariant<F extends TypeLambda> extends TypeClass<F> {
+    readonly imap: {
+>imap : { <A, B>(to: (a: A) => B, from: (b: B) => A): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>; <R, O, E, A, B>(self: Kind<F, R, O, E, A>, to: (a: A) => B, from: (b: B) => A): Kind<F, R, O, E, B>; }
+>     : ^^^ ^^ ^^  ^^           ^^    ^^           ^^^                                                           ^^^ ^^ ^^ ^^ ^^ ^^    ^^                   ^^  ^^           ^^    ^^           ^^^                   ^^^
+
+        <A, B>(
+            to: (a: A) => B,
+>to : (a: A) => B
+>   : ^ ^^ ^^^^^ 
+>a : A
+>  : ^
+
+            from: (b: B) => A
+>from : (b: B) => A
+>     : ^ ^^ ^^^^^ 
+>b : B
+>  : ^
+
+        ): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+>self : Kind<F, R, O, E, A>
+>     : ^^^^^^^^^^^^^^^^^^^
+
+        <R, O, E, A, B>(
+            self: Kind<F, R, O, E, A>,
+>self : Kind<F, R, O, E, A>
+>     : ^^^^^^^^^^^^^^^^^^^
+
+            to: (a: A) => B,
+>to : (a: A) => B
+>   : ^ ^^ ^^^^^ 
+>a : A
+>  : ^
+
+            from: (b: B) => A
+>from : (b: B) => A
+>     : ^ ^^ ^^^^^ 
+>b : B
+>  : ^
+
+        ): Kind<F, R, O, E, B>
+    }
+}
+
+export interface Covariant<F extends TypeLambda> extends Invariant<F> {
+    readonly map: {
+>map : { <A, B>(f: (a: A) => B): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>; <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): Kind<F, R, O, E, B>; }
+>    : ^^^ ^^ ^^ ^^           ^^^                                                           ^^^ ^^ ^^ ^^ ^^ ^^    ^^                   ^^ ^^           ^^^                   ^^^
+
+        <A, B>(f: (a: A) => B): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>
+>f : (a: A) => B
+>  : ^ ^^ ^^^^^ 
+>a : A
+>  : ^
+>self : Kind<F, R, O, E, A>
+>     : ^^^^^^^^^^^^^^^^^^^
+
+        <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): Kind<F, R, O, E, B>
+>self : Kind<F, R, O, E, A>
+>     : ^^^^^^^^^^^^^^^^^^^
+>f : (a: A) => B
+>  : ^ ^^ ^^^^^ 
+>a : A
+>  : ^
+    }
+}
+
+
+export type Kind<F extends TypeLambda, In, Out2, Out1, Target> = F extends {
+>Kind : Kind<F, In, Out2, Out1, Target>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    readonly type: unknown
+>type : unknown
+>     : ^^^^^^^
+
+} ? (F & {
+    readonly In: In
+>In : In
+>   : ^^
+
+    readonly Out2: Out2
+>Out2 : Out2
+>     : ^^^^
+
+    readonly Out1: Out1
+>Out1 : Out1
+>     : ^^^^
+
+    readonly Target: Target
+>Target : Target
+>       : ^^^^^^
+
+})["type"]
+    : {
+        readonly F: F
+>F : F
+>  : ^
+
+        readonly In: Types.Contravariant<In>
+>In : Types.Contravariant<In>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+>Types : any
+>      : ^^^
+
+        readonly Out2: Types.Covariant<Out2>
+>Out2 : Types.Covariant<Out2>
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>Types : any
+>      : ^^^
+
+        readonly Out1: Types.Covariant<Out1>
+>Out1 : Types.Covariant<Out1>
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>Types : any
+>      : ^^^
+
+        readonly Target: Types.Invariant<Target>
+>Target : Types.Invariant<Target>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
+>Types : any
+>      : ^^^
+    }
+
+export interface SemiProduct<F extends TypeLambda> extends Invariant<F> {
+    readonly product: <R1, O1, E1, A, R2, O2, E2, B>(
+>product : <R1, O1, E1, A, R2, O2, E2, B>(self: Kind<F, R1, O1, E1, A>, that: Kind<F, R2, O2, E2, B>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+>        : ^  ^^  ^^  ^^ ^^  ^^  ^^  ^^ ^^    ^^                      ^^    ^^                      ^^^^^                                          
+
+        self: Kind<F, R1, O1, E1, A>,
+>self : Kind<F, R1, O1, E1, A>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+        that: Kind<F, R2, O2, E2, B>
+>that : Kind<F, R2, O2, E2, B>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+    ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+
+    readonly productMany: <R, O, E, A>(
+>productMany : <R, O, E, A>(self: Kind<F, R, O, E, A>, collection: Iterable<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, [A, ...Array<A>]>
+>            : ^ ^^ ^^ ^^ ^^    ^^                   ^^          ^^                             ^^^^^                                  
+
+        self: Kind<F, R, O, E, A>,
+>self : Kind<F, R, O, E, A>
+>     : ^^^^^^^^^^^^^^^^^^^
+
+        collection: Iterable<Kind<F, R, O, E, A>>
+>collection : Iterable<Kind<F, R, O, E, A>>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    ) => Kind<F, R, O, E, [A, ...Array<A>]>
+}
+export interface SemiApplicative<F extends TypeLambda> extends SemiProduct<F>, Covariant<F> { }
+
+
+export const SK = <A, B>(_: A, b: B): B => b;
+>SK : <A, B>(_: A, b: B) => B
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
+><A, B>(_: A, b: B): B => b : <A, B>(_: A, b: B) => B
+>                           : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
+>_ : A
+>  : ^
+>b : B
+>  : ^
+>b : B
+>  : ^
+
+export declare const dual: {
+>dual : { <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(arity: Parameters<DataFirst>["length"], body: DataFirst): DataLast & DataFirst; <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(isDataFirst: (args: IArguments) => boolean, body: DataFirst): DataLast & DataFirst; }
+>     : ^^^        ^^^^^^^^^                            ^^         ^^^^^^^^^                            ^^     ^^                               ^^    ^^         ^^^                    ^^^        ^^^^^^^^^                            ^^         ^^^^^^^^^                            ^^           ^^                             ^^    ^^         ^^^                    ^^^
+
+    <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(
+>args : any[]
+>     : ^^^^^
+>args : any[]
+>     : ^^^^^
+
+        arity: Parameters<DataFirst>["length"],
+>arity : Parameters<DataFirst>["length"]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        body: DataFirst
+>body : DataFirst
+>     : ^^^^^^^^^
+
+    ): DataLast & DataFirst
+    <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(
+>args : any[]
+>     : ^^^^^
+>args : any[]
+>     : ^^^^^
+
+        isDataFirst: (args: IArguments) => boolean,
+>isDataFirst : (args: IArguments) => boolean
+>            : ^    ^^          ^^^^^       
+>args : IArguments
+>     : ^^^^^^^^^^
+
+        body: DataFirst
+>body : DataFirst
+>     : ^^^^^^^^^
+
+    ): DataLast & DataFirst
+};
+
+export const zipWith = <F extends TypeLambda>(F: SemiApplicative<F>): {
+>zipWith : <F extends TypeLambda>(F: SemiApplicative<F>) => { <R2, O2, E2, B, A, C>(that: Kind<F, R2, O2, E2, B>, f: (a: A, b: B) => C): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, C>; <R1, O1_1, E1_1, A_1, R2, O2_1, E2_1, B_1, C_1>(self: Kind<F, R1, O1_1, E1_1, A_1>, that: Kind<F, R2, O2_1, E2_1, B_1>, f: (a: A_1, b: B_1) => C_1): Kind<F, R1 & R2, O1_1 | O2_1, E1_1 | E2_1, C_1>; }
+>        : ^ ^^^^^^^^^          ^^ ^^                  ^^^^^                                                                                                                                                                                                                                                                                                                                                                         
+><F extends TypeLambda>(F: SemiApplicative<F>): {    <R2, O2, E2, B, A, C>(        that: Kind<F, R2, O2, E2, B>,        f: (a: A, b: B) => C    ): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, C>    <R1, O1, E1, A, R2, O2, E2, B, C>(        self: Kind<F, R1, O1, E1, A>,        that: Kind<F, R2, O2, E2, B>,        f: (a: A, b: B) => C    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C>} =>    dual(        3,        <R1, O1, E1, A, R2, O2, E2, B, C>(            self: Kind<F, R1, O1, E1, A>,            that: Kind<F, R2, O2, E2, B>,            f: (a: A, b: B) => C        ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => F.map(F.product(self, that), ([a, b]) => f(a, b))    ) : <F extends TypeLambda>(F: SemiApplicative<F>) => { <R2, O2, E2, B, A, C>(that: Kind<F, R2, O2, E2, B>, f: (a: A, b: B) => C): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, C>; <R1, O1_1, E1_1, A_1, R2, O2_1, E2_1, B_1, C_1>(self: Kind<F, R1, O1_1, E1_1, A_1>, that: Kind<F, R2, O2_1, E2_1, B_1>, f: (a: A_1, b: B_1) => C_1): Kind<F, R1 & R2, O1_1 | O2_1, E1_1 | E2_1, C_1>; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           : ^ ^^^^^^^^^          ^^ ^^                  ^^^^^                                                                                                                                                                                                                                                                                                                                                                         
+>F : SemiApplicative<F>
+>  : ^^^^^^^^^^^^^^^^^^
+
+    <R2, O2, E2, B, A, C>(
+        that: Kind<F, R2, O2, E2, B>,
+>that : Kind<F, R2, O2, E2, B>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+        f: (a: A, b: B) => C
+>f : (a: A, b: B) => C
+>  : ^ ^^ ^^ ^^ ^^^^^ 
+>a : A
+>  : ^
+>b : B
+>  : ^
+
+    ): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, C>
+>self : Kind<F, R1, O1, E1, A>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+    <R1, O1, E1, A, R2, O2, E2, B, C>(
+        self: Kind<F, R1, O1, E1, A>,
+>self : Kind<F, R1, O1, E1, A>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+        that: Kind<F, R2, O2, E2, B>,
+>that : Kind<F, R2, O2, E2, B>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+        f: (a: A, b: B) => C
+>f : (a: A, b: B) => C
+>  : ^ ^^ ^^ ^^ ^^^^^ 
+>a : A
+>  : ^
+>b : B
+>  : ^
+
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
+} =>
+    dual(
+>dual(        3,        <R1, O1, E1, A, R2, O2, E2, B, C>(            self: Kind<F, R1, O1, E1, A>,            that: Kind<F, R2, O2, E2, B>,            f: (a: A, b: B) => C        ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => F.map(F.product(self, that), ([a, b]) => f(a, b))    ) : ((...args: Array<any>) => any) & (<R1, O1, E1, A, R2, O2, E2, B, C>(self: Kind<F, R1, O1, E1, A>, that: Kind<F, R2, O2, E2, B>, f: (a: A, b: B) => C) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>)
+>                                                                                                                                                                                                                                                                                      : ^^^^^    ^^          ^^^^^   ^^^^^^  ^^  ^^  ^^ ^^  ^^  ^^  ^^ ^^ ^^    ^^                      ^^    ^^                      ^^ ^^                 ^^^^^                                     ^
+>dual : { <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(arity: Parameters<DataFirst>["length"], body: DataFirst): DataLast & DataFirst; <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(isDataFirst: (args: IArguments) => boolean, body: DataFirst): DataLast & DataFirst; }
+>     : ^^^        ^^^^^^^^^                            ^^         ^^^^^^^^^                            ^^     ^^                               ^^    ^^         ^^^                    ^^^        ^^^^^^^^^                            ^^         ^^^^^^^^^                            ^^           ^^                             ^^    ^^         ^^^                    ^^^
+
+        3,
+>3 : 3
+>  : ^
+
+        <R1, O1, E1, A, R2, O2, E2, B, C>(
+><R1, O1, E1, A, R2, O2, E2, B, C>(            self: Kind<F, R1, O1, E1, A>,            that: Kind<F, R2, O2, E2, B>,            f: (a: A, b: B) => C        ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => F.map(F.product(self, that), ([a, b]) => f(a, b)) : <R1, O1, E1, A, R2, O2, E2, B, C>(self: Kind<F, R1, O1, E1, A>, that: Kind<F, R2, O2, E2, B>, f: (a: A, b: B) => C) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
+>                                                                                                                                                                                                                                                          : ^  ^^  ^^  ^^ ^^  ^^  ^^  ^^ ^^ ^^    ^^                      ^^    ^^                      ^^ ^^                 ^^^^^                                     
+
+            self: Kind<F, R1, O1, E1, A>,
+>self : Kind<F, R1, O1, E1, A>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+            that: Kind<F, R2, O2, E2, B>,
+>that : Kind<F, R2, O2, E2, B>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+            f: (a: A, b: B) => C
+>f : (a: A, b: B) => C
+>  : ^ ^^ ^^ ^^ ^^^^^ 
+>a : A
+>  : ^
+>b : B
+>  : ^
+
+        ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => F.map(F.product(self, that), ([a, b]) => f(a, b))
+>F.map(F.product(self, that), ([a, b]) => f(a, b)) : Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>F.map : { <A_1, B_1>(f: (a: A_1) => B_1): <R, O, E>(self: Kind<F, R, O, E, A_1>) => Kind<F, R, O, E, B_1>; <R, O, E, A_1, B_1>(self: Kind<F, R, O, E, A_1>, f: (a: A_1) => B_1): Kind<F, R, O, E, B_1>; }
+>      : ^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>F : SemiApplicative<F>
+>  : ^^^^^^^^^^^^^^^^^^
+>map : { <A_1, B_1>(f: (a: A_1) => B_1): <R, O, E>(self: Kind<F, R, O, E, A_1>) => Kind<F, R, O, E, B_1>; <R, O, E, A_1, B_1>(self: Kind<F, R, O, E, A_1>, f: (a: A_1) => B_1): Kind<F, R, O, E, B_1>; }
+>    : ^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>F.product(self, that) : Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>F.product : <R1_1, O1_1, E1_1, A_1, R2_1, O2_1, E2_1, B_1>(self: Kind<F, R1_1, O1_1, E1_1, A_1>, that: Kind<F, R2_1, O2_1, E2_1, B_1>) => Kind<F, R1_1 & R2_1, O1_1 | O2_1, E1_1 | E2_1, [A_1, B_1]>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>F : SemiApplicative<F>
+>  : ^^^^^^^^^^^^^^^^^^
+>product : <R1_1, O1_1, E1_1, A_1, R2_1, O2_1, E2_1, B_1>(self: Kind<F, R1_1, O1_1, E1_1, A_1>, that: Kind<F, R2_1, O2_1, E2_1, B_1>) => Kind<F, R1_1 & R2_1, O1_1 | O2_1, E1_1 | E2_1, [A_1, B_1]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>self : Kind<F, R1, O1, E1, A>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+>that : Kind<F, R2, O2, E2, B>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+>([a, b]) => f(a, b) : ([a, b]: [A, B]) => C
+>                    : ^      ^^^^^^^^^^^^^^
+>a : A
+>  : ^
+>b : B
+>  : ^
+>f(a, b) : C
+>        : ^
+>f : (a: A, b: B) => C
+>  : ^ ^^ ^^ ^^ ^^^^^ 
+>a : A
+>  : ^
+>b : B
+>  : ^
+
+    );
+
+
+export const zipRight = <F extends TypeLambda>(F: SemiApplicative<F>): {
+>zipRight : <F extends TypeLambda>(F: SemiApplicative<F>) => { <R2, O2, E2, B>(that: Kind<F, R2, O2, E2, B>): <R1, O1, E1, _>(self: Kind<F, R1, O1, E1, _>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>; <R1, O1_1, E1_1, __1, R2, O2_1, E2_1, B_1>(self: Kind<F, R1, O1_1, E1_1, __1>, that: Kind<F, R2, O2_1, E2_1, B_1>): Kind<F, R1 & R2, O1_1 | O2_1, E1_1 | E2_1, B_1>; }
+>         : ^ ^^^^^^^^^          ^^ ^^                  ^^^^^                                                                                                                                                                                                                                                                                                               
+><F extends TypeLambda>(F: SemiApplicative<F>): {    <R2, O2, E2, B>(        that: Kind<F, R2, O2, E2, B>    ): <R1, O1, E1, _>(self: Kind<F, R1, O1, E1, _>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>    <R1, O1, E1, _, R2, O2, E2, B>(        self: Kind<F, R1, O1, E1, _>,        that: Kind<F, R2, O2, E2, B>    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B>} =>    dual(2, <R1, O1, E1, _, R2, O2, E2, B>(        self: Kind<F, R1, O1, E1, _>,        that: Kind<F, R2, O2, E2, B>    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(self, that, SK)) : <F extends TypeLambda>(F: SemiApplicative<F>) => { <R2, O2, E2, B>(that: Kind<F, R2, O2, E2, B>): <R1, O1, E1, _>(self: Kind<F, R1, O1, E1, _>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>; <R1, O1_1, E1_1, __1, R2, O2_1, E2_1, B_1>(self: Kind<F, R1, O1_1, E1_1, __1>, that: Kind<F, R2, O2_1, E2_1, B_1>): Kind<F, R1 & R2, O1_1 | O2_1, E1_1 | E2_1, B_1>; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 : ^ ^^^^^^^^^          ^^ ^^                  ^^^^^                                                                                                                                                                                                                                                                                                               
+>F : SemiApplicative<F>
+>  : ^^^^^^^^^^^^^^^^^^
+
+    <R2, O2, E2, B>(
+        that: Kind<F, R2, O2, E2, B>
+>that : Kind<F, R2, O2, E2, B>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+    ): <R1, O1, E1, _>(self: Kind<F, R1, O1, E1, _>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>
+>self : Kind<F, R1, O1, E1, _>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+    <R1, O1, E1, _, R2, O2, E2, B>(
+        self: Kind<F, R1, O1, E1, _>,
+>self : Kind<F, R1, O1, E1, _>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+        that: Kind<F, R2, O2, E2, B>
+>that : Kind<F, R2, O2, E2, B>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
+} =>
+    dual(2, <R1, O1, E1, _, R2, O2, E2, B>(
+>dual(2, <R1, O1, E1, _, R2, O2, E2, B>(        self: Kind<F, R1, O1, E1, _>,        that: Kind<F, R2, O2, E2, B>    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(self, that, SK)) : ((...args: Array<any>) => any) & (<R1, O1, E1, _, R2, O2, E2, B>(self: Kind<F, R1, O1, E1, _>, that: Kind<F, R2, O2, E2, B>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>)
+>                                                                                                                                                                                            : ^^^^^    ^^          ^^^^^   ^^^^^^  ^^  ^^  ^^ ^^  ^^  ^^  ^^ ^^    ^^                      ^^    ^^                      ^^^^^                                     ^
+>dual : { <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(arity: Parameters<DataFirst>["length"], body: DataFirst): DataLast & DataFirst; <DataLast extends (...args: Array<any>) => any, DataFirst extends (...args: Array<any>) => any>(isDataFirst: (args: IArguments) => boolean, body: DataFirst): DataLast & DataFirst; }
+>     : ^^^        ^^^^^^^^^                            ^^         ^^^^^^^^^                            ^^     ^^                               ^^    ^^         ^^^                    ^^^        ^^^^^^^^^                            ^^         ^^^^^^^^^                            ^^           ^^                             ^^    ^^         ^^^                    ^^^
+>2 : 2
+>  : ^
+><R1, O1, E1, _, R2, O2, E2, B>(        self: Kind<F, R1, O1, E1, _>,        that: Kind<F, R2, O2, E2, B>    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(self, that, SK) : <R1, O1, E1, _, R2, O2, E2, B>(self: Kind<F, R1, O1, E1, _>, that: Kind<F, R2, O2, E2, B>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
+>                                                                                                                                                                                   : ^  ^^  ^^  ^^ ^^  ^^  ^^  ^^ ^^    ^^                      ^^    ^^                      ^^^^^                                     
+
+        self: Kind<F, R1, O1, E1, _>,
+>self : Kind<F, R1, O1, E1, _>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+        that: Kind<F, R2, O2, E2, B>
+>that : Kind<F, R2, O2, E2, B>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+
+    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(self, that, SK));
+>zipWith(F)(self, that, SK) : Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>zipWith(F) : { <R2_1, O2_1, E2_1, B_1, A, C>(that: Kind<F, R2_1, O2_1, E2_1, B_1>, f: (a: A, b: B_1) => C): <R1_1, O1_1, E1_1>(self: Kind<F, R1_1, O1_1, E1_1, A>) => Kind<F, R1_1 & R2_1, O2_1 | O1_1, E2_1 | E1_1, C>; <R1_1, O1_1, E1_1, A, R2_1, O2_1, E2_1, B_1, C>(self: Kind<F, R1_1, O1_1, E1_1, A>, that: Kind<F, R2_1, O2_1, E2_1, B_1>, f: (a: A, b: B_1) => C): Kind<F, R1_1 & R2_1, O1_1 | O2_1, E1_1 | E2_1, C>; }
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>zipWith : <F extends TypeLambda>(F: SemiApplicative<F>) => { <R2_1, O2_1, E2_1, B_1, A, C>(that: Kind<F, R2_1, O2_1, E2_1, B_1>, f: (a: A, b: B_1) => C): <R1_1, O1_1, E1_1>(self: Kind<F, R1_1, O1_1, E1_1, A>) => Kind<F, R1_1 & R2_1, O2_1 | O1_1, E2_1 | E1_1, C>; <R1_1, O1_2, E1_2, A_1, R2_1, O2_2, E2_2, B_2, C_1>(self: Kind<F, R1_1, O1_2, E1_2, A_1>, that: Kind<F, R2_1, O2_2, E2_2, B_2>, f: (a: A_1, b: B_2) => C_1): Kind<F, R1_1 & R2_1, O1_2 | O2_2, E1_2 | E2_2, C_1>; }
+>        : ^ ^^^^^^^^^          ^^ ^^                  ^^^^^                                                                                                                                                                                                                                                                                                                                                                                                                               
+>F : SemiApplicative<F>
+>  : ^^^^^^^^^^^^^^^^^^
+>self : Kind<F, R1, O1, E1, _>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+>that : Kind<F, R2, O2, E2, B>
+>     : ^^^^^^^^^^^^^^^^^^^^^^
+>SK : <A, B_1>(_: A, b: B_1) => B_1
+>   : ^ ^^^^^^^ ^^ ^^ ^^   ^^^^^   
+

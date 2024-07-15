@@ -53,7 +53,7 @@ import {
     TemplateExpression,
     TextSpan,
     TryStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
@@ -164,7 +164,7 @@ function isRegionDelimiter(lineText: string) {
     // multiple potential whitespace matches can make for some gnarly backtracking behavior
     lineText = lineText.trimStart();
     if (!startsWith(lineText, "//")) {
-        return null; // eslint-disable-line no-null/no-null
+        return null; // eslint-disable-line no-restricted-syntax
     }
     lineText = lineText.slice(2).trim();
     return regionDelimiterRegExp.exec(lineText);

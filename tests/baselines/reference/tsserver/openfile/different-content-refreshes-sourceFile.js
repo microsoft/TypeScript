@@ -33,8 +33,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /project
-Info seq  [hh:mm:ss:mss] For info: /project/a.ts :: Config file name: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/a.ts ProjectRootPath: undefined:: Result: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/tsconfig.json 2000 undefined Project: /project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -147,7 +146,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -195,8 +201,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /project/b.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /project
-Info seq  [hh:mm:ss:mss] For info: /project/b.ts :: Config file name: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/b.ts ProjectRootPath: undefined:: Result: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
@@ -217,7 +222,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/b.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -290,6 +302,7 @@ Projects::
 /project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -316,6 +329,12 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Before request
 
+Projects::
+/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "close",
@@ -335,7 +354,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 4,
+      "success": true
     }
 After request
 
@@ -355,6 +378,7 @@ Projects::
 /project/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -400,6 +424,7 @@ Projects::
 /project/tsconfig.json (Configured) *changed*
     projectStateVersion: 5 *changed*
     projectProgramVersion: 1
+    dirty: true
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -456,6 +481,12 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

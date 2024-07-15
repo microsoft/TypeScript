@@ -14,8 +14,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: ^/inmemory/model
-Info seq  [hh:mm:ss:mss] For info: ^/inmemory/model/6 :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^/inmemory/model/6 ProjectRootPath: /users/user/projects/san:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/san/^ 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/user/projects/san/^ 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
@@ -47,7 +46,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: ^/inmemory/model/6 ProjectRootPath: /users/u
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -71,7 +77,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-^/inmemory/model/6 (Open) *new*
+^/inmemory/model/6 (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -90,8 +96,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: ^/inmemory/model
-Info seq  [hh:mm:ss:mss] For info: ^/inmemory/model/4 :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^/inmemory/model/4 ProjectRootPath: /users/user/projects/san:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -117,7 +122,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: ^/inmemory/model/4 ProjectRootPath: /users/u
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -127,11 +139,11 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-^/inmemory/model/4 (Open) *new*
+^/inmemory/model/4 (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-^/inmemory/model/6 (Open)
+^/inmemory/model/6 (Dynamic) (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -156,7 +168,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: ^/inmemory/model/6 ProjectRootPath: /users/u
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 3,
+      "success": true
     }
 After request
 
@@ -164,14 +180,15 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 ScriptInfos::
-^/inmemory/model/4 *deleted*
+^/inmemory/model/4 (Dynamic) *deleted*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-^/inmemory/model/6 (Open)
+^/inmemory/model/6 (Dynamic) (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -212,8 +229,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: ^/inmemory/model
-Info seq  [hh:mm:ss:mss] For info: ^/inmemory/model/4 :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^/inmemory/model/4 ProjectRootPath: /users/user/projects/san:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -240,7 +256,10 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -248,13 +267,14 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
-^/inmemory/model/4 (Open) *new*
+^/inmemory/model/4 (Dynamic) (Open) *new*
     version: SVC-2-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-^/inmemory/model/6 (Open) *changed*
+^/inmemory/model/6 (Dynamic) (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
         /dev/null/inferredProject1* *default*

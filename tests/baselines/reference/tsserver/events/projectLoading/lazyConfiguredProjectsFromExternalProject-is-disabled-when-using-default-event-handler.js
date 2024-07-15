@@ -40,10 +40,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -88,6 +84,7 @@ Projects::
 /user/username/projects/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 
 Before request
 
@@ -102,7 +99,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -215,10 +211,6 @@ Info seq  [hh:mm:ss:mss] response:
         "updateGraphDurationMs": *
       }
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 PolledWatches::
@@ -243,6 +235,7 @@ Projects::
 /user/username/projects/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*

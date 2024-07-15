@@ -3,4 +3,5 @@
 === asiContinue.ts ===
 while (true) continue
 >true : true
+>     : ^^^^
 

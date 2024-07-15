@@ -25,6 +25,8 @@ import {
     IScriptSnapshot,
     isString,
     LineInfo,
+    missingFileModifiedTime,
+    orderedRemoveItem,
     Path,
     ScriptKind,
     ScriptSnapshot,
@@ -32,25 +34,24 @@ import {
     SourceFile,
     SourceFileLike,
     TextSpan,
-    unorderedRemoveItem,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     AbsolutePositionAndLineText,
     ConfiguredProject,
     Errors,
-    ExternalProject,
     InferredProject,
     isBackgroundProject,
     isConfiguredProject,
     isExternalProject,
     isInferredProject,
+    isProjectDeferredClose,
     maxFileSize,
     NormalizedPath,
     Project,
     ScriptVersionCache,
     ServerHost,
-} from "./_namespaces/ts.server";
-import * as protocol from "./protocol";
+} from "./_namespaces/ts.server.js";
+import * as protocol from "./protocol.js";
 
 /** @internal */
 export class TextStorage {
@@ -180,6 +181,14 @@ export class TextStorage {
         const reloaded = this.reload(newText);
         this.fileSize = fileSize; // NB: after reload since reload clears it
         this.ownFileText = !tempFileName || tempFileName === this.info.fileName;
+        // In case we update this text before mTime gets updated to present file modified time
+        // because its schedule to do that later, update the mTime so we dont re-update the text
+        // Eg. with npm ci where file gets created and editor calls say get error request before
+        // the timeout to update the file stamps in node_modules is run
+        // Test:: watching npm install in codespaces where workspaces folder is hosted at root
+        if (this.ownFileText && this.info.mTime === missingFileModifiedTime.getTime()) {
+            this.info.mTime = (this.host.getModifiedTime!(this.info.fileName) || missingFileModifiedTime).getTime();
+        }
         return reloaded;
     }
 
@@ -373,8 +382,6 @@ export class ScriptInfo {
 
     /**
      * Set to real path if path is different from info.path
-     *
-     * @internal
      */
     private realpath: Path | undefined;
 
@@ -397,6 +404,9 @@ export class ScriptInfo {
     sourceInfos?: Set<Path>;
     /** @internal */
     documentPositionMapper?: DocumentPositionMapper | false;
+
+    /** @internal */
+    deferredDelete?: boolean;
 
     constructor(
         private readonly host: ServerHost,
@@ -536,7 +546,8 @@ export class ScriptInfo {
                 }
                 break;
             default:
-                if (unorderedRemoveItem(this.containingProjects, project)) {
+                // We use first configured project as default so we shouldnt change the order of the containing projects
+                if (orderedRemoveItem(this.containingProjects, project)) {
                     project.onFileAddedOrRemoved(this.isSymlink());
                 }
                 break;
@@ -566,15 +577,16 @@ export class ScriptInfo {
             case 0:
                 return Errors.ThrowNoProject();
             case 1:
-                return ensurePrimaryProjectKind(this.containingProjects[0]);
+                return isProjectDeferredClose(this.containingProjects[0]) || isBackgroundProject(this.containingProjects[0]) ?
+                    Errors.ThrowNoProject() :
+                    this.containingProjects[0];
             default:
                 // If this file belongs to multiple projects, below is the order in which default project is used
+                // - first external project
                 // - for open script info, its default configured project during opening is default if info is part of it
                 // - first configured project of which script info is not a source of project reference redirect
                 // - first configured project
-                // - first external project
                 // - first inferred project
-                let firstExternalProject: ExternalProject | undefined;
                 let firstConfiguredProject: ConfiguredProject | undefined;
                 let firstInferredProject: InferredProject | undefined;
                 let firstNonSourceOfProjectReferenceRedirect: ConfiguredProject | undefined;
@@ -582,6 +594,7 @@ export class ScriptInfo {
                 for (let index = 0; index < this.containingProjects.length; index++) {
                     const project = this.containingProjects[index];
                     if (isConfiguredProject(project)) {
+                        if (project.deferredClose) continue;
                         if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) {
                             // If we havent found default configuredProject and
                             // its not the last one, find it and use that one if there
@@ -596,20 +609,17 @@ export class ScriptInfo {
                         }
                         if (!firstConfiguredProject) firstConfiguredProject = project;
                     }
-                    else if (!firstExternalProject && isExternalProject(project)) {
-                        firstExternalProject = project;
+                    else if (isExternalProject(project)) {
+                        return project;
                     }
                     else if (!firstInferredProject && isInferredProject(project)) {
                         firstInferredProject = project;
                     }
                 }
-                return ensurePrimaryProjectKind(
-                    defaultConfiguredProject ||
-                        firstNonSourceOfProjectReferenceRedirect ||
-                        firstConfiguredProject ||
-                        firstExternalProject ||
-                        firstInferredProject,
-                );
+                return (defaultConfiguredProject ||
+                    firstNonSourceOfProjectReferenceRedirect ||
+                    firstConfiguredProject ||
+                    firstInferredProject) ?? Errors.ThrowNoProject();
         }
     }
 
@@ -675,7 +685,7 @@ export class ScriptInfo {
     }
 
     isOrphan() {
-        return !forEach(this.containingProjects, p => !p.isOrphan());
+        return this.deferredDelete || !forEach(this.containingProjects, p => !p.isOrphan());
     }
 
     /** @internal */
@@ -722,18 +732,6 @@ export class ScriptInfo {
             this.sourceMapFilePath = undefined;
         }
     }
-}
-
-/**
- * Throws an error if `project` is an AutoImportProvider or AuxiliaryProject,
- * which are used in the background by other Projects and should never be
- * reported as the default project for a ScriptInfo.
- */
-function ensurePrimaryProjectKind(project: Project | undefined) {
-    if (!project || isBackgroundProject(project)) {
-        return Errors.ThrowNoProject();
-    }
-    return project;
 }
 
 function failIfInvalidPosition(position: number) {
