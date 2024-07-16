@@ -1,12 +1,12 @@
-//// [tests/cases/compiler/resolveSideEffectImports.ts] ////
+//// [tests/cases/compiler/sideEffectImports1.ts] ////
 
-//// [resolveSideEffectImports.ts]
+//// [sideEffectImports1.ts]
 import "does-not-exist";
 import "./does-not-exist-either";
 import "./does-not-exist-either.js";
 
 
-//// [resolveSideEffectImports.js]
+//// [sideEffectImports1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("does-not-exist");

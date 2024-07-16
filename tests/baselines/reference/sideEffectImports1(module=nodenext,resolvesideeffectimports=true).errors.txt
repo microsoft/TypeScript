@@ -1,9 +1,9 @@
-resolveSideEffectImports.ts(1,8): error TS2307: Cannot find module 'does-not-exist' or its corresponding type declarations.
-resolveSideEffectImports.ts(2,8): error TS2307: Cannot find module './does-not-exist-either' or its corresponding type declarations.
-resolveSideEffectImports.ts(3,8): error TS2307: Cannot find module './does-not-exist-either.js' or its corresponding type declarations.
+sideEffectImports1.ts(1,8): error TS2307: Cannot find module 'does-not-exist' or its corresponding type declarations.
+sideEffectImports1.ts(2,8): error TS2307: Cannot find module './does-not-exist-either' or its corresponding type declarations.
+sideEffectImports1.ts(3,8): error TS2307: Cannot find module './does-not-exist-either.js' or its corresponding type declarations.
 
 
-==== resolveSideEffectImports.ts (3 errors) ====
+==== sideEffectImports1.ts (3 errors) ====
     import "does-not-exist";
            ~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module 'does-not-exist' or its corresponding type declarations.
