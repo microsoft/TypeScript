@@ -844,6 +844,38 @@ export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeChec
     return result;
 }
 
+/** @internal */
+export function createModeMismatchDetails(currentSourceFile: SourceFile) {
+    const ext = tryGetExtensionFromPath(currentSourceFile.fileName);
+    const scope = currentSourceFile.packageJsonScope;
+    const targetExt = ext === Extension.Ts ? Extension.Mts : ext === Extension.Js ? Extension.Mjs : undefined;
+    const result = scope && !scope.contents.packageJsonContent.type ?
+        targetExt ?
+            chainDiagnosticMessages(
+                /*details*/ undefined,
+                Diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Colon_module_to_1,
+                targetExt,
+                combinePaths(scope.packageDirectory, "package.json"),
+            ) :
+            chainDiagnosticMessages(
+                /*details*/ undefined,
+                Diagnostics.To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0,
+                combinePaths(scope.packageDirectory, "package.json"),
+            ) :
+        targetExt ?
+        chainDiagnosticMessages(
+            /*details*/ undefined,
+            Diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_create_a_local_package_json_file_with_type_Colon_module,
+            targetExt,
+        ) :
+        chainDiagnosticMessages(
+            /*details*/ undefined,
+            Diagnostics.To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module,
+        );
+    result.repopulateInfo = () => true;
+    return result;
+}
+
 function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
     return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version && a.peerDependencies === b.peerDependencies;
 }
