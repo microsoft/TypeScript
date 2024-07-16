@@ -49375,13 +49375,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function isExpressionNodeOrShorthandPropertyAssignmentName(node: Identifier) {
             // TODO(jakebailey): Just use isExpressionNode once that considers these identifiers to be expressions.
-            if (isExpressionNode(node)) return true;
-
-            if (isShorthandPropertyAssignment(node.parent)) {
-                return (node.parent.objectAssignmentInitializer ?? node.parent.name) === node;
-            }
-
-            return false;
+            return isExpressionNode(node)
+                || isShorthandPropertyAssignment(node.parent) && (node.parent.objectAssignmentInitializer ?? node.parent.name) === node;
         }
 
         function checkSingleIdentifier(node: Node) {
