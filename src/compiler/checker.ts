@@ -31308,7 +31308,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (functionFlags & FunctionFlags.Async) {
                 return filterType(returnType, t => {
-                    return !!(t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void | TypeFlags.InstantiableNonPrimitive)) || !!getAwaitedTypeOfPromise(t);
+                    return !!(t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void | TypeFlags.InstantiableNonPrimitive)) || isGenericType(t) || !!getAwaitedTypeOfPromise(t);
                 });
             }
             return returnType;
