@@ -169,11 +169,18 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
-TestServerCancellationToken:: resetRequest:: 1 is as expected
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
+TestServerCancellationToken:: resetRequest:: 1 is as expected
 After request
 
 PolledWatches::
@@ -215,10 +222,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 TestServerCancellationToken:: Cancellation Request id:: 2
 TestServerCancellationToken:: resetRequest:: 2 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -256,10 +259,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 TestServerCancellationToken:: Cancellation Request id:: 3
 TestServerCancellationToken:: resetRequest:: 3 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -323,10 +322,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 TestServerCancellationToken:: Cancellation Request id:: 5
 TestServerCancellationToken:: resetRequest:: 5 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -343,8 +338,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
@@ -365,7 +359,15 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 5
+        "request_seq": 5,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "file": "/a/app.ts"
+            }
+          ]
+        }
       }
     }
 TestServerCancellationToken:: resetRequest:: 5 is as expected
@@ -387,10 +389,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 TestServerCancellationToken:: Cancellation Request id:: 6
 TestServerCancellationToken:: resetRequest:: 6 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -407,8 +405,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
@@ -428,8 +425,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
@@ -449,8 +445,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -459,7 +454,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 6
+        "request_seq": 6,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/a/app.ts"
+            }
+          ]
+        }
       }
     }
 TestServerCancellationToken:: resetRequest:: 6 is as expected
@@ -481,10 +486,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 TestServerCancellationToken:: Cancellation Request id:: 7
 TestServerCancellationToken:: resetRequest:: 7 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -501,8 +502,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/app.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 TestServerCancellationToken:: resetRequest:: 7 is as expected
@@ -532,14 +532,18 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 7
+        "request_seq": 7,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "file": "/a/app.ts"
+            }
+          ]
+        }
       }
     }
 TestServerCancellationToken:: resetRequest:: 8 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1

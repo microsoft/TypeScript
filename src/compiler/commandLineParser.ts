@@ -123,8 +123,7 @@ import {
     WatchOptions,
 } from "./_namespaces/ts.js";
 
-/** @internal */
-export const compileOnSaveCommandLineOption: CommandLineOption = {
+const compileOnSaveCommandLineOption: CommandLineOption = {
     name: "compileOnSave",
     type: "boolean",
     defaultValueDescription: false,
@@ -796,6 +795,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "boolean",
         affectsEmit: true,
         affectsBuildInfo: true,
+        affectsSourceFile: true,
         category: Diagnostics.Emit,
         description: Diagnostics.Allow_importing_helper_functions_from_tslib_once_per_project_instead_of_including_them_per_file,
         defaultValueDescription: false,
@@ -1274,6 +1274,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsModuleResolution: true,
+        affectsSourceFile: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Specify_module_specifier_used_to_import_the_JSX_factory_functions_when_using_jsx_Colon_react_jsx_Asterisk,
         defaultValueDescription: "react",
@@ -1634,12 +1635,11 @@ export const optionsAffectingProgramStructure: readonly CommandLineOption[] = op
 /** @internal */
 export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => hasProperty(option, "transpileOptionValue"));
 
-/** @internal */
-export const configDirTemplateSubstitutionOptions: readonly CommandLineOption[] = optionDeclarations.filter(
+const configDirTemplateSubstitutionOptions: readonly CommandLineOption[] = optionDeclarations.filter(
     option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
 );
-/** @internal */
-export const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOption[] = optionsForWatch.filter(
+
+const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOption[] = optionsForWatch.filter(
     option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
 );
 
@@ -1753,8 +1753,7 @@ const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
     getOptionsNameMap: getBuildOptionsNameMap,
 };
 
-/** @internal */
-export const defaultInitCompilerOptions: CompilerOptions = {
+const defaultInitCompilerOptions: CompilerOptions = {
     module: ModuleKind.CommonJS,
     target: ScriptTarget.ES2016,
     strict: true,
@@ -2911,8 +2910,7 @@ function directoryOfCombinedPath(fileName: string, basePath: string) {
     return getDirectoryPath(getNormalizedAbsolutePath(fileName, basePath));
 }
 
-/** @internal */
-export const defaultIncludeSpec = "**/*";
+const defaultIncludeSpec = "**/*";
 
 /**
  * Parse the contents of a config file from json or json source file (tsconfig.json).

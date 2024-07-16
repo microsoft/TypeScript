@@ -199,3 +199,27 @@ namespace GH39357 {
     declare const b: B;
     const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
 }
+
+// https://github.com/microsoft/TypeScript/issues/58603
+namespace GH58603 {
+    enum MyEnum { A = 1, B = 2 }
+
+    type TypeA = { kind: MyEnum.A, id?: number };
+    
+    type TypeB = { kind: MyEnum.B } & ({ id?: undefined } | { id: number });
+    
+    type MyType = TypeA | TypeB;
+    
+    function something(a: MyType): void {}
+    
+    function indirect(kind: MyEnum, id?: number): void {
+        something({ kind, id });
+    }
+    
+    type Foo = { kind: "a" | "b", value: number } | { kind: "a", value: undefined } | { kind: "b", value: undefined };
+    
+    function test(obj: { kind: "a" | "b", value: number | undefined }) {
+        let x1: Foo = obj;
+        let x2: Foo = { kind: obj.kind, value: obj.value };
+    }
+}

@@ -29,9 +29,9 @@ p.finally();
 >p.finally() : Promise<number>
 >            : ^^^^^^^^^^^^^^^
 >p.finally : (onfinally?: () => void) => Promise<number>
->          : ^         ^^^^^^^^^    ^^^^^        ^^^^^^ 
+>          : ^         ^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >p : Promise<number>
 >  : ^^^^^^^^^^^^^^^
 >finally : (onfinally?: () => void) => Promise<number>
->        : ^         ^^^^^^^^^    ^^^^^        ^^^^^^ 
+>        : ^         ^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 

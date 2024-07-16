@@ -1,3 +1,6 @@
+import * as Diff from "diff";
+import fs from "fs";
+import pathModule from "path";
 import * as compiler from "./_namespaces/compiler.js";
 import * as documents from "./_namespaces/documents.js";
 import * as fakes from "./_namespaces/fakes.js";
@@ -54,14 +57,6 @@ export const virtualFileSystemRoot = "/";
 
 function createNodeIO(): IO {
     const workspaceRoot = Utils.findUpRoot();
-    let fs: any, pathModule: any;
-    if (require) {
-        fs = require("fs");
-        pathModule = require("path");
-    }
-    else {
-        fs = pathModule = {};
-    }
 
     function deleteFile(path: string) {
         try {
@@ -458,7 +453,7 @@ export namespace Compiler {
     ): DeclarationCompilationContext | undefined {
         if (options.declaration && result.diagnostics.length === 0) {
             if (options.emitDeclarationOnly) {
-                if (result.js.size > 0 || result.dts.size === 0) {
+                if (result.js.size > 0 || (result.dts.size === 0 && !options.noEmit)) {
                     throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
                 }
             }
@@ -1022,7 +1017,6 @@ export namespace Compiler {
                 }
                 else if (original.text !== doc.text) {
                     jsCode += `\r\n\r\n!!!! File ${Utils.removeTestPathPrefixes(doc.file)} differs from original emit in noCheck emit\r\n`;
-                    const Diff = require("diff");
                     const expected = original.text;
                     const actual = doc.text;
                     const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The full check baseline", "with noCheck set");
@@ -1518,8 +1512,7 @@ export namespace Baseline {
                 IO.writeFile(actualFileName, encodedActual);
             }
             const errorMessage = getBaselineFileChangedErrorMessage(relativeFileName);
-            if (!!require && opts && opts.PrintDiff) {
-                const Diff = require("diff");
+            if (opts && opts.PrintDiff) {
                 const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
                 throw new Error(`${errorMessage}${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
             }

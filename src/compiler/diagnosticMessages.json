@@ -1028,7 +1028,7 @@
         "category": "Error",
         "code": 1323
     },
-    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 1324
     },
@@ -2680,10 +2680,6 @@
         "category": "Error",
         "code": 2524
     },
-    "Initializer provides no value for this binding element and the binding element has no default value.": {
-        "category": "Error",
-        "code": 2525
-    },
     "A 'this' type is available only in a non-static member of a class or interface.": {
         "category": "Error",
         "code": 2526
@@ -4212,7 +4208,7 @@
         "category": "Error",
         "code": 4092
     },
-    "Property '{0}' of exported class expression may not be private or protected.": {
+    "Property '{0}' of exported anonymous class type may not be private or protected.": {
         "category": "Error",
         "code": 4094
     },
@@ -5112,10 +5108,6 @@
     "Module '{0}' was resolved as locally declared ambient module in file '{1}'.": {
         "category": "Message",
         "code": 6144
-    },
-    "Module '{0}' was resolved as ambient module declared in '{1}' since this file was not modified.": {
-        "category": "Message",
-        "code": 6145
     },
     "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
         "category": "Message",
