@@ -3492,7 +3492,7 @@ export function isInExpressionContext(node: Node): boolean {
         case SyntaxKind.ExpressionWithTypeArguments:
             return (parent as ExpressionWithTypeArguments).expression === node && !isPartOfTypeNode(parent);
         case SyntaxKind.ShorthandPropertyAssignment:
-            return (parent as ShorthandPropertyAssignment).objectAssignmentInitializer === node;
+            return ((parent as ShorthandPropertyAssignment).objectAssignmentInitializer ?? (parent as ShorthandPropertyAssignment).name) === node;
         case SyntaxKind.SatisfiesExpression:
             return node === (parent as SatisfiesExpression).expression;
         default:

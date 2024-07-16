@@ -823,8 +823,8 @@ function f15() {
 >  : ^^^^^^
 >b : number
 >  : ^^^^^^
->c : boolean
->  : ^^^^^^^
+>c : true
+>  : ^^^^
 }
 
 function f16() {
