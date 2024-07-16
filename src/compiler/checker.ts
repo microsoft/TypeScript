@@ -15942,7 +15942,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createSignatureTypeMapper(signature: Signature, typeArguments: readonly Type[] | undefined): TypeMapper {
-        return createTypeMapper(signature.typeParameters!, typeArguments);
+        return createTypeMapper(sameMap(signature.typeParameters!, tp => tp.mapper ? instantiateType(tp, tp.mapper) : tp), typeArguments);
     }
 
     function getErasedSignature(signature: Signature): Signature {
