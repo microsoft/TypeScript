@@ -167,14 +167,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/src/file.ts Proje
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "seq": 0,
-      "type": "response",
-      "command": "open",
-      "request_seq": 1,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
+      "responseRequired": false
     }
 After request
 
@@ -231,6 +224,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
 After request
 
 Timeout callback:: count: 1
@@ -246,8 +243,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/src/file.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -292,8 +288,7 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 6307,
             "category": "error"
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -326,8 +321,7 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ],
-        "duration": *
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] event:
