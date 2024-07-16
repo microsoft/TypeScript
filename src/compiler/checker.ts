@@ -45707,8 +45707,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!node) return;
             node = skipParentheses(node);
             if (isConditionalExpression(node)) {
-                node.flowNodeWhenTrue && flowNodes.push(node.flowNodeWhenTrue);
-                node.flowNodeWhenFalse && flowNodes.push(node.flowNodeWhenFalse);
+                if (node.flowNodeWhenTrue) flowNodes.push(node.flowNodeWhenTrue);
+                if (node.flowNodeWhenFalse) flowNodes.push(node.flowNodeWhenFalse);
                 visitConditionalReturnExpression(node.whenTrue);
                 visitConditionalReturnExpression(node.whenFalse);
             }

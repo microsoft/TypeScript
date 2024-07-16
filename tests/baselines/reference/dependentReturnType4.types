@@ -4,223 +4,331 @@
 // Test narrowing through `hasOwnProperty` calls
 declare const rand: { a?: never };
 >rand : { a?: never; }
+>     : ^^^^^^     ^^^
 >a : undefined
+>  : ^^^^^^^^^
 
 type Missing = typeof rand.a;
 >Missing : undefined
+>        : ^^^^^^^^^
 >rand.a : undefined
+>       : ^^^^^^^^^
 >rand : { a?: never; }
+>     : ^^^^^^     ^^^
 >a : undefined
+>  : ^^^^^^^^^
 
 declare function takesString(x: string): void;
 >takesString : (x: string) => void
+>            : ^ ^^      ^^^^^    
 >x : string
+>  : ^^^^^^
 
 function hasOwnP<T extends string | Missing>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
->hasOwnP : <T extends string | undefined>(obj: {    a?: T;}) => T extends string ? 1 : T extends undefined ? 2 : 1 | 2
+>hasOwnP : <T extends string | Missing>(obj: { a?: T; }) => T extends string ? 1 : T extends undefined ? 2 : 1 | 2
+>        : ^ ^^^^^^^^^                ^^   ^^          ^^^^^                                                      
 >obj : { a?: T; }
+>    : ^^^^^^ ^^^
 >a : T | undefined
+>  : ^^^^^^^^^^^^^
 
     if (obj.hasOwnProperty("a")) {
 >obj.hasOwnProperty("a") : boolean
+>                        : ^^^^^^^
 >obj.hasOwnProperty : (v: PropertyKey) => boolean
+>                   : ^ ^^           ^^^^^       
 >obj : { a?: T; }
+>    : ^^^^^^ ^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
+>               : ^ ^^           ^^^^^       
 >"a" : "a"
+>    : ^^^
 
         takesString(obj.a);
 >takesString(obj.a) : void
+>                   : ^^^^
 >takesString : (x: string) => void
+>            : ^ ^^      ^^^^^    
 >obj.a : string
+>      : ^^^^^^
 >obj : { a?: T; }
+>    : ^^^^^^ ^^^
 >a : string
+>  : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     return 2;
 >2 : 2
+>  : ^
 }
 
 function foo<T extends string | undefined>(opts: { x?: T }):
->foo : <T extends string | undefined>(opts: {    x?: T;}) => T extends undefined ? 0 : T extends string ? 1 : 0 | 1
+>foo : <T extends string | undefined>(opts: { x?: T; }) => T extends undefined ? 0 : T extends string ? 1 : 0 | 1
+>    : ^ ^^^^^^^^^                  ^^    ^^          ^^^^^                                                      
 >opts : { x?: T; }
+>     : ^^^^^^ ^^^
 >x : T | undefined
+>  : ^^^^^^^^^^^^^
 
     T extends undefined ? 0 : T extends string ? 1 : 0 | 1 {
     if (opts.x === undefined) {
 >opts.x === undefined : boolean
+>                     : ^^^^^^^
 >opts.x : T | undefined
+>       : ^^^^^^^^^^^^^
 >opts : { x?: T; }
+>     : ^^^^^^ ^^^
 >x : T | undefined
+>  : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
     return 1;
 >1 : 1
+>  : ^
 }
 
 function bar<T extends string | Missing>(x?: T ):
->bar : <T extends string | undefined>(x?: T) => T extends Missing ? 0 : T extends string ? 1 : 0 | 1
+>bar : <T extends string | Missing>(x?: T) => T extends Missing ? 0 : T extends string ? 1 : 0 | 1
+>    : ^ ^^^^^^^^^                ^^ ^^^ ^^^^^                                                    
 >x : T | undefined
+>  : ^^^^^^^^^^^^^
 
     T extends Missing ? 0 : T extends string ? 1 : 0 | 1 {
     if (x === undefined) {
 >x === undefined : boolean
+>                : ^^^^^^^
 >x : T | undefined
+>  : ^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         return 0;
 >0 : 0
+>  : ^
     }
     return 1;
 >1 : 1
+>  : ^
 }
 
 // Aliased narrowing
 function inlined<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
->inlined : <T extends string | number>(x: T) => T extends number ? string : T extends string ? number : string | number
+>inlined : <T extends number | string>(x: T) => T extends number ? string : T extends string ? number : string | number
+>        : ^ ^^^^^^^^^               ^^ ^^ ^^^^^                                                                       
 >x : T
+>  : ^
 
     const t = typeof x === "string";
 >t : boolean
+>  : ^^^^^^^
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
     if (t) {
 >t : boolean
+>  : ^^^^^^^
 
         const y: string = x;
 >y : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     return "one";
 >"one" : "one"
+>      : ^^^^^
 }
 
 // Don't narrow more than 5 levels of aliasing
 function inlined6<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
->inlined6 : <T extends string | number>(x: T) => T extends number ? string : T extends string ? number : string | number
+>inlined6 : <T extends number | string>(x: T) => T extends number ? string : T extends string ? number : string | number
+>         : ^ ^^^^^^^^^               ^^ ^^ ^^^^^                                                                       
 >x : T
+>  : ^
 
     const t1 = typeof x === "string";
 >t1 : boolean
+>   : ^^^^^^^
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
     const t2 = t1;
 >t2 : boolean
+>   : ^^^^^^^
 >t1 : boolean
+>   : ^^^^^^^
 
     const t3 = t2;
 >t3 : boolean
+>   : ^^^^^^^
 >t2 : boolean
+>   : ^^^^^^^
 
     const t4 = t3;
 >t4 : boolean
+>   : ^^^^^^^
 >t3 : boolean
+>   : ^^^^^^^
 
     const t5 = t4;
 >t5 : boolean
+>   : ^^^^^^^
 >t4 : boolean
+>   : ^^^^^^^
 
     const t6 = t5;
 >t6 : boolean
+>   : ^^^^^^^
 >t5 : boolean
+>   : ^^^^^^^
 
     if (t6) {
 >t6 : boolean
+>   : ^^^^^^^
 
         const y: string = x;
 >y : string
+>  : ^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     return "one";
 >"one" : "one"
+>      : ^^^^^
 }
 
 type A = { kind: "a", a: number };
->A : { kind: "a"; a: number; }
+>A : A
+>  : ^
 >kind : "a"
+>     : ^^^
 >a : number
+>  : ^^^^^^
 
 type B = { kind: "b", b: string };
->B : { kind: "b"; b: string; }
+>B : B
+>  : ^
 >kind : "b"
+>     : ^^^
 >b : string
+>  : ^^^^^^
 
 type AOrB = A | B;
->AOrB : A | B
+>AOrB : AOrB
+>     : ^^^^
 
 function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B ? string : number | string {
 >subexpression : <T extends AOrB>(x: T) => T extends A ? number : T extends B ? string : number | string
+>              : ^ ^^^^^^^^^    ^^ ^^ ^^^^^                                                             
 >x : T
+>  : ^
 
     if (x.kind === "b") {
 >x.kind === "b" : boolean
+>               : ^^^^^^^
 >x.kind : "a" | "b"
+>       : ^^^^^^^^^
 >x : AOrB
+>  : ^^^^
 >kind : "a" | "b"
+>     : ^^^^^^^^^
 >"b" : "b"
+>    : ^^^
 
         return "some str";
 >"some str" : "some str"
+>           : ^^^^^^^^^^
     }
     return 0;
 >0 : 0
+>  : ^
 }
 
 function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 0 : 0 | 1 {
 >switchTrue : <T extends boolean>(x: T) => T extends true ? 1 : T extends false ? 0 : 0 | 1
+>           : ^ ^^^^^^^^^       ^^ ^^ ^^^^^                                                
 >x : T
+>  : ^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 
     switch (true) {
 >true : true
+>     : ^^^^
 
         case x:
 >x : T
+>  : ^
 
             return 1;
 >1 : 1
+>  : ^
     }
     return 0;
 >0 : 0
+>  : ^
 }
 
 // Don't raise errors when getting the narrowed type of synthesized nodes
 type Ret<T extends string | number> = T extends string ? 1 : T extends number ? 2 : 1 | 2;
 >Ret : Ret<T>
+>    : ^^^^^^
 
 function f<T extends string | number>(x: T): Ret<T> {
 >f : <T extends string | number>(x: T) => Ret<T>
+>  : ^ ^^^^^^^^^               ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 
     let y!: T;
 >y : T
+>  : ^
 
     if (typeof y === "string") {
 >typeof y === "string" : boolean
+>                      : ^^^^^^^
 >typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : T
+>  : ^
 >"string" : "string"
+>         : ^^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     return 2;
 >2 : 2
+>  : ^
 }
