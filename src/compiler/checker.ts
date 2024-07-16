@@ -16443,7 +16443,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     minTypeArgumentCount,
                     typeParameters.length,
                 );
-                return getTypeReferenceErrorType(node, symbol, /*typeParameters*/ undefined, /*minTypeArgumentCount*/ 0);
+                return getTypeReferenceErrorType(node, symbol, typeParameters, minTypeArgumentCount);
             }
             // We refrain from associating a local type alias with an instantiation of a top-level type alias
             // because the local alias may end up being referenced in an inferred return type where it is not
