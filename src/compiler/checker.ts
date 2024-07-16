@@ -4646,6 +4646,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getMergedSymbol(sourceFile.symbol);
             }
             if (errorNode && moduleNotFoundError) {
+                if (isImportDeclaration(location) && !location.importClause) {
+                    // This a side-effect import; ignore the fact that it's not a module.
+                    return undefined;
+                }
                 // report errors only if it was requested
                 error(errorNode, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
             }
