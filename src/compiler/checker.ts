@@ -15553,8 +15553,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const baseDefaultType = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
             for (let i = numTypeArguments; i < numTypeParameters; i++) {
                 let defaultType = getDefaultFromTypeParameter(typeParameters![i]);
-                if (!defaultType) {
-                    // error type was already prefilled at this slot above
+                if (!isJavaScriptImplicitAny && !defaultType) {
+                    // error type was already prefilled at this slot by the loop above
                     continue;
                 }
                 if (isJavaScriptImplicitAny && defaultType && (isTypeIdenticalTo(defaultType, unknownType) || isTypeIdenticalTo(defaultType, emptyObjectType))) {
