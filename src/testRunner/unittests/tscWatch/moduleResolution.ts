@@ -1,3 +1,8 @@
+import {
+    ModuleDetectionKind,
+    ModuleKind,
+    ModuleResolutionKind,
+} from "../../_namespaces/ts.js";
 import * as Utils from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
@@ -6,6 +11,7 @@ import {
     getFsContentsForAlternateResultDts,
     getFsContentsForAlternateResultPackageJson,
 } from "../helpers/alternateResult.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
@@ -709,6 +715,71 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                     sys.replaceFileText("/home/src/project/withb/b.ts", `readFile();`, "");
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario: "moduleResolution",
+        subScenario: "type reference resolutions with impliedMode",
+        sys: () =>
+            createWatchedSystem({
+                "/user/username/projects/myproject/package.json": jsonToReadableText({
+                    name: "myproject",
+                    version: "1.0.0",
+                    type: "module",
+                }),
+                "/user/username/projects/myproject/tsconfig.json": jsonToReadableText({
+                    compilerOptions: compilerOptionsToConfigJson({
+                        moduleResolution: ModuleResolutionKind.Node16,
+                        module: ModuleKind.Node16,
+                        moduleDetection: ModuleDetectionKind.Legacy,
+                        types: [],
+                    }),
+                }),
+                "/user/username/projects/myproject/index.ts": Utils.dedent`
+                    /// <reference types="pkg"/>
+                    interface LocalInterface extends RequireInterface {}
+                `,
+                "/user/username/projects/myproject/node_modules/@types/pkg/package.json": jsonToReadableText({
+                    name: "pkg",
+                    version: "0.0.1",
+                    exports: {
+                        import: "./import.js",
+                        require: "./require.js",
+                    },
+                }),
+                "/user/username/projects/myproject/node_modules/@types/pkg/import.d.ts": Utils.dedent`
+                    export {};
+                    declare global {
+                        interface ImportInterface {}
+                    }
+                `,
+                "/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts": Utils.dedent`
+                    export {};
+                    declare global {
+                        interface RequireInterface {}
+                    }
+                `,
+                [libFile.path]: libFile.content,
+                ["/a/lib/lib.es2022.full.d.ts"]: libFile.content,
+            }, { currentDirectory: "/user/username/projects/myproject" }),
+        commandLineArgs: ["-w", "--traceResolution", "--explainFiles"],
+        edits: [
+            {
+                caption: "Modify package json",
+                edit: sys =>
+                    sys.prependFile(
+                        "/user/username/projects/myproject/package.json",
+                        jsonToReadableText({
+                            name: "myproject",
+                            version: "1.0.0",
+                        }),
+                    ),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks();
+                    sys.runQueuedTimeoutCallbacks();
+                },
             },
         ],
     });
