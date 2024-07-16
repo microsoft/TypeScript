@@ -22,20 +22,17 @@ export type Foo {
     bar: number;
 };
 
-
 //// [/a/file1.ts]
 
 import { Foo } from "./type";
 const a: Foo = { bar : 1 };
 a.bar;
 
-
 //// [/a/file2.ts]
 
 import { Foo } from "./type";
 const a: Foo = { bar : 2 };
 a.bar;
-
 
 //// [/file3.js]
 console.log('noop');
@@ -83,9 +80,9 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/type.ts Text-1 "\nexport type Foo {\n    bar: number;\n};\n"
-	/a/file1.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 1 };\na.bar;\n"
-	/a/file2.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 2 };\na.bar;\n"
+	/a/type.ts Text-1 "\nexport type Foo {\n    bar: number;\n};"
+	/a/file1.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 1 };\na.bar;"
+	/a/file2.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 2 };\na.bar;"
 
 
 	a/type.ts
@@ -122,7 +119,7 @@ Info seq  [hh:mm:ss:mss] event:
             "jsx": 0,
             "jsxSize": 0,
             "ts": 3,
-            "tsSize": 171,
+            "tsSize": 168,
             "tsx": 0,
             "tsxSize": 0,
             "dts": 0,
@@ -205,7 +202,6 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -445,14 +441,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /file3.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "seq": 0,
-      "type": "response",
-      "command": "open",
-      "request_seq": 1,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
+      "responseRequired": false
     }
 After request
 
@@ -533,9 +522,9 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 un
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/type.ts Text-1 "\nexport type Foo {\n    bar: number;\n};\n"
-	/a/file1.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 1 };\na.bar;\n"
-	/a/file2.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 2 };\na.bar;\n"
+	/a/type.ts Text-1 "\nexport type Foo {\n    bar: number;\n};"
+	/a/file1.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 1 };\na.bar;"
+	/a/file2.ts Text-1 "\nimport { Foo } from \"./type\";\nconst a: Foo = { bar : 2 };\na.bar;"
 
 
 	type.ts
@@ -572,7 +561,7 @@ Info seq  [hh:mm:ss:mss] event:
             "jsx": 0,
             "jsxSize": 0,
             "ts": 3,
-            "tsSize": 171,
+            "tsSize": 168,
             "tsx": 0,
             "tsxSize": 0,
             "dts": 0,
@@ -679,14 +668,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json,/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "seq": 0,
-      "type": "response",
-      "command": "open",
-      "request_seq": 2,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
+      "responseRequired": false
     }
 After request
 
