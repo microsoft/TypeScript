@@ -694,10 +694,7 @@ Info seq  [hh:mm:ss:mss] event:
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar' from '/users/user/projects/project1/app.js' of old program, it was successfully resolved to '/home/src/Library/Caches/typescript/node_modules/@types/bar/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/bar/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/Library/Caches/typescript/node_modules/@types/bar' was found in cache and resolves to '/home/src/Library/Caches/typescript/package.json'.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/user/projects/project1/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -884,10 +881,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /users/user/proje
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /users/user/projects/project1/node_modules 1 undefined Project: /users/user/projects/project1/jsconfig.json WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Closing file watchers for project '/users/user/projects/project1/jsconfig.json' - done.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/bar/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/Library/Caches/typescript/node_modules/@types/bar' was found in cache and resolves to '/home/src/Library/Caches/typescript/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'bar' from '/users/user/projects/project1/app.js'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1119,13 +1113,7 @@ Info seq  [hh:mm:ss:mss] Config: /users/user/projects/project1/jsconfig.json : {
  }
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/user/projects/project1/jsconfig.json
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/project1/node_modules/bar/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/project1/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/project1/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/user/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/user/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/users/user/projects/project1/node_modules/bar' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'bar' from '/users/user/projects/project1/app.js'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] Loading module 'bar' from 'node_modules' folder, target file types: TypeScript, Declaration.

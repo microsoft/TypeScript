@@ -66,7 +66,7 @@ Resolved under condition 'default'.
 Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/index.ts', result '/user/username/projects/myproject/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/myproject' was found in cache and resolves to '/user/username/projects/myproject/package.json'.
 File '/home/src/tslibs/TS/Lib/package.json' does not exist.
 File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
@@ -179,17 +179,12 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/myproject' was found in cache and resolves to '/user/username/projects/myproject/package.json'.
+Lookup for package.json from '/user/username/projects/myproject' was found in cache and resolves to '/user/username/projects/myproject/package.json'.
+Lookup for package.json from '/user/username/projects/myproject' was found in cache and resolves to '/user/username/projects/myproject/package.json'.
 Reusing resolution of module '@this/package' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/index.ts'.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/myproject' was found in cache and resolves to '/user/username/projects/myproject/package.json'.
 ======== Resolving module './index.js' from '/user/username/projects/myproject/index2.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -197,12 +192,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/index.ts' exists - use it as a name resolution result.
 ======== Module name './index.js' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 [91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
 
 [96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.

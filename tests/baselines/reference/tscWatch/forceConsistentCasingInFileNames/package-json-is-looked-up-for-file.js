@@ -50,7 +50,7 @@ Output::
 File '/Users/name/projects/lib-boilerplate/src/package.json' does not exist.
 Found 'package.json' at '/Users/name/projects/lib-boilerplate/package.json'.
 File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist.
-File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/Users/name/projects/lib-boilerplate' was found in cache and resolves to '/Users/name/projects/lib-boilerplate/package.json'.
 ======== Resolving module 'lib-boilerplate' from '/Users/name/projects/lib-boilerplate/test/basic.spec.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.

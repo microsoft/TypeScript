@@ -780,14 +780,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.mjs' with Package ID 'foo/index.mjs@1.0.0'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'bar' from '/home/src/projects/project/index.mts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node16'.
@@ -873,14 +868,9 @@ Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/nod
 Info seq  [hh:mm:ss:mss] ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.d.ts' with Package ID 'foo2/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -1136,14 +1126,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node16'.
 Info seq  [hh:mm:ss:mss] Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -1209,14 +1194,9 @@ Info seq  [hh:mm:ss:mss] ======== Module name 'foo' was successfully resolved to
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.d.ts' with Package ID 'foo2/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -1474,14 +1454,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.mjs' with Package ID 'foo/index.mjs@1.0.0'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'bar' from '/home/src/projects/project/index.mts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node16'.
@@ -1555,14 +1530,9 @@ Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/nod
 Info seq  [hh:mm:ss:mss] ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.d.ts' with Package ID 'foo2/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -1820,14 +1790,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node16'.
 Info seq  [hh:mm:ss:mss] Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -1880,14 +1845,9 @@ Info seq  [hh:mm:ss:mss] ======== Module name 'foo' was successfully resolved to
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.d.ts' with Package ID 'foo2/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 5 projectProgramVersion: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -2153,14 +2113,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.mjs' with Package ID 'foo/index.mjs@1.0.0'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'bar' from '/home/src/projects/project/index.mts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node16'.
@@ -2195,14 +2150,9 @@ Info seq  [hh:mm:ss:mss] ======== Module name 'bar' was successfully resolved to
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.d.ts' with Package ID 'foo2/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 6 projectProgramVersion: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -2491,15 +2441,10 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'foo' from '/home/src/projects/project/index.mts'. ========
 Info seq  [hh:mm:ss:mss] Explicitly specified module resolution kind: 'Node16'.
 Info seq  [hh:mm:ss:mss] Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -2524,15 +2469,10 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar' from '/home/src/proj
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.d.ts' with Package ID 'foo2/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' with Package ID '@types/bar2/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar2' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 7 projectProgramVersion: 6 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -2850,15 +2790,10 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/@types/bar2/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.d.ts' with Package ID 'foo/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar/index.d.ts' with Package ID '@types/bar/index.d.ts@1.0.0'.
@@ -2937,15 +2872,10 @@ Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/nod
 Info seq  [hh:mm:ss:mss] ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo2' was found in cache and resolves to '/home/src/projects/project/node_modules/foo2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 8 projectProgramVersion: 7 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -3272,14 +3202,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/foo2/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.d.ts' with Package ID 'foo/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar/index.d.ts' with Package ID '@types/bar/index.d.ts@1.0.0'.
@@ -3333,14 +3258,9 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/inde
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/foo2/index.mjs', result '/home/src/projects/project/node_modules/foo2/index.mjs'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'foo2' was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.mjs' with Package ID 'foo2/index.mjs@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 9 projectProgramVersion: 8 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -3655,14 +3575,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.d.ts' with Package ID 'foo/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar/index.d.ts' with Package ID '@types/bar/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.mjs' with Package ID 'foo2/index.mjs@1.0.0'.
@@ -3748,14 +3663,9 @@ Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 10 projectProgramVersion: 9 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -4037,14 +3947,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.d.ts' with Package ID 'foo/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar/index.d.ts' with Package ID '@types/bar/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'foo2' from '/home/src/projects/project/index.mts'. ========
@@ -4110,14 +4015,9 @@ Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all 
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/foo2/index.mjs', result '/home/src/projects/project/node_modules/foo2/index.mjs'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'foo2' was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.mjs' with Package ID 'foo2/index.mjs@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 11 projectProgramVersion: 10 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -4401,14 +4301,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.d.ts' with Package ID 'foo/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar/index.d.ts' with Package ID '@types/bar/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.mjs' with Package ID 'foo2/index.mjs@1.0.0'.
@@ -4482,14 +4377,9 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/ba
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 12 projectProgramVersion: 11 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -4772,14 +4662,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'foo' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/foo/index.d.ts' with Package ID 'foo/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/@types/bar/index.d.ts' with Package ID '@types/bar/index.d.ts@1.0.0'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'foo2' from '/home/src/projects/project/index.mts'. ========
@@ -4832,14 +4717,9 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo2/inde
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/foo2/index.mjs', result '/home/src/projects/project/node_modules/foo2/index.mjs'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'foo2' was successfully resolved to '/home/src/projects/project/node_modules/foo2/index.mjs' with Package ID 'foo2/index.mjs@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'bar2' from '/home/src/projects/project/index.mts' of old program, it was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/foo' was found in cache and resolves to '/home/src/projects/project/node_modules/foo/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/projects/project/node_modules/@types/bar' was found in cache and resolves to '/home/src/projects/project/node_modules/@types/bar/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 13 projectProgramVersion: 12 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)

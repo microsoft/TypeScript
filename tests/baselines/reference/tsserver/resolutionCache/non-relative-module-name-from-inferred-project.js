@@ -153,11 +153,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/module2/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/user/username/projects/myproject' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
@@ -431,21 +427,8 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/node_modules/module1/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/module2/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/user/username/projects/myproject/product/node_modules/module1' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/user/username/projects/myproject/node_modules/module2' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './feature/file2' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/src/feature/file2.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '../test/file4' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/test/file4.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module '../test/src/file3' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/test/src/file3.ts'.
@@ -453,21 +436,8 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module1' from '/user/user
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/src/feature/file2.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/src/feature/file2.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/node_modules/module1/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/product/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/module2/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/user/username/projects/myproject/product/node_modules/module1' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/user/username/projects/myproject/node_modules/module2' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/test/file4.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module2' from '/user/username/projects/myproject/product/test/file4.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'module1' from '/user/username/projects/myproject/product/test/src/file3.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'.

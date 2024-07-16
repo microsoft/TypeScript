@@ -136,10 +136,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/x.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] ======== Module name './x' was successfully resolved to '/home/src/Library/Caches/typescript/node_modules/@types/node/x.d.ts'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/node/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/Library/Caches/typescript/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/Library/Caches/typescript/node_modules/@types/node' was found in cache and resolves to '/home/src/Library/Caches/typescript/package.json'.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/node/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Caches/typescript/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution

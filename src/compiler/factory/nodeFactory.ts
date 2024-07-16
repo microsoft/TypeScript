@@ -6072,7 +6072,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.amdDependencies = undefined!;
         node.commentDirectives = undefined;
         node.identifiers = undefined!;
-        node.packageJsonLocations = undefined;
         node.packageJsonScope = undefined;
         node.imports = undefined!;
         node.moduleAugmentations = undefined!;
@@ -6113,7 +6112,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.path = source.path;
         node.resolvedPath = source.resolvedPath;
         node.originalFileName = source.originalFileName;
-        node.packageJsonLocations = source.packageJsonLocations;
         node.packageJsonScope = source.packageJsonScope;
         node.emitNode = undefined;
         return node;

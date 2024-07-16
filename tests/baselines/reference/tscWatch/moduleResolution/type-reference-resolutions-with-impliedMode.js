@@ -218,15 +218,10 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/@types/pkg/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/myproject/node_modules/@types/pkg' was found in cache and resolves to '/user/username/projects/myproject/node_modules/@types/pkg/package.json'.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/myproject' was found in cache and resolves to '/user/username/projects/myproject/package.json'.
 ======== Resolving type reference directive 'pkg', containing file '/user/username/projects/myproject/index.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/user/username/projects/myproject/node_modules/@types, /user/username/projects/node_modules/@types, /user/username/node_modules/@types, /user/node_modules/@types, /node_modules/@types'.
 File '/user/username/projects/myproject/node_modules/@types/pkg/package.json' exists according to earlier cached lookups.
@@ -252,13 +247,8 @@ Resolved under condition 'require'.
 Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts', result '/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts'.
 ======== Type reference directive 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts' with Package ID 'pkg/require.d.ts@0.0.1', primary: false. ========
-File '/user/username/projects/myproject/node_modules/@types/pkg/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/myproject/node_modules/@types/pkg' was found in cache and resolves to '/user/username/projects/myproject/node_modules/@types/pkg/package.json'.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 ../../../../home/src/tslibs/TS/Lib/lib.es2022.full.d.ts
   Default library for target 'es2022'
 node_modules/@types/pkg/require.d.ts

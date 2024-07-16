@@ -848,13 +848,7 @@ CreatingProgramWith::
   roots: ["/home/src/workspaces/project/bMain.ts","/home/src/workspaces/project/bFileWithImports.ts","/home/src/workspaces/project/bRandomFileForImport.ts","/home/src/workspaces/project/bRandomFileForImport2.ts"]
   options: {"composite":true,"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.b.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.b.json"}
   projectReferences: [{"path":"/home/src/workspaces/project/tsconfig.a.json","originalPath":"./tsconfig.a.json"}]
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module './aFileWithImports' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aFileWithImports.ts'.
 Reusing resolution of module './bRandomFileForImport' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/bRandomFileForImport.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -863,13 +857,7 @@ Reusing resolution of module './aRandomFileForImport2' from '/home/src/workspace
 ======== Resolving module 'pkg0' from '/home/src/workspaces/project/bRandomFileForImport.ts'. ========
 Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 bMain.ts

@@ -289,32 +289,20 @@ File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'NodeNext'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 File '/user/username/projects/transitiveReferences/refs/package.json' does not exist.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 File '/home/src/tslibs/TS/Lib/package.json' does not exist.
 File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/' was found in cache and does not resolve.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
@@ -544,33 +532,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/transitiveReferences/refs' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -695,11 +661,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
@@ -718,32 +680,15 @@ File '/user/username/projects/transitiveReferences/nrefs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/nrefs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/nrefs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 File '/user/username/projects/transitiveReferences/nrefs/package.json' does not exist.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
@@ -783,8 +728,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
-
-PolledWatches *deleted*::
 /user/username/projects/transitiveReferences/refs/package.json:
   {"pollingInterval":2000}
 
@@ -914,11 +857,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
@@ -937,32 +876,14 @@ File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
 File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/transitiveReferences/refs' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
@@ -998,13 +919,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/transitiveReferences/nrefs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/refs/package.json: *new*
-  {"pollingInterval":2000}
-
-PolledWatches *deleted*::
-/user/username/projects/transitiveReferences/nrefs/package.json:
+/user/username/projects/transitiveReferences/refs/package.json:
   {"pollingInterval":2000}
 
 FsWatches::
@@ -1134,40 +1053,17 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'NodeNext'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/nrefs/package.json' does not exist.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences/nrefs' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/transitiveReferences/refs' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 nrefs/a.d.ts
@@ -1201,7 +1097,7 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitiveReferences/nrefs/package.json: *new*
+/user/username/projects/transitiveReferences/nrefs/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
@@ -1335,34 +1231,16 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences/refs' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 refs/a.d.ts
@@ -1394,13 +1272,11 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/transitiveReferences/nrefs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json:
-  {"pollingInterval":2000}
-
-PolledWatches *deleted*::
-/user/username/projects/transitiveReferences/nrefs/package.json:
   {"pollingInterval":2000}
 
 FsWatches::
@@ -1499,33 +1375,15 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences/refs' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 [96mtsconfig.c.json[0m:[93m16[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.b.json' not found.
 
 [7m16[0m     {
@@ -1567,6 +1425,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/transitiveReferences/nrefs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json:
@@ -1688,39 +1548,17 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'NodeNext'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/transitiveReferences/refs' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
@@ -1756,6 +1594,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/transitiveReferences/nrefs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json:
@@ -1864,36 +1704,14 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/transitiveReferences/refs' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 [96mtsconfig.b.json[0m:[93m17[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.a.json' not found.
 
 [7m17[0m     {
@@ -1937,6 +1755,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/transitiveReferences/nrefs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json:
@@ -2056,36 +1876,14 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/transitiveReferences' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/transitiveReferences/refs' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 a.d.ts
@@ -2120,6 +1918,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/transitiveReferences/nrefs/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json:

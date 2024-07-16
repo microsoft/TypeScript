@@ -52,8 +52,7 @@ declare const console: { log(msg: any): void; };
 Output::
 File '/home/src/workspaces/project/src/package.json' does not exist.
 Found 'package.json' at '/home/src/workspaces/project/package.json'.
-File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 ======== Resolving module './fileB.mjs' from '/home/src/workspaces/project/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
@@ -247,12 +246,7 @@ File '/home/src/workspaces/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 ======== Resolving module './fileB.mjs' from '/home/src/workspaces/project/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
@@ -263,9 +257,7 @@ File '/home/src/workspaces/project/src/fileB.mts' exists - use it as a name reso
 File '/home/src/tslibs/TS/Lib/package.json' does not exist.
 File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src' was found in cache and does not resolve.
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./fileB.mjs")' call instead.
   To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
 

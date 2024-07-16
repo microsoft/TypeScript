@@ -664,7 +664,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     getGlobalTypingsCacheLocation(): string | undefined {
-        return this.getTypeAcquisition().enable ? this.projectService.typingsInstaller.globalTypingsCacheLocation : undefined;
+        return this.projectService.typingsInstaller.globalTypingsCacheLocation;
+    }
+
+    /** @internal */
+    useGlobalTypingsCacheLocation(): boolean {
+        return !!this.getTypeAcquisition().enable;
     }
 
     /** @internal */
@@ -2709,7 +2714,7 @@ export class AutoImportProviderProject extends Project {
 
                 // 2. Try to load from the @types package in the tree and in the global
                 //    typings cache location, if enabled.
-                const done = forEach([hostProject.currentDirectory, hostProject.getGlobalTypingsCacheLocation()], directory => {
+                const done = forEach([hostProject.currentDirectory, hostProject.useGlobalTypingsCacheLocation() ? hostProject.getGlobalTypingsCacheLocation() : undefined], directory => {
                     if (directory) {
                         const typesPackageJson = resolvePackageNameToPackageJson(
                             `@types/${name}`,
@@ -2967,7 +2972,8 @@ export class AutoImportProviderProject extends Project {
 
     /** @internal */
     override getModuleResolutionCache(): ModuleResolutionCache | undefined {
-        return this.hostProject.getCurrentProgram()?.getModuleResolutionCache();
+        // TODO:: sheetal dont override this when resolutions are shared across projects
+        return this.hostProject.getModuleResolutionCache();
     }
 }
 

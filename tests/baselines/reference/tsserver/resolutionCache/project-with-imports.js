@@ -612,34 +612,20 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was not resolved.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
 Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
@@ -796,35 +782,21 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was not resolved.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'pkg2', containing file '/home/src/workspaces/project/randomFileForTypeRef.ts'. ========
 Info seq  [hh:mm:ss:mss] Resolution for type reference directive 'pkg2' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'pkg2' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1', primary: false. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (9)
@@ -953,16 +925,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
@@ -987,22 +952,15 @@ Info seq  [hh:mm:ss:mss] Resolved under condition 'require'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg1/require.d.ts', result '/home/src/workspaces/project/node_modules/pkg1/require.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg1' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg1/require.d.ts' with Package ID 'pkg1/require.d.ts@0.0.1'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was not resolved.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
@@ -1162,21 +1120,14 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg1' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg1/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg1/require.d.ts' with Package ID 'pkg1/require.d.ts@0.0.1'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg1' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg1/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'pkg3', containing file '/home/src/workspaces/project/fileWithTypeRefs.ts', root directory '/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
 Info seq  [hh:mm:ss:mss] Resolving with primary search path '/home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
@@ -1198,19 +1149,12 @@ Info seq  [hh:mm:ss:mss] Resolved under condition 'require'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg3/require.d.ts', result '/home/src/workspaces/project/node_modules/pkg3/require.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'pkg3' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1', primary: false. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 5 projectProgramVersion: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (11)
@@ -1377,18 +1321,11 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/workspaces/project/node_modules/pkg1/package.json'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg3' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg3/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
@@ -1456,22 +1393,15 @@ Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field
 Info seq  [hh:mm:ss:mss] Resolved under condition 'import'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg1' was not resolved. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg3' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg3/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 6 projectProgramVersion: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
@@ -1630,17 +1560,10 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg3' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg3/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
@@ -1665,23 +1588,16 @@ Info seq  [hh:mm:ss:mss] Resolved under condition 'require'.
 Info seq  [hh:mm:ss:mss] Exiting conditional exports.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/workspaces/project/node_modules/pkg1/require1.d.ts', result '/home/src/workspaces/project/node_modules/pkg1/require1.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg1' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg1/require1.d.ts' with Package ID 'pkg1/require1.d.ts@0.0.1'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg3' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg3/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 7 projectProgramVersion: 6 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (11)
@@ -1894,20 +1810,13 @@ Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg3' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg3/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/node_modules/pkg1/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 8 projectProgramVersion: 7 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
@@ -2167,18 +2076,11 @@ ScriptInfos::
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/node_modules/pkg3/package.json 2000 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 9 projectProgramVersion: 8 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
@@ -2425,7 +2327,7 @@ ScriptInfos::
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
@@ -2435,7 +2337,7 @@ Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to e
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './import.js'.
@@ -2498,16 +2400,9 @@ Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 10 projectProgramVersion: 9 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
@@ -2650,7 +2545,7 @@ ScriptInfos::
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was not resolved.
 Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'pkg2', containing file '/home/src/workspaces/project/randomFileForTypeRef.ts', root directory '/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
 Info seq  [hh:mm:ss:mss] Resolving with primary search path '/home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
@@ -2660,7 +2555,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/node_modules/@types' does not exist, s
 Info seq  [hh:mm:ss:mss] Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Looking up in 'node_modules' folder, initial location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: Declaration.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Info seq  [hh:mm:ss:mss] Entering conditional exports.
 Info seq  [hh:mm:ss:mss] Matched 'exports' condition 'import'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './import.js'.
@@ -2676,14 +2571,7 @@ Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Type reference directive 'pkg2' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 11 projectProgramVersion: 10 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)

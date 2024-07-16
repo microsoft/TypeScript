@@ -86,7 +86,7 @@ Output::
 
 Found 'package.json' at '/home/src/workspaces/project/packages/a/package.json'.
 File '/home/src/workspaces/project/packages/a/test/package.json' does not exist.
-File '/home/src/workspaces/project/packages/a/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/packages/a' was found in cache and resolves to '/home/src/workspaces/project/packages/a/package.json'.
 ======== Resolving module 'a' from '/home/src/workspaces/project/packages/a/test/index.js'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -134,13 +134,8 @@ Directory '/home/src/workspaces/project/packages/b/node_modules' does not exist,
 Resolution for module 'a' was found in cache from location '/home/src/workspaces/project/packages'.
 ======== Module name 'a' was successfully resolved to '/home/src/workspaces/project/packages/a/index.js' with Package ID 'a/index.js@0.0.0'. ========
 File '/home/src/workspaces/project/packages/a/types/package.json' does not exist.
-File '/home/src/workspaces/project/packages/a/package.json' exists according to earlier cached lookups.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/packages/a' was found in cache and resolves to '/home/src/workspaces/project/packages/a/package.json'.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 ../../tslibs/TS/Lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 packages/a/types/index.d.ts

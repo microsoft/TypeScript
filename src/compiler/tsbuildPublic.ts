@@ -464,6 +464,8 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
             /*options*/ undefined,
             moduleResolutionCache?.getPackageJsonInfoCache(),
             moduleResolutionCache?.optionsToRedirectsKey,
+            /*getValidResolution*/ undefined,
+            /*getValidPackageJsonScope*/ undefined,
         );
         compilerHost.resolveTypeReferenceDirectiveReferences = (typeDirectiveNames, containingFile, redirectedReference, options, containingSourceFile) =>
             loadWithModeAwareCache(

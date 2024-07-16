@@ -202,8 +202,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/workspaces/project/package.json'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module './fileB.mjs' from '/home/src/workspaces/project/src/fileA.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node16'.
 Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types', 'node'.
@@ -211,37 +210,22 @@ Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module locat
 Info seq  [hh:mm:ss:mss] File name '/home/src/workspaces/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/fileB.mts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name './fileB.mjs' was successfully resolved to '/home/src/workspaces/project/src/fileB.mts'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist.
@@ -249,61 +233,30 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/pa
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist.
@@ -315,7 +268,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Li
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/a/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/b/ba/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/b/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
@@ -345,6 +297,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/f/fa/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/f/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/f/fa/faa/faaa/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/node_modules/@types 1 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/node_modules/@types 1 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: Type roots
@@ -870,109 +823,27 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/a' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b/ba' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa/caaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/cb' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/faaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (22)
@@ -1179,47 +1050,26 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/workspaces/project/package.json'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist according to earlier cached lookups.
@@ -1227,65 +1077,32 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/pa
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module './fileB.mjs' from '/home/src/workspaces/project/src/fileA.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node16'.
 Info seq  [hh:mm:ss:mss] Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -1293,105 +1110,25 @@ Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module locat
 Info seq  [hh:mm:ss:mss] File name '/home/src/workspaces/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/fileB.mts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name './fileB.mjs' was successfully resolved to '/home/src/workspaces/project/src/fileB.mts'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/a' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b/ba' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa/caaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/cb' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/faaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (22)
@@ -1495,47 +1232,26 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/workspaces/project/package.json'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist according to earlier cached lookups.
@@ -1543,65 +1259,32 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/pa
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module './fileB.mjs' from '/home/src/workspaces/project/src/fileA.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node16'.
 Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types', 'node'.
@@ -1609,105 +1292,25 @@ Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module locat
 Info seq  [hh:mm:ss:mss] File name '/home/src/workspaces/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/fileB.mts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name './fileB.mjs' was successfully resolved to '/home/src/workspaces/project/src/fileB.mts'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/a' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b/ba' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa/caaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/cb' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/faaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (22)
@@ -1807,87 +1410,28 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist according to earlier cached lookups.
@@ -1895,285 +1439,52 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/pa
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './fileB.mjs' from '/home/src/workspaces/project/src/fileA.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/src/fileB.mts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/a' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b/ba' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa/caaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/cb' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/x/y/z' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/faaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json projectStateVersion: 5 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/src/tsconfig.json' (Configured)
@@ -2409,39 +1720,23 @@ Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to e
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/workspaces/project/package.json'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist according to earlier cached lookups.
@@ -2449,65 +1744,32 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/pa
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
 Info seq  [hh:mm:ss:mss] ======== Resolving module './fileB.mjs' from '/home/src/workspaces/project/src/fileA.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node16'.
 Info seq  [hh:mm:ss:mss] Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -2515,105 +1777,25 @@ Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module locat
 Info seq  [hh:mm:ss:mss] File name '/home/src/workspaces/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/fileB.mts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name './fileB.mjs' was successfully resolved to '/home/src/workspaces/project/src/fileB.mts'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' exists according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/a' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b/ba' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa/caaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/cb' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/x/y/z' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/faaa' was found in cache and resolves to '/home/src/workspaces/project/package.json'.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json projectStateVersion: 6 projectProgramVersion: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/src/tsconfig.json' (Configured)
@@ -2837,87 +2019,28 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist according to earlier cached lookups.
@@ -2925,113 +2048,32 @@ Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/pa
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] ======== Resolving module './fileB.mjs' from '/home/src/workspaces/project/src/fileA.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node16'.
 Info seq  [hh:mm:ss:mss] Resolving in CJS mode with conditions 'require', 'types', 'node'.
@@ -3039,177 +2081,25 @@ Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module locat
 Info seq  [hh:mm:ss:mss] File name '/home/src/workspaces/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/fileB.mts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name './fileB.mjs' was successfully resolved to '/home/src/workspaces/project/src/fileB.mts'. ========
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/a/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/ba/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/b/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/caaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/cb/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/c/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/d/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/e/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/z/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/y/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/x/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/faaa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/f/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/a' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b/ba' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/b' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/ca/caa/caaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/c/cb' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa/x/y/z' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa/daaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da/daa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/d/da' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/e/ea/eaa/eaaa/x/y/z' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/x/y/z' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/src/f/fa/faa/faaa' was found in cache and does not resolve.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefined Project: /home/src/workspaces/project/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/src/tsconfig.json projectStateVersion: 7 projectProgramVersion: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/src/tsconfig.json' (Configured)

@@ -269,6 +269,7 @@ function verifyProgramStructureAndResolutionCache(
             writeLog: ts.noop,
         },
         caption,
+        /*usesCachedPackageJsonScopes*/ true,
         userResolvedModuleNames,
     );
 }

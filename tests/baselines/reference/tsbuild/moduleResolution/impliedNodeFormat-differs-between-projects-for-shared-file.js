@@ -102,7 +102,7 @@ File '/home/src/workspaces/project/node_modules/@types/pg/package.json' exists a
 File '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts', result '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts'.
 ======== Module name 'pg' was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pg/index.d.ts'. ========
-File '/home/src/workspaces/project/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pg' was found in cache and resolves to '/home/src/workspaces/project/node_modules/@types/pg/package.json'.
 ======== Resolving type reference directive 'pg', containing file '/home/src/workspaces/project/b/__inferred type names__.ts', root directory '/home/src/workspaces/project/b/node_modules/@types,/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/home/src/workspaces/project/b/node_modules/@types, /home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
 Directory '/home/src/workspaces/project/b/node_modules/@types' does not exist, skipping all lookups in it.

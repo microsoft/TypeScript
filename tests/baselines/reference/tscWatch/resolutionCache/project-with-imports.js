@@ -531,34 +531,20 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/fileWithTypeRefs.ts","/home/src/workspaces/project/main.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/randomFileForTypeRef.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 ======== Resolving module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
 Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'. ========
 Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 [91merror[0m[90m TS2318: [0mCannot find global type 'ImportAttributes'.
 
 [96mfileWithImports.ts[0m:[93m2[0m:[93m40[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
@@ -667,35 +653,21 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/fileWithTypeRefs.ts","/home/src/workspaces/project/main.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/randomFileForTypeRef.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 ======== Resolving type reference directive 'pkg2', containing file '/home/src/workspaces/project/randomFileForTypeRef.ts'. ========
 Resolution for type reference directive 'pkg2' was found in cache from location '/home/src/workspaces/project'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1', primary: false. ========
 Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 [91merror[0m[90m TS2318: [0mCannot find global type 'ImportAttributes'.
 
 [96mfileWithImports.ts[0m:[93m2[0m:[93m40[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
@@ -824,16 +796,9 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/fileWithTypeRefs.ts","/home/src/workspaces/project/main.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/randomFileForTypeRef.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 ======== Resolving module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -858,23 +823,16 @@ Resolved under condition 'require'.
 Exiting conditional exports.
 Resolving real path for '/home/src/workspaces/project/node_modules/pkg1/require.d.ts', result '/home/src/workspaces/project/node_modules/pkg1/require.d.ts'.
 ======== Module name 'pkg1' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg1/require.d.ts' with Package ID 'pkg1/require.d.ts@0.0.1'. ========
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 File '/home/src/workspaces/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg1/require.d.ts 250 undefined Source file
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 [91merror[0m[90m TS2318: [0mCannot find global type 'ImportAttributes'.
 
 [96mfileWithTypeRefs.ts[0m:[93m2[0m:[93m23[0m - [91merror[0m[90m TS2688: [0mCannot find type definition file for 'pkg3'.
@@ -1057,21 +1015,14 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/fileWithTypeRefs.ts","/home/src/workspaces/project/main.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/randomFileForTypeRef.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg1' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg1/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg1/require.d.ts' with Package ID 'pkg1/require.d.ts@0.0.1'.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg1' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg1/package.json'.
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 ======== Resolving type reference directive 'pkg3', containing file '/home/src/workspaces/project/fileWithTypeRefs.ts', root directory '/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/home/src/workspaces/project/node_modules/@types, /home/src/workspaces/node_modules/@types, /home/src/node_modules/@types, /home/node_modules/@types, /node_modules/@types'.
@@ -1093,20 +1044,13 @@ Resolved under condition 'require'.
 Exiting conditional exports.
 Resolving real path for '/home/src/workspaces/project/node_modules/pkg3/require.d.ts', result '/home/src/workspaces/project/node_modules/pkg3/require.d.ts'.
 ======== Type reference directive 'pkg3' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1', primary: false. ========
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg3/require.d.ts 250 undefined Source file
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 [91merror[0m[90m TS2318: [0mCannot find global type 'ImportAttributes'.
 
 ../../tslibs/TS/Lib/lib.d.ts
@@ -1308,18 +1252,11 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/fileWithTypeRefs.ts","/home/src/workspaces/project/main.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/randomFileForTypeRef.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Found 'package.json' at '/home/src/workspaces/project/node_modules/pkg1/package.json'.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg3' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg3/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 ======== Resolving module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -1387,22 +1324,15 @@ File '/home/src/workspaces/project/node_modules/pkg1/import.d.ts' exists - use i
 Resolved under condition 'import'.
 Exiting conditional exports.
 ======== Module name 'pkg1' was not resolved. ========
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1'.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg3' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg3/package.json'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/node_modules/pkg1/require.d.ts 250 undefined Source file
 [91merror[0m[90m TS2318: [0mCannot find global type 'ImportAttributes'.
 
@@ -1580,17 +1510,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/fileWithTypeRefs.ts","/home/src/workspaces/project/main.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/randomFileForTypeRef.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg3' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg3/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 ======== Resolving module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -1615,24 +1538,17 @@ Resolved under condition 'require'.
 Exiting conditional exports.
 Resolving real path for '/home/src/workspaces/project/node_modules/pkg1/require1.d.ts', result '/home/src/workspaces/project/node_modules/pkg1/require1.d.ts'.
 ======== Module name 'pkg1' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg1/require1.d.ts' with Package ID 'pkg1/require1.d.ts@0.0.1'. ========
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 File '/home/src/workspaces/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg1/require1.d.ts 250 undefined Source file
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1'.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg3' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg3/package.json'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 [91merror[0m[90m TS2318: [0mCannot find global type 'ImportAttributes'.
 
 ../../tslibs/TS/Lib/lib.d.ts
@@ -1802,20 +1718,13 @@ CreatingProgramWith::
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/home/src/workspaces/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1'.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg3' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg3/package.json'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/node_modules/pkg1/require1.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/fileWithImports.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/node_modules/pkg1/package.json 2000 undefined File location affecting resolution
@@ -1974,18 +1883,11 @@ CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/randomFileForTypeRef.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/node_modules/pkg3/require.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/fileWithTypeRefs.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/node_modules/pkg3/package.json 2000 undefined File location affecting resolution
@@ -2142,7 +2044,7 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/randomFileForTypeRef.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-Found 'package.json' at '/home/src/workspaces/project/node_modules/pkg0/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/node_modules/pkg0/import.d.ts 250 undefined Source file
 ======== Resolving module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -2153,7 +2055,7 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Found 'package.json' at '/home/src/workspaces/project/node_modules/pkg0/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './import.js'.
@@ -2216,16 +2118,9 @@ Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg0' was not resolved. ========
 Reusing resolution of type reference directive 'pkg2' from '/home/src/workspaces/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 [91merror[0m[90m TS2318: [0mCannot find global type 'ImportAttributes'.
 
 [96mrandomFileForImport.ts[0m:[93m1[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg0' or its corresponding type declarations.
@@ -2366,7 +2261,7 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/randomFileForTypeRef.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-Found 'package.json' at '/home/src/workspaces/project/node_modules/pkg2/package.json'.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg2' was found in cache and resolves to '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/node_modules/pkg2/import.d.ts 250 undefined Source file
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was not resolved.
 ======== Resolving type reference directive 'pkg2', containing file '/home/src/workspaces/project/randomFileForTypeRef.ts', root directory '/home/src/workspaces/project/node_modules/@types,/home/src/workspaces/node_modules/@types,/home/src/node_modules/@types,/home/node_modules/@types,/node_modules/@types'. ========
@@ -2377,7 +2272,7 @@ Directory '/home/node_modules/@types' does not exist, skipping all lookups in it
 Directory '/node_modules/@types' does not exist, skipping all lookups in it.
 Looking up in 'node_modules' folder, initial location '/home/src/workspaces/project'.
 Searching all ancestor node_modules directories for preferred extensions: Declaration.
-File '/home/src/workspaces/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Found 'package.json' at '/home/src/workspaces/project/node_modules/pkg2/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './import.js'.
@@ -2393,14 +2288,7 @@ Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Type reference directive 'pkg2' was not resolved. ========
 Reusing resolution of type reference directive 'pkg4' from '/home/src/workspaces/project/__inferred type names__.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/@types/pkg4/index.d.ts'.
-File '/home/src/workspaces/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/@types/pkg4' was found in cache and does not resolve.
 [91merror[0m[90m TS2318: [0mCannot find global type 'ImportAttributes'.
 
 [96mrandomFileForImport.ts[0m:[93m1[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg0' or its corresponding type declarations.

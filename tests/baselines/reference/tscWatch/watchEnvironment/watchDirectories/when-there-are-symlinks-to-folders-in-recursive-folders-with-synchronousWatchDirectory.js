@@ -262,13 +262,7 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/user/projects/myproject/src/file.ts"]
   options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
-File '/home/user/projects/myproject/node_modules/reala/package.json' does not exist.
-File '/home/user/projects/myproject/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/home/user/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/user/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/user/projects/myproject/node_modules/reala' was found in cache and does not resolve.
 FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'Node10'.

@@ -1120,13 +1120,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './bFileWithImports' from '/home/src/workspaces/project/cFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/bFileWithImports.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/cFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/pkg0.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aFileWithImports' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aFileWithImports.ts'.
@@ -1135,13 +1129,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/wor
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport2' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport2.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/cRandomFileForImport.ts'. ========
 Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/pkg0.d.ts'. ========
@@ -1684,13 +1672,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './bFileWithImports' from '/home/src/workspaces/project/cFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/bFileWithImports.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/cFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/pkg0.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aFileWithImports' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aFileWithImports.ts'.
@@ -1699,13 +1681,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/wor
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport2' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport2.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/bRandomFileForImport.ts'. ========
 Info seq  [hh:mm:ss:mss] Using compiler options of project reference redirect '/home/src/workspaces/project/tsconfig.b.json'.
 Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
@@ -1730,26 +1706,14 @@ Info seq  [hh:mm:ss:mss] 	Files (12)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.b.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.b.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aFileWithImports' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aFileWithImports.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './bRandomFileForImport' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/bRandomFileForImport.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport2' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport2.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/bRandomFileForImport.ts'. ========
 Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
@@ -2282,13 +2246,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './bFileWithImports' from '/home/src/workspaces/project/cFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/bFileWithImports.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/cFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/pkg0.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aFileWithImports' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aFileWithImports.ts'.
@@ -2297,13 +2255,7 @@ Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/wor
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport2' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport2.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/aRandomFileForImport.ts'. ========
 Info seq  [hh:mm:ss:mss] Using compiler options of project reference redirect '/home/src/workspaces/project/tsconfig.a.json'.
 Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
@@ -2329,26 +2281,14 @@ Info seq  [hh:mm:ss:mss] 	Files (12)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.b.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.b.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aFileWithImports' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aFileWithImports.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './bRandomFileForImport' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/bRandomFileForImport.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/bFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport2' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport2.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/aRandomFileForImport.ts'. ========
 Info seq  [hh:mm:ss:mss] Using compiler options of project reference redirect '/home/src/workspaces/project/tsconfig.a.json'.
 Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
@@ -2370,23 +2310,11 @@ Info seq  [hh:mm:ss:mss] 	Files (9)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: /home/src/workspaces/project/tsconfig.a.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.a.json
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport.ts'.
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './aRandomFileForImport2' from '/home/src/workspaces/project/aFileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/aRandomFileForImport2.ts'.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/src/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/home/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'pkg0' from '/home/src/workspaces/project/aRandomFileForImport.ts'. ========
 Info seq  [hh:mm:ss:mss] Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========

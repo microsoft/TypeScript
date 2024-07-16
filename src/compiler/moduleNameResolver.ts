@@ -81,6 +81,7 @@ import {
     normalizeSlashes,
     PackageId,
     packageIdToString,
+    PackageJsonScope,
     ParsedPatterns,
     Path,
     pathIsRelative,
@@ -272,10 +273,12 @@ function createResolvedModuleWithFailedLookupLocations(
         }
         else {
             return {
-                ...resultFromCache,
+                resolvedModule: resultFromCache.resolvedModule,
                 failedLookupLocations: initializeResolutionFieldForReadonlyCache(resultFromCache.failedLookupLocations, failedLookupLocations),
                 affectingLocations: initializeResolutionFieldForReadonlyCache(resultFromCache.affectingLocations, affectingLocations),
                 resolutionDiagnostics: initializeResolutionFieldForReadonlyCache(resultFromCache.resolutionDiagnostics, diagnostics),
+                alternateResult: resultFromCache.alternateResult,
+                globalCacheResolution: resultFromCache.globalCacheResolution,
             };
         }
     }
@@ -637,6 +640,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
     };
     if (containingDirectory) {
         setPerDirectoryAndNonRelativeNameCacheResult(
+            host,
             cache,
             typeReferenceDirectiveName,
             resolutionMode,
@@ -906,7 +910,8 @@ export interface NonRelativeNameResolutionCache<T> {
 export interface PerNonRelativeNameCache<T> {
     get(directory: string): T | undefined;
     set(directory: string, result: T): void;
-    /** @internal */ deleteByPath(directory: Path): void;
+    /** @internal */ set(directory: string, result: T, host: ModuleResolutionHost): void; // eslint-disable-line @typescript-eslint/unified-signatures
+    /** @internal */ deleteByPath(directory: Path, host: ModuleResolutionHost): void;
     /** @internal */ directoryPathMap: Map<Path, T>;
     /** @internal */ isReadonly?: boolean;
 }
@@ -951,8 +956,17 @@ export interface PackageJsonInfoCache {
     /** @internal */ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfoCacheEntry | undefined;
     /** @internal */ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfoCacheEntry): void;
     /** @internal */ getInternalMap(): Map<Path, PackageJsonInfoCacheEntry> | undefined;
+    /** @internal */ getPackageJsonScope(dir: string): PackageJsonScope | undefined;
+    /** @internal */ setPackageJsonScope(dir: string, scope: PackageJsonScope, host: ModuleResolutionHost): void;
+    /** @internal */ packageJsonScopes: PerNonRelativeNameCache<PackageJsonScope>;
     clear(): void;
     /** @internal */ isReadonly?: boolean;
+    /** @internal */ print(): void;
+}
+
+/** @internal */
+export function getPackageJsonLocationFromScope(scope: PackageJsonScope): string | undefined {
+    return lastOrUndefined(scope.affectingLocations);
 }
 
 export type PerModuleNameCache = PerNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations>;
@@ -1097,9 +1111,28 @@ function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined,
     }
 }
 
-function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): PackageJsonInfoCache {
+function createPackageJsonInfoCache(
+    currentDirectory: string,
+    getCanonicalFileName: (s: string) => string,
+    getValidResolution: (resolution: PackageJsonScope | undefined) => PackageJsonScope | undefined,
+): PackageJsonInfoCache {
     let cache: Map<Path, PackageJsonInfoCacheEntry> | undefined;
-    return { getPackageJsonInfo, setPackageJsonInfo, clear, getInternalMap };
+    const packageJsonScopes = createPerNonRelativeNameCache(
+        currentDirectory,
+        getCanonicalFileName,
+        getPackageJsonLocationFromScope,
+        getValidResolution,
+    );
+    return {
+        getPackageJsonInfo,
+        setPackageJsonInfo,
+        getPackageJsonScope,
+        setPackageJsonScope,
+        clear,
+        getInternalMap,
+        packageJsonScopes,
+        print,
+    };
     function getPackageJsonInfo(packageJsonPath: string) {
         return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
     }
@@ -1108,9 +1141,26 @@ function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileNa
     }
     function clear() {
         cache = undefined;
+        packageJsonScopes.directoryPathMap.clear();
     }
     function getInternalMap() {
         return cache;
+    }
+    function getPackageJsonScope(dir: string) {
+        return packageJsonScopes.get(dir);
+    }
+    function setPackageJsonScope(dir: string, scope: PackageJsonScope, host: ModuleResolutionHost) {
+        packageJsonScopes.set(dir, scope, host);
+    }
+    function print() {
+        console.log(`cache::`);
+        cache?.forEach((value, key) => {
+            console.log(`  ${key} ${JSON.stringify(value, undefined, " ")}`);
+        });
+        console.log(`packageJsonScopes::`);
+        packageJsonScopes.directoryPathMap.forEach((value, key) => {
+            console.log(`  ${key} ${JSON.stringify(value, undefined, " ")}`);
+        });
     }
 }
 
@@ -1259,103 +1309,126 @@ function createNonRelativeNameResolutionCache<T>(
     }
 
     function createPerModuleNameCache(): PerNonRelativeNameCache<T> {
-        const directoryPathMap = new Map<Path, T>();
+        return createPerNonRelativeNameCache(
+            currentDirectory,
+            getCanonicalFileName,
+            getResolvedFileName,
+            getValidResolution,
+        );
+    }
+}
 
-        return { get, set, deleteByPath, directoryPathMap };
+function createPerNonRelativeNameCache<T>(
+    currentDirectory: string,
+    getCanonicalFileName: (s: string) => string,
+    getResolvedFileName: (result: T) => string | undefined,
+    getValidResolution: (resolution: T | undefined) => T | undefined,
+): PerNonRelativeNameCache<T> {
+    const directoryPathMap = new Map<Path, T>();
 
-        function get(directory: string): T | undefined {
-            return getByPath(toPath(directory, currentDirectory, getCanonicalFileName));
-        }
+    return { get, set, deleteByPath, directoryPathMap };
 
-        function getByPath(directoryPath: Path): T | undefined {
-            return getValidResolution(directoryPathMap.get(directoryPath));
-        }
+    function get(directory: string): T | undefined {
+        return getByPath(toPath(directory, currentDirectory, getCanonicalFileName));
+    }
 
-        function deleteByPath(directory: Path) {
-            const existing = directoryPathMap.get(directory);
-            // Remove invalidated result from parent
-            if (existing) {
-                directoryPathMap.delete(directory);
-                withCommonPrefix(
-                    directory,
-                    getCommonPrefix(directory, existing),
-                    parent => directoryPathMap.delete(parent),
-                );
-            }
-        }
+    function getByPath(directoryPath: Path): T | undefined {
+        return getValidResolution(directoryPathMap.get(directoryPath));
+    }
 
-        /**
-         * At first this function add entry directory -> module resolution result to the table.
-         * Then it computes the set of parent folders for 'directory' that should have the same module resolution result
-         * and for every parent folder in set it adds entry: parent -> module resolution. .
-         * Lets say we first directory name: /a/b/c/d/e and resolution result is: /a/b/bar.ts.
-         * Set of parent folders that should have the same result will be:
-         * [
-         *     /a/b/c/d, /a/b/c, /a/b
-         * ]
-         * this means that request for module resolution from file in any of these folder will be immediately found in cache.
-         */
-        function set(directory: string, result: T): void {
-            const path = toPath(directory, currentDirectory, getCanonicalFileName);
-            // if entry is already in cache do nothing
-            if (getByPath(path)) {
-                return;
-            }
-
-            // Remove invalidated result from parent
-            deleteByPath(path);
-
-            directoryPathMap.set(path, result);
-
-            // find common prefix between directory and resolved file name
-            // this common prefix should be the shortest path that has the same resolution
-            // directory: /a/b/c/d/e
-            // resolvedFileName: /a/b/foo.d.ts
-            // commonPrefix: /a/b
-            // for failed lookups cache the result for every directory up to root
+    function deleteByPath(directory: Path, host?: ModuleResolutionHost) {
+        const existing = directoryPathMap.get(directory);
+        // Remove invalidated result from parent
+        if (existing) {
+            directoryPathMap.delete(directory);
             withCommonPrefix(
-                path,
-                getCommonPrefix(path, result),
-                parent => directoryPathMap.set(parent, result),
+                host,
+                directory,
+                getCommonPrefix(directory, existing),
+                parent => directoryPathMap.delete(parent),
             );
         }
+    }
 
-        function withCommonPrefix(path: Path, commonPrefix: Path | undefined, action: (parent: Path) => void) {
-            let current = path;
-            while (current !== commonPrefix) {
-                const parent = getDirectoryPath(current);
-                if (parent === current || getByPath(parent)) {
-                    break;
-                }
-                action(parent);
-                current = parent;
-            }
+    /**
+     * At first this function add entry directory -> module resolution result to the table.
+     * Then it computes the set of parent folders for 'directory' that should have the same module resolution result
+     * and for every parent folder in set it adds entry: parent -> module resolution. .
+     * Lets say we first directory name: /a/b/c/d/e and resolution result is: /a/b/bar.ts.
+     * Set of parent folders that should have the same result will be:
+     * [
+     *     /a/b/c/d, /a/b/c, /a/b
+     * ]
+     * this means that request for module resolution from file in any of these folder will be immediately found in cache.
+     */
+    function set(directory: string, result: T, host?: ModuleResolutionHost): void {
+        const path = toPath(directory, currentDirectory, getCanonicalFileName);
+        // if entry is already in cache do nothing
+        if (getByPath(path)) {
+            return;
         }
 
-        function getCommonPrefix(directory: Path, resolution: T) {
-            const resolvedFileName = getResolvedFileName(resolution);
-            if (!resolvedFileName) return undefined;
-            const resolutionDirectory = toPath(getDirectoryPath(resolvedFileName), currentDirectory, getCanonicalFileName);
+        // Remove invalidated result from parent
+        deleteByPath(path, host);
 
-            // find first position where directory and resolution differs
-            let i = 0;
-            const limit = Math.min(directory.length, resolutionDirectory.length);
-            while (i < limit && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
-                i++;
+        directoryPathMap.set(path, result);
+
+        // find common prefix between directory and resolved file name
+        // this common prefix should be the shortest path that has the same resolution
+        // directory: /a/b/c/d/e
+        // resolvedFileName: /a/b/foo.d.ts
+        // commonPrefix: /a/b
+        // for failed lookups cache the result for every directory up to root
+        withCommonPrefix(
+            host,
+            path,
+            getCommonPrefix(path, result),
+            parent => directoryPathMap.set(parent, result),
+        );
+    }
+
+    function withCommonPrefix(
+        host: ModuleResolutionHost | undefined,
+        path: Path,
+        commonPrefix: Path | undefined,
+        action: (parent: Path) => void,
+    ) {
+        let current = path;
+        const globalCache = host?.getGlobalTypingsCacheLocation?.();
+        const globalCachePath = globalCache ? toPath(globalCache, currentDirectory, getCanonicalFileName) : undefined;
+        while (current !== commonPrefix) {
+            const parent = getDirectoryPath(current);
+            if (parent === globalCachePath || parent === current || getByPath(parent)) {
+                break;
             }
-            if (i === directory.length && (resolutionDirectory.length === i || resolutionDirectory[i] === directorySeparator)) {
-                return directory;
-            }
-            const rootLength = getRootLength(directory);
-            if (i < rootLength) {
-                return undefined;
-            }
-            const sep = directory.lastIndexOf(directorySeparator, i - 1);
-            if (sep === -1) {
-                return undefined;
-            }
-            return directory.substr(0, Math.max(sep, rootLength)) as Path;
+            action(parent);
+            current = parent;
         }
+    }
+
+    function getCommonPrefix(directory: Path, resolution: T) {
+        const resolvedFileName = getResolvedFileName(resolution);
+        if (!resolvedFileName) return undefined;
+        const resolutionDirectory = toPath(getDirectoryPath(resolvedFileName), currentDirectory, getCanonicalFileName);
+
+        // find first position where directory and resolution differs
+        let i = 0;
+        const limit = Math.min(directory.length, resolutionDirectory.length);
+        while (i < limit && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
+            i++;
+        }
+        if (i === directory.length && (resolutionDirectory.length === i || resolutionDirectory[i] === directorySeparator)) {
+            return directory;
+        }
+        const rootLength = getRootLength(directory);
+        if (i < rootLength) {
+            return undefined;
+        }
+        const sep = directory.lastIndexOf(directorySeparator, i - 1);
+        if (sep === -1) {
+            return undefined;
+        }
+        return directory.substr(0, Math.max(sep, rootLength)) as Path;
     }
 }
 
@@ -1374,6 +1447,7 @@ function createModuleOrTypeReferenceResolutionCache<T>(
     getResolvedFileName: (result: T) => string | undefined,
     optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey> | undefined,
     getValidResolution: ((resolution: T | undefined) => T | undefined) | undefined,
+    getValidPackageJsonScope: ((scope: PackageJsonScope | undefined) => PackageJsonScope | undefined) | undefined,
 ): ModuleOrTypeReferenceResolutionCache<T> {
     optionsToRedirectsKey ??= new Map();
     getValidResolution ??= identity;
@@ -1392,7 +1466,11 @@ function createModuleOrTypeReferenceResolutionCache<T>(
         optionsToRedirectsKey,
         getValidResolution,
     );
-    packageJsonInfoCache ??= createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
+    packageJsonInfoCache ??= createPackageJsonInfoCache(
+        currentDirectory,
+        getCanonicalFileName,
+        getValidPackageJsonScope ?? identity,
+    );
 
     return {
         ...packageJsonInfoCache,
@@ -1453,6 +1531,7 @@ function createModuleOrTypeReferenceResolutionCache<T>(
 
 /** @internal */
 export function setPerDirectoryAndNonRelativeNameCacheResult<T>(
+    host: ModuleResolutionHost,
     cache: ModuleOrTypeReferenceResolutionCache<T> | undefined,
     name: string,
     mode: ResolutionMode,
@@ -1464,7 +1543,7 @@ export function setPerDirectoryAndNonRelativeNameCacheResult<T>(
         cache.getOrCreateCacheForDirectory(directoryName, redirectedReference).set(name, mode, result);
         if (!isExternalModuleNameRelative(name)) {
             // put result in per-module name cache
-            cache.getOrCreateCacheForNonRelativeName(name, mode, redirectedReference).set(directoryName, result);
+            cache.getOrCreateCacheForNonRelativeName(name, mode, redirectedReference).set(directoryName, result, host);
         }
     }
 }
@@ -1479,12 +1558,19 @@ export function createModuleResolutionCache(
 export function createModuleResolutionCache(
     currentDirectory: string,
     getCanonicalFileName: (s: string) => string,
-    options?: CompilerOptions,
-    packageJsonInfoCache?: PackageJsonInfoCache,
-    optionsToRedirectsKey?: Map<CompilerOptions, RedirectsCacheKey>,
-    getValidResolution?: ( // eslint-disable-line @typescript-eslint/unified-signatures
-        resolution: ResolvedModuleWithFailedLookupLocations | undefined,
-    ) => ResolvedModuleWithFailedLookupLocations | undefined,
+    options: CompilerOptions | undefined,
+    packageJsonInfoCache: PackageJsonInfoCache | undefined,
+    optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey> | undefined,
+    getValidResolution:
+        | ((
+            resolution: ResolvedModuleWithFailedLookupLocations | undefined,
+        ) => ResolvedModuleWithFailedLookupLocations | undefined)
+        | undefined,
+    getValidPackageJsonScope:
+        | ((
+            scope: PackageJsonScope | undefined,
+        ) => PackageJsonScope | undefined)
+        | undefined,
 ): ModuleResolutionCache;
 export function createModuleResolutionCache(
     currentDirectory: string,
@@ -1493,6 +1579,7 @@ export function createModuleResolutionCache(
     packageJsonInfoCache?: PackageJsonInfoCache,
     optionsToRedirectsKey?: Map<CompilerOptions, RedirectsCacheKey>,
     getValidResolution?: (resolution: ResolvedModuleWithFailedLookupLocations | undefined) => ResolvedModuleWithFailedLookupLocations | undefined,
+    getValidPackageJsonScope?: (scope: PackageJsonScope | undefined) => PackageJsonScope | undefined,
 ): ModuleResolutionCache {
     const result = createModuleOrTypeReferenceResolutionCache(
         currentDirectory,
@@ -1502,6 +1589,7 @@ export function createModuleResolutionCache(
         getOriginalOrResolvedModuleFileName,
         optionsToRedirectsKey,
         getValidResolution,
+        getValidPackageJsonScope,
     ) as ModuleResolutionCache;
     result.getOrCreateCacheForModuleName = (nonRelativeName, mode, redirectedReference) => result.getOrCreateCacheForNonRelativeName(nonRelativeName, mode, redirectedReference);
     return result;
@@ -1517,12 +1605,19 @@ export function createTypeReferenceDirectiveResolutionCache(
 export function createTypeReferenceDirectiveResolutionCache(
     currentDirectory: string,
     getCanonicalFileName: (s: string) => string,
-    options?: CompilerOptions,
-    packageJsonInfoCache?: PackageJsonInfoCache,
-    optionsToRedirectsKey?: Map<CompilerOptions, RedirectsCacheKey>,
-    getValidResolution?: ( // eslint-disable-line @typescript-eslint/unified-signatures
-        resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined,
-    ) => ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined,
+    options: CompilerOptions | undefined,
+    packageJsonInfoCache: PackageJsonInfoCache | undefined,
+    optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey> | undefined,
+    getValidResolution:
+        | ((
+            resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined,
+        ) => ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined)
+        | undefined,
+    getValidPackageJsonScope:
+        | ((
+            scope: PackageJsonScope | undefined,
+        ) => PackageJsonScope | undefined)
+        | undefined,
 ): TypeReferenceDirectiveResolutionCache;
 export function createTypeReferenceDirectiveResolutionCache(
     currentDirectory: string,
@@ -1531,6 +1626,7 @@ export function createTypeReferenceDirectiveResolutionCache(
     packageJsonInfoCache?: PackageJsonInfoCache,
     optionsToRedirectsKey?: Map<CompilerOptions, RedirectsCacheKey>,
     getValidResolution?: (resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined) => ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined,
+    getValidPackageJsonScope?: (scope: PackageJsonScope | undefined) => PackageJsonScope | undefined,
 ): TypeReferenceDirectiveResolutionCache {
     return createModuleOrTypeReferenceResolutionCache(
         currentDirectory,
@@ -1540,6 +1636,7 @@ export function createTypeReferenceDirectiveResolutionCache(
         getOriginalOrResolvedTypeReferenceFileName,
         optionsToRedirectsKey,
         getValidResolution,
+        getValidPackageJsonScope,
     );
 }
 
@@ -1612,6 +1709,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
         }
 
         setPerDirectoryAndNonRelativeNameCacheResult(
+            host,
             cache,
             moduleName,
             resolutionMode,
@@ -2538,6 +2636,78 @@ export interface PackageJsonInfoContents {
     resolvedEntrypoints: string[] | false | undefined;
     /** false: peerDependencies are not present. undefined: not yet resolved */
     peerDependencies: string | false | undefined;
+}
+
+/** @internal */
+export function getPackageScope(
+    dir: string,
+    packageJsonInfoCache: PackageJsonInfoCache | undefined,
+    host: ModuleResolutionHost,
+    options: CompilerOptions,
+): PackageJsonScope {
+    const state = getTemporaryModuleResolutionState(packageJsonInfoCache, host, options);
+    const failedLookupLocations: string[] = [];
+    const affectingLocations: string[] = [];
+    state.failedLookupLocations = failedLookupLocations;
+    state.affectingLocations = affectingLocations;
+    let packageJsonInfo: PackageJsonInfo | undefined;
+    const fromCacheOrFoundPackageJsonInfo = forEachAncestorDirectoryStoppingAtGlobalCache(
+        host,
+        dir,
+        directory => {
+            const fromCache = packageJsonInfoCache?.getPackageJsonScope(directory);
+            if (fromCache) {
+                const { host, traceEnabled } = state;
+                if (traceEnabled) {
+                    trace(
+                        host,
+                        fromCache.contents ?
+                            Diagnostics.Lookup_for_package_json_from_0_was_found_in_cache_and_resolves_to_1 :
+                            Diagnostics.Lookup_for_package_json_from_0_was_found_in_cache_and_does_not_resolve,
+                        directory,
+                        getPackageJsonLocationFromScope(fromCache),
+                    );
+                }
+                return fromCache;
+            }
+
+            packageJsonInfo = getPackageJsonInfo(directory, /*onlyRecordFailures*/ false, state);
+            if (packageJsonInfo?.contents) return false as const;
+        },
+    );
+
+    if (fromCacheOrFoundPackageJsonInfo) {
+        //  Update the cache and found scope
+        if (!packageJsonInfoCache!.isReadonly) {
+            fromCacheOrFoundPackageJsonInfo.failedLookupLocations = updateResolutionField(
+                fromCacheOrFoundPackageJsonInfo.failedLookupLocations,
+                failedLookupLocations,
+            );
+            // Dont need to update affectingLocations as that will be only one location and its already present on the resolution
+            packageJsonInfoCache!.setPackageJsonScope(dir, fromCacheOrFoundPackageJsonInfo, host);
+            return fromCacheOrFoundPackageJsonInfo;
+        }
+
+        // Return cloned one since cache is read only
+        return {
+            contents: fromCacheOrFoundPackageJsonInfo.contents,
+            failedLookupLocations: initializeResolutionFieldForReadonlyCache(
+                fromCacheOrFoundPackageJsonInfo.failedLookupLocations,
+                failedLookupLocations,
+            ),
+            affectingLocations: fromCacheOrFoundPackageJsonInfo.affectingLocations?.slice(),
+        };
+    }
+
+    const result: PackageJsonScope = {
+        contents: packageJsonInfo?.contents,
+        failedLookupLocations: initializeResolutionField(failedLookupLocations),
+        affectingLocations: initializeResolutionField(affectingLocations),
+    };
+    if (packageJsonInfoCache && !packageJsonInfoCache.isReadonly) {
+        packageJsonInfoCache.setPackageJsonScope(dir, result, host);
+    }
+    return result;
 }
 
 /**

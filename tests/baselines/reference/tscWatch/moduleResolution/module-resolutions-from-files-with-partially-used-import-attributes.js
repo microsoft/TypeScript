@@ -72,11 +72,7 @@ File '/user/username/projects/package.json' does not exist.
 File '/user/username/package.json' does not exist.
 File '/user/package.json' does not exist.
 File '/package.json' does not exist.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/myproject' was found in cache and does not resolve.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 Resolving in ESM mode with conditions 'import', 'types', 'node'.
@@ -154,7 +150,7 @@ File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/' was found in cache and does not resolve.
 [96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {
@@ -268,46 +264,20 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/myproject' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/myproject/node_modules/pkg' was found in cache and resolves to '/user/username/projects/myproject/node_modules/pkg/package.json'.
+Lookup for package.json from '/user/username/projects/myproject' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/myproject' was found in cache and does not resolve.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/a.ts'. ========
 Resolution for module 'pkg' was found in cache from location '/user/username/projects/myproject'.
 ======== Module name 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'. ========
-File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/myproject/node_modules/pkg' was found in cache and resolves to '/user/username/projects/myproject/node_modules/pkg/package.json'.
+Lookup for package.json from '/user/username/projects/myproject' was found in cache and does not resolve.
 Reusing resolution of module 'pkg' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'.
 Reusing resolution of module './a' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/a.ts'.
 Reusing resolution of module 'pkg1' from '/user/username/projects/myproject/index.ts' of old program, it was not resolved.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 [96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
 [7m2[0m   "compilerOptions": {

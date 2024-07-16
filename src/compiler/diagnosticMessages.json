@@ -5594,6 +5594,14 @@
         "category": "Error",
         "code": 6266
     },
+    "Lookup for package.json from '{0}' was found in cache and resolves to '{1}'.": {
+        "category": "Message",
+        "code": 6267
+    },
+    "Lookup for package.json from '{0}' was found in cache and does not resolve.": {
+        "category": "Message",
+        "code": 6268
+    },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
         "category": "Message",

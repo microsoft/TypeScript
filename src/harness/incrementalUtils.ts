@@ -103,6 +103,26 @@ function verifyDocumentRegistry(service: ts.server.ProjectService) {
     verifyDocumentRegistryStats(service.documentRegistry, stats);
 }
 
+function verifyResolutionWithFailedLookupsAndAffectedLocations<T extends ts.ResolutionWithFailedLookupLocations | ts.PackageJsonScope>(
+    expectedResolutionWithFailedLookupLocations: T,
+    actualResolutionWithFailedLookupLocations: T | undefined,
+    projectName: string,
+    cacheType: string,
+) {
+    expectedResolutionWithFailedLookupLocations?.failedLookupLocations?.forEach(l =>
+        ts.Debug.assert(
+            ts.contains(actualResolutionWithFailedLookupLocations!.failedLookupLocations, l),
+            `${projectName}:: ${cacheType}:: Expected failed lookup location ${l} not found in actual resolution`,
+        )
+    );
+    expectedResolutionWithFailedLookupLocations?.affectingLocations?.forEach(l =>
+        ts.Debug.assert(
+            ts.contains(actualResolutionWithFailedLookupLocations!.affectingLocations, l),
+            `${projectName}:: ${cacheType}:: Expected affecting location ${l} not found in actual resolution`,
+        )
+    );
+}
+
 /**
  * Verifies that failed lookups, affecting locations and alternate result are present in actual resolution
  * Not checking otherway round because actual resolution can have more failed lookups and affecting locations
@@ -113,18 +133,11 @@ function verifyResolutionWithFailedLookupLocationsProperties(
     projectName: string,
     cacheType: string,
 ) {
-    expectedResolutionWithFailedLookupLocations?.failedLookupLocations?.forEach(l =>
-        ts.Debug.assert(
-            ts.contains(actualResolutionWithFailedLookupLocations!.failedLookupLocations, l),
-            `${projectName}:: ${cacheType}:: Expected failed lookup location ${l} not found in actual resolution`,
-        )
-    );
-
-    expectedResolutionWithFailedLookupLocations?.affectingLocations?.forEach(l =>
-        ts.Debug.assert(
-            ts.contains(actualResolutionWithFailedLookupLocations!.affectingLocations, l),
-            `${projectName}:: ${cacheType}:: Expected affecting location ${l} not found in actual resolution`,
-        )
+    verifyResolutionWithFailedLookupsAndAffectedLocations(
+        expectedResolutionWithFailedLookupLocations,
+        actualResolutionWithFailedLookupLocations,
+        projectName,
+        cacheType,
     );
     ts.Debug.assert(
         expectedResolutionWithFailedLookupLocations?.alternateResult === actualResolutionWithFailedLookupLocations!.alternateResult,
@@ -247,6 +260,14 @@ function getProgramStructure(
             projectName,
             (key, mode) => actualProgram!.getResolvedTypeReferenceDirective(actualSourceFile, key, mode),
         );
+        if (actualProgram && f.packageJsonScope) {
+            verifyResolutionWithFailedLookupsAndAffectedLocations(
+                f.packageJsonScope,
+                actualSourceFile.packageJsonScope,
+                projectName!,
+                "PackageJsonScope",
+            );
+        }
     });
     getResolutionCacheDetails(
         baseline,
@@ -286,6 +307,7 @@ export function verifyResolutionCache(
     actualProgram: ts.Program,
     resolutionHostCacheHost: ts.ResolutionCacheHost,
     projectName: string,
+    usesCachedPackageJsonScopes: boolean,
     userResolvedModuleNames?: true,
 ): void {
     const currentDirectory = resolutionHostCacheHost.getCurrentDirectory!();
@@ -297,6 +319,11 @@ export function verifyResolutionCache(
     const expectedToResolution = new Map<ExpectedResolution, ts.ResolutionWithFailedLookupLocations>();
     const resolutionToExpected = new Map<ts.ResolutionWithFailedLookupLocations, ExpectedResolution>();
     const resolutionToRefs = new Map<ts.ResolutionWithFailedLookupLocations, ResolutionInfo[]>();
+
+    const expectedToPackageJsonScope = new Map<ts.PackageJsonScope, ts.PackageJsonScope>();
+    const packageJsonScopeToExpected = new Map<ts.PackageJsonScope, ts.PackageJsonScope>();
+    const packageJsonScopeToRefs = new Map<ts.PackageJsonScope, string[]>();
+
     const inferredTypesPath = resolutionHostCacheHost.toPath(
         ts.getAutomaticTypeDirectiveContainingFile(
             actualProgram.getCompilerOptions(),
@@ -345,6 +372,7 @@ export function verifyResolutionCache(
         );
         expected.resolvedLibraries.set(libFileName, expectedResolution);
         ts.setPerDirectoryAndNonRelativeNameCacheResult(
+            resolutionHostCacheHost,
             expected.libraryResolutionCache,
             ts.getLibraryNameFromLibFileName(libFileName),
             undefined,
@@ -387,39 +415,28 @@ export function verifyResolutionCache(
         )
     );
 
-    expected.finishCachingPerDirectoryResolution(actualProgram, /*oldProgram*/ undefined, /*skipCacheCompact*/ true);
+    expected.finishCachingPerDirectoryResolution(
+        actualProgram,
+        /*oldProgram*/ undefined,
+        /*skipCacheCompact*/ true,
+        collectPackageJsonScope,
+    );
+
+    actualProgram.getSourceFiles().forEach(f =>
+        ts.Debug.assert(
+            actual.impliedFormatPackageJsons.get(f.resolvedPath) === f.packageJsonScope,
+            `${projectName}:: PackageJsonScope:: Expected scope for ${f.resolvedPath} from program to be in cache`,
+        )
+    );
 
     // Verify ref count
-    resolutionToRefs.forEach((info, resolution) => {
-        ts.Debug.assert(
-            resolution.files?.size === info.length,
-            `${projectName}:: Expected Resolution ref count ${info.length} but got ${resolution.files?.size}`,
-            () =>
-                `Expected from:: ${JSON.stringify(info, undefined, " ")}` +
-                `Actual from: ${resolution.files?.size}`,
-        );
-        ts.Debug.assert(
-            !resolution.isInvalidated,
-            `${projectName}:: Resolution should not be invalidated`,
-        );
-        const expected = resolutionToExpected.get(resolution)!;
-        verifySet(expected.files, resolution.files, `${projectName}:: Resolution files`);
-        ts.Debug.assert(
-            expected.watchedFailed === resolution.watchedFailed,
-            `${projectName}:: Expected watchedFailed of Resolution ${expected.watchedFailed} but got ${resolution.watchedFailed}`,
-        );
-        ts.Debug.assert(
-            expected.watchedAffected === resolution.watchedAffected,
-            `${projectName}:: Expected watchedAffected of Resolution ${expected.watchedAffected} but got ${resolution.watchedAffected}`,
-        );
-        ts.Debug.assert(
-            expected.setAtRoot === resolution.setAtRoot,
-            `${projectName}:: Expected setAtRoot of Resolution ${expected.setAtRoot} but got ${resolution.setAtRoot}`,
-        );
-    });
+    verifyResolutionOrScopeToRefs(resolutionToRefs, resolutionToExpected, "Resolution");
     verifyMapOfResolutionSet(expected.resolvedFileToResolution, actual.resolvedFileToResolution, `resolvedFileToResolution`);
     verifyResolutionSet(expected.resolutionsWithFailedLookups, actual.resolutionsWithFailedLookups, `resolutionsWithFailedLookups`);
     verifyResolutionSet(expected.resolutionsWithOnlyAffectingLocations, actual.resolutionsWithOnlyAffectingLocations, `resolutionsWithOnlyAffectingLocations`);
+    verifyResolutionOrScopeToRefs(packageJsonScopeToRefs, packageJsonScopeToExpected, "PackageJsonScope");
+    verifyPackageScopeSet(expected.watchedPackageJsonScopes, actual.watchedPackageJsonScopes, `resolutionsWitwatchedPackageJsonScopeshFailedLookups`);
+    verifyPackageScopeMap(expected.impliedFormatPackageJsons, actual.impliedFormatPackageJsons, `impliedFormatPackageJsons`);
     verifyDirectoryWatchesOfFailedLookups(expected.directoryWatchesOfFailedLookups, actual.directoryWatchesOfFailedLookups);
     verifyFileWatchesOfAffectingLocations(expected.fileWatchesOfAffectingLocations, actual.fileWatchesOfAffectingLocations);
     verifyPackageDirWatchers(expected.packageDirWatchers, actual.packageDirWatchers);
@@ -435,6 +452,13 @@ export function verifyResolutionCache(
 
     // Verify that caches are same:
     forEachModuleOrTypeRefOrLibCache((cache, cacheType) => verifyModuleOrTypeResolutionCache(cache, actual[cacheType], cacheType));
+    if (usesCachedPackageJsonScopes) {
+        verifyPackageScopeMap(
+            expected.moduleResolutionCache.getPackageJsonInfoCache().packageJsonScopes.directoryPathMap,
+            actual.moduleResolutionCache.getPackageJsonInfoCache().packageJsonScopes.directoryPathMap,
+            "packageJsonScopes cache",
+        );
+    }
     verifyPackageJsonWatchInfo();
 
     // Stop watching resolutions to verify everything gets closed.
@@ -443,17 +467,22 @@ export function verifyResolutionCache(
     actual.resolvedTypeReferenceDirectives.forEach((_resolutions, path) => expected.removeResolutionsOfFile(path));
     expected.finishCachingPerDirectoryResolution(/*newProgram*/ undefined, actualProgram, /*skipCacheCompact*/ true);
 
-    resolutionToExpected.forEach(
-        expected => ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldnt ref to any files`),
-    );
+    verifyResolutionOrScopeReleased(resolutionToExpected, "Resolution");
     ts.Debug.assert(expected.resolvedFileToResolution.size === 0, `${projectName}:: resolvedFileToResolution should be released`);
     ts.Debug.assert(expected.resolutionsWithFailedLookups.size === 0, `${projectName}:: resolutionsWithFailedLookups should be released`);
     ts.Debug.assert(expected.resolutionsWithOnlyAffectingLocations.size === 0, `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`);
+    verifyResolutionOrScopeReleased(packageJsonScopeToExpected, "PackageJsonScope");
+    ts.Debug.assert(expected.watchedPackageJsonScopes.size === 0, `${projectName}:: watchedPackageJsonScopes should be released`);
+    ts.Debug.assert(expected.impliedFormatPackageJsons.size === 0, `${projectName}:: impliedFormatPackageJsons should be released`);
     ts.Debug.assert(expected.directoryWatchesOfFailedLookups.size === 0, `${projectName}:: directoryWatchesOfFailedLookups should be released`);
     ts.Debug.assert(expected.fileWatchesOfAffectingLocations.size === 0, `${projectName}:: fileWatchesOfAffectingLocations should be released`);
     ts.Debug.assert(expected.countResolutionsResolvedWithGlobalCache() === 0, `${projectName}:: ResolutionsResolvedWithGlobalCache should be cleared`);
     ts.Debug.assert(expected.countResolutionsResolvedWithoutGlobalCache() === 0, `${projectName}:: ResolutionsResolvedWithoutGlobalCache should be cleared`);
     forEachModuleOrTypeRefOrLibCache((cache, cacheType) => verifyModuleOrTypeResolutionCacheIsEmpty(cache, cacheType, /*compacted*/ false));
+    ts.Debug.assert(
+        expected.moduleResolutionCache.getPackageJsonInfoCache().packageJsonScopes.directoryPathMap.size === 0,
+        `${projectName}:: packageJsonScopes cache should be released`,
+    );
     ts.Debug.assert(expected.packageJsonRefCount.size === 0, `${projectName}:: packageJsonRefCount should be cleared`);
     ts.Debug.assert(
         expected.moduleResolutionCache.getPackageJsonInfoCache().getInternalMap() === undefined || expected.moduleResolutionCache.getPackageJsonInfoCache().getInternalMap()!.size === 0,
@@ -462,6 +491,76 @@ export function verifyResolutionCache(
 
     expected.compactCaches(/*newProgram*/ undefined);
     forEachModuleOrTypeRefOrLibCache((cache, cacheType) => verifyModuleOrTypeResolutionCacheIsEmpty(cache, cacheType, /*compacted*/ true));
+
+    function verifyResolutionOrScopeReleased(
+        resolutionToExpected: Map<ts.WatchedResolutionWithFailedLookupLocations, ts.WatchedResolutionWithFailedLookupLocations>,
+        resolutionOrScope: string,
+    ) {
+        resolutionToExpected.forEach(
+            expected => ts.Debug.assert(!expected.files?.size, `${projectName}:: ${resolutionOrScope} Shouldnt ref to any files`),
+        );
+    }
+
+    function verifyResolutionOrScopeToRefs(
+        resolutionToRefs: Map<ts.WatchedResolutionWithFailedLookupLocations, any[]>,
+        resolutionToExpected: Map<ts.WatchedResolutionWithFailedLookupLocations, ts.WatchedResolutionWithFailedLookupLocations>,
+        resolutionOrScope: string,
+    ) {
+        resolutionToRefs.forEach((info, resolution) => {
+            ts.Debug.assert(
+                resolution.files?.size === info.length,
+                `${projectName}:: Expected ${resolutionOrScope} ref count ${info.length} but got ${resolution.files?.size}`,
+                () =>
+                    `Expected from:: ${JSON.stringify(info, undefined, " ")}` +
+                    `Actual from: ${resolution.files?.size}`,
+            );
+            ts.Debug.assert(
+                !resolution.isInvalidated,
+                `${projectName}:: ${resolutionOrScope} should not be invalidated`,
+            );
+            const expected = resolutionToExpected.get(resolution)!;
+            verifySet(expected.files, resolution.files, `${projectName}:: ${resolutionOrScope} files`);
+            ts.Debug.assert(
+                expected.watchedFailed === resolution.watchedFailed,
+                `${projectName}:: Expected watchedFailed of ${resolutionOrScope} ${expected.watchedFailed} but got ${resolution.watchedFailed}`,
+            );
+            ts.Debug.assert(
+                expected.watchedAffected === resolution.watchedAffected,
+                `${projectName}:: Expected watchedAffected of ${resolutionOrScope} ${expected.watchedAffected} but got ${resolution.watchedAffected}`,
+            );
+            ts.Debug.assert(
+                expected.setAtRoot === resolution.setAtRoot,
+                `${projectName}:: Expected setAtRoot of ${resolutionOrScope} ${expected.setAtRoot} but got ${resolution.setAtRoot}`,
+            );
+        });
+    }
+
+    function collectPackageJsonScope(file: ts.SourceFile) {
+        const scope = file.packageJsonScope;
+        if (!scope) return undefined;
+        const existing = packageJsonScopeToRefs.get(scope);
+        let expectedScope: ts.PackageJsonScope;
+        if (existing) {
+            existing.push(file.fileName);
+            expectedScope = packageJsonScopeToExpected.get(scope)!;
+        }
+        else {
+            packageJsonScopeToRefs.set(scope, [file.fileName]);
+            expectedScope = {
+                contents: scope.contents,
+                failedLookupLocations: scope.failedLookupLocations,
+                affectingLocations: scope.affectingLocations,
+            };
+            expectedToPackageJsonScope.set(expectedScope, scope);
+            packageJsonScopeToExpected.set(scope, expectedScope);
+        }
+        expected.moduleResolutionCache.getPackageJsonInfoCache().setPackageJsonScope(
+            ts.getDirectoryPath(ts.getNormalizedAbsolutePath(file.fileName, currentDirectory)),
+            expectedScope,
+            resolutionHostCacheHost,
+        );
+        return expectedScope;
+    }
 
     function verifyResolutionIsInCache<T extends ts.ResolutionWithFailedLookupLocations>(
         cacheType: string,
@@ -508,6 +607,7 @@ export function verifyResolutionCache(
             if (!expectedCache) storeExpected.set(fileName, expectedCache = ts.createModeAwareCache());
             expectedCache.set(name, mode, expected);
             ts.setPerDirectoryAndNonRelativeNameCacheResult(
+                resolutionHostCacheHost,
                 moduleOrTypeRefCache,
                 name,
                 mode,
@@ -835,6 +935,45 @@ export function verifyResolutionCache(
             "Package Json cache watched",
         );
     }
+    function verifyPackageScopeSet(
+        expectedScopeSet: Set<ts.PackageJsonScope> | undefined,
+        actualScopeSet: Set<ts.PackageJsonScope> | undefined,
+        caption: string,
+    ) {
+        expectedScopeSet?.forEach(scope =>
+            ts.Debug.assert(
+                actualScopeSet?.has(expectedToPackageJsonScope.get(scope)!),
+                `${projectName}:: ${caption}:: Expected PackageJsonScope should be present in actual`,
+            )
+        );
+        actualScopeSet?.forEach(scope =>
+            ts.Debug.assert(
+                expectedScopeSet?.has(packageJsonScopeToExpected.get(scope)!),
+                `${projectName}:: ${caption}:: Actual PackageJsonScope should be present in expected`,
+            )
+        );
+    }
+
+    function verifyPackageScopeMap(
+        expectedScopeMap: Map<ts.Path, ts.PackageJsonScope>,
+        actualScopeMap: Map<ts.Path, ts.PackageJsonScope>,
+        caption: string,
+    ) {
+        verifyMap(
+            expectedScopeMap,
+            actualScopeMap,
+            (expectedScope, actualScope, caption) =>
+                ts.Debug.assert(
+                    expectedScope ?
+                        // Scope should match
+                        expectedToPackageJsonScope.get(expectedScope) === actualScope :
+                        // Otherwise in actual cache present because of incremental storage and should be referenced somewhere
+                        packageJsonScopeToExpected.get(actualScope!) !== undefined,
+                    `${projectName}:: ${caption} Expected PackageJsonScope need to match in actual`,
+                ),
+            caption,
+        );
+    }
 }
 
 function verifyMap<Key extends string, Expected, Actual>(
@@ -964,6 +1103,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         getCompilationSettings: project.getCompilationSettings.bind(project),
         projectName: project.projectName,
         getGlobalTypingsCacheLocation: project.getGlobalTypingsCacheLocation.bind(project),
+        useGlobalTypingsCacheLocation: project.useGlobalTypingsCacheLocation.bind(project),
         globalCacheResolutionModuleName: project.globalCacheResolutionModuleName.bind(project),
         fileIsOpen: project.fileIsOpen.bind(project),
         getCurrentProgram: () => project.getCurrentProgram(),
@@ -1008,7 +1148,15 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         project.getCurrentProgram()!,
         project.projectName,
     );
-    verifyResolutionCache(project.resolutionCache, project.getCurrentProgram()!, resolutionHostCacheHost, project.projectName);
+    verifyResolutionCache(
+        project.resolutionCache,
+        project.getCurrentProgram()!,
+        resolutionHostCacheHost,
+        project.projectName,
+        // Currently auto import provider uses moduleCache so in turn packageJsonInfoCache from host project,
+        // so we dont expected to verify that
+        project.projectKind !== ts.server.ProjectKind.AutoImportProvider,
+    );
 }
 
 function verifyUnresolvedImports(_service: ts.server.ProjectService, project: ts.server.Project) {

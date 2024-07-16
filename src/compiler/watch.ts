@@ -62,6 +62,7 @@ import {
     getNameOfScriptTarget,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
+    getPackageJsonLocationFromScope,
     getParsedCommandLineOfConfigFile,
     getPatternFromSpec,
     getReferencedFileLocation,
@@ -74,7 +75,6 @@ import {
     isReferencedFile,
     isReferenceFileLocation,
     isString,
-    last,
     maxBy,
     maybeBind,
     memoize,
@@ -381,25 +381,25 @@ export function explainIfFileIsRedirectAndImpliedFormat(
     if (isExternalOrCommonJsModule(file)) {
         switch (getImpliedNodeFormatForEmitWorker(file, options)) {
             case ModuleKind.ESNext:
-                if (file.packageJsonScope) {
+                if (file.packageJsonScope?.contents) {
                     (result ??= []).push(chainDiagnosticMessages(
                         /*details*/ undefined,
                         Diagnostics.File_is_ECMAScript_module_because_0_has_field_type_with_value_module,
-                        toFileName(last(file.packageJsonLocations!), fileNameConvertor),
+                        toFileName(getPackageJsonLocationFromScope(file.packageJsonScope)!, fileNameConvertor),
                     ));
                 }
                 break;
             case ModuleKind.CommonJS:
-                if (file.packageJsonScope) {
+                if (file.packageJsonScope?.contents) {
                     (result ??= []).push(chainDiagnosticMessages(
                         /*details*/ undefined,
                         file.packageJsonScope.contents.packageJsonContent.type ?
                             Diagnostics.File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module :
                             Diagnostics.File_is_CommonJS_module_because_0_does_not_have_field_type,
-                        toFileName(last(file.packageJsonLocations!), fileNameConvertor),
+                        toFileName(getPackageJsonLocationFromScope(file.packageJsonScope)!, fileNameConvertor),
                     ));
                 }
-                else if (file.packageJsonLocations?.length) {
+                else if (file.packageJsonScope) {
                     (result ??= []).push(chainDiagnosticMessages(
                         /*details*/ undefined,
                         Diagnostics.File_is_CommonJS_module_because_package_json_was_not_found,

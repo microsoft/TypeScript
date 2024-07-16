@@ -132,12 +132,7 @@ Directory '/users/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Type reference directive 'pkg3' was not resolved. ========
 File '/users/username/projects/project/node_modules/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/users/username/projects/project/node_modules' was found in cache and does not resolve.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg2/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg0/package.json 2000 undefined File location affecting resolution
@@ -454,20 +449,8 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
   options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/users/username/projects/project/node_modules/pkg0' was found in cache and does not resolve.
+Lookup for package.json from '/users/username/projects/project/node_modules/pkg2' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/users/username/projects/project/fileWithImports.ts' of old program, it was successfully resolved to '/users/username/projects/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/users/username/projects/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -482,30 +465,13 @@ File '/users/username/projects/project/node_modules/pkg1/index.tsx' does not exi
 File '/users/username/projects/project/node_modules/pkg1/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/users/username/projects/project/node_modules/pkg1/index.d.ts', result '/users/username/projects/project/node_modules/pkg1/index.d.ts'.
 ======== Module name 'pkg1' was successfully resolved to '/users/username/projects/project/node_modules/pkg1/index.d.ts'. ========
-File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/users/username/projects/project/node_modules/pkg0' was found in cache and does not resolve.
 File '/users/username/projects/project/node_modules/pkg1/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/users/username/projects/project/node_modules' was found in cache and does not resolve.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg1/index.d.ts 250 undefined Source file
 Reusing resolution of type reference directive 'pkg2' from '/users/username/projects/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/users/username/projects/project/node_modules/pkg2/index.d.ts'.
 Reusing resolution of type reference directive 'pkg3' from '/users/username/projects/project/fileWithTypeRefs.ts' of old program, it was not resolved.
-File '/users/username/projects/project/node_modules/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/users/username/projects/project/node_modules/pkg2' was found in cache and does not resolve.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg1/package.json 2000 undefined File location affecting resolution
 [96mfileWithTypeRefs.ts[0m:[93m2[0m:[93m23[0m - [91merror[0m[90m TS2688: [0mCannot find type definition file for 'pkg3'.
 
@@ -788,43 +754,13 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
   options: {"composite":true,"traceResolution":true,"outDir":"/users/username/projects/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/pkg1/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/users/username/projects/project/node_modules/pkg0' was found in cache and does not resolve.
+Lookup for package.json from '/users/username/projects/project/node_modules/pkg1' was found in cache and does not resolve.
+Lookup for package.json from '/users/username/projects/project/node_modules/pkg2' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/users/username/projects/project/fileWithImports.ts' of old program, it was successfully resolved to '/users/username/projects/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/users/username/projects/project/fileWithImports.ts' of old program, it was successfully resolved to '/users/username/projects/project/node_modules/pkg1/index.d.ts'.
-File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/pkg1/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/users/username/projects/project/node_modules/pkg0' was found in cache and does not resolve.
+Lookup for package.json from '/users/username/projects/project/node_modules/pkg1' was found in cache and does not resolve.
 Reusing resolution of type reference directive 'pkg2' from '/users/username/projects/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/users/username/projects/project/node_modules/pkg2/index.d.ts'.
 ======== Resolving type reference directive 'pkg3', containing file '/users/username/projects/project/fileWithTypeRefs.ts', root directory '/users/username/projects/project/node_modules/@types,/users/username/projects/node_modules/@types,/users/username/node_modules/@types,/users/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/users/username/projects/project/node_modules/@types, /users/username/projects/node_modules/@types, /users/username/node_modules/@types, /users/node_modules/@types, /node_modules/@types'.
@@ -840,20 +776,9 @@ File '/users/username/projects/project/node_modules/pkg3.d.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg3/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/users/username/projects/project/node_modules/pkg3/index.d.ts', result '/users/username/projects/project/node_modules/pkg3/index.d.ts'.
 ======== Type reference directive 'pkg3' was successfully resolved to '/users/username/projects/project/node_modules/pkg3/index.d.ts', primary: false. ========
-File '/users/username/projects/project/node_modules/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/users/username/projects/project/node_modules/pkg2' was found in cache and does not resolve.
 File '/users/username/projects/project/node_modules/pkg3/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/username/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/users/username/projects/project/node_modules' was found in cache and does not resolve.
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg3/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg3/package.json 2000 undefined File location affecting resolution
 [96mfileWithTypeRefs.ts[0m:[93m3[0m:[93m43[0m - [91merror[0m[90m TS2552: [0mCannot find name 'Import3'. Did you mean 'Import2'?

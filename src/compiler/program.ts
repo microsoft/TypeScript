@@ -136,7 +136,7 @@ import {
     getNormalizedAbsolutePathWithoutRoot,
     getNormalizedPathComponents,
     getOutputDeclarationFileName,
-    getPackageScopeForPath,
+    getPackageScope,
     getPathFromPathComponents,
     getPositionOfLineAndCharacter,
     getPropertyArrayElementValue,
@@ -150,7 +150,6 @@ import {
     getStrictOptionValue,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
-    getTemporaryModuleResolutionState,
     getTextOfIdentifierOrLiteral,
     getTransformers,
     getTsBuildInfoEmitOutputFilePath,
@@ -1438,13 +1437,9 @@ export function getImpliedNodeFormatForFileWorker(
         undefined; // other extensions, like `json` or `tsbuildinfo`, are set as `undefined` here but they should never be fed through the transformer pipeline
 
     function lookupFromPackageJson(): Partial<CreateSourceFileOptions> {
-        const state = getTemporaryModuleResolutionState(packageJsonInfoCache, host, options);
-        const packageJsonLocations: string[] = [];
-        state.failedLookupLocations = packageJsonLocations;
-        state.affectingLocations = packageJsonLocations;
-        const packageJsonScope = getPackageScopeForPath(getDirectoryPath(fileName), state);
-        const impliedNodeFormat = packageJsonScope?.contents.packageJsonContent.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
-        return { impliedNodeFormat, packageJsonLocations, packageJsonScope };
+        const packageJsonScope = getPackageScope(getDirectoryPath(fileName), packageJsonInfoCache, host, options);
+        const impliedNodeFormat = packageJsonScope.contents?.packageJsonContent.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
+        return { impliedNodeFormat, packageJsonScope };
     }
 }
 
@@ -1763,6 +1758,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             /*options*/ undefined,
             moduleResolutionCache?.getPackageJsonInfoCache(),
             moduleResolutionCache?.optionsToRedirectsKey,
+            /*getValidResolution*/ undefined,
+            /*getValidPackageJsonScope*/ undefined,
         );
         actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference, options, containingSourceFile) =>
             loadWithModeAwareCache(
@@ -2578,7 +2575,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const seenPackageNames = new Map<string, SeenPackageName>();
 
         for (const oldSourceFile of oldSourceFiles) {
-            const sourceFileOptions = getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options);
+            const sourceFileOptions = getCreateSourceFileOptions(oldSourceFile.fileName);
             let newSourceFile = host.getSourceFileByPath
                 ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile)
                 : host.getSourceFile(oldSourceFile.fileName, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
@@ -2586,7 +2583,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (!newSourceFile) {
                 return StructureIsReused.Not;
             }
-            newSourceFile.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
             newSourceFile.packageJsonScope = sourceFileOptions.packageJsonScope;
 
             Debug.assert(!newSourceFile.redirectInfo, "Host should not return a redirect source file from `getSourceFile`");
@@ -3767,7 +3763,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         redirect.path = path;
         redirect.resolvedPath = resolvedPath;
         redirect.originalFileName = originalFileName;
-        redirect.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
         redirect.packageJsonScope = sourceFileOptions.packageJsonScope;
         sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
         return redirect;
@@ -3785,11 +3780,16 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return result;
     }
 
-    function getCreateSourceFileOptions(fileName: string, moduleResolutionCache: ModuleResolutionCache | undefined, host: CompilerHost, options: CompilerOptions): CreateSourceFileOptions {
+    function getCreateSourceFileOptions(fileName: string): CreateSourceFileOptions {
         // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
         // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
         // to the check and emit steps would be bad - so we much prefer detecting and storing the format information on the source file node upfront.
-        const result = getImpliedNodeFormatForFileWorker(getNormalizedAbsolutePath(fileName, currentDirectory), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
+        const result = getImpliedNodeFormatForFileWorker(
+            getNormalizedAbsolutePath(fileName, currentDirectory),
+            moduleResolutionCache?.getPackageJsonInfoCache(),
+            host,
+            options,
+        );
         const languageVersion = getEmitScriptTarget(options);
         const setExternalModuleIndicator = getSetExternalModuleIndicator(options);
         return typeof result === "object" ?
@@ -3889,7 +3889,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         // We haven't looked for this file, do so now and cache result
-        const sourceFileOptions = getCreateSourceFileOptions(fileName, moduleResolutionCache, host, options);
+        const sourceFileOptions = getCreateSourceFileOptions(fileName);
         const file = host.getSourceFile(
             fileName,
             sourceFileOptions,
@@ -3925,7 +3925,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             file.path = path;
             file.resolvedPath = toPath(fileName);
             file.originalFileName = originalFileName;
-            file.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
             file.packageJsonScope = sourceFileOptions.packageJsonScope;
             addFileIncludeReason(file, reason, /*checkExisting*/ false);
 
@@ -5321,14 +5320,14 @@ export function getImpliedNodeFormatForEmitWorker(sourceFile: Pick<SourceFile, "
     }
     if (
         sourceFile.impliedNodeFormat === ModuleKind.CommonJS
-        && (sourceFile.packageJsonScope?.contents.packageJsonContent.type === "commonjs"
+        && (sourceFile.packageJsonScope?.contents?.packageJsonContent.type === "commonjs"
             || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Cjs, Extension.Cts]))
     ) {
         return ModuleKind.CommonJS;
     }
     if (
         sourceFile.impliedNodeFormat === ModuleKind.ESNext
-        && (sourceFile.packageJsonScope?.contents.packageJsonContent.type === "module"
+        && (sourceFile.packageJsonScope?.contents?.packageJsonContent.type === "module"
             || fileExtensionIsOneOf(sourceFile.fileName, [Extension.Mjs, Extension.Mts]))
     ) {
         return ModuleKind.ESNext;

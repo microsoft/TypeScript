@@ -903,22 +903,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 ======== Resolving module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
 Resolution for module 'pkg0' was found in cache from location '/home/src/workspaces/project'.
 ======== Module name 'pkg0' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'. ========
@@ -1167,22 +1155,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was not resolved.
@@ -1436,22 +1412,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was not resolved.
@@ -1707,22 +1671,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was not resolved.
@@ -1983,22 +1935,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was not resolved.
@@ -2262,22 +2202,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 ======== Resolving module 'pkg1' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
 Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project'.
 ======== Module name 'pkg1' was not resolved. ========
@@ -2541,22 +2469,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was not resolved.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -2829,22 +2745,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was not resolved.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -3123,22 +3027,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was not resolved.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -3426,22 +3318,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was not resolved.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -3734,22 +3614,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was not resolved.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -4045,22 +3913,10 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was not resolved.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was not resolved.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
@@ -4386,13 +4242,7 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/workspaces/project/main.ts","/home/src/workspaces/project/fileWithImports.ts","/home/src/workspaces/project/randomFileForImport.ts","/home/src/workspaces/project/a/fileWithImports.ts","/home/src/workspaces/project/b/ba/fileWithImports.ts","/home/src/workspaces/project/b/randomFileForImport.ts","/home/src/workspaces/project/c/ca/fileWithImports.ts","/home/src/workspaces/project/c/ca/caa/randomFileForImport.ts","/home/src/workspaces/project/c/ca/caa/caaa/fileWithImports.ts","/home/src/workspaces/project/c/cb/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/d/da/daa/daaa/fileWithImports.ts","/home/src/workspaces/project/d/da/daa/fileWithImports.ts","/home/src/workspaces/project/d/da/fileWithImports.ts","/home/src/workspaces/project/e/ea/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/fileWithImports.ts","/home/src/workspaces/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/x/y/z/randomFileForImport.ts","/home/src/workspaces/project/f/fa/faa/faaa/fileWithImports.ts"]
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -4407,20 +4257,9 @@ File '/home/src/workspaces/project/node_modules/pkg1/index.tsx' does not exist.
 File '/home/src/workspaces/project/node_modules/pkg1/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspaces/project/node_modules/pkg1/index.d.ts', result '/home/src/workspaces/project/node_modules/pkg1/index.d.ts'.
 ======== Module name 'pkg1' was successfully resolved to '/home/src/workspaces/project/node_modules/pkg1/index.d.ts'. ========
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
 File '/home/src/workspaces/project/node_modules/pkg1/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules' was found in cache and does not resolve.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/pkg1/index.d.ts 250 undefined Source file
 ======== Resolving module 'pkg1' from '/home/src/workspaces/project/randomFileForImport.ts'. ========
 Resolution for module 'pkg1' was found in cache from location '/home/src/workspaces/project'.
@@ -4944,20 +4783,8 @@ CreatingProgramWith::
   options: {"traceResolution":true,"watch":true,"project":"/home/src/workspaces/project/tsconfig.json","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspaces/project/tsconfig.json"}
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg1/index.d.ts'.
-File '/home/src/workspaces/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/pkg1/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/project/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg0' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspaces/project/node_modules/pkg1' was found in cache and does not resolve.
 Reusing resolution of module 'pkg1' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg1/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/randomFileForImport.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/home/src/workspaces/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/home/src/workspaces/project/node_modules/pkg0/index.d.ts'.

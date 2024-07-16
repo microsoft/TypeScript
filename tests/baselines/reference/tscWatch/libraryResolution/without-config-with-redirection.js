@@ -210,13 +210,7 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 ======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript' was found in cache and does not resolve.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts 250 undefined Source file
 ======== Resolving module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -232,13 +226,7 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts' 
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript' was found in cache and does not resolve.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts 250 undefined Source file
 ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -254,13 +242,7 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts' 
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript' was found in cache and does not resolve.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/package.json 2000 undefined File location affecting resolution
@@ -448,71 +430,22 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
   options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-webworker' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-es5' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-dom' was found in cache and does not resolve.
 FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-webworker' was found in cache and does not resolve.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost' was found in cache and does not resolve.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-es5' was found in cache and does not resolve.
 ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.ts' does not exist.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
@@ -544,7 +477,6 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
-FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined File location affecting resolution
 ../../tslibs/TS/Lib/lib.dom.d.ts
   Library 'lib.dom.d.ts' specified in compilerOptions
 node_modules/@typescript/lib-webworker/index.d.ts
@@ -581,6 +513,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json:
+  {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json:
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json:
@@ -592,10 +526,6 @@ PolledWatches::
 /home/src/workspace/projects/node_modules/package.json:
   {"pollingInterval":2000}
 /home/src/workspace/projects/package.json:
-  {"pollingInterval":2000}
-
-PolledWatches *deleted*::
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json:
   {"pollingInterval":2000}
 
 FsWatches::
@@ -710,30 +640,9 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
   options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-webworker' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-es5' was found in cache and does not resolve.
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
@@ -834,58 +743,16 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
   options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-webworker' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-es5' was found in cache and does not resolve.
 FileWatcher:: Close:: WatchInfo: project1/core.d.ts 250 undefined Source file
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-webworker' was found in cache and does not resolve.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost' was found in cache and does not resolve.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-es5' was found in cache and does not resolve.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was not resolved.
 FileWatcher:: Added:: WatchInfo: project1/core.d.ts 500 undefined Missing file
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
@@ -923,6 +790,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json:
+  {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json:
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json:
@@ -1040,30 +909,9 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
   options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-webworker' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-es5' was found in cache and does not resolve.
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
@@ -1080,41 +928,12 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.tsx' d
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-webworker' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-es5' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-dom' was found in cache and does not resolve.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts 250 undefined Source file
 FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.dom.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
@@ -1153,7 +972,7 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@types:
   {"pollingInterval":500}
-/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json: *new*
+/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json:
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json:
   {"pollingInterval":2000}
@@ -1273,20 +1092,13 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
   options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-webworker' was found in cache and does not resolve.
 FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
@@ -1319,33 +1131,11 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefin
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost' was found in cache and does not resolve.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-es5' was found in cache and does not resolve.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined File location affecting resolution
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-dom' was found in cache and does not resolve.
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
   The file is in the program because:
     Root file specified for compilation
@@ -1390,6 +1180,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json:
   {"pollingInterval":2000}
+/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json:
+  {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/package.json:
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/package.json:
@@ -1398,10 +1190,6 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/project1/core.d.ts:
   {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.webworker.d.ts: *new*
@@ -1514,30 +1302,9 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["project1/core.d.ts","project1/utils.d.ts","project1/file.ts","project1/index.ts","project1/file2.ts"]
   options: {"watch":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"extendedDiagnostics":true}
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-es5' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-dom' was found in cache and does not resolve.
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-webworker' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -1551,44 +1318,15 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.
 File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 ======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
-File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-webworker' was found in cache and does not resolve.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-scripthost' was found in cache and does not resolve.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-es5/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-es5' was found in cache and does not resolve.
 Reusing resolution of module '@typescript/lib-dom' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.dom.d.ts__.ts' of old program, it was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-dom/index.d.ts'.
-File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/workspace/projects/node_modules/@typescript/lib-dom' was found in cache and does not resolve.
 FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.webworker.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspace/node_modules 1 undefined Failed Lookup Locations
 [91merror[0m[90m TS6053: [0mFile 'project1/core.d.ts' not found.
@@ -1633,7 +1371,7 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/lib-scripthost/package.json:
   {"pollingInterval":2000}
-/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json: *new*
+/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json:
   {"pollingInterval":2000}
 /home/src/workspace/projects/node_modules/@typescript/package.json:
   {"pollingInterval":2000}

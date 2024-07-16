@@ -105,7 +105,7 @@ File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/' was found in cache and does not resolve.
 [96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 
 [7m2[0m   "compilerOptions": {

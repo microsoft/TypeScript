@@ -514,33 +514,20 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File '/user/username/projects/sample1/core/anotherModule.ts' exists - use it as a name resolution result.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
 File '/user/username/projects/sample1/core/package.json' does not exist.
-File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/sample1' was found in cache and does not resolve.
 File '/user/username/projects/sample1/logic/package.json' does not exist.
-File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/sample1' was found in cache and does not resolve.
 ======== Resolving module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
 Module resolution kind is not specified, using 'NodeNext'.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
-File '/user/username/projects/sample1/core/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/sample1/core' was found in cache and does not resolve.
 File '/home/src/tslibs/TS/Lib/package.json' does not exist.
 File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/' was found in cache and does not resolve.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts
@@ -957,36 +944,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/core/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/core/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/logic/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/tests/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/sample1/core' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/sample1/core' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/sample1/logic' was found in cache and does not resolve.
+Lookup for package.json from '/user/username/projects/sample1/tests' was found in cache and does not resolve.
 Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
@@ -1326,44 +1288,19 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/user/username/projects/sample1/tests/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/sample1/tests' was found in cache and does not resolve.
 Reusing resolution of module '../core/index' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/index.ts'.
 Reusing resolution of module '../logic/index' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/logic/index.ts'.
 Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
-File '/user/username/projects/sample1/core/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/sample1/core' was found in cache and does not resolve.
 File '/user/username/projects/sample1/logic/decls/package.json' does not exist.
-File '/user/username/projects/sample1/logic/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/sample1/logic' was found in cache and does not resolve.
 ======== Resolving module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
 Module resolution kind is not specified, using 'NodeNext'.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
-File '/user/username/projects/sample1/core/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/sample1/core' was found in cache and does not resolve.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 core/index.d.ts

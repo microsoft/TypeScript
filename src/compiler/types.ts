@@ -10,8 +10,8 @@ import {
     MultiMap,
     NodeFactoryFlags,
     OptionsNameMap,
-    PackageJsonInfo,
     PackageJsonInfoCache,
+    PackageJsonInfoContents,
     Pattern,
     SymlinkCache,
     ThisContainer,
@@ -4271,11 +4271,10 @@ export interface SourceFileLike {
 }
 
 /** @internal */
-export interface FutureSourceFile {
+export interface FutureSourceFile extends SourceFileWithPackageJsonInfo {
     readonly path: Path;
     readonly fileName: string;
     readonly impliedNodeFormat?: ResolutionMode;
-    readonly packageJsonScope?: PackageJsonInfo;
     readonly externalModuleIndicator?: true | undefined;
     readonly commonJsModuleIndicator?: true | undefined;
     readonly statements: readonly never[];
@@ -4294,6 +4293,18 @@ export interface RedirectInfo {
 }
 
 export type ResolutionMode = ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
+
+/** @internal */
+export interface PackageJsonScope {
+    contents: PackageJsonInfoContents | undefined;
+    failedLookupLocations?: string[];
+    affectingLocations?: string[];
+}
+
+/** @internal */
+export interface SourceFileWithPackageJsonInfo {
+    packageJsonScope?: PackageJsonScope;
+}
 
 // Source files are declarations when they are external modules.
 export interface SourceFile extends Declaration, LocalsContainer {
@@ -4372,8 +4383,6 @@ export interface SourceFile extends Declaration, LocalsContainer {
      * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
      */
     impliedNodeFormat?: ResolutionMode;
-    /** @internal */ packageJsonLocations?: readonly string[];
-    /** @internal */ packageJsonScope?: PackageJsonInfo;
 
     /** @internal */ scriptKind: ScriptKind;
 
@@ -4439,6 +4448,12 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ endFlowNode?: FlowNode;
 
     /** @internal */ jsDocParsingMode?: JSDocParsingMode;
+}
+
+/** @internal */
+export interface SourceFile extends SourceFileWithPackageJsonInfo {
+    // TODO:: sheetal this need to be moved to program instead so it does not create problems or
+    //  may be ok if sharing between projects is enabled and not data between
 }
 
 /** @internal */
@@ -7900,6 +7915,7 @@ export interface ModuleResolutionHost {
     getDirectories?(path: string): string[];
     useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
     /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
+    /** @internal */ useGlobalTypingsCacheLocation?(): boolean;
 }
 
 /**

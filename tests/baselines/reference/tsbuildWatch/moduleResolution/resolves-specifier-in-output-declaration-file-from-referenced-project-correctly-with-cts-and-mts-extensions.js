@@ -119,7 +119,7 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exis
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
+Lookup for package.json from '/user/username/projects/myproject/packages/pkg2' was found in cache and resolves to '/user/username/projects/myproject/packages/pkg2/package.json'.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'Node16'.
@@ -129,12 +129,7 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -932,12 +927,7 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
-File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Lookup for package.json from '/home/src/tslibs/TS/Lib' was found in cache and does not resolve.
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
