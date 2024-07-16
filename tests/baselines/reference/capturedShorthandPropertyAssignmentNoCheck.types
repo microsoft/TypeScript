@@ -43,11 +43,11 @@ const result = fns.map(fn => fn());
 >fns.map(fn => fn()) : any[]
 >                    : ^^^^^
 >fns.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->        : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>        : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >fns : any[]
 >    : ^^^^^
 >map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^ ^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
 >fn => fn() : (fn: any) => any
 >           : ^  ^^^^^^^^^^^^^
 >fn : any
