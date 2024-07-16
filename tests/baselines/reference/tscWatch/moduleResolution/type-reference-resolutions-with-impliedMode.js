@@ -141,6 +141,8 @@ FsWatches::
   {}
 /user/username/projects/myproject/node_modules/@types/pkg/package.json: *new*
   {}
+/user/username/projects/myproject/package.json: *new*
+  {}
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
 
@@ -195,13 +197,130 @@ Input::
 }
 
 
-Before running Timeout callback:: count: 0
+Timeout callback:: count: 1
+1: timerToInvalidateFailedLookupResolutions *new*
 
+Before running Timeout callback:: count: 1
+1: timerToInvalidateFailedLookupResolutions
+
+Host is moving to new time
+After running Timeout callback:: count: 1
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+Host is moving to new time
 After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-Before running Timeout callback:: count: 0
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/node_modules/@types/pkg/package.json' exists according to earlier cached lookups.
+Found 'package.json' at '/user/username/projects/myproject/package.json'.
+File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+======== Resolving type reference directive 'pkg', containing file '/user/username/projects/myproject/index.ts', root directory '/user/username/projects/myproject/node_modules/@types,/user/username/projects/node_modules/@types,/user/username/node_modules/@types,/user/node_modules/@types,/node_modules/@types'. ========
+Resolving with primary search path '/user/username/projects/myproject/node_modules/@types, /user/username/projects/node_modules/@types, /user/username/node_modules/@types, /user/node_modules/@types, /node_modules/@types'.
+File '/user/username/projects/myproject/node_modules/@types/pkg/package.json' exists according to earlier cached lookups.
+'package.json' does not have a 'typings' field.
+'package.json' does not have a 'types' field.
+'package.json' does not have a 'main' field.
+File '/user/username/projects/myproject/node_modules/@types/pkg/index.d.ts' does not exist.
+Directory '/user/username/projects/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/user/username/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/user/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
+File '/user/username/projects/myproject/node_modules/pkg.d.ts' does not exist.
+File '/user/username/projects/myproject/node_modules/@types/pkg/package.json' exists according to earlier cached lookups.
+Entering conditional exports.
+Saw non-matching condition 'import'.
+Matched 'exports' condition 'require'.
+Using 'exports' subpath '.' with target './require.js'.
+File name '/user/username/projects/myproject/node_modules/@types/pkg/require.js' has a '.js' extension - stripping it.
+File '/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts' exists - use it as a name resolution result.
+Resolved under condition 'require'.
+Exiting conditional exports.
+Resolving real path for '/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts', result '/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts'.
+======== Type reference directive 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts' with Package ID 'pkg/require.d.ts@0.0.1', primary: false. ========
+File '/user/username/projects/myproject/node_modules/@types/pkg/package.json' exists according to earlier cached lookups.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+../../../../a/lib/lib.es2022.full.d.ts
+  Default library for target 'es2022'
+node_modules/@types/pkg/require.d.ts
+  Type library referenced via 'pkg' from file 'index.ts' with packageId 'pkg/require.d.ts@0.0.1'
+  File is CommonJS module because 'node_modules/@types/pkg/package.json' does not have field "type"
+index.ts
+  Matched by default include pattern '**/*'
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-After running Timeout callback:: count: 0
 
+
+//// [/user/username/projects/myproject/index.js] file written with same contents
+
+PolledWatches::
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.es2022.full.d.ts:
+  {}
+/user/username/projects/myproject/index.ts:
+  {}
+/user/username/projects/myproject/node_modules/@types/pkg/package.json:
+  {}
+/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts: *new*
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/node_modules/@types/pkg/import.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+
+
+Program root files: [
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "module": 100,
+  "moduleDetection": 1,
+  "types": [],
+  "watch": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.es2022.full.d.ts
+/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts
+/user/username/projects/myproject/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.es2022.full.d.ts
+/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts
+/user/username/projects/myproject/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts (used version)
+/user/username/projects/myproject/index.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
