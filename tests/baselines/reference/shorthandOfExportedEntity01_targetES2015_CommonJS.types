@@ -16,7 +16,7 @@ export function foo () {
 >  : ^^^^^^^^^^^^^^^^^
 >{ test } : { test: string; }
 >         : ^^^^^^^^^^^^^^^^^
->test : "test"
+>test : string
 >     : ^^^^^^
 }
 
