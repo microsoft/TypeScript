@@ -13589,7 +13589,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference, restSymbol: Symbol) {
             const associatedNamesMap = new Map<__String, number>();
             return map(type.target.labeledElementDeclarations, (labeledElement, i) => {
-                const name = getTupleElementLabel(labeledElement, i, restSymbol);
+                const name = getTupleElementLabel(labeledElement, i, type.target.elementFlags[i], restSymbol);
                 const prevCounter = associatedNamesMap.get(name);
                 if (prevCounter === undefined) {
                     associatedNamesMap.set(name, 1);
@@ -37233,35 +37233,71 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     /**
      * Gets a tuple element label by recursively walking `ArrayBindingPattern` nodes in a `BindingName`.
+     * @param node The source node from which to derive a label
+     * @param index The index into the tuple
+     * @param elementFlags The {@see ElementFlags} of the tuple element
      */
-    function getTupleElementLabelFromBindingName(node: BindingName, index: number): __String | undefined {
-        if (isArrayBindingPattern(node)) {
-            const elements = node.elements;
-            const lastElement = tryCast(lastOrUndefined(elements), isBindingElement);
-            const elementCount = elements.length - (lastElement?.dotDotDotToken ? 1 : 0);
-            if (index < elementCount) {
-                const element = elements[index];
-                if (isBindingElement(element) && isIdentifier(element.name)) {
-                    return element.name.escapedText;
+    function getTupleElementLabelFromBindingElement(node: BindingElement | ParameterDeclaration, index: number, elementFlags: ElementFlags): __String {
+        switch (node.name.kind) {
+            case SyntaxKind.Identifier: {
+                const name = node.name.escapedText;
+                if (node.dotDotDotToken) {
+                    // given
+                    //   (...[x, y, ...z]: [number, number, ...number[]]) => ...
+                    // this produces
+                    //   (x: number, y: number, ...z: number[]) => ...
+                    // which preserves rest elements of 'z'
+
+                    // given
+                    //   (...[x, y, ...z]: [number, number, ...[...number[], number]]) => ...
+                    // this produces
+                    //   (x: number, y: number, ...z: number[], z_1: number) => ...
+                    // which preserves rest elements of z but gives distinct numbers to fixed elements of 'z'
+                    return elementFlags & ElementFlags.Variable ? name : `${name}_${index}` as __String;
+                }
+                else {
+                    // given
+                    //   (...[x]: [number]) => ...
+                    // this produces
+                    //   (x: number) => ...
+                    // which preserves fixed elements of 'x'
+
+                    // given
+                    //   (...[x]: ...number[]) => ...
+                    // this produces
+                    //   (x_0: number) => ...
+                    // which which numbers fixed elements of 'x' whose tuple element type is variable
+                    return elementFlags & ElementFlags.Fixed ? name : `${name}_n` as __String;
                 }
             }
-            else if (lastElement?.dotDotDotToken) {
-                const restIndex = index - elementCount;
-                return getTupleElementLabelFromBindingName(lastElement.name, restIndex);
+            case SyntaxKind.ArrayBindingPattern: {
+                if (node.dotDotDotToken) {
+                    const elements = node.name.elements;
+                    const lastElement = tryCast(lastOrUndefined(elements), isBindingElement);
+                    const elementCount = elements.length - (lastElement?.dotDotDotToken ? 1 : 0);
+                    if (index < elementCount) {
+                        const element = elements[index];
+                        if (isBindingElement(element)) {
+                            return getTupleElementLabelFromBindingElement(element, index, elementFlags);
+                        }
+                    }
+                    else if (lastElement?.dotDotDotToken) {
+                        return getTupleElementLabelFromBindingElement(lastElement, index - elementCount, elementFlags);
+                    }
+                }
+                break;
             }
         }
-        else if (isIdentifier(node)) {
-            return `${node.escapedText}_${index}` as __String;
-        }
+        return `arg_${index}` as __String;
     }
 
     function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember): __String;
-    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index: number, restSymbol?: Symbol): __String;
-    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index = 0, restSymbol?: Symbol) {
+    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index: number, elementFlags: ElementFlags, restSymbol?: Symbol): __String;
+    function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember | undefined, index = 0, elementFlags = ElementFlags.Fixed, restSymbol?: Symbol) {
         if (!d) {
             const restParameter = tryCast(restSymbol?.valueDeclaration, isParameter);
-            const label = restParameter && getTupleElementLabelFromBindingName(restParameter.name, index);
-            return label ?? `${restSymbol?.escapedName ?? "arg"}_${index}` as __String;
+            return restParameter ? getTupleElementLabelFromBindingElement(restParameter, index, elementFlags) :
+                `${restSymbol?.escapedName ?? "arg"}_${index}` as __String;
         }
         Debug.assert(isIdentifier(d.name)); // Parameter declarations could be binding patterns, but we only allow identifier names
         return d.name.escapedText;
@@ -37275,9 +37311,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const restParameter = signature.parameters[paramCount] || unknownSymbol;
         const restType = overrideRestType || getTypeOfSymbol(restParameter);
         if (isTupleType(restType)) {
-            const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
+            const tupleType = ((restType as TypeReference).target as TupleType);
             const index = pos - paramCount;
-            return getTupleElementLabel(associatedNames?.[index], index, restParameter);
+            const associatedName = tupleType.labeledElementDeclarations?.[index];
+            const elementFlags = tupleType.elementFlags[index];
+            return getTupleElementLabel(associatedName, index, elementFlags, restParameter);
         }
         return restParameter.escapedName;
     }
