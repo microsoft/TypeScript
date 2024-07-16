@@ -19673,7 +19673,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isJSConstructor(container) && isNodeDescendantOf(node, container.body)) {
             return getDeclaredTypeOfClassOrInterface(getSymbolOfDeclaration(container)).thisType!;
         }
-        error(node, Diagnostics.A_this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
+        if (node.parent.kind !== SyntaxKind.TypePredicate) {
+            error(node, Diagnostics.A_this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
+        }
         return errorType;
     }
 
