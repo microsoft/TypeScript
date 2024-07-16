@@ -14,48 +14,48 @@ class C<T> {
 }
 
 var c: C;
->c : C
->  : ^
+>c : C<any>
+>  : ^^^^^^
 
 var a: { x: C };
 >a : { x: C; }
 >  : ^^^^^ ^^^
->x : C
->  : ^
+>x : C<any>
+>  : ^^^^^^
 
 var b: { (x: C): C };
 >b : (x: C) => C
 >  : ^ ^^ ^^^^^ 
->x : C
->  : ^
+>x : C<any>
+>  : ^^^^^^
 
 var d: { [x: C]: C };
 >d : {}
 >  : ^^
->x : C
->  : ^
+>x : C<any>
+>  : ^^^^^^
 
 var e = (x: C) => { var y: C; return y; }
->e : (x: C) => C
->  : ^ ^^ ^^^^^^
->(x: C) => { var y: C; return y; } : (x: C) => C
->                                  : ^ ^^ ^^^^^^
->x : C
->  : ^
->y : C
->  : ^
->y : C
->  : ^
+>e : (x: C) => C<any>
+>  : ^ ^^ ^^^^^^^^^^^
+>(x: C) => { var y: C; return y; } : (x: C) => C<any>
+>                                  : ^ ^^ ^^^^^^^^^^^
+>x : C<any>
+>  : ^^^^^^
+>y : C<any>
+>  : ^^^^^^
+>y : C<any>
+>  : ^^^^^^
 
 function f(x: C): C { var y: C; return y; }
 >f : (x: C) => C
 >  : ^ ^^ ^^^^^ 
->x : C
->  : ^
->y : C
->  : ^
->y : C
->  : ^
+>x : C<any>
+>  : ^^^^^^
+>y : C<any>
+>  : ^^^^^^
+>y : C<any>
+>  : ^^^^^^
 
 var g = function f(x: C): C { var y: C; return y; }
 >g : (x: C) => C
@@ -64,12 +64,12 @@ var g = function f(x: C): C { var y: C; return y; }
 >                                            : ^ ^^ ^^^^^ 
 >f : (x: C) => C
 >  : ^ ^^ ^^^^^ 
->x : C
->  : ^
->y : C
->  : ^
->y : C
->  : ^
+>x : C<any>
+>  : ^^^^^^
+>y : C<any>
+>  : ^^^^^^
+>y : C<any>
+>  : ^^^^^^
 
 class D extends C {
 >D : D
@@ -126,16 +126,16 @@ function i<T extends M.E>(x: T) { }
 >  : ^
 
 var j = <C>null;
->j : C
->  : ^
-><C>null : C
->        : ^
+>j : C<any>
+>  : ^^^^^^
+><C>null : C<any>
+>        : ^^^^^^
 
 var k = <M.E>null;
->k : M.E
->  : ^^^
-><M.E>null : M.E
->          : ^^^
+>k : M.E<any>
+>  : ^^^^^^^^
+><M.E>null : M.E<any>
+>          : ^^^^^^^^
 >M : any
 >  : ^^^
 

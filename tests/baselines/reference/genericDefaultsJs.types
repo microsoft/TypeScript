@@ -192,8 +192,8 @@ const C0_B0_v0 = new C0_B0();
 >      : ^^^^^^^^^^^^
 
 const C0_B0_v0_y = C0_B0_v0.y;
->C0_B0_v0_y : any
->C0_B0_v0.y : any
+>C0_B0_v0_y : error
+>C0_B0_v0.y : error
 >C0_B0_v0 : C0_B0
 >         : ^^^^^
 >y : any
@@ -210,8 +210,8 @@ const C0_B0_v1 = new C0_B0(1);
 >  : ^
 
 const C0_B0_v1_y = C0_B0_v1.y;
->C0_B0_v1_y : any
->C0_B0_v1.y : any
+>C0_B0_v1_y : error
+>C0_B0_v1.y : error
 >C0_B0_v1 : C0_B0
 >         : ^^^^^
 >y : any
@@ -226,8 +226,8 @@ const C0_B1_v0 = new C0_B1();
 >      : ^^^^^^^^^^^^
 
 const C0_B1_v0_y = C0_B1_v0.y;
->C0_B1_v0_y : any
->C0_B1_v0.y : any
+>C0_B1_v0_y : error
+>C0_B1_v0.y : error
 >C0_B1_v0 : C0_B1
 >         : ^^^^^
 >y : any
@@ -242,8 +242,8 @@ const C0_B2_v0 = new C0_B2();
 >      : ^^^^^^^^^^^^
 
 const C0_B2_v0_y = C0_B2_v0.y;
->C0_B2_v0_y : any
->C0_B2_v0.y : any
+>C0_B2_v0_y : error
+>C0_B2_v0.y : error
 >C0_B2_v0 : C0_B2
 >         : ^^^^^
 >y : any

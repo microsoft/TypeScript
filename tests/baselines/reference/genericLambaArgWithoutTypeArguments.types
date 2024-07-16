@@ -21,12 +21,12 @@ foo((arg: Foo) => { return arg.x; });
 >    : ^ ^^^^^^^^^^^^^
 >(arg: Foo) => { return arg.x; } : (arg: Foo) => any
 >                                : ^   ^^   ^^^^^^^^
->arg : Foo
->    : ^^^
+>arg : Foo<any>
+>    : ^^^^^^^^
 >arg.x : any
 >      : ^^^
->arg : Foo
->    : ^^^
+>arg : Foo<any>
+>    : ^^^^^^^^
 >x : any
 >  : ^^^
 

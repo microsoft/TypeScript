@@ -15544,7 +15544,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return [];
         }
         const numTypeArguments = length(typeArguments);
-        if (isJavaScriptImplicitAny || (numTypeArguments >= minTypeArgumentCount && numTypeArguments <= numTypeParameters)) {
+        if (isJavaScriptImplicitAny || numTypeArguments <= numTypeParameters) {
             const result = typeArguments ? typeArguments.slice() : [];
             // Map invalid forward references in default types to the error type
             for (let i = numTypeArguments; i < numTypeParameters; i++) {
@@ -15553,12 +15553,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const baseDefaultType = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
             for (let i = numTypeArguments; i < numTypeParameters; i++) {
                 let defaultType = getDefaultFromTypeParameter(typeParameters![i]);
+                if (!defaultType) {
+                    // error type was already prefilled at this slot above
+                    continue;
+                }
                 if (isJavaScriptImplicitAny && defaultType && (isTypeIdenticalTo(defaultType, unknownType) || isTypeIdenticalTo(defaultType, emptyObjectType))) {
                     defaultType = anyType;
                 }
                 result[i] = defaultType ? instantiateType(defaultType, createTypeMapper(typeParameters!, result)) : baseDefaultType;
             }
-            result.length = typeParameters!.length;
+            result.length = numTypeParameters;
             return result;
         }
         return typeArguments && typeArguments.slice();

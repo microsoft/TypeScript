@@ -8,6 +8,6 @@ class X {
     public f(a: Array) { }
 >f : (a: Array) => void
 >  : ^ ^^     ^^^^^^^^^
->a : Array
->  : ^^^^^
+>a : Array<any>
+>  : ^^^^^^^^^^
 }
