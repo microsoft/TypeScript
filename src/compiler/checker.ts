@@ -33335,7 +33335,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         checkJsxPreconditions(node);
 
-        markLinkedReferences(node, ReferenceHint.Jsx);
+        markJsxAliasReferenced(node);
 
         if (isNodeOpeningLikeElement) {
             const jsxOpeningLikeNode = node;
