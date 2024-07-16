@@ -31300,11 +31300,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const signature = getContextualSignatureForFunctionLikeDeclaration(functionDecl as FunctionExpression);
         if (signature && !isResolvingReturnTypeOfSignature(signature)) {
             const returnType = getReturnTypeOfSignature(signature);
-            
+
             if (returnType.flags & TypeFlags.Never) {
                 return returnType;
             }
-            
+
             const functionFlags = getFunctionFlags(functionDecl);
             if (functionFlags & FunctionFlags.Generator) {
                 return filterType(returnType, t => {
