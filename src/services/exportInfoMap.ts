@@ -580,6 +580,7 @@ function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
 export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions, preferCapitalizedNames: boolean, cb: (name: string) => T | undefined): T | undefined {
     let chain: Symbol[] | undefined;
     let current: Symbol | undefined = defaultExport;
+    const seen = new Map<Symbol, true>();
 
     while (current) {
         // The predecessor to this function also looked for a name on the `localSymbol`
@@ -597,6 +598,7 @@ export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: Ty
         }
 
         chain = append(chain, current);
+        if (!addToSeen(seen, current)) break;
         current = current.flags & SymbolFlags.Alias ? checker.getImmediateAliasedSymbol(current) : undefined;
     }
 

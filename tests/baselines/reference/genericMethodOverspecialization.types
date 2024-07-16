@@ -45,11 +45,11 @@ var elements = names.map(function (name) {
 >names.map(function (name) {    return document.getElementById(name);}) : HTMLElement[]
 >                                                                       : ^^^^^^^^^^^^^
 >names.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->          : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>          : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >names : string[]
 >      : ^^^^^^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >function (name) {    return document.getElementById(name);} : (name: string) => HTMLElement
 >                                                            : ^    ^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
@@ -76,11 +76,11 @@ var xxx = elements.filter(function (e) {
 >elements.filter(function (e) {    return !e.isDisabled;}) : HTMLElement[]
 >                                                          : ^^^^^^^^^^^^^
 >elements.filter : { <S extends HTMLElement>(predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => value is S, thisArg?: any): S[]; (predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => unknown, thisArg?: any): HTMLElement[]; }
->                : ^^^ ^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^  ^^^
+>                : ^^^ ^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^
 >elements : HTMLElement[]
 >         : ^^^^^^^^^^^^^
 >filter : { <S extends HTMLElement>(predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => value is S, thisArg?: any): S[]; (predicate: (value: HTMLElement, index: number, array: HTMLElement[]) => unknown, thisArg?: any): HTMLElement[]; }
->       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^  ^^^
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^
 >function (e) {    return !e.isDisabled;} : (e: HTMLElement) => boolean
 >                                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : HTMLElement
@@ -104,11 +104,11 @@ var widths:number[] = elements.map(function (e) { // should not error
 >elements.map(function (e) { // should not error    return e.clientWidth;}) : number[]
 >                                                                           : ^^^^^^^^
 >elements.map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
->             : ^ ^^          ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>             : ^ ^^          ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >elements : HTMLElement[]
 >         : ^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >function (e) { // should not error    return e.clientWidth;} : (e: HTMLElement) => number
 >                                                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >e : HTMLElement

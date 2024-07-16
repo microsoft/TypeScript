@@ -367,7 +367,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
         runBaseline("fetches imports after npm install", baselines);
     });
 
-    it("can reuse ambient module declarations from non-modified files", () => {
+    it("should not reuse ambient module declarations from non-modified files", () => {
         const files = [
             { name: "/a/b/app.ts", text: SourceText.New("", "import * as fs from 'fs'", "") },
             { name: "/a/b/node.d.ts", text: SourceText.New("", "", "declare module 'fs' {}") },
@@ -387,7 +387,7 @@ describe("unittests:: reuseProgramStructure:: General", () => {
             f[1].text = f[1].text.updateProgram("declare var process: any");
         });
         baselineProgram(baselines, program3);
-        runBaseline("can reuse ambient module declarations from non-modified files", baselines);
+        runBaseline("should not reuse ambient module declarations from non-modified files", baselines);
     });
 
     it("can reuse module resolutions from non-modified files", () => {

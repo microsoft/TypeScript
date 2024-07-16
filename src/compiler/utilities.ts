@@ -1187,7 +1187,7 @@ export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, inclu
 
     if (isJSDocNode(node) || node.kind === SyntaxKind.JsxText) {
         // JsxText cannot actually contain comments, even though the scanner will think it sees comments
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+        return skipTrivia((sourceFile ?? getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
     if (includeJsDoc && hasJSDocNodes(node)) {
@@ -1199,14 +1199,15 @@ export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, inclu
     // trivia for the list, we may have skipped the JSDocComment as well. So we should process its
     // first child to determine the actual position of its first token.
     if (node.kind === SyntaxKind.SyntaxList) {
-        const first = firstOrUndefined(getNodeChildren(node));
+        sourceFile ??= getSourceFileOfNode(node);
+        const first = firstOrUndefined(getNodeChildren(node, sourceFile));
         if (first) {
             return getTokenPosOfNode(first, sourceFile, includeJsDoc);
         }
     }
 
     return skipTrivia(
-        (sourceFile || getSourceFileOfNode(node)).text,
+        (sourceFile ?? getSourceFileOfNode(node)).text,
         node.pos,
         /*stopAfterLineBreak*/ false,
         /*stopAtComments*/ false,
