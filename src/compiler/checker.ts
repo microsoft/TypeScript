@@ -49373,10 +49373,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             forEachNodeRecursively(node, checkIdentifiers);
         }
 
+        function isExpressionNodeOrShorthandPropertyAssignmentName(node: Identifier) {
+            // TODO(jakebailey): Just use isExpressionNode once that considers these identifiers to be expressions.
+            if (isExpressionNode(node)) return true;
+
+            if (isShorthandPropertyAssignment(node.parent)) {
+                return (node.parent.objectAssignmentInitializer ?? node.parent.name) === node;
+            }
+
+            return false;
+        }
+
         function checkSingleIdentifier(node: Node) {
             const nodeLinks = getNodeLinks(node);
             nodeLinks.calculatedFlags |= NodeCheckFlags.ConstructorReference | NodeCheckFlags.CapturedBlockScopedBinding | NodeCheckFlags.BlockScopedBindingInLoop;
-            if (isIdentifier(node) && isExpressionNode(node) && !(isPropertyAccessExpression(node.parent) && node.parent.name === node)) {
+            if (isIdentifier(node) && isExpressionNodeOrShorthandPropertyAssignmentName(node) && !(isPropertyAccessExpression(node.parent) && node.parent.name === node)) {
                 const s = getResolvedSymbol(node);
                 if (s && s !== unknownSymbol) {
                     checkIdentifierCalculateNodeCheckFlags(node, s);
