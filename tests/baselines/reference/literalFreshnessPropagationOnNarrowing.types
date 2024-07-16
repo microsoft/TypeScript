@@ -16,8 +16,8 @@ function f1() {
 >    : ^^^^^^^^^^^^^^^
 >{ b } : { b: boolean; }
 >      : ^^^^^^^^^^^^^^^
->b : true
->  : ^^^^
+>b : boolean
+>  : ^^^^^^^
 
     // Desired: OK
     // 3.0: OK

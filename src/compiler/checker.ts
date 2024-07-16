@@ -49242,7 +49242,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const nodeLinks = getNodeLinks(node);
             nodeLinks.calculatedFlags |= NodeCheckFlags.ConstructorReference | NodeCheckFlags.CapturedBlockScopedBinding | NodeCheckFlags.BlockScopedBindingInLoop;
             if (isIdentifier(node) && isExpressionNode(node) && !(isPropertyAccessExpression(node.parent) && node.parent.name === node)) {
-                const s = getResolvedSymbol(node);
+                const s = getSymbolAtLocation(node, /*ignoreErrors*/ true);
                 if (s && s !== unknownSymbol) {
                     checkIdentifierCalculateNodeCheckFlags(node, s);
                 }
