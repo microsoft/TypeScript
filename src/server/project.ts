@@ -392,8 +392,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     public languageServiceEnabled: boolean;
 
-    trace?(s: string): void;
-    realpath?(path: string): string;
+    readonly trace?: (s: string) => void;
+    readonly realpath?: (path: string) => string;
 
     /** @internal */
     hasInvalidatedResolutions?: HasInvalidatedResolutions | undefined;
