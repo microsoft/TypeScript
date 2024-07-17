@@ -13587,19 +13587,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference, restSymbol: Symbol) {
-            const associatedNamesMap = new Map<__String, number>();
-            return map(type.target.labeledElementDeclarations, (labeledElement, i) => {
-                const name = getTupleElementLabel(labeledElement, i, type.target.elementFlags[i], restSymbol);
-                const prevCounter = associatedNamesMap.get(name);
-                if (prevCounter === undefined) {
-                    associatedNamesMap.set(name, 1);
-                    return name;
+            const names = map(type.target.labeledElementDeclarations, (labeledElement, i) =>
+                getTupleElementLabel(labeledElement, i, type.target.elementFlags[i], restSymbol));
+            if (names) {
+                const duplicates: number[] = [];
+                const uniqueNames = new Set<__String>();
+                for (let i = 0; i < names.length; i++) {
+                    const name = names[i];
+                    if (!tryAddToSet(uniqueNames, name)) {
+                        duplicates.push(i);
+                    }
                 }
-                else {
-                    associatedNamesMap.set(name, prevCounter + 1);
-                    return `${name}_${prevCounter}` as __String;
+                const counters = new Map<__String, number>();
+                for (const i of duplicates) {
+                    let counter = counters.get(names[i]) ?? 1;
+                    let name: __String;
+                    while (!tryAddToSet(uniqueNames, name = `${names[i]}_${counter}` as __String)) {
+                        counter++;
+                    }
+                    names[i] = name;
+                    counters.set(names[i], counter + 1);
                 }
-            });
+            }
+            return names;
         }
     }
 
