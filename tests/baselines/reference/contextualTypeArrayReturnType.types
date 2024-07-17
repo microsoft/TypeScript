@@ -31,7 +31,7 @@ var style: IBookStyle = {
 >initialLeftPageTransforms : (width: number) => { ry: any; }[]
 >                          : ^     ^^      ^^^^^^^^^^^^^^^^^^^
 >(width: number) => {        return [            {'ry': null }        ];    } : (width: number) => { ry: any; }[]
->                                                                             :                                  
+>                                                                             : ^     ^^      ^^^^^^^^^^^^^^^^^^^
 >width : number
 >      : ^^^^^^
 

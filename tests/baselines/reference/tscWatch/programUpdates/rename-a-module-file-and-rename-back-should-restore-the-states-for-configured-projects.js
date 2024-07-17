@@ -51,8 +51,12 @@ T.bar();
 PolledWatches::
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -137,10 +141,14 @@ function bar() { }
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/project/moduleFile: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -208,6 +216,7 @@ Before running Timeout callback:: count: 2
 7: timerToInvalidateFailedLookupResolutions
 8: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -217,6 +226,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 9: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -239,8 +249,12 @@ function bar() { }
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /users/username/projects/project/moduleFile:

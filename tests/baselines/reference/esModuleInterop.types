@@ -24,7 +24,7 @@ export = anything;
 === mjts.ts ===
 import { sayHello } from "./hybrid";
 >sayHello : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 import path from "./path";
 >path : any
@@ -40,7 +40,7 @@ sayHello();
 >sayHello() : string
 >           : ^^^^^^
 >sayHello : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 
 fs;
 >fs : any

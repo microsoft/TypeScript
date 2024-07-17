@@ -51,6 +51,14 @@ define(["require", "exports"], function (require, exports) {
 
 
 
+PolledWatches::
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
+/users/username/projects/project/d/package.json: *new*
+  {"pollingInterval":2000}
+/users/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
+
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
@@ -101,6 +109,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -168,6 +177,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -189,6 +199,14 @@ define(["require", "exports"], function (require, exports) {
 });
 
 
+
+PolledWatches::
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
+/users/username/projects/project/d/package.json:
+  {"pollingInterval":2000}
+/users/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -237,6 +255,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -258,6 +277,14 @@ Output::
 
 //// [/users/username/projects/project/f1.js] file written with same contents
 //// [/users/username/projects/project/d/f0.js] file written with same contents
+
+PolledWatches::
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
+/users/username/projects/project/d/package.json:
+  {"pollingInterval":2000}
+/users/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:

@@ -62,7 +62,7 @@ export type MappedResult<T> =
 interface X {
     decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never>
 >decode : <C extends Constructor<any>>(ctor: C) => MappedResult<C extends Constructor<infer T> ? T : never>
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^                                                        
+>       : ^ ^^^^^^^^^                ^^    ^^ ^^^^^                                                        
 >ctor : C
 >     : ^
 }
@@ -73,7 +73,7 @@ class Y implements X {
 
     decode<C extends Constructor<any>>(ctor: C): MappedResult<C extends Constructor<infer T> ? T : never> {
 >decode : <C extends Constructor<any>>(ctor: C) => MappedResult<C extends Constructor<infer T> ? T : never>
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^                                                        
+>       : ^ ^^^^^^^^^                ^^    ^^ ^^^^^                                                        
 >ctor : C
 >     : ^
 

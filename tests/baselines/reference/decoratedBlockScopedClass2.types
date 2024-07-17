@@ -17,9 +17,9 @@ function decorator() {
 try {
     @decorator()
 >decorator() : (target: new (...args: any[]) => any) => void
->            : ^      ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^      ^^                           ^^^^^^^^^
 >decorator : () => (target: new (...args: any[]) => any) => void
->          : ^^^^^^^      ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^      ^^                           ^^^^^^^^^
 
     class Foo {
 >Foo : Foo

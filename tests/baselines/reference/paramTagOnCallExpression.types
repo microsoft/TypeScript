@@ -20,9 +20,9 @@ exports.inherits = factory('inherits')
 >inherits : {}
 >         : ^^
 >factory('inherits') : {}
->                    :   
+>                    : ^^
 >factory : (type: string) => {}
->        : ^    ^^^^^^^^^^^^^^^
+>        : ^    ^^      ^^^^^  
 >'inherits' : "inherits"
 >           : ^^^^^^^^^^
 

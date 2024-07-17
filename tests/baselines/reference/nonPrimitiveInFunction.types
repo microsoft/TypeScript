@@ -28,7 +28,7 @@ takeObject(nonPrimitive);
 >takeObject(nonPrimitive) : void
 >                         : ^^^^
 >takeObject : (o: object) => void
->           : ^ ^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^
 >nonPrimitive : object
 >             : ^^^^^^
 
@@ -40,13 +40,13 @@ nonPrimitive = returnObject();
 >returnObject() : object
 >               : ^^^^^^
 >returnObject : () => object
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 
 takeObject(primitive); // expect error
 >takeObject(primitive) : void
 >                      : ^^^^
 >takeObject : (o: object) => void
->           : ^ ^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^
 >primitive : boolean
 >          : ^^^^^^^
 
@@ -58,7 +58,7 @@ primitive = returnObject(); // expect error
 >returnObject() : object
 >               : ^^^^^^
 >returnObject : () => object
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 
 function returnError(): object {
 >returnError : () => object

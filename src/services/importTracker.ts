@@ -83,7 +83,7 @@ import {
     ValidImportTypeNode,
     VariableDeclaration,
     walkUpBindingElementsAndPatterns,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /* Code for finding imports of an exported symbol. Used only by FindAllReferences. */
 
@@ -480,7 +480,7 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
                 }
             }
             for (const ref of referencingFile.typeReferenceDirectives) {
-                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
+                const referenced = program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(ref, referencingFile)?.resolvedTypeReferenceDirective;
                 if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                     refs.push({ kind: "reference", referencingFile, ref });
                 }

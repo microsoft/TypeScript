@@ -80,7 +80,7 @@ declare module "./f1" {
     interface A {
         foo(): B;
 >foo : () => B
->    : ^^^^^^^
+>    : ^^^^^^ 
 
         bar(): I;
 >bar : () => I

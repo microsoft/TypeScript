@@ -47,6 +47,22 @@ Output::
 
 
 
+PolledWatches::
+/a/lib/package.json: *new*
+  {"pollingInterval":2000}
+/a/package.json: *new*
+  {"pollingInterval":2000}
+/package.json: *new*
+  {"pollingInterval":2000}
+/user/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
+
 FsWatches::
 /user/username/projects/myproject/a.js: *new*
   {}
@@ -98,6 +114,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -148,6 +165,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear

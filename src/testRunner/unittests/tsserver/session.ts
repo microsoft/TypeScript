@@ -1,12 +1,12 @@
 import { expect } from "chai";
 
-import { incrementalVerifier } from "../../../harness/incrementalUtils";
+import { incrementalVerifier } from "../../../harness/incrementalUtils.js";
 import {
     createHasErrorMessageLogger,
     nullLogger,
-} from "../../../harness/tsserverLogger";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+} from "../../../harness/tsserverLogger.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 let lastWrittenToHost: string;
 const noopFileWatcher: ts.FileWatcher = { close: ts.noop };
@@ -229,7 +229,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
                 session.onMessage(JSON.stringify(req));
                 req.seq = i;
                 i++;
-                req.arguments = null; // eslint-disable-line no-null/no-null
+                req.arguments = null; // eslint-disable-line no-restricted-syntax
                 session.onMessage(JSON.stringify(req));
                 req.seq = i;
                 i++;

@@ -20,7 +20,7 @@ a0([1, "string", [["world"]]);      // Error
 >a0([1, "string", [["world"]]) : void
 >                              : ^^^^
 >a0 : ([a, b, [[c]]]: [number, number, string[][]]) => void
->   : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^             ^^                            ^^^^^^^^^
 >[1, "string", [["world"]] : [number, string, string[][]]
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -38,7 +38,7 @@ a0([1, 2, [["world"]], "string"]);  // Error
 >a0([1, 2, [["world"]], "string"]) : void
 >                                  : ^^^^
 >a0 : ([a, b, [[c]]]: [number, number, string[][]]) => void
->   : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^             ^^                            ^^^^^^^^^
 >[1, 2, [["world"]], "string"] : [number, number, string[][], string]
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -297,8 +297,8 @@ c2({ z: false });  // Error, implied type is {z?: number}
 c3({ b: true });   // Error, implied type is { b: number|string }. 
 >c3({ b: true }) : void
 >                : ^^^^
->c3 : ({ b }?: { b: string | number; }) => void
->   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c3 : ({ b }?: { b: number | string; }) => void
+>   : ^     ^^^                       ^^^^^^^^^
 >{ b: true } : { b: boolean; }
 >            : ^^^^^^^^^^^^^^^
 >b : boolean

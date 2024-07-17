@@ -55,7 +55,7 @@ Zet.prototype.add = function(v, o) {
 >v : T
 >  : ^
 >o : { nested: T; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^
 
     this.u = v || o.nested
 >this.u = v || o.nested : T
@@ -73,7 +73,7 @@ Zet.prototype.add = function(v, o) {
 >o.nested : T
 >         : ^
 >o : { nested: T; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^^
 >nested : T
 >       : ^
 

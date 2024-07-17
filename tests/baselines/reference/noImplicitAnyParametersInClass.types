@@ -65,7 +65,7 @@ class C {
     // Implicit-'any' errors for x1, y2, x3, and y3.
     public pub_f8(x1, y1: number): any;
 >pub_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->       : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^
+>       : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x1 : any
 >   : ^^^
 >y1 : number
@@ -73,7 +73,7 @@ class C {
 
     public pub_f8(x2: string, y2): any;
 >pub_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->       : ^^^  ^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^      ^^  ^^^^^^^^   ^^^
+>       : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x2 : string
 >   : ^^^^^^
 >y2 : any
@@ -81,7 +81,7 @@ class C {
 
     public pub_f8(x3, y3): any { }
 >pub_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->       : ^^^  ^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^
+>       : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x3 : any
 >   : ^^^
 >y3 : any
@@ -92,7 +92,7 @@ class C {
 >pub_f9 : () => string
 >       : ^^^^^^^^^^^^
 >() => "" : () => string
->         :             
+>         : ^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -101,7 +101,7 @@ class C {
 >pub_f10 : (x: any) => string
 >        : ^ ^^^^^^^^^^^^^^^^
 >(x) => "" : (x: any) => string
->          :                   
+>          : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >"" : ""
@@ -112,7 +112,7 @@ class C {
 >pub_f11 : (x: any, y: any, z: any) => string
 >        : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 >(x, y, z) => "" : (x: any, y: any, z: any) => string
->                :                                   
+>                : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -127,7 +127,7 @@ class C {
 >pub_f12 : (x: any, y: any, z: any) => string
 >        : ^ ^^^^^^^ ^^   ^^ ^^^^^^^^^^^^^^^^
 >(x, y: any, z) => "" : (x: any, y: any, z: any) => string
->                     :                                   
+>                     : ^ ^^^^^^^ ^^   ^^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -142,7 +142,7 @@ class C {
 >pub_f13 : (...r: any[]) => string
 >        : ^^^^ ^^^^^^^^^^^^^^^^^^
 >(...r) => "" : (...r: any[]) => string
->             :  ^^^                   
+>             : ^^^^ ^^^^^^^^^^^^^^^^^^
 >r : any[]
 >  : ^^^^^
 >"" : ""
@@ -153,7 +153,7 @@ class C {
 >pub_f14 : (x: any, ...r: any[]) => string
 >        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >(x, ...r) => "" : (x: any, ...r: any[]) => string
->                :          ^^^                   
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >r : any[]
@@ -223,7 +223,7 @@ class C {
     // Implicit-'any' errors for x1, y2, x3, and y3.
     private priv_f8(x1, y1: number): any;
 >priv_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->        : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^
+>        : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x1 : any
 >   : ^^^
 >y1 : number
@@ -231,7 +231,7 @@ class C {
 
     private priv_f8(x2: string, y2): any;
 >priv_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->        : ^^^  ^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^      ^^  ^^^^^^^^   ^^^
+>        : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x2 : string
 >   : ^^^^^^
 >y2 : any
@@ -239,7 +239,7 @@ class C {
 
     private priv_f8(x3, y3): any { }
 >priv_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; }
->        : ^^^  ^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^
+>        : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^   ^^^
 >x3 : any
 >   : ^^^
 >y3 : any
@@ -250,7 +250,7 @@ class C {
 >priv_f9 : () => string
 >        : ^^^^^^^^^^^^
 >() => "" : () => string
->         :             
+>         : ^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -259,7 +259,7 @@ class C {
 >priv_f10 : (x: any) => string
 >         : ^ ^^^^^^^^^^^^^^^^
 >(x) => "" : (x: any) => string
->          :                   
+>          : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >"" : ""
@@ -270,7 +270,7 @@ class C {
 >priv_f11 : (x: any, y: any, z: any) => string
 >         : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 >(x, y, z) => "" : (x: any, y: any, z: any) => string
->                :                                   
+>                : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -285,7 +285,7 @@ class C {
 >priv_f12 : (x: any, y: any, z: any) => string
 >         : ^ ^^^^^^^ ^^   ^^ ^^^^^^^^^^^^^^^^
 >(x, y: any, z) => "" : (x: any, y: any, z: any) => string
->                     :                                   
+>                     : ^ ^^^^^^^ ^^   ^^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -300,7 +300,7 @@ class C {
 >priv_f13 : (...r: any[]) => string
 >         : ^^^^ ^^^^^^^^^^^^^^^^^^
 >(...r) => "" : (...r: any[]) => string
->             :  ^^^                   
+>             : ^^^^ ^^^^^^^^^^^^^^^^^^
 >r : any[]
 >  : ^^^^^
 >"" : ""
@@ -311,7 +311,7 @@ class C {
 >priv_f14 : (x: any, ...r: any[]) => string
 >         : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >(x, ...r) => "" : (x: any, ...r: any[]) => string
->                :          ^^^                   
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >r : any[]

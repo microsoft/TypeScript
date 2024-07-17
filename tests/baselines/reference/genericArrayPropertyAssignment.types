@@ -15,7 +15,7 @@ return list.length ===0;
 >list.length : number
 >            : ^^^^^^
 >list : { length: number; }
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^      ^^^
 >length : number
 >       : ^^^^^^
 >0 : 0
@@ -26,7 +26,7 @@ isEmpty([]); // error
 >isEmpty([]) : boolean
 >            : ^^^^^^^
 >isEmpty : (list: { length: number; }) => boolean
->        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^                   ^^^^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
  

@@ -56,6 +56,7 @@ import {
     getOriginalNodeId,
     getStrictOptionValue,
     getTextOfIdentifierOrLiteral,
+    hasJSFileExtension,
     hasJsonModuleEmitEnabled,
     hasSyntacticModifier,
     Identifier,
@@ -160,7 +161,7 @@ import {
     VisitResult,
     WhileStatement,
     WithStatement,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
@@ -243,6 +244,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function shouldEmitUnderscoreUnderscoreESModule() {
+        if (hasJSFileExtension(currentSourceFile.fileName) && currentSourceFile.commonJsModuleIndicator && (!currentSourceFile.externalModuleIndicator || currentSourceFile.externalModuleIndicator === true)) {
+            return false;
+        }
         if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile)) {
             return true;
         }
@@ -279,10 +283,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 );
             }
         }
-        if (some(currentModuleInfo.exportedFunctions)) {
-            for (const f of currentModuleInfo.exportedFunctions) {
-                appendExportsOfHoistedDeclaration(statements, f);
-            }
+        for (const f of currentModuleInfo.exportedFunctions) {
+            appendExportsOfHoistedDeclaration(statements, f);
         }
 
         append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, topLevelVisitor, isStatement));
@@ -609,10 +611,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         if (some(currentModuleInfo.exportedNames)) {
             append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
         }
-        if (some(currentModuleInfo.exportedFunctions)) {
-            for (const f of currentModuleInfo.exportedFunctions) {
-                appendExportsOfHoistedDeclaration(statements, f);
-            }
+        for (const f of currentModuleInfo.exportedFunctions) {
+            appendExportsOfHoistedDeclaration(statements, f);
         }
 
         // Visit each statement of the module body.
@@ -785,7 +785,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
             case SyntaxKind.CallExpression:
-                if (isImportCall(node) && currentSourceFile.impliedNodeFormat === undefined) {
+                if (isImportCall(node) && host.shouldTransformImportCall(currentSourceFile)) {
                     return visitImportCallExpression(node);
                 }
                 break;

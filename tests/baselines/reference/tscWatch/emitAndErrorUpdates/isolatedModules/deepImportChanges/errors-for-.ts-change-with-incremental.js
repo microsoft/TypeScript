@@ -81,7 +81,7 @@ console.log(b.c.d);
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-22447130237-export class C\n{\n    d = 1;\n}","-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-22447130237-export class C\n{\n    d = 1;\n}","impliedFormat":1},{"version":"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","impliedFormat":1},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","impliedFormat":1}],"root":[[2,4]],"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -104,23 +104,40 @@ console.log(b.c.d);
       "../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
+        "original": {
+          "version": "-22447130237-export class C\n{\n    d = 1;\n}",
+          "impliedFormat": 1
+        },
         "version": "-22447130237-export class C\n{\n    d = 1;\n}",
-        "signature": "-22447130237-export class C\n{\n    d = 1;\n}"
+        "signature": "-22447130237-export class C\n{\n    d = 1;\n}",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
+        "original": {
+          "version": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
+          "impliedFormat": 1
+        },
         "version": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
-        "signature": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}"
+        "signature": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
+        "original": {
+          "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
+          "impliedFormat": 1
+        },
         "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
-        "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"
+        "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -143,24 +160,22 @@ console.log(b.c.d);
       "./b.ts": [
         "./c.ts"
       ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts"
-    ]
+    }
   },
   "version": "FakeTSVersion",
-  "size": 857
+  "size": 926
 }
 
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -226,6 +241,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -254,7 +270,7 @@ exports.C = C;
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-22846341163-export class C\n{\n    d2 = 1;\n}","signature":"-4637923302-export declare class C {\n    d2: number;\n}\n"},"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./a.ts","start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]],3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-22846341163-export class C\n{\n    d2 = 1;\n}","signature":"-4637923302-export declare class C {\n    d2: number;\n}\n","impliedFormat":1},{"version":"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","impliedFormat":1},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","impliedFormat":1}],"root":[[2,4]],"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[[4,[{"start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]]]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -277,27 +293,41 @@ exports.C = C;
       "../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
         "original": {
           "version": "-22846341163-export class C\n{\n    d2 = 1;\n}",
-          "signature": "-4637923302-export declare class C {\n    d2: number;\n}\n"
+          "signature": "-4637923302-export declare class C {\n    d2: number;\n}\n",
+          "impliedFormat": 1
         },
         "version": "-22846341163-export class C\n{\n    d2 = 1;\n}",
-        "signature": "-4637923302-export declare class C {\n    d2: number;\n}\n"
+        "signature": "-4637923302-export declare class C {\n    d2: number;\n}\n",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
+        "original": {
+          "version": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
+          "impliedFormat": 1
+        },
         "version": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
-        "signature": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}"
+        "signature": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
+        "original": {
+          "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
+          "impliedFormat": 1
+        },
         "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
-        "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"
+        "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -322,12 +352,10 @@ exports.C = C;
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
       [
         "./a.ts",
         [
           {
-            "file": "./a.ts",
             "start": 82,
             "length": 1,
             "code": 2339,
@@ -335,13 +363,11 @@ exports.C = C;
             "messageText": "Property 'd' does not exist on type 'C'."
           }
         ]
-      ],
-      "./b.ts",
-      "./c.ts"
+      ]
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1069
+  "size": 1143
 }
 
 
@@ -392,6 +418,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -415,7 +442,7 @@ exports.C = C;
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-22447130237-export class C\n{\n    d = 1;\n}","signature":"-6977846840-export declare class C {\n    d: number;\n}\n"},"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-22447130237-export class C\n{\n    d = 1;\n}","signature":"-6977846840-export declare class C {\n    d: number;\n}\n","impliedFormat":1},{"version":"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","impliedFormat":1},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","impliedFormat":1}],"root":[[2,4]],"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -438,27 +465,41 @@ exports.C = C;
       "../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
         "original": {
           "version": "-22447130237-export class C\n{\n    d = 1;\n}",
-          "signature": "-6977846840-export declare class C {\n    d: number;\n}\n"
+          "signature": "-6977846840-export declare class C {\n    d: number;\n}\n",
+          "impliedFormat": 1
         },
         "version": "-22447130237-export class C\n{\n    d = 1;\n}",
-        "signature": "-6977846840-export declare class C {\n    d: number;\n}\n"
+        "signature": "-6977846840-export declare class C {\n    d: number;\n}\n",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
+        "original": {
+          "version": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
+          "impliedFormat": 1
+        },
         "version": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
-        "signature": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}"
+        "signature": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
+        "original": {
+          "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
+          "impliedFormat": 1
+        },
         "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
-        "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"
+        "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -481,16 +522,10 @@ exports.C = C;
       "./b.ts": [
         "./c.ts"
       ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./a.ts",
-      "./b.ts",
-      "./c.ts"
-    ]
+    }
   },
   "version": "FakeTSVersion",
-  "size": 941
+  "size": 998
 }
 
 
@@ -541,6 +576,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -569,7 +605,7 @@ exports.C = C;
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-22846341163-export class C\n{\n    d2 = 1;\n}","signature":"-4637923302-export declare class C {\n    d2: number;\n}\n"},"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,[4,[{"file":"./a.ts","start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]],3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-22846341163-export class C\n{\n    d2 = 1;\n}","signature":"-4637923302-export declare class C {\n    d2: number;\n}\n","impliedFormat":1},{"version":"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","impliedFormat":1},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","impliedFormat":1}],"root":[[2,4]],"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[[4,[{"start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]]]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -592,27 +628,41 @@ exports.C = C;
       "../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./c.ts": {
         "original": {
           "version": "-22846341163-export class C\n{\n    d2 = 1;\n}",
-          "signature": "-4637923302-export declare class C {\n    d2: number;\n}\n"
+          "signature": "-4637923302-export declare class C {\n    d2: number;\n}\n",
+          "impliedFormat": 1
         },
         "version": "-22846341163-export class C\n{\n    d2 = 1;\n}",
-        "signature": "-4637923302-export declare class C {\n    d2: number;\n}\n"
+        "signature": "-4637923302-export declare class C {\n    d2: number;\n}\n",
+        "impliedFormat": "commonjs"
       },
       "./b.ts": {
+        "original": {
+          "version": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
+          "impliedFormat": 1
+        },
         "version": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
-        "signature": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}"
+        "signature": "-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}",
+        "impliedFormat": "commonjs"
       },
       "./a.ts": {
+        "original": {
+          "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
+          "impliedFormat": 1
+        },
         "version": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
-        "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"
+        "signature": "4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -637,12 +687,10 @@ exports.C = C;
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
       [
         "./a.ts",
         [
           {
-            "file": "./a.ts",
             "start": 82,
             "length": 1,
             "code": 2339,
@@ -650,13 +698,11 @@ exports.C = C;
             "messageText": "Property 'd' does not exist on type 'C'."
           }
         ]
-      ],
-      "./b.ts",
-      "./c.ts"
+      ]
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1069
+  "size": 1143
 }
 
 

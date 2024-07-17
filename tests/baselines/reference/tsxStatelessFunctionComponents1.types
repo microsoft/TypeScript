@@ -28,7 +28,7 @@ function Greet(x: {name: string}) {
 >div : any
 >    : ^^^
 >x : { name: string; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^      ^^^
 >div : any
 >    : ^^^
 }
@@ -74,7 +74,7 @@ let a = <Greet name='world' />;
 ><Greet name='world' /> : JSX.Element
 >                       : ^^^^^^^^^^^
 >Greet : (x: { name: string; }) => JSX.Element
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                 ^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 
@@ -84,7 +84,7 @@ let a1 = <Greet name='world' extra-prop />;
 ><Greet name='world' extra-prop /> : JSX.Element
 >                                  : ^^^^^^^^^^^
 >Greet : (x: { name: string; }) => JSX.Element
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                 ^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >extra-prop : true
@@ -97,7 +97,7 @@ let b = <Greet naaame='world' />;
 ><Greet naaame='world' /> : JSX.Element
 >                         : ^^^^^^^^^^^
 >Greet : (x: { name: string; }) => JSX.Element
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                 ^^^^^^^^^^^^^^^^
 >naaame : string
 >       : ^^^^^^
 
@@ -162,7 +162,7 @@ let g = <MeetAndGreet prop-name="Bob" />;
 ><MeetAndGreet prop-name="Bob" /> : JSX.Element
 >                                 : ^^^^^^^^^^^
 >MeetAndGreet : (k: { "prop-name": string; }) => JSX.Element
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^                        ^^^^^^^^^^^^^^^^
 >prop-name : string
 >          : ^^^^^^
 
@@ -173,7 +173,7 @@ let h = <MeetAndGreet extra-prop-name="World" />;
 ><MeetAndGreet extra-prop-name="World" /> : JSX.Element
 >                                         : ^^^^^^^^^^^
 >MeetAndGreet : (k: { "prop-name": string; }) => JSX.Element
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^                        ^^^^^^^^^^^^^^^^
 >extra-prop-name : string
 >                : ^^^^^^
 

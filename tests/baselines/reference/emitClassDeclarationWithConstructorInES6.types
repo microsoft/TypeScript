@@ -20,7 +20,7 @@ class A {
 
     foo() { }
 >foo : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 }
 
 class B {
@@ -71,7 +71,7 @@ class B {
 
     baz(z: string, v: number): string {
 >baz : (...args: any[]) => string
->    : ^^^^    ^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^^      
 >z : string
 >  : ^^^^^^
 >v : number

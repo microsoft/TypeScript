@@ -1,4 +1,4 @@
-import type * as ts from "./_namespaces/ts";
+import type * as ts from "./_namespaces/ts.js";
 import type {
     ApplicableRefactorInfo,
     CompilerOptionsValue,
@@ -6,13 +6,21 @@ import type {
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
+    InlayHintKind,
     InteractiveRefactorArguments,
     OutputFile,
+    RefactorActionInfo,
     RefactorTriggerReason,
     RenameInfoFailure,
     RenameLocation,
     ScriptElementKind,
     ScriptKind,
+    SignatureHelpCharacterTypedReason,
+    SignatureHelpInvokedReason,
+    SignatureHelpParameter,
+    SignatureHelpRetriggerCharacter,
+    SignatureHelpRetriggeredReason,
+    SignatureHelpTriggerCharacter,
     SignatureHelpTriggerReason,
     SymbolDisplayPart,
     TextChange,
@@ -21,16 +29,16 @@ import type {
     TodoCommentDescriptor,
     TypeAcquisition,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ClassificationType,
     CompletionTriggerKind,
     OrganizeImportsMode,
     SemicolonPreference,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 // These types/enums used to be defined in duplicate here and exported. They are re-exported to avoid breaking changes.
-export { ApplicableRefactorInfo, ClassificationType, CompletionsTriggerCharacter, CompletionTriggerKind, OrganizeImportsMode, RefactorTriggerReason, RenameInfoFailure, SemicolonPreference, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };
+export { ApplicableRefactorInfo, ClassificationType, CompletionsTriggerCharacter, CompletionTriggerKind, InlayHintKind, OrganizeImportsMode, RefactorActionInfo, RefactorTriggerReason, RenameInfoFailure, SemicolonPreference, SignatureHelpCharacterTypedReason, SignatureHelpInvokedReason, SignatureHelpParameter, SignatureHelpRetriggerCharacter, SignatureHelpRetriggeredReason, SignatureHelpTriggerCharacter, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };
 
 type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = { [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K]; };
 type ChangePropertyTypes<T, Substitutions extends { [K in keyof T]?: any; }> = {
@@ -161,6 +169,7 @@ export const enum CommandTypes {
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
     GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+    GetPasteEdits = "getPasteEdits",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
 
@@ -191,6 +200,7 @@ export const enum CommandTypes {
     ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
     ProvideInlayHints = "provideInlayHints",
     WatchChange = "watchChange",
+    MapCode = "mapCode",
 }
 
 /**
@@ -623,6 +633,35 @@ export interface GetMoveToRefactoringFileSuggestions extends Response {
         newFileName: string;
         files: string[];
     };
+}
+
+/**
+ * Request refactorings at a given position post pasting text from some other location.
+ */
+
+export interface GetPasteEditsRequest extends Request {
+    command: CommandTypes.GetPasteEdits;
+    arguments: GetPasteEditsRequestArgs;
+}
+
+export interface GetPasteEditsRequestArgs extends FileRequestArgs {
+    /** The text that gets pasted in a file.  */
+    pastedText: string[];
+    /** Locations of where the `pastedText` gets added in a file. If the length of the `pastedText` and `pastedLocations` are not the same,
+     *  then the `pastedText` is combined into one and added at all the `pastedLocations`.
+     */
+    pasteLocations: TextSpan[];
+    /** The source location of each `pastedText`. If present, the length of `spans` must be equal to the length of `pastedText`. */
+    copiedFrom?: { file: string; spans: TextSpan[]; };
+}
+
+export interface GetPasteEditsResponse extends Response {
+    body: PasteEditsAction;
+}
+
+export interface PasteEditsAction {
+    edits: FileCodeEdits[];
+    fixId?: {};
 }
 
 export interface GetEditsForRefactorRequest extends Request {
@@ -2304,6 +2343,38 @@ export interface InlayHintsResponse extends Response {
     body?: InlayHintItem[];
 }
 
+export interface MapCodeRequestArgs extends FileRequestArgs {
+    /**
+     * The files and changes to try and apply/map.
+     */
+    mapping: MapCodeRequestDocumentMapping;
+}
+
+export interface MapCodeRequestDocumentMapping {
+    /**
+     * The specific code to map/insert/replace in the file.
+     */
+    contents: string[];
+
+    /**
+     * Areas of "focus" to inform the code mapper with. For example, cursor
+     * location, current selection, viewport, etc. Nested arrays denote
+     * priority: toplevel arrays are more important than inner arrays, and
+     * inner array priorities are based on items within that array. Items
+     * earlier in the arrays have higher priority.
+     */
+    focusLocations?: TextSpan[][];
+}
+
+export interface MapCodeRequest extends FileRequest {
+    command: CommandTypes.MapCode;
+    arguments: MapCodeRequestArgs;
+}
+
+export interface MapCodeResponse extends Response {
+    body: readonly FileCodeEdits[];
+}
+
 /**
  * Synchronous request for semantic diagnostics of one file.
  */
@@ -3142,6 +3213,7 @@ export const enum ScriptTarget {
     ES2020 = "es2020",
     ES2021 = "es2021",
     ES2022 = "es2022",
+    ES2023 = "es2023",
     ESNext = "esnext",
     JSON = "json",
     Latest = ESNext,

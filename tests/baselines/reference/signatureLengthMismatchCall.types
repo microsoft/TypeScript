@@ -16,7 +16,7 @@ takesCallback((a: number, b: number) => {});
 >takesCallback((a: number, b: number) => {}) : void
 >                                            : ^^^^
 >takesCallback : (fn: (a: number) => void) => void
->              : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^  ^^                   ^^^^^^^^^
 >(a: number, b: number) => {} : (a: number, b: number) => void
 >                             : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : number

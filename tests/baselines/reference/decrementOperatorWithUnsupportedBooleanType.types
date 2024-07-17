@@ -99,7 +99,7 @@ var ResultIsNumber5 = --{ x: true, y: (n: boolean) => { return n; } };
 >y : (n: boolean) => boolean
 >  : ^ ^^       ^^^^^^^^^^^^
 >(n: boolean) => { return n; } : (n: boolean) => boolean
->                              :                        
+>                              : ^ ^^       ^^^^^^^^^^^^
 >n : boolean
 >  : ^^^^^^^
 >n : boolean
@@ -143,7 +143,7 @@ var ResultIsNumber8 = { x: true, y: (n: boolean) => { return n; } }--;
 >y : (n: boolean) => boolean
 >  : ^ ^^       ^^^^^^^^^^^^
 >(n: boolean) => { return n; } : (n: boolean) => boolean
->                              :                        
+>                              : ^ ^^       ^^^^^^^^^^^^
 >n : boolean
 >  : ^^^^^^^
 >n : boolean
@@ -182,7 +182,7 @@ var ResultIsNumber11 = --foo();
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 var ResultIsNumber12 = --A.foo();
 >ResultIsNumber12 : number
@@ -206,7 +206,7 @@ var ResultIsNumber13 = foo()--;
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 var ResultIsNumber14 = A.foo()--;
 >ResultIsNumber14 : number
@@ -265,7 +265,7 @@ var ResultIsNumber16 = M.n--;
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 --objA.a;
 >--objA.a : number
@@ -323,7 +323,7 @@ foo()--;
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 objA.a--;
 >objA.a-- : number

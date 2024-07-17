@@ -39,7 +39,7 @@ export async function myFunction(param: T1) {
 >awaited : 1 | T1[]
 >        : ^^^^^^^^
 >await param : 1 | T1[]
->            : ^^^^    
+>            : ^^^^^^^^
 >param : T1
 >      : ^^
 }
@@ -73,11 +73,11 @@ export async function handleEffectResult(result: EffectResult) {
 >handleEffectResult(result()) : Promise<void>
 >                             : ^^^^^^^^^^^^^
 >handleEffectResult : (result: EffectResult) => Promise<void>
->                   : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^      ^^            ^^^^^^^^^^^^^^^^^^
 >result() : EffectResult
 >         : ^^^^^^^^^^^^
 >result : () => EffectResult
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^            
 
   } else if (result instanceof Promise) {
 >result instanceof Promise : boolean
@@ -93,9 +93,9 @@ export async function handleEffectResult(result: EffectResult) {
 >handleEffectResult(await result) : Promise<void>
 >                                 : ^^^^^^^^^^^^^
 >handleEffectResult : (result: EffectResult) => Promise<void>
->                   : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^      ^^            ^^^^^^^^^^^^^^^^^^
 >await result : () => EffectResult
->             : ^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^            
 >result : Promise<EffectResult>
 >       : ^^^^^^^^^^^^^^^^^^^^^
   }

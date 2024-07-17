@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/esmNoSynthesizedDefault.ts] ////
+
+=== /node_modules/mdast-util-to-string/index.d.ts ===
+export function toString(): string;
+>toString : () => string
+>         : ^^^^^^      
+
+=== /index.ts ===
+import mdast, { toString } from 'mdast-util-to-string';
+>mdast : any
+>      : ^^^
+>toString : () => string
+>         : ^^^^^^      
+
+mdast;
+>mdast : any
+>      : ^^^
+
+mdast.toString();
+>mdast.toString() : any
+>                 : ^^^
+>mdast.toString : any
+>               : ^^^
+>mdast : any
+>      : ^^^
+>toString : any
+>         : ^^^
+
+const mdast2 = await import('mdast-util-to-string');
+>mdast2 : typeof import("/node_modules/mdast-util-to-string/index")
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await import('mdast-util-to-string') : typeof import("/node_modules/mdast-util-to-string/index")
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('mdast-util-to-string') : Promise<typeof import("/node_modules/mdast-util-to-string/index")>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'mdast-util-to-string' : "mdast-util-to-string"
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
+
+mdast2.toString();
+>mdast2.toString() : string
+>                  : ^^^^^^
+>mdast2.toString : () => string
+>                : ^^^^^^      
+>mdast2 : typeof import("/node_modules/mdast-util-to-string/index")
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : () => string
+>         : ^^^^^^      
+
+mdast2.default;
+>mdast2.default : any
+>               : ^^^
+>mdast2 : typeof import("/node_modules/mdast-util-to-string/index")
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>default : any
+>        : ^^^
+

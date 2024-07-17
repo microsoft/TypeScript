@@ -58,13 +58,13 @@ export const Fs = {
 >Fs : { ADD1: (n: any) => any; ID: (n: any) => any; SUB1: (n: any) => number; }
 >   : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >{    ADD1: n => n + 1,    ID: n => n,    SUB1: n => n - 1} : { ADD1: (n: any) => any; ID: (n: any) => any; SUB1: (n: any) => number; }
->                                                           : ^^^^^^^^               ^^^^^^               ^^^^^^^^                  ^^^
+>                                                           : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 
     ADD1: n => n + 1,
 >ADD1 : (n: any) => any
 >     : ^ ^^^^^^^^^^^^^
 >n => n + 1 : (n: any) => any
->           :                
+>           : ^ ^^^^^^^^^^^^^
 >n : any
 >n + 1 : any
 >n : any
@@ -75,7 +75,7 @@ export const Fs = {
 >ID : (n: any) => any
 >   : ^ ^^^^^^^^^^^^^
 >n => n : (n: any) => any
->       :                
+>       : ^ ^^^^^^^^^^^^^
 >n : any
 >n : any
 
@@ -83,7 +83,7 @@ export const Fs = {
 >SUB1 : (n: any) => number
 >     : ^ ^^^^^^^^^^^^^^^^
 >n => n - 1 : (n: any) => number
->           :                   
+>           : ^ ^^^^^^^^^^^^^^^^
 >n : any
 >n - 1 : number
 >      : ^^^^^^
@@ -124,7 +124,7 @@ export function consume(t,s,f) {
     /** @type {(n: number) => number} */
     var fun = f
 >fun : (n: number) => number
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^      
 >f : Fs
 >  : ^^
 
@@ -135,7 +135,7 @@ export function consume(t,s,f) {
 >Target.START : string
 >             : ^^^^^^
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >START : string
 >      : ^^^^^^
 
@@ -160,7 +160,7 @@ export function ff(s) {
 >           : ^^^^^^^
 >Target[s] : error
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >s : string
 >  : ^^^^^^
 
@@ -170,7 +170,7 @@ export function ff(s) {
         return Target[s]
 >Target[s] : error
 >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >s : string
 >  : ^^^^^^
     }

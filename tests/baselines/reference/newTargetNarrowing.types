@@ -31,7 +31,7 @@ function f() {
 >foo(new.target.marked) : void
 >                       : ^^^^
 >foo : (x: true) => void
->    : ^ ^^^^^^^^^^^^^^^
+>    : ^ ^^    ^^^^^^^^^
 >new.target.marked : true
 >                  : ^^^^
 >new.target : typeof f

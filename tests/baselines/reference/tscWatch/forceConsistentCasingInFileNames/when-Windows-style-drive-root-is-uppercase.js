@@ -73,6 +73,8 @@ a_2.b;
 PolledWatches::
 C:/project/node_modules/@types: *new*
   {"pollingInterval":500}
+C:/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 C:/a/lib/lib.d.ts: *new*
@@ -134,6 +136,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear

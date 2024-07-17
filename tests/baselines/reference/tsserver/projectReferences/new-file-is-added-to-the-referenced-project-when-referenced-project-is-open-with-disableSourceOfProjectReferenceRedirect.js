@@ -58,8 +58,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/projects/project2
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/projects/project2/class2.ts :: Config file name: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -196,8 +195,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/projects/project2
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/projects/project2/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/projects/project2/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -267,8 +265,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/projects/project1
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/projects/project1/class1.ts :: Config file name: /user/username/projects/myproject/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/projects/project1/class1.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -366,8 +363,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/projects/project1
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/projects/project1/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/projects/project1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -482,6 +478,41 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.\n  The file is in the program because:\n    Output from referenced project '/user/username/projects/myproject/projects/project1/tsconfig.json' included because '--module' is specified as 'none'",
+            "code": 6053,
+            "category": "error",
+            "relatedInformation": [
+              {
+                "span": {
+                  "start": {
+                    "line": 8,
+                    "offset": 5
+                  },
+                  "end": {
+                    "line": 10,
+                    "offset": 6
+                  },
+                  "file": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+                },
+                "message": "File is output from referenced project specified here.",
+                "category": "message",
+                "code": 1413
+              }
+            ]
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project1/tsconfig.json
@@ -694,6 +725,17 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
@@ -820,7 +862,6 @@ declare class file {}
 After running Timeout callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 2:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 2:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
@@ -831,40 +872,6 @@ Before running Timeout callback:: count: 2
 7: /user/username/projects/myproject/projects/project2/tsconfig.json
 8: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/projects/project1/class3.d.ts] deleted
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/myproject/projects/project1/class3.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {}
-/user/username/projects/myproject/projects/project2:
-  {}
 
 Timeout callback:: count: 2
 7: /user/username/projects/myproject/projects/project2/tsconfig.json *new*
@@ -893,8 +900,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project1/tsconfig.json *default*
-/user/username/projects/myproject/projects/project1/class3.d.ts *deleted*
+/user/username/projects/myproject/projects/project1/class3.d.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /user/username/projects/myproject/projects/project2/tsconfig.json *deleted*
 /user/username/projects/myproject/projects/project1/class3.ts
@@ -925,6 +934,41 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/user/username/projects/myproject/projects/project1/class3.d.ts' not found.\n  The file is in the program because:\n    Output from referenced project '/user/username/projects/myproject/projects/project1/tsconfig.json' included because '--module' is specified as 'none'",
+            "code": 6053,
+            "category": "error",
+            "relatedInformation": [
+              {
+                "span": {
+                  "start": {
+                    "line": 8,
+                    "offset": 5
+                  },
+                  "end": {
+                    "line": 10,
+                    "offset": 6
+                  },
+                  "file": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+                },
+                "message": "File is output from referenced project specified here.",
+                "category": "message",
+                "code": 1413
+              }
+            ]
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
@@ -969,38 +1013,6 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {}
-/user/username/projects/myproject/projects/project2:
-  {}
-
 Projects::
 /user/username/projects/myproject/projects/project1/tsconfig.json (Configured)
     projectStateVersion: 2
@@ -1010,6 +1022,8 @@ Projects::
     projectProgramVersion: 4 *changed*
     dirty: false *changed*
 
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -1025,40 +1039,6 @@ Before running Timeout callback:: count: 2
 declare class class3 {}
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
-/user/username/projects/myproject/projects/project1/class3.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {}
-/user/username/projects/myproject/projects/project2:
-  {}
-
 Timeout callback:: count: 2
 9: /user/username/projects/myproject/projects/project2/tsconfig.json *new*
 10: *ensureProjectForOpenFiles* *new*
@@ -1072,15 +1052,42 @@ Projects::
     projectProgramVersion: 4
     dirty: true *changed*
 
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/projects/project2/tsconfig.json
+        /user/username/projects/myproject/projects/project1/tsconfig.json
+/user/username/projects/myproject/projects/project1/class1.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
+/user/username/projects/myproject/projects/project1/class1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project1/tsconfig.json *default*
+/user/username/projects/myproject/projects/project1/class3.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: undefined *changed*
+    containingProjects: 0
+/user/username/projects/myproject/projects/project1/class3.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project1/tsconfig.json
+/user/username/projects/myproject/projects/project2/class2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json *default*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json projectStateVersion: 5 projectProgramVersion: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/user/username/projects/myproject/projects/project1/class1.d.ts Text-1 "declare class class1 {}"
-	/user/username/projects/myproject/projects/project1/class3.d.ts Text-2 "declare class class3 {}"
+	/user/username/projects/myproject/projects/project1/class3.d.ts Text-1 "declare class class3 {}"
 	/user/username/projects/myproject/projects/project2/class2.ts SVC-1-0 "class class2 {}"
 
 
@@ -1094,6 +1101,17 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
@@ -1137,38 +1155,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class1.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.d.ts: *new*
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {}
-/user/username/projects/myproject/projects/project2:
-  {}
 
 Projects::
 /user/username/projects/myproject/projects/project1/tsconfig.json (Configured)
@@ -1193,10 +1179,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project1/tsconfig.json *default*
-/user/username/projects/myproject/projects/project1/class3.d.ts *new*
-    version: Text-2
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
+/user/username/projects/myproject/projects/project1/class3.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1 *changed*
+        /user/username/projects/myproject/projects/project2/tsconfig.json *new*
 /user/username/projects/myproject/projects/project1/class3.ts
     version: Text-1
     containingProjects: 1

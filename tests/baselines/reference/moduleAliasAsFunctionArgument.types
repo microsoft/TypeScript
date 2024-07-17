@@ -27,7 +27,7 @@ fn(a); // Error: property 'x' is missing from 'a'
 >fn(a) : void
 >      : ^^^^
 >fn : (arg: { x: number; }) => void
->   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^              ^^^^^^^^^
 >a : typeof a
 >  : ^^^^^^^^
 

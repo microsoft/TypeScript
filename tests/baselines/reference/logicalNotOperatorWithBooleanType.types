@@ -110,7 +110,7 @@ var ResultIsBoolean6 = !foo();
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 var ResultIsBoolean7 = !A.foo();
 >ResultIsBoolean7 : boolean
@@ -156,7 +156,7 @@ var ResultIsBoolean = !!BOOLEAN;
 >foo() : boolean
 >      : ^^^^^^^
 >foo : () => boolean
->    : ^^^^^^^^^^^^^
+>    : ^^^^^^       
 
 !true, false;
 >!true, false : false

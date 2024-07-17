@@ -20,7 +20,6 @@ import {
     ClassDeclaration,
     ClassExpression,
     clone,
-    codefix,
     combinePaths,
     CommentKind,
     CommentRange,
@@ -90,13 +89,17 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
+    FutureSourceFile,
     getAssignmentDeclarationKind,
+    getBaseFileName,
     getCombinedNodeFlagsAlwaysIncludeJSDoc,
     getDirectoryPath,
     getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
+    getImpliedNodeFormatForEmitWorker,
     getImpliedNodeFormatForFile,
+    getImpliedNodeFormatForFileWorker,
     getIndentString,
     getJSDocEnumTag,
     getLastChild,
@@ -106,6 +109,7 @@ import {
     getModuleInstanceState,
     getNameOfDeclaration,
     getNodeId,
+    getOriginalNode,
     getPackageNameFromTypesPackageName,
     getPathComponents,
     getRootDeclaration,
@@ -168,6 +172,7 @@ import {
     isFileLevelUniqueName,
     isForInStatement,
     isForOfStatement,
+    isFullSourceFile,
     isFunctionBlock,
     isFunctionDeclaration,
     isFunctionExpression,
@@ -176,6 +181,8 @@ import {
     isGlobalScopeAugmentation,
     isHeritageClause,
     isIdentifier,
+    isIdentifierPart,
+    isIdentifierStart,
     isImportCall,
     isImportClause,
     isImportDeclaration,
@@ -235,6 +242,7 @@ import {
     isSetAccessorDeclaration,
     isSourceFile,
     isSourceFileJS,
+    isStringANonContextualKeyword,
     isStringDoubleQuoted,
     isStringLiteral,
     isStringLiteralLike,
@@ -281,6 +289,7 @@ import {
     ModuleDeclaration,
     ModuleInstanceState,
     ModuleKind,
+    ModuleResolutionHost,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
@@ -313,6 +322,8 @@ import {
     pseudoBigIntToString,
     QualifiedName,
     RefactorContext,
+    removeFileExtension,
+    removeSuffix,
     Scanner,
     ScriptElementKind,
     ScriptElementKindModifier,
@@ -321,6 +332,7 @@ import {
     SemicolonPreference,
     setConfigFileInOptions,
     setOriginalNode,
+    setParentRecursive,
     setTextRange,
     Signature,
     SignatureDeclaration,
@@ -378,7 +390,7 @@ import {
     VoidExpression,
     walkUpParenthesizedExpressions,
     YieldExpression,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 // These utilities are common to multiple language service features.
 // #region
@@ -1824,7 +1836,7 @@ function findRightmostToken(n: Node, sourceFile: SourceFileLike): Node | undefin
 /**
  * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
  */
-function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFileLike, parentKind: SyntaxKind): Node | undefined {
+function findRightmostChildNodeWithTokens(children: readonly Node[], exclusiveStartPosition: number, sourceFile: SourceFileLike, parentKind: SyntaxKind): Node | undefined {
     for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
         const child = children[i];
 
@@ -2481,6 +2493,8 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
         getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
+        getDefaultResolutionModeForFile: file => program.getDefaultResolutionModeForFile(file),
+        getModeForResolutionAtIndex: (file, index) => program.getModeForResolutionAtIndex(file, index),
     };
 }
 
@@ -2497,11 +2511,6 @@ export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResoluti
     return moduleResolution === ModuleResolutionKind.Node10
         || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
         || moduleResolution === ModuleResolutionKind.Bundler;
-}
-
-/** @internal */
-export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
-    return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
 }
 
 /** @internal */
@@ -2533,13 +2542,13 @@ export function quotePreferenceFromString(str: StringLiteral, sourceFile: Source
 }
 
 /** @internal */
-export function getQuotePreference(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference {
+export function getQuotePreference(sourceFile: SourceFile | FutureSourceFile, preferences: UserPreferences): QuotePreference {
     if (preferences.quotePreference && preferences.quotePreference !== "auto") {
         return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
     }
     else {
         // ignore synthetic import added when importHelpers: true
-        const firstModuleSpecifier = sourceFile.imports &&
+        const firstModuleSpecifier = isFullSourceFile(sourceFile) && sourceFile.imports &&
             find(sourceFile.imports, n => isStringLiteral(n) && !nodeIsSynthesized(n.parent)) as StringLiteral;
         return firstModuleSpecifier ? quotePreferenceFromString(firstModuleSpecifier, sourceFile) : QuotePreference.Double;
     }
@@ -2627,16 +2636,28 @@ export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | und
 }
 
 /** @internal */
-export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean, preferences: UserPreferences): void {
+export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile | FutureSourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean, preferences: UserPreferences): void {
     const decl = isArray(imports) ? imports[0] : imports;
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
     const { comparer, isSorted } = OrganizeImports.getOrganizeImportsStringComparerWithDetection(existingImportStatements, preferences);
     const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
-    if (!existingImportStatements.length) {
-        changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
+    if (!existingImportStatements?.length) {
+        if (isFullSourceFile(sourceFile)) {
+            changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
+        }
+        else {
+            for (const newImport of sortedNewImports) {
+                // Insert one at a time to send correct original source file for accurate text reuse
+                // when some imports are cloned from existing ones in other files.
+                changes.insertStatementsInNewFile(sourceFile.fileName, [newImport], getOriginalNode(newImport)?.getSourceFile());
+            }
+        }
+        return;
     }
-    else if (existingImportStatements && isSorted) {
+
+    Debug.assert(isFullSourceFile(sourceFile));
+    if (existingImportStatements && isSorted) {
         for (const newImport of sortedNewImports) {
             const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer);
             if (insertionIndex === 0) {
@@ -3152,7 +3173,7 @@ export function getPrecedingNonSpaceCharacterPosition(text: string, position: nu
 export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
     const clone = node && getSynthesizedDeepCloneWorker(node);
     if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
-    return clone;
+    return setParentRecursive(clone, /*incremental*/ false);
 }
 
 /** @internal */
@@ -3761,7 +3782,7 @@ export interface PackageJsonImportFilter {
 }
 
 /** @internal */
-export function createPackageJsonImportFilter(fromFile: SourceFile, preferences: UserPreferences, host: LanguageServiceHost): PackageJsonImportFilter {
+export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourceFile, preferences: UserPreferences, host: LanguageServiceHost): PackageJsonImportFilter {
     const packageJsons = (
         (host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName)) || getPackageJsonsVisibleToFile(fromFile.fileName, host)
     ).filter(p => p.parseable);
@@ -3860,7 +3881,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
         // from Node core modules or not. We can start by seeing if the user is actually using
         // any node core modules, as opposed to simply having @types/node accidentally as a
         // dependency of a dependency.
-        if (isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
+        if (isFullSourceFile(fromFile) && isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
             if (usesNodeCoreModules === undefined) {
                 usesNodeCoreModules = consumesNodeCoreModules(fromFile);
             }
@@ -4008,8 +4029,8 @@ export function getNamesForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTa
     if (needsNameFromDeclaration(symbol)) {
         const fromDeclaration = getDefaultLikeExportNameFromDeclaration(symbol);
         if (fromDeclaration) return fromDeclaration;
-        const fileNameCase = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ false);
-        const capitalized = codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ true);
+        const fileNameCase = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ false);
+        const capitalized = moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, /*forceCapitalize*/ true);
         if (fileNameCase === capitalized) return fileNameCase;
         return [fileNameCase, capitalized];
     }
@@ -4024,7 +4045,7 @@ export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTar
         // - export { foo as default } => foo
         // - export default 0 => filename converted to camelCase
         return getDefaultLikeExportNameFromDeclaration(symbol)
-            || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, !!preferCapitalized);
+            || moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, !!preferCapitalized);
     }
     return symbol.name;
 }
@@ -4033,7 +4054,8 @@ function needsNameFromDeclaration(symbol: Symbol) {
     return !(symbol.flags & SymbolFlags.Transient) && (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default);
 }
 
-function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
+/** @internal */
+export function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undefined {
     return firstDefined(symbol.declarations, d => {
         // "export default" in this case. See `ExportAssignment`for more details.
         if (isExportAssignment(d)) {
@@ -4048,7 +4070,8 @@ function getDefaultLikeExportNameFromDeclaration(symbol: Symbol): string | undef
     });
 }
 
-function getSymbolParentOrFail(symbol: Symbol) {
+/** @internal */
+export function getSymbolParentOrFail(symbol: Symbol) {
     return Debug.checkDefined(
         symbol.parent,
         `Symbol parent was undefined. Flags: ${Debug.formatSymbolFlags(symbol.flags)}. ` +
@@ -4061,6 +4084,42 @@ function getSymbolParentOrFail(symbol: Symbol) {
                 }).join(", ")
             }.`,
     );
+}
+
+/** @internal */
+export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget | undefined, forceCapitalize: boolean): string {
+    return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), target, forceCapitalize);
+}
+
+/** @internal */
+export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget | undefined, forceCapitalize?: boolean): string {
+    const baseName = getBaseFileName(removeSuffix(moduleSpecifier, "/index"));
+    let res = "";
+    let lastCharWasValid = true;
+    const firstCharCode = baseName.charCodeAt(0);
+    if (isIdentifierStart(firstCharCode, target)) {
+        res += String.fromCharCode(firstCharCode);
+        if (forceCapitalize) {
+            res = res.toUpperCase();
+        }
+    }
+    else {
+        lastCharWasValid = false;
+    }
+    for (let i = 1; i < baseName.length; i++) {
+        const ch = baseName.charCodeAt(i);
+        const isValid = isIdentifierPart(ch, target);
+        if (isValid) {
+            let char = String.fromCharCode(ch);
+            if (!lastCharWasValid) {
+                char = char.toUpperCase();
+            }
+            res += char;
+        }
+        lastCharWasValid = isValid;
+    }
+    // Need `|| "_"` to ensure result isn't empty.
+    return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
 }
 
 /**
@@ -4121,7 +4180,7 @@ export function isDeprecatedDeclaration(decl: Declaration) {
 }
 
 /** @internal */
-export function shouldUseUriStyleNodeCoreModules(file: SourceFile, program: Program): boolean {
+export function shouldUseUriStyleNodeCoreModules(file: SourceFile | FutureSourceFile, program: Program): boolean {
     const decisionFromFile = firstDefined(file.imports, node => {
         if (JsTyping.nodeCoreModules.has(node.text)) {
             return startsWith(node.text, "node:");
@@ -4245,11 +4304,13 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     if (!hasJSFileExtension(fileName)) {
         return false;
     }
-    const compilerOptions = program.getCompilerOptions();
+    const compilerOptions = typeof file === "string" ? program.getCompilerOptions() : program.getCompilerOptionsForFile(file);
     const moduleKind = getEmitModuleKind(compilerOptions);
-    const impliedNodeFormat = typeof file === "string"
-        ? getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions)
-        : file.impliedNodeFormat;
+    const sourceFileLike = typeof file === "string" ? {
+        fileName: file,
+        impliedNodeFormat: getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions),
+    } : file;
+    const impliedNodeFormat = getImpliedNodeFormatForEmitWorker(sourceFileLike, compilerOptions);
 
     if (impliedNodeFormat === ModuleKind.ESNext) {
         return false;
@@ -4292,4 +4353,24 @@ export function isBlockLike(node: Node): node is BlockLike {
         default:
             return false;
     }
+}
+
+/** @internal */
+export function createFutureSourceFile(fileName: string, syntaxModuleIndicator: ModuleKind.ESNext | ModuleKind.CommonJS | undefined, program: Program, moduleResolutionHost: ModuleResolutionHost): FutureSourceFile {
+    const result = getImpliedNodeFormatForFileWorker(fileName, program.getPackageJsonInfoCache?.(), moduleResolutionHost, program.getCompilerOptions());
+    let impliedNodeFormat, packageJsonScope;
+    if (typeof result === "object") {
+        impliedNodeFormat = result.impliedNodeFormat;
+        packageJsonScope = result.packageJsonScope;
+    }
+    return {
+        path: toPath(fileName, program.getCurrentDirectory(), program.getCanonicalFileName),
+        fileName,
+        externalModuleIndicator: syntaxModuleIndicator === ModuleKind.ESNext ? true : undefined,
+        commonJsModuleIndicator: syntaxModuleIndicator === ModuleKind.CommonJS ? true : undefined,
+        impliedNodeFormat,
+        packageJsonScope,
+        statements: emptyArray,
+        imports: emptyArray,
+    };
 }

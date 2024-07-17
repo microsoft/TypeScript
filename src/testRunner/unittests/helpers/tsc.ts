@@ -1,8 +1,8 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselinePrograms,
     CommandLineCallbacks,
@@ -13,9 +13,10 @@ import {
     ReadableBuildInfo,
     ReadableProgramBuildInfoFileInfo,
     ReadableProgramMultiFileEmitBuildInfo,
+    sanitizeSysOutput,
     toPathWithSystem,
     tscBaselineName,
-} from "./baseline";
+} from "./baseline.js";
 
 export type TscCompileSystem = fakes.System & {
     writtenFiles: Set<ts.Path>;
@@ -88,7 +89,7 @@ export function testTscCompileLike(input: TestTscCompileLike) {
 ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 
 Output::
-${sys.output.join("")}
+${sys.output.map(sanitizeSysOutput).join("")}
 
 ${patch ? vfs.formatPatch(patch) : ""}`,
         };
@@ -553,7 +554,7 @@ export function verifyTsc({
                 }
                 Harness.Baseline.runBaseline(
                     tscBaselineName(scenario, subScenario, commandLineArgs, /*isWatch*/ undefined, "-discrepancies"),
-                    baselines ? baselines.join("\r\n") : null, // eslint-disable-line no-null/no-null
+                    baselines ? baselines.join("\r\n") : null, // eslint-disable-line no-restricted-syntax
                 );
             });
         }

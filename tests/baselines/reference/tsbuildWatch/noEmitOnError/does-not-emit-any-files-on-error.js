@@ -64,6 +64,28 @@ Output::
 
 
 
+PolledWatches::
+/a/lib/package.json: *new*
+  {"pollingInterval":2000}
+/a/package.json: *new*
+  {"pollingInterval":2000}
+/package.json: *new*
+  {"pollingInterval":2000}
+/user/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/noEmitOnError/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/noEmitOnError/shared/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/noEmitOnError/shared/types/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/noEmitOnError/src/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
+
 FsWatches::
 /user/username/projects/noEmitOnError/shared/types/db.ts: *new*
   {}
@@ -113,6 +135,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -173,6 +196,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -253,6 +277,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -310,6 +335,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -368,6 +394,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 5: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -430,6 +457,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 6: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear

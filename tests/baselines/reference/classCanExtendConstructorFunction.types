@@ -31,10 +31,10 @@ Wagon.circle = function (wagons) {
 >             : ^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >Wagon : typeof Wagon
 >      : ^^^^^^^^^^^^
->circle : (wagons?: Wagon[]) => number
->       : ^      ^^^^^^^^^^^^^^^^^^^^^
+>circle : (wagons?: Wagon[] | undefined) => number
+>       : ^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[] | undefined) => number
->                                                              :        ^                                
+>                                                              : ^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >wagons : Wagon[]
 >       : ^^^^^^^
 
@@ -131,12 +131,12 @@ Wagon.prototype.speed = function () {
 >           : ^^^^^^
 >this.weight() : number
 >              : ^^^^^^
->this.weight : (supplies?: any[]) => number
->            : ^        ^^^^^^^^^^^^^^^^^^^
+>this.weight : (supplies?: any[] | undefined) => number
+>            : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->weight : (supplies?: any[]) => number
->       : ^        ^^^^^^^^^^^^^^^^^^^
+>weight : (supplies?: any[] | undefined) => number
+>       : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 }
 // ok
 class Sql extends Wagon {
@@ -209,12 +209,12 @@ class Sql extends Wagon {
 >                   : ^^^^^^^
 >super.weight() : number
 >               : ^^^^^^
->super.weight : (supplies?: any[]) => number
->             : ^        ^^^^^^^^^^^^^^^^^^^
+>super.weight : (supplies?: any[] | undefined) => number
+>             : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >super : Wagon
 >      : ^^^^^
->weight : (supplies?: any[]) => number
->       : ^        ^^^^^^^^^^^^^^^^^^^
+>weight : (supplies?: any[] | undefined) => number
+>       : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -252,7 +252,7 @@ class Drakkhen extends Dragon {
 >Drakkhen : Drakkhen
 >         : ^^^^^^^^
 >Dragon : (numberEaten: number) => void
->       : ^           ^^^^^^^^^^^^^^^^^
+>       : ^           ^^      ^^^^^^^^^
 
 }
 
@@ -283,7 +283,7 @@ class Firedrake extends Dragon {
 >Firedrake : Firedrake
 >          : ^^^^^^^^^
 >Dragon : (numberEaten: number) => void
->       : ^           ^^^^^^^^^^^^^^^^^
+>       : ^           ^^      ^^^^^^^^^
 
     constructor() {
         super();
@@ -387,19 +387,19 @@ class Chowder extends Soup {
 >Chowder : Chowder
 >        : ^^^^^^^
 >Soup : Soup<{ claim: "ignorant" | "malicious"; }>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^                        ^^^^
 
     log() {
 >log : () => { claim: "ignorant" | "malicious"; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^                        ^^^
 
         return this.flavour
 >this.flavour : { claim: "ignorant" | "malicious"; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^                        ^^^
 >this : this
 >     : ^^^^
 >flavour : { claim: "ignorant" | "malicious"; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^                        ^^^
     }
 }
 
@@ -439,11 +439,11 @@ chowder.flavour.claim
 >chowder.flavour.claim : "ignorant" | "malicious"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >chowder.flavour : { claim: "ignorant" | "malicious"; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^                        ^^^
 >chowder : Chowder
 >        : ^^^^^^^
 >flavour : { claim: "ignorant" | "malicious"; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^                        ^^^
 >claim : "ignorant" | "malicious"
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 

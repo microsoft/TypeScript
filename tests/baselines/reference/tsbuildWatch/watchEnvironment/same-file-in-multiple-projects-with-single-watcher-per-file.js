@@ -154,6 +154,32 @@ exports.pkg3 = 3;
 
 
 
+PolledWatches::
+/a/lib/package.json: *new*
+  {"pollingInterval":2000}
+/a/package.json: *new*
+  {"pollingInterval":2000}
+/package.json: *new*
+  {"pollingInterval":2000}
+/user/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/pkg0/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/pkg1/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/pkg2/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/pkg3/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/typings/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
+
 FsWatches::
 /user/username/projects/myproject/pkg0/index.ts: *new*
   {}
@@ -297,6 +323,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
@@ -318,6 +345,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 5: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 [[90mHH:MM:SS AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'typings/xterm.d.ts'
@@ -456,6 +484,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 6: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -465,6 +494,34 @@ Output::
 
 
 
+
+PolledWatches::
+/a/lib/package.json:
+  {"pollingInterval":2000}
+/a/package.json:
+  {"pollingInterval":2000}
+/package.json:
+  {"pollingInterval":2000}
+/user/package.json:
+  {"pollingInterval":2000}
+/user/username/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/pkg0/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/pkg1/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/pkg2/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/typings/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/pkg3/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/myproject/pkg0/index.ts:
@@ -518,6 +575,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 9: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
@@ -539,6 +597,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 10: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 [[90mHH:MM:SS AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'typings/xterm.d.ts'
@@ -640,6 +699,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 11: timerToBuildInvalidatedProject
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -654,6 +714,30 @@ Output::
 
 
 
+
+PolledWatches *deleted*::
+/a/lib/package.json:
+  {"pollingInterval":2000}
+/a/package.json:
+  {"pollingInterval":2000}
+/package.json:
+  {"pollingInterval":2000}
+/user/package.json:
+  {"pollingInterval":2000}
+/user/username/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/pkg0/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/pkg1/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/pkg2/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/typings/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:

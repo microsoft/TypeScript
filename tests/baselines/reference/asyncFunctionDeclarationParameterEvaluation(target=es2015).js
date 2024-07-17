@@ -79,17 +79,17 @@ function f12() { return (...args_1) => {
 function f() {
     const a1 = (x_1, ...args_1) => __awaiter(this, [x_1, ...args_1], void 0, function* (x, y = z) { });
     const a2 = (_a) => __awaiter(this, [_a], void 0, function* ({ [z]: x }) { });
-    const a3 = (...args_2) => {
+    const a3 = (...args_1) => {
         var arguments_10 = arguments;
-        return __awaiter(this, [...args_2], void 0, function* (x = z) { return () => __awaiter(this, void 0, void 0, function* () { return arguments_10; }); });
+        return __awaiter(this, [...args_1], void 0, function* (x = z) { return () => __awaiter(this, void 0, void 0, function* () { return arguments_10; }); });
     };
-    const a4 = (...args_2) => __awaiter(this, [...args_2], void 0, function* (x = z) { return () => __awaiter(this, void 0, void 0, function* () { return () => __awaiter(this, void 0, void 0, function* () { return arguments_10; }); }); });
-    const a5 = (...args_3) => __awaiter(this, [...args_3], void 0, function* (x = z, ...args) { });
-    const a6 = (...args_4) => __awaiter(this, [...args_4], void 0, function* (x = z, ...args) { return () => __awaiter(this, void 0, void 0, function* () { return arguments_10; }); });
-    const a7 = (...args_5) => __awaiter(this, [...args_5], void 0, function* (x = z, ...args) { return () => __awaiter(this, void 0, void 0, function* () { return () => __awaiter(this, void 0, void 0, function* () { return arguments_10; }); }); });
-    const a8 = () => __awaiter(this, void 0, void 0, function* () { return (...args_6) => __awaiter(this, [...args_6], void 0, function* (x = z) { return arguments_10; }); });
-    const a9 = () => __awaiter(this, void 0, void 0, function* () { return (...args_7) => __awaiter(this, [...args_7], void 0, function* (x = z) { return () => __awaiter(this, void 0, void 0, function* () { return arguments_10; }); }); });
-    const a10 = (...args_8) => __awaiter(this, [...args_8], void 0, function* (x = z) { return () => __awaiter(this, void 0, void 0, function* () { return function () {
+    const a4 = (...args_1) => __awaiter(this, [...args_1], void 0, function* (x = z) { return () => __awaiter(this, void 0, void 0, function* () { return () => __awaiter(this, void 0, void 0, function* () { return arguments_10; }); }); });
+    const a5 = (...args_1) => __awaiter(this, [...args_1], void 0, function* (x = z, ...args) { });
+    const a6 = (...args_1) => __awaiter(this, [...args_1], void 0, function* (x = z, ...args) { return () => __awaiter(this, void 0, void 0, function* () { return arguments_10; }); });
+    const a7 = (...args_1) => __awaiter(this, [...args_1], void 0, function* (x = z, ...args) { return () => __awaiter(this, void 0, void 0, function* () { return () => __awaiter(this, void 0, void 0, function* () { return arguments_10; }); }); });
+    const a8 = () => __awaiter(this, void 0, void 0, function* () { return (...args_1) => __awaiter(this, [...args_1], void 0, function* (x = z) { return arguments_10; }); });
+    const a9 = () => __awaiter(this, void 0, void 0, function* () { return (...args_1) => __awaiter(this, [...args_1], void 0, function* (x = z) { return () => __awaiter(this, void 0, void 0, function* () { return arguments_10; }); }); });
+    const a10 = (...args_1) => __awaiter(this, [...args_1], void 0, function* (x = z) { return () => __awaiter(this, void 0, void 0, function* () { return function () {
         var arguments_11 = arguments;
         return __awaiter(this, void 0, void 0, function* () { return () => __awaiter(this, void 0, void 0, function* () { return arguments_11; }); });
     }; }); });

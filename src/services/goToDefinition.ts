@@ -1,3 +1,4 @@
+import { isContextWithStartAndEndNode } from "./_namespaces/ts.FindAllReferences.js";
 import {
     AssignmentDeclarationKind,
     AssignmentExpression,
@@ -9,7 +10,6 @@ import {
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
@@ -106,8 +106,7 @@ import {
     TypeFlags,
     TypeReference,
     unescapeLeadingUnderscores,
-} from "./_namespaces/ts";
-import { isContextWithStartAndEndNode } from "./_namespaces/ts.FindAllReferences";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
@@ -200,7 +199,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     if (!symbol && isModuleSpecifierLike(fallbackNode)) {
         // We couldn't resolve the module specifier as an external module, but it could
         // be that module resolution succeeded but the target was not a module.
-        const ref = program.getResolvedModuleFromModuleSpecifier(fallbackNode)?.resolvedModule;
+        const ref = program.getResolvedModuleFromModuleSpecifier(fallbackNode, sourceFile)?.resolvedModule;
         if (ref) {
             return [{
                 name: fallbackNode.text,
@@ -226,7 +225,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
 
     const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
     // Don't go to the component constructor definition for a JSX element, just go to the component definition.
-    if (calledDeclaration && !(isJsxOpeningLikeElement(node.parent) && isConstructorLike(calledDeclaration))) {
+    if (calledDeclaration && !(isJsxOpeningLikeElement(node.parent) && isJsxConstructorLike(calledDeclaration))) {
         const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration, failedAliasResolution);
         // For a function, if this is the original function definition, return just sigInfo.
         // If this is the original constructor definition, parent is the class.
@@ -342,7 +341,7 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
 
     const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
     if (typeReferenceDirective) {
-        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
+        const reference = program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeReferenceDirective, sourceFile)?.resolvedTypeReferenceDirective;
         const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
         return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
     }
@@ -356,7 +355,7 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
     if (sourceFile.imports.length || sourceFile.moduleAugmentations.length) {
         const node = getTouchingToken(sourceFile, position);
         let resolution: ResolvedModuleWithFailedLookupLocations | undefined;
-        if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && (resolution = program.getResolvedModuleFromModuleSpecifier(node))) {
+        if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && (resolution = program.getResolvedModuleFromModuleSpecifier(node, sourceFile))) {
             const verifiedFileName = resolution.resolvedModule?.resolvedFileName;
             const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
             return {
@@ -581,16 +580,20 @@ function isExpandoDeclaration(node: Declaration): boolean {
 
 function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean, excludeDeclaration?: Node): DefinitionInfo[] | undefined {
     const filteredDeclarations = filter(symbol.declarations, d => d !== excludeDeclaration);
+    const signatureDefinition = getConstructSignatureDefinition() || getCallSignatureDefinition();
+    if (signatureDefinition) {
+        return signatureDefinition;
+    }
     const withoutExpandos = filter(filteredDeclarations, d => !isExpandoDeclaration(d));
     const results = some(withoutExpandos) ? withoutExpandos : filteredDeclarations;
-    return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution));
+    return map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution));
 
     function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
         // Applicable only if we are in a new expression, or we are on a constructor declaration
         // and in either case the symbol has a construct signature definition, i.e. class
         if (symbol.flags & SymbolFlags.Class && !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Variable)) && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
-            const cls = find(filteredDeclarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
-            return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
+            const cls = find(filteredDeclarations, isClassLike);
+            return cls && getSignatureDefinition(cls.members, /*selectConstructors*/ true);
         }
     }
 
@@ -738,10 +741,11 @@ function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): Signa
     return tryCast(signature && signature.declaration, (d): d is SignatureDeclaration => isFunctionLike(d) && !isFunctionTypeNode(d));
 }
 
-function isConstructorLike(node: Node): boolean {
+function isJsxConstructorLike(node: Node): boolean {
     switch (node.kind) {
         case SyntaxKind.Constructor:
         case SyntaxKind.ConstructorType:
+        case SyntaxKind.CallSignature:
         case SyntaxKind.ConstructSignature:
             return true;
         default:

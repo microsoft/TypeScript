@@ -39,6 +39,12 @@ T.bar();
 
 
 
+PolledWatches::
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
+/users/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
+
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
@@ -83,6 +89,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -91,6 +98,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -108,6 +116,12 @@ exports.bar = bar;
 function bar() { }
 
 
+
+PolledWatches::
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
+/users/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:

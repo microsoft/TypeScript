@@ -1,10 +1,10 @@
-import * as Utils from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import { verifyTsc } from "../helpers/tsc";
+import * as Utils from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { verifyTsc } from "../helpers/tsc.js";
 import {
     loadProjectFromFiles,
     replaceText,
-} from "../helpers/vfs";
+} from "../helpers/vfs.js";
 
 describe("unittests:: tsc:: composite::", () => {
     verifyTsc({

@@ -16,9 +16,9 @@ function decorator() {
 
 @decorator()
 >decorator() : (target: new (...args: any[]) => any) => void
->            : ^      ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^      ^^                           ^^^^^^^^^
 >decorator : () => (target: new (...args: any[]) => any) => void
->          : ^^^^^^^      ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^      ^^                           ^^^^^^^^^
 
 class Foo {
 >Foo : Foo
@@ -39,9 +39,9 @@ Foo.func();
 >Foo.func() : Foo
 >           : ^^^
 >Foo.func : () => Foo
->         : ^^^^^^^^^
+>         : ^^^^^^   
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >func : () => Foo
->     : ^^^^^^^^^
+>     : ^^^^^^   
 

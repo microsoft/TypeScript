@@ -1,16 +1,17 @@
 import * as fs from "fs";
 
-import { IO } from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import { IO } from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 import {
     defer,
     Deferred,
-} from "../../_namespaces/Utils";
+} from "../../_namespaces/Utils.js";
 import {
     createWatchedSystem,
     FileOrFolderOrSymLinkMap,
+    osFlavorToString,
     TestServerHostOsFlavor,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 describe("unittests:: sys:: symlinkWatching::", () => {
     function delayedOp(op: () => void, delay: number) {
         ts.sys.setTimeout!(op, delay);
@@ -44,10 +45,16 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                     watcher: sys.watchFile!(
                         toWatch,
                         (fileName, eventKind, modifiedTime) => {
-                            assert.equal(fileName, toWatch);
-                            assert.equal(eventKind, ts.FileWatcherEventKind.Changed);
-                            const actual = modifiedTimeToString(modifiedTime);
-                            assert(actual === undefined || actual === modifiedTimeToString(sys.getModifiedTime!(file)));
+                            try {
+                                assert.equal(fileName, toWatch);
+                                assert.equal(eventKind, ts.FileWatcherEventKind.Changed);
+                                const actual = modifiedTimeToString(modifiedTime);
+                                assert(actual === undefined || actual === modifiedTimeToString(sys.getModifiedTime!(file)));
+                            }
+                            catch (e) {
+                                result.deferred.reject(e);
+                                return;
+                            }
                             result.deferred.resolve();
                         },
                         10,
@@ -70,11 +77,13 @@ describe("unittests:: sys:: symlinkWatching::", () => {
     }
 
     interface EventAndFileName {
-        event: string;
+        event: "rename" | "change";
+        // eslint-disable-next-line no-restricted-syntax
         fileName: string | null | undefined;
     }
     interface ExpectedEventAndFileName {
-        event: string | readonly string[]; // Its expected event name or any of the event names
+        event: "rename" | "change" | readonly ["rename", "change"]; // Its expected event name or any of the event names
+        // eslint-disable-next-line no-restricted-syntax
         fileName: string | null | undefined;
     }
     type FsWatch<System extends ts.System> = (dir: string, recursive: boolean, cb: ts.FsWatchCallback, sys: System) => ts.FileWatcher;
@@ -115,12 +124,27 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         const deferred = defer();
         delayedOp(() => {
             if (opType !== "init") {
-                verifyEventAndFileNames(`${opType}:: dir`, dirResult.actual, expectedResult);
-                verifyEventAndFileNames(`${opType}:: link`, linkResult.actual, expectedResult);
+                try {
+                    verifyEventAndFileNames(`${opType}:: dir`, dirResult.actual, expectedResult);
+                    verifyEventAndFileNames(`${opType}:: link`, linkResult.actual, expectedResult);
+                }
+                catch (e) {
+                    deferred.reject(e);
+                    return;
+                }
             }
             deferred.resolve();
         }, !!process.env.CI ? 1000 : 500);
         return deferred.promise;
+    }
+
+    function compareEventFileName(a: EventAndFileName["fileName"], b: EventAndFileName["fileName"]) {
+        return ts.compareStringsCaseSensitive(a ?? undefined, b ?? undefined);
+    }
+
+    function compareEventAndFileName(a: EventAndFileName, b: EventAndFileName): ts.Comparison {
+        return compareEventFileName(b.fileName, a.fileName) || // Also longer string to be before shorter string
+            ts.compareStringsCaseSensitive(b.event, a.event); // We want rename to be before change
     }
 
     function verifyEventAndFileNames(
@@ -129,36 +153,23 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         expected: readonly ExpectedEventAndFileName[] | undefined,
     ) {
         assert(actual.length >= (expected?.length ?? 0), `${prefix}:: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)}`);
+        const sortedActual = ts.sortAndDeduplicate(actual, compareEventAndFileName);
+
         let expectedIndex = 0;
-        for (const a of actual) {
+        for (const a of sortedActual) {
             if (isExpectedEventAndFileName(a, expected![expectedIndex])) {
                 expectedIndex++;
                 continue;
             }
-            // Previous event repeated?
-            if (isExpectedEventAndFileName(a, expected![expectedIndex - 1])) continue;
-            ts.Debug.fail(`${prefix}:: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)}`);
+            ts.Debug.fail(`${prefix}:: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)} Sorted: ${JSON.stringify(sortedActual)}`);
         }
-        assert(expectedIndex >= (expected?.length ?? 0), `${prefix}:: Should get all events: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)}`);
+        assert(expectedIndex >= (expected?.length ?? 0), `${prefix}:: Should get all events: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)} Sorted: ${JSON.stringify(sortedActual)}`);
     }
 
     function isExpectedEventAndFileName(actual: EventAndFileName, expected: ExpectedEventAndFileName | undefined) {
         return !!expected &&
             actual.fileName === expected.fileName &&
             (ts.isString(expected.event) ? actual.event === expected.event : ts.contains(expected.event, actual.event));
-    }
-
-    function osFlavorToString(osFlavor: TestServerHostOsFlavor) {
-        switch (osFlavor) {
-            case TestServerHostOsFlavor.Windows:
-                return "Windows";
-            case TestServerHostOsFlavor.MacOs:
-                return "MacOs";
-            case TestServerHostOsFlavor.Linux:
-                return "Linux";
-            default:
-                ts.Debug.assertNever(osFlavor);
-        }
     }
 
     interface FsEventsForWatchDirectory extends Record<string, readonly ExpectedEventAndFileName[] | undefined> {

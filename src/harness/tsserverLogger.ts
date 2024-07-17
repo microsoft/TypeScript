@@ -1,5 +1,5 @@
-import * as ts from "./_namespaces/ts";
-import { Compiler } from "./harnessIO";
+import * as ts from "./_namespaces/ts.js";
+import { Compiler } from "./harnessIO.js";
 
 export const HarnessLSCouldNotResolveModule = "HarnessLanguageService:: Could not resolve module";
 
@@ -123,7 +123,7 @@ export function sanitizeLog(s: string): string {
     s = s.replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`);
     s = s.replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`);
     s = s.replace(/continuePreviousIncompleteResponse: \d+(?:\.\d+)?/g, `continuePreviousIncompleteResponse: *`);
-    s = s.replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`);
+    s = s.replace(/referenced projects in \d+(?:\.\d+)?/g, `referenced projects in *`);
     s = s.replace(/"exportMapKey":\s*"\d+ \d+ /g, match => match.replace(/ \d+ /, ` * `));
     s = s.replace(/getIndentationAtPosition: getCurrentSourceFile: \d+(?:\.\d+)?/, `getIndentationAtPosition: getCurrentSourceFile: *`);
     s = s.replace(/getIndentationAtPosition: computeIndentation\s*: \d+(?:\.\d+)?/, `getIndentationAtPosition: computeIndentation: *`);
