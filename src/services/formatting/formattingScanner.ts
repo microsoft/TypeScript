@@ -16,6 +16,7 @@ import {
     isTrivia,
     LanguageVariant,
     last,
+    Mutable,
     Node,
     NodeArray,
     ScriptTarget,
@@ -308,7 +309,7 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
     // when parser interprets token differently, i.e keyword treated as identifier
     function fixTokenKind(tokenInfo: TokenInfo, container: Node): TokenInfo {
         if (isToken(container) && tokenInfo.token.kind !== container.kind) {
-            tokenInfo.token.kind = container.kind;
+            (tokenInfo.token as Mutable<TextRangeWithKind>).kind = container.kind;
         }
         return tokenInfo;
     }

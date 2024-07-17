@@ -125,9 +125,9 @@ interface ProjectTestConfiguration {
 }
 
 interface ProjectTestPayload {
-    testCase: ProjectRunnerTestCase & ts.CompilerOptions;
-    moduleKind: ts.ModuleKind;
-    vfs: vfs.FileSystem;
+    readonly testCase: ProjectRunnerTestCase & ts.CompilerOptions;
+    readonly moduleKind: ts.ModuleKind;
+    readonly vfs: vfs.FileSystem;
 }
 
 class ProjectTestCase {

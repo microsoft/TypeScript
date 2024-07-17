@@ -104,6 +104,7 @@ import {
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PropertyAssignment,
+    ReadonlyTextRange,
     setCommentRange,
     setEmitFlags,
     setTextRange,
@@ -971,7 +972,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param value The value of the variable's initializer.
      * @param location The source map location for the assignment.
      */
-    function createExportedVariableAssignment(name: Identifier, value: Expression, location?: TextRange) {
+    function createExportedVariableAssignment(name: Identifier, value: Expression, location?: ReadonlyTextRange) {
         return createVariableAssignment(name, value, location, /*isExportedDeclaration*/ true);
     }
 
@@ -982,7 +983,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param value The value of the variable's initializer.
      * @param location The source map location for the assignment.
      */
-    function createNonExportedVariableAssignment(name: Identifier, value: Expression, location?: TextRange) {
+    function createNonExportedVariableAssignment(name: Identifier, value: Expression, location?: ReadonlyTextRange) {
         return createVariableAssignment(name, value, location, /*isExportedDeclaration*/ false);
     }
 
@@ -994,7 +995,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      * @param location The source map location for the assignment.
      * @param isExportedDeclaration A value indicating whether the variable is exported.
      */
-    function createVariableAssignment(name: Identifier, value: Expression, location: TextRange | undefined, isExportedDeclaration: boolean) {
+    function createVariableAssignment(name: Identifier, value: Expression, location: ReadonlyTextRange | undefined, isExportedDeclaration: boolean) {
         hoistVariableDeclaration(factory.cloneNode(name));
         return isExportedDeclaration
             ? createExportExpression(name, preventSubstitution(setTextRange(factory.createAssignment(name, value), location)))

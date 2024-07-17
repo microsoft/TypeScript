@@ -256,6 +256,7 @@ import {
     PropertyAccessExpression,
     PropertyName,
     QualifiedName,
+    ReadonlyTextRange,
     ScriptTarget,
     SetAccessorDeclaration,
     setLocalizedDiagnosticMessages,
@@ -343,7 +344,7 @@ export function textSpanContainsPosition(span: TextSpan, position: number) {
 }
 
 /** @internal */
-export function textRangeContainsPositionInclusive(range: TextRange, position: number): boolean {
+export function textRangeContainsPositionInclusive(range: ReadonlyTextRange, position: number): boolean {
     return position >= range.pos && position <= range.end;
 }
 
@@ -353,12 +354,12 @@ export function textSpanContainsTextSpan(span: TextSpan, other: TextSpan) {
 }
 
 /** @internal */
-export function textSpanContainsTextRange(span: TextSpan, range: TextRange) {
+export function textSpanContainsTextRange(span: TextSpan, range: ReadonlyTextRange) {
     return range.pos >= span.start && range.end <= textSpanEnd(span);
 }
 
 /** @internal */
-export function textRangeContainsTextSpan(range: TextRange, span: TextSpan) {
+export function textRangeContainsTextSpan(range: ReadonlyTextRange, span: TextSpan) {
     return span.start >= range.pos && textSpanEnd(span) <= range.end;
 }
 
@@ -390,7 +391,7 @@ export function textSpanIntersectsWithPosition(span: TextSpan, position: number)
 }
 
 /** @internal */
-export function textRangeIntersectsWithTextSpan(range: TextRange, span: TextSpan): boolean {
+export function textRangeIntersectsWithTextSpan(range: ReadonlyTextRange, span: TextSpan): boolean {
     return textSpanIntersectsWith(span, range.pos, range.end - range.pos);
 }
 

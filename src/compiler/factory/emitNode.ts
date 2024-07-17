@@ -17,6 +17,7 @@ import {
     NodeArray,
     orderedRemoveItem,
     PrivateIdentifier,
+    ReadonlyTextRange,
     SnippetElement,
     some,
     SourceFile,
@@ -180,14 +181,14 @@ export function setStartsOnNewLine<T extends Node>(node: T, newLine: boolean) {
 /**
  * Gets a custom text range to use when emitting comments.
  */
-export function getCommentRange(node: Node): TextRange {
+export function getCommentRange(node: Node): ReadonlyTextRange {
     return node.emitNode?.commentRange ?? node;
 }
 
 /**
  * Sets a custom text range to use when emitting comments.
  */
-export function setCommentRange<T extends Node>(node: T, range: TextRange) {
+export function setCommentRange<T extends Node>(node: T, range: ReadonlyTextRange) {
     getOrCreateEmitNode(node).commentRange = range;
     return node;
 }

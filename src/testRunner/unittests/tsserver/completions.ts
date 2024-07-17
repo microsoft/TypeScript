@@ -62,8 +62,8 @@ describe("unittests:: tsserver:: completions::", () => {
         });
 
         interface CompletionDetailsFullRequest extends ts.server.protocol.FileLocationRequest {
-            readonly command: ts.server.protocol.CommandTypes.CompletionDetailsFull;
-            readonly arguments: ts.server.protocol.CompletionDetailsRequestArgs;
+            command: ts.server.protocol.CommandTypes.CompletionDetailsFull;
+            arguments: ts.server.protocol.CompletionDetailsRequestArgs;
         }
         session.executeCommandSeq<CompletionDetailsFullRequest>({
             command: ts.server.protocol.CommandTypes.CompletionDetailsFull,

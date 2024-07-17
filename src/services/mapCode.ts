@@ -311,13 +311,13 @@ function matchNode(a: Node, b: Node): boolean {
     return false;
 }
 
-function wipeNode(node: Mutable<Node>) {
+function wipeNode(node: Node) {
     resetNodePositions(node);
-    node.parent = undefined!;
+    (node as Mutable<Node>).parent = undefined!;
 }
 
-function resetNodePositions(node: Mutable<Node>) {
-    node.pos = -1;
-    node.end = -1;
+function resetNodePositions(node: Node) {
+    (node as Mutable<Node>).pos = -1;
+    (node as Mutable<Node>).end = -1;
     node.forEachChild(resetNodePositions);
 }

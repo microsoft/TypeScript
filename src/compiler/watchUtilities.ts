@@ -673,7 +673,7 @@ export interface WatchFactoryHost {
     watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
     watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
     getCurrentDirectory?(): string;
-    useCaseSensitiveFileNames: boolean | (() => boolean);
+    readonly useCaseSensitiveFileNames: boolean | (() => boolean);
 }
 
 /** @internal */

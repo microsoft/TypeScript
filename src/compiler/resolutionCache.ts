@@ -183,7 +183,7 @@ export interface CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations e
 /** @internal */
 export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
     toPath(fileName: string): Path;
-    getCanonicalFileName: GetCanonicalFileName;
+    getCanonicalFileName(fileName: string): string;
     getCompilationSettings(): CompilerOptions;
     preferNonRecursiveWatch: boolean | undefined;
     watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
@@ -193,7 +193,7 @@ export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
     onChangedAutomaticTypeDirectiveNames(): void;
     scheduleInvalidateResolutionsOfFailedLookupLocations(): void;
     getCachedDirectoryStructureHost(): CachedDirectoryStructureHost | undefined;
-    projectName?: string;
+    readonly projectName?: string;
     getGlobalCache?(): string | undefined;
     globalCacheResolutionModuleName?(externalModuleName: string): string;
     writeLog(s: string): void;

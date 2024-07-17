@@ -251,7 +251,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     });
 
     interface ReferencesFullRequest extends ts.server.protocol.FileLocationRequest {
-        readonly command: ts.server.protocol.CommandTypes.ReferencesFull;
+        command: ts.server.protocol.CommandTypes.ReferencesFull;
     }
     it("findAllReferencesFull", () => {
         const session = makeSampleProjects();

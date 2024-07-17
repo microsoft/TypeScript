@@ -151,6 +151,7 @@ import {
     pushIfUnique,
     QuestionToken,
     ReadonlyKeyword,
+    ReadonlyTextRange,
     RelationalOperator,
     RelationalOperatorOrHigher,
     SetAccessorDeclaration,
@@ -182,7 +183,7 @@ export function createEmptyExports(factory: NodeFactory) {
 }
 
 /** @internal */
-export function createMemberAccessForPropertyName(factory: NodeFactory, target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
+export function createMemberAccessForPropertyName(factory: NodeFactory, target: Expression, memberName: PropertyName, location?: ReadonlyTextRange): MemberExpression {
     if (isComputedPropertyName(memberName)) {
         return setTextRange(factory.createElementAccessExpression(target, memberName.expression), location);
     }
@@ -241,7 +242,7 @@ function createJsxFragmentFactoryExpression(factory: NodeFactory, jsxFragmentFac
 }
 
 /** @internal */
-export function createExpressionForJsxElement(factory: NodeFactory, callee: Expression, tagName: Expression, props: Expression | undefined, children: readonly Expression[] | undefined, location: TextRange): LeftHandSideExpression {
+export function createExpressionForJsxElement(factory: NodeFactory, callee: Expression, tagName: Expression, props: Expression | undefined, children: readonly Expression[] | undefined, location: ReadonlyTextRange): LeftHandSideExpression {
     const argumentsList = [tagName];
     if (props) {
         argumentsList.push(props);
@@ -274,7 +275,7 @@ export function createExpressionForJsxElement(factory: NodeFactory, callee: Expr
 }
 
 /** @internal */
-export function createExpressionForJsxFragment(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, jsxFragmentFactoryEntity: EntityName | undefined, reactNamespace: string, children: readonly Expression[], parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
+export function createExpressionForJsxFragment(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, jsxFragmentFactoryEntity: EntityName | undefined, reactNamespace: string, children: readonly Expression[], parentElement: JsxOpeningFragment, location: ReadonlyTextRange): LeftHandSideExpression {
     const tagName = createJsxFragmentFactoryExpression(factory, jsxFragmentFactoryEntity, reactNamespace, parentElement);
     const argumentsList = [tagName, factory.createNull()];
 

@@ -2292,7 +2292,7 @@ export function createDiagnosticMessageChainFromDiagnostic(diagnostic: Diagnosti
 }
 
 /** @internal */
-export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage): DiagnosticWithLocation {
+export function createDiagnosticForRange(sourceFile: SourceFile, range: ReadonlyTextRange, message: DiagnosticMessage): DiagnosticWithLocation {
     return {
         file: sourceFile,
         start: range.pos,
@@ -5386,7 +5386,7 @@ export function nodeStartsNewLexicalEnvironment(node: Node): boolean {
 }
 
 /** @internal */
-export function nodeIsSynthesized(range: TextRange): boolean {
+export function nodeIsSynthesized(range: ReadonlyTextRange): boolean {
     return positionIsSynthesized(range.pos)
         || positionIsSynthesized(range.end);
 }
@@ -6684,7 +6684,7 @@ export function getEffectiveSetAccessorTypeAnnotationNode(node: SetAccessorDecla
     return parameter && getEffectiveTypeAnnotationNode(parameter);
 }
 
-function emitNewLineBeforeLeadingComments(lineMap: readonly number[], writer: EmitTextWriter, node: TextRange, leadingComments: readonly CommentRange[] | undefined) {
+function emitNewLineBeforeLeadingComments(lineMap: readonly number[], writer: EmitTextWriter, node: ReadonlyTextRange, leadingComments: readonly CommentRange[] | undefined) {
     emitNewLineBeforeLeadingCommentsOfPosition(lineMap, writer, node.pos, leadingComments);
 }
 
@@ -6752,7 +6752,7 @@ function emitComments(
  *
  * @internal
  */
-export function emitDetachedComments(text: string, lineMap: readonly number[], writer: EmitTextWriter, writeComment: (text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void, node: TextRange, newLine: string, removeComments: boolean) {
+export function emitDetachedComments(text: string, lineMap: readonly number[], writer: EmitTextWriter, writeComment: (text: string, lineMap: readonly number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void, node: ReadonlyTextRange, newLine: string, removeComments: boolean) {
     let leadingComments: CommentRange[] | undefined;
     let currentDetachedCommentInfo: { nodePos: number; detachedCommentEndPos: number; } | undefined;
     if (removeComments) {
@@ -7580,7 +7580,7 @@ export function createRange(pos: number, end: number = pos): TextRange {
  *
  * @internal
  */
-export function moveRangeEnd(range: TextRange, end: number): TextRange {
+export function moveRangeEnd(range: ReadonlyTextRange, end: number): TextRange {
     return createRange(range.pos, end);
 }
 
@@ -7592,7 +7592,7 @@ export function moveRangeEnd(range: TextRange, end: number): TextRange {
  *
  * @internal
  */
-export function moveRangePos(range: TextRange, pos: number): TextRange {
+export function moveRangePos(range: ReadonlyTextRange, pos: number): TextRange {
     return createRange(pos, range.end);
 }
 
@@ -7601,7 +7601,7 @@ export function moveRangePos(range: TextRange, pos: number): TextRange {
  *
  * @internal
  */
-export function moveRangePastDecorators(node: Node): TextRange {
+export function moveRangePastDecorators(node: Node): ReadonlyTextRange {
     const lastDecorator = canHaveModifiers(node) ? findLast(node.modifiers, isDecorator) : undefined;
     return lastDecorator && !positionIsSynthesized(lastDecorator.end)
         ? moveRangePos(node, lastDecorator.end)
@@ -7613,7 +7613,7 @@ export function moveRangePastDecorators(node: Node): TextRange {
  *
  * @internal
  */
-export function moveRangePastModifiers(node: Node): TextRange {
+export function moveRangePastModifiers(node: Node): ReadonlyTextRange {
     if (isPropertyDeclaration(node) || isMethodDeclaration(node)) {
         return moveRangePos(node, node.name.pos);
     }
@@ -7637,12 +7637,12 @@ export function createTokenRange(pos: number, token: SyntaxKind): TextRange {
 }
 
 /** @internal */
-export function rangeIsOnSingleLine(range: TextRange, sourceFile: SourceFile) {
+export function rangeIsOnSingleLine(range: ReadonlyTextRange, sourceFile: SourceFile) {
     return rangeStartIsOnSameLineAsRangeEnd(range, range, sourceFile);
 }
 
 /** @internal */
-export function rangeStartPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+export function rangeStartPositionsAreOnSameLine(range1: ReadonlyTextRange, range2: ReadonlyTextRange, sourceFile: SourceFile) {
     return positionsAreOnSameLine(
         getStartPositionOfRange(range1, sourceFile, /*includeComments*/ false),
         getStartPositionOfRange(range2, sourceFile, /*includeComments*/ false),
@@ -7651,28 +7651,28 @@ export function rangeStartPositionsAreOnSameLine(range1: TextRange, range2: Text
 }
 
 /** @internal */
-export function rangeEndPositionsAreOnSameLine(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+export function rangeEndPositionsAreOnSameLine(range1: ReadonlyTextRange, range2: ReadonlyTextRange, sourceFile: SourceFile) {
     return positionsAreOnSameLine(range1.end, range2.end, sourceFile);
 }
 
 /** @internal @knipignore */
-export function rangeStartIsOnSameLineAsRangeEnd(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+export function rangeStartIsOnSameLineAsRangeEnd(range1: ReadonlyTextRange, range2: ReadonlyTextRange, sourceFile: SourceFile) {
     return positionsAreOnSameLine(getStartPositionOfRange(range1, sourceFile, /*includeComments*/ false), range2.end, sourceFile);
 }
 
 /** @internal */
-export function rangeEndIsOnSameLineAsRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+export function rangeEndIsOnSameLineAsRangeStart(range1: ReadonlyTextRange, range2: ReadonlyTextRange, sourceFile: SourceFile) {
     return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile, /*includeComments*/ false), sourceFile);
 }
 
 /** @internal */
-export function getLinesBetweenRangeEndAndRangeStart(range1: TextRange, range2: TextRange, sourceFile: SourceFile, includeSecondRangeComments: boolean) {
+export function getLinesBetweenRangeEndAndRangeStart(range1: ReadonlyTextRange, range2: ReadonlyTextRange, sourceFile: SourceFile, includeSecondRangeComments: boolean) {
     const range2Start = getStartPositionOfRange(range2, sourceFile, includeSecondRangeComments);
     return getLinesBetweenPositions(sourceFile, range1.end, range2Start);
 }
 
 /** @internal @knipignore */
-export function getLinesBetweenRangeEndPositions(range1: TextRange, range2: TextRange, sourceFile: SourceFile) {
+export function getLinesBetweenRangeEndPositions(range1: ReadonlyTextRange, range2: ReadonlyTextRange, sourceFile: SourceFile) {
     return getLinesBetweenPositions(sourceFile, range1.end, range2.end);
 }
 
@@ -7687,7 +7687,7 @@ export function positionsAreOnSameLine(pos1: number, pos2: number, sourceFile: S
 }
 
 /** @internal @knipignore */
-export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile, includeComments: boolean) {
+export function getStartPositionOfRange(range: ReadonlyTextRange, sourceFile: SourceFile, includeComments: boolean) {
     return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos, /*stopAfterLineBreak*/ false, includeComments);
 }
 

@@ -52,6 +52,7 @@ class EditWalker implements LineIndexWalker {
     get done() {
         return false;
     }
+    set done(value) {}
 
     readonly lineIndex = new LineIndex();
     // path to start of range

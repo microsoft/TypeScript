@@ -353,7 +353,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     readonly watchUtils: WatchUtils<TestFileWatcher, TestFsWatcher>;
     runWithFallbackPolling: boolean;
-    public readonly useCaseSensitiveFileNames: boolean;
+    public useCaseSensitiveFileNames: boolean;
     public readonly newLine: string;
     public readonly windowsStyleRoot?: string;
     private readonly environmentVariables?: Map<string, string>;

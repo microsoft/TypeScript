@@ -46,6 +46,7 @@ import {
     positionBelongsToNode,
     rangeContainsRange,
     rangeContainsStartEnd,
+    ReadonlyTextRange,
     SignatureDeclaration,
     skipTrivia,
     SourceFile,
@@ -532,7 +533,7 @@ export namespace SmartIndenter {
         }
     }
 
-    function getVisualListRange(node: Node, list: TextRange, sourceFile: SourceFile): TextRange {
+    function getVisualListRange(node: Node, list: ReadonlyTextRange, sourceFile: SourceFile): ReadonlyTextRange {
         const children = node.getChildren(sourceFile);
         for (let i = 1; i < children.length - 1; i++) {
             if (children[i].pos === list.pos && children[i].end === list.end) {

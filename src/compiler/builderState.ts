@@ -291,7 +291,7 @@ export namespace BuilderState {
     /**
      * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
      */
-    export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: BuilderState | undefined) {
+    export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: Readonly<BuilderState> | undefined) {
         return oldState && !oldState.referencedMap === !newReferencedMap;
     }
 

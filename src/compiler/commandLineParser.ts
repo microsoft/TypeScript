@@ -2515,7 +2515,7 @@ export interface TSConfig {
 /** @internal */
 export interface ConvertToTSConfigHost {
     getCurrentDirectory(): string;
-    useCaseSensitiveFileNames: boolean;
+    readonly useCaseSensitiveFileNames: boolean;
 }
 
 /**

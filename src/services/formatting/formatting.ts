@@ -66,6 +66,7 @@ import {
     rangeContainsRange,
     rangeContainsStartEnd,
     rangeOverlapsWithStartEnd,
+    ReadonlyTextRange,
     repeatString,
     SourceFile,
     SourceFileLike,
@@ -86,8 +87,8 @@ export interface FormatContext {
 }
 
 /** @internal */
-export interface TextRangeWithKind<T extends SyntaxKind = SyntaxKind> extends TextRange {
-    kind: T;
+export interface TextRangeWithKind<T extends SyntaxKind = SyntaxKind> extends ReadonlyTextRange {
+    readonly kind: T;
 }
 
 /** @internal */
@@ -327,7 +328,7 @@ function findEnclosingNode(range: TextRange, sourceFile: SourceFile): Node {
  * This function will return a predicate that for a given text range will tell
  * if there are any parse errors that overlap with the range.
  */
-function prepareRangeContainsErrorFunction(errors: readonly Diagnostic[], originalRange: TextRange): (r: TextRange) => boolean {
+function prepareRangeContainsErrorFunction(errors: readonly Diagnostic[], originalRange: ReadonlyTextRange): (r: ReadonlyTextRange) => boolean {
     if (!errors.length) {
         return rangeHasNoErrors;
     }
@@ -494,7 +495,7 @@ function formatSpanWorker(
     formattingScanner: FormattingScanner,
     { options, getRules, host }: FormatContext,
     requestKind: FormattingRequestKind,
-    rangeContainsError: (r: TextRange) => boolean,
+    rangeContainsError: (r: ReadonlyTextRange) => boolean,
     sourceFile: SourceFileLike,
 ): TextChange[] {
     // formatting context is used by rules provider
@@ -1181,7 +1182,7 @@ function formatSpanWorker(
         return indentationString !== sourceFile.text.substr(startLinePosition, indentationString.length);
     }
 
-    function indentMultilineComment(commentRange: TextRange, indentation: number, firstLineIsIndented: boolean, indentFinalLine = true) {
+    function indentMultilineComment(commentRange: ReadonlyTextRange, indentation: number, firstLineIsIndented: boolean, indentFinalLine = true) {
         // split comment in lines
         let startLine = sourceFile.getLineAndCharacterOfPosition(commentRange.pos).line;
         const endLine = sourceFile.getLineAndCharacterOfPosition(commentRange.end).line;

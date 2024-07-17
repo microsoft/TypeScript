@@ -405,15 +405,16 @@ export abstract class TypingsInstaller {
         const requestId = this.installRunCount;
         this.installRunCount++;
 
+        const scopedTypings = filteredTypings.map(typingsName);
         // send progress event
         this.sendResponse({
             kind: EventBeginInstallTypes,
             eventId: requestId,
             typingsInstallerVersion: version,
             projectName: req.projectName,
+            packagesToInstall: scopedTypings,
         } as BeginInstallTypes);
 
-        const scopedTypings = filteredTypings.map(typingsName);
         this.installTypingsAsync(requestId, scopedTypings, cachePath, ok => {
             try {
                 if (!ok) {

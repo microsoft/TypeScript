@@ -64,6 +64,7 @@ import {
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     PropertyAssignment,
+    ReadonlyTextRange,
     sameMap,
     ScriptTarget,
     setIdentifierGeneratedImportReference,
@@ -311,7 +312,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         return length(result) ? factory.createPropertyAssignment("children", factory.createArrayLiteralExpression(result)) : undefined;
     }
 
-    function visitJsxOpeningLikeElementJSX(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
+    function visitJsxOpeningLikeElementJSX(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: ReadonlyTextRange) {
         const tagName = getTagName(node);
         const childrenProp = children && children.length ? convertJsxChildrenToChildrenPropAssignment(children) : undefined;
         const keyAttr = find(node.attributes.properties, p => !!p.name && isIdentifier(p.name) && p.name.escapedText === "key") as JsxAttribute | undefined;
@@ -334,7 +335,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         keyAttr: JsxAttribute | undefined,
         children: readonly JsxChild[],
         isChild: boolean,
-        location: TextRange,
+        location: ReadonlyTextRange,
     ) {
         const nonWhitespaceChildren = getSemanticJsxChildren(children);
         const isStaticChildren = length(nonWhitespaceChildren) > 1 || !!(nonWhitespaceChildren[0] as JsxExpression)?.dotDotDotToken;
@@ -377,7 +378,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         return element;
     }
 
-    function visitJsxOpeningLikeElementCreateElement(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
+    function visitJsxOpeningLikeElementCreateElement(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: ReadonlyTextRange) {
         const tagName = getTagName(node);
         const attrs = node.attributes.properties;
         const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs) :
@@ -408,7 +409,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         return element;
     }
 
-    function visitJsxOpeningFragmentJSX(_node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
+    function visitJsxOpeningFragmentJSX(_node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: ReadonlyTextRange) {
         let childrenProps: Expression | undefined;
         if (children && children.length) {
             const result = convertJsxChildrenToChildrenPropObject(children);
@@ -426,7 +427,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         );
     }
 
-    function visitJsxOpeningFragmentCreateElement(node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
+    function visitJsxOpeningFragmentCreateElement(node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: ReadonlyTextRange) {
         const element = createExpressionForJsxFragment(
             factory,
             context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),

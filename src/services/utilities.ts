@@ -317,6 +317,7 @@ import {
     PseudoBigInt,
     pseudoBigIntToString,
     QualifiedName,
+    ReadonlyTextRange,
     RefactorContext,
     removeFileExtension,
     removeSuffix,
@@ -915,37 +916,37 @@ export function getLineStartPositionForPosition(position: number, sourceFile: So
 }
 
 /** @internal */
-export function rangeContainsRange(r1: TextRange, r2: TextRange): boolean {
+export function rangeContainsRange(r1: ReadonlyTextRange, r2: ReadonlyTextRange): boolean {
     return startEndContainsRange(r1.pos, r1.end, r2);
 }
 
 /** @internal */
-export function rangeContainsRangeExclusive(r1: TextRange, r2: TextRange): boolean {
+export function rangeContainsRangeExclusive(r1: ReadonlyTextRange, r2: ReadonlyTextRange): boolean {
     return rangeContainsPositionExclusive(r1, r2.pos) && rangeContainsPositionExclusive(r1, r2.end);
 }
 
 /** @internal */
-export function rangeContainsPosition(r: TextRange, pos: number): boolean {
+export function rangeContainsPosition(r: ReadonlyTextRange, pos: number): boolean {
     return r.pos <= pos && pos <= r.end;
 }
 
 /** @internal */
-export function rangeContainsPositionExclusive(r: TextRange, pos: number) {
+export function rangeContainsPositionExclusive(r: ReadonlyTextRange, pos: number) {
     return r.pos < pos && pos < r.end;
 }
 
 /** @internal */
-export function startEndContainsRange(start: number, end: number, range: TextRange): boolean {
+export function startEndContainsRange(start: number, end: number, range: ReadonlyTextRange): boolean {
     return start <= range.pos && end >= range.end;
 }
 
 /** @internal */
-export function rangeContainsStartEnd(range: TextRange, start: number, end: number): boolean {
+export function rangeContainsStartEnd(range: ReadonlyTextRange, start: number, end: number): boolean {
     return range.pos <= start && range.end >= end;
 }
 
 /** @internal */
-export function rangeOverlapsWithStartEnd(r1: TextRange, start: number, end: number) {
+export function rangeOverlapsWithStartEnd(r1: ReadonlyTextRange, start: number, end: number) {
     return startEndOverlapsWithStartEnd(r1.pos, r1.end, start, end);
 }
 
@@ -2344,7 +2345,7 @@ export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): Tex
 }
 
 /** @internal */
-export function createTextSpanFromRange(range: TextRange): TextSpan {
+export function createTextSpanFromRange(range: ReadonlyTextRange): TextSpan {
     return createTextSpanFromBounds(range.pos, range.end);
 }
 

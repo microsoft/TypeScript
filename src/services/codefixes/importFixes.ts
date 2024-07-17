@@ -450,7 +450,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
             const nonTypeOnlyKey = newImportsKey(moduleSpecifier, /*topLevelTypeOnly*/ false);
             const typeOnlyEntry = newImports.get(typeOnlyKey);
             const nonTypeOnlyEntry = newImports.get(nonTypeOnlyKey);
-            const newEntry: ImportsCollection & { useRequire: boolean; } = {
+            const newEntry: Mutable<ImportsCollection & { useRequire: boolean; }> = {
                 defaultImport: undefined,
                 namedImports: undefined,
                 namespaceLikeImport: undefined,
@@ -1930,11 +1930,11 @@ interface ImportsCollection {
     };
 }
 
-function needsTypeOnly({ addAsTypeOnly }: { addAsTypeOnly: AddAsTypeOnly; }): boolean {
+function needsTypeOnly({ addAsTypeOnly }: { readonly addAsTypeOnly: AddAsTypeOnly; }): boolean {
     return addAsTypeOnly === AddAsTypeOnly.Required;
 }
 
-function shouldUseTypeOnly(info: { addAsTypeOnly: AddAsTypeOnly; }, preferences: UserPreferences): boolean {
+function shouldUseTypeOnly(info: { readonly addAsTypeOnly: AddAsTypeOnly; }, preferences: UserPreferences): boolean {
     return needsTypeOnly(info) || !!preferences.preferTypeOnlyAutoImports && info.addAsTypeOnly !== AddAsTypeOnly.NotAllowed;
 }
 
@@ -1943,7 +1943,7 @@ function getNewImports(
     quotePreference: QuotePreference,
     defaultImport: Import | undefined,
     namedImports: readonly Import[] | undefined,
-    namespaceLikeImport: Import & { importKind: ImportKind.CommonJS | ImportKind.Namespace; } | undefined,
+    namespaceLikeImport: Import & { readonly importKind: ImportKind.CommonJS | ImportKind.Namespace; } | undefined,
     compilerOptions: CompilerOptions,
     preferences: UserPreferences,
 ): AnyImportSyntax | readonly AnyImportSyntax[] {

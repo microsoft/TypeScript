@@ -27,6 +27,7 @@ import {
     ObjectLiteralElementLike,
     ParameterDeclaration,
     PrivateIdentifier,
+    ReadonlyTextRange,
     ScriptTarget,
     setEmitFlags,
     setInternalEmitFlags,
@@ -113,7 +114,7 @@ export interface EmitHelperFactory {
     createAsyncDelegatorHelper(expression: Expression): Expression;
     createAsyncValuesHelper(expression: Expression): Expression;
     // ES2018 Destructuring Helpers
-    createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: TextRange): Expression;
+    createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: ReadonlyTextRange): Expression;
     // ES2017 Helpers
     createAwaiterHelper(hasLexicalThis: boolean, argumentsExpression: Expression | undefined, promiseConstructor: EntityName | Expression | undefined, parameters: readonly ParameterDeclaration[] | undefined, body: Block): Expression;
     // ES2015 Helpers

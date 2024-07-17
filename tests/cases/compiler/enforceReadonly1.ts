@@ -33,6 +33,23 @@ function f3(m: { foo(): void }, p: { foo: () => void }, r: { readonly foo: () =>
     p = r;  // Error
 }
 
+interface Base {
+    foo(): void;
+}
+
+interface Item extends Base {
+    name: string;
+}
+
+interface ReadonlyItem extends Base {
+    readonly name: string;
+}
+
+declare let item1: ReadonlyItem;
+declare let item2: Readonly<Item>;
+
+item1 = item2;
+
 type Paths = string[] & { __brand__: "Paths" };
 
 function f4(rp: Readonly<Paths>, rs: Readonly<string[]>) {

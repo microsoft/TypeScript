@@ -2320,7 +2320,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindModuleDeclaration(node: ModuleDeclaration) {
-        setExportContextFlag(node);
+        setExportContextFlag(node as Mutable<ModuleDeclaration>);
         if (isAmbientModule(node)) {
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 errorOnFirstToken(node, Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible);
@@ -2778,7 +2778,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 bindChildren(node);
             }
             else {
-                bindContainer(node as HasContainerFlags, containerFlags);
+                bindContainer(node as Mutable<HasContainerFlags>, containerFlags);
             }
             parent = saveParent;
         }
@@ -3091,7 +3091,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindSourceFileIfExternalModule() {
-        setExportContextFlag(file);
+        setExportContextFlag(file as Mutable<SourceFile>);
         if (isExternalModule(file)) {
             bindSourceFileAsExternalModule();
         }

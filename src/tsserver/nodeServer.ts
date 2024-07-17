@@ -392,7 +392,7 @@ function parseEventPort(eventPortStr: string | undefined) {
 function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger, cancellationToken: ts.server.ServerCancellationToken) {
     const rl = readline.createInterface({
         input: process.stdin,
-        output: process.stdout,
+        output: process.stdout as NodeJS.WritableStream,
         terminal: false,
     });
 
