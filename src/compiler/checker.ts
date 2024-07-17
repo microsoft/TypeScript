@@ -47145,7 +47145,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            else if (resolveSideEffectImports && !importClause) {
+            else if (!importClause) {
                 void resolveExternalModuleName(node, node.moduleSpecifier);
             }
         }
