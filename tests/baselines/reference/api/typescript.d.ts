@@ -2821,8 +2821,8 @@ declare namespace ts {
             private hasAddedOrRemovedSymlinks;
             protected languageService: LanguageService;
             languageServiceEnabled: boolean;
-            trace?(s: string): void;
-            realpath?(path: string): string;
+            readonly trace?: (s: string) => void;
+            readonly realpath?: (path: string) => string;
             private builderState;
             private updatedFileNames;
             private lastReportedFileNames;
