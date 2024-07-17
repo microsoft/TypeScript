@@ -442,9 +442,9 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
         return this.getChildren(sourceFile)[index];
     }
 
-    public getChildren(sourceFile?: SourceFileLike): readonly Node[] {
+    public getChildren(sourceFile: SourceFileLike = getSourceFileOfNode(this)): readonly Node[] {
         this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-        return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
+        return getNodeChildren(this, sourceFile) ?? setNodeChildren(this, sourceFile, createChildren(this, sourceFile));
     }
 
     public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
@@ -543,7 +543,7 @@ function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
         pos = node.end;
     }
     addSyntheticNodes(children, pos, nodes.end, parent);
-    setNodeChildren(list, children);
+    list._children = children;
     return list;
 }
 

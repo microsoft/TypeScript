@@ -2193,6 +2193,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /** Key is "/path/to/a.ts|/path/to/b.ts". */
     var amalgamatedDuplicates: Map<string, DuplicateInfoForFiles> | undefined;
     var reverseMappedCache = new Map<string, Type | undefined>();
+    var reverseHomomorphicMappedCache = new Map<string, Type | undefined>();
     var ambientModulesCache: Symbol[] | undefined;
     /**
      * List of every ambient module with a "*" wildcard.
@@ -7003,12 +7004,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function shouldUsePlaceholderForProperty(propertySymbol: Symbol, context: NodeBuilderContext) {
-            // Use placeholders for reverse mapped types we've either already descended into, or which
-            // are nested reverse mappings within a mapping over a non-anonymous type. The later is a restriction mostly just to
+            // Use placeholders for reverse mapped types we've either
+            // (1) already descended into, or
+            // (2) are nested reverse mappings within a mapping over a non-anonymous type, or
+            // (3) are deeply nested properties that originate from the same mapped type.
+            // Condition (2) is a restriction mostly just to
             // reduce the blowup in printback size from doing, eg, a deep reverse mapping over `Window`.
             // Since anonymous types usually come from expressions, this allows us to preserve the output
             // for deep mappings which likely come from expressions, while truncating those parts which
             // come from mappings over library functions.
+            // Condition (3) limits printing of possibly infinitely deep reverse mapped types.
+            const depth = 3;
             return !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped)
                 && (
                     contains(context.reverseMappedStack, propertySymbol as ReverseMappedSymbol)
@@ -7016,7 +7022,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         context.reverseMappedStack?.[0]
                         && !(getObjectFlags(last(context.reverseMappedStack).links.propertyType) & ObjectFlags.Anonymous)
                     )
+                    || isDeeplyNestedReverseMappedTypeProperty()
                 );
+            function isDeeplyNestedReverseMappedTypeProperty() {
+                if ((context.reverseMappedStack?.length ?? 0) < depth) {
+                    return false;
+                }
+                for (let i = 0; i < depth; i++) {
+                    const prop = context.reverseMappedStack![context.reverseMappedStack!.length - 1 - i];
+                    if (prop.links.mappedType.symbol !== (propertySymbol as ReverseMappedSymbol).links.mappedType.symbol) {
+                        return false;
+                    }
+                }
+                return true;
+            }
         }
 
         function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[]) {
@@ -8291,11 +8310,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const typePredicate = getTypePredicateOfSignature(signature);
             const type = getReturnTypeOfSignature(signature);
             if (context.enclosingDeclaration && (!isErrorType(type) || (context.flags & NodeBuilderFlags.AllowUnresolvedNames)) && signature.declaration && !nodeIsSynthesized(signature.declaration)) {
-                const annotation = signature.declaration && getNonlocalEffectiveReturnTypeAnnotationNode(signature.declaration);
-                // Default constructor signatures inherited from base classes return the derived class but have the base class declaration
-                // To ensure we don't serialize the wrong type we check that that return type of the signature corresponds to the declaration return type signature
-                if (annotation && getTypeFromTypeNode(context, annotation) === type) {
-                    const result = tryReuseExistingTypeNodeHelper(context, annotation);
+                const annotation = getNonlocalEffectiveReturnTypeAnnotationNode(signature.declaration);
+                if (annotation) {
+                    const result = tryReuseExistingTypeNode(context, annotation, type, context.enclosingDeclaration);
                     if (result) {
                         return result;
                     }
@@ -8805,7 +8822,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
                 if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.ComputedPropertyName && !isLateBindableName(node.name)) {
-                    if (!(context.flags & NodeBuilderFlags.AllowUnresolvedNames && hasDynamicName(node) && isEntityNameExpression(node.name.expression) && checkComputedPropertyName(node.name).flags & TypeFlags.Any)) {
+                    if (!hasDynamicName(node)) {
+                        return visitEachChild(node, visitExistingNodeTreeSymbols);
+                    }
+                    if (!(context.flags & NodeBuilderFlags.AllowUnresolvedNames && isEntityNameExpression(node.name.expression) && checkComputedPropertyName(node.name).flags & TypeFlags.Any)) {
                         return undefined;
                     }
                 }
@@ -8949,7 +8969,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (result) {
                         if (result.pos !== -1 || result.end !== -1) {
                             if (result === nodes) {
-                                result = factory.createNodeArray(nodes, nodes.hasTrailingComma);
+                                result = factory.createNodeArray(nodes.slice(), nodes.hasTrailingComma);
                             }
                             setTextRangePosEnd(result, -1, -1);
                         }
@@ -15923,7 +15943,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createSignatureTypeMapper(signature: Signature, typeArguments: readonly Type[] | undefined): TypeMapper {
-        return createTypeMapper(signature.typeParameters!, typeArguments);
+        return createTypeMapper(sameMap(signature.typeParameters!, tp => tp.mapper ? instantiateType(tp, tp.mapper) : tp), typeArguments);
     }
 
     function getErasedSignature(signature: Signature): Signature {
@@ -25604,11 +25624,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
         const cacheKey = source.id + "," + target.id + "," + constraint.id;
-        if (reverseMappedCache.has(cacheKey)) {
-            return reverseMappedCache.get(cacheKey);
+        if (reverseHomomorphicMappedCache.has(cacheKey)) {
+            return reverseHomomorphicMappedCache.get(cacheKey);
         }
         const type = createReverseMappedType(source, target, constraint);
-        reverseMappedCache.set(cacheKey, type);
+        reverseHomomorphicMappedCache.set(cacheKey, type);
         return type;
     }
 
@@ -33316,7 +33336,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         checkJsxPreconditions(node);
 
-        markLinkedReferences(node, ReferenceHint.Jsx);
+        markJsxAliasReferenced(node);
 
         if (isNodeOpeningLikeElement) {
             const jsxOpeningLikeNode = node;
@@ -49219,11 +49239,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             forEachNodeRecursively(node, checkIdentifiers);
         }
 
+        function isExpressionNodeOrShorthandPropertyAssignmentName(node: Identifier) {
+            // TODO(jakebailey): Just use isExpressionNode once that considers these identifiers to be expressions.
+            return isExpressionNode(node)
+                || isShorthandPropertyAssignment(node.parent) && (node.parent.objectAssignmentInitializer ?? node.parent.name) === node;
+        }
+
         function checkSingleIdentifier(node: Node) {
             const nodeLinks = getNodeLinks(node);
             nodeLinks.calculatedFlags |= NodeCheckFlags.ConstructorReference | NodeCheckFlags.CapturedBlockScopedBinding | NodeCheckFlags.BlockScopedBindingInLoop;
-            if (isIdentifier(node) && isExpressionNode(node) && !(isPropertyAccessExpression(node.parent) && node.parent.name === node)) {
-                const s = getSymbolAtLocation(node, /*ignoreErrors*/ true);
+            if (isIdentifier(node) && isExpressionNodeOrShorthandPropertyAssignmentName(node) && !(isPropertyAccessExpression(node.parent) && node.parent.name === node)) {
+                const s = getResolvedSymbol(node);
                 if (s && s !== unknownSymbol) {
                     checkIdentifierCalculateNodeCheckFlags(node, s);
                 }
