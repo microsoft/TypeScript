@@ -24,3 +24,13 @@ class Baz {
 class Qwe {
   protected pro: number = 42;
 }
+
+// https://github.com/microsoft/TypeScript/issues/46049
+
+export class A {
+  protected bar(): void {}
+  baz() {
+    const unionRef: this | A = this;
+    unionRef.bar();
+  }
+}

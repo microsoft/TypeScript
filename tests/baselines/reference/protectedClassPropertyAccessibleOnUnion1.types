@@ -112,3 +112,35 @@ class Qwe {
 >   : ^^
 }
 
+// https://github.com/microsoft/TypeScript/issues/46049
+
+export class A {
+>A : A
+>  : ^
+
+  protected bar(): void {}
+>bar : () => void
+>    : ^^^^^^    
+
+  baz() {
+>baz : () => void
+>    : ^^^^^^^^^^
+
+    const unionRef: this | A = this;
+>unionRef : A | this
+>         : ^^^^^^^^
+>this : this
+>     : ^^^^
+
+    unionRef.bar();
+>unionRef.bar() : void
+>               : ^^^^
+>unionRef.bar : () => void
+>             : ^^^^^^    
+>unionRef : A | this
+>         : ^^^^^^^^
+>bar : () => void
+>    : ^^^^^^    
+  }
+}
+

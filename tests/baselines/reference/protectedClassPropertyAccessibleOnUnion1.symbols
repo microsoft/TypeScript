@@ -62,3 +62,26 @@ class Qwe {
 >pro : Symbol(Qwe.pro, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 20, 11))
 }
 
+// https://github.com/microsoft/TypeScript/issues/46049
+
+export class A {
+>A : Symbol(A, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 22, 1))
+
+  protected bar(): void {}
+>bar : Symbol(A.bar, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 26, 16))
+
+  baz() {
+>baz : Symbol(A.baz, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 27, 26))
+
+    const unionRef: this | A = this;
+>unionRef : Symbol(unionRef, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 29, 9))
+>A : Symbol(A, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 22, 1))
+>this : Symbol(A, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 22, 1))
+
+    unionRef.bar();
+>unionRef.bar : Symbol(A.bar, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 26, 16))
+>unionRef : Symbol(unionRef, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 29, 9))
+>bar : Symbol(A.bar, Decl(protectedClassPropertyAccessibleOnUnion1.ts, 26, 16))
+  }
+}
+
