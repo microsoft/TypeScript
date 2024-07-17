@@ -13587,8 +13587,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getUniqAssociatedNamesFromTupleType(type: TupleTypeReference, restSymbol: Symbol) {
-            const names = map(type.target.labeledElementDeclarations, (labeledElement, i) =>
-                getTupleElementLabel(labeledElement, i, type.target.elementFlags[i], restSymbol));
+            const names = map(type.target.labeledElementDeclarations, (labeledElement, i) => getTupleElementLabel(labeledElement, i, type.target.elementFlags[i], restSymbol));
             if (names) {
                 const duplicates: number[] = [];
                 const uniqueNames = new Set<__String>();
@@ -37321,7 +37320,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const restParameter = signature.parameters[paramCount] || unknownSymbol;
         const restType = overrideRestType || getTypeOfSymbol(restParameter);
         if (isTupleType(restType)) {
-            const tupleType = ((restType as TypeReference).target as TupleType);
+            const tupleType = (restType as TypeReference).target as TupleType;
             const index = pos - paramCount;
             const associatedName = tupleType.labeledElementDeclarations?.[index];
             const elementFlags = tupleType.elementFlags[index];
