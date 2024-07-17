@@ -12,3 +12,17 @@ const foo2 = {
         return true;
     },
 };
+
+// Still an error
+const foo3 = {
+>foo3 : Symbol(foo3, Decl(thisPredicateInObjectLiteral.ts, 8, 5))
+
+    isNumber(x: any): x is this {
+>isNumber : Symbol(isNumber, Decl(thisPredicateInObjectLiteral.ts, 8, 14))
+>x : Symbol(x, Decl(thisPredicateInObjectLiteral.ts, 9, 13))
+>x : Symbol(x, Decl(thisPredicateInObjectLiteral.ts, 9, 13))
+
+        return true;
+    },
+};
+

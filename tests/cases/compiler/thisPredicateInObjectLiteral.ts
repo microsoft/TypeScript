@@ -6,3 +6,10 @@ const foo2 = {
         return true;
     },
 };
+
+// Still an error
+const foo3 = {
+    isNumber(x: any): x is this {
+        return true;
+    },
+};
