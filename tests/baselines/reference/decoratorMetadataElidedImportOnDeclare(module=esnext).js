@@ -24,6 +24,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+import { Observable } from './observable';
 function whatever(a, b) { }
 class Test {
 }
@@ -31,4 +32,3 @@ __decorate([
     whatever,
     __metadata("design:type", Observable)
 ], Test.prototype, "prop", void 0);
-export {};

@@ -29679,9 +29679,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!canCollectSymbolAliasAccessabilityData) {
             return;
         }
-        if (location.flags & NodeFlags.Ambient) {
-            return; // References within types and declaration files are never going to contribute to retaining a JS import
-        }
         switch (hint) {
             case ReferenceHint.Identifier:
                 return markIdentifierAliasReferenced(location as Identifier);
