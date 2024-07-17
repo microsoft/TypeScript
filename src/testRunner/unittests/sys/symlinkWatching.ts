@@ -713,7 +713,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         });
 
         if (osFlavor !== TestServerHostOsFlavor.Linux) {
-            describe("recursive watchDirectory using fsEvents", () => {
+            (process?.env.NO_RECURSIVE_WATCHDIRECTORY_TESTS ? describe.skip : describe)("recursive watchDirectory using fsEvents", () => {
                 before(() => {
                     setupRecursiveFsEvents("recursivefsevents");
                     setupRecursiveFsEvents("recursivefseventssub");
