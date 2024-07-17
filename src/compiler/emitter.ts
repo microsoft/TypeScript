@@ -907,7 +907,7 @@ export function emitFiles(
                 module: compilerOptions.module,
                 moduleResolution: compilerOptions.moduleResolution,
                 target: compilerOptions.target,
-                sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
+                sourceMap: emitOnly !== EmitOnly.BuilderSignature && compilerOptions.declarationMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
