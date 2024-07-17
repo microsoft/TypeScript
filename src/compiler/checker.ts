@@ -4565,6 +4565,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (ambientModule) {
             return ambientModule;
         }
+        const isSideEffectImport = isImportDeclaration(location) && !location.importClause;
         const currentSourceFile = getSourceFileOfNode(location);
         const contextSpecifier = isStringLiteralLike(location)
             ? location
@@ -4646,7 +4647,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getMergedSymbol(sourceFile.symbol);
             }
             if (errorNode && moduleNotFoundError) {
-                if (isImportDeclaration(location) && !location.importClause) {
+                if (isSideEffectImport) {
                     // This a side-effect import; ignore the fact that it's not a module.
                     return undefined;
                 }
@@ -4677,7 +4678,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // May be an untyped module. If so, ignore resolutionDiagnostic.
         if (resolvedModule && !resolutionExtensionIsTSOrJson(resolvedModule.extension) && resolutionDiagnostic === undefined || resolutionDiagnostic === Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type) {
-            if (isImportDeclaration(location) && !location.importClause) {
+            if (isSideEffectImport) {
                 // This a side-effect import; ignore the implicit any.
                 return undefined;
             }
