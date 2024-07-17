@@ -96,11 +96,10 @@ jobs:
           name: coverage
           path: coverage
 
-      # TODO(jakebailey): discuss, enable
-      # - uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
-      #   with:
-      #     use_oidc: true
-      #     file: ./coverage/codecov.json
+      - uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
+        with:
+          use_oidc: true
+          file: ./coverage/codecov.json
 
   lint:
     runs-on: ubuntu-latest
