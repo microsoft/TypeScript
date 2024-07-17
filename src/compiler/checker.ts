@@ -22922,7 +22922,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (getObjectFlags(source) & ObjectFlags.Mapped && !(source as MappedType).declaration.nameType && isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(source as MappedType), RecursionFlags.Both)) {
                     if (
                         !(getMappedTypeModifiers(source as MappedType) & MappedTypeModifiers.IncludeOptional) &&
-                        !(enforceReadonly && getMappedTypeModifiers(source as MappedType) & MappedTypeModifiers.IncludeReadonly)
+                        !(enforceReadonly && relation !== comparableRelation && getMappedTypeModifiers(source as MappedType) & MappedTypeModifiers.IncludeReadonly)
                     ) {
                         const templateType = getTemplateTypeFromMappedType(source as MappedType);
                         const indexedAccessType = getIndexedAccessType(target, getTypeParameterFromMappedType(source as MappedType));
@@ -23046,7 +23046,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const keysRemapped = !!target.declaration.nameType;
                 const templateType = getTemplateTypeFromMappedType(target);
                 const modifiers = getMappedTypeModifiers(target);
-                if (!(modifiers & MappedTypeModifiers.ExcludeOptional) && !(enforceReadonly && modifiers & MappedTypeModifiers.ExcludeReadonly)) {
+                if (!(modifiers & MappedTypeModifiers.ExcludeOptional) && !(enforceReadonly && relation !== comparableRelation && modifiers & MappedTypeModifiers.ExcludeReadonly)) {
                     // If the mapped type has shape `{ [P in Q]: T[P] }`,
                     // source `S` is related to target if `T` = `S`, i.e. `S` is related to `{ [P in Q]: S[P] }`.
                     if (
@@ -23433,7 +23433,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function mappedTypeRelatedTo(source: MappedType, target: MappedType, reportErrors: boolean): Ternary {
             const modifiersRelated = relation === comparableRelation || (relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
                 getMappedTypeModifiersRank(source, MappedTypeModifiers.Optional) <= getMappedTypeModifiersRank(target, MappedTypeModifiers.Optional) &&
-                (!enforceReadonly || getMappedTypeModifiersRank(source, MappedTypeModifiers.Readonly) <= getMappedTypeModifiersRank(target, MappedTypeModifiers.Readonly)));
+                (!enforceReadonly || relation === comparableRelation || getMappedTypeModifiersRank(source, MappedTypeModifiers.Readonly) <= getMappedTypeModifiersRank(target, MappedTypeModifiers.Readonly)));
             if (modifiersRelated) {
                 let result: Ternary;
                 const targetConstraint = getConstraintTypeFromMappedType(target);
@@ -23605,7 +23605,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // They're still assignable to one another, since `readonly` doesn't affect assignability.
             // This is only applied during the strictSubtypeRelation -- currently used in subtype reduction
             if (
-                (relation === strictSubtypeRelation || enforceReadonly) &&
+                (relation === strictSubtypeRelation || enforceReadonly && relation !== comparableRelation) &&
                 isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp) && !(targetProp.flags & SymbolFlags.Method)
             ) {
                 if (reportErrors) {
@@ -24079,7 +24079,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return Ternary.False;
             }
-            if (enforceReadonly && sourceInfo.isReadonly && !targetInfo.isReadonly) {
+            if (enforceReadonly && relation !== comparableRelation && sourceInfo.isReadonly && !targetInfo.isReadonly) {
                 if (reportErrors) {
                     reportError(Diagnostics._0_index_signature_is_readonly_in_the_source_but_not_in_the_target, typeToString(sourceInfo.keyType));
                 }
