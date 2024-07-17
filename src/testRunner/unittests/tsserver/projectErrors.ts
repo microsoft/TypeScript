@@ -1,5 +1,6 @@
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
+import { libContent } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -831,5 +832,31 @@ describe("unittests:: tsserver:: projectErrors:: with file rename on wsl2::", ()
         host.runQueuedTimeoutCallbacks();
         closeFilesForSession(["/home/username/project/src/c.ts"], session);
         baselineTsserverLogs("projectErrors", "file rename on wsl2", session);
+    });
+});
+
+describe("unittests:: tsserver:: projectErrors:: dts errors when files dont belong to common root", () => {
+    [undefined, "decls"].forEach(declarationDir => {
+        it(`dts errors when files dont belong to common root${declarationDir ? " with declarationDir" : ""}`, () => {
+            const host = createServerHost({
+                "/home/src/projects/project/src/file.ts": `import { a } from "../a";`,
+                "/home/src/projects/project/a.ts": `export const a = 10;`,
+                "/home/src/projects/project/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        noEmit: true,
+                        declarationDir,
+                    },
+                }),
+                [libFile.path]: libContent,
+            });
+            const session = new TestSession(host);
+            openFilesForSession(["/home/src/projects/project/src/file.ts"], session);
+            verifyGetErrRequest({
+                session,
+                files: ["/home/src/projects/project/src/file.ts"],
+            });
+            baselineTsserverLogs("projectErrors", `dts errors when files dont belong to common root${declarationDir ? " with declarationDir" : ""}`, session);
+        });
     });
 });
