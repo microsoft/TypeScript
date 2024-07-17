@@ -1,0 +1,97 @@
+//// [tests/cases/compiler/excessPropertyCheckSpreadConditionalInlineAndVar.ts] ////
+
+=== excessPropertyCheckSpreadConditionalInlineAndVar.ts ===
+declare const someCondition: boolean;
+>someCondition : boolean
+>              : ^^^^^^^
+
+type MyObj = { foo: number; bar: number };
+>MyObj : MyObj
+>      : ^^^^^
+>foo : number
+>    : ^^^^^^
+>bar : number
+>    : ^^^^^^
+
+const containsExcessProperty = { bar: 2, excessProperty: "A" };
+>containsExcessProperty : { bar: number; excessProperty: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ bar: 2, excessProperty: "A" } : { bar: number; excessProperty: string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+>excessProperty : string
+>               : ^^^^^^
+>"A" : "A"
+>    : ^^^
+
+// no epc right now :(
+const a4 : MyObj = {
+>a4 : MyObj
+>   : ^^^^^
+>{    foo: 1,    ...(someCondition ? { bar: 2, excessProperty: "A" } : containsExcessProperty),} : { bar: number; excessProperty: string; foo: number; }
+>                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...(someCondition ? { bar: 2, excessProperty: "A" } : containsExcessProperty),
+>(someCondition ? { bar: 2, excessProperty: "A" } : containsExcessProperty) : { bar: number; excessProperty: string; }
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition ? { bar: 2, excessProperty: "A" } : containsExcessProperty : { bar: number; excessProperty: string; }
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition : boolean
+>              : ^^^^^^^
+>{ bar: 2, excessProperty: "A" } : { bar: number; excessProperty: string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+>excessProperty : string
+>               : ^^^^^^
+>"A" : "A"
+>    : ^^^
+>containsExcessProperty : { bar: number; excessProperty: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+const a5 : MyObj = {
+>a5 : MyObj
+>   : ^^^^^
+>{    foo: 1,    ...(someCondition ? containsExcessProperty : { bar: 2, excessProperty: "A" }),} : { bar: number; excessProperty: string; foo: number; }
+>                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...(someCondition ? containsExcessProperty : { bar: 2, excessProperty: "A" }),
+>(someCondition ? containsExcessProperty : { bar: 2, excessProperty: "A" }) : { bar: number; excessProperty: string; }
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition ? containsExcessProperty : { bar: 2, excessProperty: "A" } : { bar: number; excessProperty: string; }
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition : boolean
+>              : ^^^^^^^
+>containsExcessProperty : { bar: number; excessProperty: string; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ bar: 2, excessProperty: "A" } : { bar: number; excessProperty: string; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+>excessProperty : string
+>               : ^^^^^^
+>"A" : "A"
+>    : ^^^
+
+};

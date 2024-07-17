@@ -1,0 +1,26 @@
+excessPropertyCheckSpreadInlineObject.ts(7,9): error TS2353: Object literal may only specify known properties, and 'excessProperty' does not exist in type 'MyObject'.
+excessPropertyCheckSpreadInlineObject.ts(15,9): error TS2353: Object literal may only specify known properties, and 'excessProperty' does not exist in type 'MyObject'.
+
+
+==== excessPropertyCheckSpreadInlineObject.ts (2 errors) ====
+    type MyObject = { foo: number; bar?: number };
+    
+    const b: MyObject = {
+        foo: 1,
+        ...{
+            bar: 2,
+            excessProperty: 3,
+            ~~~~~~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'excessProperty' does not exist in type 'MyObject'.
+        },
+    };
+    
+    const b2 = {
+        foo: 1,
+        ...{
+            bar: 2,
+            excessProperty: 3,
+            ~~~~~~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'excessProperty' does not exist in type 'MyObject'.
+        },
+    } satisfies MyObject;

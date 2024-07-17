@@ -1,0 +1,278 @@
+//// [tests/cases/compiler/excessPropertyCheckInlineChainedConditional.ts] ////
+
+=== excessPropertyCheckInlineChainedConditional.ts ===
+declare const someConditions: boolean[];
+>someConditions : boolean[]
+>               : ^^^^^^^^^
+
+// bar is optional
+type MyObj = { foo: number; bar?: number };
+>MyObj : MyObj
+>      : ^^^^^
+>foo : number
+>    : ^^^^^^
+>bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+const yWithExtraProp = { Y: 2 };
+>yWithExtraProp : { Y: number; }
+>               : ^^^^^^^^^^^^^^
+>{ Y: 2 } : { Y: number; }
+>         : ^^^^^^^^^^^^^^
+>Y : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const zWithExtraProp = { Z: 2, excessPropertyZ: "Z" };
+>zWithExtraProp : { Z: number; excessPropertyZ: string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ Z: 2, excessPropertyZ: "Z" } : { Z: number; excessPropertyZ: string; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Z : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>excessPropertyZ : string
+>                : ^^^^^^
+>"Z" : "Z"
+>    : ^^^
+
+const v1: MyObj = {
+>v1 : MyObj
+>   : ^^^^^
+>{    foo: 1,    ...(someConditions[0]        ? someConditions[1]            ? {                bar: 2,                excessPropertyA: "A",            }            : someConditions[2]                ? someConditions[3]                    ? {                        bar: 2,                        excessPropertyB: "B",                    }                    : { bar: 2 }                : someConditions[4]            ? {                foo: 2,                excessPropertyC: "C",            }            : {}        : { excessPropertyD: "D" }),} : { bar: number; excessPropertyA: string; foo: number; } | { bar: number; excessPropertyB: string; foo: number; } | { bar: number; foo: number; } | { foo: number; excessPropertyC: string; } | { foo: number; } | { excessPropertyD: string; foo: number; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...(someConditions[0]
+>(someConditions[0]        ? someConditions[1]            ? {                bar: 2,                excessPropertyA: "A",            }            : someConditions[2]                ? someConditions[3]                    ? {                        bar: 2,                        excessPropertyB: "B",                    }                    : { bar: 2 }                : someConditions[4]            ? {                foo: 2,                excessPropertyC: "C",            }            : {}        : { excessPropertyD: "D" }) : { bar: number; excessPropertyA: string; } | { bar: number; excessPropertyB: string; } | { bar: number; } | { foo: number; excessPropertyC: string; } | {} | { excessPropertyD: string; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someConditions[0]        ? someConditions[1]            ? {                bar: 2,                excessPropertyA: "A",            }            : someConditions[2]                ? someConditions[3]                    ? {                        bar: 2,                        excessPropertyB: "B",                    }                    : { bar: 2 }                : someConditions[4]            ? {                foo: 2,                excessPropertyC: "C",            }            : {}        : { excessPropertyD: "D" } : { bar: number; excessPropertyA: string; } | { bar: number; excessPropertyB: string; } | { bar: number; } | { foo: number; excessPropertyC: string; } | {} | { excessPropertyD: string; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someConditions[0] : boolean
+>                  : ^^^^^^^
+>someConditions : boolean[]
+>               : ^^^^^^^^^
+>0 : 0
+>  : ^
+
+        ? someConditions[1]
+>someConditions[1]            ? {                bar: 2,                excessPropertyA: "A",            }            : someConditions[2]                ? someConditions[3]                    ? {                        bar: 2,                        excessPropertyB: "B",                    }                    : { bar: 2 }                : someConditions[4]            ? {                foo: 2,                excessPropertyC: "C",            }            : {} : { bar: number; excessPropertyA: string; } | { bar: number; excessPropertyB: string; } | { bar: number; } | { foo: number; excessPropertyC: string; } | {}
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someConditions[1] : boolean
+>                  : ^^^^^^^
+>someConditions : boolean[]
+>               : ^^^^^^^^^
+>1 : 1
+>  : ^
+
+            ? {
+>{                bar: 2,                excessPropertyA: "A",            } : { bar: number; excessPropertyA: string; }
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+                bar: 2,
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+                excessPropertyA: "A",
+>excessPropertyA : string
+>                : ^^^^^^
+>"A" : "A"
+>    : ^^^
+            }
+            : someConditions[2]
+>someConditions[2]                ? someConditions[3]                    ? {                        bar: 2,                        excessPropertyB: "B",                    }                    : { bar: 2 }                : someConditions[4]            ? {                foo: 2,                excessPropertyC: "C",            }            : {} : { bar: number; excessPropertyB: string; } | { bar: number; } | { foo: number; excessPropertyC: string; } | {}
+>                                                                                                                                                                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someConditions[2] : boolean
+>                  : ^^^^^^^
+>someConditions : boolean[]
+>               : ^^^^^^^^^
+>2 : 2
+>  : ^
+
+                ? someConditions[3]
+>someConditions[3]                    ? {                        bar: 2,                        excessPropertyB: "B",                    }                    : { bar: 2 } : { bar: number; excessPropertyB: string; } | { bar: number; }
+>                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someConditions[3] : boolean
+>                  : ^^^^^^^
+>someConditions : boolean[]
+>               : ^^^^^^^^^
+>3 : 3
+>  : ^
+
+                    ? {
+>{                        bar: 2,                        excessPropertyB: "B",                    } : { bar: number; excessPropertyB: string; }
+>                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+                        bar: 2,
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+                        excessPropertyB: "B",
+>excessPropertyB : string
+>                : ^^^^^^
+>"B" : "B"
+>    : ^^^
+                    }
+                    : { bar: 2 }
+>{ bar: 2 } : { bar: number; }
+>           : ^^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+                : someConditions[4]
+>someConditions[4]            ? {                foo: 2,                excessPropertyC: "C",            }            : {} : { foo: number; excessPropertyC: string; } | {}
+>                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someConditions[4] : boolean
+>                  : ^^^^^^^
+>someConditions : boolean[]
+>               : ^^^^^^^^^
+>4 : 4
+>  : ^
+
+            ? {
+>{                foo: 2,                excessPropertyC: "C",            } : { foo: number; excessPropertyC: string; }
+>                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+                foo: 2,
+>foo : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+                excessPropertyC: "C",
+>excessPropertyC : string
+>                : ^^^^^^
+>"C" : "C"
+>    : ^^^
+            }
+            : {}
+>{} : {}
+>   : ^^
+
+        : { excessPropertyD: "D" }),
+>{ excessPropertyD: "D" } : { excessPropertyD: string; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>excessPropertyD : string
+>                : ^^^^^^
+>"D" : "D"
+>    : ^^^
+
+};
+
+// no errors by design since the objects are not defined inline
+const v2: MyObj = {
+>v2 : MyObj
+>   : ^^^^^
+>{    ...(someConditions[0]        ? someConditions[1]            ? { bar: 2 }            : someConditions[2]                ? someConditions[3]                    ? yWithExtraProp                    : { bar: 2 }                : someConditions[4]            ? { foo: 2 }            : {}        : zWithExtraProp),    foo: 1,} : { foo: number; Y: number; } | { foo: number; Z: number; excessPropertyZ: string; } | { foo: number; bar: number; } | { foo: number; } | { foo: number; }
+>                                                                                                                                                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    ...(someConditions[0]
+>(someConditions[0]        ? someConditions[1]            ? { bar: 2 }            : someConditions[2]                ? someConditions[3]                    ? yWithExtraProp                    : { bar: 2 }                : someConditions[4]            ? { foo: 2 }            : {}        : zWithExtraProp) : { Y: number; } | { Z: number; excessPropertyZ: string; } | { bar: number; } | { foo: number; } | {}
+>                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someConditions[0]        ? someConditions[1]            ? { bar: 2 }            : someConditions[2]                ? someConditions[3]                    ? yWithExtraProp                    : { bar: 2 }                : someConditions[4]            ? { foo: 2 }            : {}        : zWithExtraProp : { Y: number; } | { Z: number; excessPropertyZ: string; } | { bar: number; } | { foo: number; } | {}
+>                                                                                                                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someConditions[0] : boolean
+>                  : ^^^^^^^
+>someConditions : boolean[]
+>               : ^^^^^^^^^
+>0 : 0
+>  : ^
+
+        ? someConditions[1]
+>someConditions[1]            ? { bar: 2 }            : someConditions[2]                ? someConditions[3]                    ? yWithExtraProp                    : { bar: 2 }                : someConditions[4]            ? { foo: 2 }            : {} : { Y: number; } | { bar: number; } | { foo: number; } | {}
+>                                                                                                                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someConditions[1] : boolean
+>                  : ^^^^^^^
+>someConditions : boolean[]
+>               : ^^^^^^^^^
+>1 : 1
+>  : ^
+
+            ? { bar: 2 }
+>{ bar: 2 } : { bar: number; }
+>           : ^^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+            : someConditions[2]
+>someConditions[2]                ? someConditions[3]                    ? yWithExtraProp                    : { bar: 2 }                : someConditions[4]            ? { foo: 2 }            : {} : { Y: number; } | { bar: number; } | { foo: number; } | {}
+>                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someConditions[2] : boolean
+>                  : ^^^^^^^
+>someConditions : boolean[]
+>               : ^^^^^^^^^
+>2 : 2
+>  : ^
+
+                ? someConditions[3]
+>someConditions[3]                    ? yWithExtraProp                    : { bar: 2 } : { Y: number; } | { bar: number; }
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someConditions[3] : boolean
+>                  : ^^^^^^^
+>someConditions : boolean[]
+>               : ^^^^^^^^^
+>3 : 3
+>  : ^
+
+                    ? yWithExtraProp
+>yWithExtraProp : { Y: number; }
+>               : ^^^^^^^^^^^^^^
+
+                    : { bar: 2 }
+>{ bar: 2 } : { bar: number; }
+>           : ^^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+                : someConditions[4]
+>someConditions[4]            ? { foo: 2 }            : {} : { foo: number; } | {}
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^
+>someConditions[4] : boolean
+>                  : ^^^^^^^
+>someConditions : boolean[]
+>               : ^^^^^^^^^
+>4 : 4
+>  : ^
+
+            ? { foo: 2 }
+>{ foo: 2 } : { foo: number; }
+>           : ^^^^^^^^^^^^^^^^
+>foo : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+            : {}
+>{} : {}
+>   : ^^
+
+        : zWithExtraProp),
+>zWithExtraProp : { Z: number; excessPropertyZ: string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+};
+
+

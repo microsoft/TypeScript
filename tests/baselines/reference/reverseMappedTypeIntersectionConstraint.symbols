@@ -247,7 +247,7 @@ foo({x: 1, y: 'foo'});
 >x : Symbol(x, Decl(reverseMappedTypeIntersectionConstraint.ts, 86, 5))
 >y : Symbol(y, Decl(reverseMappedTypeIntersectionConstraint.ts, 86, 10))
 
-foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
+foo({...{x: 1, y: 'foo'}}); // error here added in #59277 by design
 >foo : Symbol(foo, Decl(reverseMappedTypeIntersectionConstraint.ts, 78, 28))
 >x : Symbol(x, Decl(reverseMappedTypeIntersectionConstraint.ts, 88, 9))
 >y : Symbol(y, Decl(reverseMappedTypeIntersectionConstraint.ts, 88, 14))

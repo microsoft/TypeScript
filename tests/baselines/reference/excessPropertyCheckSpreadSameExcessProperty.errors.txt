@@ -1,0 +1,35 @@
+excessPropertyCheckSpreadSameExcessProperty.ts(7,5): error TS2783: 'bar' is specified more than once, so this usage will be overwritten.
+excessPropertyCheckSpreadSameExcessProperty.ts(9,18): error TS2353: Object literal may only specify known properties, and 'excessProperty' does not exist in type 'MyObj'.
+
+
+==== excessPropertyCheckSpreadSameExcessProperty.ts (2 errors) ====
+    type MyObj = { foo: number; bar: number };
+    
+    const containsExcessProperty = { bar: 2, excessProperty: "A" };
+    
+    const a1 : MyObj = {
+        foo: 1,
+        bar: 1, 
+        ~~~~~~
+!!! error TS2783: 'bar' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 excessPropertyCheckSpreadSameExcessProperty.ts:8:5: This spread always overwrites this property.
+        ...containsExcessProperty,
+        ...{ bar: 2, excessProperty: "A" },
+                     ~~~~~~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'excessProperty' does not exist in type 'MyObj'.
+    };
+    
+    // no EPC errors because the inline excessProperty will be overwritten
+    const a2 : MyObj = {
+        foo: 1,
+        ...{ bar: 2, excessProperty: "A" },
+        ...containsExcessProperty,
+        bar: 1, 
+    };
+    
+    // no EPC errors because the inline excessProperty will be overwritten
+    const a3 : MyObj = {
+        foo: 1,
+        ...{ bar: 2, excessProperty: "A" },
+        ...containsExcessProperty,
+    };

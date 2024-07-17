@@ -1,0 +1,283 @@
+//// [tests/cases/compiler/excessPropertyCheckSpreadReturn.ts] ////
+
+=== excessPropertyCheckSpreadReturn.ts ===
+type FReturnType = {
+>FReturnType : FReturnType
+>            : ^^^^^^^^^^^
+
+    a?: any;
+>a : any
+>  : ^^^
+
+    b?: any;
+>b : any
+>  : ^^^
+}
+const objWithAllowedKeys = { a: 2 }
+>objWithAllowedKeys : { a: number; }
+>                   : ^^^^^^^^^^^^^^
+>{ a: 2 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const objWithForbiddenKeys = { c: 2 }
+>objWithForbiddenKeys : { c: number; }
+>                     : ^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+const objWithNoKeys = {}
+>objWithNoKeys : {}
+>              : ^^
+>{} : {}
+>   : ^^
+
+const a = 2;
+>a : 2
+>  : ^
+>2 : 2
+>  : ^
+
+const c = 2;
+>c : 2
+>  : ^
+>2 : 2
+>  : ^
+
+function f1(): FReturnType {
+>f1 : () => FReturnType
+>   : ^^^^^^           
+
+    return { ...objWithAllowedKeys };
+>{ ...objWithAllowedKeys } : { a: number; }
+>                          : ^^^^^^^^^^^^^^
+>objWithAllowedKeys : { a: number; }
+>                   : ^^^^^^^^^^^^^^
+}
+
+function f2(): FReturnType {
+>f2 : () => FReturnType
+>   : ^^^^^^           
+
+    return { ...objWithForbiddenKeys };
+>{ ...objWithForbiddenKeys } : { c: number; }
+>                            : ^^^^^^^^^^^^^^
+>objWithForbiddenKeys : { c: number; }
+>                     : ^^^^^^^^^^^^^^
+}
+
+function f3(): FReturnType {
+>f3 : () => FReturnType
+>   : ^^^^^^           
+
+    return { ...objWithAllowedKeys, ...objWithForbiddenKeys };
+>{ ...objWithAllowedKeys, ...objWithForbiddenKeys } : { c: number; a: number; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>objWithAllowedKeys : { a: number; }
+>                   : ^^^^^^^^^^^^^^
+>objWithForbiddenKeys : { c: number; }
+>                     : ^^^^^^^^^^^^^^
+}
+
+function f4(): FReturnType {
+>f4 : () => FReturnType
+>   : ^^^^^^           
+
+    return { ...{ a: 2 }, ...{ c: 2 } };
+>{ ...{ a: 2 }, ...{ c: 2 } } : { c: number; a: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 2 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+}
+
+function f5(): FReturnType {
+>f5 : () => FReturnType
+>   : ^^^^^^           
+
+    return { ...{ a: 2, c: 2 } };
+>{ ...{ a: 2, c: 2 } } : { a: number; c: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 2, c: 2 } : { a: number; c: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+}
+
+function f6(): FReturnType {
+>f6 : () => FReturnType
+>   : ^^^^^^           
+
+    return { ...{ c: 2 }, ...{ b: 2 } };
+>{ ...{ c: 2 }, ...{ b: 2 } } : { b: number; c: number; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>{ b: 2 } : { b: number; }
+>         : ^^^^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+}
+
+function f7(): FReturnType {
+>f7 : () => FReturnType
+>   : ^^^^^^           
+
+    return { ...{ a: 2 }, ...objWithForbiddenKeys };
+>{ ...{ a: 2 }, ...objWithForbiddenKeys } : { c: number; a: number; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 2 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>objWithForbiddenKeys : { c: number; }
+>                     : ^^^^^^^^^^^^^^
+}
+
+function f8(): FReturnType {
+>f8 : () => FReturnType
+>   : ^^^^^^           
+
+    return { ...{ c: 2 }, ...objWithAllowedKeys };
+>{ ...{ c: 2 }, ...objWithAllowedKeys } : { a: number; c: number; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>objWithAllowedKeys : { a: number; }
+>                   : ^^^^^^^^^^^^^^
+}
+
+function f9(): FReturnType {
+>f9 : () => FReturnType
+>   : ^^^^^^           
+
+    return { ...{ c: 2 }, ...objWithForbiddenKeys };
+>{ ...{ c: 2 }, ...objWithForbiddenKeys } : { c: number; }
+>                                         : ^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>objWithForbiddenKeys : { c: number; }
+>                     : ^^^^^^^^^^^^^^
+}
+
+function f10(): FReturnType {
+>f10 : () => FReturnType
+>    : ^^^^^^           
+
+    return { ...{ c: 2 }, ...objWithNoKeys };
+>{ ...{ c: 2 }, ...objWithNoKeys } : { c: number; }
+>                                  : ^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>objWithNoKeys : {}
+>              : ^^
+}
+
+function f11(): FReturnType {
+>f11 : () => FReturnType
+>    : ^^^^^^           
+
+    return { ...{...{ c: 2 }, ...objWithNoKeys } };
+>{ ...{...{ c: 2 }, ...objWithNoKeys } } : { c: number; }
+>                                        : ^^^^^^^^^^^^^^
+>{...{ c: 2 }, ...objWithNoKeys } : { c: number; }
+>                                 : ^^^^^^^^^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>objWithNoKeys : {}
+>              : ^^
+}
+
+function f12(): FReturnType {
+>f12 : () => FReturnType
+>    : ^^^^^^           
+
+    return { a, ...{ c: 2 } };
+>{ a, ...{ c: 2 } } : { c: number; a: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>{ c: 2 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+}
+
+function f13(): FReturnType {
+>f13 : () => FReturnType
+>    : ^^^^^^           
+
+    return { a, ...{ c } };
+>{ a, ...{ c } } : { c: number; a: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>{ c } : { c: number; }
+>      : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+}
+
+function f14(): FReturnType {
+>f14 : () => FReturnType
+>    : ^^^^^^           
+
+    return { ...{ c }, ...objWithAllowedKeys };
+>{ ...{ c }, ...objWithAllowedKeys } : { a: number; c: number; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ c } : { c: number; }
+>      : ^^^^^^^^^^^^^^
+>c : number
+>  : ^^^^^^
+>objWithAllowedKeys : { a: number; }
+>                   : ^^^^^^^^^^^^^^
+}
+

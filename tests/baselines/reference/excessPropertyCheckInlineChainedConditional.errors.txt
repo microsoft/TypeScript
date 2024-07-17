@@ -1,0 +1,55 @@
+excessPropertyCheckInlineChainedConditional.ts(13,17): error TS2322: Type '{ bar: number; excessPropertyA: string; foo: number; } | { bar: number; excessPropertyB: string; foo: number; } | { bar: number; foo: number; } | { foo: number; excessPropertyC: string; } | { foo: number; } | { excessPropertyD: string; foo: number; }' is not assignable to type 'MyObj'.
+  Object literal may only specify known properties, and 'excessPropertyA' does not exist in type 'MyObj'.
+
+
+==== excessPropertyCheckInlineChainedConditional.ts (1 errors) ====
+    declare const someConditions: boolean[];
+    // bar is optional
+    type MyObj = { foo: number; bar?: number };
+    const yWithExtraProp = { Y: 2 };
+    const zWithExtraProp = { Z: 2, excessPropertyZ: "Z" };
+    
+    const v1: MyObj = {
+        foo: 1,
+        ...(someConditions[0]
+            ? someConditions[1]
+                ? {
+                    bar: 2,
+                    excessPropertyA: "A",
+                    ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ bar: number; excessPropertyA: string; foo: number; } | { bar: number; excessPropertyB: string; foo: number; } | { bar: number; foo: number; } | { foo: number; excessPropertyC: string; } | { foo: number; } | { excessPropertyD: string; foo: number; }' is not assignable to type 'MyObj'.
+!!! error TS2322:   Object literal may only specify known properties, and 'excessPropertyA' does not exist in type 'MyObj'.
+                }
+                : someConditions[2]
+                    ? someConditions[3]
+                        ? {
+                            bar: 2,
+                            excessPropertyB: "B",
+                        }
+                        : { bar: 2 }
+                    : someConditions[4]
+                ? {
+                    foo: 2,
+                    excessPropertyC: "C",
+                }
+                : {}
+            : { excessPropertyD: "D" }),
+    };
+    
+    // no errors by design since the objects are not defined inline
+    const v2: MyObj = {
+        ...(someConditions[0]
+            ? someConditions[1]
+                ? { bar: 2 }
+                : someConditions[2]
+                    ? someConditions[3]
+                        ? yWithExtraProp
+                        : { bar: 2 }
+                    : someConditions[4]
+                ? { foo: 2 }
+                : {}
+            : zWithExtraProp),
+        foo: 1,
+    };
+    
+    

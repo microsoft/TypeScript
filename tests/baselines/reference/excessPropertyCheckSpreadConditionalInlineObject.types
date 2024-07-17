@@ -1,0 +1,270 @@
+//// [tests/cases/compiler/excessPropertyCheckSpreadConditionalInlineObject.ts] ////
+
+=== excessPropertyCheckSpreadConditionalInlineObject.ts ===
+declare const someCondition: boolean;
+>someCondition : boolean
+>              : ^^^^^^^
+
+// bar is optional
+type C = { foo: number; bar?: number };
+>C : C
+>  : ^
+>foo : number
+>    : ^^^^^^
+>bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+const c: C = {
+>c : C
+>  : ^
+>{    foo: 1,    ...(someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {}),} : { bar?: number | undefined; excessProperty?: number | undefined; foo: number; }
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...(someCondition
+>(someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {}) : { bar: number; excessProperty: number; } | {}
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {} : { bar: number; excessProperty: number; } | {}
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition : boolean
+>              : ^^^^^^^
+
+        ? {
+>{            bar: 2,            excessProperty: 3,        } : { bar: number; excessProperty: number; }
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            bar: 2,
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+            excessProperty: 3,
+>excessProperty : number
+>               : ^^^^^^
+>3 : 3
+>  : ^
+        }
+        : {}),
+>{} : {}
+>   : ^^
+
+};
+
+const c2 = {
+>c2 : { bar?: number | undefined; excessProperty?: number | undefined; foo: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    foo: 1,    ...(someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {}),} satisfies C : { bar?: number | undefined; excessProperty?: number | undefined; foo: number; }
+>                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    foo: 1,    ...(someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {}),} : { bar?: number | undefined; excessProperty?: number | undefined; foo: number; }
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...(someCondition
+>(someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {}) : { bar: number; excessProperty: number; } | {}
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {} : { bar: number; excessProperty: number; } | {}
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition : boolean
+>              : ^^^^^^^
+
+        ? {
+>{            bar: 2,            excessProperty: 3,        } : { bar: number; excessProperty: number; }
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            bar: 2,
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+            excessProperty: 3,
+>excessProperty : number
+>               : ^^^^^^
+>3 : 3
+>  : ^
+        }
+        : {}),
+>{} : {}
+>   : ^^
+
+} satisfies C;
+
+function testC(condition: boolean) {
+>testC : (condition: boolean) => { bar: number; excessProperty: number; } | { bar?: undefined; excessProperty?: undefined; }
+>      : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>condition : boolean
+>          : ^^^^^^^
+
+    return someCondition ? { bar: 2, excessProperty: 3 } : {};
+>someCondition ? { bar: 2, excessProperty: 3 } : {} : { bar: number; excessProperty: number; } | {}
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition : boolean
+>              : ^^^^^^^
+>{ bar: 2, excessProperty: 3 } : { bar: number; excessProperty: number; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+>excessProperty : number
+>               : ^^^^^^
+>3 : 3
+>  : ^
+>{} : {}
+>   : ^^
+}
+
+// no errors on c3 and c4 since not defined inline
+const c3: C = {
+>c3 : C
+>   : ^
+>{    foo: 1,    ...testC(someCondition)} : { bar: number; excessProperty: number; foo: number; } | { bar?: undefined; excessProperty?: undefined; foo: number; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...testC(someCondition)
+>testC(someCondition) : { bar: number; excessProperty: number; } | { bar?: undefined; excessProperty?: undefined; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>testC : (condition: boolean) => { bar: number; excessProperty: number; } | { bar?: undefined; excessProperty?: undefined; }
+>      : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition : boolean
+>              : ^^^^^^^
+
+};
+
+const c4 = {
+>c4 : { bar: number; excessProperty: number; foo: number; } | { bar?: undefined; excessProperty?: undefined; foo: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    foo: 1,    ...testC(someCondition)} satisfies C : { bar: number; excessProperty: number; foo: number; } | { bar?: undefined; excessProperty?: undefined; foo: number; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    foo: 1,    ...testC(someCondition)} : { bar: number; excessProperty: number; foo: number; } | { bar?: undefined; excessProperty?: undefined; foo: number; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...testC(someCondition)
+>testC(someCondition) : { bar: number; excessProperty: number; } | { bar?: undefined; excessProperty?: undefined; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>testC : (condition: boolean) => { bar: number; excessProperty: number; } | { bar?: undefined; excessProperty?: undefined; }
+>      : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition : boolean
+>              : ^^^^^^^
+
+} satisfies C;
+
+
+
+// bar is not optional 
+type D = { foo: number; bar: number };
+>D : D
+>  : ^
+>foo : number
+>    : ^^^^^^
+>bar : number
+>    : ^^^^^^
+
+const d: D = {
+>d : D
+>  : ^
+>{    foo: 1,    ...(someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {}),} : { bar?: number | undefined; excessProperty?: number | undefined; foo: number; }
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...(someCondition
+>(someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {}) : { bar: number; excessProperty: number; } | {}
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {} : { bar: number; excessProperty: number; } | {}
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition : boolean
+>              : ^^^^^^^
+
+        ? {
+>{            bar: 2,            excessProperty: 3,        } : { bar: number; excessProperty: number; }
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            bar: 2,
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+            excessProperty: 3,
+>excessProperty : number
+>               : ^^^^^^
+>3 : 3
+>  : ^
+        }
+        : {}),
+>{} : {}
+>   : ^^
+
+};
+
+const d2 = {
+>d2 : { bar?: number | undefined; excessProperty?: number | undefined; foo: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    foo: 1,    ...(someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {}),} satisfies D : { bar?: number | undefined; excessProperty?: number | undefined; foo: number; }
+>                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    foo: 1,    ...(someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {}),} : { bar?: number | undefined; excessProperty?: number | undefined; foo: number; }
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 1,
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...(someCondition
+>(someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {}) : { bar: number; excessProperty: number; } | {}
+>                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition        ? {            bar: 2,            excessProperty: 3,        }        : {} : { bar: number; excessProperty: number; } | {}
+>                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someCondition : boolean
+>              : ^^^^^^^
+
+        ? {
+>{            bar: 2,            excessProperty: 3,        } : { bar: number; excessProperty: number; }
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+            bar: 2,
+>bar : number
+>    : ^^^^^^
+>2 : 2
+>  : ^
+
+            excessProperty: 3,
+>excessProperty : number
+>               : ^^^^^^
+>3 : 3
+>  : ^
+        }
+        : {}),
+>{} : {}
+>   : ^^
+
+} satisfies D;

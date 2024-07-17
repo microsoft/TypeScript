@@ -1,0 +1,75 @@
+excessPropertyCheckSpreadFunctionParam.ts(17,3): error TS2559: Type '{ c: number; }' has no properties in common with type 'Params'.
+excessPropertyCheckSpreadFunctionParam.ts(20,23): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+excessPropertyCheckSpreadFunctionParam.ts(21,16): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+excessPropertyCheckSpreadFunctionParam.ts(22,10): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+excessPropertyCheckSpreadFunctionParam.ts(26,10): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+excessPropertyCheckSpreadFunctionParam.ts(27,3): error TS2559: Type '{ c: number; }' has no properties in common with type 'Params'.
+excessPropertyCheckSpreadFunctionParam.ts(28,10): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+excessPropertyCheckSpreadFunctionParam.ts(30,14): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+excessPropertyCheckSpreadFunctionParam.ts(32,13): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+excessPropertyCheckSpreadFunctionParam.ts(33,13): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+excessPropertyCheckSpreadFunctionParam.ts(34,10): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+
+
+==== excessPropertyCheckSpreadFunctionParam.ts (11 errors) ====
+    type Params = {
+        a?: any;
+        b?: any;
+    }
+      
+    function f(params: Params) {
+        return;
+    }
+    
+    const objWithAllowedKeys = { a: 2 }
+    const objWithForbiddenKeys = { c: 2 }
+    const objWithNoKeys = {}
+    const a = 2;
+    const c = 2;
+    
+    f({ ...objWithAllowedKeys })
+    f({ ...objWithForbiddenKeys })
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2559: Type '{ c: number; }' has no properties in common with type 'Params'.
+    f({ ...objWithAllowedKeys, ...objWithForbiddenKeys })
+    
+    f({ ...{ a: 2 }, ...{ c: 2 } })
+                          ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+    f({ ...{ a: 2, c: 2 } })
+                   ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+    f({ ...{ c: 2 }, ...{ b: 2 } })
+             ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+    
+    f({ ...{ a: 2 }, ...objWithForbiddenKeys })
+    
+    f({ ...{ c: 2 }, ...objWithAllowedKeys })
+             ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+    f({ ...{ c: 2 }, ...objWithForbiddenKeys })
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2559: Type '{ c: number; }' has no properties in common with type 'Params'.
+    f({ ...{ c: 2 }, ...objWithNoKeys })
+             ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+    
+    f({ ...{...{ c: 2 }, ...objWithNoKeys } })
+                 ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+    
+    f({ a, ...{ c: 2 } })
+                ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+    f({ a, ...{ c } })
+                ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+    f({ ...{ c }, ...objWithAllowedKeys })
+             ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Params'.
+    
+    
+    
+    
+    

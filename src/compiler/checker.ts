@@ -22357,13 +22357,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             return false;
-        }
 
-        function shouldCheckAsExcessProperty(prop: Symbol, container: Symbol) {
-            if (!container.valueDeclaration) return false;
-            if (prop.valueDeclaration?.parent === container.valueDeclaration) return true;
-            if (isObjectLiteralExpression(container.valueDeclaration) && hasOnlyExpressionInitializer(container.valueDeclaration.parent)) return true;
-            return false;
+            function shouldCheckAsExcessProperty(prop: Symbol, container: Symbol) {
+                if (!container.valueDeclaration) return false;
+                if (prop.valueDeclaration?.parent === container.valueDeclaration) return true;
+                if (!isObjectLiteralExpression(container.valueDeclaration) || isJsxOpeningLikeElement(container.valueDeclaration.parent)) return false;
+                // if (prop.valueDeclaration) return isPropFromInlineSpread(prop.valueDeclaration);
+                // check if the property is in a spread inline object top level. This will be optimized as it's probably doing a lot of extra work with big/very nested objects
+                if (prop.declarations) return prop.declarations.some(isPropFromInlineSpread);
+                return false;
+
+                function isPropFromInlineSpread(d: Declaration) {
+                    return isObjectLiteralExpression(d.parent) && findAncestor(d.parent, n => {
+                        if (n === container.valueDeclaration || isSourceFile(n.parent.parent)) return "quit";
+                        if (
+                            isSpreadAssignment(n.parent)
+                            && isObjectLiteralExpression(n.parent.parent)
+                            && n.parent.parent === container.valueDeclaration
+                        ) {
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+            }
         }
 
         function unionOrIntersectionRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {

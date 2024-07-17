@@ -1,0 +1,137 @@
+//// [tests/cases/compiler/excessPropertyCheckSpreadConditionalInlineObject.ts] ////
+
+=== excessPropertyCheckSpreadConditionalInlineObject.ts ===
+declare const someCondition: boolean;
+>someCondition : Symbol(someCondition, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 13))
+
+// bar is optional
+type C = { foo: number; bar?: number };
+>C : Symbol(C, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 37))
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 3, 10))
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 3, 23))
+
+const c: C = {
+>c : Symbol(c, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 5, 5))
+>C : Symbol(C, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 37))
+
+    foo: 1,
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 5, 14))
+
+    ...(someCondition
+>someCondition : Symbol(someCondition, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 13))
+
+        ? {
+            bar: 2,
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 8, 11))
+
+            excessProperty: 3,
+>excessProperty : Symbol(excessProperty, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 9, 19))
+        }
+        : {}),
+};
+
+const c2 = {
+>c2 : Symbol(c2, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 15, 5))
+
+    foo: 1,
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 15, 12))
+
+    ...(someCondition
+>someCondition : Symbol(someCondition, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 13))
+
+        ? {
+            bar: 2,
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 18, 11))
+
+            excessProperty: 3,
+>excessProperty : Symbol(excessProperty, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 19, 19))
+        }
+        : {}),
+} satisfies C;
+>C : Symbol(C, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 37))
+
+function testC(condition: boolean) {
+>testC : Symbol(testC, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 23, 14))
+>condition : Symbol(condition, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 25, 15))
+
+    return someCondition ? { bar: 2, excessProperty: 3 } : {};
+>someCondition : Symbol(someCondition, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 13))
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 26, 28))
+>excessProperty : Symbol(excessProperty, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 26, 36))
+}
+
+// no errors on c3 and c4 since not defined inline
+const c3: C = {
+>c3 : Symbol(c3, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 30, 5))
+>C : Symbol(C, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 37))
+
+    foo: 1,
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 30, 15))
+
+    ...testC(someCondition)
+>testC : Symbol(testC, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 23, 14))
+>someCondition : Symbol(someCondition, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 13))
+
+};
+
+const c4 = {
+>c4 : Symbol(c4, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 35, 5))
+
+    foo: 1,
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 35, 12))
+
+    ...testC(someCondition)
+>testC : Symbol(testC, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 23, 14))
+>someCondition : Symbol(someCondition, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 13))
+
+} satisfies C;
+>C : Symbol(C, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 37))
+
+
+
+// bar is not optional 
+type D = { foo: number; bar: number };
+>D : Symbol(D, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 38, 14))
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 43, 10))
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 43, 23))
+
+const d: D = {
+>d : Symbol(d, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 45, 5))
+>D : Symbol(D, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 38, 14))
+
+    foo: 1,
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 45, 14))
+
+    ...(someCondition
+>someCondition : Symbol(someCondition, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 13))
+
+        ? {
+            bar: 2,
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 48, 11))
+
+            excessProperty: 3,
+>excessProperty : Symbol(excessProperty, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 49, 19))
+        }
+        : {}),
+};
+
+const d2 = {
+>d2 : Symbol(d2, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 55, 5))
+
+    foo: 1,
+>foo : Symbol(foo, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 55, 12))
+
+    ...(someCondition
+>someCondition : Symbol(someCondition, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 0, 13))
+
+        ? {
+            bar: 2,
+>bar : Symbol(bar, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 58, 11))
+
+            excessProperty: 3,
+>excessProperty : Symbol(excessProperty, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 59, 19))
+        }
+        : {}),
+} satisfies D;
+>D : Symbol(D, Decl(excessPropertyCheckSpreadConditionalInlineObject.ts, 38, 14))
+

@@ -1,0 +1,37 @@
+excessPropertyCheckInlineObjectWithSpreadVariable.ts(11,20): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type 'Foo'.
+excessPropertyCheckInlineObjectWithSpreadVariable.ts(14,26): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type 'Foo'.
+excessPropertyCheckInlineObjectWithSpreadVariable.ts(18,21): error TS2353: Object literal may only specify known properties, and 'extraProp2' does not exist in type 'Foo'.
+excessPropertyCheckInlineObjectWithSpreadVariable.ts(21,26): error TS2353: Object literal may only specify known properties, and 'noBar' does not exist in type 'Foo'.
+
+
+==== excessPropertyCheckInlineObjectWithSpreadVariable.ts (4 errors) ====
+    type Foo = {
+        foo: string;
+    }
+    
+    type Bar = {
+        extraProp: string;
+    }
+    
+    const bar: Bar = { extraProp: "" };
+    
+    const foo: Foo = { bar: "", foo: "" };
+                       ~~~
+!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type 'Foo'.
+    const foo2: Foo = { ...bar, foo: "" };
+    const foo3: Foo = { ...{ ...bar}, foo: ""};
+    const foo4: Foo = { ...{ bar: "" }, foo: ""};
+                             ~~~
+!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type 'Foo'.
+    
+    
+    const noBar = { extraProp2: "" };
+    const foo5: Foo = { extraProp2: "", foo: "" };
+                        ~~~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'extraProp2' does not exist in type 'Foo'.
+    const foo6: Foo = { ...noBar, foo: "" };
+    const foo7: Foo = { ...{ ...noBar}, foo: ""};
+    const foo8: Foo = { ...{ noBar: "" }, foo: ""};
+                             ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'noBar' does not exist in type 'Foo'.
+    

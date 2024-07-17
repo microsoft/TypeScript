@@ -1,0 +1,102 @@
+excessPropertyCheckSpreadReturn.ts(16,5): error TS2559: Type '{ c: number; }' has no properties in common with type 'FReturnType'.
+excessPropertyCheckSpreadReturn.ts(24,32): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+excessPropertyCheckSpreadReturn.ts(28,25): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+excessPropertyCheckSpreadReturn.ts(32,19): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+excessPropertyCheckSpreadReturn.ts(40,19): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+excessPropertyCheckSpreadReturn.ts(44,5): error TS2559: Type '{ c: number; }' has no properties in common with type 'FReturnType'.
+excessPropertyCheckSpreadReturn.ts(48,19): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+excessPropertyCheckSpreadReturn.ts(52,23): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+excessPropertyCheckSpreadReturn.ts(56,22): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+excessPropertyCheckSpreadReturn.ts(60,22): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+excessPropertyCheckSpreadReturn.ts(64,19): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+
+
+==== excessPropertyCheckSpreadReturn.ts (11 errors) ====
+    type FReturnType = {
+        a?: any;
+        b?: any;
+    }
+    const objWithAllowedKeys = { a: 2 }
+    const objWithForbiddenKeys = { c: 2 }
+    const objWithNoKeys = {}
+    const a = 2;
+    const c = 2;
+    
+    function f1(): FReturnType {
+        return { ...objWithAllowedKeys };
+    }
+    
+    function f2(): FReturnType {
+        return { ...objWithForbiddenKeys };
+        ~~~~~~
+!!! error TS2559: Type '{ c: number; }' has no properties in common with type 'FReturnType'.
+    }
+    
+    function f3(): FReturnType {
+        return { ...objWithAllowedKeys, ...objWithForbiddenKeys };
+    }
+    
+    function f4(): FReturnType {
+        return { ...{ a: 2 }, ...{ c: 2 } };
+                                   ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+    }
+    
+    function f5(): FReturnType {
+        return { ...{ a: 2, c: 2 } };
+                            ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+    }
+    
+    function f6(): FReturnType {
+        return { ...{ c: 2 }, ...{ b: 2 } };
+                      ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+    }
+    
+    function f7(): FReturnType {
+        return { ...{ a: 2 }, ...objWithForbiddenKeys };
+    }
+    
+    function f8(): FReturnType {
+        return { ...{ c: 2 }, ...objWithAllowedKeys };
+                      ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+    }
+    
+    function f9(): FReturnType {
+        return { ...{ c: 2 }, ...objWithForbiddenKeys };
+        ~~~~~~
+!!! error TS2559: Type '{ c: number; }' has no properties in common with type 'FReturnType'.
+    }
+    
+    function f10(): FReturnType {
+        return { ...{ c: 2 }, ...objWithNoKeys };
+                      ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+    }
+    
+    function f11(): FReturnType {
+        return { ...{...{ c: 2 }, ...objWithNoKeys } };
+                          ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+    }
+    
+    function f12(): FReturnType {
+        return { a, ...{ c: 2 } };
+                         ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+    }
+    
+    function f13(): FReturnType {
+        return { a, ...{ c } };
+                         ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+    }
+    
+    function f14(): FReturnType {
+        return { ...{ c }, ...objWithAllowedKeys };
+                      ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'FReturnType'.
+    }
+    
