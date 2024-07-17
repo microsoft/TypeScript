@@ -539,7 +539,7 @@ interface StringConstructor {
      * @param template A well-formed template string call site representation.
      * @param substitutions A set of substitution values.
      */
-    raw(template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]): string;
+    raw(template: { readonly raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]): string;
 }
 
 interface Int8Array {
