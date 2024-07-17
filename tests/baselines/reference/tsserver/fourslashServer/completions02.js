@@ -226,6 +226,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "export",
             "sortText": "11"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -645,6 +650,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "export",
             "sortText": "11"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

@@ -245,7 +245,8 @@
             }
           ]
         }
-      ]
+      ],
+      "commitCharacters": []
     }
   }
 ]

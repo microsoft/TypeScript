@@ -889,6 +889,11 @@ Info seq  [hh:mm:ss:mss] response:
               "isPackageJsonImport": true
             }
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true
@@ -1426,6 +1431,11 @@ Info seq  [hh:mm:ss:mss] response:
               "isPackageJsonImport": true
             }
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -2009,6 +2019,11 @@ Info seq  [hh:mm:ss:mss] response:
               "isPackageJsonImport": true
             }
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -2504,6 +2519,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,

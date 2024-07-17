@@ -975,6 +975,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/src/a.ts"
             }
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -1495,6 +1500,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/src/a.ts"
             }
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -2012,6 +2022,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/src/a.ts"
             }
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,

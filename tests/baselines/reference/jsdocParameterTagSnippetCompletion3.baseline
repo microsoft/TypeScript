@@ -1682,6 +1682,11 @@
           ],
           "documentation": []
         }
+      ],
+      "commitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -2801,6 +2806,11 @@
           ],
           "documentation": []
         }
+      ],
+      "commitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -3920,6 +3930,11 @@
           ],
           "documentation": []
         }
+      ],
+      "commitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -5039,6 +5054,11 @@
           ],
           "documentation": []
         }
+      ],
+      "commitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -6158,6 +6178,11 @@
           ],
           "documentation": []
         }
+      ],
+      "commitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -7277,6 +7302,11 @@
           ],
           "documentation": []
         }
+      ],
+      "commitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

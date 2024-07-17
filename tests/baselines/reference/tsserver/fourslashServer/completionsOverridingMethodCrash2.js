@@ -467,7 +467,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
-        ]
+        ],
+        "commitCharacters": []
       }
     }
 Info seq  [hh:mm:ss:mss] request:
@@ -811,7 +812,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
-        ]
+        ],
+        "commitCharacters": []
       }
     }
 After Request

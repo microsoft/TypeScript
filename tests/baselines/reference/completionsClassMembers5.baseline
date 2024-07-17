@@ -250,7 +250,8 @@
             }
           ]
         }
-      ]
+      ],
+      "commitCharacters": []
     }
   }
 ]

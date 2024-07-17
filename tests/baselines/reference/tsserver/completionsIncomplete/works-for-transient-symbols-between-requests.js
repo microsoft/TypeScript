@@ -4691,6 +4691,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/lib/foo/constants.d.ts"
             }
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -7743,6 +7748,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/lib/foo/constants.d.ts"
             }
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,

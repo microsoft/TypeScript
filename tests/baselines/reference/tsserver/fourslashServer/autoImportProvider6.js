@@ -1809,6 +1809,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

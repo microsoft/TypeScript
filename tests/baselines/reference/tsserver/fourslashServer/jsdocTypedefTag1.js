@@ -333,6 +333,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

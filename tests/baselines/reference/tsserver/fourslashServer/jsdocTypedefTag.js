@@ -471,6 +471,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -629,6 +634,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "18"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -913,6 +923,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1107,6 +1122,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "18"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1265,6 +1285,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "18"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1549,6 +1574,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1743,6 +1773,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "18"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1901,6 +1936,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "18"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2185,6 +2225,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2379,6 +2424,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "18"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2537,6 +2587,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "18"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2821,6 +2876,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -3015,6 +3075,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "18"
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

@@ -16929,6 +16929,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/lib/a_99.ts"
             }
           }
+        ],
+        "commitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
