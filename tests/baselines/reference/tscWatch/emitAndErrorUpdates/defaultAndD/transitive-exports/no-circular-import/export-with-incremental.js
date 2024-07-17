@@ -60,9 +60,9 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w --d --incremental
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -195,134 +195,123 @@ export declare class App {
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-4369626085-export interface ITest {\n    title: string;\n}","signature":"-2463740027-export interface ITest {\n    title: string;\n}\n"},{"version":"-10750058173-export * from \"./toolsinterface\";","signature":"-11154536019-export * from \"./toolsinterface\";\n"},{"version":"-5078933600-export * from \"./tools/public\";","signature":"-4396051542-export * from \"./tools/public\";\n"},{"version":"-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","signature":"-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"},{"version":"-9530042629-export * from \"./data\";","signature":"-9548728731-export * from \"./data\";\n"},{"version":"-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}","signature":"-18990360330-export declare class App {\n    constructor();\n}\n"}],"root":[7],"options":{"declaration":true},"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,5,6]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileIdsList":[[6],[3],[2],[4],[5]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-4369626085-export interface ITest {\n    title: string;\n}","signature":"-2463740027-export interface ITest {\n    title: string;\n}\n"},{"version":"-10750058173-export * from \"./toolsinterface\";","signature":"-11154536019-export * from \"./toolsinterface\";\n"},{"version":"-5078933600-export * from \"./tools/public\";","signature":"-4396051542-export * from \"./tools/public\";\n"},{"version":"-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","signature":"-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"},{"version":"-9530042629-export * from \"./data\";","signature":"-9548728731-export * from \"./data\";\n"},{"version":"-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}","signature":"-18990360330-export declare class App {\n    constructor();\n}\n"}],"root":[7],"options":{"declaration":true},"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./lib1/tools/toolsinterface.ts",
-      "./lib1/tools/public.ts",
-      "./lib1/public.ts",
-      "./lib2/data.ts",
-      "./lib2/public.ts",
-      "./app.ts"
+  "fileNames": [
+    "../../../../a/lib/lib.d.ts",
+    "./lib1/tools/toolsinterface.ts",
+    "./lib1/tools/public.ts",
+    "./lib1/public.ts",
+    "./lib2/data.ts",
+    "./lib2/public.ts",
+    "./app.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./lib2/public.ts"
     ],
-    "fileNamesList": [
-      [
-        "./lib2/public.ts"
-      ],
-      [
-        "./lib1/tools/public.ts"
-      ],
-      [
-        "./lib1/tools/toolsinterface.ts"
-      ],
-      [
-        "./lib1/public.ts"
-      ],
-      [
-        "./lib2/data.ts"
-      ]
+    [
+      "./lib1/tools/public.ts"
     ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+    [
+      "./lib1/tools/toolsinterface.ts"
+    ],
+    [
+      "./lib1/public.ts"
+    ],
+    [
+      "./lib2/data.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./lib1/tools/toolsinterface.ts": {
-        "original": {
-          "version": "-4369626085-export interface ITest {\n    title: string;\n}",
-          "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "./lib1/tools/toolsinterface.ts": {
+      "original": {
         "version": "-4369626085-export interface ITest {\n    title: string;\n}",
         "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n"
       },
-      "./lib1/tools/public.ts": {
-        "original": {
-          "version": "-10750058173-export * from \"./toolsinterface\";",
-          "signature": "-11154536019-export * from \"./toolsinterface\";\n"
-        },
+      "version": "-4369626085-export interface ITest {\n    title: string;\n}",
+      "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n"
+    },
+    "./lib1/tools/public.ts": {
+      "original": {
         "version": "-10750058173-export * from \"./toolsinterface\";",
         "signature": "-11154536019-export * from \"./toolsinterface\";\n"
       },
-      "./lib1/public.ts": {
-        "original": {
-          "version": "-5078933600-export * from \"./tools/public\";",
-          "signature": "-4396051542-export * from \"./tools/public\";\n"
-        },
+      "version": "-10750058173-export * from \"./toolsinterface\";",
+      "signature": "-11154536019-export * from \"./toolsinterface\";\n"
+    },
+    "./lib1/public.ts": {
+      "original": {
         "version": "-5078933600-export * from \"./tools/public\";",
         "signature": "-4396051542-export * from \"./tools/public\";\n"
       },
-      "./lib2/data.ts": {
-        "original": {
-          "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
-          "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
-        },
+      "version": "-5078933600-export * from \"./tools/public\";",
+      "signature": "-4396051542-export * from \"./tools/public\";\n"
+    },
+    "./lib2/data.ts": {
+      "original": {
         "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
         "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
       },
-      "./lib2/public.ts": {
-        "original": {
-          "version": "-9530042629-export * from \"./data\";",
-          "signature": "-9548728731-export * from \"./data\";\n"
-        },
+      "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
+      "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
+    },
+    "./lib2/public.ts": {
+      "original": {
         "version": "-9530042629-export * from \"./data\";",
         "signature": "-9548728731-export * from \"./data\";\n"
       },
-      "./app.ts": {
-        "original": {
-          "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
-          "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
-        },
+      "version": "-9530042629-export * from \"./data\";",
+      "signature": "-9548728731-export * from \"./data\";\n"
+    },
+    "./app.ts": {
+      "original": {
         "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
         "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
-      }
-    },
-    "root": [
-      [
-        7,
-        "./app.ts"
-      ]
-    ],
-    "options": {
-      "declaration": true
-    },
-    "referencedMap": {
-      "./app.ts": [
-        "./lib2/public.ts"
-      ],
-      "./lib1/public.ts": [
-        "./lib1/tools/public.ts"
-      ],
-      "./lib1/tools/public.ts": [
-        "./lib1/tools/toolsinterface.ts"
-      ],
-      "./lib2/data.ts": [
-        "./lib1/public.ts"
-      ],
-      "./lib2/public.ts": [
-        "./lib2/data.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./app.ts",
-      "./lib1/public.ts",
-      "./lib1/tools/public.ts",
-      "./lib1/tools/toolsinterface.ts",
-      "./lib2/data.ts",
+      },
+      "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
+      "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
+    }
+  },
+  "root": [
+    [
+      7,
+      "./app.ts"
+    ]
+  ],
+  "options": {
+    "declaration": true
+  },
+  "referencedMap": {
+    "./app.ts": [
       "./lib2/public.ts"
+    ],
+    "./lib1/public.ts": [
+      "./lib1/tools/public.ts"
+    ],
+    "./lib1/tools/public.ts": [
+      "./lib1/tools/toolsinterface.ts"
+    ],
+    "./lib2/data.ts": [
+      "./lib1/public.ts"
+    ],
+    "./lib2/public.ts": [
+      "./lib2/data.ts"
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1862
+  "size": 1805
 }
 
 
@@ -405,17 +394,18 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2561: [0mObject literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
 [7m [0m [91m            ~~~~~[0m
 
-[[90m12:01:38 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -433,146 +423,137 @@ export interface ITest {
 //// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
 //// [/user/username/projects/myproject/app.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3501597171-export interface ITest {\n    title2: string;\n}","signature":"-3883556937-export interface ITest {\n    title2: string;\n}\n"},{"version":"-10750058173-export * from \"./toolsinterface\";","signature":"-11154536019-export * from \"./toolsinterface\";\n"},{"version":"-5078933600-export * from \"./tools/public\";","signature":"-4396051542-export * from \"./tools/public\";\n"},{"version":"-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","signature":"-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"},{"version":"-9530042629-export * from \"./data\";","signature":"-9548728731-export * from \"./data\";\n"},{"version":"-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}","signature":"-18990360330-export declare class App {\n    constructor();\n}\n"}],"root":[7],"options":{"declaration":true},"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,[5,[{"file":"./lib2/data.ts","start":121,"length":5,"code":2561,"category":1,"messageText":"Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?"}]],6]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileIdsList":[[6],[3],[2],[4],[5]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3501597171-export interface ITest {\n    title2: string;\n}","signature":"-3883556937-export interface ITest {\n    title2: string;\n}\n"},{"version":"-10750058173-export * from \"./toolsinterface\";","signature":"-11154536019-export * from \"./toolsinterface\";\n"},{"version":"-5078933600-export * from \"./tools/public\";","signature":"-4396051542-export * from \"./tools/public\";\n"},{"version":"-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","signature":"-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"},{"version":"-9530042629-export * from \"./data\";","signature":"-9548728731-export * from \"./data\";\n"},{"version":"-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}","signature":"-18990360330-export declare class App {\n    constructor();\n}\n"}],"root":[7],"options":{"declaration":true},"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[[5,[{"start":121,"length":5,"code":2561,"category":1,"messageText":"Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?"}]]],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./lib1/tools/toolsinterface.ts",
-      "./lib1/tools/public.ts",
-      "./lib1/public.ts",
-      "./lib2/data.ts",
-      "./lib2/public.ts",
-      "./app.ts"
+  "fileNames": [
+    "../../../../a/lib/lib.d.ts",
+    "./lib1/tools/toolsinterface.ts",
+    "./lib1/tools/public.ts",
+    "./lib1/public.ts",
+    "./lib2/data.ts",
+    "./lib2/public.ts",
+    "./app.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./lib2/public.ts"
     ],
-    "fileNamesList": [
-      [
-        "./lib2/public.ts"
-      ],
-      [
-        "./lib1/tools/public.ts"
-      ],
-      [
-        "./lib1/tools/toolsinterface.ts"
-      ],
-      [
-        "./lib1/public.ts"
-      ],
-      [
-        "./lib2/data.ts"
-      ]
+    [
+      "./lib1/tools/public.ts"
     ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+    [
+      "./lib1/tools/toolsinterface.ts"
+    ],
+    [
+      "./lib1/public.ts"
+    ],
+    [
+      "./lib2/data.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./lib1/tools/toolsinterface.ts": {
-        "original": {
-          "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
-          "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "./lib1/tools/toolsinterface.ts": {
+      "original": {
         "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
         "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
       },
-      "./lib1/tools/public.ts": {
-        "original": {
-          "version": "-10750058173-export * from \"./toolsinterface\";",
-          "signature": "-11154536019-export * from \"./toolsinterface\";\n"
-        },
+      "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
+      "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
+    },
+    "./lib1/tools/public.ts": {
+      "original": {
         "version": "-10750058173-export * from \"./toolsinterface\";",
         "signature": "-11154536019-export * from \"./toolsinterface\";\n"
       },
-      "./lib1/public.ts": {
-        "original": {
-          "version": "-5078933600-export * from \"./tools/public\";",
-          "signature": "-4396051542-export * from \"./tools/public\";\n"
-        },
+      "version": "-10750058173-export * from \"./toolsinterface\";",
+      "signature": "-11154536019-export * from \"./toolsinterface\";\n"
+    },
+    "./lib1/public.ts": {
+      "original": {
         "version": "-5078933600-export * from \"./tools/public\";",
         "signature": "-4396051542-export * from \"./tools/public\";\n"
       },
-      "./lib2/data.ts": {
-        "original": {
-          "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
-          "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
-        },
+      "version": "-5078933600-export * from \"./tools/public\";",
+      "signature": "-4396051542-export * from \"./tools/public\";\n"
+    },
+    "./lib2/data.ts": {
+      "original": {
         "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
         "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
       },
-      "./lib2/public.ts": {
-        "original": {
-          "version": "-9530042629-export * from \"./data\";",
-          "signature": "-9548728731-export * from \"./data\";\n"
-        },
+      "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
+      "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
+    },
+    "./lib2/public.ts": {
+      "original": {
         "version": "-9530042629-export * from \"./data\";",
         "signature": "-9548728731-export * from \"./data\";\n"
       },
-      "./app.ts": {
-        "original": {
-          "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
-          "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
-        },
+      "version": "-9530042629-export * from \"./data\";",
+      "signature": "-9548728731-export * from \"./data\";\n"
+    },
+    "./app.ts": {
+      "original": {
         "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
         "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
-      }
-    },
-    "root": [
-      [
-        7,
-        "./app.ts"
-      ]
-    ],
-    "options": {
-      "declaration": true
-    },
-    "referencedMap": {
-      "./app.ts": [
-        "./lib2/public.ts"
-      ],
-      "./lib1/public.ts": [
-        "./lib1/tools/public.ts"
-      ],
-      "./lib1/tools/public.ts": [
-        "./lib1/tools/toolsinterface.ts"
-      ],
-      "./lib2/data.ts": [
-        "./lib1/public.ts"
-      ],
-      "./lib2/public.ts": [
-        "./lib2/data.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./app.ts",
-      "./lib1/public.ts",
-      "./lib1/tools/public.ts",
-      "./lib1/tools/toolsinterface.ts",
-      [
-        "./lib2/data.ts",
-        [
-          {
-            "file": "./lib2/data.ts",
-            "start": 121,
-            "length": 5,
-            "code": 2561,
-            "category": 1,
-            "messageText": "Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?"
-          }
-        ]
-      ],
+      },
+      "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
+      "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
+    }
+  },
+  "root": [
+    [
+      7,
+      "./app.ts"
+    ]
+  ],
+  "options": {
+    "declaration": true
+  },
+  "referencedMap": {
+    "./app.ts": [
       "./lib2/public.ts"
+    ],
+    "./lib1/public.ts": [
+      "./lib1/tools/public.ts"
+    ],
+    "./lib1/tools/public.ts": [
+      "./lib1/tools/toolsinterface.ts"
+    ],
+    "./lib2/data.ts": [
+      "./lib1/public.ts"
+    ],
+    "./lib2/public.ts": [
+      "./lib2/data.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./lib2/data.ts",
+      [
+        {
+          "start": 121,
+          "length": 5,
+          "code": 2561,
+          "category": 1,
+          "messageText": "Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?"
+        }
+      ]
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 2084
+  "size": 2036
 }
 
 
@@ -630,12 +611,13 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:45 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:13 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -653,134 +635,123 @@ export interface ITest {
 //// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
 //// [/user/username/projects/myproject/app.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-4369626085-export interface ITest {\n    title: string;\n}","signature":"-2463740027-export interface ITest {\n    title: string;\n}\n"},{"version":"-10750058173-export * from \"./toolsinterface\";","signature":"-11154536019-export * from \"./toolsinterface\";\n"},{"version":"-5078933600-export * from \"./tools/public\";","signature":"-4396051542-export * from \"./tools/public\";\n"},{"version":"-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","signature":"-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"},{"version":"-9530042629-export * from \"./data\";","signature":"-9548728731-export * from \"./data\";\n"},{"version":"-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}","signature":"-18990360330-export declare class App {\n    constructor();\n}\n"}],"root":[7],"options":{"declaration":true},"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,5,6]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileIdsList":[[6],[3],[2],[4],[5]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-4369626085-export interface ITest {\n    title: string;\n}","signature":"-2463740027-export interface ITest {\n    title: string;\n}\n"},{"version":"-10750058173-export * from \"./toolsinterface\";","signature":"-11154536019-export * from \"./toolsinterface\";\n"},{"version":"-5078933600-export * from \"./tools/public\";","signature":"-4396051542-export * from \"./tools/public\";\n"},{"version":"-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","signature":"-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"},{"version":"-9530042629-export * from \"./data\";","signature":"-9548728731-export * from \"./data\";\n"},{"version":"-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}","signature":"-18990360330-export declare class App {\n    constructor();\n}\n"}],"root":[7],"options":{"declaration":true},"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./lib1/tools/toolsinterface.ts",
-      "./lib1/tools/public.ts",
-      "./lib1/public.ts",
-      "./lib2/data.ts",
-      "./lib2/public.ts",
-      "./app.ts"
+  "fileNames": [
+    "../../../../a/lib/lib.d.ts",
+    "./lib1/tools/toolsinterface.ts",
+    "./lib1/tools/public.ts",
+    "./lib1/public.ts",
+    "./lib2/data.ts",
+    "./lib2/public.ts",
+    "./app.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./lib2/public.ts"
     ],
-    "fileNamesList": [
-      [
-        "./lib2/public.ts"
-      ],
-      [
-        "./lib1/tools/public.ts"
-      ],
-      [
-        "./lib1/tools/toolsinterface.ts"
-      ],
-      [
-        "./lib1/public.ts"
-      ],
-      [
-        "./lib2/data.ts"
-      ]
+    [
+      "./lib1/tools/public.ts"
     ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+    [
+      "./lib1/tools/toolsinterface.ts"
+    ],
+    [
+      "./lib1/public.ts"
+    ],
+    [
+      "./lib2/data.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./lib1/tools/toolsinterface.ts": {
-        "original": {
-          "version": "-4369626085-export interface ITest {\n    title: string;\n}",
-          "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "./lib1/tools/toolsinterface.ts": {
+      "original": {
         "version": "-4369626085-export interface ITest {\n    title: string;\n}",
         "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n"
       },
-      "./lib1/tools/public.ts": {
-        "original": {
-          "version": "-10750058173-export * from \"./toolsinterface\";",
-          "signature": "-11154536019-export * from \"./toolsinterface\";\n"
-        },
+      "version": "-4369626085-export interface ITest {\n    title: string;\n}",
+      "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n"
+    },
+    "./lib1/tools/public.ts": {
+      "original": {
         "version": "-10750058173-export * from \"./toolsinterface\";",
         "signature": "-11154536019-export * from \"./toolsinterface\";\n"
       },
-      "./lib1/public.ts": {
-        "original": {
-          "version": "-5078933600-export * from \"./tools/public\";",
-          "signature": "-4396051542-export * from \"./tools/public\";\n"
-        },
+      "version": "-10750058173-export * from \"./toolsinterface\";",
+      "signature": "-11154536019-export * from \"./toolsinterface\";\n"
+    },
+    "./lib1/public.ts": {
+      "original": {
         "version": "-5078933600-export * from \"./tools/public\";",
         "signature": "-4396051542-export * from \"./tools/public\";\n"
       },
-      "./lib2/data.ts": {
-        "original": {
-          "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
-          "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
-        },
+      "version": "-5078933600-export * from \"./tools/public\";",
+      "signature": "-4396051542-export * from \"./tools/public\";\n"
+    },
+    "./lib2/data.ts": {
+      "original": {
         "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
         "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
       },
-      "./lib2/public.ts": {
-        "original": {
-          "version": "-9530042629-export * from \"./data\";",
-          "signature": "-9548728731-export * from \"./data\";\n"
-        },
+      "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
+      "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
+    },
+    "./lib2/public.ts": {
+      "original": {
         "version": "-9530042629-export * from \"./data\";",
         "signature": "-9548728731-export * from \"./data\";\n"
       },
-      "./app.ts": {
-        "original": {
-          "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
-          "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
-        },
+      "version": "-9530042629-export * from \"./data\";",
+      "signature": "-9548728731-export * from \"./data\";\n"
+    },
+    "./app.ts": {
+      "original": {
         "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
         "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
-      }
-    },
-    "root": [
-      [
-        7,
-        "./app.ts"
-      ]
-    ],
-    "options": {
-      "declaration": true
-    },
-    "referencedMap": {
-      "./app.ts": [
-        "./lib2/public.ts"
-      ],
-      "./lib1/public.ts": [
-        "./lib1/tools/public.ts"
-      ],
-      "./lib1/tools/public.ts": [
-        "./lib1/tools/toolsinterface.ts"
-      ],
-      "./lib2/data.ts": [
-        "./lib1/public.ts"
-      ],
-      "./lib2/public.ts": [
-        "./lib2/data.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./app.ts",
-      "./lib1/public.ts",
-      "./lib1/tools/public.ts",
-      "./lib1/tools/toolsinterface.ts",
-      "./lib2/data.ts",
+      },
+      "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
+      "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
+    }
+  },
+  "root": [
+    [
+      7,
+      "./app.ts"
+    ]
+  ],
+  "options": {
+    "declaration": true
+  },
+  "referencedMap": {
+    "./app.ts": [
       "./lib2/public.ts"
+    ],
+    "./lib1/public.ts": [
+      "./lib1/tools/public.ts"
+    ],
+    "./lib1/tools/public.ts": [
+      "./lib1/tools/toolsinterface.ts"
+    ],
+    "./lib2/data.ts": [
+      "./lib1/public.ts"
+    ],
+    "./lib2/public.ts": [
+      "./lib2/data.ts"
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1862
+  "size": 1805
 }
 
 
@@ -838,17 +809,18 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:02:20 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2561: [0mObject literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
 
 [7m5[0m             title: "title"
 [7m [0m [91m            ~~~~~[0m
 
-[[90m12:02:48 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -866,146 +838,137 @@ export interface ITest {
 //// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
 //// [/user/username/projects/myproject/app.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3501597171-export interface ITest {\n    title2: string;\n}","signature":"-3883556937-export interface ITest {\n    title2: string;\n}\n"},{"version":"-10750058173-export * from \"./toolsinterface\";","signature":"-11154536019-export * from \"./toolsinterface\";\n"},{"version":"-5078933600-export * from \"./tools/public\";","signature":"-4396051542-export * from \"./tools/public\";\n"},{"version":"-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","signature":"-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"},{"version":"-9530042629-export * from \"./data\";","signature":"-9548728731-export * from \"./data\";\n"},{"version":"-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}","signature":"-18990360330-export declare class App {\n    constructor();\n}\n"}],"root":[7],"options":{"declaration":true},"fileIdsList":[[6],[3],[2],[4],[5]],"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[1,7,4,3,2,[5,[{"file":"./lib2/data.ts","start":121,"length":5,"code":2561,"category":1,"messageText":"Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?"}]],6]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../a/lib/lib.d.ts","./lib1/tools/toolsinterface.ts","./lib1/tools/public.ts","./lib1/public.ts","./lib2/data.ts","./lib2/public.ts","./app.ts"],"fileIdsList":[[6],[3],[2],[4],[5]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3501597171-export interface ITest {\n    title2: string;\n}","signature":"-3883556937-export interface ITest {\n    title2: string;\n}\n"},{"version":"-10750058173-export * from \"./toolsinterface\";","signature":"-11154536019-export * from \"./toolsinterface\";\n"},{"version":"-5078933600-export * from \"./tools/public\";","signature":"-4396051542-export * from \"./tools/public\";\n"},{"version":"-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}","signature":"-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"},{"version":"-9530042629-export * from \"./data\";","signature":"-9548728731-export * from \"./data\";\n"},{"version":"-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}","signature":"-18990360330-export declare class App {\n    constructor();\n}\n"}],"root":[7],"options":{"declaration":true},"referencedMap":[[7,1],[4,2],[3,3],[5,4],[6,5]],"semanticDiagnosticsPerFile":[[5,[{"start":121,"length":5,"code":2561,"category":1,"messageText":"Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?"}]]],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./lib1/tools/toolsinterface.ts",
-      "./lib1/tools/public.ts",
-      "./lib1/public.ts",
-      "./lib2/data.ts",
-      "./lib2/public.ts",
-      "./app.ts"
+  "fileNames": [
+    "../../../../a/lib/lib.d.ts",
+    "./lib1/tools/toolsinterface.ts",
+    "./lib1/tools/public.ts",
+    "./lib1/public.ts",
+    "./lib2/data.ts",
+    "./lib2/public.ts",
+    "./app.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./lib2/public.ts"
     ],
-    "fileNamesList": [
-      [
-        "./lib2/public.ts"
-      ],
-      [
-        "./lib1/tools/public.ts"
-      ],
-      [
-        "./lib1/tools/toolsinterface.ts"
-      ],
-      [
-        "./lib1/public.ts"
-      ],
-      [
-        "./lib2/data.ts"
-      ]
+    [
+      "./lib1/tools/public.ts"
     ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+    [
+      "./lib1/tools/toolsinterface.ts"
+    ],
+    [
+      "./lib1/public.ts"
+    ],
+    [
+      "./lib2/data.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./lib1/tools/toolsinterface.ts": {
-        "original": {
-          "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
-          "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "./lib1/tools/toolsinterface.ts": {
+      "original": {
         "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
         "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
       },
-      "./lib1/tools/public.ts": {
-        "original": {
-          "version": "-10750058173-export * from \"./toolsinterface\";",
-          "signature": "-11154536019-export * from \"./toolsinterface\";\n"
-        },
+      "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
+      "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
+    },
+    "./lib1/tools/public.ts": {
+      "original": {
         "version": "-10750058173-export * from \"./toolsinterface\";",
         "signature": "-11154536019-export * from \"./toolsinterface\";\n"
       },
-      "./lib1/public.ts": {
-        "original": {
-          "version": "-5078933600-export * from \"./tools/public\";",
-          "signature": "-4396051542-export * from \"./tools/public\";\n"
-        },
+      "version": "-10750058173-export * from \"./toolsinterface\";",
+      "signature": "-11154536019-export * from \"./toolsinterface\";\n"
+    },
+    "./lib1/public.ts": {
+      "original": {
         "version": "-5078933600-export * from \"./tools/public\";",
         "signature": "-4396051542-export * from \"./tools/public\";\n"
       },
-      "./lib2/data.ts": {
-        "original": {
-          "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
-          "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
-        },
+      "version": "-5078933600-export * from \"./tools/public\";",
+      "signature": "-4396051542-export * from \"./tools/public\";\n"
+    },
+    "./lib2/data.ts": {
+      "original": {
         "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
         "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
       },
-      "./lib2/public.ts": {
-        "original": {
-          "version": "-9530042629-export * from \"./data\";",
-          "signature": "-9548728731-export * from \"./data\";\n"
-        },
+      "version": "-30573389178-import { ITest } from \"lib1/public\";\nexport class Data {\n    public test() {\n        const result: ITest = {\n            title: \"title\"\n        }\n        return result;\n    }\n}",
+      "signature": "-15758516261-import { ITest } from \"lib1/public\";\nexport declare class Data {\n    test(): ITest;\n}\n"
+    },
+    "./lib2/public.ts": {
+      "original": {
         "version": "-9530042629-export * from \"./data\";",
         "signature": "-9548728731-export * from \"./data\";\n"
       },
-      "./app.ts": {
-        "original": {
-          "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
-          "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
-        },
+      "version": "-9530042629-export * from \"./data\";",
+      "signature": "-9548728731-export * from \"./data\";\n"
+    },
+    "./app.ts": {
+      "original": {
         "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
         "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
-      }
-    },
-    "root": [
-      [
-        7,
-        "./app.ts"
-      ]
-    ],
-    "options": {
-      "declaration": true
-    },
-    "referencedMap": {
-      "./app.ts": [
-        "./lib2/public.ts"
-      ],
-      "./lib1/public.ts": [
-        "./lib1/tools/public.ts"
-      ],
-      "./lib1/tools/public.ts": [
-        "./lib1/tools/toolsinterface.ts"
-      ],
-      "./lib2/data.ts": [
-        "./lib1/public.ts"
-      ],
-      "./lib2/public.ts": [
-        "./lib2/data.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../../../a/lib/lib.d.ts",
-      "./app.ts",
-      "./lib1/public.ts",
-      "./lib1/tools/public.ts",
-      "./lib1/tools/toolsinterface.ts",
-      [
-        "./lib2/data.ts",
-        [
-          {
-            "file": "./lib2/data.ts",
-            "start": 121,
-            "length": 5,
-            "code": 2561,
-            "category": 1,
-            "messageText": "Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?"
-          }
-        ]
-      ],
+      },
+      "version": "-14937286564-import { Data } from \"lib2/public\";\nexport class App {\n    public constructor() {\n        new Data().test();\n    }\n}",
+      "signature": "-18990360330-export declare class App {\n    constructor();\n}\n"
+    }
+  },
+  "root": [
+    [
+      7,
+      "./app.ts"
+    ]
+  ],
+  "options": {
+    "declaration": true
+  },
+  "referencedMap": {
+    "./app.ts": [
       "./lib2/public.ts"
+    ],
+    "./lib1/public.ts": [
+      "./lib1/tools/public.ts"
+    ],
+    "./lib1/tools/public.ts": [
+      "./lib1/tools/toolsinterface.ts"
+    ],
+    "./lib2/data.ts": [
+      "./lib1/public.ts"
+    ],
+    "./lib2/public.ts": [
+      "./lib2/data.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./lib2/data.ts",
+      [
+        {
+          "start": 121,
+          "length": 5,
+          "code": 2561,
+          "category": 1,
+          "messageText": "Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?"
+        }
+      ]
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 2084
+  "size": 2036
 }
 
 

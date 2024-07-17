@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: c.ts
 
 
@@ -20,14 +20,14 @@ var x = 1
 resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs/index.d.ts",
-    "node_modules/typerefs/package.json",
-    "node_modules/typerefs.d.ts",
-    "node_modules/typerefs/index.d.ts",
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs.d.ts",
-    "node_modules/@types/typerefs/index.d.ts"
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs/index.d.ts",
+    "/node_modules/typerefs/package.json",
+    "/node_modules/typerefs.d.ts",
+    "/node_modules/typerefs/index.d.ts",
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs.d.ts",
+    "/node_modules/@types/typerefs/index.d.ts"
   ]
 }
 
@@ -44,7 +44,7 @@ b.ts(1,22): error TS6059: File 'c.ts' is not under 'rootDir' '/a/b'. 'rootDir' i
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: c.ts
 
 
@@ -66,14 +66,14 @@ var x = 1
 resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs/index.d.ts",
-    "node_modules/typerefs/package.json",
-    "node_modules/typerefs.d.ts",
-    "node_modules/typerefs/index.d.ts",
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs.d.ts",
-    "node_modules/@types/typerefs/index.d.ts"
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs/index.d.ts",
+    "/node_modules/typerefs/package.json",
+    "/node_modules/typerefs.d.ts",
+    "/node_modules/typerefs/index.d.ts",
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs.d.ts",
+    "/node_modules/@types/typerefs/index.d.ts"
   ]
 }
 

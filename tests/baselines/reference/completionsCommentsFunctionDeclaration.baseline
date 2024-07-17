@@ -102,7 +102,7 @@
 // | (message?: string) => ReferenceError (+1 overload)
 // | interface ReferenceError
 // | var RegExp: RegExpConstructor
-// | (pattern: string | RegExp) => RegExp (+1 overload)
+// | (pattern: RegExp | string) => RegExp (+1 overload)
 // | interface RegExp
 // | return
 // | satisfies
@@ -377,7 +377,7 @@
 // | (message?: string) => ReferenceError (+1 overload)
 // | interface ReferenceError
 // | var RegExp: RegExpConstructor
-// | (pattern: string | RegExp) => RegExp (+1 overload)
+// | (pattern: RegExp | string) => RegExp (+1 overload)
 // | interface RegExp
 // | return
 // | satisfies
@@ -3599,8 +3599,8 @@
               "kind": "space"
             },
             {
-              "text": "string",
-              "kind": "keyword"
+              "text": "RegExp",
+              "kind": "localName"
             },
             {
               "text": " ",
@@ -3615,8 +3615,8 @@
               "kind": "space"
             },
             {
-              "text": "RegExp",
-              "kind": "localName"
+              "text": "string",
+              "kind": "keyword"
             },
             {
               "text": ")",
@@ -11459,8 +11459,8 @@
               "kind": "space"
             },
             {
-              "text": "string",
-              "kind": "keyword"
+              "text": "RegExp",
+              "kind": "localName"
             },
             {
               "text": " ",
@@ -11475,8 +11475,8 @@
               "kind": "space"
             },
             {
-              "text": "RegExp",
-              "kind": "localName"
+              "text": "string",
+              "kind": "keyword"
             },
             {
               "text": ")",

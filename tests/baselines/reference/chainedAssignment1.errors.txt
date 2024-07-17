@@ -1,6 +1,6 @@
 chainedAssignment1.ts(21,1): error TS2741: Property 'a' is missing in type 'Z' but required in type 'X'.
 chainedAssignment1.ts(21,6): error TS2739: Type 'Z' is missing the following properties from type 'Y': a, b
-chainedAssignment1.ts(22,1): error TS2322: Type 'Z' is not assignable to type 'Y'.
+chainedAssignment1.ts(22,1): error TS2739: Type 'Z' is missing the following properties from type 'Y': a, b
 
 
 ==== chainedAssignment1.ts (3 errors) ====
@@ -32,4 +32,4 @@ chainedAssignment1.ts(22,1): error TS2322: Type 'Z' is not assignable to type 'Y
 !!! error TS2739: Type 'Z' is missing the following properties from type 'Y': a, b
     c2 = c3; // Error TS111: Cannot convert Z to Y
     ~~
-!!! error TS2322: Type 'Z' is not assignable to type 'Y'.
+!!! error TS2739: Type 'Z' is missing the following properties from type 'Y': a, b

@@ -6,13 +6,19 @@
  */
 function Dependency(j) {
 >Dependency : typeof Dependency
+>           : ^^^^^^^^^^^^^^^^^
 >j : any
+>  : ^^^
 
   return j
 >j : any
+>  : ^^^
 }
 Dependency({})
 >Dependency({}) : any
+>               : ^^^
 >Dependency : typeof Dependency
+>           : ^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 

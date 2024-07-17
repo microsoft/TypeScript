@@ -6,24 +6,34 @@ var R: any
 
 export default R = {
 >R = {    "__esmodule": true,    "__proto__": {}} : { __esmodule: boolean; __proto__: {}; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >R : any
 >{    "__esmodule": true,    "__proto__": {}} : { __esmodule: boolean; __proto__: {}; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "__esmodule": true,
 >"__esmodule" : boolean
+>             : ^^^^^^^
 >true : true
+>     : ^^^^
 
     "__proto__": {}
 >"__proto__" : {}
+>            : ^^
 >{} : {}
+>   : ^^
 }
 
 === m2.ts ===
 import R from "./m1";
 >R : { __esmodule: boolean; __proto__: {}; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const { __esmodule, __proto__ } = R;
 >__esmodule : boolean
+>           : ^^^^^^^
 >__proto__ : {}
+>          : ^^
 >R : { __esmodule: boolean; __proto__: {}; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

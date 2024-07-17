@@ -3,11 +3,17 @@
 === parserES5SymbolProperty6.ts ===
 class C {
 >C : C
+>  : ^
 
     [Symbol.toStringTag]: string = "";
 >[Symbol.toStringTag] : string
+>                     : ^^^^^^
 >Symbol.toStringTag : any
+>                   : ^^^
 >Symbol : any
+>       : ^^^
 >toStringTag : any
+>            : ^^^
 >"" : ""
+>   : ^^
 }

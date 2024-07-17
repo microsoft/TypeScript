@@ -4,6 +4,7 @@
 // asdf
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
  /*asdf*/{}
 }

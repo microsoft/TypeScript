@@ -3,16 +3,22 @@
 === file1.ts ===
 import * as test from "./test.json"
 >test : { a: boolean; b: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === test.json ===
 {
 >{    "a": true,    "b": "hello"} : { a: boolean; b: string; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "a": true,
 >"a" : boolean
+>    : ^^^^^^^
 >true : true
+>     : ^^^^
 
     "b": "hello"
 >"b" : string
+>    : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 }

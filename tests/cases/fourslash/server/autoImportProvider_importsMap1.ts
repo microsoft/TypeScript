@@ -29,4 +29,4 @@
 // @Filename: /src/a.ts
 //// isBrowser/**/
 
-verify.importFixModuleSpecifiers("", ["./env/browser.js", "#is-browser"]);
+verify.importFixModuleSpecifiers("", ["#is-browser", "./env/browser.js"]);

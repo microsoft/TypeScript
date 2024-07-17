@@ -3,18 +3,23 @@
 === a.ts ===
 const enum A {
 >A : A
+>  : ^
 
     Foo
 >Foo : A.Foo
+>    : ^^^^^
 
 };
 export { A };
 >A : typeof A
+>  : ^^^^^^^^
 
 === b.ts ===
 import { A } from './a';
 >A : typeof A
+>  : ^^^^^^^^
 
 export { A };
 >A : typeof A
+>  : ^^^^^^^^
 

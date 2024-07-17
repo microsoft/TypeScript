@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: c.ts
 
 
@@ -20,28 +20,28 @@ var x = 1
 resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs/index.d.ts",
-    "node_modules/typerefs/package.json",
-    "node_modules/typerefs.d.ts",
-    "node_modules/typerefs/index.d.ts",
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs.d.ts",
-    "node_modules/@types/typerefs/index.d.ts"
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs/index.d.ts",
+    "/node_modules/typerefs/package.json",
+    "/node_modules/typerefs.d.ts",
+    "/node_modules/typerefs/index.d.ts",
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs.d.ts",
+    "/node_modules/@types/typerefs/index.d.ts"
   ]
 }
 
 automaticTypeDirectiveResolutions:
 a: {
   "failedLookupLocations": [
-    "node_modules/@types/a/package.json",
-    "node_modules/@types/a/index.d.ts",
-    "node_modules/a/package.json",
-    "node_modules/a.d.ts",
-    "node_modules/a/index.d.ts",
-    "node_modules/@types/a/package.json",
-    "node_modules/@types/a.d.ts",
-    "node_modules/@types/a/index.d.ts"
+    "/node_modules/@types/a/package.json",
+    "/node_modules/@types/a/index.d.ts",
+    "/node_modules/a/package.json",
+    "/node_modules/a.d.ts",
+    "/node_modules/a/index.d.ts",
+    "/node_modules/@types/a/package.json",
+    "/node_modules/@types/a.d.ts",
+    "/node_modules/@types/a/index.d.ts"
   ]
 }
 
@@ -55,7 +55,7 @@ a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs'.
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: c.ts
 
 
@@ -77,28 +77,28 @@ var x = 1
 resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs/index.d.ts",
-    "node_modules/typerefs/package.json",
-    "node_modules/typerefs.d.ts",
-    "node_modules/typerefs/index.d.ts",
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs.d.ts",
-    "node_modules/@types/typerefs/index.d.ts"
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs/index.d.ts",
+    "/node_modules/typerefs/package.json",
+    "/node_modules/typerefs.d.ts",
+    "/node_modules/typerefs/index.d.ts",
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs.d.ts",
+    "/node_modules/@types/typerefs/index.d.ts"
   ]
 }
 
 automaticTypeDirectiveResolutions:
 a: {
   "failedLookupLocations": [
-    "node_modules/@types/a/package.json",
-    "node_modules/@types/a/index.d.ts",
-    "node_modules/a/package.json",
-    "node_modules/a.d.ts",
-    "node_modules/a/index.d.ts",
-    "node_modules/@types/a/package.json",
-    "node_modules/@types/a.d.ts",
-    "node_modules/@types/a/index.d.ts"
+    "/node_modules/@types/a/package.json",
+    "/node_modules/@types/a/index.d.ts",
+    "/node_modules/a/package.json",
+    "/node_modules/a.d.ts",
+    "/node_modules/a/index.d.ts",
+    "/node_modules/@types/a/package.json",
+    "/node_modules/@types/a.d.ts",
+    "/node_modules/@types/a/index.d.ts"
   ]
 }
 

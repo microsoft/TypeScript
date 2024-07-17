@@ -24,7 +24,7 @@ CompilerOptions::
   "target": 1,
   "noImplicitAny": false,
   "sourceMap": false,
-  "configFilePath": "tsconfig.json"
+  "configFilePath": "/apath/tsconfig.json"
 }
 Errors::
 [96mtsconfig.json[0m:[93m7[0m:[93m12[0m - [91merror[0m[90m TS6046: [0mArgument for '--jsx' option must be: 'preserve', 'react-native', 'react', 'react-jsx', 'react-jsxdev'.

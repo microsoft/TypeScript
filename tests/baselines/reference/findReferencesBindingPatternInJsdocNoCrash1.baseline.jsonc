@@ -1,0 +1,45 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/src/index.ts ===
+// import { useQuery } from "use-query";
+// <|const { /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}data|] } = useQuery();|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/src/index.ts ===
+  // import { useQuery } from "use-query";
+  // <|const { /*FIND ALL REFS*/[|data|] } = useQuery();|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const data: any",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "data",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

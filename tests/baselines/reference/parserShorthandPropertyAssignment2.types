@@ -3,7 +3,11 @@
 === parserShorthandPropertyAssignment2.ts ===
 var v = { class };
 >v : { class: any; }
+>  : ^^^^^^^^^^^^^^^
 >{ class } : { class: any; }
+>          : ^^^^^^^^^^^^^^^
 >class : any
+>      : ^^^
 > : any
+> : ^^^
 
