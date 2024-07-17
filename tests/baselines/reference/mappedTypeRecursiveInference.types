@@ -2,8 +2,8 @@
 
 === Performance Stats ===
 Assignability cache: 5,000
-Type Count: 10,000
-Instantiation count: 250,000
+Type Count: 25,000
+Instantiation count: 500,000
 Symbol count: 250,000
 
 === mappedTypeRecursiveInference.ts ===
