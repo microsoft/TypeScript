@@ -1,9 +1,9 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /a.ts
 
 
 import * as a from "a";a;
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/a.ts",
@@ -12,21 +12,22 @@ a: {
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
 parent pointers are updated: true
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: /a.ts
 'use strict';
 
 import * as a from "a";a;
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/a.ts",
@@ -35,10 +36,11 @@ a: {
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 

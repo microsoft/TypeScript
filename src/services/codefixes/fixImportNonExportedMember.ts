@@ -1,4 +1,10 @@
 import {
+    createCodeFixAction,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     canHaveExportModifier,
     canHaveLocals,
     Declaration,
@@ -10,7 +16,6 @@ import {
     findLast,
     firstOrUndefined,
     getIsolatedModules,
-    getResolvedModule,
     getTokenAtPosition,
     Identifier,
     isExportDeclaration,
@@ -31,13 +36,7 @@ import {
     textChanges,
     tryCast,
     VariableStatement,
-} from "../_namespaces/ts";
-import {
-    createCodeFixAction,
-    createCombinedCodeActions,
-    eachDiagnostic,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixImportNonExportedMember";
 const errorCodes = [
@@ -91,7 +90,7 @@ registerCodeFix({
                 }
             });
         }));
-    }
+    },
 });
 
 interface ModuleExports {
@@ -117,10 +116,10 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         const importDeclaration = findAncestor(token, isImportDeclaration);
         if (importDeclaration === undefined) return undefined;
 
-        const moduleSpecifier = isStringLiteral(importDeclaration.moduleSpecifier) ? importDeclaration.moduleSpecifier.text : undefined;
+        const moduleSpecifier = isStringLiteral(importDeclaration.moduleSpecifier) ? importDeclaration.moduleSpecifier : undefined;
         if (moduleSpecifier === undefined) return undefined;
 
-        const resolvedModule = getResolvedModule(sourceFile, moduleSpecifier, /*mode*/ undefined);
+        const resolvedModule = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier, sourceFile)?.resolvedModule;
         if (resolvedModule === undefined) return undefined;
 
         const moduleSourceFile = program.getSourceFile(resolvedModule.resolvedFileName);
@@ -137,7 +136,7 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         if (node === undefined) return undefined;
 
         const exportName = { node: token, isTypeOnly: isTypeDeclaration(node) };
-        return { exportName, node, moduleSourceFile, moduleSpecifier };
+        return { exportName, node, moduleSourceFile, moduleSpecifier: moduleSpecifier.text };
     }
     return undefined;
 }
@@ -167,24 +166,31 @@ function doChanges(changes: textChanges.ChangeTracker, program: Program, sourceF
 }
 
 function tryGetExportDeclaration(sourceFile: SourceFile, isTypeOnly: boolean) {
-    const predicate = (node: Node): node is ExportDeclaration =>
-        isExportDeclaration(node) && (isTypeOnly && node.isTypeOnly || !node.isTypeOnly);
+    const predicate = (node: Node): node is ExportDeclaration => isExportDeclaration(node) && (isTypeOnly && node.isTypeOnly || !node.isTypeOnly);
     return findLast(sourceFile.statements, predicate);
 }
 
 function updateExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, node: ExportDeclaration, names: ExportName[]) {
     const namedExports = node.exportClause && isNamedExports(node.exportClause) ? node.exportClause.elements : factory.createNodeArray([]);
     const allowTypeModifier = !node.isTypeOnly && !!(getIsolatedModules(program.getCompilerOptions()) || find(namedExports, e => e.isTypeOnly));
-    changes.replaceNode(sourceFile, node,
-        factory.updateExportDeclaration(node, node.modifiers, node.isTypeOnly,
+    changes.replaceNode(
+        sourceFile,
+        node,
+        factory.updateExportDeclaration(
+            node,
+            node.modifiers,
+            node.isTypeOnly,
             factory.createNamedExports(
-                factory.createNodeArray([...namedExports, ...createExportSpecifiers(names, allowTypeModifier)], /*hasTrailingComma*/ namedExports.hasTrailingComma)), node.moduleSpecifier, node.assertClause));
+                factory.createNodeArray([...namedExports, ...createExportSpecifiers(names, allowTypeModifier)], /*hasTrailingComma*/ namedExports.hasTrailingComma),
+            ),
+            node.moduleSpecifier,
+            node.attributes,
+        ),
+    );
 }
 
 function createExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, names: ExportName[]) {
-    changes.insertNodeAtEndOfScope(sourceFile, sourceFile,
-        factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false,
-            factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ getIsolatedModules(program.getCompilerOptions()))), /*moduleSpecifier*/ undefined, /*assertClause*/ undefined));
+    changes.insertNodeAtEndOfScope(sourceFile, sourceFile, factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ getIsolatedModules(program.getCompilerOptions()))), /*moduleSpecifier*/ undefined, /*attributes*/ undefined));
 }
 
 function createExportSpecifiers(names: ExportName[], allowTypeModifier: boolean) {

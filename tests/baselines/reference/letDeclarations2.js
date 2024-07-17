@@ -15,6 +15,6 @@ var M;
 
 
 //// [letDeclarations2.d.ts]
-declare module M {
+declare namespace M {
     let l2: number;
 }

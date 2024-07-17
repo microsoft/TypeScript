@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/declarationEmitClassSetAccessorParamNameInJs2.ts] ////
+
+=== foo.js ===
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+    /**
+     * Bar.
+     *
+     * @param {{ prop: string }} baz Baz.
+     */
+    set bar({}) {}
+>bar : { prop: string; }
+>    : ^^^^^^^^      ^^^
+}
+

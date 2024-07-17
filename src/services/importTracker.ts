@@ -1,5 +1,6 @@
 import {
     __String,
+    AnyImportOrJsDocImport,
     AnyImportOrReExport,
     AssignmentDeclarationKind,
     BinaryExpression,
@@ -57,9 +58,12 @@ import {
     isVariableDeclaration,
     isVariableDeclarationInitializedToBareOrAccessedRequire,
     isVariableStatement,
+    JSDocImportTag,
     ModifierFlags,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleExportName,
+    moduleExportNameTextEscaped,
     NamedImportsOrExports,
     NamespaceImport,
     Node,
@@ -81,14 +85,14 @@ import {
     ValidImportTypeNode,
     VariableDeclaration,
     walkUpBindingElementsAndPatterns,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /* Code for finding imports of an exported symbol. Used only by FindAllReferences. */
 
 /** @internal */
 export interface ImportsResult {
     /** For every import of the symbol, the location and local symbol for the import. */
-    importSearches: readonly [Identifier, Symbol][];
+    importSearches: readonly [ModuleExportName, Symbol][];
     /** For rename imports/exports `{ foo as bar }`, `foo` is not a local, so it may be added as a reference immediately without further searching. */
     singleReferences: readonly (Identifier | StringLiteral)[];
     /** List of source files that may (or may not) use the symbol via a namespace. (For UMD modules this is every file.) */
@@ -121,15 +125,24 @@ export interface ExportInfo {
 }
 
 /** @internal */
-export const enum ExportKind { Named, Default, ExportEquals }
+export const enum ExportKind {
+    Named,
+    Default,
+    ExportEquals,
+}
 
 /** @internal */
-export const enum ImportExport { Import, Export }
+export const enum ImportExport {
+    Import,
+    Export,
+}
 
-interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
+interface AmbientModuleDeclaration extends ModuleDeclaration {
+    body?: ModuleBlock;
+}
 type SourceFileLike = SourceFile | AmbientModuleDeclaration;
 // Identifier for the case of `const x = require("y")`.
-type Importer = AnyImportOrReExport | ValidImportTypeNode | Identifier;
+type Importer = AnyImportOrReExport | ValidImportTypeNode | Identifier | JSDocImportTag;
 type ImporterOrCallExpression = Importer | CallExpression;
 
 /** Returns import statements that directly reference the exporting module, and a list of files that may access the module through a namespace. */
@@ -140,7 +153,7 @@ function getImportersForExport(
     { exportingModuleSymbol, exportKind }: ExportInfo,
     checker: TypeChecker,
     cancellationToken: CancellationToken | undefined,
-): { directImports: Importer[], indirectUsers: readonly SourceFile[] } {
+): { directImports: Importer[]; indirectUsers: readonly SourceFile[]; } {
     const markSeenDirectImport = nodeSeenTracker<ImporterOrCallExpression>();
     const markSeenIndirectUser = nodeSeenTracker<SourceFileLike>();
     const directImports: Importer[] = [];
@@ -206,6 +219,7 @@ function getImportersForExport(
                         break;
 
                     case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.JSDocImportTag:
                         directImports.push(direct);
                         const namedBindings = direct.importClause && direct.importClause.namedBindings;
                         if (namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport) {
@@ -258,7 +272,7 @@ function getImportersForExport(
         });
     }
 
-    function handleNamespaceImport(importDeclaration: ImportEqualsDeclaration | ImportDeclaration, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
+    function handleNamespaceImport(importDeclaration: AnyImportOrJsDocImport, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
         if (exportKind === ExportKind.ExportEquals) {
             // This is a direct import, not import-as-namespace.
             if (!alreadyAddedDirect) directImports.push(importDeclaration);
@@ -307,9 +321,9 @@ function getImportersForExport(
  * But re-exports will be placed in 'singleReferences' since they cannot be locally referenced.
  */
 function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: Symbol, exportKind: ExportKind, checker: TypeChecker, isForRename: boolean): Pick<ImportsResult, "importSearches" | "singleReferences"> {
-    const importSearches: [Identifier, Symbol][] = [];
+    const importSearches: [ModuleExportName, Symbol][] = [];
     const singleReferences: (Identifier | StringLiteral)[] = [];
-    function addSearch(location: Identifier, symbol: Symbol): void {
+    function addSearch(location: ModuleExportName, symbol: Symbol): void {
         importSearches.push([location, symbol]);
     }
 
@@ -405,7 +419,7 @@ function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: S
 
         for (const element of namedBindings.elements) {
             const { name, propertyName } = element;
-            if (!isNameMatch((propertyName || name).escapedText)) {
+            if (!isNameMatch(moduleExportNameTextEscaped(propertyName || name))) {
                 continue;
             }
 
@@ -414,7 +428,7 @@ function getSearchesFromDirectImports(directImports: Importer[], exportSymbol: S
                 singleReferences.push(propertyName);
                 // If renaming `{ foo as bar }`, don't touch `bar`, just `foo`.
                 // But do rename `foo` in ` { default as foo }` if that's the original export name.
-                if (!isForRename || name.escapedText === exportSymbol.escapedName) {
+                if (!isForRename || moduleExportNameTextEscaped(name) === exportSymbol.escapedName) {
                     // Search locally for `bar`.
                     addSearch(name, checker.getSymbolAtLocation(name)!);
                 }
@@ -449,11 +463,11 @@ function findNamespaceReExports(sourceFileLike: SourceFileLike, name: Identifier
 /** @internal */
 export type ModuleReference =
     /** "import" also includes require() calls. */
-    | { kind: "import", literal: StringLiteralLike }
+    | { kind: "import"; literal: StringLiteralLike; }
     /** <reference path> or <reference types> */
-    | { kind: "reference", referencingFile: SourceFile, ref: FileReference }
+    | { kind: "reference"; referencingFile: SourceFile; ref: FileReference; }
     /** Containing file implicitly references the module (eg, via implicit jsx runtime import) */
-    | { kind: "implicit", literal: StringLiteralLike, referencingFile: SourceFile };
+    | { kind: "implicit"; literal: StringLiteralLike; referencingFile: SourceFile; };
 
 /** @internal */
 export function findModuleReferences(program: Program, sourceFiles: readonly SourceFile[], searchModuleSymbol: Symbol): ModuleReference[] {
@@ -468,7 +482,7 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
                 }
             }
             for (const ref of referencingFile.typeReferenceDirectives) {
-                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
+                const referenced = program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(ref, referencingFile)?.resolvedTypeReferenceDirective;
                 if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                     refs.push({ kind: "reference", referencingFile, ref });
                 }
@@ -509,7 +523,8 @@ function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeCh
 
 /** Iterates over all statements at the top level or in module declarations. Returns the first truthy result. */
 function forEachPossibleImportOrExportStatement<T>(sourceFileLike: SourceFileLike, action: (statement: Statement) => T) {
-    return forEach(sourceFileLike.kind === SyntaxKind.SourceFile ? sourceFileLike.statements : sourceFileLike.body!.statements, statement => // TODO: GH#18217
+    return forEach(sourceFileLike.kind === SyntaxKind.SourceFile ? sourceFileLike.statements : sourceFileLike.body!.statements, statement =>
+        // TODO: GH#18217
         action(statement) || (isAmbientModuleDeclaration(statement) && forEach(statement.body && statement.body.statements, action)));
 }
 
@@ -755,9 +770,11 @@ function skipExportSpecifierSymbol(symbol: Symbol, checker: TypeChecker): Symbol
                 // Export of form 'module.exports.propName = expr';
                 return checker.getSymbolAtLocation(declaration)!;
             }
-            else if (isShorthandPropertyAssignment(declaration)
+            else if (
+                isShorthandPropertyAssignment(declaration)
                 && isBinaryExpression(declaration.parent.parent)
-                && getAssignmentDeclarationKind(declaration.parent.parent) === AssignmentDeclarationKind.ModuleExports) {
+                && getAssignmentDeclarationKind(declaration.parent.parent) === AssignmentDeclarationKind.ModuleExports
+            ) {
                 return checker.getExportSpecifierLocalTargetSymbol(declaration.name)!;
             }
         }
@@ -770,10 +787,9 @@ function getContainingModuleSymbol(importer: Importer, checker: TypeChecker): Sy
 }
 
 function getSourceFileLikeForImportDeclaration(node: ImporterOrCallExpression): SourceFileLike {
-    if (node.kind === SyntaxKind.CallExpression) {
+    if (node.kind === SyntaxKind.CallExpression || node.kind === SyntaxKind.JSDocImportTag) {
         return node.getSourceFile();
     }
-
     const { parent } = node;
     if (parent.kind === SyntaxKind.SourceFile) {
         return parent as SourceFile;
@@ -786,6 +802,6 @@ function isAmbientModuleDeclaration(node: Node): node is AmbientModuleDeclaratio
     return node.kind === SyntaxKind.ModuleDeclaration && (node as ModuleDeclaration).name.kind === SyntaxKind.StringLiteral;
 }
 
-function isExternalModuleImportEquals(eq: ImportEqualsDeclaration): eq is ImportEqualsDeclaration & { moduleReference: { expression: StringLiteral } } {
+function isExternalModuleImportEquals(eq: ImportEqualsDeclaration): eq is ImportEqualsDeclaration & { moduleReference: { expression: StringLiteral; }; } {
     return eq.moduleReference.kind === SyntaxKind.ExternalModuleReference && eq.moduleReference.expression.kind === SyntaxKind.StringLiteral;
 }

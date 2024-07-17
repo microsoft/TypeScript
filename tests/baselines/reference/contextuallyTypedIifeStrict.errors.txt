@@ -23,7 +23,7 @@ contextuallyTypedIifeStrict.ts(16,17): error TS18048: 'o' is possibly 'undefined
     ((k?) => k + 1)();
              ~
 !!! error TS18048: 'k' is possibly 'undefined'.
-    ((l, o?) => l + o)(12); // o should be any
+    ((l, o?) => l + o)(12);
                     ~
 !!! error TS18048: 'o' is possibly 'undefined'.
     // rest parameters

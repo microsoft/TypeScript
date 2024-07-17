@@ -19,19 +19,35 @@ declare const console: { log(msg: any): void; };
 import { b } from './b';
 const a = b;
 
+
 //// [/src/src/main/b.ts]
 export const b = 0;
 
 
 //// [/src/src/main/tsconfig.main.json]
-{"compilerOptions":{"composite":true,"outDir":"../../dist/"},"references":[{"path":"../other/tsconfig.other.json"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../../dist/"
+  },
+  "references": [
+    {
+      "path": "../other/tsconfig.other.json"
+    }
+  ]
+}
 
 //// [/src/src/other/other.ts]
 export const Other = 0;
 
 
 //// [/src/src/other/tsconfig.other.json]
-{"compilerOptions":{"composite":true,"outDir":"../../dist/"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../../dist/"
+  }
+}
 
 //// [/src/tsconfig.base.json]
 {
@@ -51,17 +67,17 @@ export const Other = 0;
 
 Output::
 /lib/tsc --b /src/src/main/tsconfig.main.json --verbose
-[[90m12:00:10 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/src/other/tsconfig.other.json
     * src/src/main/tsconfig.main.json
 
-[[90m12:00:11 AM[0m] Project 'src/src/other/tsconfig.other.json' is out of date because output file 'src/dist/tsconfig.other.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/src/other/tsconfig.other.json' is out of date because output file 'src/dist/tsconfig.other.tsbuildinfo' does not exist
 
-[[90m12:00:12 AM[0m] Building project '/src/src/other/tsconfig.other.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/src/other/tsconfig.other.json'...
 
-[[90m12:00:19 AM[0m] Project 'src/src/main/tsconfig.main.json' is out of date because output file 'src/dist/tsconfig.main.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/src/main/tsconfig.main.json' is out of date because output file 'src/dist/tsconfig.main.tsbuildinfo' does not exist
 
-[[90m12:00:20 AM[0m] Building project '/src/src/main/tsconfig.main.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/src/main/tsconfig.main.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -100,127 +116,130 @@ exports.Other = 0;
 
 
 //// [/src/dist/tsconfig.main.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../src/main/b.ts","../src/main/a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11678562673-export const b = 0;\r\n","signature":"-5842658702-export declare const b = 0;\n"},{"version":"-17071184049-import { b } from './b';\r\nconst a = b;","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./a.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","../src/main/b.ts","../src/main/a.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13368948254-export const b = 0;\n","signature":"-5842658702-export declare const b = 0;\n"},{"version":"-18592354388-import { b } from './b';\nconst a = b;\n","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./a.d.ts","version":"FakeTSVersion"}
 
 //// [/src/dist/tsconfig.main.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "../src/main/b.ts",
-      "../src/main/a.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../src/main/b.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "../src/main/b.ts",
+    "../src/main/a.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../src/main/b.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "../src/main/b.ts": {
-        "original": {
-          "version": "-11678562673-export const b = 0;\r\n",
-          "signature": "-5842658702-export declare const b = 0;\n"
-        },
-        "version": "-11678562673-export const b = 0;\r\n",
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "../src/main/b.ts": {
+      "original": {
+        "version": "-13368948254-export const b = 0;\n",
         "signature": "-5842658702-export declare const b = 0;\n"
       },
-      "../src/main/a.ts": {
-        "original": {
-          "version": "-17071184049-import { b } from './b';\r\nconst a = b;",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "-17071184049-import { b } from './b';\r\nconst a = b;",
+      "version": "-13368948254-export const b = 0;\n",
+      "signature": "-5842658702-export declare const b = 0;\n"
+    },
+    "../src/main/a.ts": {
+      "original": {
+        "version": "-18592354388-import { b } from './b';\nconst a = b;\n",
         "signature": "-3531856636-export {};\n"
-      }
-    },
-    "root": [
-      [
-        2,
-        "../src/main/b.ts"
-      ],
-      [
-        3,
-        "../src/main/a.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "outDir": "./"
-    },
-    "referencedMap": {
-      "../src/main/a.ts": [
-        "../src/main/b.ts"
-      ]
-    },
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "../src/main/a.ts",
+      },
+      "version": "-18592354388-import { b } from './b';\nconst a = b;\n",
+      "signature": "-3531856636-export {};\n"
+    }
+  },
+  "root": [
+    [
+      2,
       "../src/main/b.ts"
     ],
-    "latestChangedDtsFile": "./a.d.ts"
+    [
+      3,
+      "../src/main/a.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "outDir": "./"
   },
+  "referencedMap": {
+    "../src/main/a.ts": [
+      "../src/main/b.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./a.d.ts",
   "version": "FakeTSVersion",
-  "size": 1014
+  "size": 939
 }
 
 //// [/src/dist/tsconfig.other.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../src/other/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2951227185-export const Other = 0;\r\n","signature":"-10003600206-export declare const Other = 0;\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","../src/other/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-4254247902-export const Other = 0;\n","signature":"-10003600206-export declare const Other = 0;\n"}],"root":[2],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./other.d.ts","version":"FakeTSVersion"}
 
 //// [/src/dist/tsconfig.other.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "../src/other/other.ts"
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "../src/other/other.ts"
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "../src/other/other.ts": {
-        "original": {
-          "version": "-2951227185-export const Other = 0;\r\n",
-          "signature": "-10003600206-export declare const Other = 0;\n"
-        },
-        "version": "-2951227185-export const Other = 0;\r\n",
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "../src/other/other.ts": {
+      "original": {
+        "version": "-4254247902-export const Other = 0;\n",
         "signature": "-10003600206-export declare const Other = 0;\n"
-      }
-    },
-    "root": [
-      [
-        2,
-        "../src/other/other.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "outDir": "./"
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.d.ts",
-      "../src/other/other.ts"
-    ],
-    "latestChangedDtsFile": "./other.d.ts"
+      },
+      "version": "-4254247902-export const Other = 0;\n",
+      "signature": "-10003600206-export declare const Other = 0;\n"
+    }
   },
+  "root": [
+    [
+      2,
+      "../src/other/other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "outDir": "./"
+  },
+  "latestChangedDtsFile": "./other.d.ts",
   "version": "FakeTSVersion",
-  "size": 876
+  "size": 784
 }
+
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --b /src/src/main/tsconfig.main.json --verbose
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * src/src/other/tsconfig.other.json
+    * src/src/main/tsconfig.main.json
+
+[[90mHH:MM:SS AM[0m] Project 'src/src/other/tsconfig.other.json' is up to date because newest input 'src/src/other/other.ts' is older than output 'src/dist/tsconfig.other.tsbuildinfo'
+
+[[90mHH:MM:SS AM[0m] Project 'src/src/main/tsconfig.main.json' is up to date because newest input 'src/src/main/b.ts' is older than output 'src/dist/tsconfig.main.tsbuildinfo'
+
+exitCode:: ExitStatus.Success
+
 

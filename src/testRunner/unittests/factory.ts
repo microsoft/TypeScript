@@ -1,4 +1,4 @@
-import * as ts from "../_namespaces/ts";
+import * as ts from "../_namespaces/ts.js";
 
 describe("unittests:: FactoryAPI", () => {
     function assertSyntaxKind(node: ts.Node, expected: ts.SyntaxKind) {
@@ -82,5 +82,4 @@ describe("unittests:: FactoryAPI", () => {
             checkRhs(ts.SyntaxKind.QuestionQuestionEqualsToken, /*expectParens*/ false);
         });
     });
-
 });

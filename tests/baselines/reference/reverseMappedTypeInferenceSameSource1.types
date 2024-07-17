@@ -1,0 +1,111 @@
+//// [tests/cases/compiler/reverseMappedTypeInferenceSameSource1.ts] ////
+
+=== reverseMappedTypeInferenceSameSource1.ts ===
+type Action<T extends string = string> = {
+>Action : Action<T>
+>       : ^^^^^^^^^
+
+  type: T;
+>type : T
+>     : ^
+
+};
+interface UnknownAction extends Action {
+  [extraProps: string]: unknown;
+>extraProps : string
+>           : ^^^^^^
+}
+type Reducer<S = any, A extends Action = UnknownAction> = (
+>Reducer : Reducer<S, A>
+>        : ^^^^^^^^^^^^^
+
+  state: S | undefined,
+>state : S | undefined
+>      : ^^^^^^^^^^^^^
+
+  action: A,
+>action : A
+>       : ^
+
+) => S;
+
+type ReducersMapObject<S = any, A extends Action = UnknownAction> = {
+>ReducersMapObject : ReducersMapObject<S, A>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof S]: Reducer<S[K], A>;
+};
+
+interface ConfigureStoreOptions<S = any, A extends Action = UnknownAction> {
+  reducer: Reducer<S, A> | ReducersMapObject<S, A>;
+>reducer : Reducer<S, A> | ReducersMapObject<S, A>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+declare function configureStore<S = any, A extends Action = UnknownAction>(
+>configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
+>               : ^ ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^       ^^                           ^^^^^    
+
+  options: ConfigureStoreOptions<S, A>,
+>options : ConfigureStoreOptions<S, A>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): void;
+
+{
+  const reducer: Reducer<number> = () => 0;
+>reducer : Reducer<number, UnknownAction>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => 0 : () => number
+>        : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+  const store1 = configureStore({ reducer });
+>store1 : void
+>       : ^^^^
+>configureStore({ reducer }) : void
+>                            : ^^^^
+>configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
+>               : ^ ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^       ^^                           ^^^^^    
+>{ reducer } : { reducer: Reducer<number, UnknownAction>; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>reducer : Reducer<number, UnknownAction>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+const counterReducer1: Reducer<number> = () => 0;
+>counterReducer1 : Reducer<number, UnknownAction>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => 0 : () => number
+>        : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+const store2 = configureStore({
+>store2 : void
+>       : ^^^^
+>configureStore({  reducer: {    counter1: counterReducer1,  },}) : void
+>                                                                 : ^^^^
+>configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
+>               : ^ ^^^^^^^^ ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^       ^^                           ^^^^^    
+>{  reducer: {    counter1: counterReducer1,  },} : { reducer: { counter1: Reducer<number, UnknownAction>; }; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  reducer: {
+>reducer : { counter1: Reducer<number, UnknownAction>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    counter1: counterReducer1,  } : { counter1: Reducer<number, UnknownAction>; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    counter1: counterReducer1,
+>counter1 : Reducer<number, UnknownAction>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>counterReducer1 : Reducer<number, UnknownAction>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  },
+});
+
+export {}
+

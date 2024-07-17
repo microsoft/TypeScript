@@ -1,11 +1,4 @@
 import {
-    Debug,
-    every,
-    FormatCodeSettings,
-    FormattingHost,
-    SyntaxKind,
-} from "../_namespaces/ts";
-import {
     anyContext,
     FormatContext,
     FormattingContext,
@@ -13,7 +6,14 @@ import {
     Rule,
     RuleAction,
     RuleSpec,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.formatting.js";
+import {
+    Debug,
+    every,
+    FormatCodeSettings,
+    FormattingHost,
+    SyntaxKind,
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function getFormatContext(options: FormatCodeSettings, host: FormattingHost): FormatContext {
@@ -110,7 +110,7 @@ enum RulesPosition {
     ContextRulesSpecific = maskBitSize * 2,
     ContextRulesAny = maskBitSize * 3,
     NoContextRulesSpecific = maskBitSize * 4,
-    NoContextRulesAny = maskBitSize * 5
+    NoContextRulesAny = maskBitSize * 5,
 }
 
 // The Rules list contains all the inserted rules into a rulebucket in the following order:
@@ -132,8 +132,8 @@ function addRule(rules: Rule[], rule: Rule, specificTokens: boolean, constructio
     const position = rule.action & RuleAction.StopAction ?
         specificTokens ? RulesPosition.StopRulesSpecific : RulesPosition.StopRulesAny :
         rule.context !== anyContext ?
-            specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny :
-            specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
+        specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny :
+        specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
 
     const state = constructionState[rulesBucketIndex] || 0;
     rules.splice(getInsertionIndex(state, position), 0, rule);

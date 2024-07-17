@@ -1,0 +1,73 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement9.ts] ////
+
+=== parserForStatement9.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54769
+
+for (let [x = 'a' in {}] = []; !x; x = !x) console.log(x)
+>x : boolean
+>  : ^^^^^^^
+>'a' in {} : boolean
+>          : ^^^^^^^
+>'a' : "a"
+>    : ^^^
+>{} : {}
+>   : ^^
+>[] : []
+>   : ^^
+>!x : boolean
+>   : ^^^^^^^
+>x : boolean
+>  : ^^^^^^^
+>x = !x : boolean
+>       : ^^^^^^^
+>x : boolean
+>  : ^^^^^^^
+>!x : boolean
+>   : ^^^^^^^
+>x : boolean
+>  : ^^^^^^^
+>console.log(x) : void
+>               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x : boolean
+>  : ^^^^^^^
+
+for (let {x = 'a' in {}} = {}; !x; x = !x) console.log(x)
+>x : boolean
+>  : ^^^^^^^
+>'a' in {} : boolean
+>          : ^^^^^^^
+>'a' : "a"
+>    : ^^^
+>{} : {}
+>   : ^^
+>{} : {}
+>   : ^^
+>!x : boolean
+>   : ^^^^^^^
+>x : boolean
+>  : ^^^^^^^
+>x = !x : boolean
+>       : ^^^^^^^
+>x : boolean
+>  : ^^^^^^^
+>!x : boolean
+>   : ^^^^^^^
+>x : boolean
+>  : ^^^^^^^
+>console.log(x) : void
+>               : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x : boolean
+>  : ^^^^^^^
+

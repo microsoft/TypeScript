@@ -1,0 +1,325 @@
+//// [tests/cases/compiler/divideAndConquerIntersections.ts] ////
+
+=== Performance Stats ===
+Type Count: 2,500
+Instantiation count: 10,000
+
+=== divideAndConquerIntersections.ts ===
+type QQ<T extends string[]> =
+>QQ : QQ<T>
+>   : ^^^^^
+
+    & ("a" | T[0])
+    & ("b" | T[1])
+    & ("c" | T[2])
+    & ("d" | T[3])
+    & ("e" | T[4])
+    & ("f" | T[5])
+    & ("g" | T[6])
+    & ("h" | T[7])
+    & ("i" | T[8])
+    & ("j" | T[9])
+    & ("k" | T[10])
+    & ("l" | T[11])
+    & ("m" | T[12])
+    & ("n" | T[13])
+    & ("q" | T[14])
+    & ("p" | T[15])
+    & ("q" | T[16])
+    & ("r" | T[17])
+    & ("s" | T[18])
+    & ("t" | T[19]);
+
+// Repro from #57863
+
+export interface Update {
+    update_id: number;
+>update_id : number
+>          : ^^^^^^
+
+    message?: { message: string };
+>message : { message: string; } | undefined
+>        : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>message : string
+>        : ^^^^^^
+
+    edited_message?: { edited_message: string };
+>edited_message : { edited_message: string; } | undefined
+>               : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>edited_message : string
+>               : ^^^^^^
+
+    channel_post?: { channel_post: string };
+>channel_post : { channel_post: string; } | undefined
+>             : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>channel_post : string
+>             : ^^^^^^
+
+    edited_channel_post?: { edited_channel_post: string };
+>edited_channel_post : { edited_channel_post: string; } | undefined
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>edited_channel_post : string
+>                    : ^^^^^^
+
+    message_reaction?: { message_reaction: string };
+>message_reaction : { message_reaction: string; } | undefined
+>                 : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>message_reaction : string
+>                 : ^^^^^^
+
+    message_reaction_count?: { message_reaction_count: string };
+>message_reaction_count : { message_reaction_count: string; } | undefined
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>message_reaction_count : string
+>                       : ^^^^^^
+
+    inline_query?: { inline_query: string };
+>inline_query : { inline_query: string; } | undefined
+>             : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>inline_query : string
+>             : ^^^^^^
+
+    chosen_inline_result?: { chosen_inline_result: string };
+>chosen_inline_result : { chosen_inline_result: string; } | undefined
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>chosen_inline_result : string
+>                     : ^^^^^^
+
+    callback_query?: { callback_query: string };
+>callback_query : { callback_query: string; } | undefined
+>               : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>callback_query : string
+>               : ^^^^^^
+
+    shipping_query?: { shipping_query: string };
+>shipping_query : { shipping_query: string; } | undefined
+>               : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>shipping_query : string
+>               : ^^^^^^
+
+    pre_checkout_query?: { pre_checkout_query: string };
+>pre_checkout_query : { pre_checkout_query: string; } | undefined
+>                   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>pre_checkout_query : string
+>                   : ^^^^^^
+
+    poll?: { poll: string };
+>poll : { poll: string; } | undefined
+>     : ^^^^^^^^      ^^^^^^^^^^^^^^^
+>poll : string
+>     : ^^^^^^
+
+    poll_answer?: { poll_answer: string };
+>poll_answer : { poll_answer: string; } | undefined
+>            : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>poll_answer : string
+>            : ^^^^^^
+
+    my_chat_member?: { my_chat_member: string };
+>my_chat_member : { my_chat_member: string; } | undefined
+>               : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>my_chat_member : string
+>               : ^^^^^^
+
+    chat_member?: { chat_member: string };
+>chat_member : { chat_member: string; } | undefined
+>            : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>chat_member : string
+>            : ^^^^^^
+
+    chat_join_request?: { chat_join_request: string };
+>chat_join_request : { chat_join_request: string; } | undefined
+>                  : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>chat_join_request : string
+>                  : ^^^^^^
+
+    chat_boost?: { chat_boost: string };
+>chat_boost : { chat_boost: string; } | undefined
+>           : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>chat_boost : string
+>           : ^^^^^^
+
+    removed_chat_boost?: { removed_chat_boost: string };
+>removed_chat_boost : { removed_chat_boost: string; } | undefined
+>                   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
+>removed_chat_boost : string
+>                   : ^^^^^^
+}
+
+type FilterFunction<U extends Update, V extends U> = (up: U) => up is V;
+>FilterFunction : FilterFunction<U, V>
+>               : ^^^^^^^^^^^^^^^^^^^^
+>up : U
+>   : ^
+
+export function matchFilter<U extends Update, Q extends FilterQuery>(
+>matchFilter : <U extends Update, Q extends FilterQuery>(filter: Q | Q[]) => FilterFunction<U, Filter<U, Q>>
+>            : ^ ^^^^^^^^^      ^^ ^^^^^^^^^           ^^      ^^       ^^^^^                               
+
+    filter: Q | Q[],
+>filter : Q | Q[]
+>       : ^^^^^^^
+
+): FilterFunction<U, Filter<U, Q>> {
+  // ^ errors out
+    console.log("Matching", filter);
+>console.log("Matching", filter) : void
+>                                : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"Matching" : "Matching"
+>           : ^^^^^^^^^^
+>filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return (up: U): up is Filter<U, Q> => !!up;
+>(up: U): up is Filter<U, Q> => !!up : (up: U) => up is Filter<U, Q>
+>                                    : ^  ^^ ^^^^^                  
+>up : U
+>   : ^
+>!!up : true
+>     : ^^^^
+>!up : false
+>    : ^^^^^
+>up : U
+>   : ^
+}
+
+/** All valid filter queries (every update key except update_id) */
+export type FilterQuery = keyof Omit<Update, "update_id">;
+>FilterQuery : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/** Narrow down an update object based on a filter query */
+export type Filter<U extends Update, Q extends FilterQuery> = PerformQuery<
+>Filter : Filter<U, Q>
+>       : ^^^^^^^^^^^^
+
+    U,
+    RunQuery<Q>
+>;
+
+// generate an object structure that can be intersected with updates to narrow them down
+type RunQuery<Q extends string> = Combine<L1Fragment<Q>, Q>;
+>RunQuery : RunQuery<Q>
+>         : ^^^^^^^^^^^
+
+// maps each part of the filter query to Record<"key", object>
+type L1Fragment<Q extends string> = Q extends unknown ? Record<Q, object>
+>L1Fragment : L1Fragment<Q>
+>           : ^^^^^^^^^^^^^
+
+    : never;
+// define all other fields from query as keys with value `undefined`
+type Combine<U, K extends string> = U extends unknown
+>Combine : Combine<U, K>
+>        : ^^^^^^^^^^^^^
+
+    ? U & Partial<Record<Exclude<K, keyof U>, undefined>>
+    : never;
+
+// apply a query result by intersecting it with update,
+// and then using these values to override the actual update
+type PerformQuery<U extends Update, R extends object> = R extends unknown
+>PerformQuery : PerformQuery<U, R>
+>             : ^^^^^^^^^^^^^^^^^^
+
+    ? FilteredEvent<U, Update & R>
+    : never;
+
+// narrow down an update by intersecting it with a different update
+type FilteredEvent<E extends Update, U extends Update> =
+>FilteredEvent : FilteredEvent<E, U>
+>              : ^^^^^^^^^^^^^^^^^^^
+
+    & E
+    & Omit<U, "update_id">;
+
+type Middleware<U extends Update> = (ctx: U) => unknown | Promise<unknown>;
+>Middleware : Middleware<U>
+>           : ^^^^^^^^^^^^^
+>ctx : U
+>    : ^
+
+class EventHub<U extends Update> {
+>EventHub : EventHub<U>
+>         : ^^^^^^^^^^^
+
+    use(...middleware: Array<Middleware<U>>): EventHub<U> {
+>use : (...middleware: Array<Middleware<U>>) => EventHub<U>
+>    : ^^^^          ^^                    ^^^^^           
+>middleware : Middleware<U>[]
+>           : ^^^^^^^^^^^^^^^
+
+        console.log("Adding", middleware.length, "generic handlers");
+>console.log("Adding", middleware.length, "generic handlers") : void
+>                                                             : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"Adding" : "Adding"
+>         : ^^^^^^^^
+>middleware.length : number
+>                  : ^^^^^^
+>middleware : Middleware<U>[]
+>           : ^^^^^^^^^^^^^^^
+>length : number
+>       : ^^^^^^
+>"generic handlers" : "generic handlers"
+>                   : ^^^^^^^^^^^^^^^^^^
+
+        return this;
+>this : this
+>     : ^^^^
+    }
+    on<Q extends FilterQuery>(
+>on : <Q extends FilterQuery>(filter: Q | Q[], ...middleware: Array<Middleware<Filter<U, Q>>>) => EventHub<Filter<U, Q>>
+>   : ^ ^^^^^^^^^           ^^      ^^       ^^^^^          ^^                               ^^^^^                      
+
+        filter: Q | Q[],
+>filter : Q | Q[]
+>       : ^^^^^^^
+
+        ...middleware: Array<Middleware<Filter<U, Q>>>
+>middleware : Middleware<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>[]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+                           // ^ errors out
+    ): EventHub<Filter<U, Q>> {
+        console.log("Adding", middleware.length, "handlers for", filter);
+>console.log("Adding", middleware.length, "handlers for", filter) : void
+>                                                                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"Adding" : "Adding"
+>         : ^^^^^^^^
+>middleware.length : number
+>                  : ^^^^^^
+>middleware : Middleware<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>[]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>length : number
+>       : ^^^^^^
+>"handlers for" : "handlers for"
+>               : ^^^^^^^^^^^^^^
+>filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        return new EventHub<Filter<U, Q>>();
+>new EventHub<Filter<U, Q>>() : EventHub<PerformQuery<U, Combine<L1Fragment<Q>, Q>>>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>EventHub : typeof EventHub
+>         : ^^^^^^^^^^^^^^^
+    }
+}
+

@@ -20,19 +20,14 @@
 /////*bar2*/[|bar|](); /*baz1*/[|baz|](); /*bang1*/[|bang|](); /*boom1*/[|boom|]();
 
 verify.noErrors();
-const commands: FourSlashInterface.BaselineCommand[] = [
-    {
-        type: "findAllReferences",
-        markerOrRange: [
-            'foo0', 'foo1', 'foo2',
-            'bar0', 'bar1', 'bar2',
-            'defaultC', 'defaultE', 'defaultD',
-            'baz0', 'baz1',
-            'bang0', 'bang1',
-            'boom0', 'boom1'
-        ],
-    },
-];
+verify.baselineFindAllReferences(
+    'foo0', 'foo1', 'foo2',
+    'bar0', 'bar1', 'bar2',
+    'defaultC', 'defaultE', 'defaultD',
+    'baz0', 'baz1',
+    'bang0', 'bang1',
+    'boom0', 'boom1'
+);
 test.rangesByText().forEach((ranges, text) => {
     if (text.indexOf("export") === 0 || text.indexOf("import") === 0) return;
     switch (text) {
@@ -43,8 +38,7 @@ test.rangesByText().forEach((ranges, text) => {
             }
             break;
         default:
-            commands.push({ type: "findRenameLocations", markerOrRange: ranges });
+            verify.baselineRename(ranges);
             break;
     }
 });
-verify.baselineCommands(...commands);

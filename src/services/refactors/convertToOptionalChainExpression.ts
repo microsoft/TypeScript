@@ -40,12 +40,12 @@ import {
     TextSpan,
     TypeChecker,
     VariableStatement,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     isRefactorErrorInfo,
     RefactorErrorInfo,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Convert to optional chain expression";
 const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);
@@ -86,18 +86,16 @@ function getRefactorActionsToConvertToOptionalChain(context: RefactorContext): r
 function getRefactorEditsToConvertToOptionalChain(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
     const info = getInfo(context);
     Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-    const edits = textChanges.ChangeTracker.with(context, t =>
-        doChange(context.file, context.program.getTypeChecker(), t, info, actionName)
-    );
+    const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program.getTypeChecker(), t, info, actionName));
     return { edits, renameFilename: undefined, renameLocation: undefined };
 }
 
 type Occurrence = PropertyAccessExpression | ElementAccessExpression | Identifier;
 
 interface OptionalChainInfo {
-    finalExpression: PropertyAccessExpression | ElementAccessExpression | CallExpression,
-    occurrences: Occurrence[],
-    expression: ValidExpression,
+    finalExpression: PropertyAccessExpression | ElementAccessExpression | CallExpression;
+    occurrences: Occurrence[];
+    expression: ValidExpression;
 }
 
 type ValidExpressionOrStatement = ValidExpression | ValidStatement;
@@ -152,8 +150,10 @@ function getConditionalInfo(expression: ConditionalExpression, checker: TypeChec
         return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
     }
 
-    if ((isPropertyAccessExpression(condition) || isIdentifier(condition))
-        && getMatchingStart(condition, finalExpression.expression)) {
+    if (
+        (isPropertyAccessExpression(condition) || isIdentifier(condition))
+        && getMatchingStart(condition, finalExpression.expression)
+    ) {
         return { finalExpression, occurrences: [condition], expression };
     }
     else if (isBinaryExpression(condition)) {
@@ -194,7 +194,7 @@ function getOccurrencesInExpression(matchTo: Expression, expression: Expression)
     if (finalMatch) {
         occurrences.push(finalMatch);
     }
-    return occurrences.length > 0 ? occurrences: undefined;
+    return occurrences.length > 0 ? occurrences : undefined;
 }
 
 /**
@@ -217,8 +217,10 @@ function chainStartsWith(chain: Node, subchain: Node): boolean {
         chain = chain.expression;
     }
     // check that the chains match at each access. Call chains in subchain are not valid.
-    while ((isPropertyAccessExpression(chain) && isPropertyAccessExpression(subchain)) ||
-           (isElementAccessExpression(chain) && isElementAccessExpression(subchain))) {
+    while (
+        (isPropertyAccessExpression(chain) && isPropertyAccessExpression(subchain)) ||
+        (isElementAccessExpression(chain) && isElementAccessExpression(subchain))
+    ) {
         if (getTextOfChainNode(chain) !== getTextOfChainNode(subchain)) return false;
         chain = chain.expression;
         subchain = subchain.expression;
@@ -338,9 +340,7 @@ function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textCha
             changes.replaceNodeRange(sourceFile, firstOccurrence, finalExpression, convertedChain);
         }
         else if (isConditionalExpression(expression)) {
-            changes.replaceNode(sourceFile, expression,
-                factory.createBinaryExpression(convertedChain, factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse)
-            );
+            changes.replaceNode(sourceFile, expression, factory.createBinaryExpression(convertedChain, factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse));
         }
     }
 }

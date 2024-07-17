@@ -1,5 +1,5 @@
 // @moduleResolution: bundler
-// @module: esnext
+// @module: esnext, preserve
 
 // @Filename: /esm.mts
 export const esm = 0;

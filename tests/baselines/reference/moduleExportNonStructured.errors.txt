@@ -1,0 +1,36 @@
+error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+
+!!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+==== package.json (0 errors) ====
+    {
+        "name": "test",
+        "version": "1.0.0",
+        "description": "",
+        "type": "module",
+        "module": "index.mjs"
+    }
+    
+==== index.mts (0 errors) ====
+    import * as exportAny from "./exportAny.cjs";
+    import * as exportUnknown from "./exportUnknown.cjs";
+    import * as exportSymbol from "./exportSymbol.cjs";
+    
+    import type * as exportAnyType from "./exportAny.cjs";
+    import type * as exportUnknownType from "./exportUnknown.cjs";
+    import type * as exportSymbolType from "./exportSymbol.cjs";
+    
+==== exportAny.d.cts (0 errors) ====
+    declare const __: any;
+    export = __;
+    
+    
+==== exportUnknown.d.cts (0 errors) ====
+    declare const __: unknown;
+    export = __;
+    
+    
+==== exportSymbol.d.cts (0 errors) ====
+    declare const __: symbol;
+    export = __;
+    

@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/duplicateErrorClassExpression.ts] ////
+
+=== duplicateErrorClassExpression.ts ===
+interface ComplicatedTypeBase {
+    [s: string]: ABase;
+>s : string
+>  : ^^^^^^
+}
+interface ComplicatedTypeDerived {
+    [s: string]: ADerived;
+>s : string
+>  : ^^^^^^
+}
+interface ABase {
+    a: string;
+>a : string
+>  : ^^^^^^
+}
+interface ADerived {
+    b: string;
+>b : string
+>  : ^^^^^^
+}
+class Base {
+>Base : Base
+>     : ^^^^
+
+    foo!: ComplicatedTypeBase;
+>foo : ComplicatedTypeBase
+>    : ^^^^^^^^^^^^^^^^^^^
+}
+const x = class Derived extends Base {
+>x : typeof Derived
+>  : ^^^^^^^^^^^^^^
+>class Derived extends Base {    foo!: ComplicatedTypeDerived;} : typeof Derived
+>                                                               : ^^^^^^^^^^^^^^
+>Derived : typeof Derived
+>        : ^^^^^^^^^^^^^^
+>Base : Base
+>     : ^^^^
+
+    foo!: ComplicatedTypeDerived;
+>foo : ComplicatedTypeDerived
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+}
+let obj: { 3: string } = { 3: "three" };
+>obj : { 3: string; }
+>    : ^^^^^      ^^^
+>3 : string
+>  : ^^^^^^
+>{ 3: "three" } : { 3: string; }
+>               : ^^^^^^^^^^^^^^
+>3 : string
+>  : ^^^^^^
+>"three" : "three"
+>        : ^^^^^^^
+
+obj[x];
+>obj[x] : any
+>       : ^^^
+>obj : { 3: string; }
+>    : ^^^^^      ^^^
+>x : typeof Derived
+>  : ^^^^^^^^^^^^^^
+

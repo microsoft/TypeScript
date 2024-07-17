@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/coAndContraVariantInferences7.ts] ////
+
+=== coAndContraVariantInferences7.ts ===
+type Request<TSchema extends Schema> = {
+>Request : Symbol(Request, Decl(coAndContraVariantInferences7.ts, 0, 0))
+>TSchema : Symbol(TSchema, Decl(coAndContraVariantInferences7.ts, 0, 13))
+>Schema : Symbol(Schema, Decl(coAndContraVariantInferences7.ts, 2, 2))
+
+  query: TSchema["query"];
+>query : Symbol(query, Decl(coAndContraVariantInferences7.ts, 0, 40))
+>TSchema : Symbol(TSchema, Decl(coAndContraVariantInferences7.ts, 0, 13))
+
+};
+
+type Schema = { query?: unknown; body?: unknown };
+>Schema : Symbol(Schema, Decl(coAndContraVariantInferences7.ts, 2, 2))
+>query : Symbol(query, Decl(coAndContraVariantInferences7.ts, 4, 15))
+>body : Symbol(body, Decl(coAndContraVariantInferences7.ts, 4, 32))
+
+declare function route<TSchema extends Schema>(obj: {
+>route : Symbol(route, Decl(coAndContraVariantInferences7.ts, 4, 50))
+>TSchema : Symbol(TSchema, Decl(coAndContraVariantInferences7.ts, 6, 23))
+>Schema : Symbol(Schema, Decl(coAndContraVariantInferences7.ts, 2, 2))
+>obj : Symbol(obj, Decl(coAndContraVariantInferences7.ts, 6, 47))
+
+  pre: (a: TSchema) => void;
+>pre : Symbol(pre, Decl(coAndContraVariantInferences7.ts, 6, 53))
+>a : Symbol(a, Decl(coAndContraVariantInferences7.ts, 7, 8))
+>TSchema : Symbol(TSchema, Decl(coAndContraVariantInferences7.ts, 6, 23))
+
+  schema: TSchema;
+>schema : Symbol(schema, Decl(coAndContraVariantInferences7.ts, 7, 28))
+>TSchema : Symbol(TSchema, Decl(coAndContraVariantInferences7.ts, 6, 23))
+
+  handle: (req: Request<TSchema>) => void;
+>handle : Symbol(handle, Decl(coAndContraVariantInferences7.ts, 8, 18))
+>req : Symbol(req, Decl(coAndContraVariantInferences7.ts, 9, 11))
+>Request : Symbol(Request, Decl(coAndContraVariantInferences7.ts, 0, 0))
+>TSchema : Symbol(TSchema, Decl(coAndContraVariantInferences7.ts, 6, 23))
+
+}): void;
+
+const validate = (_: { query?: unknown; body?: unknown }) => {};
+>validate : Symbol(validate, Decl(coAndContraVariantInferences7.ts, 12, 5))
+>_ : Symbol(_, Decl(coAndContraVariantInferences7.ts, 12, 18))
+>query : Symbol(query, Decl(coAndContraVariantInferences7.ts, 12, 22))
+>body : Symbol(body, Decl(coAndContraVariantInferences7.ts, 12, 39))
+
+route({
+>route : Symbol(route, Decl(coAndContraVariantInferences7.ts, 4, 50))
+
+  pre: validate,
+>pre : Symbol(pre, Decl(coAndContraVariantInferences7.ts, 14, 7))
+>validate : Symbol(validate, Decl(coAndContraVariantInferences7.ts, 12, 5))
+
+  schema: {
+>schema : Symbol(schema, Decl(coAndContraVariantInferences7.ts, 15, 16))
+
+    query: "",
+>query : Symbol(query, Decl(coAndContraVariantInferences7.ts, 16, 11))
+
+  },
+  handle: (req) => {
+>handle : Symbol(handle, Decl(coAndContraVariantInferences7.ts, 18, 4))
+>req : Symbol(req, Decl(coAndContraVariantInferences7.ts, 19, 11))
+
+    const test: string = req.query;
+>test : Symbol(test, Decl(coAndContraVariantInferences7.ts, 20, 9))
+>req.query : Symbol(query, Decl(coAndContraVariantInferences7.ts, 0, 40))
+>req : Symbol(req, Decl(coAndContraVariantInferences7.ts, 19, 11))
+>query : Symbol(query, Decl(coAndContraVariantInferences7.ts, 0, 40))
+
+  },
+});
+
+export {};
+

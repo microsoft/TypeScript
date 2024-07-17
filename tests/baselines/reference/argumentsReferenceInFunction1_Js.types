@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/argumentsReferenceInFunction1_Js.ts] ////
+
+=== index.js ===
+const format = function(f) {
+>format : (f: any, ...args: any[]) => string
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function(f) {  var str = '';  var i = 1;  var args = arguments;  var len = args.length;  for (var x = args[i]; i < len; x = args[++i]) {    str += ' ' + x;  }  return str;} : (f: any, ...args: any[]) => string
+>                                                                                                                                                                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : any
+>  : ^^^
+
+  var str = '';
+>str : string
+>    : ^^^^^^
+>'' : ""
+>   : ^^
+
+  var i = 1;
+>i : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+  var args = arguments;
+>args : IArguments
+>     : ^^^^^^^^^^
+>arguments : IArguments
+>          : ^^^^^^^^^^
+
+  var len = args.length;
+>len : number
+>    : ^^^^^^
+>args.length : number
+>            : ^^^^^^
+>args : IArguments
+>     : ^^^^^^^^^^
+>length : number
+>       : ^^^^^^
+
+  for (var x = args[i]; i < len; x = args[++i]) {
+>x : any
+>  : ^^^
+>args[i] : any
+>        : ^^^
+>args : IArguments
+>     : ^^^^^^^^^^
+>i : number
+>  : ^^^^^^
+>i < len : boolean
+>        : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>len : number
+>    : ^^^^^^
+>x = args[++i] : any
+>              : ^^^
+>x : any
+>  : ^^^
+>args[++i] : any
+>          : ^^^
+>args : IArguments
+>     : ^^^^^^^^^^
+>++i : number
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+    str += ' ' + x;
+>str += ' ' + x : string
+>               : ^^^^^^
+>str : string
+>    : ^^^^^^
+>' ' + x : string
+>        : ^^^^^^
+>' ' : " "
+>    : ^^^
+>x : any
+>  : ^^^
+  }
+  return str;
+>str : string
+>    : ^^^^^^
+
+};
+
+const debuglog = function() {
+>debuglog : (...args: any[]) => string
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function() {  return format.apply(null, arguments);} : (...args: any[]) => string
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  return format.apply(null, arguments);
+>format.apply(null, arguments) : string
+>                              : ^^^^^^
+>format.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>             : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>format : (f: any, ...args: any[]) => string
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^ ^^^ ^^ ^^^^^^^^^     ^^ ^^    ^^                          ^^       ^^ ^^    ^^ ^^^ ^^^
+>arguments : IArguments
+>          : ^^^^^^^^^^
+
+};
+

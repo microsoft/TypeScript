@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/circularReferenceInReturnType.ts] ////
+
+=== circularReferenceInReturnType.ts ===
+// inference fails for res1 and res2, but ideally should not
+declare function fn1<T>(cb: () => T): string;
+>fn1 : Symbol(fn1, Decl(circularReferenceInReturnType.ts, 0, 0))
+>T : Symbol(T, Decl(circularReferenceInReturnType.ts, 1, 21))
+>cb : Symbol(cb, Decl(circularReferenceInReturnType.ts, 1, 24))
+>T : Symbol(T, Decl(circularReferenceInReturnType.ts, 1, 21))
+
+const res1 = fn1(() => res1);
+>res1 : Symbol(res1, Decl(circularReferenceInReturnType.ts, 2, 5))
+>fn1 : Symbol(fn1, Decl(circularReferenceInReturnType.ts, 0, 0))
+>res1 : Symbol(res1, Decl(circularReferenceInReturnType.ts, 2, 5))
+
+declare function fn2<T>(): (cb: () => any) => (a: T) => void;
+>fn2 : Symbol(fn2, Decl(circularReferenceInReturnType.ts, 2, 29))
+>T : Symbol(T, Decl(circularReferenceInReturnType.ts, 4, 21))
+>cb : Symbol(cb, Decl(circularReferenceInReturnType.ts, 4, 28))
+>a : Symbol(a, Decl(circularReferenceInReturnType.ts, 4, 47))
+>T : Symbol(T, Decl(circularReferenceInReturnType.ts, 4, 21))
+
+const res2 = fn2()(() => res2);
+>res2 : Symbol(res2, Decl(circularReferenceInReturnType.ts, 5, 5))
+>fn2 : Symbol(fn2, Decl(circularReferenceInReturnType.ts, 2, 29))
+>res2 : Symbol(res2, Decl(circularReferenceInReturnType.ts, 5, 5))
+
+declare function fn3<T>(): <T2>(cb: (arg: T2) => any) => (a: T) => void;
+>fn3 : Symbol(fn3, Decl(circularReferenceInReturnType.ts, 5, 31))
+>T : Symbol(T, Decl(circularReferenceInReturnType.ts, 7, 21))
+>T2 : Symbol(T2, Decl(circularReferenceInReturnType.ts, 7, 28))
+>cb : Symbol(cb, Decl(circularReferenceInReturnType.ts, 7, 32))
+>arg : Symbol(arg, Decl(circularReferenceInReturnType.ts, 7, 37))
+>T2 : Symbol(T2, Decl(circularReferenceInReturnType.ts, 7, 28))
+>a : Symbol(a, Decl(circularReferenceInReturnType.ts, 7, 58))
+>T : Symbol(T, Decl(circularReferenceInReturnType.ts, 7, 21))
+
+const res3 = fn3()(() => res3);
+>res3 : Symbol(res3, Decl(circularReferenceInReturnType.ts, 8, 5))
+>fn3 : Symbol(fn3, Decl(circularReferenceInReturnType.ts, 5, 31))
+>res3 : Symbol(res3, Decl(circularReferenceInReturnType.ts, 8, 5))
+
+// https://github.com/microsoft/TypeScript/issues/58616
+
+function foo(arg: Parameters<typeof bar>[0]) {
+>foo : Symbol(foo, Decl(circularReferenceInReturnType.ts, 8, 31))
+>arg : Symbol(arg, Decl(circularReferenceInReturnType.ts, 12, 13))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>bar : Symbol(bar, Decl(circularReferenceInReturnType.ts, 14, 1))
+
+    return arg;
+>arg : Symbol(arg, Decl(circularReferenceInReturnType.ts, 12, 13))
+}
+
+function bar(arg: string) {
+>bar : Symbol(bar, Decl(circularReferenceInReturnType.ts, 14, 1))
+>arg : Symbol(arg, Decl(circularReferenceInReturnType.ts, 16, 13))
+
+    return foo(arg);
+>foo : Symbol(foo, Decl(circularReferenceInReturnType.ts, 8, 31))
+>arg : Symbol(arg, Decl(circularReferenceInReturnType.ts, 16, 13))
+}
+

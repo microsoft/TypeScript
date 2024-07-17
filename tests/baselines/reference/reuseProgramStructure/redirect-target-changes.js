@@ -1,16 +1,14 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /node_modules/a/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/a/index.d.ts
 
 import X from "x";
 export function a(x: X): void;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/node_modules/x/index.d.ts",
@@ -34,20 +32,17 @@ x: {
     "/node_modules/a/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
 import X from "x";
 export const b: X;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/node_modules/x/index.d.ts",
@@ -71,13 +66,12 @@ x: {
     "/node_modules/b/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
 import { a } from "a"; import { b } from "b";
 a(b)
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/index.d.ts",
@@ -110,27 +104,26 @@ b: {
     "/node_modules/b/index.tsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: Not
+Program 2 Reused:: Not
 File: /node_modules/a/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; private y: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/a/index.d.ts
 
 import X from "x";
 export function a(x: X): void;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/node_modules/x/index.d.ts",
@@ -149,20 +142,17 @@ x: {
     "/node_modules/a/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
 import X from "x";
 export const b: X;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/node_modules/x/index.d.ts",
@@ -186,13 +176,12 @@ x: {
     "/node_modules/b/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
 import { a } from "a"; import { b } from "b";
 a(b)
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/index.d.ts",
@@ -225,12 +214,13 @@ b: {
     "/node_modules/b/index.tsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
-/a.ts(3,3): error TS2345: Argument of type 'import("/node_modules/b/node_modules/x/index").default' is not assignable to parameter of type 'import("/node_modules/a/node_modules/x/index").default'.
+a.ts(3,3): error TS2345: Argument of type 'import("/node_modules/b/node_modules/x/index").default' is not assignable to parameter of type 'import("/node_modules/a/node_modules/x/index").default'.
   Property 'y' is missing in type 'import("/node_modules/b/node_modules/x/index").default' but required in type 'import("/node_modules/a/node_modules/x/index").default'.
 
 

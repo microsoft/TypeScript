@@ -1,0 +1,135 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-preservesThis.ts] ////
+
+=== esDecorators-preservesThis.ts ===
+// https://github.com/microsoft/TypeScript/issues/53752
+
+declare class DecoratorProvider {
+>DecoratorProvider : DecoratorProvider
+>                  : ^^^^^^^^^^^^^^^^^
+
+    decorate<T>(this: DecoratorProvider, v: T, ctx: DecoratorContext): T;
+>decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>         : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>this : DecoratorProvider
+>     : ^^^^^^^^^^^^^^^^^
+>v : T
+>  : ^
+>ctx : DecoratorContext
+>    : ^^^^^^^^^^^^^^^^
+}
+
+declare const instance: DecoratorProvider;
+>instance : DecoratorProvider
+>         : ^^^^^^^^^^^^^^^^^
+
+// preserve `this` for access
+class C {
+>C : C
+>  : ^
+
+    @instance.decorate
+>instance.decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>                  : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>instance : DecoratorProvider
+>         : ^^^^^^^^^^^^^^^^^
+>decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>         : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+
+    method1() { }
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+    @(instance["decorate"])
+>(instance["decorate"]) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>                       : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>instance["decorate"] : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>                     : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>instance : DecoratorProvider
+>         : ^^^^^^^^^^^^^^^^^
+>"decorate" : "decorate"
+>           : ^^^^^^^^^^
+
+    method2() { }
+>method2 : () => void
+>        : ^^^^^^^^^^
+
+    // even in parens
+    @((instance.decorate))
+>((instance.decorate)) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>                      : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>(instance.decorate) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>                    : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>instance.decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>                  : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>instance : DecoratorProvider
+>         : ^^^^^^^^^^^^^^^^^
+>decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>         : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+
+    method3() { }
+>method3 : () => void
+>        : ^^^^^^^^^^
+}
+
+// preserve `this` for `super` access
+class D extends DecoratorProvider {
+>D : D
+>  : ^
+>DecoratorProvider : DecoratorProvider
+>                  : ^^^^^^^^^^^^^^^^^
+
+    m() {
+>m : () => void
+>  : ^^^^^^^^^^
+
+        class C {
+>C : C
+>  : ^
+
+            @(super.decorate)
+>(super.decorate) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>                 : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>super.decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>               : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>super : DecoratorProvider
+>      : ^^^^^^^^^^^^^^^^^
+>decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>         : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+
+            method1() { }
+>method1 : () => void
+>        : ^^^^^^^^^^
+
+            @(super["decorate"])
+>(super["decorate"]) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>                    : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>super["decorate"] : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>                  : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>super : DecoratorProvider
+>      : ^^^^^^^^^^^^^^^^^
+>"decorate" : "decorate"
+>           : ^^^^^^^^^^
+
+            method2() { }
+>method2 : () => void
+>        : ^^^^^^^^^^
+
+            @((super.decorate))
+>((super.decorate)) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>                   : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>(super.decorate) : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>                 : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>super.decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>               : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+>super : DecoratorProvider
+>      : ^^^^^^^^^^^^^^^^^
+>decorate : <T>(this: DecoratorProvider, v: T, ctx: DecoratorContext) => T
+>         : ^ ^^    ^^                 ^^ ^^ ^^   ^^                ^^^^^ 
+
+            method3() { }
+>method3 : () => void
+>        : ^^^^^^^^^^
+        }
+    }
+}
+

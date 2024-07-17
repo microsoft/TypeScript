@@ -16,6 +16,7 @@ tests/baselines/rwc/*
 tests/baselines/reference/projectOutput/*
 tests/baselines/local/projectOutput/*
 tests/baselines/reference/testresults.tap
+tests/baselines/symlinks/*
 tests/services/baselines/prototyping/local/*
 tests/services/browser/typescriptServices.js
 src/harness/*.js
@@ -62,4 +63,4 @@ TEST-results.xml
 package-lock.json
 .eslintcache
 *v8.log
-lib/
+/lib/

@@ -1,19 +1,26 @@
 import { CancelError } from "@esfx/canceltoken";
 import chalk from "chalk";
-import del from "del";
 import fs from "fs";
 import os from "os";
 import path from "path";
 
-import { findUpFile, findUpRoot } from "./findUpDir.mjs";
+import {
+    findUpFile,
+    findUpRoot,
+} from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
-import { exec, ExecError } from "./utils.mjs";
+import {
+    exec,
+    ExecError,
+    rimraf,
+} from "./utils.mjs";
+
+/** @import { CancelToken } from "@esfx/canceltoken" */
+void 0;
 
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
 export const refBaseline = "tests/baselines/reference/";
-export const localRwcBaseline = "internal/baselines/rwc/local";
-export const refRwcBaseline = "internal/baselines/rwc/reference";
 export const coverageDir = "coverage";
 
 /**
@@ -21,12 +28,13 @@ export const coverageDir = "coverage";
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
  * @param {object} options
- * @param {import("@esfx/canceltoken").CancelToken} [options.token]
+ * @param {CancelToken} [options.token]
  * @param {boolean} [options.watching]
  */
 export async function runConsoleTests(runJs, defaultReporter, runInParallel, options = {}) {
-    let testTimeout = cmdLineOptions.timeout;
+    const testTimeout = cmdLineOptions.timeout;
     const tests = cmdLineOptions.tests;
+    const skipSysTests = cmdLineOptions.skipSysTests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
     const light = cmdLineOptions.light;
@@ -42,16 +50,14 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
             console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
         }
         await cleanTestDirs();
-        await cleanCoverageDir();
+        await rimraf(coverageDir);
 
         if (options.token?.signaled) {
             return;
         }
     }
 
-    if (fs.existsSync(testConfigFile)) {
-        fs.unlinkSync(testConfigFile);
-    }
+    await rimraf(testConfigFile);
 
     let workerCount, taskConfigsFolder;
     if (runInParallel) {
@@ -61,22 +67,19 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         do {
             taskConfigsFolder = prefix + i;
             i++;
-        } while (fs.existsSync(taskConfigsFolder));
+        }
+        while (fs.existsSync(taskConfigsFolder));
         fs.mkdirSync(taskConfigsFolder);
 
         workerCount = cmdLineOptions.workers;
-    }
-
-    if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 400000;
     }
 
     if (options.watching) {
         console.log(chalk.yellowBright(`[watch] running tests...`));
     }
 
-    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || shards || shardId) {
-        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed, shards, shardId);
+    if (tests || skipSysTests || runners || light || testTimeout || taskConfigsFolder || keepFailed || shards || shardId) {
+        writeTestConfigFile(tests, skipSysTests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed, shards, shardId);
     }
 
     const colors = cmdLineOptions.colors;
@@ -112,7 +115,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
             args.push("--no-colors");
         }
         if (inspect !== undefined) {
-            args.unshift((inspect === "" || inspect === true) ? "--inspect-brk" : "--inspect-brk="+inspect);
+            args.unshift((inspect === "" || inspect === true) ? "--inspect-brk" : "--inspect-brk=" + inspect);
             args.push("-t", "0");
         }
         else {
@@ -155,8 +158,8 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         process.env.NODE_ENV = savedNodeEnv;
     }
 
-    await del("test.config");
-    await deleteTemporaryProjectOutput();
+    await rimraf("test.config");
+    await rimraf(path.join(localBaseline, "projectOutput"));
 
     if (error !== undefined) {
         if (error instanceof CancelError) {
@@ -174,18 +177,14 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 }
 
 export async function cleanTestDirs() {
-    await del([localBaseline, localRwcBaseline]);
-    await fs.promises.mkdir(localRwcBaseline, { recursive: true });
+    await rimraf(localBaseline);
     await fs.promises.mkdir(localBaseline, { recursive: true });
-}
-
-async function cleanCoverageDir() {
-    await del([coverageDir]);
 }
 
 /**
  * used to pass data from command line directly to run.js
  * @param {string} tests
+ * @param {boolean} skipSysTests
  * @param {string} runners
  * @param {boolean} light
  * @param {string} [taskConfigsFolder]
@@ -196,9 +195,10 @@ async function cleanCoverageDir() {
  * @param {number | undefined} [shards]
  * @param {number | undefined} [shardId]
  */
-export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
+export function writeTestConfigFile(tests, skipSysTests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed, shards, shardId) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
+        skipSysTests: skipSysTests ? skipSysTests : undefined,
         runners: runners ? runners.split(",") : undefined,
         light,
         workerCount,
@@ -208,19 +208,15 @@ export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, wo
         timeout,
         keepFailed,
         shards,
-        shardId
+        shardId,
     });
     console.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
-}
-
-function deleteTemporaryProjectOutput() {
-    return del(path.join(localBaseline, "projectOutput/"));
 }
 
 /**
  * @param {string} text
  */
 function regExpEscape(text) {
-    return text.replace(/[.*+?^${}()|\[\]\\]/g, "\\$&");
+    return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

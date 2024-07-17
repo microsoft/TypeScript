@@ -11,7 +11,7 @@ import {
     scanner,
     ScriptTarget,
     SyntaxKind,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
     const pragmaContext: PragmaContext = {
@@ -23,10 +23,10 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
         libReferenceDirectives: [],
         amdDependencies: [],
         hasNoDefaultLib: undefined,
-        moduleName: undefined
+        moduleName: undefined,
     };
     const importedFiles: FileReference[] = [];
-    let ambientExternalModules: { ref: FileReference, depth: number }[] | undefined;
+    let ambientExternalModules: { ref: FileReference; depth: number; }[] | undefined;
     let lastToken: SyntaxKind;
     let currentToken: SyntaxKind;
     let braceNesting = 0;
@@ -279,8 +279,10 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
             token = nextToken();
             if (token === SyntaxKind.OpenParenToken) {
                 token = nextToken();
-                if (token === SyntaxKind.StringLiteral ||
-                    allowTemplateLiterals && token === SyntaxKind.NoSubstitutionTemplateLiteral) {
+                if (
+                    token === SyntaxKind.StringLiteral ||
+                    allowTemplateLiterals && token === SyntaxKind.NoSubstitutionTemplateLiteral
+                ) {
                     //  require("mod");
                     recordModuleName();
                 }
@@ -328,7 +330,6 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
                 token = nextToken();
             }
             return true;
-
         }
         return false;
     }
@@ -361,7 +362,8 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
 
             if (scanner.getToken() === SyntaxKind.TemplateHead) {
                 const stack = [scanner.getToken()];
-                loop: while (length(stack)) {
+                loop:
+                while (length(stack)) {
                     const token = scanner.scan();
                     switch (token) {
                         case SyntaxKind.EndOfFileToken:
@@ -395,13 +397,15 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
             }
 
             // check if at least one of alternative have moved scanner forward
-            if (tryConsumeDeclare() ||
+            if (
+                tryConsumeDeclare() ||
                 tryConsumeImport() ||
                 tryConsumeExport() ||
                 (detectJavaScriptImports && (
                     tryConsumeRequireCall(/*skipCurrentToken*/ false, /*allowTemplateLiterals*/ true) ||
                     tryConsumeDefine()
-                ))) {
+                ))
+            ) {
                 continue;
             }
             else {

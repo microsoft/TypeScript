@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/modularizeLibrary_Dom.asynciterable.ts] ////
+
+=== modularizeLibrary_Dom.asynciterable.ts ===
+navigator.storage.getDirectory().then(async directory => {
+>navigator.storage.getDirectory().then(async directory => {    for await (const [key, handle] of directory) {        handle.kind;    }}) : Promise<void>
+>                                                                                                                                        : ^^^^^^^^^^^^^
+>navigator.storage.getDirectory().then : <TResult1 = FileSystemDirectoryHandle, TResult2 = never>(onfulfilled?: (value: FileSystemDirectoryHandle) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                                      : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>navigator.storage.getDirectory() : Promise<FileSystemDirectoryHandle>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>navigator.storage.getDirectory : () => Promise<FileSystemDirectoryHandle>
+>                               : ^^^^^^                                  
+>navigator.storage : StorageManager
+>                  : ^^^^^^^^^^^^^^
+>navigator : Navigator
+>          : ^^^^^^^^^
+>storage : StorageManager
+>        : ^^^^^^^^^^^^^^
+>getDirectory : () => Promise<FileSystemDirectoryHandle>
+>             : ^^^^^^                                  
+>then : <TResult1 = FileSystemDirectoryHandle, TResult2 = never>(onfulfilled?: (value: FileSystemDirectoryHandle) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async directory => {    for await (const [key, handle] of directory) {        handle.kind;    }} : (directory: FileSystemDirectoryHandle) => Promise<void>
+>                                                                                                 : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>directory : FileSystemDirectoryHandle
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    for await (const [key, handle] of directory) {
+>key : string
+>    : ^^^^^^
+>handle : FileSystemHandle
+>       : ^^^^^^^^^^^^^^^^
+>directory : FileSystemDirectoryHandle
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        handle.kind;
+>handle.kind : FileSystemHandleKind
+>            : ^^^^^^^^^^^^^^^^^^^^
+>handle : FileSystemHandle
+>       : ^^^^^^^^^^^^^^^^
+>kind : FileSystemHandleKind
+>     : ^^^^^^^^^^^^^^^^^^^^
+    }
+});
+

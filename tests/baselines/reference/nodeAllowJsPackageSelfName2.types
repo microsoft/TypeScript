@@ -1,0 +1,14 @@
+//// [tests/cases/conformance/node/allowJs/nodeAllowJsPackageSelfName2.ts] ////
+
+=== /src/foo.js ===
+export const foo = 1;
+>foo : 1
+>    : ^
+>1 : 1
+>  : ^
+
+=== /test/foo.js ===
+import { foo } from "js-self-name-import/foo.js";
+>foo : 1
+>    : ^
+

@@ -7,17 +7,15 @@ const parsed = minimist(process.argv.slice(2), {
     boolean: ["dirty", "light", "colors", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci", "bundle", "typecheck", "lint", "coverage"],
     string: ["browser", "tests", "break", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
-        /* eslint-disable quote-props */
-        "b": "browser",
-        "i": ["inspect", "inspect-brk", "break", "debug", "debug-brk"],
-        "t": ["tests", "test"],
-        "ru": ["runners", "runner"],
-        "r": "reporter",
-        "c": ["colors", "color"],
-        "skippercent": "skipPercent",
-        "w": "workers",
-        "f": "fix"
-        /* eslint-enable quote-props */
+        b: "browser",
+        i: ["inspect", "inspect-brk", "break", "debug", "debug-brk"],
+        t: ["tests", "test"],
+        ru: ["runners", "runner"],
+        r: "reporter",
+        c: ["colors", "color"],
+        skippercent: "skipPercent",
+        w: "workers",
+        f: "fix",
     },
     default: {
         soft: false,
@@ -43,7 +41,7 @@ const parsed = minimist(process.argv.slice(2), {
         typecheck: true,
         lint: true,
         coverage: false,
-    }
+    },
 });
 
 /** @type {CommandLineOptions} */
@@ -59,8 +57,6 @@ if (!options.bundle && !options.typecheck) {
 
 export default options;
 
-
-
 /**
  * @typedef CommandLineOptions
  * @property {boolean} dirty
@@ -72,6 +68,7 @@ export default options;
  * @property {boolean} fix
  * @property {string} browser
  * @property {string} tests
+ * @property {boolean} skipSysTests
  * @property {string | boolean} break
  * @property {string | boolean} inspect
  * @property {string} runners

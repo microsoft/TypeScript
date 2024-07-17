@@ -106,7 +106,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.adaptSession = exports.GatewayOpcode = void 0;
+exports.GatewayOpcode = void 0;
+exports.adaptSession = adaptSession;
 function f1(foo) {
     if (foo.kind === 'a') {
         foo.a;
@@ -142,4 +143,3 @@ function adaptSession(input) {
         });
     });
 }
-exports.adaptSession = adaptSession;

@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Debug,
     Diagnostics,
     emptyArray,
@@ -13,12 +18,7 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixUnreachableCode";
 const errorCodes = [Diagnostics.Unreachable_code_detected.code];
@@ -43,7 +43,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, st
             tokenKind: Debug.formatSyntaxKind(token.kind),
             errorCode,
             start,
-            length
+            length,
         });
         Debug.fail("Token and statement should start at the same point. " + logData);
     }

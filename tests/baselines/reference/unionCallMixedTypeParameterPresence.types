@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/unionCallMixedTypeParameterPresence.ts] ////
+
+=== unionCallMixedTypeParameterPresence.ts ===
+// https://github.com/microsoft/TypeScript/issues/57356
+
+interface Err<T> {
+  f<U>(a: (err: T) => U): Err<U>;
+>f : <U>(a: (err: T) => U) => Err<U>
+>  : ^ ^^ ^^             ^^^^^      
+>a : (err: T) => U
+>  : ^   ^^ ^^^^^ 
+>err : T
+>    : ^
+}
+interface Ok<T> {
+  f(a: (err: T) => unknown): Err<T>;
+>f : (a: (err: T) => unknown) => Err<T>
+>  : ^ ^^                   ^^^^^      
+>a : (err: T) => unknown
+>  : ^   ^^ ^^^^^       
+>err : T
+>    : ^
+}
+declare const e: Err<0> | Err<1> | Ok<2>;
+>e : Err<0> | Err<1> | Ok<2>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+
+const e2 = e.f((e) => e);
+>e2 : Err<2> | Err<0 | 1 | 2>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+>e.f((e) => e) : Err<2> | Err<0 | 1 | 2>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^
+>e.f : (<U>(a: (err: 0) => U) => Err<U>) | (<U>(a: (err: 1) => U) => Err<U>) | ((a: (err: 2) => unknown) => Err<2>)
+>    : ^^ ^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^   ^^^^^^^^       ^^^^^^^^^^^^
+>e : Err<0> | Err<1> | Ok<2>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+>f : (<U>(a: (err: 0) => U) => Err<U>) | (<U>(a: (err: 1) => U) => Err<U>) | ((a: (err: 2) => unknown) => Err<2>)
+>  : ^^ ^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^   ^^^^^^^^       ^^^^^^^^^^^^
+>(e) => e : (e: 0 | 1 | 2) => 0 | 1 | 2
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>e : 0 | 1 | 2
+>  : ^^^^^^^^^
+>e : 0 | 1 | 2
+>  : ^^^^^^^^^
+

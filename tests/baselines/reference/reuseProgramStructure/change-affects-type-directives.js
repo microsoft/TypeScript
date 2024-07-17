@@ -1,17 +1,13 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: c.ts
 
 
 var z = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b.ts
 /// <reference path='c.ts'/>
 
 var y = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a.ts
 
@@ -21,43 +17,41 @@ File: a.ts
 
 
 var x = 1
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs/index.d.ts",
-    "node_modules/typerefs/package.json",
-    "node_modules/typerefs.d.ts",
-    "node_modules/typerefs/index.d.ts",
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs.d.ts",
-    "node_modules/@types/typerefs/index.d.ts"
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs/index.d.ts",
+    "/node_modules/typerefs/package.json",
+    "/node_modules/typerefs.d.ts",
+    "/node_modules/typerefs/index.d.ts",
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs.d.ts",
+    "/node_modules/@types/typerefs/index.d.ts"
   ]
 }
 
 
-MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
+MissingPaths:: [
+  "non-existing-file.ts",
+  "lib.d.ts"
+]
 
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.
 a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs'.
 
 
 
-Program Reused:: SafeModules
+Program 2 Reused:: SafeModules
 File: c.ts
 
 
 var z = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b.ts
 /// <reference path='c.ts'/>
 
 var y = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a.ts
 
@@ -66,23 +60,25 @@ File: a.ts
 /// <reference types="typerefs1" />
 
 var x = 1
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs1: {
   "failedLookupLocations": [
-    "node_modules/@types/typerefs1/package.json",
-    "node_modules/@types/typerefs1/index.d.ts",
-    "node_modules/typerefs1/package.json",
-    "node_modules/typerefs1.d.ts",
-    "node_modules/typerefs1/index.d.ts",
-    "node_modules/@types/typerefs1/package.json",
-    "node_modules/@types/typerefs1.d.ts",
-    "node_modules/@types/typerefs1/index.d.ts"
+    "/node_modules/@types/typerefs1/package.json",
+    "/node_modules/@types/typerefs1/index.d.ts",
+    "/node_modules/typerefs1/package.json",
+    "/node_modules/typerefs1.d.ts",
+    "/node_modules/typerefs1/index.d.ts",
+    "/node_modules/@types/typerefs1/package.json",
+    "/node_modules/@types/typerefs1.d.ts",
+    "/node_modules/@types/typerefs1/index.d.ts"
   ]
 }
 
 
-MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
+MissingPaths:: [
+  "non-existing-file.ts",
+  "lib.d.ts"
+]
 
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.
 a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs1'.
