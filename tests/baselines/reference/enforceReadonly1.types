@@ -265,6 +265,62 @@ class D3 extends B3 {  // Error
 >  : ^
 }
 
+// readonly is not enforced in comparable relation
+
+type Foo = {
+>Foo : Foo
+>    : ^^^
+
+    readonly a: string | undefined;
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+    readonly b: number | undefined;
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+}
+
+type Bar = {
+>Bar : Bar
+>    : ^^^
+
+    a: string;
+>a : string
+>  : ^^^^^^
+}
+
+function f5(foo: Foo, bar: Bar) {
+>f5 : (foo: Foo, bar: Bar) => boolean
+>   : ^   ^^   ^^   ^^   ^^^^^^^^^^^^
+>foo : Foo
+>    : ^^^
+>bar : Bar
+>    : ^^^
+
+    return foo === bar;
+>foo === bar : boolean
+>            : ^^^^^^^
+>foo : Foo
+>    : ^^^
+>bar : Bar
+>    : ^^^
+}
+
+function f6(a: string) {
+>f6 : (a: string) => Foo
+>   : ^ ^^      ^^^^^   
+>a : string
+>  : ^^^^^^
+
+    return { a } as Foo;
+>{ a } as Foo : Foo
+>             : ^^^
+>{ a } : { a: string; }
+>      : ^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+}
+
 // A const assertion means "as const as possible" without violating constraints
 
 const x1 = { a: "hello", b: 42 };

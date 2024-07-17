@@ -14,8 +14,8 @@ enforceReadonly1.ts(53,11): error TS2430: Interface 'D2' incorrectly extends int
   Property 'x' is 'readonly' in the source but not in the target.
 enforceReadonly1.ts(61,7): error TS2415: Class 'D3' incorrectly extends base class 'B3'.
   Property 'x' is 'readonly' in the source but not in the target.
-enforceReadonly1.ts(100,3): error TS2540: Cannot assign to 'value' because it is a read-only property.
-enforceReadonly1.ts(102,5): error TS2322: Type 'ImmutableValue<string>' is not assignable to type 'MutableValue<string>'.
+enforceReadonly1.ts(119,3): error TS2540: Cannot assign to 'value' because it is a read-only property.
+enforceReadonly1.ts(121,5): error TS2322: Type 'ImmutableValue<string>' is not assignable to type 'MutableValue<string>'.
   Property 'value' is 'readonly' in the source but not in the target.
 
 
@@ -108,6 +108,25 @@ enforceReadonly1.ts(102,5): error TS2322: Type 'ImmutableValue<string>' is not a
 !!! error TS2415: Class 'D3' incorrectly extends base class 'B3'.
 !!! error TS2415:   Property 'x' is 'readonly' in the source but not in the target.
         readonly x = 1;
+    }
+    
+    // readonly is not enforced in comparable relation
+    
+    type Foo = {
+        readonly a: string | undefined;
+        readonly b: number | undefined;
+    }
+    
+    type Bar = {
+        a: string;
+    }
+    
+    function f5(foo: Foo, bar: Bar) {
+        return foo === bar;
+    }
+    
+    function f6(a: string) {
+        return { a } as Foo;
     }
     
     // A const assertion means "as const as possible" without violating constraints
