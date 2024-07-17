@@ -967,6 +967,10 @@
         "category": "Error",
         "code": 1292
     },
+    "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
+        "category": "Error",
+        "code": 1293
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",

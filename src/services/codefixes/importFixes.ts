@@ -50,10 +50,12 @@ import {
     getDeclarationOfKind,
     getDefaultLikeExportInfo,
     getDirectoryPath,
+    getEmitModuleFormatOfFileWorker,
     getEmitModuleKind,
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getExportInfoMap,
+    getImpliedNodeFormatForEmitWorker,
     getIsFileExcluded,
     getMeaningFromLocation,
     getNameForExportedSymbol,
@@ -335,7 +337,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 compilerOptions,
                 createModuleSpecifierResolutionHost(program, host),
             );
-            const importKind = getImportKind(futureExportingSourceFile, exportKind, compilerOptions);
+            const importKind = getImportKind(futureExportingSourceFile, exportKind, program);
             const addAsTypeOnly = getAddAsTypeOnly(
                 isImportUsageValidAsTypeOnly,
                 /*isForNewImportDeclaration*/ true,
@@ -699,7 +701,7 @@ export interface ImportSpecifierResolver {
 /** @internal */
 export function createImportSpecifierResolver(importingFile: SourceFile, program: Program, host: LanguageServiceHost, preferences: UserPreferences): ImportSpecifierResolver {
     const packageJsonImportFilter = createPackageJsonImportFilter(importingFile, preferences, host);
-    const importMap = createExistingImportMap(program.getTypeChecker(), importingFile, program.getCompilerOptions());
+    const importMap = createExistingImportMap(importingFile, program);
     return { getModuleSpecifierForBestExportInfo };
 
     function getModuleSpecifierForBestExportInfo(
@@ -911,7 +913,7 @@ function getImportFixes(
     sourceFile: SourceFile | FutureSourceFile,
     host: LanguageServiceHost,
     preferences: UserPreferences,
-    importMap = isFullSourceFile(sourceFile) ? createExistingImportMap(program.getTypeChecker(), sourceFile, program.getCompilerOptions()) : undefined,
+    importMap = isFullSourceFile(sourceFile) ? createExistingImportMap(sourceFile, program) : undefined,
     fromCacheOnly?: boolean,
 ): { computedWithoutCacheCount: number; fixes: readonly ImportFixWithModuleSpecifier[]; } {
     const checker = program.getTypeChecker();
@@ -1078,7 +1080,8 @@ function tryAddToExistingImport(existingImports: readonly FixAddToExistingImport
     }
 }
 
-function createExistingImportMap(checker: TypeChecker, importingFile: SourceFile, compilerOptions: CompilerOptions) {
+function createExistingImportMap(importingFile: SourceFile, program: Program) {
+    const checker = program.getTypeChecker();
     let importMap: MultiMap<SymbolId, AnyImportOrRequire> | undefined;
     for (const moduleSpecifier of importingFile.imports) {
         const i = importFromModuleSpecifier(moduleSpecifier);
@@ -1108,7 +1111,7 @@ function createExistingImportMap(checker: TypeChecker, importingFile: SourceFile
                 && !every(matchingDeclarations, isJSDocImportTag)
             ) return emptyArray;
 
-            const importKind = getImportKind(importingFile, exportKind, compilerOptions);
+            const importKind = getImportKind(importingFile, exportKind, program);
             return matchingDeclarations.map(declaration => ({ declaration, importKind, symbol, targetFlags }));
         },
     };
@@ -1132,8 +1135,9 @@ function shouldUseRequire(sourceFile: SourceFile | FutureSourceFile, program: Pr
 
     // 4. In --module nodenext, assume we're not emitting JS -> JS, so use
     //    whatever syntax Node expects based on the detected module kind
-    if (sourceFile.impliedNodeFormat === ModuleKind.CommonJS) return true;
-    if (sourceFile.impliedNodeFormat === ModuleKind.ESNext) return false;
+    //    TODO: consider removing `impliedNodeFormatForEmit`
+    if (getImpliedNodeFormatForEmit(sourceFile, program) === ModuleKind.CommonJS) return true;
+    if (getImpliedNodeFormatForEmit(sourceFile, program) === ModuleKind.ESNext) return false;
 
     // 5. Match the first other JS file in the program that's unambiguously CJS or ESM
     for (const otherFile of program.getSourceFiles()) {
@@ -1186,7 +1190,7 @@ function getNewImportFixes(
                 // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                 return { kind: ImportFixKind.JsdocTypeImport, moduleSpecifierKind, moduleSpecifier, usagePosition, exportInfo, isReExport: i > 0 };
             }
-            const importKind = getImportKind(sourceFile, exportInfo.exportKind, compilerOptions);
+            const importKind = getImportKind(sourceFile, exportInfo.exportKind, program);
             let qualification: Qualification | undefined;
             if (usagePosition !== undefined && importKind === ImportKind.CommonJS && exportInfo.exportKind === ExportKind.Named) {
                 // Compiler options are restricting our import options to a require, but we need to access
@@ -1198,7 +1202,7 @@ function getNewImportFixes(
                 const exportEquals = checker.resolveExternalModuleSymbol(exportInfo.moduleSymbol);
                 let namespacePrefix;
                 if (exportEquals !== exportInfo.moduleSymbol) {
-                    namespacePrefix = forEachNameOfDefaultExport(exportEquals, checker, compilerOptions, /*preferCapitalizedNames*/ false, identity)!;
+                    namespacePrefix = forEachNameOfDefaultExport(exportEquals, checker, getEmitScriptTarget(compilerOptions), identity)!;
                 }
                 namespacePrefix ||= moduleSymbolToValidIdentifier(
                     exportInfo.moduleSymbol,
@@ -1417,8 +1421,8 @@ function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
  *
  * @internal
  */
-export function getImportKind(importingFile: SourceFile | FutureSourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions, forceImportKeyword?: boolean): ImportKind {
-    if (compilerOptions.verbatimModuleSyntax && (getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS || importingFile.impliedNodeFormat === ModuleKind.CommonJS)) {
+export function getImportKind(importingFile: SourceFile | FutureSourceFile, exportKind: ExportKind, program: Program, forceImportKeyword?: boolean): ImportKind {
+    if (program.getCompilerOptions().verbatimModuleSyntax && getEmitModuleFormatOfFile(importingFile, program) === ModuleKind.CommonJS) {
         // TODO: if the exporting file is ESM under nodenext, or `forceImport` is given in a JS file, this is impossible
         return ImportKind.CommonJS;
     }
@@ -1428,22 +1432,22 @@ export function getImportKind(importingFile: SourceFile | FutureSourceFile, expo
         case ExportKind.Default:
             return ImportKind.Default;
         case ExportKind.ExportEquals:
-            return getExportEqualsImportKind(importingFile, compilerOptions, !!forceImportKeyword);
+            return getExportEqualsImportKind(importingFile, program.getCompilerOptions(), !!forceImportKeyword);
         case ExportKind.UMD:
-            return getUmdImportKind(importingFile, compilerOptions, !!forceImportKeyword);
+            return getUmdImportKind(importingFile, program, !!forceImportKeyword);
         default:
             return Debug.assertNever(exportKind);
     }
 }
 
-function getUmdImportKind(importingFile: SourceFile | FutureSourceFile, compilerOptions: CompilerOptions, forceImportKeyword: boolean): ImportKind {
+function getUmdImportKind(importingFile: SourceFile | FutureSourceFile, program: Program, forceImportKeyword: boolean): ImportKind {
     // Import a synthetic `default` if enabled.
-    if (getAllowSyntheticDefaultImports(compilerOptions)) {
+    if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
         return ImportKind.Default;
     }
 
     // When a synthetic `default` is unavailable, use `import..require` if the module kind supports it.
-    const moduleKind = getEmitModuleKind(compilerOptions);
+    const moduleKind = getEmitModuleKind(program.getCompilerOptions());
     switch (moduleKind) {
         case ModuleKind.AMD:
         case ModuleKind.CommonJS:
@@ -1463,7 +1467,7 @@ function getUmdImportKind(importingFile: SourceFile | FutureSourceFile, compiler
             return ImportKind.Namespace;
         case ModuleKind.Node16:
         case ModuleKind.NodeNext:
-            return importingFile.impliedNodeFormat === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
+            return getImpliedNodeFormatForEmit(importingFile, program) === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
         default:
             return Debug.assertNever(moduleKind, `Unexpected moduleKind ${moduleKind}`);
     }
@@ -1555,7 +1559,7 @@ function getExportInfos(
         if (
             defaultInfo
             && symbolFlagsHaveMeaning(checker.getSymbolFlags(defaultInfo.symbol), currentTokenMeaning)
-            && forEachNameOfDefaultExport(defaultInfo.symbol, checker, compilerOptions, isJsxTagName, name => name === symbolName)
+            && forEachNameOfDefaultExport(defaultInfo.symbol, checker, getEmitScriptTarget(compilerOptions), (name, capitalizedName) => (isJsxTagName ? capitalizedName ?? name : name) === symbolName)
         ) {
             addSymbol(moduleSymbol, sourceFile, defaultInfo.symbol, defaultInfo.exportKind, program, isFromPackageJson);
         }
@@ -2037,4 +2041,12 @@ function symbolFlagsHaveMeaning(flags: SymbolFlags, meaning: SemanticMeaning): b
         meaning & SemanticMeaning.Type ? !!(flags & SymbolFlags.Type) :
         meaning & SemanticMeaning.Namespace ? !!(flags & SymbolFlags.Namespace) :
         false;
+}
+
+function getImpliedNodeFormatForEmit(file: SourceFile | FutureSourceFile, program: Program) {
+    return isFullSourceFile(file) ? program.getImpliedNodeFormatForEmit(file) : getImpliedNodeFormatForEmitWorker(file, program.getCompilerOptions());
+}
+
+function getEmitModuleFormatOfFile(file: SourceFile | FutureSourceFile, program: Program) {
+    return isFullSourceFile(file) ? program.getEmitModuleFormatOfFile(file) : getEmitModuleFormatOfFileWorker(file, program.getCompilerOptions());
 }
