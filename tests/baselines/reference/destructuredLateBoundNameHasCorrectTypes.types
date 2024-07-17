@@ -8,16 +8,16 @@ let { [Symbol.iterator]: destructured } = [];
 >       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
 >         : ^^^^^^^^^^^^^
->destructured : () => IterableIterator<undefined, BuiltinIteratorReturn>
->             : ^^^^^^                 ^^^^^^^^^                        
+>destructured : () => IterableIterator<undefined>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
 void destructured;
 >void destructured : undefined
 >                  : ^^^^^^^^^
->destructured : () => IterableIterator<undefined, BuiltinIteratorReturn>
->             : ^^^^^^                 ^^^^^^^^^                        
+>destructured : () => IterableIterator<undefined>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const named = "prop";
 >named : "prop"
@@ -54,8 +54,8 @@ let { [notPresent]: computed2 } = { prop: "b" };
 >           : ^^^^^^^
 >computed2 : any
 >          : ^^^
->{ prop: "b" } : { prop: string; prop2: any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ prop: "b" } : { prop: string; }
+>              : ^^^^^^^^^^^^^^^^^
 >prop : string
 >     : ^^^^^^
 >"b" : "b"

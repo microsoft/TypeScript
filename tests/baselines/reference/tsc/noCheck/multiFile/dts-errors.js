@@ -32,10 +32,15 @@ export const b = 10;
 
 Output::
 /lib/tsc -p /src/tsconfig.json --noCheck
-[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
+
+  [96msrc/a.ts[0m:[93m1[0m:[93m14[0m
+    [7m1[0m export const a = class { private p = 10; };
+    [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 
 Found 1 error in src/a.ts[90m:1[0m
@@ -89,10 +94,15 @@ Input::
 
 Output::
 /lib/tsc -p /src/tsconfig.json --noCheck
-[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
+
+  [96msrc/a.ts[0m:[93m1[0m:[93m14[0m
+    [7m1[0m export const a = class { private p = 10; };
+    [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 
 Found 1 error in src/a.ts[90m:1[0m
@@ -289,10 +299,15 @@ export const a = class { private p = 10; };
 
 Output::
 /lib/tsc -p /src/tsconfig.json --noCheck
-[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
+
+  [96msrc/a.ts[0m:[93m1[0m:[93m14[0m
+    [7m1[0m export const a = class { private p = 10; };
+    [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 
 Found 1 error in src/a.ts[90m:1[0m
@@ -337,10 +352,15 @@ Input::
 
 Output::
 /lib/tsc -p /src/tsconfig.json --noCheck
-[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
+
+  [96msrc/a.ts[0m:[93m1[0m:[93m14[0m
+    [7m1[0m export const a = class { private p = 10; };
+    [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 
 Found 1 error in src/a.ts[90m:1[0m
@@ -374,10 +394,15 @@ Input::
 
 Output::
 /lib/tsc -p /src/tsconfig.json
-[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
+
+  [96msrc/a.ts[0m:[93m1[0m:[93m14[0m
+    [7m1[0m export const a = class { private p = 10; };
+    [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 
 Found 1 error in src/a.ts[90m:1[0m
@@ -534,10 +559,15 @@ export const a = class { private p = 10; };
 
 Output::
 /lib/tsc -p /src/tsconfig.json --noCheck
-[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
 [7m [0m [91m             ~[0m
+
+  [96msrc/a.ts[0m:[93m1[0m:[93m14[0m
+    [7m1[0m export const a = class { private p = 10; };
+    [7m [0m [96m             ~[0m
+    Add a type annotation to the variable a.
 
 
 Found 1 error in src/a.ts[90m:1[0m

@@ -10,14 +10,14 @@ for (v of [0, ""].values()) { }
 >  : ^^^^^^
 >[0, ""].values() : IterableIterator<string | number>
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->[0, ""].values : () => IterableIterator<string | number, BuiltinIteratorReturn>
->               : ^^^^^^                 ^^^^^^^^^^^^^^^                        
+>[0, ""].values : () => IterableIterator<string | number>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[0, ""] : (string | number)[]
 >        : ^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >"" : ""
 >   : ^^
->values : () => IterableIterator<string | number, BuiltinIteratorReturn>
->       : ^^^^^^                 ^^^^^^^^^^^^^^^                        
+>values : () => IterableIterator<string | number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -94,8 +94,7 @@ interface RenameEntry {
     readonly locations: RenameLocation[];
 }
 
-/** @internal */
-export function extractMessage(message: string): string {
+function extractMessage(message: string): string {
     // Read the content length
     const contentLengthPrefix = "Content-Length: ";
     const lines = message.split(/\r?\n/);
@@ -1030,7 +1029,7 @@ export class SessionClient implements LanguageService {
         };
         const request = this.processRequest<protocol.GetPasteEditsRequest>(protocol.CommandTypes.GetPasteEdits, args);
         const response = this.processResponse<protocol.GetPasteEditsResponse>(request);
-        if (!response.body) {
+        if (response.body.edits.length === 0) {
             return { edits: [] };
         }
         const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);

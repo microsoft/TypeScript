@@ -129,13 +129,13 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
 >                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
 >     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >key : K
 >    : ^
 
@@ -274,13 +274,13 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
 >                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
 >     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >key : K
 >    : ^
 >value : V | undefined
@@ -299,13 +299,13 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
 >                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
 >     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >key : K
 >    : ^
 
@@ -403,11 +403,11 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >ref.deref() : K | undefined
 >            : ^^^^^^^^^^^^^
 >ref.deref : () => K | undefined
->          : ^^^^^^^            
+>          : ^^^^^^^^^^^^^^^^^^^
 >ref : WeakRef<K>
 >    : ^^^^^^^^^^
 >deref : () => K | undefined
->      : ^^^^^^^            
+>      : ^^^^^^^^^^^^^^^^^^^
 
             if (key === undefined) continue;
 >key === undefined : boolean
@@ -425,13 +425,13 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >this.#weakMap.get(key) : { readonly ref: WeakRef<K>; value: V; } | undefined
 >                       : ^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap.get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >this.#weakMap : WeakMap<K, { readonly ref: WeakRef<K>; value: V; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^
 >this : this
 >     : ^^^^
 >get : (key: K) => { readonly ref: WeakRef<K>; value: V; } | undefined
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^            
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^ ^^^^^^^^^^^^^^^
 >key : K
 >    : ^
 

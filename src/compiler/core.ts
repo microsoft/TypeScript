@@ -17,8 +17,6 @@ import {
 export const emptyArray: never[] = [] as never[];
 /** @internal */
 export const emptyMap: ReadonlyMap<never, never> = new Map<never, never>();
-/** @internal */
-export const emptySet: ReadonlySet<never> = new Set<never>();
 
 /** @internal */
 export function length(array: readonly any[] | undefined): number {
@@ -216,22 +214,6 @@ export function findLastIndex<T>(array: readonly T[] | undefined, predicate: (el
         }
     }
     return -1;
-}
-
-/**
- * Returns the first truthy result of `callback`, or else fails.
- * This is like `forEach`, but never returns undefined.
- *
- * @internal
- */
-export function findMap<T, U>(array: readonly T[], callback: (element: T, index: number) => U | undefined): U {
-    for (let i = 0; i < array.length; i++) {
-        const result = callback(array[i], i);
-        if (result) {
-            return result;
-        }
-    }
-    return Debug.fail();
 }
 
 /** @internal */
@@ -825,17 +807,6 @@ export function sortAndDeduplicate<T>(array: readonly T[], comparer: Comparer<T>
 /** @internal */
 export function sortAndDeduplicate<T>(array: readonly T[], comparer?: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T> {
     return deduplicateSorted(sort(array, comparer), equalityComparer ?? comparer ?? compareStringsCaseSensitive as any as Comparer<T>);
-}
-
-/** @internal */
-export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
-    if (array.length < 2) return true;
-    for (let i = 1, len = array.length; i < len; i++) {
-        if (comparer(array[i - 1], array[i]) === Comparison.GreaterThan) {
-            return false;
-        }
-    }
-    return true;
 }
 
 /** @internal */
@@ -1875,10 +1846,8 @@ export function identity<T>(x: T) {
 
 /**
  * Returns lower case string
- *
- * @internal
  */
-export function toLowerCase(x: string) {
+function toLowerCase(x: string) {
     return x.toLowerCase();
 }
 
@@ -1963,82 +1932,6 @@ export function memoizeOne<A extends string | number | boolean | undefined, T>(c
     };
 }
 
-/**
- * A version of `memoize` that supports a single non-primitive argument, stored as keys of a WeakMap.
- *
- * @internal
- */
-export function memoizeWeak<A extends object, T>(callback: (arg: A) => T): (arg: A) => T {
-    const map = new WeakMap<A, T>();
-    return (arg: A) => {
-        let value = map.get(arg);
-        if (value === undefined && !map.has(arg)) {
-            value = callback(arg);
-            map.set(arg, value);
-        }
-        return value!;
-    };
-}
-
-/** @internal */
-export interface MemoizeCache<A extends any[], T> {
-    has(args: A): boolean;
-    get(args: A): T | undefined;
-    set(args: A, value: T): void;
-}
-
-/**
- * A version of `memoize` that supports multiple arguments, backed by a provided cache.
- *
- * @internal
- */
-export function memoizeCached<A extends any[], T>(callback: (...args: A) => T, cache: MemoizeCache<A, T>): (...args: A) => T {
-    return (...args: A) => {
-        let value = cache.get(args);
-        if (value === undefined && !cache.has(args)) {
-            value = callback(...args);
-            cache.set(args, value);
-        }
-        return value!;
-    };
-}
-
-/**
- * High-order function, composes functions. Note that functions are composed inside-out;
- * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
- *
- * @param args The functions to compose.
- *
- * @internal
- */
-export function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
-/** @internal */
-export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
-    if (!!e) {
-        const args: ((t: T) => T)[] = [];
-        for (let i = 0; i < arguments.length; i++) {
-            // eslint-disable-next-line prefer-rest-params
-            args[i] = arguments[i];
-        }
-
-        return t => reduceLeft(args, (u, f) => f(u), t);
-    }
-    else if (d) {
-        return t => d(c(b(a(t))));
-    }
-    else if (c) {
-        return t => c(b(a(t)));
-    }
-    else if (b) {
-        return t => b(a(t));
-    }
-    else if (a) {
-        return t => a(t);
-    }
-    else {
-        return t => t;
-    }
-}
 /** @internal */
 export const enum AssertionLevel {
     None = 0,
@@ -2054,8 +1947,6 @@ export const enum AssertionLevel {
  * @internal
  */
 export type AnyFunction = (...args: never[]) => void;
-/** @internal */
-export type AnyConstructor = new (...args: unknown[]) => unknown;
 
 /** @internal */
 export function equateValues<T>(a: T, b: T) {
@@ -2467,8 +2358,7 @@ export function orderedRemoveItemAt<T>(array: T[], index: number): void {
     array.pop();
 }
 
-/** @internal */
-export function unorderedRemoveItemAt<T>(array: T[], index: number): void {
+function unorderedRemoveItemAt<T>(array: T[], index: number): void {
     // Fill in the "hole" left at `index`.
     array[index] = array[array.length - 1];
     array.pop();

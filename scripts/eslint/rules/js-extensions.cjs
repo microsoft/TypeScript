@@ -1,5 +1,8 @@
 const { createRule } = require("./utils.cjs");
 
+/** @import { TSESTree } from "@typescript-eslint/utils" */
+void 0;
+
 module.exports = createRule({
     name: "js-extensions",
     meta: {
@@ -18,11 +21,11 @@ module.exports = createRule({
     create(context) {
         /** @type {(
          *      node:
-         *          | import("@typescript-eslint/utils").TSESTree.ImportDeclaration
-         *          | import("@typescript-eslint/utils").TSESTree.ExportAllDeclaration
-         *          | import("@typescript-eslint/utils").TSESTree.ExportNamedDeclaration
-         *          | import("@typescript-eslint/utils").TSESTree.TSImportEqualsDeclaration
-         *          | import("@typescript-eslint/utils").TSESTree.TSModuleDeclaration
+         *          | TSESTree.ImportDeclaration
+         *          | TSESTree.ExportAllDeclaration
+         *          | TSESTree.ExportNamedDeclaration
+         *          | TSESTree.TSImportEqualsDeclaration
+         *          | TSESTree.TSModuleDeclaration
          *  ) => void}
          */
         const check = node => {

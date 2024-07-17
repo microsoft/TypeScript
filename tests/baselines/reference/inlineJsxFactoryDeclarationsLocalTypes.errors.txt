@@ -4,15 +4,16 @@ index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'impor
 index.tsx(21,22): error TS2786: 'MySFC' cannot be used as a JSX component.
   Its return type 'import("renderer2").predom.JSX.Element' is not a valid JSX element.
     Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
-index.tsx(21,40): error TS2322: Type 'import("renderer").dom.JSX.Element' is not assignable to type 'import("renderer2").predom.JSX.Element'.
+index.tsx(21,40): error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
 index.tsx(21,41): error TS2786: 'MyClass' cannot be used as a JSX component.
   Its instance type 'MyClass' is not a valid JSX element.
     Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
-index.tsx(21,63): error TS2322: Type 'import("renderer").dom.JSX.Element' is not assignable to type 'import("renderer2").predom.JSX.Element'.
+index.tsx(21,63): error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
 index.tsx(21,64): error TS2786: 'MyClass' cannot be used as a JSX component.
   Its instance type 'MyClass' is not a valid JSX element.
-index.tsx(24,42): error TS2322: Type 'import("renderer2").predom.JSX.Element' is not assignable to type 'import("renderer").dom.JSX.Element'.
-index.tsx(24,48): error TS2322: Type 'import("renderer2").predom.JSX.Element' is not assignable to type 'import("renderer").dom.JSX.Element'.
+    Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
+index.tsx(24,42): error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
+index.tsx(24,48): error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
 
 
 ==== renderer.d.ts (0 errors) ====
@@ -110,22 +111,28 @@ index.tsx(24,48): error TS2322: Type 'import("renderer2").predom.JSX.Element' is
 !!! error TS2786:     Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
 !!! related TS2728 renderer.d.ts:7:13: '__domBrand' is declared here.
                                            ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'import("renderer").dom.JSX.Element' is not assignable to type 'import("renderer2").predom.JSX.Element'.
+!!! error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+!!! related TS2728 renderer2.d.ts:7:13: '__predomBrand' is declared here.
                                             ~~~~~~~
 !!! error TS2786: 'MyClass' cannot be used as a JSX component.
 !!! error TS2786:   Its instance type 'MyClass' is not a valid JSX element.
 !!! error TS2786:     Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
 !!! related TS2728 renderer.d.ts:7:13: '__domBrand' is declared here.
                                                                   ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'import("renderer").dom.JSX.Element' is not assignable to type 'import("renderer2").predom.JSX.Element'.
+!!! error TS2741: Property '__predomBrand' is missing in type 'import("renderer").dom.JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
+!!! related TS2728 renderer2.d.ts:7:13: '__predomBrand' is declared here.
                                                                    ~~~~~~~
 !!! error TS2786: 'MyClass' cannot be used as a JSX component.
 !!! error TS2786:   Its instance type 'MyClass' is not a valid JSX element.
+!!! error TS2786:     Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
+!!! related TS2728 renderer.d.ts:7:13: '__domBrand' is declared here.
     
     // Should fail, nondom isn't allowed as children of dom
     const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
                                              ~~~~~~
-!!! error TS2322: Type 'import("renderer2").predom.JSX.Element' is not assignable to type 'import("renderer").dom.JSX.Element'.
+!!! error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
+!!! related TS2728 renderer.d.ts:7:13: '__domBrand' is declared here.
                                                    ~~~~~~
-!!! error TS2322: Type 'import("renderer2").predom.JSX.Element' is not assignable to type 'import("renderer").dom.JSX.Element'.
+!!! error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
+!!! related TS2728 renderer.d.ts:7:13: '__domBrand' is declared here.
     

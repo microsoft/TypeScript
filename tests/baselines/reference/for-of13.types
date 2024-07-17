@@ -10,12 +10,12 @@ for (v of [""].values()) { }
 >  : ^^^^^^
 >[""].values() : IterableIterator<string>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
->[""].values : () => IterableIterator<string, BuiltinIteratorReturn>
->            : ^^^^^^                 ^^^^^^                        
+>[""].values : () => IterableIterator<string>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[""] : string[]
 >     : ^^^^^^^^
 >"" : ""
 >   : ^^
->values : () => IterableIterator<string, BuiltinIteratorReturn>
->       : ^^^^^^                 ^^^^^^                        
+>values : () => IterableIterator<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

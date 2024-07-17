@@ -28,7 +28,7 @@ function mapAsyncIterable<T, U, R = undefined>(
 >iterable[Symbol.asyncIterator]() : AsyncIterator<T, R, undefined>
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterable[Symbol.asyncIterator] : (() => AsyncGenerator<T, R, undefined>) | (() => AsyncIterator<T, R, undefined>)
->                               : ^^^^^^^               ^  ^  ^^^^^^^^^ ^^^^^^^^^^^              ^  ^  ^^^^^^^^^ ^
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterable : AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.asyncIterator : unique symbol
@@ -93,11 +93,11 @@ function mapAsyncIterable<T, U, R = undefined>(
 >typeof iterator.return : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator.return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
->                : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^  ^  ^^^^^^^^^^^^^
+>                : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator : AsyncIterator<T, R, undefined>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
->       : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^  ^  ^^^^^^^^^^^^^
+>       : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"function" : "function"
 >           : ^^^^^^^^^^
 
@@ -108,11 +108,11 @@ function mapAsyncIterable<T, U, R = undefined>(
 >iterator.return() : Promise<IteratorResult<T, R>>
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator.return : (value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>
->                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^  ^  
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator : AsyncIterator<T, R, undefined>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >return : (value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>
->       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^  ^  
+>       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         } catch (_e) {}
 >_e : unknown
@@ -142,11 +142,11 @@ function mapAsyncIterable<T, U, R = undefined>(
 >iterator.next() : Promise<IteratorResult<T, R>>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator.next : (...args: [] | [undefined]) => Promise<IteratorResult<T, R>>
->              : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^                       ^  ^  
+>              : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator : AsyncIterator<T, R, undefined>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >next : (...args: [] | [undefined]) => Promise<IteratorResult<T, R>>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^                       ^  ^  
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     },
     async return(): Promise<IteratorResult<U, R>> {
@@ -161,11 +161,11 @@ function mapAsyncIterable<T, U, R = undefined>(
 >typeof iterator.return : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator.return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
->                : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^  ^  ^^^^^^^^^^^^^
+>                : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator : AsyncIterator<T, R, undefined>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >return : ((value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>) | undefined
->       : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^  ^  ^^^^^^^^^^^^^
+>       : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"function" : "function"
 >           : ^^^^^^^^^^
 
@@ -179,11 +179,11 @@ function mapAsyncIterable<T, U, R = undefined>(
 >iterator.return() : Promise<IteratorResult<T, R>>
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator.return : (value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>
->                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^  ^  
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator : AsyncIterator<T, R, undefined>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >return : (value?: R | PromiseLike<R> | undefined) => Promise<IteratorResult<T, R>>
->       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^  ^  
+>       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         : { value: undefined as any, done: true };
 >{ value: undefined as any, done: true } : { value: any; done: true; }
@@ -210,11 +210,11 @@ function mapAsyncIterable<T, U, R = undefined>(
 >typeof iterator.throw : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator.throw : ((e?: any) => Promise<IteratorResult<T, R>>) | undefined
->               : ^^ ^^^   ^^^^^                       ^  ^  ^^^^^^^^^^^^^
+>               : ^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator : AsyncIterator<T, R, undefined>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >throw : ((e?: any) => Promise<IteratorResult<T, R>>) | undefined
->      : ^^ ^^^   ^^^^^                       ^  ^  ^^^^^^^^^^^^^
+>      : ^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"function" : "function"
 >           : ^^^^^^^^^^
 
@@ -228,11 +228,11 @@ function mapAsyncIterable<T, U, R = undefined>(
 >iterator.throw(error) : Promise<IteratorResult<T, R>>
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator.throw : (e?: any) => Promise<IteratorResult<T, R>>
->               : ^ ^^^   ^^^^^                       ^  ^  
+>               : ^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator : AsyncIterator<T, R, undefined>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >throw : (e?: any) => Promise<IteratorResult<T, R>>
->      : ^ ^^^   ^^^^^                       ^  ^  
+>      : ^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >error : unknown
 >      : ^^^^^^^
       }
@@ -310,11 +310,11 @@ const iterable = {
 >items.shift() : number | undefined
 >              : ^^^^^^^^^^^^^^^^^^
 >items.shift : () => number | undefined
->            : ^^^^^^^^^^^^            
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
 >items : number[]
 >      : ^^^^^^^^
 >shift : () => number | undefined
->      : ^^^^^^^^^^^^            
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     return Promise.resolve({
 >Promise.resolve({      done: items.length === 0,      value,    }) : Promise<{ done: boolean; value: number; }>
