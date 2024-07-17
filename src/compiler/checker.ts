@@ -1502,7 +1502,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
-    // var resolveSideEffectImports = compilerOptions.resolveSideEffectImports;
+    var resolveSideEffectImports = compilerOptions.resolveSideEffectImports;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -47144,7 +47144,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            else if (!importClause) {
+            else if (resolveSideEffectImports && !importClause) {
                 void resolveExternalModuleName(node, node.moduleSpecifier);
             }
         }
