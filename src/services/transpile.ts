@@ -205,7 +205,7 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
         addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
     }
     // Emit
-    const result = program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ undefined, transpileOptions.transformers, /*forceDtsEmit*/ undefined);
+    const result = program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnly*/ undefined, transpileOptions.transformers, /*forceDtsEmit*/ undefined);
 
     addRange(/*to*/ diagnostics, /*from*/ result.diagnostics);
 
