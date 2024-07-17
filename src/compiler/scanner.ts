@@ -1614,8 +1614,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     pos -= 2;
                     const result = scanExtendedUnicodeEscape(!!(flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors));
                     if (!(flags & EscapeSequenceScanningFlags.AllowExtendedUnicodeEscape)) {
-                        Debug.assert(flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors);
-                        error(Diagnostics.Unicode_escape_sequences_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
+                            error(Diagnostics.Unicode_escape_sequences_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
+                        }
                     }
                     return result;
                 }
