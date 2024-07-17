@@ -18714,7 +18714,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(indexNode, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(indexType));
             }
             else {
-                const typeString = typeToString(indexNode.kind === SyntaxKind.BigIntLiteral ? getBaseTypeOfLiteralType(getContextFreeTypeOfExpression(indexNode)) : indexType);
+                const typeString = indexNode.kind === SyntaxKind.BigIntLiteral ? `bigInt` : typeToString(indexType);
                 error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeString);
             }
         }
