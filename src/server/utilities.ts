@@ -1,10 +1,4 @@
-import {
-    binarySearch,
-    Comparer,
-    getBaseFileName,
-    identity,
-    SortedArray,
-} from "./_namespaces/ts.js";
+import { getBaseFileName } from "./_namespaces/ts.js";
 import {
     Logger,
     LogLevel,
@@ -87,21 +81,4 @@ export class GcTimer {
 export function getBaseConfigFileName(configFilePath: NormalizedPath): "tsconfig.json" | "jsconfig.json" | undefined {
     const base = getBaseFileName(configFilePath);
     return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
-}
-
-/** @internal */
-export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Comparer<T>): void {
-    if (!array || array.length === 0) {
-        return;
-    }
-
-    if (array[0] === remove) {
-        array.splice(0, 1);
-        return;
-    }
-
-    const removeIndex = binarySearch(array, remove, identity, compare);
-    if (removeIndex >= 0) {
-        array.splice(removeIndex, 1);
-    }
 }

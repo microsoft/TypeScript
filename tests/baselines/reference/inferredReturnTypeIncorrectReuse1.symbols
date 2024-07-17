@@ -1,0 +1,112 @@
+//// [tests/cases/compiler/inferredReturnTypeIncorrectReuse1.ts] ////
+
+=== inferredReturnTypeIncorrectReuse1.ts ===
+export type inferPipe<t, pipe> =
+>inferPipe : Symbol(inferPipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 0, 0))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 0, 22))
+>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 0, 24))
+
+    pipe extends (In: t) => unknown ? (In: t) => ReturnType<pipe> : never
+>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 0, 24))
+>In : Symbol(In, Decl(inferredReturnTypeIncorrectReuse1.ts, 1, 18))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 0, 22))
+>In : Symbol(In, Decl(inferredReturnTypeIncorrectReuse1.ts, 1, 39))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 0, 22))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 0, 24))
+
+interface Type<t> {
+>Type : Symbol(Type, Decl(inferredReturnTypeIncorrectReuse1.ts, 1, 73))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 15))
+
+    pipe<fn extends (In: t) => unknown>(fn: fn): Type<inferPipe<t, fn>>
+>pipe : Symbol(Type.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 19))
+>fn : Symbol(fn, Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 9), Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 40))
+>In : Symbol(In, Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 21))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 15))
+>fn : Symbol(fn, Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 9), Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 40))
+>fn : Symbol(fn, Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 9), Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 40))
+>Type : Symbol(Type, Decl(inferredReturnTypeIncorrectReuse1.ts, 1, 73))
+>inferPipe : Symbol(inferPipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 0, 0))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 15))
+>fn : Symbol(fn, Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 9), Decl(inferredReturnTypeIncorrectReuse1.ts, 4, 40))
+}
+
+declare const t: Type<string>
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 7, 13))
+>Type : Symbol(Type, Decl(inferredReturnTypeIncorrectReuse1.ts, 1, 73))
+
+/** Type<(In: string) => number> */
+export const out = t.pipe(s => parseInt(s))
+>out : Symbol(out, Decl(inferredReturnTypeIncorrectReuse1.ts, 10, 12))
+>t.pipe : Symbol(Type.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 19))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 7, 13))
+>pipe : Symbol(Type.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 3, 19))
+>s : Symbol(s, Decl(inferredReturnTypeIncorrectReuse1.ts, 10, 26))
+>parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(inferredReturnTypeIncorrectReuse1.ts, 10, 26))
+
+export type inferPipe2<t, pipe> =
+>inferPipe2 : Symbol(inferPipe2, Decl(inferredReturnTypeIncorrectReuse1.ts, 10, 43))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 12, 23))
+>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 12, 25))
+
+	pipe extends (In: t) => unknown ?
+>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 12, 25))
+>In : Symbol(In, Decl(inferredReturnTypeIncorrectReuse1.ts, 13, 15))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 12, 23))
+
+		(In: t) => ReturnType<pipe> extends infer n extends number ? n
+>In : Symbol(In, Decl(inferredReturnTypeIncorrectReuse1.ts, 14, 3))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 12, 23))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 12, 25))
+>n : Symbol(n, Decl(inferredReturnTypeIncorrectReuse1.ts, 14, 43))
+>n : Symbol(n, Decl(inferredReturnTypeIncorrectReuse1.ts, 14, 43))
+
+		: ReturnType<pipe> extends infer s extends string ? s
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 12, 25))
+>s : Symbol(s, Decl(inferredReturnTypeIncorrectReuse1.ts, 15, 34))
+>s : Symbol(s, Decl(inferredReturnTypeIncorrectReuse1.ts, 15, 34))
+
+		: ReturnType<pipe> extends infer b extends boolean ? b
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>pipe : Symbol(pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 12, 25))
+>b : Symbol(b, Decl(inferredReturnTypeIncorrectReuse1.ts, 16, 34))
+>b : Symbol(b, Decl(inferredReturnTypeIncorrectReuse1.ts, 16, 34))
+
+		: never
+	:	never
+
+interface Type2<t> {
+>Type2 : Symbol(Type2, Decl(inferredReturnTypeIncorrectReuse1.ts, 18, 8))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 16))
+
+	pipe<fn extends (In: t) => unknown>(fn: fn): Type<inferPipe2<t, fn>>
+>pipe : Symbol(Type2.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 20))
+>fn : Symbol(fn, Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 6), Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 37))
+>In : Symbol(In, Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 18))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 16))
+>fn : Symbol(fn, Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 6), Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 37))
+>fn : Symbol(fn, Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 6), Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 37))
+>Type : Symbol(Type, Decl(inferredReturnTypeIncorrectReuse1.ts, 1, 73))
+>inferPipe2 : Symbol(inferPipe2, Decl(inferredReturnTypeIncorrectReuse1.ts, 10, 43))
+>t : Symbol(t, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 16))
+>fn : Symbol(fn, Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 6), Decl(inferredReturnTypeIncorrectReuse1.ts, 21, 37))
+}
+
+declare const t2: Type2<string>
+>t2 : Symbol(t2, Decl(inferredReturnTypeIncorrectReuse1.ts, 24, 13))
+>Type2 : Symbol(Type2, Decl(inferredReturnTypeIncorrectReuse1.ts, 18, 8))
+
+/** Type<(In: string) => number> */
+export const out2 = t2.pipe(s => parseInt(s))
+>out2 : Symbol(out2, Decl(inferredReturnTypeIncorrectReuse1.ts, 27, 12))
+>t2.pipe : Symbol(Type2.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 20))
+>t2 : Symbol(t2, Decl(inferredReturnTypeIncorrectReuse1.ts, 24, 13))
+>pipe : Symbol(Type2.pipe, Decl(inferredReturnTypeIncorrectReuse1.ts, 20, 20))
+>s : Symbol(s, Decl(inferredReturnTypeIncorrectReuse1.ts, 27, 28))
+>parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(inferredReturnTypeIncorrectReuse1.ts, 27, 28))
+

@@ -149,7 +149,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /Volumes/git/projects/project/foo.ts Project
 Info seq  [hh:mm:ss:mss] 		Projects: /Volumes/git/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

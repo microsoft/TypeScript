@@ -610,8 +610,7 @@ function typeContainsTypeParameter(type: Type) {
     return type.flags & TypeFlags.TypeParameter;
 }
 
-/** @internal */
-export function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: ImportAdder, instanceTypes: Type[], contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker) {
+function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: ImportAdder, instanceTypes: Type[], contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker) {
     // Types to be used as the types of the parameters in the new function
     // E.g. from this source:
     //   added("", 0)
@@ -874,13 +873,11 @@ export function setJsonCompilerOptionValue(
     setJsonCompilerOptionValues(changeTracker, configFile, [[optionName, optionValue]]);
 }
 
-/** @internal */
-export function createJsonPropertyAssignment(name: string, initializer: Expression) {
+function createJsonPropertyAssignment(name: string, initializer: Expression) {
     return factory.createPropertyAssignment(factory.createStringLiteral(name), initializer);
 }
 
-/** @internal */
-export function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyAssignment | undefined {
+function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyAssignment | undefined {
     return find(obj.properties, (p): p is PropertyAssignment => isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name);
 }
 

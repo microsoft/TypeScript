@@ -80,7 +80,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -144,7 +151,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app2.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -218,7 +232,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app3.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject3*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -306,7 +327,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app4.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject4*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -386,10 +414,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -405,8 +429,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/b/app.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -450,8 +473,7 @@ Info seq  [hh:mm:ss:mss] event:
               "offset": 13
             }
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -496,8 +518,7 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 2345,
             "category": "error"
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -515,8 +536,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/a/b/app.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 0
@@ -534,8 +554,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/b/app2.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -567,8 +586,7 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 2345,
             "category": "error"
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -586,8 +604,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/a/b/app2.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 0
@@ -605,8 +622,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/b/app3.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -636,8 +652,7 @@ Info seq  [hh:mm:ss:mss] event:
               "offset": 16
             }
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -669,8 +684,7 @@ Info seq  [hh:mm:ss:mss] event:
             "code": 2345,
             "category": "error"
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -688,8 +702,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/a/b/app3.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 0
@@ -707,8 +720,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/b/app4.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -726,8 +738,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/a/b/app4.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
@@ -745,8 +756,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/a/b/app4.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -757,7 +767,34 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "request_seq": 5,
         "performanceData": {
-          "updateGraphDurationMs": *
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "regionSemanticDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/a/b/app.ts"
+            },
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/a/b/app2.ts"
+            },
+            {
+              "syntaxDiag": *,
+              "regionSemanticDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/a/b/app3.ts"
+            },
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/a/b/app4.ts"
+            }
+          ]
         }
       }
     }

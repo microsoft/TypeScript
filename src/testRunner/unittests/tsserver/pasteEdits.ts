@@ -19,6 +19,11 @@ describe("unittests:: tsserver:: pasteEdits", () => {
 const b = 2;
 const c = 3;`,
         };
+        const file1: File = {
+            path: "/project/a/file1.ts",
+            content: `export const r = 1;
+export const s = 2;`,
+        };
         const tsconfig: File = {
             path: "/project/tsconfig.json",
             content: "{}",
@@ -27,7 +32,7 @@ const c = 3;`,
 function e();
 const f = r + s;`;
 
-        const host = createServerHost([target, tsconfig, libFile]);
+        const host = createServerHost([target, file1, tsconfig, libFile]);
         const session = new TestSession(host);
         openFilesForSession([target], session);
 

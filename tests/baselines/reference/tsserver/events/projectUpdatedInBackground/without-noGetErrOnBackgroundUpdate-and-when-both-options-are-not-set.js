@@ -144,7 +144,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/project/a.ts Projec
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -346,8 +353,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/users/username/projects/project/a.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json

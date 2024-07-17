@@ -159,6 +159,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /index.ts: *new*
@@ -281,6 +292,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -376,7 +395,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 4 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1051,6 +1070,19 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "defaults",
+            "kind": "property",
+            "kindModifiers": "",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/third_party/marked/src/defaults",
+            "data": {
+              "exportName": "export=",
+              "exportMapKey": "8 * defaults ",
+              "fileName": "/third_party/marked/src/defaults.js"
+            }
+          },
+          {
+            "name": "defaults",
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
@@ -1104,6 +1136,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 5,
+      "success": true
+    }
 After Request
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -1156,6 +1196,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "d"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 6,
+      "success": true
     }
 After Request
 ScriptInfos::
@@ -1253,7 +1301,7 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 4 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1941,6 +1989,19 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "defaults",
+            "kind": "property",
+            "kindModifiers": "",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/third_party/marked/src/defaults",
+            "data": {
+              "exportName": "export=",
+              "exportMapKey": "8 * defaults ",
+              "fileName": "/third_party/marked/src/defaults.js"
+            }
+          },
+          {
+            "name": "defaults",
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
@@ -2139,6 +2200,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "import { defaults } from \"./third_party/marked/src/defaults\";\n\n"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 11,
+      "success": true
     }
 After Request
 Projects::

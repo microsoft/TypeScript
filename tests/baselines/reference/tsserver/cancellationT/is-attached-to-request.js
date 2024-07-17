@@ -35,11 +35,18 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-TestServerCancellationToken:: resetRequest:: 1 is as expected
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
+TestServerCancellationToken:: resetRequest:: 1 is as expected
 After request
 
 PolledWatches::
@@ -73,10 +80,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 TestServerCancellationToken:: Cancellation Request id:: 2
 TestServerCancellationToken:: resetRequest:: 2 is as expected
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Timeout callback:: count: 1
@@ -143,8 +146,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/a/b/app.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 TestServerCancellationToken:: resetRequest:: 2 is as expected
@@ -164,8 +166,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/a/b/app.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 TestServerCancellationToken:: resetRequest:: 2 is as expected
@@ -185,8 +186,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "suggestionDiag",
       "body": {
         "file": "/a/b/app.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -197,7 +197,14 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "request_seq": 2,
         "performanceData": {
-          "updateGraphDurationMs": *
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/a/b/app.ts"
+            }
+          ]
         }
       }
     }

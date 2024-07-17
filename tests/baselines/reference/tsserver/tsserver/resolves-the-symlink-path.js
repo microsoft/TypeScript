@@ -172,7 +172,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /users/user/projects/myproject/src/index.ts 
 Info seq  [hh:mm:ss:mss] 		Projects: /users/user/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
