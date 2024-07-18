@@ -467,7 +467,6 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Emit,
-        transpileOptionValue: undefined,
         defaultValueDescription: false,
         description: Diagnostics.Create_sourcemaps_for_d_ts_files,
     },
