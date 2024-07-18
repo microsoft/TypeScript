@@ -1194,7 +1194,8 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "resolveSideEffectImports",
         type: "boolean",
-        affectsModuleResolution: true,
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Resolve_side_effect_imports,
         defaultValueDescription: false,
