@@ -4648,6 +4648,7 @@ export type FilePreprocessingDiagnostics = FilePreprocessingLibReferenceDiagnost
 export const enum EmitOnly {
     Js,
     Dts,
+    BuilderSignature,
 }
 
 /** @internal */
