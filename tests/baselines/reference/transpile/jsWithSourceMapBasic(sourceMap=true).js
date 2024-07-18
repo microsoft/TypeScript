@@ -70,22 +70,17 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
             env.error = env.hasError ? new SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
             env.hasError = true;
         }
-        var r, s = 0;
         function next() {
-            while (r = env.stack.pop()) {
+            while (env.stack.length) {
+                var rec = env.stack.pop();
                 try {
-                    if (!r.async && s === 1) return s = 0, env.stack.push(r), Promise.resolve().then(next);
-                    if (r.dispose) {
-                        var result = r.dispose.call(r.value);
-                        if (r.async) return s |= 2, Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
-                    }
-                    else s |= 1;
+                    var result = rec.dispose && rec.dispose.call(rec.value);
+                    if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
                 }
                 catch (e) {
                     fail(e);
                 }
             }
-            if (s === 1) return env.hasError ? Promise.reject(env.error) : Promise.resolve();
             if (env.hasError) throw env.error;
         }
         return next();
@@ -116,7 +111,7 @@ finally {
 }
 //# sourceMappingURL=variables.js.map
 //// [variables.js.map] ////
-{"version":3,"file":"variables.js","sourceRoot":"","sources":["variables.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,MAAM,CAAC,MAAM,CAAC,GAAG,CAAC,CAAC;AACnB,MAAM,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC;AACjB,MAAM,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC;AAEjB,OAAO,EAAE,CAAC,EAAE,CAAC;AAEb,OAAO,EAAE,CAAC,EAAE,CAAC;;;;IAHP,mCAAI,SAAS,QAAA,CAAC;IAER,mCAAI,SAAS,OAAA,CAAC"}
+{"version":3,"file":"variables.js","sourceRoot":"","sources":["variables.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,MAAM,CAAC,MAAM,CAAC,GAAG,CAAC,CAAC;AACnB,MAAM,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC;AACjB,MAAM,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC;AAEjB,OAAO,EAAE,CAAC,EAAE,CAAC;AAEb,OAAO,EAAE,CAAC,EAAE,CAAC;;;;IAHP,mCAAI,SAAS,QAAA,CAAC;IAER,mCAAI,SAAS,OAAA,CAAC"}
 //// [interface.js] ////
 export {};
 //# sourceMappingURL=interface.js.map
