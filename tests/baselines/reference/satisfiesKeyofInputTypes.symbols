@@ -1,0 +1,404 @@
+//// [tests/cases/conformance/types/keyof/satisfiesKeyofInputTypes.ts] ////
+
+=== satisfiesKeyofInputTypes.ts ===
+const sym = Symbol();
+>sym : Symbol(sym, Decl(satisfiesKeyofInputTypes.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const num = 1;
+>num : Symbol(num, Decl(satisfiesKeyofInputTypes.ts, 1, 5))
+
+const str = "f";
+>str : Symbol(str, Decl(satisfiesKeyofInputTypes.ts, 2, 5))
+
+const union = Math.random() > 0.5 ? "answer" : 42;
+>union : Symbol(union, Decl(satisfiesKeyofInputTypes.ts, 3, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+enum NumEnum {
+>NumEnum : Symbol(NumEnum, Decl(satisfiesKeyofInputTypes.ts, 3, 50))
+
+    A,
+>A : Symbol(NumEnum.A, Decl(satisfiesKeyofInputTypes.ts, 5, 14))
+
+    B,
+>B : Symbol(NumEnum.B, Decl(satisfiesKeyofInputTypes.ts, 6, 6))
+}
+
+enum StrEnum {
+>StrEnum : Symbol(StrEnum, Decl(satisfiesKeyofInputTypes.ts, 8, 1))
+
+    A = "a",
+>A : Symbol(StrEnum.A, Decl(satisfiesKeyofInputTypes.ts, 10, 14))
+
+    B = "b"
+>B : Symbol(StrEnum.B, Decl(satisfiesKeyofInputTypes.ts, 11, 12))
+}
+
+enum MixEnum {
+>MixEnum : Symbol(MixEnum, Decl(satisfiesKeyofInputTypes.ts, 13, 1))
+
+    A = 10,
+>A : Symbol(MixEnum.A, Decl(satisfiesKeyofInputTypes.ts, 15, 14))
+
+    B = "bb",
+>B : Symbol(MixEnum.B, Decl(satisfiesKeyofInputTypes.ts, 16, 11))
+}
+
+const anything = null as any;
+>anything : Symbol(anything, Decl(satisfiesKeyofInputTypes.ts, 20, 5))
+
+const unk = null as any as unknown;
+>unk : Symbol(unk, Decl(satisfiesKeyofInputTypes.ts, 21, 5))
+
+const basestr = "" as string;
+>basestr : Symbol(basestr, Decl(satisfiesKeyofInputTypes.ts, 22, 5))
+
+const basenum = 11 as number;
+>basenum : Symbol(basenum, Decl(satisfiesKeyofInputTypes.ts, 23, 5))
+
+const bool = true as boolean;
+>bool : Symbol(bool, Decl(satisfiesKeyofInputTypes.ts, 24, 5))
+
+const t = true;
+>t : Symbol(t, Decl(satisfiesKeyofInputTypes.ts, 25, 5))
+
+const f = false;
+>f : Symbol(f, Decl(satisfiesKeyofInputTypes.ts, 26, 5))
+
+const n = null;
+>n : Symbol(n, Decl(satisfiesKeyofInputTypes.ts, 27, 5))
+
+const u = undefined;
+>u : Symbol(u, Decl(satisfiesKeyofInputTypes.ts, 28, 5))
+>undefined : Symbol(undefined)
+
+const bigbase = 1n as bigint;
+>bigbase : Symbol(bigbase, Decl(satisfiesKeyofInputTypes.ts, 29, 5))
+
+const biglit = 22n;
+>biglit : Symbol(biglit, Decl(satisfiesKeyofInputTypes.ts, 30, 5))
+
+const symbase = null as any as symbol;
+>symbase : Symbol(symbase, Decl(satisfiesKeyofInputTypes.ts, 31, 5))
+
+const nev = null as never;
+>nev : Symbol(nev, Decl(satisfiesKeyofInputTypes.ts, 32, 5))
+
+const templateLit = `aaabb` as `aaa${string}`;
+>templateLit : Symbol(templateLit, Decl(satisfiesKeyofInputTypes.ts, 33, 5))
+
+const mappingLit = `bbbaa` as Lowercase<string>;
+>mappingLit : Symbol(mappingLit, Decl(satisfiesKeyofInputTypes.ts, 34, 5))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+export class Foo {
+>Foo : Symbol(Foo, Decl(satisfiesKeyofInputTypes.ts, 34, 48))
+
+    [sym satisfies keyof]() {
+>[sym satisfies keyof] : Symbol(Foo[sym satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 36, 18))
+>sym : Symbol(sym, Decl(satisfiesKeyofInputTypes.ts, 0, 5))
+
+        return 1 as const;
+>const : Symbol(const)
+    }
+
+    [num satisfies keyof]() {
+>[num satisfies keyof] : Symbol(Foo[num satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 39, 5))
+>num : Symbol(num, Decl(satisfiesKeyofInputTypes.ts, 1, 5))
+
+        return 2 as const;
+>const : Symbol(const)
+    }
+
+    [str satisfies keyof]() {
+>[str satisfies keyof] : Symbol(Foo[str satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 43, 5))
+>str : Symbol(str, Decl(satisfiesKeyofInputTypes.ts, 2, 5))
+
+        return 3 as const;
+>const : Symbol(const)
+    }
+
+    [union satisfies keyof]() {
+>[union satisfies keyof] : Symbol(Foo[union satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 47, 5))
+>union : Symbol(union, Decl(satisfiesKeyofInputTypes.ts, 3, 5))
+
+        return 4 as const;
+>const : Symbol(const)
+    }
+
+    [NumEnum.A satisfies keyof]() {
+>[NumEnum.A satisfies keyof] : Symbol(Foo[NumEnum.A satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 51, 5))
+>NumEnum.A : Symbol(NumEnum.A, Decl(satisfiesKeyofInputTypes.ts, 5, 14))
+>NumEnum : Symbol(NumEnum, Decl(satisfiesKeyofInputTypes.ts, 3, 50))
+>A : Symbol(NumEnum.A, Decl(satisfiesKeyofInputTypes.ts, 5, 14))
+
+        return 5 as const;
+>const : Symbol(const)
+    }
+
+    [StrEnum.A satisfies keyof]() {
+>[StrEnum.A satisfies keyof] : Symbol(Foo[StrEnum.A satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 55, 5))
+>StrEnum.A : Symbol(StrEnum.A, Decl(satisfiesKeyofInputTypes.ts, 10, 14))
+>StrEnum : Symbol(StrEnum, Decl(satisfiesKeyofInputTypes.ts, 8, 1))
+>A : Symbol(StrEnum.A, Decl(satisfiesKeyofInputTypes.ts, 10, 14))
+
+        return 6 as const;
+>const : Symbol(const)
+    }
+
+    [MixEnum.A satisfies keyof]() {
+>[MixEnum.A satisfies keyof] : Symbol(Foo[MixEnum.A satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 59, 5))
+>MixEnum.A : Symbol(MixEnum.A, Decl(satisfiesKeyofInputTypes.ts, 15, 14))
+>MixEnum : Symbol(MixEnum, Decl(satisfiesKeyofInputTypes.ts, 13, 1))
+>A : Symbol(MixEnum.A, Decl(satisfiesKeyofInputTypes.ts, 15, 14))
+
+        return 7 as const;
+>const : Symbol(const)
+    }
+
+    [MixEnum.B satisfies keyof]() {
+>[MixEnum.B satisfies keyof] : Symbol(Foo[MixEnum.B satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 63, 5))
+>MixEnum.B : Symbol(MixEnum.B, Decl(satisfiesKeyofInputTypes.ts, 16, 11))
+>MixEnum : Symbol(MixEnum, Decl(satisfiesKeyofInputTypes.ts, 13, 1))
+>B : Symbol(MixEnum.B, Decl(satisfiesKeyofInputTypes.ts, 16, 11))
+
+        return 8 as const;
+>const : Symbol(const)
+    }
+
+    [anything satisfies keyof]() {
+>[anything satisfies keyof] : Symbol(Foo[anything satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 67, 5))
+>anything : Symbol(anything, Decl(satisfiesKeyofInputTypes.ts, 20, 5))
+
+        return 9 as const;
+>const : Symbol(const)
+    }
+
+    [unk satisfies keyof]() {
+>[unk satisfies keyof] : Symbol(Foo[unk satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 71, 5))
+>unk : Symbol(unk, Decl(satisfiesKeyofInputTypes.ts, 21, 5))
+
+        return 10 as const;
+>const : Symbol(const)
+    }
+
+    [basestr satisfies keyof]() {
+>[basestr satisfies keyof] : Symbol(Foo[basestr satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 75, 5))
+>basestr : Symbol(basestr, Decl(satisfiesKeyofInputTypes.ts, 22, 5))
+
+        return 11 as const;
+>const : Symbol(const)
+    }
+
+    [basenum satisfies keyof]() {
+>[basenum satisfies keyof] : Symbol(Foo[basenum satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 79, 5))
+>basenum : Symbol(basenum, Decl(satisfiesKeyofInputTypes.ts, 23, 5))
+
+        return 12 as const;
+>const : Symbol(const)
+    }
+
+    [bool satisfies keyof]() {
+>[bool satisfies keyof] : Symbol(Foo[bool satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 83, 5))
+>bool : Symbol(bool, Decl(satisfiesKeyofInputTypes.ts, 24, 5))
+
+        return 13 as const;
+>const : Symbol(const)
+    }
+
+    [t satisfies keyof]() {
+>[t satisfies keyof] : Symbol(Foo[t satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 87, 5))
+>t : Symbol(t, Decl(satisfiesKeyofInputTypes.ts, 25, 5))
+
+        return 14 as const;
+>const : Symbol(const)
+    }
+
+    [f satisfies keyof]() {
+>[f satisfies keyof] : Symbol(Foo[f satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 91, 5))
+>f : Symbol(f, Decl(satisfiesKeyofInputTypes.ts, 26, 5))
+
+        return 15 as const;
+>const : Symbol(const)
+    }
+
+    [n satisfies keyof]() {
+>[n satisfies keyof] : Symbol(Foo[n satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 95, 5))
+>n : Symbol(n, Decl(satisfiesKeyofInputTypes.ts, 27, 5))
+
+        return 16 as const;
+>const : Symbol(const)
+    }
+
+    [u satisfies keyof]() {
+>[u satisfies keyof] : Symbol(Foo[u satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 99, 5))
+>u : Symbol(u, Decl(satisfiesKeyofInputTypes.ts, 28, 5))
+
+        return 17 as const;
+>const : Symbol(const)
+    }
+
+    [bigbase satisfies keyof]() {
+>[bigbase satisfies keyof] : Symbol(Foo[bigbase satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 103, 5))
+>bigbase : Symbol(bigbase, Decl(satisfiesKeyofInputTypes.ts, 29, 5))
+
+        return 18 as const;
+>const : Symbol(const)
+    }
+
+    [biglit satisfies keyof]() {
+>[biglit satisfies keyof] : Symbol(Foo[biglit satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 107, 5))
+>biglit : Symbol(biglit, Decl(satisfiesKeyofInputTypes.ts, 30, 5))
+
+        return 19 as const;
+>const : Symbol(const)
+    }
+
+    [symbase satisfies keyof]() {
+>[symbase satisfies keyof] : Symbol(Foo[symbase satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 111, 5))
+>symbase : Symbol(symbase, Decl(satisfiesKeyofInputTypes.ts, 31, 5))
+
+        return 20 as const;
+>const : Symbol(const)
+    }
+
+    [nev satisfies keyof]() {
+>[nev satisfies keyof] : Symbol(Foo[nev satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 115, 5))
+>nev : Symbol(nev, Decl(satisfiesKeyofInputTypes.ts, 32, 5))
+
+        return 21 as const;
+>const : Symbol(const)
+    }
+
+    [templateLit satisfies keyof]() {
+>[templateLit satisfies keyof] : Symbol(Foo[templateLit satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 119, 5))
+>templateLit : Symbol(templateLit, Decl(satisfiesKeyofInputTypes.ts, 33, 5))
+
+        return 22 as const;
+>const : Symbol(const)
+    }
+
+    [mappingLit satisfies keyof]() {
+>[mappingLit satisfies keyof] : Symbol(Foo[mappingLit satisfies keyof], Decl(satisfiesKeyofInputTypes.ts, 123, 5))
+>mappingLit : Symbol(mappingLit, Decl(satisfiesKeyofInputTypes.ts, 34, 5))
+
+        return 23 as const;
+>const : Symbol(const)
+    }
+}
+
+const inst = new Foo();
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>Foo : Symbol(Foo, Decl(satisfiesKeyofInputTypes.ts, 34, 48))
+
+export const results = [
+>results : Symbol(results, Decl(satisfiesKeyofInputTypes.ts, 131, 12))
+
+    inst[sym](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>sym : Symbol(sym, Decl(satisfiesKeyofInputTypes.ts, 0, 5))
+
+    inst[num](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>num : Symbol(num, Decl(satisfiesKeyofInputTypes.ts, 1, 5))
+
+    inst[str](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>str : Symbol(str, Decl(satisfiesKeyofInputTypes.ts, 2, 5))
+
+    inst[union](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>union : Symbol(union, Decl(satisfiesKeyofInputTypes.ts, 3, 5))
+
+    inst[NumEnum.A](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>NumEnum.A : Symbol(NumEnum.A, Decl(satisfiesKeyofInputTypes.ts, 5, 14))
+>NumEnum : Symbol(NumEnum, Decl(satisfiesKeyofInputTypes.ts, 3, 50))
+>A : Symbol(NumEnum.A, Decl(satisfiesKeyofInputTypes.ts, 5, 14))
+
+    inst[StrEnum.A](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>StrEnum.A : Symbol(StrEnum.A, Decl(satisfiesKeyofInputTypes.ts, 10, 14))
+>StrEnum : Symbol(StrEnum, Decl(satisfiesKeyofInputTypes.ts, 8, 1))
+>A : Symbol(StrEnum.A, Decl(satisfiesKeyofInputTypes.ts, 10, 14))
+
+    inst[MixEnum.A](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>MixEnum.A : Symbol(MixEnum.A, Decl(satisfiesKeyofInputTypes.ts, 15, 14))
+>MixEnum : Symbol(MixEnum, Decl(satisfiesKeyofInputTypes.ts, 13, 1))
+>A : Symbol(MixEnum.A, Decl(satisfiesKeyofInputTypes.ts, 15, 14))
+
+    inst[MixEnum.B](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>MixEnum.B : Symbol(MixEnum.B, Decl(satisfiesKeyofInputTypes.ts, 16, 11))
+>MixEnum : Symbol(MixEnum, Decl(satisfiesKeyofInputTypes.ts, 13, 1))
+>B : Symbol(MixEnum.B, Decl(satisfiesKeyofInputTypes.ts, 16, 11))
+
+    inst[anything](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>anything : Symbol(anything, Decl(satisfiesKeyofInputTypes.ts, 20, 5))
+
+    inst[unk](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>unk : Symbol(unk, Decl(satisfiesKeyofInputTypes.ts, 21, 5))
+
+    inst[basestr](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>basestr : Symbol(basestr, Decl(satisfiesKeyofInputTypes.ts, 22, 5))
+
+    inst[basenum](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>basenum : Symbol(basenum, Decl(satisfiesKeyofInputTypes.ts, 23, 5))
+
+    inst[bool](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>bool : Symbol(bool, Decl(satisfiesKeyofInputTypes.ts, 24, 5))
+
+    inst[t](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>t : Symbol(t, Decl(satisfiesKeyofInputTypes.ts, 25, 5))
+
+    inst[f](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>f : Symbol(f, Decl(satisfiesKeyofInputTypes.ts, 26, 5))
+
+    inst[n](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>n : Symbol(n, Decl(satisfiesKeyofInputTypes.ts, 27, 5))
+
+    inst[u](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>u : Symbol(u, Decl(satisfiesKeyofInputTypes.ts, 28, 5))
+
+    inst[bigbase](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>bigbase : Symbol(bigbase, Decl(satisfiesKeyofInputTypes.ts, 29, 5))
+
+    inst[biglit](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>biglit : Symbol(biglit, Decl(satisfiesKeyofInputTypes.ts, 30, 5))
+
+    inst[symbase](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>symbase : Symbol(symbase, Decl(satisfiesKeyofInputTypes.ts, 31, 5))
+
+    inst[nev](), // indexing by `never` always gives `never`, rather than the fallback index property
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>nev : Symbol(nev, Decl(satisfiesKeyofInputTypes.ts, 32, 5))
+
+    inst[templateLit](),
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>templateLit : Symbol(templateLit, Decl(satisfiesKeyofInputTypes.ts, 33, 5))
+
+    inst[mappingLit](),    
+>inst : Symbol(inst, Decl(satisfiesKeyofInputTypes.ts, 130, 5))
+>mappingLit : Symbol(mappingLit, Decl(satisfiesKeyofInputTypes.ts, 34, 5))
+
+] as const;
+>const : Symbol(const)
+
+
+

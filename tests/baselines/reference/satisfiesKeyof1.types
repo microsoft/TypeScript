@@ -1,0 +1,142 @@
+//// [tests/cases/conformance/types/keyof/satisfiesKeyof1.ts] ////
+
+=== satisfiesKeyof1.ts ===
+// intended usage
+const x = Symbol();
+>x : unique symbol
+>  : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+    [x satisfies keyof]() {
+>[x satisfies keyof] : () => number
+>                    : ^^^^^^^^^^^^
+>x satisfies keyof : unique symbol
+>                  : ^^^^^^^^^^^^^
+>x : unique symbol
+>  : ^^^^^^^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+}
+
+export const usage1 = new Foo()[x]();
+>usage1 : number
+>       : ^^^^^^
+>new Foo()[x]() : number
+>               : ^^^^^^
+>new Foo()[x] : () => number
+>             : ^^^^^^^^^^^^
+>new Foo() : Foo
+>          : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>x : unique symbol
+>  : ^^^^^^^^^^^^^
+
+// errors on missing
+import {y} from "missing";
+>y : any
+>  : ^^^
+
+export class Bar {
+>Bar : Bar
+>    : ^^^
+
+    [y satisfies keyof]() {
+>[y satisfies keyof] : () => number
+>                    : ^^^^^^^^^^^^
+>y satisfies keyof : unique symbol
+>                  : ^^^^^^^^^^^^^
+>y : any
+>  : ^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+}
+
+export const usage2 = new Bar()[y]();
+>usage2 : number
+>       : ^^^^^^
+>new Bar()[y]() : number
+>               : ^^^^^^
+>new Bar()[y] : () => number
+>             : ^^^^^^^^^^^^
+>new Bar() : Bar
+>          : ^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+>y : any
+>  : ^^^
+
+// errors on wrong types
+const z = Math.random() ? 1 : "a";
+>z : 1 | "a"
+>  : ^^^^^^^
+>Math.random() ? 1 : "a" : 1 | "a"
+>                        : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>1 : 1
+>  : ^
+>"a" : "a"
+>    : ^^^
+
+export class Baz {
+>Baz : Baz
+>    : ^^^
+
+    [z satisfies keyof]() {
+>[z satisfies keyof] : () => number
+>                    : ^^^^^^^^^^^^
+>z satisfies keyof : unique symbol
+>                  : ^^^^^^^^^^^^^
+>z : 1 | "a"
+>  : ^^^^^^^
+
+        return 1;
+>1 : 1
+>  : ^
+    }
+}
+
+export const usage3 = new Baz()[z]();
+>usage3 : number
+>       : ^^^^^^
+>new Baz()[z]() : number
+>               : ^^^^^^
+>new Baz()[z] : () => number
+>             : ^^^^^^^^^^^^
+>new Baz() : Baz
+>          : ^^^
+>Baz : typeof Baz
+>    : ^^^^^^^^^^
+>z : 1 | "a"
+>  : ^^^^^^^
+
+// error on satisfies keyof outside computed name
+
+export const a = 0 satisfies keyof;
+>a : 0
+>  : ^
+>0 satisfies keyof : 0
+>                  : ^
+>0 : 0
+>  : ^
+

@@ -1,0 +1,296 @@
+//// [tests/cases/conformance/types/keyof/satisfiesKeyofGenerics.ts] ////
+
+=== satisfiesKeyofGenerics.ts ===
+export function f<
+>f : Symbol(f, Decl(satisfiesKeyofGenerics.ts, 0, 0))
+
+    T,
+>T : Symbol(T, Decl(satisfiesKeyofGenerics.ts, 0, 18))
+
+    U extends string,
+>U : Symbol(U, Decl(satisfiesKeyofGenerics.ts, 1, 6))
+
+    V extends "onefield",
+>V : Symbol(V, Decl(satisfiesKeyofGenerics.ts, 2, 21))
+
+    W extends "afield" | "bfield",
+>W : Symbol(W, Decl(satisfiesKeyofGenerics.ts, 3, 25))
+
+>(
+    p1: T,
+>p1 : Symbol(p1, Decl(satisfiesKeyofGenerics.ts, 5, 2))
+>T : Symbol(T, Decl(satisfiesKeyofGenerics.ts, 0, 18))
+
+    p2: T & string,
+>p2 : Symbol(p2, Decl(satisfiesKeyofGenerics.ts, 6, 10))
+>T : Symbol(T, Decl(satisfiesKeyofGenerics.ts, 0, 18))
+
+    p3: T & "f",
+>p3 : Symbol(p3, Decl(satisfiesKeyofGenerics.ts, 7, 19))
+>T : Symbol(T, Decl(satisfiesKeyofGenerics.ts, 0, 18))
+
+    p4: T | string,
+>p4 : Symbol(p4, Decl(satisfiesKeyofGenerics.ts, 8, 16))
+>T : Symbol(T, Decl(satisfiesKeyofGenerics.ts, 0, 18))
+
+    p5: T | "g",
+>p5 : Symbol(p5, Decl(satisfiesKeyofGenerics.ts, 9, 19))
+>T : Symbol(T, Decl(satisfiesKeyofGenerics.ts, 0, 18))
+
+    p6: Extract<T, "h">,
+>p6 : Symbol(p6, Decl(satisfiesKeyofGenerics.ts, 10, 16))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(satisfiesKeyofGenerics.ts, 0, 18))
+
+    p7: U,
+>p7 : Symbol(p7, Decl(satisfiesKeyofGenerics.ts, 11, 24))
+>U : Symbol(U, Decl(satisfiesKeyofGenerics.ts, 1, 6))
+
+    p8: U & string,
+>p8 : Symbol(p8, Decl(satisfiesKeyofGenerics.ts, 13, 10))
+>U : Symbol(U, Decl(satisfiesKeyofGenerics.ts, 1, 6))
+
+    p9: U & "f",
+>p9 : Symbol(p9, Decl(satisfiesKeyofGenerics.ts, 14, 19))
+>U : Symbol(U, Decl(satisfiesKeyofGenerics.ts, 1, 6))
+
+    p10: U | string,
+>p10 : Symbol(p10, Decl(satisfiesKeyofGenerics.ts, 15, 16))
+>U : Symbol(U, Decl(satisfiesKeyofGenerics.ts, 1, 6))
+
+    p11: U | "g",
+>p11 : Symbol(p11, Decl(satisfiesKeyofGenerics.ts, 16, 20))
+>U : Symbol(U, Decl(satisfiesKeyofGenerics.ts, 1, 6))
+
+    p12: Extract<U, "h">,
+>p12 : Symbol(p12, Decl(satisfiesKeyofGenerics.ts, 17, 17))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(satisfiesKeyofGenerics.ts, 1, 6))
+
+    p13: V,
+>p13 : Symbol(p13, Decl(satisfiesKeyofGenerics.ts, 18, 25))
+>V : Symbol(V, Decl(satisfiesKeyofGenerics.ts, 2, 21))
+
+    p14: V & string,
+>p14 : Symbol(p14, Decl(satisfiesKeyofGenerics.ts, 20, 11))
+>V : Symbol(V, Decl(satisfiesKeyofGenerics.ts, 2, 21))
+
+    p15: V & "onefield",
+>p15 : Symbol(p15, Decl(satisfiesKeyofGenerics.ts, 21, 20))
+>V : Symbol(V, Decl(satisfiesKeyofGenerics.ts, 2, 21))
+
+    p16: V | string,
+>p16 : Symbol(p16, Decl(satisfiesKeyofGenerics.ts, 22, 24))
+>V : Symbol(V, Decl(satisfiesKeyofGenerics.ts, 2, 21))
+
+    p17: V | "onefield",
+>p17 : Symbol(p17, Decl(satisfiesKeyofGenerics.ts, 23, 20))
+>V : Symbol(V, Decl(satisfiesKeyofGenerics.ts, 2, 21))
+
+    p18: Extract<V, "onefield">,
+>p18 : Symbol(p18, Decl(satisfiesKeyofGenerics.ts, 24, 24))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(satisfiesKeyofGenerics.ts, 2, 21))
+
+    p19: W,
+>p19 : Symbol(p19, Decl(satisfiesKeyofGenerics.ts, 25, 32))
+>W : Symbol(W, Decl(satisfiesKeyofGenerics.ts, 3, 25))
+
+    p20: W & string,
+>p20 : Symbol(p20, Decl(satisfiesKeyofGenerics.ts, 27, 11))
+>W : Symbol(W, Decl(satisfiesKeyofGenerics.ts, 3, 25))
+
+    p21: W & "afield", // reduction rules for generics extending unions will simplify this to just "afield" where possible, so should be the only one that works without error
+>p21 : Symbol(p21, Decl(satisfiesKeyofGenerics.ts, 28, 20))
+>W : Symbol(W, Decl(satisfiesKeyofGenerics.ts, 3, 25))
+
+    p22: W | string,
+>p22 : Symbol(p22, Decl(satisfiesKeyofGenerics.ts, 29, 22))
+>W : Symbol(W, Decl(satisfiesKeyofGenerics.ts, 3, 25))
+
+    p23: W | "afield",
+>p23 : Symbol(p23, Decl(satisfiesKeyofGenerics.ts, 30, 20))
+>W : Symbol(W, Decl(satisfiesKeyofGenerics.ts, 3, 25))
+
+    p24: Extract<W, "afield">,
+>p24 : Symbol(p24, Decl(satisfiesKeyofGenerics.ts, 31, 22))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>W : Symbol(W, Decl(satisfiesKeyofGenerics.ts, 3, 25))
+
+) {
+    return [
+        class Foo {
+>Foo : Symbol(Foo, Decl(satisfiesKeyofGenerics.ts, 34, 12))
+
+            [p1 satisfies keyof]() {
+>[p1 satisfies keyof] : Symbol(Foo[p1 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 35, 19))
+>p1 : Symbol(p1, Decl(satisfiesKeyofGenerics.ts, 5, 2))
+
+                return 1 as const;
+>const : Symbol(const)
+            }
+            [p2 satisfies keyof]() {
+>[p2 satisfies keyof] : Symbol(Foo[p2 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 38, 13))
+>p2 : Symbol(p2, Decl(satisfiesKeyofGenerics.ts, 6, 10))
+
+                return 2 as const;
+>const : Symbol(const)
+            }
+            [p3 satisfies keyof]() {
+>[p3 satisfies keyof] : Symbol(Foo[p3 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 41, 13))
+>p3 : Symbol(p3, Decl(satisfiesKeyofGenerics.ts, 7, 19))
+
+                return 3 as const;
+>const : Symbol(const)
+            }
+            [p4 satisfies keyof]() {
+>[p4 satisfies keyof] : Symbol(Foo[p4 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 44, 13))
+>p4 : Symbol(p4, Decl(satisfiesKeyofGenerics.ts, 8, 16))
+
+                return 4 as const;
+>const : Symbol(const)
+            }
+            [p5 satisfies keyof]() {
+>[p5 satisfies keyof] : Symbol(Foo[p5 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 47, 13))
+>p5 : Symbol(p5, Decl(satisfiesKeyofGenerics.ts, 9, 19))
+
+                return 5 as const;
+>const : Symbol(const)
+            }
+            [p6 satisfies keyof]() {
+>[p6 satisfies keyof] : Symbol(Foo[p6 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 50, 13))
+>p6 : Symbol(p6, Decl(satisfiesKeyofGenerics.ts, 10, 16))
+
+                return 6 as const;
+>const : Symbol(const)
+            }
+            [p7 satisfies keyof]() {
+>[p7 satisfies keyof] : Symbol(Foo[p7 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 53, 13))
+>p7 : Symbol(p7, Decl(satisfiesKeyofGenerics.ts, 11, 24))
+
+                return 7 as const;
+>const : Symbol(const)
+            }
+            [p8 satisfies keyof]() {
+>[p8 satisfies keyof] : Symbol(Foo[p8 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 56, 13))
+>p8 : Symbol(p8, Decl(satisfiesKeyofGenerics.ts, 13, 10))
+
+                return 8 as const;
+>const : Symbol(const)
+            }
+            [p9 satisfies keyof]() {
+>[p9 satisfies keyof] : Symbol(Foo[p9 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 59, 13))
+>p9 : Symbol(p9, Decl(satisfiesKeyofGenerics.ts, 14, 19))
+
+                return 9 as const;
+>const : Symbol(const)
+            }
+            [p10 satisfies keyof]() {
+>[p10 satisfies keyof] : Symbol(Foo[p10 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 62, 13))
+>p10 : Symbol(p10, Decl(satisfiesKeyofGenerics.ts, 15, 16))
+
+                return 10 as const;
+>const : Symbol(const)
+            }
+            [p11 satisfies keyof]() {
+>[p11 satisfies keyof] : Symbol(Foo[p11 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 65, 13))
+>p11 : Symbol(p11, Decl(satisfiesKeyofGenerics.ts, 16, 20))
+
+                return 11 as const;
+>const : Symbol(const)
+            }
+            [p12 satisfies keyof]() {
+>[p12 satisfies keyof] : Symbol(Foo[p12 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 68, 13))
+>p12 : Symbol(p12, Decl(satisfiesKeyofGenerics.ts, 17, 17))
+
+                return 12 as const;
+>const : Symbol(const)
+            }
+            [p13 satisfies keyof]() {
+>[p13 satisfies keyof] : Symbol(Foo[p13 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 71, 13))
+>p13 : Symbol(p13, Decl(satisfiesKeyofGenerics.ts, 18, 25))
+
+                return 13 as const;
+>const : Symbol(const)
+            }
+            [p14 satisfies keyof]() {
+>[p14 satisfies keyof] : Symbol(Foo[p14 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 74, 13))
+>p14 : Symbol(p14, Decl(satisfiesKeyofGenerics.ts, 20, 11))
+
+                return 14 as const;
+>const : Symbol(const)
+            }
+            [p15 satisfies keyof]() {
+>[p15 satisfies keyof] : Symbol(Foo[p15 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 77, 13))
+>p15 : Symbol(p15, Decl(satisfiesKeyofGenerics.ts, 21, 20))
+
+                return 15 as const;
+>const : Symbol(const)
+            }
+            [p16 satisfies keyof]() {
+>[p16 satisfies keyof] : Symbol(Foo[p16 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 80, 13))
+>p16 : Symbol(p16, Decl(satisfiesKeyofGenerics.ts, 22, 24))
+
+                return 16 as const;
+>const : Symbol(const)
+            }
+            [p17 satisfies keyof]() {
+>[p17 satisfies keyof] : Symbol(Foo[p17 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 83, 13))
+>p17 : Symbol(p17, Decl(satisfiesKeyofGenerics.ts, 23, 20))
+
+                return 17 as const;
+>const : Symbol(const)
+            }
+            [p18 satisfies keyof]() {
+>[p18 satisfies keyof] : Symbol(Foo[p18 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 86, 13))
+>p18 : Symbol(p18, Decl(satisfiesKeyofGenerics.ts, 24, 24))
+
+                return 18 as const;
+>const : Symbol(const)
+            }
+            [p19 satisfies keyof]() {
+>[p19 satisfies keyof] : Symbol(Foo[p19 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 89, 13))
+>p19 : Symbol(p19, Decl(satisfiesKeyofGenerics.ts, 25, 32))
+
+                return 19 as const;
+>const : Symbol(const)
+            }
+            [p20 satisfies keyof]() {
+>[p20 satisfies keyof] : Symbol(Foo[p20 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 92, 13))
+>p20 : Symbol(p20, Decl(satisfiesKeyofGenerics.ts, 27, 11))
+
+                return 20 as const;
+>const : Symbol(const)
+            }
+            [p21 satisfies keyof]() {
+>[p21 satisfies keyof] : Symbol(Foo[p21 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 95, 13))
+>p21 : Symbol(p21, Decl(satisfiesKeyofGenerics.ts, 28, 20))
+
+                return 21 as const;
+>const : Symbol(const)
+            }
+            [p22 satisfies keyof]() {
+>[p22 satisfies keyof] : Symbol(Foo[p22 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 98, 13))
+>p22 : Symbol(p22, Decl(satisfiesKeyofGenerics.ts, 29, 22))
+
+                return 22 as const;
+>const : Symbol(const)
+            }
+            [p23 satisfies keyof]() {
+>[p23 satisfies keyof] : Symbol(Foo[p23 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 101, 13))
+>p23 : Symbol(p23, Decl(satisfiesKeyofGenerics.ts, 30, 20))
+
+                return 23 as const;
+>const : Symbol(const)
+            }
+            [p24 satisfies keyof]() {
+>[p24 satisfies keyof] : Symbol(Foo[p24 satisfies keyof], Decl(satisfiesKeyofGenerics.ts, 104, 13))
+>p24 : Symbol(p24, Decl(satisfiesKeyofGenerics.ts, 31, 22))
+
+                return 24 as const;
+>const : Symbol(const)
+            }
+        }
+    ] as const;
+>const : Symbol(const)
+}

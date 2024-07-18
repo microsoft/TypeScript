@@ -1,0 +1,460 @@
+//// [tests/cases/conformance/types/keyof/satisfiesKeyofGenerics.ts] ////
+
+=== satisfiesKeyofGenerics.ts ===
+export function f<
+>f : <T, U extends string, V extends "onefield", W extends "afield" | "bfield">(p1: T, p2: T & string, p3: T & "f", p4: T | string, p5: T | "g", p6: Extract<T, "h">, p7: U, p8: U & string, p9: U & "f", p10: U | string, p11: U | "g", p12: Extract<U, "h">, p13: V, p14: V & string, p15: V & "onefield", p16: V | string, p17: V | "onefield", p18: Extract<V, "onefield">, p19: W, p20: W & string, p21: W & "afield", p22: W | string, p23: W | "afield", p24: Extract<W, "afield">) => readonly [typeof Foo]
+>  : ^ ^^ ^^^^^^^^^      ^^ ^^^^^^^^^          ^^ ^^^^^^^^^                   ^^  ^^ ^^  ^^          ^^  ^^       ^^  ^^          ^^  ^^       ^^  ^^               ^^  ^^ ^^  ^^          ^^  ^^       ^^   ^^          ^^   ^^       ^^   ^^               ^^   ^^ ^^   ^^          ^^   ^^              ^^   ^^          ^^   ^^              ^^   ^^                      ^^   ^^ ^^   ^^          ^^   ^^            ^^   ^^          ^^   ^^            ^^   ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    T,
+    U extends string,
+    V extends "onefield",
+    W extends "afield" | "bfield",
+>(
+    p1: T,
+>p1 : T
+>   : ^
+
+    p2: T & string,
+>p2 : T & string
+>   : ^^^^^^^^^^
+
+    p3: T & "f",
+>p3 : T & "f"
+>   : ^^^^^^^
+
+    p4: T | string,
+>p4 : string | T
+>   : ^^^^^^^^^^
+
+    p5: T | "g",
+>p5 : T | "g"
+>   : ^^^^^^^
+
+    p6: Extract<T, "h">,
+>p6 : Extract<T, "h">
+>   : ^^^^^^^^^^^^^^^
+
+    p7: U,
+>p7 : U
+>   : ^
+
+    p8: U & string,
+>p8 : U
+>   : ^
+
+    p9: U & "f",
+>p9 : U & "f"
+>   : ^^^^^^^
+
+    p10: U | string,
+>p10 : string | U
+>    : ^^^^^^^^^^
+
+    p11: U | "g",
+>p11 : U | "g"
+>    : ^^^^^^^
+
+    p12: Extract<U, "h">,
+>p12 : Extract<U, "h">
+>    : ^^^^^^^^^^^^^^^
+
+    p13: V,
+>p13 : V
+>    : ^
+
+    p14: V & string,
+>p14 : V
+>    : ^
+
+    p15: V & "onefield",
+>p15 : V
+>    : ^
+
+    p16: V | string,
+>p16 : string | V
+>    : ^^^^^^^^^^
+
+    p17: V | "onefield",
+>p17 : V | "onefield"
+>    : ^^^^^^^^^^^^^^
+
+    p18: Extract<V, "onefield">,
+>p18 : Extract<V, "onefield">
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+    p19: W,
+>p19 : W
+>    : ^
+
+    p20: W & string,
+>p20 : W
+>    : ^
+
+    p21: W & "afield", // reduction rules for generics extending unions will simplify this to just "afield" where possible, so should be the only one that works without error
+>p21 : W & "afield"
+>    : ^^^^^^^^^^^^
+
+    p22: W | string,
+>p22 : string | W
+>    : ^^^^^^^^^^
+
+    p23: W | "afield",
+>p23 : "afield" | W
+>    : ^^^^^^^^^^^^
+
+    p24: Extract<W, "afield">,
+>p24 : Extract<W, "afield">
+>    : ^^^^^^^^^^^^^^^^^^^^
+
+) {
+    return [
+>[        class Foo {            [p1 satisfies keyof]() {                return 1 as const;            }            [p2 satisfies keyof]() {                return 2 as const;            }            [p3 satisfies keyof]() {                return 3 as const;            }            [p4 satisfies keyof]() {                return 4 as const;            }            [p5 satisfies keyof]() {                return 5 as const;            }            [p6 satisfies keyof]() {                return 6 as const;            }            [p7 satisfies keyof]() {                return 7 as const;            }            [p8 satisfies keyof]() {                return 8 as const;            }            [p9 satisfies keyof]() {                return 9 as const;            }            [p10 satisfies keyof]() {                return 10 as const;            }            [p11 satisfies keyof]() {                return 11 as const;            }            [p12 satisfies keyof]() {                return 12 as const;            }            [p13 satisfies keyof]() {                return 13 as const;            }            [p14 satisfies keyof]() {                return 14 as const;            }            [p15 satisfies keyof]() {                return 15 as const;            }            [p16 satisfies keyof]() {                return 16 as const;            }            [p17 satisfies keyof]() {                return 17 as const;            }            [p18 satisfies keyof]() {                return 18 as const;            }            [p19 satisfies keyof]() {                return 19 as const;            }            [p20 satisfies keyof]() {                return 20 as const;            }            [p21 satisfies keyof]() {                return 21 as const;            }            [p22 satisfies keyof]() {                return 22 as const;            }            [p23 satisfies keyof]() {                return 23 as const;            }            [p24 satisfies keyof]() {                return 24 as const;            }        }    ] as const : readonly [typeof Foo]
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^
+>[        class Foo {            [p1 satisfies keyof]() {                return 1 as const;            }            [p2 satisfies keyof]() {                return 2 as const;            }            [p3 satisfies keyof]() {                return 3 as const;            }            [p4 satisfies keyof]() {                return 4 as const;            }            [p5 satisfies keyof]() {                return 5 as const;            }            [p6 satisfies keyof]() {                return 6 as const;            }            [p7 satisfies keyof]() {                return 7 as const;            }            [p8 satisfies keyof]() {                return 8 as const;            }            [p9 satisfies keyof]() {                return 9 as const;            }            [p10 satisfies keyof]() {                return 10 as const;            }            [p11 satisfies keyof]() {                return 11 as const;            }            [p12 satisfies keyof]() {                return 12 as const;            }            [p13 satisfies keyof]() {                return 13 as const;            }            [p14 satisfies keyof]() {                return 14 as const;            }            [p15 satisfies keyof]() {                return 15 as const;            }            [p16 satisfies keyof]() {                return 16 as const;            }            [p17 satisfies keyof]() {                return 17 as const;            }            [p18 satisfies keyof]() {                return 18 as const;            }            [p19 satisfies keyof]() {                return 19 as const;            }            [p20 satisfies keyof]() {                return 20 as const;            }            [p21 satisfies keyof]() {                return 21 as const;            }            [p22 satisfies keyof]() {                return 22 as const;            }            [p23 satisfies keyof]() {                return 23 as const;            }            [p24 satisfies keyof]() {                return 24 as const;            }        }    ] : readonly [typeof Foo]
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^
+
+        class Foo {
+>class Foo {            [p1 satisfies keyof]() {                return 1 as const;            }            [p2 satisfies keyof]() {                return 2 as const;            }            [p3 satisfies keyof]() {                return 3 as const;            }            [p4 satisfies keyof]() {                return 4 as const;            }            [p5 satisfies keyof]() {                return 5 as const;            }            [p6 satisfies keyof]() {                return 6 as const;            }            [p7 satisfies keyof]() {                return 7 as const;            }            [p8 satisfies keyof]() {                return 8 as const;            }            [p9 satisfies keyof]() {                return 9 as const;            }            [p10 satisfies keyof]() {                return 10 as const;            }            [p11 satisfies keyof]() {                return 11 as const;            }            [p12 satisfies keyof]() {                return 12 as const;            }            [p13 satisfies keyof]() {                return 13 as const;            }            [p14 satisfies keyof]() {                return 14 as const;            }            [p15 satisfies keyof]() {                return 15 as const;            }            [p16 satisfies keyof]() {                return 16 as const;            }            [p17 satisfies keyof]() {                return 17 as const;            }            [p18 satisfies keyof]() {                return 18 as const;            }            [p19 satisfies keyof]() {                return 19 as const;            }            [p20 satisfies keyof]() {                return 20 as const;            }            [p21 satisfies keyof]() {                return 21 as const;            }            [p22 satisfies keyof]() {                return 22 as const;            }            [p23 satisfies keyof]() {                return 23 as const;            }            [p24 satisfies keyof]() {                return 24 as const;            }        } : typeof Foo
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           : ^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+            [p1 satisfies keyof]() {
+>[p1 satisfies keyof] : () => 1
+>                     : ^^^^^^^
+>p1 satisfies keyof : unique symbol
+>                   : ^^^^^^^^^^^^^
+>p1 : T
+>   : ^
+
+                return 1 as const;
+>1 as const : 1
+>           : ^
+>1 : 1
+>  : ^
+            }
+            [p2 satisfies keyof]() {
+>[p2 satisfies keyof] : () => 2
+>                     : ^^^^^^^
+>p2 satisfies keyof : unique symbol
+>                   : ^^^^^^^^^^^^^
+>p2 : T & string
+>   : ^^^^^^^^^^
+
+                return 2 as const;
+>2 as const : 2
+>           : ^
+>2 : 2
+>  : ^
+            }
+            [p3 satisfies keyof]() {
+>[p3 satisfies keyof] : () => 3
+>                     : ^^^^^^^
+>p3 satisfies keyof : unique symbol
+>                   : ^^^^^^^^^^^^^
+>p3 : T & "f"
+>   : ^^^^^^^
+
+                return 3 as const;
+>3 as const : 3
+>           : ^
+>3 : 3
+>  : ^
+            }
+            [p4 satisfies keyof]() {
+>[p4 satisfies keyof] : () => 4
+>                     : ^^^^^^^
+>p4 satisfies keyof : unique symbol
+>                   : ^^^^^^^^^^^^^
+>p4 : string | T
+>   : ^^^^^^^^^^
+
+                return 4 as const;
+>4 as const : 4
+>           : ^
+>4 : 4
+>  : ^
+            }
+            [p5 satisfies keyof]() {
+>[p5 satisfies keyof] : () => 5
+>                     : ^^^^^^^
+>p5 satisfies keyof : unique symbol
+>                   : ^^^^^^^^^^^^^
+>p5 : T | "g"
+>   : ^^^^^^^
+
+                return 5 as const;
+>5 as const : 5
+>           : ^
+>5 : 5
+>  : ^
+            }
+            [p6 satisfies keyof]() {
+>[p6 satisfies keyof] : () => 6
+>                     : ^^^^^^^
+>p6 satisfies keyof : unique symbol
+>                   : ^^^^^^^^^^^^^
+>p6 : Extract<T, "h">
+>   : ^^^^^^^^^^^^^^^
+
+                return 6 as const;
+>6 as const : 6
+>           : ^
+>6 : 6
+>  : ^
+            }
+            [p7 satisfies keyof]() {
+>[p7 satisfies keyof] : () => 7
+>                     : ^^^^^^^
+>p7 satisfies keyof : unique symbol
+>                   : ^^^^^^^^^^^^^
+>p7 : U
+>   : ^
+
+                return 7 as const;
+>7 as const : 7
+>           : ^
+>7 : 7
+>  : ^
+            }
+            [p8 satisfies keyof]() {
+>[p8 satisfies keyof] : () => 8
+>                     : ^^^^^^^
+>p8 satisfies keyof : unique symbol
+>                   : ^^^^^^^^^^^^^
+>p8 : U
+>   : ^
+
+                return 8 as const;
+>8 as const : 8
+>           : ^
+>8 : 8
+>  : ^
+            }
+            [p9 satisfies keyof]() {
+>[p9 satisfies keyof] : () => 9
+>                     : ^^^^^^^
+>p9 satisfies keyof : unique symbol
+>                   : ^^^^^^^^^^^^^
+>p9 : U & "f"
+>   : ^^^^^^^
+
+                return 9 as const;
+>9 as const : 9
+>           : ^
+>9 : 9
+>  : ^
+            }
+            [p10 satisfies keyof]() {
+>[p10 satisfies keyof] : () => 10
+>                      : ^^^^^^^^
+>p10 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p10 : string | U
+>    : ^^^^^^^^^^
+
+                return 10 as const;
+>10 as const : 10
+>            : ^^
+>10 : 10
+>   : ^^
+            }
+            [p11 satisfies keyof]() {
+>[p11 satisfies keyof] : () => 11
+>                      : ^^^^^^^^
+>p11 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p11 : U | "g"
+>    : ^^^^^^^
+
+                return 11 as const;
+>11 as const : 11
+>            : ^^
+>11 : 11
+>   : ^^
+            }
+            [p12 satisfies keyof]() {
+>[p12 satisfies keyof] : () => 12
+>                      : ^^^^^^^^
+>p12 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p12 : Extract<U, "h">
+>    : ^^^^^^^^^^^^^^^
+
+                return 12 as const;
+>12 as const : 12
+>            : ^^
+>12 : 12
+>   : ^^
+            }
+            [p13 satisfies keyof]() {
+>[p13 satisfies keyof] : () => 13
+>                      : ^^^^^^^^
+>p13 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p13 : V
+>    : ^
+
+                return 13 as const;
+>13 as const : 13
+>            : ^^
+>13 : 13
+>   : ^^
+            }
+            [p14 satisfies keyof]() {
+>[p14 satisfies keyof] : () => 14
+>                      : ^^^^^^^^
+>p14 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p14 : V
+>    : ^
+
+                return 14 as const;
+>14 as const : 14
+>            : ^^
+>14 : 14
+>   : ^^
+            }
+            [p15 satisfies keyof]() {
+>[p15 satisfies keyof] : () => 15
+>                      : ^^^^^^^^
+>p15 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p15 : V
+>    : ^
+
+                return 15 as const;
+>15 as const : 15
+>            : ^^
+>15 : 15
+>   : ^^
+            }
+            [p16 satisfies keyof]() {
+>[p16 satisfies keyof] : () => 16
+>                      : ^^^^^^^^
+>p16 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p16 : string | V
+>    : ^^^^^^^^^^
+
+                return 16 as const;
+>16 as const : 16
+>            : ^^
+>16 : 16
+>   : ^^
+            }
+            [p17 satisfies keyof]() {
+>[p17 satisfies keyof] : () => 17
+>                      : ^^^^^^^^
+>p17 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p17 : V | "onefield"
+>    : ^^^^^^^^^^^^^^
+
+                return 17 as const;
+>17 as const : 17
+>            : ^^
+>17 : 17
+>   : ^^
+            }
+            [p18 satisfies keyof]() {
+>[p18 satisfies keyof] : () => 18
+>                      : ^^^^^^^^
+>p18 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p18 : Extract<V, "onefield">
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+                return 18 as const;
+>18 as const : 18
+>            : ^^
+>18 : 18
+>   : ^^
+            }
+            [p19 satisfies keyof]() {
+>[p19 satisfies keyof] : () => 19
+>                      : ^^^^^^^^
+>p19 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p19 : "afield" | "bfield"
+>    : ^^^^^^^^^^^^^^^^^^^
+
+                return 19 as const;
+>19 as const : 19
+>            : ^^
+>19 : 19
+>   : ^^
+            }
+            [p20 satisfies keyof]() {
+>[p20 satisfies keyof] : () => 20
+>                      : ^^^^^^^^
+>p20 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p20 : "afield" | "bfield"
+>    : ^^^^^^^^^^^^^^^^^^^
+
+                return 20 as const;
+>20 as const : 20
+>            : ^^
+>20 : 20
+>   : ^^
+            }
+            [p21 satisfies keyof]() {
+>[p21 satisfies keyof] : () => 21
+>                      : ^^^^^^^^
+>p21 satisfies keyof : "afield"
+>                    : ^^^^^^^^
+>p21 : "afield"
+>    : ^^^^^^^^
+
+                return 21 as const;
+>21 as const : 21
+>            : ^^
+>21 : 21
+>   : ^^
+            }
+            [p22 satisfies keyof]() {
+>[p22 satisfies keyof] : () => 22
+>                      : ^^^^^^^^
+>p22 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p22 : string
+>    : ^^^^^^
+
+                return 22 as const;
+>22 as const : 22
+>            : ^^
+>22 : 22
+>   : ^^
+            }
+            [p23 satisfies keyof]() {
+>[p23 satisfies keyof] : () => 23
+>                      : ^^^^^^^^
+>p23 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p23 : "afield" | "bfield"
+>    : ^^^^^^^^^^^^^^^^^^^
+
+                return 23 as const;
+>23 as const : 23
+>            : ^^
+>23 : 23
+>   : ^^
+            }
+            [p24 satisfies keyof]() {
+>[p24 satisfies keyof] : () => 24
+>                      : ^^^^^^^^
+>p24 satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>p24 : Extract<W, "afield">
+>    : ^^^^^^^^^^^^^^^^^^^^
+
+                return 24 as const;
+>24 as const : 24
+>            : ^^
+>24 : 24
+>   : ^^
+            }
+        }
+    ] as const;
+}

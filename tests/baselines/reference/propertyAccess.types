@@ -607,10 +607,10 @@ var zz: A;
 
 // Bracket notation property access using value of other type on type with numeric index signature and no string index signature and string index signature
 var zzzz = bothIndex[someObject]; // Error
->zzzz : any
->     : ^^^
->bothIndex[someObject] : any
->                      : ^^^
+>zzzz : A
+>     : ^
+>bothIndex[someObject] : A
+>                      : ^
 >bothIndex : { [n: string]: A; [m: number]: B; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someObject : { name: string; }

@@ -142,7 +142,7 @@ s[<any>{}]; // ok
 >   : ^^
 
 yellow[blue]; // error
->yellow[blue] : any
+>yellow[blue] : Red
 >             : ^^^
 >yellow : Yellow
 >       : ^^^^^^

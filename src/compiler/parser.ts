@@ -4732,7 +4732,9 @@ namespace Parser {
     function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword) {
         const pos = getNodePos();
         parseExpected(operator);
-        return finishNode(factory.createTypeOperatorNode(operator, parseTypeOperatorOrHigher()), pos);
+        const arg = operator !== SyntaxKind.KeyOfKeyword || isStartOfType() ? parseTypeOperatorOrHigher() : undefined;
+        // parse `keyof` with no argument as a `keyof` keyword type node
+        return finishNode(arg ? factory.createTypeOperatorNode(operator, arg) : factory.createKeywordTypeNode(SyntaxKind.KeyOfKeyword), pos);
     }
 
     function tryParseConstraintOfInferType() {

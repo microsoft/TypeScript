@@ -1,0 +1,828 @@
+//// [tests/cases/conformance/types/keyof/satisfiesKeyofInputTypes.ts] ////
+
+=== satisfiesKeyofInputTypes.ts ===
+const sym = Symbol();
+>sym : unique symbol
+>    : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+const num = 1;
+>num : 1
+>    : ^
+>1 : 1
+>  : ^
+
+const str = "f";
+>str : "f"
+>    : ^^^
+>"f" : "f"
+>    : ^^^
+
+const union = Math.random() > 0.5 ? "answer" : 42;
+>union : "answer" | 42
+>      : ^^^^^^^^^^^^^
+>Math.random() > 0.5 ? "answer" : 42 : "answer" | 42
+>                                    : ^^^^^^^^^^^^^
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"answer" : "answer"
+>         : ^^^^^^^^
+>42 : 42
+>   : ^^
+
+enum NumEnum {
+>NumEnum : NumEnum
+>        : ^^^^^^^
+
+    A,
+>A : NumEnum.A
+>  : ^^^^^^^^^
+
+    B,
+>B : NumEnum.B
+>  : ^^^^^^^^^
+}
+
+enum StrEnum {
+>StrEnum : StrEnum
+>        : ^^^^^^^
+
+    A = "a",
+>A : StrEnum.A
+>  : ^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    B = "b"
+>B : StrEnum.B
+>  : ^^^^^^^^^
+>"b" : "b"
+>    : ^^^
+}
+
+enum MixEnum {
+>MixEnum : MixEnum
+>        : ^^^^^^^
+
+    A = 10,
+>A : MixEnum.A
+>  : ^^^^^^^^^
+>10 : 10
+>   : ^^
+
+    B = "bb",
+>B : MixEnum.B
+>  : ^^^^^^^^^
+>"bb" : "bb"
+>     : ^^^^
+}
+
+const anything = null as any;
+>anything : any
+>         : ^^^
+>null as any : any
+>            : ^^^
+
+const unk = null as any as unknown;
+>unk : unknown
+>    : ^^^^^^^
+>null as any as unknown : unknown
+>                       : ^^^^^^^
+>null as any : any
+>            : ^^^
+
+const basestr = "" as string;
+>basestr : string
+>        : ^^^^^^
+>"" as string : string
+>             : ^^^^^^
+>"" : ""
+>   : ^^
+
+const basenum = 11 as number;
+>basenum : number
+>        : ^^^^^^
+>11 as number : number
+>             : ^^^^^^
+>11 : 11
+>   : ^^
+
+const bool = true as boolean;
+>bool : boolean
+>     : ^^^^^^^
+>true as boolean : boolean
+>                : ^^^^^^^
+>true : true
+>     : ^^^^
+
+const t = true;
+>t : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+
+const f = false;
+>f : false
+>  : ^^^^^
+>false : false
+>      : ^^^^^
+
+const n = null;
+>n : null
+>  : ^^^^
+
+const u = undefined;
+>u : undefined
+>  : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+const bigbase = 1n as bigint;
+>bigbase : bigint
+>        : ^^^^^^
+>1n as bigint : bigint
+>             : ^^^^^^
+>1n : 1n
+>   : ^^
+
+const biglit = 22n;
+>biglit : 22n
+>       : ^^^
+>22n : 22n
+>    : ^^^
+
+const symbase = null as any as symbol;
+>symbase : symbol
+>        : ^^^^^^
+>null as any as symbol : symbol
+>                      : ^^^^^^
+>null as any : any
+>            : ^^^
+
+const nev = null as never;
+>nev : never
+>    : ^^^^^
+>null as never : never
+>              : ^^^^^
+
+const templateLit = `aaabb` as `aaa${string}`;
+>templateLit : `aaa${string}`
+>            : ^^^^^^^^^^^^^^
+>`aaabb` as `aaa${string}` : `aaa${string}`
+>                          : ^^^^^^^^^^^^^^
+>`aaabb` : "aaabb"
+>        : ^^^^^^^
+
+const mappingLit = `bbbaa` as Lowercase<string>;
+>mappingLit : Lowercase<string>
+>           : ^^^^^^^^^^^^^^^^^
+>`bbbaa` as Lowercase<string> : Lowercase<string>
+>                             : ^^^^^^^^^^^^^^^^^
+>`bbbaa` : "bbbaa"
+>        : ^^^^^^^
+
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+    [sym satisfies keyof]() {
+>[sym satisfies keyof] : () => 1
+>                      : ^^^^^^^
+>sym satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>sym : unique symbol
+>    : ^^^^^^^^^^^^^
+
+        return 1 as const;
+>1 as const : 1
+>           : ^
+>1 : 1
+>  : ^
+    }
+
+    [num satisfies keyof]() {
+>[num satisfies keyof] : () => 2
+>                      : ^^^^^^^
+>num satisfies keyof : 1
+>                    : ^
+>num : 1
+>    : ^
+
+        return 2 as const;
+>2 as const : 2
+>           : ^
+>2 : 2
+>  : ^
+    }
+
+    [str satisfies keyof]() {
+>[str satisfies keyof] : () => 3
+>                      : ^^^^^^^
+>str satisfies keyof : "f"
+>                    : ^^^
+>str : "f"
+>    : ^^^
+
+        return 3 as const;
+>3 as const : 3
+>           : ^
+>3 : 3
+>  : ^
+    }
+
+    [union satisfies keyof]() {
+>[union satisfies keyof] : () => 4
+>                        : ^^^^^^^
+>union satisfies keyof : unique symbol
+>                      : ^^^^^^^^^^^^^
+>union : "answer" | 42
+>      : ^^^^^^^^^^^^^
+
+        return 4 as const;
+>4 as const : 4
+>           : ^
+>4 : 4
+>  : ^
+    }
+
+    [NumEnum.A satisfies keyof]() {
+>[NumEnum.A satisfies keyof] : () => 5
+>                            : ^^^^^^^
+>NumEnum.A satisfies keyof : NumEnum.A
+>                          : ^^^^^^^^^
+>NumEnum.A : NumEnum.A
+>          : ^^^^^^^^^
+>NumEnum : typeof NumEnum
+>        : ^^^^^^^^^^^^^^
+>A : NumEnum.A
+>  : ^^^^^^^^^
+
+        return 5 as const;
+>5 as const : 5
+>           : ^
+>5 : 5
+>  : ^
+    }
+
+    [StrEnum.A satisfies keyof]() {
+>[StrEnum.A satisfies keyof] : () => 6
+>                            : ^^^^^^^
+>StrEnum.A satisfies keyof : StrEnum.A
+>                          : ^^^^^^^^^
+>StrEnum.A : StrEnum.A
+>          : ^^^^^^^^^
+>StrEnum : typeof StrEnum
+>        : ^^^^^^^^^^^^^^
+>A : StrEnum.A
+>  : ^^^^^^^^^
+
+        return 6 as const;
+>6 as const : 6
+>           : ^
+>6 : 6
+>  : ^
+    }
+
+    [MixEnum.A satisfies keyof]() {
+>[MixEnum.A satisfies keyof] : () => 7
+>                            : ^^^^^^^
+>MixEnum.A satisfies keyof : MixEnum.A
+>                          : ^^^^^^^^^
+>MixEnum.A : MixEnum.A
+>          : ^^^^^^^^^
+>MixEnum : typeof MixEnum
+>        : ^^^^^^^^^^^^^^
+>A : MixEnum.A
+>  : ^^^^^^^^^
+
+        return 7 as const;
+>7 as const : 7
+>           : ^
+>7 : 7
+>  : ^
+    }
+
+    [MixEnum.B satisfies keyof]() {
+>[MixEnum.B satisfies keyof] : () => 8
+>                            : ^^^^^^^
+>MixEnum.B satisfies keyof : MixEnum.B
+>                          : ^^^^^^^^^
+>MixEnum.B : MixEnum.B
+>          : ^^^^^^^^^
+>MixEnum : typeof MixEnum
+>        : ^^^^^^^^^^^^^^
+>B : MixEnum.B
+>  : ^^^^^^^^^
+
+        return 8 as const;
+>8 as const : 8
+>           : ^
+>8 : 8
+>  : ^
+    }
+
+    [anything satisfies keyof]() {
+>[anything satisfies keyof] : () => 9
+>                           : ^^^^^^^
+>anything satisfies keyof : unique symbol
+>                         : ^^^^^^^^^^^^^
+>anything : any
+>         : ^^^
+
+        return 9 as const;
+>9 as const : 9
+>           : ^
+>9 : 9
+>  : ^
+    }
+
+    [unk satisfies keyof]() {
+>[unk satisfies keyof] : () => 10
+>                      : ^^^^^^^^
+>unk satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>unk : unknown
+>    : ^^^^^^^
+
+        return 10 as const;
+>10 as const : 10
+>            : ^^
+>10 : 10
+>   : ^^
+    }
+
+    [basestr satisfies keyof]() {
+>[basestr satisfies keyof] : () => 11
+>                          : ^^^^^^^^
+>basestr satisfies keyof : unique symbol
+>                        : ^^^^^^^^^^^^^
+>basestr : string
+>        : ^^^^^^
+
+        return 11 as const;
+>11 as const : 11
+>            : ^^
+>11 : 11
+>   : ^^
+    }
+
+    [basenum satisfies keyof]() {
+>[basenum satisfies keyof] : () => 12
+>                          : ^^^^^^^^
+>basenum satisfies keyof : unique symbol
+>                        : ^^^^^^^^^^^^^
+>basenum : number
+>        : ^^^^^^
+
+        return 12 as const;
+>12 as const : 12
+>            : ^^
+>12 : 12
+>   : ^^
+    }
+
+    [bool satisfies keyof]() {
+>[bool satisfies keyof] : () => 13
+>                       : ^^^^^^^^
+>bool satisfies keyof : unique symbol
+>                     : ^^^^^^^^^^^^^
+>bool : boolean
+>     : ^^^^^^^
+
+        return 13 as const;
+>13 as const : 13
+>            : ^^
+>13 : 13
+>   : ^^
+    }
+
+    [t satisfies keyof]() {
+>[t satisfies keyof] : () => 14
+>                    : ^^^^^^^^
+>t satisfies keyof : unique symbol
+>                  : ^^^^^^^^^^^^^
+>t : true
+>  : ^^^^
+
+        return 14 as const;
+>14 as const : 14
+>            : ^^
+>14 : 14
+>   : ^^
+    }
+
+    [f satisfies keyof]() {
+>[f satisfies keyof] : () => 15
+>                    : ^^^^^^^^
+>f satisfies keyof : unique symbol
+>                  : ^^^^^^^^^^^^^
+>f : false
+>  : ^^^^^
+
+        return 15 as const;
+>15 as const : 15
+>            : ^^
+>15 : 15
+>   : ^^
+    }
+
+    [n satisfies keyof]() {
+>[n satisfies keyof] : () => 16
+>                    : ^^^^^^^^
+>n satisfies keyof : unique symbol
+>                  : ^^^^^^^^^^^^^
+>n : null
+>  : ^^^^
+
+        return 16 as const;
+>16 as const : 16
+>            : ^^
+>16 : 16
+>   : ^^
+    }
+
+    [u satisfies keyof]() {
+>[u satisfies keyof] : () => 17
+>                    : ^^^^^^^^
+>u satisfies keyof : unique symbol
+>                  : ^^^^^^^^^^^^^
+>u : undefined
+>  : ^^^^^^^^^
+
+        return 17 as const;
+>17 as const : 17
+>            : ^^
+>17 : 17
+>   : ^^
+    }
+
+    [bigbase satisfies keyof]() {
+>[bigbase satisfies keyof] : () => 18
+>                          : ^^^^^^^^
+>bigbase satisfies keyof : unique symbol
+>                        : ^^^^^^^^^^^^^
+>bigbase : bigint
+>        : ^^^^^^
+
+        return 18 as const;
+>18 as const : 18
+>            : ^^
+>18 : 18
+>   : ^^
+    }
+
+    [biglit satisfies keyof]() {
+>[biglit satisfies keyof] : () => 19
+>                         : ^^^^^^^^
+>biglit satisfies keyof : unique symbol
+>                       : ^^^^^^^^^^^^^
+>biglit : 22n
+>       : ^^^
+
+        return 19 as const;
+>19 as const : 19
+>            : ^^
+>19 : 19
+>   : ^^
+    }
+
+    [symbase satisfies keyof]() {
+>[symbase satisfies keyof] : () => 20
+>                          : ^^^^^^^^
+>symbase satisfies keyof : unique symbol
+>                        : ^^^^^^^^^^^^^
+>symbase : symbol
+>        : ^^^^^^
+
+        return 20 as const;
+>20 as const : 20
+>            : ^^
+>20 : 20
+>   : ^^
+    }
+
+    [nev satisfies keyof]() {
+>[nev satisfies keyof] : () => 21
+>                      : ^^^^^^^^
+>nev satisfies keyof : unique symbol
+>                    : ^^^^^^^^^^^^^
+>nev : never
+>    : ^^^^^
+
+        return 21 as const;
+>21 as const : 21
+>            : ^^
+>21 : 21
+>   : ^^
+    }
+
+    [templateLit satisfies keyof]() {
+>[templateLit satisfies keyof] : () => 22
+>                              : ^^^^^^^^
+>templateLit satisfies keyof : unique symbol
+>                            : ^^^^^^^^^^^^^
+>templateLit : `aaa${string}`
+>            : ^^^^^^^^^^^^^^
+
+        return 22 as const;
+>22 as const : 22
+>            : ^^
+>22 : 22
+>   : ^^
+    }
+
+    [mappingLit satisfies keyof]() {
+>[mappingLit satisfies keyof] : () => 23
+>                             : ^^^^^^^^
+>mappingLit satisfies keyof : unique symbol
+>                           : ^^^^^^^^^^^^^
+>mappingLit : Lowercase<string>
+>           : ^^^^^^^^^^^^^^^^^
+
+        return 23 as const;
+>23 as const : 23
+>            : ^^
+>23 : 23
+>   : ^^
+    }
+}
+
+const inst = new Foo();
+>inst : Foo
+>     : ^^^
+>new Foo() : Foo
+>          : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+export const results = [
+>results : readonly [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, any, 22, 23]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[    inst[sym](),    inst[num](),    inst[str](),    inst[union](),    inst[NumEnum.A](),    inst[StrEnum.A](),    inst[MixEnum.A](),    inst[MixEnum.B](),    inst[anything](),    inst[unk](),    inst[basestr](),    inst[basenum](),    inst[bool](),    inst[t](),    inst[f](),    inst[n](),    inst[u](),    inst[bigbase](),    inst[biglit](),    inst[symbase](),    inst[nev](), // indexing by `never` always gives `never`, rather than the fallback index property    inst[templateLit](),    inst[mappingLit](),    ] as const : readonly [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, any, 22, 23]
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[    inst[sym](),    inst[num](),    inst[str](),    inst[union](),    inst[NumEnum.A](),    inst[StrEnum.A](),    inst[MixEnum.A](),    inst[MixEnum.B](),    inst[anything](),    inst[unk](),    inst[basestr](),    inst[basenum](),    inst[bool](),    inst[t](),    inst[f](),    inst[n](),    inst[u](),    inst[bigbase](),    inst[biglit](),    inst[symbase](),    inst[nev](), // indexing by `never` always gives `never`, rather than the fallback index property    inst[templateLit](),    inst[mappingLit](),    ] : readonly [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, any, 22, 23]
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    inst[sym](),
+>inst[sym]() : 1
+>            : ^
+>inst[sym] : () => 1
+>          : ^^^^^^^
+>inst : Foo
+>     : ^^^
+>sym : unique symbol
+>    : ^^^^^^^^^^^^^
+
+    inst[num](),
+>inst[num]() : 2
+>            : ^
+>inst[num] : () => 2
+>          : ^^^^^^^
+>inst : Foo
+>     : ^^^
+>num : 1
+>    : ^
+
+    inst[str](),
+>inst[str]() : 3
+>            : ^
+>inst[str] : () => 3
+>          : ^^^^^^^
+>inst : Foo
+>     : ^^^
+>str : "f"
+>    : ^^^
+
+    inst[union](),
+>inst[union]() : 4
+>              : ^
+>inst[union] : () => 4
+>            : ^^^^^^^
+>inst : Foo
+>     : ^^^
+>union : "answer" | 42
+>      : ^^^^^^^^^^^^^
+
+    inst[NumEnum.A](),
+>inst[NumEnum.A]() : 5
+>                  : ^
+>inst[NumEnum.A] : () => 5
+>                : ^^^^^^^
+>inst : Foo
+>     : ^^^
+>NumEnum.A : NumEnum.A
+>          : ^^^^^^^^^
+>NumEnum : typeof NumEnum
+>        : ^^^^^^^^^^^^^^
+>A : NumEnum.A
+>  : ^^^^^^^^^
+
+    inst[StrEnum.A](),
+>inst[StrEnum.A]() : 6
+>                  : ^
+>inst[StrEnum.A] : () => 6
+>                : ^^^^^^^
+>inst : Foo
+>     : ^^^
+>StrEnum.A : StrEnum.A
+>          : ^^^^^^^^^
+>StrEnum : typeof StrEnum
+>        : ^^^^^^^^^^^^^^
+>A : StrEnum.A
+>  : ^^^^^^^^^
+
+    inst[MixEnum.A](),
+>inst[MixEnum.A]() : 7
+>                  : ^
+>inst[MixEnum.A] : () => 7
+>                : ^^^^^^^
+>inst : Foo
+>     : ^^^
+>MixEnum.A : MixEnum.A
+>          : ^^^^^^^^^
+>MixEnum : typeof MixEnum
+>        : ^^^^^^^^^^^^^^
+>A : MixEnum.A
+>  : ^^^^^^^^^
+
+    inst[MixEnum.B](),
+>inst[MixEnum.B]() : 8
+>                  : ^
+>inst[MixEnum.B] : () => 8
+>                : ^^^^^^^
+>inst : Foo
+>     : ^^^
+>MixEnum.B : MixEnum.B
+>          : ^^^^^^^^^
+>MixEnum : typeof MixEnum
+>        : ^^^^^^^^^^^^^^
+>B : MixEnum.B
+>  : ^^^^^^^^^
+
+    inst[anything](),
+>inst[anything]() : 9
+>                 : ^
+>inst[anything] : () => 9
+>               : ^^^^^^^
+>inst : Foo
+>     : ^^^
+>anything : any
+>         : ^^^
+
+    inst[unk](),
+>inst[unk]() : 10
+>            : ^^
+>inst[unk] : () => 10
+>          : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>unk : unknown
+>    : ^^^^^^^
+
+    inst[basestr](),
+>inst[basestr]() : 11
+>                : ^^
+>inst[basestr] : () => 11
+>              : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>basestr : string
+>        : ^^^^^^
+
+    inst[basenum](),
+>inst[basenum]() : 12
+>                : ^^
+>inst[basenum] : () => 12
+>              : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>basenum : number
+>        : ^^^^^^
+
+    inst[bool](),
+>inst[bool]() : 13
+>             : ^^
+>inst[bool] : () => 13
+>           : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>bool : boolean
+>     : ^^^^^^^
+
+    inst[t](),
+>inst[t]() : 14
+>          : ^^
+>inst[t] : () => 14
+>        : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>t : true
+>  : ^^^^
+
+    inst[f](),
+>inst[f]() : 15
+>          : ^^
+>inst[f] : () => 15
+>        : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>f : false
+>  : ^^^^^
+
+    inst[n](),
+>inst[n]() : 16
+>          : ^^
+>inst[n] : () => 16
+>        : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>n : null
+>  : ^^^^
+
+    inst[u](),
+>inst[u]() : 17
+>          : ^^
+>inst[u] : () => 17
+>        : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>u : undefined
+>  : ^^^^^^^^^
+
+    inst[bigbase](),
+>inst[bigbase]() : 18
+>                : ^^
+>inst[bigbase] : () => 18
+>              : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>bigbase : bigint
+>        : ^^^^^^
+
+    inst[biglit](),
+>inst[biglit]() : 19
+>               : ^^
+>inst[biglit] : () => 19
+>             : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>biglit : 22n
+>       : ^^^
+
+    inst[symbase](),
+>inst[symbase]() : 20
+>                : ^^
+>inst[symbase] : () => 20
+>              : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>symbase : symbol
+>        : ^^^^^^
+
+    inst[nev](), // indexing by `never` always gives `never`, rather than the fallback index property
+>inst[nev]() : any
+>            : ^^^
+>inst[nev] : never
+>          : ^^^^^
+>inst : Foo
+>     : ^^^
+>nev : never
+>    : ^^^^^
+
+    inst[templateLit](),
+>inst[templateLit]() : 22
+>                    : ^^
+>inst[templateLit] : () => 22
+>                  : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>templateLit : `aaa${string}`
+>            : ^^^^^^^^^^^^^^
+
+    inst[mappingLit](),    
+>inst[mappingLit]() : 23
+>                   : ^^
+>inst[mappingLit] : () => 23
+>                 : ^^^^^^^^
+>inst : Foo
+>     : ^^^
+>mappingLit : Lowercase<string>
+>           : ^^^^^^^^^^^^^^^^^
+
+] as const;
+
+
+
