@@ -25,6 +25,7 @@
         "alwaysStrict": true,
         "preserveConstEnums": true,
         "newLine": "lf",
+        "enforceReadonly": true,
 
         "types": []
     }

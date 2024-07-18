@@ -373,6 +373,7 @@ import {
     QuestionDotToken,
     QuestionToken,
     ReadonlyKeyword,
+    ReadonlyTextRange,
     RedirectInfo,
     reduceLeft,
     RegularExpressionLiteral,
@@ -505,8 +506,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     const getJSDocPrePostfixUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (node: T, type: T["type"]) => updateJSDocPrePostfixUnaryTypeWorker<T>(kind, node, type));
     const getJSDocSimpleTagCreateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => createJSDocSimpleTagWorker(kind, tagName, comment));
     const getJSDocSimpleTagUpdateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => updateJSDocSimpleTagWorker(kind, node, tagName, comment));
-    const getJSDocTypeLikeTagCreateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) => (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) => createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment));
-    const getJSDocTypeLikeTagUpdateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) => updateJSDocTypeLikeTagWorker(kind, node, tagName, typeExpression, comment));
+    const getJSDocTypeLikeTagCreateFunction = memoizeOne(<T extends JSDocTag & { readonly typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) => (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) => createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment));
+    const getJSDocTypeLikeTagUpdateFunction = memoizeOne(<T extends JSDocTag & { readonly typeExpression?: JSDocTypeExpression; }>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) => updateJSDocTypeLikeTagWorker(kind, node, tagName, typeExpression, comment));
 
     const factory: NodeFactory = {
         get parenthesizer() {
@@ -1214,10 +1215,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node;
     }
 
-    function finishUpdateBaseSignatureDeclaration<T extends SignatureDeclarationBase>(updated: Mutable<T>, original: T) {
+    function finishUpdateBaseSignatureDeclaration<T extends SignatureDeclarationBase>(updated: T, original: T) {
         if (updated !== original) {
             // copy children used for quick info
-            updated.typeArguments = original.typeArguments;
+            (updated as Mutable<T>).typeArguments = original.typeArguments;
         }
         return update(updated, original);
     }
@@ -1507,7 +1508,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         if (transformFlags) {
             node.transformFlags |= transformFlags;
         }
-        return node;
+        return node as Token<TKind>;
     }
 
     //
@@ -1750,10 +1751,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
-    function finishUpdatePropertySignature(updated: Mutable<PropertySignature>, original: PropertySignature) {
+    function finishUpdatePropertySignature(updated: PropertySignature, original: PropertySignature) {
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.initializer = original.initializer;
+            (updated as Mutable<PropertySignature>).initializer = original.initializer;
         }
         return update(updated, original);
     }
@@ -1966,10 +1967,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
-    function finishUpdateClassStaticBlockDeclaration(updated: Mutable<ClassStaticBlockDeclaration>, original: ClassStaticBlockDeclaration) {
+    function finishUpdateClassStaticBlockDeclaration(updated: ClassStaticBlockDeclaration, original: ClassStaticBlockDeclaration) {
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.modifiers = original.modifiers;
+            (updated as Mutable<ClassStaticBlockDeclaration>).modifiers = original.modifiers;
         }
         return update(updated, original);
     }
@@ -2343,10 +2344,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
-    function finishUpdateFunctionTypeNode(updated: Mutable<FunctionTypeNode>, original: FunctionTypeNode) {
+    function finishUpdateFunctionTypeNode(updated: FunctionTypeNode, original: FunctionTypeNode) {
         if (updated !== original) {
             // copy children used only for error reporting
-            updated.modifiers = original.modifiers;
+            (updated as Mutable<FunctionTypeNode>).modifiers = original.modifiers;
         }
         return finishUpdateBaseSignatureDeclaration(updated, original);
     }
@@ -3027,7 +3028,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createCallExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
+    function createCallExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined): CallExpression {
         const node = createBaseCallExpression(
             parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false),
             /*questionDotToken*/ undefined,
@@ -3408,7 +3409,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createBinaryExpression(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression) {
+    function createBinaryExpression(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression): BinaryExpression {
         const node = createBaseDeclaration<BinaryExpression>(SyntaxKind.BinaryExpression);
         const operatorToken = asToken(operator);
         const operatorKind = operatorToken.kind;
@@ -3567,7 +3568,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createTemplateLiteralLikeNode(kind: TemplateLiteralToken["kind"], text: string, rawText: string | undefined, templateFlags: TokenFlags | undefined) {
+    function createTemplateLiteralLikeNode(kind: TemplateLiteralToken["kind"], text: string, rawText: string | undefined, templateFlags: TokenFlags | undefined): TemplateLiteralLikeNode {
         if (kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
             return createTemplateLiteralLikeDeclaration(kind, text, rawText, templateFlags);
         }
@@ -5474,7 +5475,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // createJSDocThisTag
     // createJSDocEnumTag
     // createJSDocSatisfiesTag
-    function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"], tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>) {
+    function createJSDocTypeLikeTagWorker<T extends JSDocTag & { readonly typeExpression?: JSDocTypeExpression; }>(kind: T["kind"], tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>) {
         const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(getDefaultTagNameForKind(kind)), comment);
         node.typeExpression = typeExpression;
         return node;
@@ -5486,7 +5487,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // updateJSDocThisTag
     // updateJSDocEnumTag
     // updateJSDocSatisfiesTag
-    function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression; }>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, comment: string | NodeArray<JSDocComment> | undefined) {
+    function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { readonly typeExpression?: JSDocTypeExpression; }>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, comment: string | NodeArray<JSDocComment> | undefined) {
         return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.comment !== comment
@@ -6354,7 +6355,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             return node;
         }
         if (isSourceFile(node)) {
-            return cloneSourceFile(node) as T & SourceFile;
+            return cloneSourceFile(node) as SourceFile as T & SourceFile;
         }
         if (isGeneratedIdentifier(node)) {
             return cloneGeneratedIdentifier(node) as T & GeneratedIdentifier;
@@ -7154,7 +7155,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return variableDeclaration;
     }
 
-    function update<T extends Node>(updated: Mutable<T>, original: T): T {
+    function update<T extends Node>(updated: T, original: T): T {
         if (updated !== original) {
             setOriginal(updated, original);
             setTextRange(updated, original);
@@ -7511,7 +7512,7 @@ function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefi
     return destEmitNode;
 }
 
-function mergeTokenSourceMapRanges(sourceRanges: (TextRange | undefined)[], destRanges: (TextRange | undefined)[]) {
+function mergeTokenSourceMapRanges(sourceRanges: (ReadonlyTextRange | undefined)[], destRanges: (ReadonlyTextRange | undefined)[]) {
     if (!destRanges) destRanges = [];
     for (const key in sourceRanges) {
         destRanges[key] = sourceRanges[key];

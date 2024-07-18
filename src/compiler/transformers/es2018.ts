@@ -81,6 +81,7 @@ import {
     ProcessLevel,
     processTaggedTemplateExpression,
     PropertyAccessExpression,
+    ReadonlyTextRange,
     ReturnStatement,
     ScriptTarget,
     SetAccessorDeclaration,
@@ -743,8 +744,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     function transformForOfStatementWithObjectRest(node: ForOfStatement) {
         const initializerWithoutParens = skipParentheses(node.initializer) as ForInitializer;
         if (isVariableDeclarationList(initializerWithoutParens) || isAssignmentPattern(initializerWithoutParens)) {
-            let bodyLocation: TextRange | undefined;
-            let statementsLocation: TextRange | undefined;
+            let bodyLocation: ReadonlyTextRange | undefined;
+            let statementsLocation: ReadonlyTextRange | undefined;
             const temp = factory.createTempVariable(/*recordTempVariable*/ undefined);
             const statements: Statement[] = [createForOfBindingStatement(factory, initializerWithoutParens, temp)];
             if (isBlock(node.statement)) {
@@ -796,8 +797,8 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         const binding = createForOfBindingStatement(factory, node.initializer, value);
         statements.push(visitNode(binding, visitor, isStatement));
 
-        let bodyLocation: TextRange | undefined;
-        let statementsLocation: TextRange | undefined;
+        let bodyLocation: ReadonlyTextRange | undefined;
+        let statementsLocation: ReadonlyTextRange | undefined;
         const statement = visitIterationBody(node.statement, visitor, context);
         if (isBlock(statement)) {
             addRange(statements, statement.statements);
@@ -1457,7 +1458,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             || kind === SyntaxKind.SetAccessor;
     }
 
-    function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
+    function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: ReadonlyTextRange): LeftHandSideExpression {
         if (enclosingSuperContainerFlags & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
             return setTextRange(
                 factory.createPropertyAccessExpression(

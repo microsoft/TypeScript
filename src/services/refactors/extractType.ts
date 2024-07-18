@@ -53,6 +53,7 @@ import {
     nodeOverlapsWithStartEnd,
     pushIfUnique,
     rangeContainsStartEnd,
+    ReadonlyTextRange,
     RefactorContext,
     RefactorEditInfo,
     setEmitFlags,
@@ -267,7 +268,7 @@ function flattenTypeLiteralNodeReference(checker: TypeChecker, selection: TypeNo
     return undefined;
 }
 
-function rangeContainsSkipTrivia(r1: TextRange, node: TextRange, file: SourceFile): boolean {
+function rangeContainsSkipTrivia(r1: ReadonlyTextRange, node: ReadonlyTextRange, file: SourceFile): boolean {
     return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
 }
 

@@ -10,7 +10,7 @@ interface WeakRef<T extends WeakKey> {
 }
 
 interface WeakRefConstructor {
-    readonly prototype: WeakRef<any>;
+    prototype: WeakRef<any>;
 
     /**
      * Creates a WeakRef instance for the given target value.
@@ -46,7 +46,7 @@ interface FinalizationRegistry<T> {
 }
 
 interface FinalizationRegistryConstructor {
-    readonly prototype: FinalizationRegistry<any>;
+    prototype: FinalizationRegistry<any>;
 
     /**
      * Creates a finalization registry with an associated cleanup callback

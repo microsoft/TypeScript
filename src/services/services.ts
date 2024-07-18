@@ -3516,7 +3516,7 @@ function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralEleme
 }
 
 /** @internal */
-export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName; parent: ObjectLiteralExpression | JsxAttributes; };
+export type ObjectLiteralElementWithName = ObjectLiteralElement & { readonly name: PropertyName; readonly parent: ObjectLiteralExpression | JsxAttributes; };
 
 function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
     const object = getContainingObjectLiteralElement(node);

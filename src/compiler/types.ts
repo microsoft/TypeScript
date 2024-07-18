@@ -1710,7 +1710,7 @@ export interface AutoGenerateInfo {
 
 /** @internal */
 export interface GeneratedIdentifier extends Identifier {
-    readonly emitNode: EmitNode & { autoGenerate: AutoGenerateInfo; };
+    emitNode: EmitNode & { autoGenerate: AutoGenerateInfo; };
 }
 
 export interface QualifiedName extends Node, FlowContainer {
@@ -1789,7 +1789,7 @@ export interface PrivateIdentifier extends PrimaryExpression {
 
 /** @internal */
 export interface GeneratedPrivateIdentifier extends PrivateIdentifier {
-    readonly emitNode: EmitNode & { autoGenerate: AutoGenerateInfo; };
+    emitNode: EmitNode & { autoGenerate: AutoGenerateInfo; };
 }
 
 /** @internal */
@@ -1926,23 +1926,23 @@ export interface AutoAccessorPropertyDeclaration extends PropertyDeclaration {
 
 /** @internal */
 export interface PrivateIdentifierPropertyDeclaration extends PropertyDeclaration {
-    name: PrivateIdentifier;
+    readonly name: PrivateIdentifier;
 }
 /** @internal */
 export interface PrivateIdentifierAutoAccessorPropertyDeclaration extends AutoAccessorPropertyDeclaration {
-    name: PrivateIdentifier;
+    readonly name: PrivateIdentifier;
 }
 /** @internal */
 export interface PrivateIdentifierMethodDeclaration extends MethodDeclaration {
-    name: PrivateIdentifier;
+    readonly name: PrivateIdentifier;
 }
 /** @internal */
 export interface PrivateIdentifierGetAccessorDeclaration extends GetAccessorDeclaration {
-    name: PrivateIdentifier;
+    readonly name: PrivateIdentifier;
 }
 /** @internal */
 export interface PrivateIdentifierSetAccessorDeclaration extends SetAccessorDeclaration {
-    name: PrivateIdentifier;
+    readonly name: PrivateIdentifier;
 }
 /** @internal */
 export type PrivateIdentifierAccessorDeclaration = PrivateIdentifierGetAccessorDeclaration | PrivateIdentifierSetAccessorDeclaration;
@@ -4502,7 +4502,7 @@ export interface ScriptReferenceHost {
 }
 
 export interface ParseConfigHost extends ModuleResolutionHost {
-    useCaseSensitiveFileNames: boolean;
+    readonly useCaseSensitiveFileNames: boolean;
 
     readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): readonly string[];
 
@@ -7313,6 +7313,7 @@ export interface CompilerOptions {
     downlevelIteration?: boolean;
     emitBOM?: boolean;
     emitDecoratorMetadata?: boolean;
+    enforceReadonly?: boolean;
     exactOptionalPropertyTypes?: boolean;
     experimentalDecorators?: boolean;
     forceConsistentCasingInFileNames?: boolean;
@@ -7844,7 +7845,7 @@ export interface ModuleResolutionHost {
     realpath?(path: string): string;
     getCurrentDirectory?(): string;
     getDirectories?(path: string): string[];
-    useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
+    readonly useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
 }
 
 /**
@@ -8149,7 +8150,7 @@ export const enum TransformFlags {
     // - Additional bitmasks
 }
 
-export interface SourceMapRange extends TextRange {
+export interface SourceMapRange extends ReadonlyTextRange {
     source?: SourceMapSource;
 }
 
@@ -8169,7 +8170,7 @@ export interface EmitNode {
     annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
     leadingComments?: SynthesizedComment[];  // Synthesized leading comments
     trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
-    commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
+    commentRange?: ReadonlyTextRange;                // The text range to use when emitting leading or trailing comments
     sourceMapRange?: SourceMapRange;         // The text range to use when emitting leading or trailing source mappings
     tokenSourceMapRanges?: (SourceMapRange | undefined)[]; // The text range to use when emitting source mappings for tokens
     constantValue?: string | number;         // The constant value of an expression
@@ -10017,9 +10018,9 @@ export const enum PragmaKindFlags {
 
 /** @internal */
 export interface PragmaArgumentSpecification<TName extends string> {
-    name: TName; // Determines the name of the key in the resulting parsed type, type parameter to cause literal type inference
-    optional?: boolean;
-    captureSpan?: boolean;
+    readonly name: TName; // Determines the name of the key in the resulting parsed type, type parameter to cause literal type inference
+    readonly optional?: boolean;
+    readonly captureSpan?: boolean;
 }
 
 /** @internal */
@@ -10109,10 +10110,10 @@ export const enum JSDocParsingMode {
 }
 
 /** @internal */
-export type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends { captureSpan: true; } ? { value: string; pos: number; end: number; } : string;
+export type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends { readonly captureSpan: true; } ? { value: string; pos: number; end: number; } : string;
 
 /** @internal */
-export type PragmaArgTypeOptional<TDesc, TName extends string> = TDesc extends { optional: true; } ? { [K in TName]?: PragmaArgTypeMaybeCapture<TDesc>; }
+export type PragmaArgTypeOptional<TDesc, TName extends string> = TDesc extends { readonly optional: true; } ? { [K in TName]?: PragmaArgTypeMaybeCapture<TDesc>; }
     : { [K in TName]: PragmaArgTypeMaybeCapture<TDesc>; };
 
 /** @internal */
@@ -10120,7 +10121,7 @@ export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) ex
 
 /** @internal */
 export type ArgumentDefinitionToFieldUnion<T extends readonly PragmaArgumentSpecification<any>[]> = {
-    [K in keyof T]: PragmaArgTypeOptional<T[K], T[K] extends { name: infer TName; } ? TName extends string ? TName : never : never>;
+    [K in keyof T]: PragmaArgTypeOptional<T[K], T[K] extends { readonly name: infer TName; } ? TName extends string ? TName : never : never>;
 }[Extract<keyof T, number>]; // The mapped type maps over only the tuple members, but this reindex gets _all_ members - by extracting only `number` keys, we get only the tuple members
 
 /**
@@ -10128,7 +10129,7 @@ export type ArgumentDefinitionToFieldUnion<T extends readonly PragmaArgumentSpec
  *
  * @internal
  */
-export type PragmaArgumentType<KPrag extends keyof ConcretePragmaSpecs> = ConcretePragmaSpecs[KPrag] extends { args: readonly PragmaArgumentSpecification<any>[]; } ? UnionToIntersection<ArgumentDefinitionToFieldUnion<ConcretePragmaSpecs[KPrag]["args"]>>
+export type PragmaArgumentType<KPrag extends keyof ConcretePragmaSpecs> = ConcretePragmaSpecs[KPrag] extends { readonly args: readonly PragmaArgumentSpecification<any>[]; } ? UnionToIntersection<ArgumentDefinitionToFieldUnion<ConcretePragmaSpecs[KPrag]["args"]>>
     : never;
 
 /** @internal */

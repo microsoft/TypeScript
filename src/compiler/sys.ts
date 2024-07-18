@@ -134,7 +134,7 @@ function setCustomPollingValues(system: System) {
     if (!system.getEnvironmentVariable) {
         return;
     }
-    const pollingIntervalChanged = setCustomLevels("TSC_WATCH_POLLINGINTERVAL", PollingInterval);
+    const pollingIntervalChanged = setCustomLevels("TSC_WATCH_POLLINGINTERVAL", PollingInterval as Levels);  // Could modify enum which doesn't seen right
     pollingChunkSize = getCustomPollingBasedLevels("TSC_WATCH_POLLINGCHUNKSIZE", defaultChunkLevels) || pollingChunkSize;
     unchangedPollThresholds = getCustomPollingBasedLevels("TSC_WATCH_UNCHANGEDPOLLTHRESHOLDS", defaultChunkLevels) || unchangedPollThresholds;
 
@@ -1393,9 +1393,9 @@ export type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "
 
 // TODO: GH#18217 Methods on System are often used as if they are certainly defined
 export interface System {
-    args: string[];
-    newLine: string;
-    useCaseSensitiveFileNames: boolean;
+    readonly args: string[];
+    readonly newLine: string;
+    readonly useCaseSensitiveFileNames: boolean;
     write(s: string): void;
     writeOutputIsTTY?(): boolean;
     getWidthOfTerminal?(): number;

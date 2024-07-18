@@ -248,7 +248,7 @@ export class CompilerHost implements ts.CompilerHost {
     private readonly _outputsMap: collections.SortedMap<string, number>;
     public readonly traces: string[] = [];
     public readonly shouldAssertInvariants = !Harness.lightMode;
-    public readonly jsDocParsingMode: ts.JSDocParsingMode | undefined;
+    public jsDocParsingMode: ts.JSDocParsingMode | undefined;
 
     private _setParentNodes: boolean;
     private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;

@@ -151,7 +151,7 @@ export function getModuleSpecifierPreferences(
     { importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences,
     host: Pick<ModuleSpecifierResolutionHost, "getDefaultResolutionModeForFile">,
     compilerOptions: CompilerOptions,
-    importingSourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat">,
+    importingSourceFile: Readonly<Pick<SourceFile, "fileName" | "impliedNodeFormat">>,
     oldImportSpecifier?: string,
 ): ModuleSpecifierPreferences {
     const filePreferredEnding = getPreferredEnding();
@@ -392,7 +392,7 @@ export function getModuleSpecifiersWithCacheInfo(
 
 /** @internal */
 export function getLocalModuleSpecifierBetweenFileNames(
-    importingFile: Pick<SourceFile, "fileName" | "impliedNodeFormat">,
+    importingFile: Readonly<Pick<SourceFile, "fileName" | "impliedNodeFormat">>,
     targetFileName: string,
     compilerOptions: CompilerOptions,
     host: ModuleSpecifierResolutionHost,

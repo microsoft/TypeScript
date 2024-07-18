@@ -319,6 +319,7 @@ import {
     QuestionToken,
     ReadonlyKeyword,
     ReadonlyPragmaMap,
+    ReadonlyTextRange,
     ResolutionMode,
     RestTypeNode,
     ReturnStatement,
@@ -2158,7 +2159,7 @@ namespace Parser {
         return parseErrorAtPosition(start, end - start, message, ...args);
     }
 
-    function parseErrorAtRange(range: TextRange, message: DiagnosticMessage, ...args: DiagnosticArguments): void {
+    function parseErrorAtRange(range: ReadonlyTextRange, message: DiagnosticMessage, ...args: DiagnosticArguments): void {
         parseErrorAt(range.pos, range.end, message, ...args);
     }
 
@@ -6704,7 +6705,7 @@ namespace Parser {
         if (isShorthandPropertyAssignment) {
             const equalsToken = parseOptionalToken(SyntaxKind.EqualsToken);
             const objectAssignmentInitializer = equalsToken ? allowInAnd(() => parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true)) : undefined;
-            node = factory.createShorthandPropertyAssignment(name as Identifier, objectAssignmentInitializer);
+            node = factory.createShorthandPropertyAssignment(name as Identifier, objectAssignmentInitializer) as Mutable<ShorthandPropertyAssignment>;
             // Save equals token for error reporting.
             // TODO(rbuckton): Consider manufacturing this when we need to report an error as it is otherwise not useful.
             node.equalsToken = equalsToken;
@@ -6712,7 +6713,7 @@ namespace Parser {
         else {
             parseExpected(SyntaxKind.ColonToken);
             const initializer = allowInAnd(() => parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true));
-            node = factory.createPropertyAssignment(name, initializer);
+            node = factory.createPropertyAssignment(name, initializer) as Mutable<PropertyAssignment>;
         }
         // Decorators, Modifiers, questionToken, and exclamationToken are not supported by property assignments and are reported in the grammar checker
         node.modifiers = modifiers;

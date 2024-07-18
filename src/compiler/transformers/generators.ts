@@ -65,6 +65,7 @@ import {
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     PropertyAccessExpression,
+    ReadonlyTextRange,
     reduceLeft,
     ReturnStatement,
     setCommentRange,
@@ -370,7 +371,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
     // allocating objects to store the same information to avoid GC overhead.
     //
     let labelOffsets: number[] | undefined; // The operation offset at which the label is defined.
-    let labelExpressions: Mutable<LiteralExpression>[][] | undefined; // The NumericLiteral nodes bound to each label.
+    let labelExpressions: LiteralExpression[][] | undefined; // The NumericLiteral nodes bound to each label.
     let nextLabelId = 1; // The next label id to use.
 
     // Operations store information about generated code for the function body. This
@@ -380,7 +381,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
     //
     let operations: OpCode[] | undefined; // The operation to perform.
     let operationArguments: (OperationArguments | undefined)[] | undefined; // The arguments to the operation.
-    let operationLocations: (TextRange | undefined)[] | undefined; // The source map location for the operation.
+    let operationLocations: (ReadonlyTextRange | undefined)[] | undefined; // The source map location for the operation.
 
     let state: Identifier; // The name of the state object used by the generator at runtime.
 
@@ -1070,7 +1071,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param elements The elements to visit.
      * @param multiLine Whether array literals created should be emitted on multiple lines.
      */
-    function visitElements(elements: NodeArray<Expression>, leadingElement?: Expression, location?: TextRange, multiLine?: boolean) {
+    function visitElements(elements: NodeArray<Expression>, leadingElement?: Expression, location?: ReadonlyTextRange, multiLine?: boolean) {
         // [source]
         //      ar = [1, yield, 2];
         //
@@ -2553,7 +2554,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param label A label.
      * @param location An optional source map location for the statement.
      */
-    function createInlineBreak(label: Label, location?: TextRange): ReturnStatement {
+    function createInlineBreak(label: Label, location?: ReadonlyTextRange): ReturnStatement {
         Debug.assertLessThan(0, label, "Invalid label");
         return setTextRange(
             factory.createReturnStatement(
@@ -2572,7 +2573,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param expression The expression for the return statement.
      * @param location An optional source map location for the statement.
      */
-    function createInlineReturn(expression?: Expression, location?: TextRange): ReturnStatement {
+    function createInlineReturn(expression?: Expression, location?: ReadonlyTextRange): ReturnStatement {
         return setTextRange(
             factory.createReturnStatement(
                 factory.createArrayLiteralExpression(
@@ -2588,7 +2589,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
     /**
      * Creates an expression that can be used to resume from a Yield operation.
      */
-    function createGeneratorResume(location?: TextRange): LeftHandSideExpression {
+    function createGeneratorResume(location?: ReadonlyTextRange): LeftHandSideExpression {
         return setTextRange(
             factory.createCallExpression(
                 factory.createPropertyAccessExpression(state, "sent"),
@@ -2627,7 +2628,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param right The right-hand side of the assignment.
      * @param location An optional source map location for the assignment.
      */
-    function emitAssignment(left: Expression, right: Expression, location?: TextRange): void {
+    function emitAssignment(left: Expression, right: Expression, location?: ReadonlyTextRange): void {
         emitWorker(OpCode.Assign, [left, right], location);
     }
 
@@ -2637,7 +2638,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param label A label.
      * @param location An optional source map location for the assignment.
      */
-    function emitBreak(label: Label, location?: TextRange): void {
+    function emitBreak(label: Label, location?: ReadonlyTextRange): void {
         emitWorker(OpCode.Break, [label], location);
     }
 
@@ -2649,7 +2650,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param condition The condition.
      * @param location An optional source map location for the assignment.
      */
-    function emitBreakWhenTrue(label: Label, condition: Expression, location?: TextRange): void {
+    function emitBreakWhenTrue(label: Label, condition: Expression, location?: ReadonlyTextRange): void {
         emitWorker(OpCode.BreakWhenTrue, [label, condition], location);
     }
 
@@ -2661,7 +2662,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param condition The condition.
      * @param location An optional source map location for the assignment.
      */
-    function emitBreakWhenFalse(label: Label, condition: Expression, location?: TextRange): void {
+    function emitBreakWhenFalse(label: Label, condition: Expression, location?: ReadonlyTextRange): void {
         emitWorker(OpCode.BreakWhenFalse, [label, condition], location);
     }
 
@@ -2671,7 +2672,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param expression An optional value for the yield operation.
      * @param location An optional source map location for the assignment.
      */
-    function emitYieldStar(expression?: Expression, location?: TextRange): void {
+    function emitYieldStar(expression?: Expression, location?: ReadonlyTextRange): void {
         emitWorker(OpCode.YieldStar, [expression], location);
     }
 
@@ -2681,7 +2682,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param expression An optional value for the yield operation.
      * @param location An optional source map location for the assignment.
      */
-    function emitYield(expression?: Expression, location?: TextRange): void {
+    function emitYield(expression?: Expression, location?: ReadonlyTextRange): void {
         emitWorker(OpCode.Yield, [expression], location);
     }
 
@@ -2691,7 +2692,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param expression An optional value for the operation.
      * @param location An optional source map location for the assignment.
      */
-    function emitReturn(expression?: Expression, location?: TextRange): void {
+    function emitReturn(expression?: Expression, location?: ReadonlyTextRange): void {
         emitWorker(OpCode.Return, [expression], location);
     }
 
@@ -2701,7 +2702,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param expression A value for the operation.
      * @param location An optional source map location for the assignment.
      */
-    function emitThrow(expression: Expression, location?: TextRange): void {
+    function emitThrow(expression: Expression, location?: ReadonlyTextRange): void {
         emitWorker(OpCode.Throw, [expression], location);
     }
 
@@ -2718,7 +2719,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param code The OpCode for the operation.
      * @param args The optional arguments for the operation.
      */
-    function emitWorker(code: OpCode, args?: OperationArguments, location?: TextRange): void {
+    function emitWorker(code: OpCode, args?: OperationArguments, location?: ReadonlyTextRange): void {
         if (operations === undefined) {
             operations = [];
             operationArguments = [];
@@ -3093,7 +3094,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param right The right-hand side of the assignment.
      * @param operationLocation The source map location for the operation.
      */
-    function writeAssign(left: Expression, right: Expression, operationLocation: TextRange | undefined): void {
+    function writeAssign(left: Expression, right: Expression, operationLocation: ReadonlyTextRange | undefined): void {
         writeStatement(setTextRange(factory.createExpressionStatement(factory.createAssignment(left, right)), operationLocation));
     }
 
@@ -3103,7 +3104,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param expression The value to throw.
      * @param operationLocation The source map location for the operation.
      */
-    function writeThrow(expression: Expression, operationLocation: TextRange | undefined): void {
+    function writeThrow(expression: Expression, operationLocation: ReadonlyTextRange | undefined): void {
         lastOperationWasAbrupt = true;
         lastOperationWasCompletion = true;
         writeStatement(setTextRange(factory.createThrowStatement(expression), operationLocation));
@@ -3115,7 +3116,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param expression The value to return.
      * @param operationLocation The source map location for the operation.
      */
-    function writeReturn(expression: Expression | undefined, operationLocation: TextRange | undefined): void {
+    function writeReturn(expression: Expression | undefined, operationLocation: ReadonlyTextRange | undefined): void {
         lastOperationWasAbrupt = true;
         lastOperationWasCompletion = true;
         writeStatement(
@@ -3141,7 +3142,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param label The label for the Break.
      * @param operationLocation The source map location for the operation.
      */
-    function writeBreak(label: Label, operationLocation: TextRange | undefined): void {
+    function writeBreak(label: Label, operationLocation: ReadonlyTextRange | undefined): void {
         lastOperationWasAbrupt = true;
         writeStatement(
             setEmitFlags(
@@ -3166,7 +3167,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param condition The condition for the Break.
      * @param operationLocation The source map location for the operation.
      */
-    function writeBreakWhenTrue(label: Label, condition: Expression, operationLocation: TextRange | undefined): void {
+    function writeBreakWhenTrue(label: Label, condition: Expression, operationLocation: ReadonlyTextRange | undefined): void {
         writeStatement(
             setEmitFlags(
                 factory.createIfStatement(
@@ -3196,7 +3197,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param condition The condition for the Break.
      * @param operationLocation The source map location for the operation.
      */
-    function writeBreakWhenFalse(label: Label, condition: Expression, operationLocation: TextRange | undefined): void {
+    function writeBreakWhenFalse(label: Label, condition: Expression, operationLocation: ReadonlyTextRange | undefined): void {
         writeStatement(
             setEmitFlags(
                 factory.createIfStatement(
@@ -3225,7 +3226,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param expression The expression to yield.
      * @param operationLocation The source map location for the operation.
      */
-    function writeYield(expression: Expression, operationLocation: TextRange | undefined): void {
+    function writeYield(expression: Expression, operationLocation: ReadonlyTextRange | undefined): void {
         lastOperationWasAbrupt = true;
         writeStatement(
             setEmitFlags(
@@ -3250,7 +3251,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
      * @param expression The expression to yield.
      * @param operationLocation The source map location for the operation.
      */
-    function writeYieldStar(expression: Expression, operationLocation: TextRange | undefined): void {
+    function writeYieldStar(expression: Expression, operationLocation: ReadonlyTextRange | undefined): void {
         lastOperationWasAbrupt = true;
         writeStatement(
             setEmitFlags(

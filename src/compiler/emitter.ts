@@ -351,6 +351,7 @@ import {
     rangeIsOnSingleLine,
     rangeStartPositionsAreOnSameLine,
     readJsonOrUndefined,
+    ReadonlyTextRange,
     removeFileExtension,
     resolvePath,
     RestTypeNode,
@@ -4632,7 +4633,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      *
      * NOTE: You probably don't want to call this directly and should be using `emitList` or `emitExpressionList` instead.
      */
-    function emitNodeListItems<Child extends Node>(emit: EmitFunction, parentNode: Node | undefined, children: readonly Child[], format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined, start: number, count: number, hasTrailingComma: boolean, childrenTextRange: TextRange | undefined) {
+    function emitNodeListItems<Child extends Node>(emit: EmitFunction, parentNode: Node | undefined, children: readonly Child[], format: ListFormat, parenthesizerRule: ParenthesizerRuleOrSelector<Child> | undefined, start: number, count: number, hasTrailingComma: boolean, childrenTextRange: ReadonlyTextRange | undefined) {
         // Write the opening line terminator or leading whitespace.
         const mayEmitInterveningComments = (format & ListFormat.NoInterveningComments) === 0;
         let shouldEmitInterveningComments = mayEmitInterveningComments;
@@ -5013,7 +5014,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return format & ListFormat.MultiLine ? 1 : 0;
     }
 
-    function getClosingLineTerminatorCount(parentNode: Node | undefined, lastChild: Node | undefined, format: ListFormat, childrenTextRange: TextRange | undefined): number {
+    function getClosingLineTerminatorCount(parentNode: Node | undefined, lastChild: Node | undefined, format: ListFormat, childrenTextRange: ReadonlyTextRange | undefined): number {
         if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
             if (format & ListFormat.PreferNewLine) {
                 return 1;
@@ -5825,7 +5826,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             : `//${comment.text}`;
     }
 
-    function emitBodyWithDetachedComments<T extends Node>(node: T, detachedRange: TextRange, emitCallback: (node: T) => void) {
+    function emitBodyWithDetachedComments<T extends Node>(node: T, detachedRange: ReadonlyTextRange, emitCallback: (node: T) => void) {
         enterComment();
         const { pos, end } = detachedRange;
         const emitFlags = getEmitFlags(node);
@@ -6045,7 +6046,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         forEachLeadingCommentRange(currentSourceFile.text, pos, cb, /*state*/ pos);
     }
 
-    function emitDetachedCommentsAndUpdateCommentsInfo(range: TextRange) {
+    function emitDetachedCommentsAndUpdateCommentsInfo(range: ReadonlyTextRange) {
         const currentDetachedCommentInfo = currentSourceFile && emitDetachedComments(currentSourceFile.text, getCurrentLineMap(), writer, emitComment, range, newLine, commentsDisabled);
         if (currentDetachedCommentInfo) {
             if (detachedCommentsInfo) {

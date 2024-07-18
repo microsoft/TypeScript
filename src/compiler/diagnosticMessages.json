@@ -4348,6 +4348,14 @@
         "category": "Error",
         "code": 4126
     },
+    "Property '{0}' is 'readonly' in the source but not in the target.": {
+        "category": "Error",
+        "code": 4127
+    },
+    "'{0}' index signature is 'readonly' in the source but not in the target.": {
+        "category": "Error",
+        "code": 4128
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -6370,6 +6378,10 @@
     "Require sufficient annotation on exports so other tools can trivially generate declaration files.": {
         "category": "Message",
         "code": 6719
+    },
+    "Ensure that 'readonly' properties remain read-only in type relationships.": {
+        "category": "Message",
+        "code": 6720
     },
 
     "Default catch clause variables as 'unknown' instead of 'any'.": {

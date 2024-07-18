@@ -1299,7 +1299,7 @@ export function getProperty<T>(map: MapLike<T>, key: string): T | undefined {
  *
  * @internal
  */
-export function getOwnKeys<T>(map: MapLike<T>): string[] {
+export function getOwnKeys<T>(map: Readonly<MapLike<T>>): string[] {
     const keys: string[] = [];
     for (const key in map) {
         if (hasOwnProperty.call(map, key)) {

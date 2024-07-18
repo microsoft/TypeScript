@@ -159,6 +159,7 @@ import {
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
+    ReadonlyTextRange,
     removeAllComments,
     SatisfiesExpression,
     ScriptTarget,
@@ -2180,8 +2181,8 @@ export function transformTypeScript(context: TransformationContext) {
         const statements: Statement[] = [];
         startLexicalEnvironment();
 
-        let statementsLocation: TextRange | undefined;
-        let blockLocation: TextRange | undefined;
+        let statementsLocation: ReadonlyTextRange | undefined;
+        let blockLocation: ReadonlyTextRange | undefined;
         if (node.body) {
             if (node.body.kind === SyntaxKind.ModuleBlock) {
                 saveStateAndInvoke(node.body, body => addRange(statements, visitNodes(body.statements, namespaceElementVisitor, isStatement)));
@@ -2528,7 +2529,7 @@ export function transformTypeScript(context: TransformationContext) {
         statements.push(createExportMemberAssignmentStatement(node));
     }
 
-    function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {
+    function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: ReadonlyTextRange) {
         return setTextRange(
             factory.createExpressionStatement(
                 factory.createAssignment(
@@ -2540,7 +2541,7 @@ export function transformTypeScript(context: TransformationContext) {
         );
     }
 
-    function createNamespaceExportExpression(exportName: Identifier, exportValue: Expression, location?: TextRange) {
+    function createNamespaceExportExpression(exportName: Identifier, exportValue: Expression, location?: ReadonlyTextRange) {
         return setTextRange(factory.createAssignment(getNamespaceMemberNameWithSourceMapsAndWithoutComments(exportName), exportValue), location);
     }
 

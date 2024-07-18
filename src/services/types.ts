@@ -977,9 +977,9 @@ export interface CombinedCodeActions {
 export type CodeActionCommand = InstallPackageAction;
 
 export interface InstallPackageAction {
-    /** @internal */ readonly type: "install package";
-    /** @internal */ readonly file: string;
-    /** @internal */ readonly packageName: string;
+    /** @internal */ type: "install package";
+    /** @internal */ file: string;
+    /** @internal */ packageName: string;
 }
 
 /**

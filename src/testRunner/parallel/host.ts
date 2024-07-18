@@ -32,6 +32,7 @@ import {
 } from "../_namespaces/Harness.Parallel.js";
 import * as ts from "../_namespaces/ts.js";
 import * as Utils from "../_namespaces/Utils.js";
+import { WritableStream } from "stream/web";
 
 export function start(importTests: () => Promise<unknown>) {
     const Base = Mocha.reporters.Base;
@@ -173,16 +174,16 @@ export function start(importTests: () => Promise<unknown>) {
             }
 
             cursor.hide();
-            readline.moveCursor(process.stdout, -process.stdout.columns, -this._lineCount);
+            readline.moveCursor(process.stdout as NodeJS.WritableStream, -process.stdout.columns, -this._lineCount);
             let lineCount = 0;
             const numProgressBars = this._progressBars.length;
             for (let i = 0; i < numProgressBars; i++) {
                 if (i === index) {
-                    readline.clearLine(process.stdout, 1);
+                    readline.clearLine(process.stdout as NodeJS.WritableStream, 1);
                     process.stdout.write(this._progressBars[i].text + os.EOL);
                 }
                 else {
-                    readline.moveCursor(process.stdout, -process.stdout.columns, +1);
+                    readline.moveCursor(process.stdout as NodeJS.WritableStream, -process.stdout.columns, +1);
                 }
 
                 lineCount++;

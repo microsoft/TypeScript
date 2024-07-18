@@ -134,6 +134,7 @@ import {
     PartiallyEmittedExpression,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
+    ReadonlyTextRange,
     reduceLeft,
     removeAllComments,
     ScriptTarget,
@@ -1863,7 +1864,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return singleOrMany(statements);
     }
 
-    function createAllExportExpressions(name: Identifier, value: Expression, location?: TextRange) {
+    function createAllExportExpressions(name: Identifier, value: Expression, location?: ReadonlyTextRange) {
         const exportedNames = getExports(name);
         if (exportedNames) {
             // For each additional export of the declaration, apply an export assignment.
@@ -2089,7 +2090,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments Whether to allow comments on the export.
      */
-    function appendExportStatement(statements: Statement[] | undefined, seen: IdentifierNameMap<boolean>, exportName: ModuleExportName, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
+    function appendExportStatement(statements: Statement[] | undefined, seen: IdentifierNameMap<boolean>, exportName: ModuleExportName, expression: Expression, location?: ReadonlyTextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
         if (exportName.kind !== SyntaxKind.StringLiteral) {
             if (seen.has(exportName)) {
                 return statements;
@@ -2126,7 +2127,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments An optional value indicating whether to emit comments for the statement.
      */
-    function createExportStatement(name: ModuleExportName, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
+    function createExportStatement(name: ModuleExportName, value: Expression, location?: ReadonlyTextRange, allowComments?: boolean, liveBinding?: boolean) {
         const statement = setTextRange(factory.createExpressionStatement(createExportExpression(name, value, /*location*/ undefined, liveBinding)), location);
         startOnNewLine(statement);
         if (!allowComments) {
@@ -2143,7 +2144,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param value The exported value.
      * @param location The location to use for source maps and comments for the export.
      */
-    function createExportExpression(name: ModuleExportName, value: Expression, location?: TextRange, liveBinding?: boolean) {
+    function createExportExpression(name: ModuleExportName, value: Expression, location?: ReadonlyTextRange, liveBinding?: boolean) {
         return setTextRange(
             liveBinding ? factory.createCallExpression(
                 factory.createPropertyAccessExpression(

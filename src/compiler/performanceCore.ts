@@ -13,7 +13,7 @@ export interface PerformanceHooks {
 /** @internal */
 export interface PerformanceTime {
     now(): number;
-    timeOrigin: number;
+    readonly timeOrigin: number;
 }
 
 /** @internal */

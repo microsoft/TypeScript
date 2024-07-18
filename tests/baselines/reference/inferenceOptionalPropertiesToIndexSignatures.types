@@ -144,12 +144,12 @@ const query = Object.entries(obj).map(
 >                        : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >Object.entries(obj) : [string, string][]
 >                    : ^^^^^^^^^^^^^^^^^^
->Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
+>Object.entries : { <T>(o: { readonly [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>               : ^^^ ^^ ^^                                           ^^^             ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
+>entries : { <T>(o: { readonly [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>        : ^^^ ^^ ^^                                           ^^^             ^^^ ^^  ^^^               ^^^
 >obj : { param2?: string | undefined; param1: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: [string, string], index: number, array: [string, string][]) => U, thisArg?: any) => U[]

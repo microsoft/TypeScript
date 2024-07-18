@@ -350,32 +350,32 @@ new Intl.PluralRules(readonlyLocales);
 Intl.PluralRules.supportedLocalesOf(enUS);
 >Intl.PluralRules.supportedLocalesOf(enUS) : string[]
 >                                          : ^^^^^^^^
->Intl.PluralRules.supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
->                                    : ^^^       ^^                          ^^       ^^^                                          ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
+>Intl.PluralRules.supportedLocalesOf : { (locales: string | readonly string[], options?: { readonly localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>                                    : ^^^       ^^                          ^^       ^^^                                                   ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >PluralRules : Intl.PluralRulesConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
->                   : ^^^       ^^                          ^^       ^^^                                          ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
+>supportedLocalesOf : { (locales: string | readonly string[], options?: { readonly localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>                   : ^^^       ^^                          ^^       ^^^                                                   ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
 >enUS : Intl.Locale
 >     : ^^^^^^^^^^^
 
 Intl.PluralRules.supportedLocalesOf([deDE, jaJP]);
 >Intl.PluralRules.supportedLocalesOf([deDE, jaJP]) : string[]
 >                                                  : ^^^^^^^^
->Intl.PluralRules.supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
->                                    : ^^^       ^^                          ^^       ^^^                                          ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
+>Intl.PluralRules.supportedLocalesOf : { (locales: string | readonly string[], options?: { readonly localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>                                    : ^^^       ^^                          ^^       ^^^                                                   ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >PluralRules : Intl.PluralRulesConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
->                   : ^^^       ^^                          ^^       ^^^                                          ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
+>supportedLocalesOf : { (locales: string | readonly string[], options?: { readonly localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>                   : ^^^       ^^                          ^^       ^^^                                                   ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
 >[deDE, jaJP] : Intl.Locale[]
 >             : ^^^^^^^^^^^^^
 >deDE : Intl.Locale
@@ -386,16 +386,16 @@ Intl.PluralRules.supportedLocalesOf([deDE, jaJP]);
 Intl.PluralRules.supportedLocalesOf(readonlyLocales);
 >Intl.PluralRules.supportedLocalesOf(readonlyLocales) : string[]
 >                                                     : ^^^^^^^^
->Intl.PluralRules.supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
->                                    : ^^^       ^^                          ^^       ^^^                                          ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
+>Intl.PluralRules.supportedLocalesOf : { (locales: string | readonly string[], options?: { readonly localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>                                    : ^^^       ^^                          ^^       ^^^                                                   ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >PluralRules : Intl.PluralRulesConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
->                   : ^^^       ^^                          ^^       ^^^                                          ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
+>supportedLocalesOf : { (locales: string | readonly string[], options?: { readonly localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>                   : ^^^       ^^                          ^^       ^^^                                                   ^^^        ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                          ^^^        ^^^
 >readonlyLocales : readonly string[]
 >                : ^^^^^^^^^^^^^^^^^
 

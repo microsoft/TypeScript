@@ -123,6 +123,7 @@ import {
     MethodSignature,
     Modifier,
     MultiMap,
+    Mutable,
     NamedImportBindings,
     NamedImports,
     NamespaceImport,
@@ -145,6 +146,7 @@ import {
     rangeOfNode,
     rangeOfTypeParameters,
     rangeStartPositionsAreOnSameLine,
+    ReadonlyTextRange,
     removeSuffix,
     ScriptKind,
     ScriptTarget,
@@ -180,24 +182,24 @@ import {
  * Currently for simplicity we store recovered positions on the node itself.
  * It can be changed to side-table later if we decide that current design is too invasive.
  */
-function getPos(n: TextRange): number {
+function getPos(n: ReadonlyTextRange): number {
     const result = (n as any).__pos;
     Debug.assert(typeof result === "number");
     return result;
 }
 
-function setPos(n: TextRange, pos: number): void {
+function setPos(n: ReadonlyTextRange, pos: number): void {
     Debug.assert(typeof pos === "number");
     (n as any).__pos = pos;
 }
 
-function getEnd(n: TextRange): number {
+function getEnd(n: ReadonlyTextRange): number {
     const result = (n as any).__end;
     Debug.assert(typeof result === "number");
     return result;
 }
 
-function setEnd(n: TextRange, end: number): void {
+function setEnd(n: ReadonlyTextRange, end: number): void {
     Debug.assert(typeof end === "number");
     (n as any).__end = end;
 }
@@ -316,7 +318,7 @@ type Change = ReplaceWithSingleNode | ReplaceWithMultipleNodes | RemoveNode | Ch
 
 interface BaseChange {
     readonly sourceFile: SourceFile;
-    readonly range: TextRange;
+    readonly range: ReadonlyTextRange;
 }
 
 /** @internal */
@@ -493,7 +495,7 @@ export function isThisTypeAnnotatable(containingFunction: SignatureDeclaration):
 export class ChangeTracker {
     private readonly changes: Change[] = [];
     private newFileChanges?: MultiMap<string, NewFileInsertion>;
-    private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression; readonly sourceFile: SourceFile; }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+    private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration; readonly sourceFile: SourceFile; }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
     private readonly deletedNodes: { readonly sourceFile: SourceFile; readonly node: Node | NodeArray<TypeParameterDeclaration>; }[] = [];
 
     public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -521,7 +523,7 @@ export class ChangeTracker {
         }
     }
 
-    public deleteRange(sourceFile: SourceFile, range: TextRange): void {
+    public deleteRange(sourceFile: SourceFile, range: ReadonlyTextRange): void {
         this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });
     }
 
@@ -562,7 +564,7 @@ export class ChangeTracker {
         this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
     }
 
-    public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: InsertNodeOptions = {}): void {
+    public replaceRange(sourceFile: SourceFile, range: ReadonlyTextRange, newNode: Node, options: InsertNodeOptions = {}): void {
         this.changes.push({ kind: ChangeKind.ReplaceWithSingleNode, sourceFile, range, options, node: newNode });
     }
 
@@ -574,7 +576,7 @@ export class ChangeTracker {
         this.replaceRange(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNode, options);
     }
 
-    private replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = {}): void {
+    private replaceRangeWithNodes(sourceFile: SourceFile, range: ReadonlyTextRange, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = {}): void {
         this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
     }
 
@@ -744,7 +746,7 @@ export class ChangeTracker {
         this.replaceJSDocComment(sourceFile, parent, filter(flatMapToMutable(parent.jsDoc, j => j.tags), predicate));
     }
 
-    public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string): void {
+    public replaceRangeWithText(sourceFile: SourceFile, range: ReadonlyTextRange, text: string): void {
         this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
     }
 
@@ -864,7 +866,7 @@ export class ChangeTracker {
      */
     private guessIndentationFromExistingMembers(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration) {
         let indentation: number | undefined;
-        let lastRange: TextRange = node;
+        let lastRange: ReadonlyTextRange = node;
         for (const member of getMembersOrProperties(node)) {
             if (rangeStartPositionsAreOnSameLine(lastRange, member, sourceFile)) {
                 // each indented member must be on a new line
@@ -1246,7 +1248,7 @@ function endPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node, prevN
     return end;
 }
 
-function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, sourceFile: SourceFile): [number | undefined, number | undefined] {
+function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration, sourceFile: SourceFile): [number | undefined, number | undefined] {
     const open = findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile);
     const close = findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile);
     return [open?.end, close?.end];

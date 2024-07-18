@@ -1021,6 +1021,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Enforces_using_indexed_accessors_for_keys_declared_using_an_indexed_type,
         defaultValueDescription: false,
     },
+    {
+        name: "enforceReadonly",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        category: Diagnostics.Type_Checking,
+        description: Diagnostics.Ensure_that_readonly_properties_remain_read_only_in_type_relationships,
+        defaultValueDescription: false,
+    },
 
     // Module Resolution
     {
@@ -2505,7 +2514,7 @@ export interface TSConfig {
 /** @internal */
 export interface ConvertToTSConfigHost {
     getCurrentDirectory(): string;
-    useCaseSensitiveFileNames: boolean;
+    readonly useCaseSensitiveFileNames: boolean;
 }
 
 /**

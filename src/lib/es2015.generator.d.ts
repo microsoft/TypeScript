@@ -30,7 +30,7 @@ interface GeneratorFunction {
     /**
      * A reference to the prototype.
      */
-    readonly prototype: Generator;
+    prototype: Generator;
 }
 
 interface GeneratorFunctionConstructor {
@@ -55,5 +55,5 @@ interface GeneratorFunctionConstructor {
     /**
      * A reference to the prototype.
      */
-    readonly prototype: GeneratorFunction;
+    prototype: GeneratorFunction;
 }

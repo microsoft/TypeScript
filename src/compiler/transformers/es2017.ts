@@ -73,6 +73,7 @@ import {
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyAssignment,
+    ReadonlyTextRange,
     ScriptTarget,
     SetAccessorDeclaration,
     setEmitFlags,
@@ -1023,7 +1024,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             || kind === SyntaxKind.SetAccessor;
     }
 
-    function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
+    function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: ReadonlyTextRange): LeftHandSideExpression {
         if (enclosingSuperContainerFlags & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
             return setTextRange(
                 factory.createPropertyAccessExpression(

@@ -51,6 +51,7 @@ import {
     ObjectBindingOrAssignmentPattern,
     ParameterDeclaration,
     PropertyName,
+    ReadonlyTextRange,
     setTextRange,
     some,
     TextRange,
@@ -69,7 +70,7 @@ interface FlattenContext {
     hoistTempVariables: boolean;
     hasTransformedPriorElement?: boolean; // indicates whether we've transformed a prior declaration
     emitExpression: (value: Expression) => void;
-    emitBindingOrAssignment: (target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node | undefined) => void;
+    emitBindingOrAssignment: (target: BindingOrAssignmentElementTarget, value: Expression, location: ReadonlyTextRange, original: Node | undefined) => void;
     createArrayBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ArrayBindingOrAssignmentPattern;
     createObjectBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ObjectBindingOrAssignmentPattern;
     createArrayBindingOrAssignmentElement: (node: Identifier) => BindingOrAssignmentElement;
@@ -101,9 +102,9 @@ export function flattenDestructuringAssignment(
     context: TransformationContext,
     level: FlattenLevel,
     needsValue?: boolean,
-    createAssignmentCallback?: (name: Identifier, value: Expression, location?: TextRange) => Expression,
+    createAssignmentCallback?: (name: Identifier, value: Expression, location?: ReadonlyTextRange) => Expression,
 ): Expression {
-    let location: TextRange = node;
+    let location: ReadonlyTextRange = node;
     let value: Expression | undefined;
     if (isDestructuringAssignment(node)) {
         value = node.right;
@@ -180,7 +181,7 @@ export function flattenDestructuringAssignment(
         expressions = append(expressions, expression);
     }
 
-    function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node | undefined) {
+    function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: ReadonlyTextRange, original: Node | undefined) {
         Debug.assertNode(target, createAssignmentCallback ? isIdentifier : isExpression);
         const expression = createAssignmentCallback
             ? createAssignmentCallback(target as Identifier, value, location)
@@ -250,7 +251,7 @@ export function flattenDestructuringBinding(
     skipInitializer?: boolean,
 ): VariableDeclaration[] {
     let pendingExpressions: Expression[] | undefined;
-    const pendingDeclarations: { pendingExpressions?: Expression[]; name: BindingName; value: Expression; location?: TextRange; original?: Node; }[] = [];
+    const pendingDeclarations: { pendingExpressions?: Expression[]; name: BindingName; value: Expression; location?: ReadonlyTextRange; original?: Node; }[] = [];
     const declarations: VariableDeclaration[] = [];
     const flattenContext: FlattenContext = {
         context,
@@ -314,7 +315,7 @@ export function flattenDestructuringBinding(
         pendingExpressions = append(pendingExpressions, value);
     }
 
-    function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange | undefined, original: Node | undefined) {
+    function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: ReadonlyTextRange | undefined, original: Node | undefined) {
         Debug.assertNode(target, isBindingName);
         if (pendingExpressions) {
             value = context.factory.inlineExpressions(append(pendingExpressions, value));
@@ -338,7 +339,7 @@ function flattenBindingOrAssignmentElement(
     flattenContext: FlattenContext,
     element: BindingOrAssignmentElement,
     value: Expression | undefined,
-    location: TextRange,
+    location: ReadonlyTextRange,
     skipInitializer?: boolean,
 ) {
     const bindingTarget = getTargetOfBindingOrAssignmentElement(element)!; // TODO: GH#18217
@@ -382,7 +383,7 @@ function flattenBindingOrAssignmentElement(
  * @param value The current RHS value to assign to the element.
  * @param location The location to use for source maps and comments.
  */
-function flattenObjectBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ObjectBindingOrAssignmentPattern, value: Expression, location: TextRange) {
+function flattenObjectBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ObjectBindingOrAssignmentPattern, value: Expression, location: ReadonlyTextRange) {
     const elements = getElementsOfBindingOrAssignmentPattern(pattern);
     const numElements = elements.length;
     if (numElements !== 1) {
@@ -442,7 +443,7 @@ function flattenObjectBindingOrAssignmentPattern(flattenContext: FlattenContext,
  * @param value The current RHS value to assign to the element.
  * @param location The location to use for source maps and comments.
  */
-function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ArrayBindingOrAssignmentPattern, value: Expression, location: TextRange) {
+function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, parent: BindingOrAssignmentElement, pattern: ArrayBindingOrAssignmentPattern, value: Expression, location: ReadonlyTextRange) {
     const elements = getElementsOfBindingOrAssignmentPattern(pattern);
     const numElements = elements.length;
     if (flattenContext.level < FlattenLevel.ObjectRest && flattenContext.downlevelIteration) {
@@ -537,7 +538,7 @@ function isSimpleBindingOrAssignmentElement(element: BindingOrAssignmentElement)
  * @param defaultValue The default value to use if `value` is `undefined` at runtime.
  * @param location The location to use for source maps and comments.
  */
-function createDefaultValueCheck(flattenContext: FlattenContext, value: Expression, defaultValue: Expression, location: TextRange): Expression {
+function createDefaultValueCheck(flattenContext: FlattenContext, value: Expression, defaultValue: Expression, location: ReadonlyTextRange): Expression {
     value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ true, location);
     return flattenContext.context.factory.createConditionalExpression(flattenContext.context.factory.createTypeCheck(value, "undefined"), /*questionToken*/ undefined, defaultValue, /*colonToken*/ undefined, value);
 }
@@ -579,7 +580,7 @@ function createDestructuringPropertyAccess(flattenContext: FlattenContext, value
  * false if it is necessary to always emit an identifier.
  * @param location The location to use for source maps and comments.
  */
-function ensureIdentifier(flattenContext: FlattenContext, value: Expression, reuseIdentifierExpressions: boolean, location: TextRange) {
+function ensureIdentifier(flattenContext: FlattenContext, value: Expression, reuseIdentifierExpressions: boolean, location: ReadonlyTextRange) {
     if (isIdentifier(value) && reuseIdentifierExpressions) {
         return value;
     }

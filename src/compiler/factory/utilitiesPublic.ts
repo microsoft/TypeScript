@@ -2,12 +2,13 @@ import {
     HasDecorators,
     HasModifiers,
     Node,
+    ReadonlyTextRange,
     setTextRangePosEnd,
     SyntaxKind,
     TextRange,
 } from "../_namespaces/ts.js";
 
-export function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T {
+export function setTextRange<T extends ReadonlyTextRange>(range: T, location: ReadonlyTextRange | undefined): T {
     return location ? setTextRangePosEnd(range, location.pos, location.end) : range;
 }
 

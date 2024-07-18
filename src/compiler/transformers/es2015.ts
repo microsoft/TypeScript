@@ -168,6 +168,7 @@ import {
     PropertyAssignment,
     PropertyDeclaration,
     rangeEndIsOnSameLineAsRangeStart,
+    ReadonlyTextRange,
     ReturnStatement,
     SemicolonClassElement,
     setCommentRange,
@@ -2508,7 +2509,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * @param location The source-map location for the new FunctionExpression.
      * @param name The name of the new FunctionExpression.
      */
-    function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
+    function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: ReadonlyTextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
         const savedConvertedLoopState = convertedLoopState;
         convertedLoopState = undefined;
         const ancestorFacts = container && isClassLike(container) && !isStatic(node)
@@ -2547,8 +2548,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     function transformFunctionBody(node: FunctionLikeDeclaration) {
         let multiLine = false; // indicates whether the block *must* be emitted as multiple lines
         let singleLine = false; // indicates whether the block *may* be emitted as a single line
-        let statementsLocation: TextRange;
-        let closeBraceLocation: TextRange | undefined;
+        let statementsLocation: ReadonlyTextRange;
+        let closeBraceLocation: ReadonlyTextRange | undefined;
 
         const prologue: Statement[] = [];
         const statements: Statement[] = [];

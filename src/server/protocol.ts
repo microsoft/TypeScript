@@ -935,15 +935,15 @@ export interface DefinitionRequest extends FileLocationRequest {
 }
 
 export interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
-    readonly command: CommandTypes.DefinitionAndBoundSpan;
+    command: CommandTypes.DefinitionAndBoundSpan;
 }
 
 export interface FindSourceDefinitionRequest extends FileLocationRequest {
-    readonly command: CommandTypes.FindSourceDefinition;
+    command: CommandTypes.FindSourceDefinition;
 }
 
 export interface DefinitionAndBoundSpanResponse extends Response {
-    readonly body: DefinitionInfoAndBoundSpan;
+    body: DefinitionInfoAndBoundSpan;
 }
 
 /** @internal */
@@ -959,7 +959,7 @@ export interface EmitOutputRequestArgs extends FileRequestArgs {
 }
 /** @internal */
 export interface EmitOutputResponse extends Response {
-    readonly body: EmitOutput | ts.EmitOutput;
+    body: EmitOutput | ts.EmitOutput;
 }
 /** @internal */
 export interface EmitOutput {
@@ -1096,18 +1096,18 @@ export interface BraceCompletionRequestArgs extends FileLocationRequestArgs {
 }
 
 export interface JsxClosingTagRequest extends FileLocationRequest {
-    readonly command: CommandTypes.JsxClosingTag;
-    readonly arguments: JsxClosingTagRequestArgs;
+    command: CommandTypes.JsxClosingTag;
+    arguments: JsxClosingTagRequestArgs;
 }
 
 export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
 
 export interface JsxClosingTagResponse extends Response {
-    readonly body: TextInsertion;
+    body: TextInsertion;
 }
 
 export interface LinkedEditingRangeRequest extends FileLocationRequest {
-    readonly command: CommandTypes.LinkedEditingRange;
+    command: CommandTypes.LinkedEditingRange;
 }
 
 export interface LinkedEditingRangesBody {
@@ -1116,7 +1116,7 @@ export interface LinkedEditingRangesBody {
 }
 
 export interface LinkedEditingRangeResponse extends Response {
-    readonly body: LinkedEditingRangesBody;
+    body: LinkedEditingRangesBody;
 }
 
 /**
@@ -1269,13 +1269,13 @@ export interface RenameRequest extends FileLocationRequest {
 
 /** @internal */
 export interface RenameFullRequest extends FileLocationRequest {
-    readonly command: CommandTypes.RenameLocationsFull;
-    readonly arguments: RenameRequestArgs;
+    command: CommandTypes.RenameLocationsFull;
+    arguments: RenameRequestArgs;
 }
 
 /** @internal @knipignore */
 export interface RenameFullResponse extends Response {
-    readonly body: readonly RenameLocation[];
+    body: readonly RenameLocation[];
 }
 
 /**
@@ -2736,8 +2736,8 @@ export interface LargeFileReferencedEventBody {
 
 export type CreateFileWatcherEventName = "createFileWatcher";
 export interface CreateFileWatcherEvent extends Event {
-    readonly event: CreateFileWatcherEventName;
-    readonly body: CreateFileWatcherEventBody;
+    event: CreateFileWatcherEventName;
+    body: CreateFileWatcherEventBody;
 }
 
 export interface CreateFileWatcherEventBody {
@@ -2747,8 +2747,8 @@ export interface CreateFileWatcherEventBody {
 
 export type CreateDirectoryWatcherEventName = "createDirectoryWatcher";
 export interface CreateDirectoryWatcherEvent extends Event {
-    readonly event: CreateDirectoryWatcherEventName;
-    readonly body: CreateDirectoryWatcherEventBody;
+    event: CreateDirectoryWatcherEventName;
+    body: CreateDirectoryWatcherEventBody;
 }
 
 export interface CreateDirectoryWatcherEventBody {
@@ -2760,8 +2760,8 @@ export interface CreateDirectoryWatcherEventBody {
 
 export type CloseFileWatcherEventName = "closeFileWatcher";
 export interface CloseFileWatcherEvent extends Event {
-    readonly event: CloseFileWatcherEventName;
-    readonly body: CloseFileWatcherEventBody;
+    event: CloseFileWatcherEventName;
+    body: CloseFileWatcherEventBody;
 }
 
 export interface CloseFileWatcherEventBody {
@@ -3149,7 +3149,7 @@ export interface PrepareCallHierarchyRequest extends FileLocationRequest {
 }
 
 export interface PrepareCallHierarchyResponse extends Response {
-    readonly body: CallHierarchyItem | CallHierarchyItem[];
+    body: CallHierarchyItem | CallHierarchyItem[];
 }
 
 export interface ProvideCallHierarchyIncomingCallsRequest extends FileLocationRequest {
@@ -3157,7 +3157,7 @@ export interface ProvideCallHierarchyIncomingCallsRequest extends FileLocationRe
 }
 
 export interface ProvideCallHierarchyIncomingCallsResponse extends Response {
-    readonly body: CallHierarchyIncomingCall[];
+    body: CallHierarchyIncomingCall[];
 }
 
 export interface ProvideCallHierarchyOutgoingCallsRequest extends FileLocationRequest {
@@ -3165,7 +3165,7 @@ export interface ProvideCallHierarchyOutgoingCallsRequest extends FileLocationRe
 }
 
 export interface ProvideCallHierarchyOutgoingCallsResponse extends Response {
-    readonly body: CallHierarchyOutgoingCall[];
+    body: CallHierarchyOutgoingCall[];
 }
 
 export const enum IndentStyle {

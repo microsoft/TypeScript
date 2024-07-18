@@ -124,6 +124,7 @@ import {
     positionIsSynthesized,
     PropertyAccessExpression,
     rangeContainsStartEnd,
+    ReadonlyTextRange,
     RefactorActionInfo,
     RefactorContext,
     RefactorEditInfo,
@@ -917,7 +918,7 @@ interface ScopeExtractions {
  * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
  * or an error explaining why we can't extract into that scope.
  */
-function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): { readonly affectedTextRange: TextRange; readonly extractions: ScopeExtractions[] | undefined; } {
+function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): { readonly affectedTextRange: ReadonlyTextRange; readonly extractions: ScopeExtractions[] | undefined; } {
     const { scopes, affectedTextRange, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
     // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
     const extractions = scopes.map((scope, i): ScopeExtractions => {
@@ -964,7 +965,7 @@ function getPossibleExtractions(targetRange: TargetRange, context: RefactorConte
     return { affectedTextRange, extractions };
 }
 
-function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[]; readonly affectedTextRange: TextRange; readonly readsAndWrites: ReadsAndWrites; } {
+function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[]; readonly affectedTextRange: ReadonlyTextRange; readonly readsAndWrites: ReadsAndWrites; } {
     const { file: sourceFile } = context;
 
     const scopes = collectEnclosingScopes(targetRange);
@@ -1787,7 +1788,7 @@ function isReadonlyArray(v: any): v is readonly any[] {
  *   var someThing = foo + bar;
  *  this returns     ^-------^
  */
-function getEnclosingTextRange(targetRange: TargetRange, sourceFile: SourceFile): TextRange {
+function getEnclosingTextRange(targetRange: TargetRange, sourceFile: SourceFile): ReadonlyTextRange {
     return isReadonlyArray(targetRange.range)
         ? { pos: first(targetRange.range).getStart(sourceFile), end: last(targetRange.range).getEnd() }
         : targetRange.range;
@@ -1822,7 +1823,7 @@ interface ReadsAndWrites {
 function collectReadsAndWrites(
     targetRange: TargetRange,
     scopes: Scope[],
-    enclosingTextRange: TextRange,
+    enclosingTextRange: ReadonlyTextRange,
     sourceFile: SourceFile,
     checker: TypeChecker,
     cancellationToken: CancellationToken,
