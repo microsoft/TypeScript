@@ -23,7 +23,7 @@ module M {
 >fn(n2) : string
 >       : ^^^^^^
 >fn : (n: number) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >n2 : number
 >   : ^^^^^^
         }
@@ -46,11 +46,11 @@ c.m(function(n) { return "hello: "+n; },18);
 >c.m(function(n) { return "hello: "+n; },18) : string
 >                                            : ^^^^^^
 >c.m : (fn: { (n: number): string; }, n2: number) => string
->    : ^  ^^                        ^^  ^^      ^^^^^^^^^^^
+>    : ^  ^^                        ^^  ^^      ^^^^^      
 >c : M.C
 >  : ^^^
 >m : (fn: { (n: number): string; }, n2: number) => string
->  : ^  ^^                        ^^  ^^      ^^^^^^^^^^^
+>  : ^  ^^                        ^^  ^^      ^^^^^      
 >function(n) { return "hello: "+n; } : (n: number) => string
 >                                    : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number

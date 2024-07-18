@@ -78,7 +78,7 @@ function f2() {
 >a : () => void
 >  : ^^^^^^^^^^
 >() => { x /* number */ } : () => void
->                         :           
+>                         : ^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -86,7 +86,7 @@ function f2() {
 >f : () => void
 >  : ^^^^^^^^^^
 >function() { x /* number */ } : () => void
->                              :           
+>                              : ^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -193,7 +193,7 @@ function f4(cond: () => boolean) {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         x = "abc";
 >x = "abc" : "abc"
@@ -254,7 +254,7 @@ function f5(x: string | number, cond: () => boolean) {
 >cond() : boolean
 >       : ^^^^^^^
 >cond : () => boolean
->     : ^^^^^^^^^^^^^
+>     : ^^^^^^       
 
         x = 1;
 >x = 1 : 1
@@ -481,7 +481,7 @@ function f7() {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => { e /* Error */ } : () => void
->                        :           
+>                        : ^^^^^^^^^^
 >e : Error
 >  : ^^^^^
         }
@@ -710,11 +710,11 @@ function f12() {
 >values.forEach(v => foo.push(v)) : void
 >                                 : ^^^^
 >values.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->               : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>               : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >values : number[]
 >       : ^^^^^^^^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >v => foo.push(v) : (v: number) => number
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
@@ -722,11 +722,11 @@ function f12() {
 >foo.push(v) : number
 >            : ^^^^^^
 >foo.push : (...items: number[]) => number
->         : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^^^^^^^      
 >foo : number[]
 >    : ^^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >v : number
 >  : ^^^^^^
 }

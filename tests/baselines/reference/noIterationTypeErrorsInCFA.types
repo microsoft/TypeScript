@@ -18,11 +18,11 @@ export function doRemove(dds: F | F[]) {
 >Array.isArray(dds) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >dds : F | F[]
 >    : ^^^^^^^
 
@@ -46,11 +46,11 @@ export function doRemove(dds: F | F[]) {
 >n.d() : void
 >      : ^^^^
 >n.d : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 >n : F
 >  : ^
 >d : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
     }
     return dds
 >dds : F[]

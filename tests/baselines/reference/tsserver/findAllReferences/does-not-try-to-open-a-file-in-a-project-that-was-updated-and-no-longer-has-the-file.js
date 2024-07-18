@@ -73,8 +73,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/babel-loader/src
-Info seq  [hh:mm:ss:mss] For info: /packages/babel-loader/src/index.ts :: Config file name: /packages/babel-loader/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/babel-loader/src/index.ts ProjectRootPath: undefined:: Result: /packages/babel-loader/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/babel-loader/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/babel-loader/tsconfig.json 2000 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -132,8 +131,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/core/sr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/core/src 1 undefined Config: /packages/core/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/loading-indicator.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/package.json 2000 undefined Project: /packages/babel-loader/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/babel-loader/src/package.json 2000 undefined Project: /packages/babel-loader/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2018.full.d.ts 500 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
@@ -276,8 +273,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/babel-loader
-Info seq  [hh:mm:ss:mss] For info: /packages/babel-loader/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/babel-loader/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -288,17 +284,16 @@ Info seq  [hh:mm:ss:mss] 		Projects: /packages/babel-loader/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 PolledWatches::
 /a/lib/lib.es2018.full.d.ts: *new*
   {"pollingInterval":500}
-/packages/babel-loader/src/package.json: *new*
-  {"pollingInterval":2000}
-/packages/core/src/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /packages/babel-loader/tsconfig.json: *new*
@@ -352,8 +347,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/core/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /packages/core/src
-Info seq  [hh:mm:ss:mss] For info: /packages/core/src/index.ts :: Config file name: /packages/core/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/core/src/index.ts ProjectRootPath: undefined:: Result: /packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -366,7 +360,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/core/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/package.json 2000 undefined Project: /packages/core/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2018.full.d.ts 500 undefined Project: /packages/core/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/core/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/core/tsconfig.json' (Configured)
@@ -507,8 +500,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/core
-Info seq  [hh:mm:ss:mss] For info: /packages/core/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/core/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -525,17 +517,16 @@ Info seq  [hh:mm:ss:mss] 		Projects: /packages/babel-loader/tsconfig.json,/packa
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 PolledWatches::
 /a/lib/lib.es2018.full.d.ts:
   {"pollingInterval":500}
-/packages/babel-loader/src/package.json:
-  {"pollingInterval":2000}
-/packages/core/src/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /packages/babel-loader/tsconfig.json:
@@ -655,7 +646,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /packages/core/src/index.ts position 92 in project /packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/babel-loader/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/core/src/package.json 2000 undefined Project: /packages/babel-loader/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -742,18 +732,17 @@ Info seq  [hh:mm:ss:mss] response:
         "symbolStartOffset": 5,
         "symbolDisplayString": "(property) Bar.prop: number"
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 PolledWatches::
 /a/lib/lib.es2018.full.d.ts:
   {"pollingInterval":500}
-/packages/babel-loader/src/package.json:
-  {"pollingInterval":2000}
 /packages/core/dist/loading-indicator.d.ts: *new*
-  {"pollingInterval":2000}
-/packages/core/src/package.json:
   {"pollingInterval":2000}
 
 FsWatches::

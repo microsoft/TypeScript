@@ -3,7 +3,7 @@
 === declarationEmitExpressionInExtends.ts ===
 var x: {
 >x : new <T>(s: any) => Q
->  : ^^^^^^^^ ^^   ^^^^^ 
+>  : ^^^^^ ^^ ^^   ^^^^^ 
 
     new<T>(s: any): Q;
 >s : any

@@ -1,11 +1,11 @@
-import * as Utils from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import * as Utils from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is specified as nodenext", () => {
     verifyTscWatch({

@@ -157,10 +157,10 @@ class A {
 >  : ^
 
         ({ a: this.#field = 1, b: [this.#field = 1] } = { b: [] });
->({ a: this.#field = 1, b: [this.#field = 1] } = { b: [] }) : { b: []; a?: number; }
->                                                           : ^^^^^^^^^^^^^^^^^^^^^^
->{ a: this.#field = 1, b: [this.#field = 1] } = { b: [] } : { b: []; a?: number; }
->                                                         : ^^^^^^^^^^^^^^^^^^^^^^
+>({ a: this.#field = 1, b: [this.#field = 1] } = { b: [] }) : { b: []; }
+>                                                           : ^^^^^^^^^^
+>{ a: this.#field = 1, b: [this.#field = 1] } = { b: [] } : { b: []; }
+>                                                         : ^^^^^^^^^^
 >{ a: this.#field = 1, b: [this.#field = 1] } : { a?: number; b: [number]; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -185,8 +185,8 @@ class A {
 >     : ^^^^
 >1 : 1
 >  : ^
->{ b: [] } : { b: []; a?: number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^
+>{ b: [] } : { b: []; }
+>          : ^^^^^^^^^^
 >b : []
 >  : ^^
 >[] : []

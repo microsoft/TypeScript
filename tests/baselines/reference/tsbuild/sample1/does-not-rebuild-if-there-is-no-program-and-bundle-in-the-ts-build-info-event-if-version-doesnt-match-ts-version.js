@@ -179,16 +179,16 @@ export const m = mod;
 
 Output::
 /a/lib/tsc --b tests --verbose
-[[90m12:00:39 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
     * logic/tsconfig.json
     * tests/tsconfig.json
 
-[[90m12:00:40 AM[0m] Project 'core/tsconfig.json' is up to date because newest input 'core/anotherModule.ts' is older than output 'core/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is up to date because newest input 'core/anotherModule.ts' is older than output 'core/tsconfig.tsbuildinfo'
 
-[[90m12:00:41 AM[0m] Project 'logic/tsconfig.json' is up to date because newest input 'logic/index.ts' is older than output 'logic/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'logic/tsconfig.json' is up to date because newest input 'logic/index.ts' is older than output 'logic/tsconfig.tsbuildinfo'
 
-[[90m12:00:42 AM[0m] Project 'tests/tsconfig.json' is up to date because newest input 'tests/index.ts' is older than output 'tests/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'tests/tsconfig.json' is up to date because newest input 'tests/index.ts' is older than output 'tests/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 

@@ -30,8 +30,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/temp
-Info seq  [hh:mm:ss:mss] For info: /a/b/projects/temp/a.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/projects/temp/a.ts ProjectRootPath: /a/b/projects/temp:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -40,8 +39,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/tem
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -68,7 +65,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/temp/a.ts ProjectRootPath: /a/
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -77,16 +81,12 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/package.json: *new*
-  {"pollingInterval":2000}
 /a/b/projects/temp/jsconfig.json: *new*
   {"pollingInterval":2000}
 /a/b/projects/temp/node_modules: *new*
   {"pollingInterval":500}
 /a/b/projects/temp/node_modules/@types: *new*
   {"pollingInterval":500}
-/a/b/projects/temp/package.json: *new*
-  {"pollingInterval":2000}
 /a/b/projects/temp/tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -122,10 +122,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 2,
       "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
     }
 After request
 
@@ -201,7 +197,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 2
+        "request_seq": 2,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/a/b/projects/temp/a.ts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -246,11 +252,7 @@ PolledWatches::
   {"pollingInterval":500}
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/package.json:
-  {"pollingInterval":2000}
 /a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/package.json:
   {"pollingInterval":2000}
 /a/b/projects/temp/tsconfig.json:
   {"pollingInterval":2000}
@@ -287,9 +289,6 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earli
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules/@types/pad/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/temp/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -314,17 +313,7 @@ After running Timeout callback:: count: 1
 PolledWatches::
 /a/b/projects/node_modules/@types:
   {"pollingInterval":500}
-/a/b/projects/package.json:
-  {"pollingInterval":2000}
 /a/b/projects/temp/jsconfig.json:
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules/@types/package.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules/@types/pad/package.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/temp/node_modules/package.json: *new*
-  {"pollingInterval":2000}
-/a/b/projects/temp/package.json:
   {"pollingInterval":2000}
 /a/b/projects/temp/tsconfig.json:
   {"pollingInterval":2000}

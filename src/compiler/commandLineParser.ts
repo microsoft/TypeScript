@@ -121,10 +121,9 @@ import {
     WatchDirectoryKind,
     WatchFileKind,
     WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
-/** @internal */
-export const compileOnSaveCommandLineOption: CommandLineOption = {
+const compileOnSaveCommandLineOption: CommandLineOption = {
     name: "compileOnSave",
     type: "boolean",
     defaultValueDescription: false,
@@ -236,6 +235,7 @@ const libEntries: [string, string][] = [
     ["esnext.object", "lib.esnext.object.d.ts"],
     ["esnext.array", "lib.esnext.array.d.ts"],
     ["esnext.regexp", "lib.esnext.regexp.d.ts"],
+    ["esnext.string", "lib.esnext.string.d.ts"],
     ["esnext.iterator", "lib.esnext.iterator.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
@@ -468,7 +468,6 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Emit,
-        transpileOptionValue: undefined,
         defaultValueDescription: false,
         description: Diagnostics.Create_sourcemaps_for_d_ts_files,
     },
@@ -500,6 +499,25 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Emit,
         description: Diagnostics.Include_sourcemap_files_inside_the_emitted_JavaScript,
+        defaultValueDescription: false,
+    },
+    {
+        name: "noCheck",
+        type: "boolean",
+        showInSimplifiedHelpView: false,
+        category: Diagnostics.Compiler_Diagnostics,
+        description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
+        transpileOptionValue: true,
+        defaultValueDescription: false,
+        // Not setting affectsSemanticDiagnostics or affectsBuildInfo because we dont want all diagnostics to go away, its handled in builder
+    },
+    {
+        name: "noEmit",
+        type: "boolean",
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Emit,
+        description: Diagnostics.Disable_emitting_files_from_a_compilation,
+        transpileOptionValue: undefined,
         defaultValueDescription: false,
     },
     {
@@ -773,19 +791,11 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Disable_emitting_comments,
     },
     {
-        name: "noEmit",
-        type: "boolean",
-        showInSimplifiedHelpView: true,
-        category: Diagnostics.Emit,
-        description: Diagnostics.Disable_emitting_files_from_a_compilation,
-        transpileOptionValue: undefined,
-        defaultValueDescription: false,
-    },
-    {
         name: "importHelpers",
         type: "boolean",
         affectsEmit: true,
         affectsBuildInfo: true,
+        affectsSourceFile: true,
         category: Diagnostics.Emit,
         description: Diagnostics.Allow_importing_helper_functions_from_tslib_once_per_project_instead_of_including_them_per_file,
         defaultValueDescription: false,
@@ -830,6 +840,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
         defaultValueDescription: false,
+    },
+    {
+        name: "isolatedDeclarations",
+        type: "boolean",
+        category: Diagnostics.Interop_Constraints,
+        description: Diagnostics.Require_sufficient_annotation_on_exports_so_other_tools_can_trivially_generate_declaration_files,
+        defaultValueDescription: false,
+        affectsBuildInfo: true,
+        affectsSemanticDiagnostics: true,
     },
 
     // Strict Type Checks
@@ -1247,6 +1266,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsBuildInfo: true,
         affectsModuleResolution: true,
+        affectsSourceFile: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Specify_module_specifier_used_to_import_the_JSX_factory_functions_when_using_jsx_Colon_react_jsx_Asterisk,
         defaultValueDescription: "react",
@@ -1607,14 +1627,19 @@ export const optionsAffectingProgramStructure: readonly CommandLineOption[] = op
 /** @internal */
 export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => hasProperty(option, "transpileOptionValue"));
 
-/** @internal */
-export const configDirTemplateSubstitutionOptions: readonly CommandLineOption[] = optionDeclarations.filter(
+const configDirTemplateSubstitutionOptions: readonly CommandLineOption[] = optionDeclarations.filter(
     option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
 );
-/** @internal */
-export const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOption[] = optionsForWatch.filter(
+
+const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOption[] = optionsForWatch.filter(
     option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
 );
+
+/** @internal */
+export const commandLineOptionOfCustomType: readonly CommandLineOptionOfCustomType[] = optionDeclarations.filter(isCommandLineOptionOfCustomType);
+function isCommandLineOptionOfCustomType(option: CommandLineOption): option is CommandLineOptionOfCustomType {
+    return !isString(option.type);
+}
 
 // Build related options
 /** @internal */
@@ -1720,8 +1745,7 @@ const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
     getOptionsNameMap: getBuildOptionsNameMap,
 };
 
-/** @internal */
-export const defaultInitCompilerOptions: CompilerOptions = {
+const defaultInitCompilerOptions: CompilerOptions = {
     module: ModuleKind.CommonJS,
     target: ScriptTarget.ES2016,
     strict: true,
@@ -2395,7 +2419,7 @@ export function convertToJson(
                 return false;
 
             case SyntaxKind.NullKeyword:
-                return null; // eslint-disable-line no-null/no-null
+                return null; // eslint-disable-line no-restricted-syntax
 
             case SyntaxKind.StringLiteral:
                 if (!isDoubleQuotedString(valueExpression)) {
@@ -2551,9 +2575,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
 
 /** @internal */
 export function optionMapToObject(optionMap: Map<string, CompilerOptionsValue>): object {
-    return {
-        ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
-    };
+    return Object.fromEntries(optionMap);
 }
 
 function filterSameAsDefaultInclude(specs: readonly string[] | undefined) {
@@ -2870,8 +2892,8 @@ export function setConfigFileInOptions(options: CompilerOptions, configFile: TsC
     }
 }
 
-function isNullOrUndefined(x: any): x is null | undefined {
-    return x === undefined || x === null; // eslint-disable-line no-null/no-null
+function isNullOrUndefined(x: any): x is null | undefined { // eslint-disable-line no-restricted-syntax
+    return x === undefined || x === null; // eslint-disable-line no-restricted-syntax
 }
 
 function directoryOfCombinedPath(fileName: string, basePath: string) {
@@ -2880,8 +2902,7 @@ function directoryOfCombinedPath(fileName: string, basePath: string) {
     return getDirectoryPath(getNormalizedAbsolutePath(fileName, basePath));
 }
 
-/** @internal */
-export const defaultIncludeSpec = "**/*";
+const defaultIncludeSpec = "**/*";
 
 /**
  * Parse the contents of a config file from json or json source file (tsconfig.json).
@@ -2967,12 +2988,12 @@ function parseJsonConfigFileContentWorker(
         const excludeOfRaw = getSpecsFromRaw("exclude");
         let isDefaultIncludeSpec = false;
         let excludeSpecs = toPropValue(excludeOfRaw);
-        if (excludeOfRaw === "no-prop" && raw.compilerOptions) {
-            const outDir = raw.compilerOptions.outDir;
-            const declarationDir = raw.compilerOptions.declarationDir;
+        if (excludeOfRaw === "no-prop") {
+            const outDir = options.outDir;
+            const declarationDir = options.declarationDir;
 
             if (outDir || declarationDir) {
-                excludeSpecs = [outDir, declarationDir].filter(d => !!d);
+                excludeSpecs = filter([outDir, declarationDir], d => !!d) as string[];
             }
         }
 

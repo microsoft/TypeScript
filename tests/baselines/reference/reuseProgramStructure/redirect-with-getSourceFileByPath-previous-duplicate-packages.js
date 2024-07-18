@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /node_modules/a/node_modules/x/index.d.ts
 
 
@@ -110,12 +110,12 @@ MissingPaths:: [
   "lib.d.ts"
 ]
 
-/node_modules/b/index.d.ts(2,8): error TS1259: Module '"/node_modules/b/node_modules/x/index"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
-/node_modules/b/node_modules/x/index.d.ts(3,16): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
+node_modules/b/index.d.ts(2,8): error TS1259: Module '"/node_modules/b/node_modules/x/index"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
+node_modules/b/node_modules/x/index.d.ts(3,16): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
 
 
 
-Program Reused:: Not
+Program 2 Reused:: Not
 File: /node_modules/a/node_modules/x/index.d.ts
 
 

@@ -1,3 +1,4 @@
+import { StringCompletions } from "./_namespaces/ts.Completions.js";
 import {
     __String,
     addToSeen,
@@ -169,6 +170,8 @@ import {
     isFunctionTypeNode,
     isGetAccessorDeclaration,
     isIdentifier,
+    isIdentifierPart,
+    isIdentifierStart,
     isIdentifierText,
     isImportableFile,
     isImportAttributes,
@@ -296,6 +299,7 @@ import {
     ModifierSyntaxKind,
     modifierToFlag,
     ModuleDeclaration,
+    moduleExportNameTextEscaped,
     ModuleReference,
     moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
@@ -389,13 +393,12 @@ import {
     UserPreferences,
     VariableDeclaration,
     walkUpParenthesizedExpressions,
-} from "./_namespaces/ts";
-import { StringCompletions } from "./_namespaces/ts.Completions";
+} from "./_namespaces/ts.js";
 
 // Exported only for tests
 /** @internal */
 export const moduleSpecifierResolutionLimit = 100;
-/** @internal */
+/** @internal @knipignore */
 export const moduleSpecifierResolutionCacheAttemptLimit = 1000;
 
 /** @internal */
@@ -1340,7 +1343,7 @@ function completionInfoFromData(
                 !uniqueNames.has(keywordEntry.name)
             ) {
                 uniqueNames.add(keywordEntry.name);
-                insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
+                insertSorted(entries, keywordEntry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
             }
         }
     }
@@ -1348,14 +1351,14 @@ function completionInfoFromData(
     for (const keywordEntry of getContextualKeywords(contextToken, position)) {
         if (!uniqueNames.has(keywordEntry.name)) {
             uniqueNames.add(keywordEntry.name);
-            insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
+            insertSorted(entries, keywordEntry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
         }
     }
 
     for (const literal of literals) {
         const literalEntry = createCompletionEntryForLiteral(sourceFile, preferences, literal);
         uniqueNames.add(literalEntry.name);
-        insertSorted(entries, literalEntry, compareCompletionEntries, /*allowDuplicates*/ true);
+        insertSorted(entries, literalEntry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
     }
 
     if (!isChecked) {
@@ -1661,7 +1664,7 @@ function createCompletionEntry(
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
     let filterText: string | undefined;
-    let replacementSpan = getReplacementSpanForContextToken(replacementToken);
+    let replacementSpan = getReplacementSpanForContextToken(replacementToken, position);
     let data: CompletionEntryData | undefined;
     let isSnippet: true | undefined;
     let source = getSourceFromOrigin(origin);
@@ -1836,10 +1839,19 @@ function createCompletionEntry(
     }
 
     const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
-    if (parentNamedImportOrExport?.kind === SyntaxKind.NamedImports) {
-        const possibleToken = stringToToken(name);
-        if (parentNamedImportOrExport && possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
-            insertText = `${name} as ${name}_`;
+    if (parentNamedImportOrExport) {
+        const languageVersion = getEmitScriptTarget(host.getCompilationSettings());
+        if (!isIdentifierText(name, languageVersion)) {
+            insertText = JSON.stringify(name);
+            if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+                insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+            }
+        }
+        else if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+            const possibleToken = stringToToken(name);
+            if (possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
+                insertText = `${name} as ${name}_`;
+            }
         }
     }
 
@@ -1870,6 +1882,29 @@ function createCompletionEntry(
         data,
         ...includeSymbol ? { symbol } : undefined,
     };
+}
+
+function generateIdentifierForArbitraryString(text: string, languageVersion: ScriptTarget | undefined): string {
+    let needsUnderscore = false;
+    let identifier = "";
+    let ch: number | undefined;
+
+    // Convert "(example, text)" into "_example_text_"
+    for (let i = 0; i < text.length; i += ch !== undefined && ch >= 0x10000 ? 2 : 1) {
+        ch = text.codePointAt(i);
+        if (ch !== undefined && (i === 0 ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion))) {
+            if (needsUnderscore) identifier += "_";
+            identifier += String.fromCodePoint(ch);
+            needsUnderscore = false;
+        }
+        else {
+            needsUnderscore = true;
+        }
+    }
+    if (needsUnderscore) identifier += "_";
+
+    // Default to "_" if the provided text was empty
+    return identifier || "_";
 }
 
 function isClassLikeMemberCompletion(symbol: Symbol, location: Node, sourceFile: SourceFile): boolean {
@@ -2630,7 +2665,7 @@ export function getCompletionEntriesFromSymbols(
         /** True for locals; false for globals, module exports from other files, `this.` completions. */
         const shouldShadowLaterSymbols = (!origin || originIsTypeOnlyAlias(origin)) && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location.getSourceFile()));
         uniques.set(name, shouldShadowLaterSymbols);
-        insertSorted(entries, entry, compareCompletionEntries, /*allowDuplicates*/ true);
+        insertSorted(entries, entry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
     }
 
     log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (timestamp() - start));
@@ -3948,7 +3983,9 @@ function getCompletionData(
         // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
         if (compilerOptionsIndicateEsModules(program.getCompilerOptions())) return true;
         // If some file is using ES6 modules, assume that it's OK to add more.
-        return programContainsModules(program);
+        return program.getSymlinkCache?.().hasAnySymlinks() ||
+            !!program.getCompilerOptions().paths ||
+            programContainsModules(program);
     }
 
     function isSnippetScope(scopeNode: Node): boolean {
@@ -4495,7 +4532,7 @@ function getCompletionData(
         completionKind = CompletionKind.MemberLike;
         isNewIdentifierLocation = false;
         const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
-        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => (n.propertyName || n.name).escapedText));
+        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => moduleExportNameTextEscaped(n.propertyName || n.name)));
         const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
         symbols = concatenate(symbols, uniques);
         if (!uniques.length) {
@@ -5247,6 +5284,10 @@ function getCompletionEntryDisplayNameForSymbol(
     const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
     if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return validNameResult;
+    }
+    if (symbol.flags & SymbolFlags.Alias) {
+        // Allow non-identifier import/export aliases since we can insert them as string literals
+        return { name, needsConvertPropertyAccess: true };
     }
     switch (kind) {
         case CompletionKind.MemberLike:

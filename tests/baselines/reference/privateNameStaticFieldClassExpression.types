@@ -16,11 +16,11 @@ class B {
 >console.log("hello") : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -69,11 +69,11 @@ class B {
 >console.log(B.#foo.test) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >B.#foo.test : number
 >            : ^^^^^^
 >B.#foo : typeof (Anonymous class)

@@ -1,12 +1,12 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineParseConfig,
     baselineParseConfigHost,
-} from "./helpers";
+} from "./helpers.js";
 
 function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
     return new vfs.FileSystem(ignoreCase, {
@@ -186,7 +186,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                 "dev/configs/third.json": jsonToReadableText({
                     extends: "./second",
                     compilerOptions: {
-                        module: null, // eslint-disable-line no-null/no-null
+                        module: null, // eslint-disable-line no-restricted-syntax
                     },
                     include: ["../supplemental.*"],
                 }),
@@ -195,7 +195,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                     compilerOptions: {
                         module: "system",
                     },
-                    include: null, // eslint-disable-line no-null/no-null
+                    include: null, // eslint-disable-line no-restricted-syntax
                     files: ["../main.ts"],
                 }),
                 "dev/configs/fifth.json": jsonToReadableText({
@@ -228,7 +228,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                 }),
                 "dev/configs/extendsArrayThird.json": jsonToReadableText({
                     compilerOptions: {
-                        module: null, // eslint-disable-line no-null/no-null
+                        module: null, // eslint-disable-line no-restricted-syntax
                         noImplicitAny: false,
                     },
                     extends: "./extendsArrayFirst",
@@ -239,7 +239,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                         module: "system",
                         strictNullChecks: false,
                     },
-                    include: null, // eslint-disable-line no-null/no-null
+                    include: null, // eslint-disable-line no-restricted-syntax
                     files: ["../main.ts"],
                 }),
                 "dev/configs/extendsArrayFifth.json": jsonToReadableText({

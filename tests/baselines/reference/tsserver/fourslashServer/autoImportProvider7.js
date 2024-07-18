@@ -47,8 +47,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /tsconfig.json :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -90,7 +89,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/index.ts 500 unde
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir 1 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir 1 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
@@ -147,6 +145,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -168,11 +167,10 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -207,6 +205,18 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -225,9 +235,6 @@ watchedFiles::
   {"pollingInterval":500}
 /packages/mylib/mySubDir/myClass2.ts: *new*
   {"pollingInterval":500}
-/packages/mylib/mySubDir/package.json: *new*
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /src/index.ts: *new*
   {"pollingInterval":500}
 /tsconfig.json: *new*
@@ -308,8 +315,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /src
-Info seq  [hh:mm:ss:mss] For info: /src/index.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /src/index.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
 
@@ -327,6 +333,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -345,9 +359,6 @@ watchedFiles::
   {"pollingInterval":500}
 /packages/mylib/mySubDir/myClass2.ts:
   {"pollingInterval":500}
-/packages/mylib/mySubDir/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /tsconfig.json:
   {"pollingInterval":2000}
 
@@ -483,6 +494,20 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 3,
       "success": true
     }
+After Request
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 4,
@@ -1251,9 +1276,6 @@ watchedFiles::
   {"pollingInterval":500}
 /packages/mylib/mySubDir/myClass2.ts:
   {"pollingInterval":500}
-/packages/mylib/mySubDir/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /tsconfig.json:
   {"pollingInterval":2000}
 
@@ -1405,11 +1427,20 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 7,
+      "success": true
+    }
 After Request
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
+    projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1

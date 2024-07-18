@@ -39,8 +39,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /node_modules/foo
-Info seq  [hh:mm:ss:mss] For info: /node_modules/foo/package.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /node_modules/foo/package.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
@@ -71,6 +70,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/foo/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -112,11 +122,9 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /b.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/foo/types/a.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/foo/types/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -152,6 +160,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/foo/package.json ProjectRootPa
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /b.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -162,8 +181,6 @@ watchedFiles::
   {"pollingInterval":500}
 /node_modules/foo/types/a.d.ts: *new*
   {"pollingInterval":500}
-/node_modules/foo/types/package.json: *new*
-  {"pollingInterval":2000}
 
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -258,8 +275,6 @@ watchedFiles::
   {"pollingInterval":500}
 /node_modules/foo/types/a.d.ts.map: *new*
   {"pollingInterval":500}
-/node_modules/foo/types/package.json:
-  {"pollingInterval":2000}
 
 Projects::
 /dev/null/inferredProject1* (Inferred)

@@ -81,7 +81,7 @@ export function predom(): predom.JSX.Element;
 /** @jsx predom */
 import { predom } from "./renderer2"
 >predom : () => predom.JSX.Element
->       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^                  
 
 export default <h></h>
 ><h></h> : predom.JSX.Element
@@ -95,7 +95,7 @@ export default <h></h>
 /** @jsx dom */
 import { dom } from "./renderer"
 >dom : () => JSX.Element
->    : ^^^^^^^^^^^^^^^^^
+>    : ^^^^^^           
 
 import prerendered from "./component";
 >prerendered : import("renderer2").predom.JSX.Element

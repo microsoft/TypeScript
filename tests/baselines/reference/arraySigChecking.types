@@ -48,11 +48,11 @@ var strArray: string[] = [myVar.voidFn()];
 >myVar.voidFn() : void
 >               : ^^^^
 >myVar.voidFn : () => void
->             : ^^^^^^^^^^
+>             : ^^^^^^    
 >myVar : myInt
 >      : ^^^^^
 >voidFn : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 
 
 var myArray: number[][][];
@@ -87,7 +87,7 @@ function isEmpty(l: { length: number }) {
 >l.length : number
 >         : ^^^^^^
 >l : { length: number; }
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^
 >length : number
 >       : ^^^^^^
 >0 : 0

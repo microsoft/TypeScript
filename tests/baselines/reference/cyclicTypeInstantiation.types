@@ -15,14 +15,14 @@ function foo<T>() {
 
         b: typeof x;
 >b : { a: T; b: any; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^^^
 >x : { a: T; b: any; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^^^
 
     };
     return x;
 >x : { a: T; b: any; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^^^
 }
 
 function bar<T>() {
@@ -39,31 +39,31 @@ function bar<T>() {
 
         b: typeof x;
 >b : { a: T; b: any; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^^^
 >x : { a: T; b: any; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^^^
 
     };
     return x;
 >x : { a: T; b: any; }
->  : ^^^^^^^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^^^
 }
 
 var a = foo<string>();
 >a : { a: string; b: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >foo<string>() : { a: string; b: any; }
->              :                       
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>() => { a: T; b: any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 var b = bar<string>();
 >b : { a: string; b: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >bar<string>() : { a: string; b: any; }
->              :                       
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 >bar : <T>() => { a: T; b: any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 // Relating types of a and b produces instantiations of the cyclic anonymous types in foo and bar
 a = b;

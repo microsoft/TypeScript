@@ -40,10 +40,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -153,6 +149,23 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/someuser/project/tsconfig.json",
+        "configFile": "/user/someuser/project/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "No inputs were found in config file '/user/someuser/project/tsconfig.json'. Specified 'include' paths were '[\"**/*\"]' and 'exclude' paths were '[]'.",
+            "code": 18003,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
@@ -161,7 +174,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -331,10 +347,11 @@ Projects::
 /user/someuser/project/WebApplication6.csproj (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
-/user/someuser/project/tsconfig.json (Configured)
+/user/someuser/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     isOrphan: true
+    noOpenRef: true *changed*
     deferredClose: true
 
 ScriptInfos::
@@ -517,7 +534,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -556,5 +576,5 @@ Projects::
     projectProgramVersion: 1
     isClosed: true *changed*
     isOrphan: true
-    noOpenRef: true *changed*
+    noOpenRef: true
     deferredClose: true

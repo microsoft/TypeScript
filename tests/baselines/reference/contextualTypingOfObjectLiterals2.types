@@ -24,7 +24,7 @@ f2({ foo: s => s.hmm }) // 's' should be 'string', so this should be an error
 >foo : (s: string) => any
 >    : ^ ^^^^^^^^^^^^^^^^
 >s => s.hmm : (s: string) => any
->           :                   
+>           : ^ ^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s.hmm : any

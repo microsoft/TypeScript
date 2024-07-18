@@ -10,13 +10,13 @@ class class1 {
 >x2 : { doStuff: (callback: any) => () => any; }
 >   : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 >{            doStuff: (callback) => () => {                var _this = 2;                return callback(this);            }        } : { doStuff: (callback: any) => () => any; }
->                                                                                                                                      : ^^^^^^^^^^^                            ^^^
+>                                                                                                                                      : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 
             doStuff: (callback) => () => {
 >doStuff : (callback: any) => () => any
 >        : ^        ^^^^^^^^^^^^^^^^^^^
 >(callback) => () => {                var _this = 2;                return callback(this);            } : (callback: any) => () => any
->                                                                                                       :                             
+>                                                                                                       : ^        ^^^^^^^^^^^^^^^^^^^
 >callback : any
 >() => {                var _this = 2;                return callback(this);            } : () => any
 >                                                                                         : ^^^^^^^^^
@@ -52,13 +52,13 @@ class class2 {
 >x2 : { doStuff: (callback: any) => () => any; }
 >   : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 >{            doStuff: (callback) => () => {                return callback(this);            }        } : { doStuff: (callback: any) => () => any; }
->                                                                                                        : ^^^^^^^^^^^                            ^^^
+>                                                                                                        : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 
             doStuff: (callback) => () => {
 >doStuff : (callback: any) => () => any
 >        : ^        ^^^^^^^^^^^^^^^^^^^
 >(callback) => () => {                return callback(this);            } : (callback: any) => () => any
->                                                                         :                             
+>                                                                         : ^        ^^^^^^^^^^^^^^^^^^^
 >callback : any
 >() => {                return callback(this);            } : () => any
 >                                                           : ^^^^^^^^^

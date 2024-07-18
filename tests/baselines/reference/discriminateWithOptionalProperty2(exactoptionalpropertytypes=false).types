@@ -71,7 +71,7 @@ function mapAsyncIterable<T, U, R = undefined>(
 >callback(result.value) : PromiseOrValue<U>
 >                       : ^^^^^^^^^^^^^^^^^
 >callback : (value: T) => PromiseOrValue<U>
->         : ^     ^^ ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^ ^^^^^                 
 >result.value : T
 >             : ^
 >result : IteratorYieldResult<T>
@@ -136,7 +136,7 @@ function mapAsyncIterable<T, U, R = undefined>(
 >mapResult(await iterator.next()) : Promise<IteratorResult<U, R>>
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapResult : (result: IteratorResult<T, R>) => Promise<IteratorResult<U, R>>
->          : ^      ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^      ^^                    ^^^^^                             
 >await iterator.next() : IteratorResult<T, any>
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >iterator.next() : Promise<IteratorResult<T, any>>
@@ -173,7 +173,7 @@ function mapAsyncIterable<T, U, R = undefined>(
 >mapResult(await iterator.return()) : Promise<IteratorResult<U, R>>
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapResult : (result: IteratorResult<T, R>) => Promise<IteratorResult<U, R>>
->          : ^      ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^      ^^                    ^^^^^                             
 >await iterator.return() : IteratorResult<T, any>
 >                        : ^^^^^^^^^^^^^^^^^^^^^^
 >iterator.return() : Promise<IteratorResult<T, any>>
@@ -222,7 +222,7 @@ function mapAsyncIterable<T, U, R = undefined>(
 >mapResult(await iterator.throw(error)) : Promise<IteratorResult<U, R>>
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapResult : (result: IteratorResult<T, R>) => Promise<IteratorResult<U, R>>
->          : ^      ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^      ^^                    ^^^^^                             
 >await iterator.throw(error) : IteratorResult<T, any>
 >                            : ^^^^^^^^^^^^^^^^^^^^^^
 >iterator.throw(error) : Promise<IteratorResult<T, any>>
@@ -275,7 +275,7 @@ const iterable = {
 >iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  [Symbol.asyncIterator]() {    return this;  },  next() {    const value = items[0];    items.shift();    return Promise.resolve({      done: items.length === 0,      value,    });  },} : { [Symbol.asyncIterator](): { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }; next(): Promise<{ done: boolean; value: number; }>; }
->                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                 ^^^^^^^^^^^^^^^^^^^^^^                                 ^^^^
+>                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   [Symbol.asyncIterator]() {
 >[Symbol.asyncIterator] : () => { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
@@ -319,12 +319,12 @@ const iterable = {
     return Promise.resolve({
 >Promise.resolve({      done: items.length === 0,      value,    }) : Promise<{ done: boolean; value: number; }>
 >                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >{      done: items.length === 0,      value,    } : { done: boolean; value: number; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -356,7 +356,7 @@ const doubles = mapAsyncIterable(iterable, (x) => x + x);
 >mapAsyncIterable(iterable, (x) => x + x) : AsyncGenerator<number, number, void>
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapAsyncIterable : <T, U, R = undefined>(iterable: AsyncGenerator<T, R, void> | AsyncIterable<T>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
->                 : ^ ^^ ^^ ^^^^^^^^^^^^^^        ^^                                             ^^        ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^        ^^                                             ^^        ^^                               ^^^^^                          
 >iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x) => x + x : (x: number) => number

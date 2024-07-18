@@ -2,6 +2,11 @@
 /// Window Iterable APIs
 /////////////////////////////
 
+interface AbortSignal {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/any_static) */
+    any(signals: Iterable<AbortSignal>): AbortSignal;
+}
+
 interface AudioParam {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioParam/setValueCurveAtTime) */
     setValueCurveAtTime(values: Iterable<number>, startTime: number, duration: number): AudioParam;
@@ -63,6 +68,9 @@ interface CanvasPath {
 interface CanvasPathDrawingStyles {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/setLineDash) */
     setLineDash(segments: Iterable<number>): void;
+}
+
+interface CustomStateSet extends Set<string> {
 }
 
 interface DOMRectList {
@@ -183,11 +191,7 @@ interface MediaList {
 }
 
 interface MessageEvent<T = any> {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MessageEvent/initMessageEvent)
-     */
+    /** @deprecated */
     initMessageEvent(type: string, bubbles?: boolean, cancelable?: boolean, data?: any, origin?: string, lastEventId?: string, source?: MessageEventSource | null, ports?: Iterable<MessagePort>): void;
 }
 
@@ -240,7 +244,7 @@ interface PluginArray {
 
 interface RTCRtpTransceiver {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpTransceiver/setCodecPreferences) */
-    setCodecPreferences(codecs: Iterable<RTCRtpCodecCapability>): void;
+    setCodecPreferences(codecs: Iterable<RTCRtpCodec>): void;
 }
 
 interface RTCStatsReport extends ReadonlyMap<string, any> {

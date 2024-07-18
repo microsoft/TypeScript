@@ -45,13 +45,11 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /node_modules/a/dist
-Info seq  [hh:mm:ss:mss] For info: /node_modules/a/dist/index.d.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /node_modules/a/dist/index.d.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/a/dist/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules/a/dist/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules/a/dist/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -80,6 +78,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/a/dist/index.d.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -88,8 +97,6 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
-/node_modules/a/dist/package.json: *new*
-  {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
 /node_modules/a/dist/node_modules/@types: *new*
@@ -127,10 +134,8 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /index.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/a/dist/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -172,7 +177,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /node_modules/a/dist/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /node_modules/a/dist/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /node_modules/a/dist/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
@@ -184,6 +188,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /node_modules/a/dist/index.d.ts ProjectRootP
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -192,12 +207,6 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
-/node_modules/a/dist/package.json:
-  {"pollingInterval":2000} *new*
-
-watchedFiles *deleted*::
-/node_modules/a/dist/package.json:
-  {"pollingInterval":2000}
 
 watchedDirectoriesRecursive *deleted*::
 /node_modules/a/dist/node_modules/@types:
@@ -292,8 +301,6 @@ watchedFiles::
   {"pollingInterval":500}
 /node_modules/a/dist/index.d.ts.map: *new*
   {"pollingInterval":500}
-/node_modules/a/dist/package.json:
-  {"pollingInterval":2000}
 /node_modules/a/src/index.ts: *new*
   {"pollingInterval":500}
 

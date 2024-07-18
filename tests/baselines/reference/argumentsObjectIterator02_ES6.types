@@ -12,10 +12,10 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
 >  : ^^^^^^
 
     let blah = arguments[Symbol.iterator];
->blah : () => BuiltinIterator<any, void, undefined>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->arguments[Symbol.iterator] : () => BuiltinIterator<any, void, undefined>
->                           :                                            
+>blah : () => BuiltinIterator<any>
+>     : ^^^^^^                    
+>arguments[Symbol.iterator] : () => BuiltinIterator<any>
+>                           : ^^^^^^                    
 >arguments : IArguments
 >          : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
@@ -35,18 +35,18 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
 >arg : any
 >blah() : BuiltinIterator<any, void, undefined>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->blah : () => BuiltinIterator<any, void, undefined>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>blah : () => BuiltinIterator<any>
+>     : ^^^^^^                    
 
         result.push(arg + arg);
 >result.push(arg + arg) : number
 >                       : ^^^^^^
 >result.push : (...items: any[]) => number
->            : ^^^^     ^^^^^^^^^^^^^^^^^^
+>            : ^^^^     ^^^^^^^^^^^^      
 >result : any[]
 >       : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >arg + arg : any
 >arg : any
 >arg : any

@@ -43,7 +43,7 @@ inlined.nun = 456;
 >inlined.nun : 456
 >            : ^^^
 >inlined : { (): boolean; nun: 456; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^       ^^^^^^^   ^^^
 >nun : 456
 >    : ^^^
 >456 : 456
@@ -53,7 +53,7 @@ export const ignoreJsdoc = () => true;
 >ignoreJsdoc : { (): boolean; extra: number; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => true : { (): boolean; extra: number; }
->           :                                
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 

@@ -1,5 +1,5 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: config:: showConfig", () => {
     function showTSConfigCorrectly(name: string, commandLinesArgs: string[], configJson?: object) {
@@ -33,7 +33,7 @@ describe("unittests:: config:: showConfig", () => {
                 }
                 const initResult = ts.convertToTSConfig(commandLine, configPath, configParseHost);
 
-                // eslint-disable-next-line no-null/no-null
+                // eslint-disable-next-line no-restricted-syntax
                 Harness.Baseline.runBaseline(outputFileName, JSON.stringify(initResult, null, 4) + "\n");
             });
         });

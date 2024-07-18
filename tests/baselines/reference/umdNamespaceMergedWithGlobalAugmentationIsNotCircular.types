@@ -6,8 +6,8 @@ declare global {
 >       : ^^^^^^^^^^^^^
 
     const React: typeof import("./module");
->React : typeof React
->      : ^^^^^^^^^^^^
+>React : typeof import("module")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 export { };
@@ -18,8 +18,8 @@ export = React;
 >      : ^^^^^^^^^^^^
 
 export as namespace React;
->React : typeof import("module")
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>React : typeof React
+>      : ^^^^^^^^^^^^
 
 declare namespace React {
 >React : typeof React
@@ -34,30 +34,30 @@ declare namespace React {
 export { };
 React.createRef;
 >React.createRef : () => any
->                : ^^^^^^^^^
->React : typeof React
->      : ^^^^^^^^^^^^
+>                : ^^^^^^   
+>React : typeof import("module")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createRef : () => any
->          : ^^^^^^^^^
+>          : ^^^^^^   
 
 === emits.ts ===
 console.log("hello");
 >console.log("hello") : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >"hello" : "hello"
 >        : ^^^^^^^
 
 React.createRef;
 >React.createRef : () => any
->                : ^^^^^^^^^
->React : typeof React
->      : ^^^^^^^^^^^^
+>                : ^^^^^^   
+>React : typeof import("module")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createRef : () => any
->          : ^^^^^^^^^
+>          : ^^^^^^   
 

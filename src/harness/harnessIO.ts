@@ -1,15 +1,18 @@
-import * as compiler from "./_namespaces/compiler";
-import * as documents from "./_namespaces/documents";
-import * as fakes from "./_namespaces/fakes";
+import * as Diff from "diff";
+import fs from "fs";
+import pathModule from "path";
+import * as compiler from "./_namespaces/compiler.js";
+import * as documents from "./_namespaces/documents.js";
+import * as fakes from "./_namespaces/fakes.js";
 import {
     RunnerBase,
     TypeWriterResult,
     TypeWriterWalker,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 export interface IO {
     newLine(): string;
@@ -54,14 +57,6 @@ export const virtualFileSystemRoot = "/";
 
 function createNodeIO(): IO {
     const workspaceRoot = Utils.findUpRoot();
-    let fs: any, pathModule: any;
-    if (require) {
-        fs = require("fs");
-        pathModule = require("path");
-    }
-    else {
-        fs = pathModule = {};
-    }
 
     function deleteFile(path: string) {
         try {
@@ -222,6 +217,9 @@ export namespace Compiler {
         const shouldAssertInvariants = !lightMode;
 
         // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
+        // Set ParseForTypeErrors like tsc.
+        languageVersionOrOptions = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions : { languageVersion: languageVersionOrOptions };
+        languageVersionOrOptions = { ...languageVersionOrOptions, jsDocParsingMode: ts.JSDocParsingMode.ParseForTypeErrors };
         const result = ts.createSourceFile(fileName, sourceText, languageVersionOrOptions, /*setParentNodes:*/ shouldAssertInvariants);
 
         if (shouldAssertInvariants) {
@@ -303,6 +301,8 @@ export namespace Compiler {
         { name: "noTypesAndSymbols", type: "boolean", defaultValueDescription: false },
         // Emitted js baseline will print full paths for every output file
         { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false },
+        { name: "noCheck", type: "boolean", defaultValueDescription: false },
+        { name: "reportDiagnostics", type: "boolean", defaultValueDescription: false }, // used to enable error collection in `transpile` baselines
     ];
 
     let optionsIndex: Map<string, ts.CommandLineOption>;
@@ -370,6 +370,8 @@ export namespace Compiler {
         fileOptions?: any;
     }
 
+    export type CompileFilesResult = compiler.CompilationResult & { repeat(newOptions: TestCaseParser.CompilerSettings): CompileFilesResult; };
+
     export function compileFiles(
         inputFiles: TestFile[],
         otherFiles: TestFile[],
@@ -378,7 +380,8 @@ export namespace Compiler {
         // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
         currentDirectory: string | undefined,
         symlinks?: vfs.FileSet,
-    ): compiler.CompilationResult {
+    ): CompileFilesResult {
+        const originalCurrentDirectory = currentDirectory;
         const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
         options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
         options.noErrorTruncation = true;
@@ -427,7 +430,8 @@ export namespace Compiler {
         const host = new fakes.CompilerHost(fs, options);
         const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
         result.symlinks = symlinks;
-        return result;
+        (result as CompileFilesResult).repeat = newOptions => compileFiles(inputFiles, otherFiles, { ...harnessSettings, ...newOptions }, compilerOptions, originalCurrentDirectory, symlinks);
+        return result as CompileFilesResult;
     }
 
     export interface DeclarationCompilationContext {
@@ -449,7 +453,7 @@ export namespace Compiler {
     ): DeclarationCompilationContext | undefined {
         if (options.declaration && result.diagnostics.length === 0) {
             if (options.emitDeclarationOnly) {
-                if (result.js.size > 0 || result.dts.size === 0) {
+                if (result.js.size > 0 || (result.dts.size === 0 && !options.noEmit)) {
                     throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
                 }
             }
@@ -703,7 +707,7 @@ export namespace Compiler {
     }
 
     export function doErrorBaseline(baselinePath: string, inputFiles: readonly TestFile[], errors: readonly ts.Diagnostic[], pretty?: boolean) {
-        Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-null/no-null
+        Baseline.runBaseline(baselinePath.replace(/\.tsx?$/, ".errors.txt"), !errors || (errors.length === 0) ? null : getErrorBaseline(inputFiles, errors, pretty)); // eslint-disable-line no-restricted-syntax
     }
 
     export function doTypeAndSymbolBaseline(baselinePath: string, header: string, program: ts.Program, allFiles: { unitName: string; content: string; }[], opts?: Baseline.BaselineOptions, multifile?: boolean, skipTypeBaselines?: boolean, skipSymbolBaselines?: boolean, hasErrorBaseline?: boolean) {
@@ -774,7 +778,7 @@ export namespace Compiler {
             }
         }
 
-        function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string | null {
+        function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string | null { // eslint-disable-line no-restricted-syntax
             let result = "";
             const perfLines: string[] = [];
             const prePerformanceValues = getPerformanceBaselineValues();
@@ -814,7 +818,7 @@ export namespace Compiler {
                 }
             }
 
-            return result ? (`//// [${header}] ////\r\n\r\n${perfLines.join("\n")}${result}`) : null; // eslint-disable-line no-null/no-null
+            return result ? (`//// [${header}] ////\r\n\r\n${perfLines.join("\n")}${result}`) : null; // eslint-disable-line no-restricted-syntax
 
             function valueToString(value: number) {
                 return roundToHumanLogarithm(value).toLocaleString("en-US");
@@ -910,11 +914,11 @@ export namespace Compiler {
                 throw new Error("Number of sourcemap files should be same as js files.");
             }
 
-            let sourceMapCode: string | null;
+            let sourceMapCode: string | null; // eslint-disable-line no-restricted-syntax
             if ((options.noEmitOnError && result.diagnostics.length !== 0) || result.maps.size === 0) {
                 // We need to return null here or the runBaseLine will actually create a empty file.
                 // Baselining isn't required here because there is no output.
-                sourceMapCode = null; // eslint-disable-line no-null/no-null
+                sourceMapCode = null; // eslint-disable-line no-restricted-syntax
             }
             else {
                 sourceMapCode = "";
@@ -943,7 +947,7 @@ export namespace Compiler {
         return "\n//// https://sokra.github.io/source-map-visualization" + hash + "\n";
     }
 
-    export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: compiler.CompilationResult, tsConfigFiles: readonly TestFile[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], harnessSettings: TestCaseParser.CompilerSettings) {
+    export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompileFilesResult, tsConfigFiles: readonly TestFile[], toBeCompiled: readonly TestFile[], otherFiles: readonly TestFile[], harnessSettings: TestCaseParser.CompilerSettings) {
         if (!options.noEmit && !options.emitDeclarationOnly && result.js.size === 0 && result.diagnostics.length === 0) {
             throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
         }
@@ -995,9 +999,33 @@ export namespace Compiler {
             jsCode += "\r\n\r\n";
             jsCode += getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics);
         }
+        else if (!options.noCheck && !options.noEmit) {
+            const withoutChecking = result.repeat({ noCheck: "true" });
+            compareResultFileSets(withoutChecking.dts, result.dts);
+            compareResultFileSets(withoutChecking.js, result.js);
+        }
 
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), jsCode.length > 0 ? tsCode + "\r\n\r\n" + jsCode : null);
+
+        function compareResultFileSets(a: ReadonlyMap<string, documents.TextDocument>, b: ReadonlyMap<string, documents.TextDocument>) {
+            a.forEach((doc, key) => {
+                const original = b.get(key);
+                if (!original) {
+                    jsCode += `\r\n\r\n!!!! File ${Utils.removeTestPathPrefixes(doc.file)} missing from original emit, but present in noCheck emit\r\n`;
+                    jsCode += fileOutput(doc, harnessSettings);
+                }
+                else if (original.text !== doc.text) {
+                    jsCode += `\r\n\r\n!!!! File ${Utils.removeTestPathPrefixes(doc.file)} differs from original emit in noCheck emit\r\n`;
+                    const expected = original.text;
+                    const actual = doc.text;
+                    const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The full check baseline", "with noCheck set");
+                    const fileName = harnessSettings.fullEmitPaths ? Utils.removeTestPathPrefixes(doc.file) : ts.getBaseFileName(doc.file);
+                    jsCode += "//// [" + fileName + "]\r\n";
+                    jsCode += patch;
+                }
+            });
+        }
     }
 
     function fileOutput(file: documents.TextDocument, harnessSettings: TestCaseParser.CompilerSettings): string {
@@ -1235,8 +1263,8 @@ export namespace TestCaseParser {
     export function extractCompilerSettings(content: string): CompilerSettings {
         const opts: CompilerSettings = {};
 
-        let match: RegExpExecArray | null;
-        while ((match = optionRegex.exec(content)) !== null) { // eslint-disable-line no-null/no-null
+        let match: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
+        while ((match = optionRegex.exec(content)) !== null) { // eslint-disable-line no-restricted-syntax
             opts[match[1]] = match[2].trim();
         }
 
@@ -1266,7 +1294,7 @@ export namespace TestCaseParser {
         let symlinks: vfs.FileSet | undefined;
 
         for (const line of lines) {
-            let testMetaData: RegExpExecArray | null;
+            let testMetaData: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
             const possiblySymlinks = parseSymlinkFromTest(line, symlinks, vfs.srcFolder);
             if (possiblySymlinks) {
                 symlinks = possiblySymlinks;
@@ -1426,7 +1454,7 @@ export namespace Baseline {
 
     const fileCache: { [idx: string]: boolean; } = {};
 
-    function compareToBaseline(actual: string | null, relativeFileName: string, opts: BaselineOptions | undefined) {
+    function compareToBaseline(actual: string | null, relativeFileName: string, opts: BaselineOptions | undefined) { // eslint-disable-line no-restricted-syntax
         // actual is now either undefined (the generator had an error), null (no file requested),
         // or some real output of the function
         if (actual === undefined) {
@@ -1436,7 +1464,7 @@ export namespace Baseline {
 
         const refFileName = referencePath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
 
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         if (actual === null) {
             actual = noContent;
         }
@@ -1484,8 +1512,7 @@ export namespace Baseline {
                 IO.writeFile(actualFileName, encodedActual);
             }
             const errorMessage = getBaselineFileChangedErrorMessage(relativeFileName);
-            if (!!require && opts && opts.PrintDiff) {
-                const Diff = require("diff");
+            if (opts && opts.PrintDiff) {
                 const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
                 throw new Error(`${errorMessage}${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
             }
@@ -1504,7 +1531,7 @@ export namespace Baseline {
         return `The baseline file ${relativeFileName} has changed. (Run "hereby baseline-accept" if the new baseline is correct.)`;
     }
 
-    export function runBaseline(relativeFileName: string, actual: string | null, opts?: BaselineOptions): void {
+    export function runBaseline(relativeFileName: string, actual: string | null, opts?: BaselineOptions): void { // eslint-disable-line no-restricted-syntax
         const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
         if (actual === undefined) {
             throw new Error('The generated content was "undefined". Return "null" if no baselining is required."');
@@ -1513,12 +1540,12 @@ export namespace Baseline {
         writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, opts);
     }
 
-    export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]> | null, opts?: BaselineOptions, referencedExtensions?: string[]): void {
+    export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]> | null, opts?: BaselineOptions, referencedExtensions?: string[]): void { // eslint-disable-line no-restricted-syntax
         const gen = generateContent();
         const writtenFiles = new Map<string, true>();
         const errors: Error[] = [];
 
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         if (gen !== null) {
             for (const value of gen) {
                 const [name, content, count] = value as [string, string, number | undefined];

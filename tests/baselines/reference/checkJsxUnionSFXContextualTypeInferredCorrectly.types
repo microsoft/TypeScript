@@ -101,11 +101,11 @@ export function HereIsTheError() {
 >console.log(val) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >val : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 
@@ -138,17 +138,17 @@ ComponentWithUnion({
 >onChange : (val: string | undefined) => void
 >         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val => console.log(val) : (val: string | undefined) => void
->                        :                                  
+>                        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >console.log(val) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 >val : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 

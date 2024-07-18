@@ -63,8 +63,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /tsconfig.base.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.base.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
@@ -95,6 +94,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.base.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -178,8 +188,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/pkg-1/src
-Info seq  [hh:mm:ss:mss] For info: /packages/pkg-1/src/index.ts :: Config file name: /packages/pkg-1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/pkg-1/src/index.ts ProjectRootPath: undefined:: Result: /packages/pkg-1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/pkg-1/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-1/tsconfig.json 2000 undefined Project: /packages/pkg-1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -266,11 +275,10 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-1/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/utils.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -321,6 +329,18 @@ Info seq  [hh:mm:ss:mss] 	FileName: /tsconfig.base.json ProjectRootPath: undefin
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/pkg-1/src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/pkg-1/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -335,8 +355,6 @@ watchedFiles::
   {"pollingInterval":2000}
 /packages/pkg-2/src/index.ts: *new*
   {"pollingInterval":500}
-/packages/pkg-2/src/package.json: *new*
-  {"pollingInterval":2000}
 /packages/pkg-2/src/utils.ts: *new*
   {"pollingInterval":500}
 /packages/pkg-2/tsconfig.json: *new*
@@ -571,8 +589,6 @@ watchedFiles::
   {"pollingInterval":2000}
 /packages/pkg-2/src/index.ts:
   {"pollingInterval":500}
-/packages/pkg-2/src/package.json:
-  {"pollingInterval":2000}
 /packages/pkg-2/src/utils.ts:
   {"pollingInterval":500}
 /packages/pkg-2/tsconfig.json:
@@ -601,6 +617,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "import { Pkg2 } from \"pkg-2/utils\";\n\n"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 9,
+      "success": true
     }
 After Request
 Projects::
@@ -663,6 +687,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 10,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /lib.d.ts
@@ -706,8 +738,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/pkg-2/src/blah/foo
-Info seq  [hh:mm:ss:mss] For info: /packages/pkg-2/src/blah/foo/data.ts :: Config file name: /packages/pkg-2/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/pkg-2/src/blah/foo/data.ts ProjectRootPath: undefined:: Result: /packages/pkg-2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/pkg-2/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -720,7 +751,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/pkg-2/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/package.json 2000 undefined Project: /packages/pkg-2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/pkg-2/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/pkg-2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
@@ -768,8 +798,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/pkg-2
-Info seq  [hh:mm:ss:mss] For info: /packages/pkg-2/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/pkg-2/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/packages/pkg-1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -793,6 +822,17 @@ Info seq  [hh:mm:ss:mss] 	FileName: /packages/pkg-1/src/index.ts ProjectRootPath
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/pkg-1/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/pkg-2/src/blah/foo/data.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/pkg-2/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 11,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -809,9 +849,6 @@ watchedFiles::
   {"pollingInterval":250}
 /packages/pkg-2/src/index.ts:
   {"pollingInterval":500}
-/packages/pkg-2/src/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000} *new*
 /packages/pkg-2/src/utils.ts:
   {"pollingInterval":500}
 /packages/pkg-2/tsconfig.json:
@@ -1058,6 +1095,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 18,
+      "success": true
+    }
 After Request
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider)
@@ -1131,6 +1176,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 19,
+      "success": true
     }
 After Request
 ScriptInfos::

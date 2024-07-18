@@ -99,7 +99,7 @@ function C() {
 >a : () => void
 >  : ^^^^^^^^^^
 >function () { arguments } : () => void
->                          :           
+>                          : ^^^^^^^^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
   }

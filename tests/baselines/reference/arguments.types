@@ -38,16 +38,16 @@ function f() {
 
 interface I {
     method(args: typeof arguments): void;
->method : (args: any) => void
->       : ^    ^^^^^^^^^^    
+>method : (args: typeof arguments) => void
+>       : ^    ^^                ^^^^^    
 >args : any
 >     : ^^^
 >arguments : any
 >          : ^^^
 
     fn: (args: typeof arguments) => void;
->fn : (args: any) => void
->   : ^    ^^^^^^^^^^    
+>fn : (args: typeof arguments) => void
+>   : ^    ^^                ^^^^^    
 >args : any
 >     : ^^^
 >arguments : any
@@ -66,8 +66,8 @@ interface I {
 >          : ^^^
 
     construct: new (args: typeof arguments) => void;
->construct : new (args: any) => void
->          : ^^^^^    ^^^^^^^^^^    
+>construct : new (args: typeof arguments) => void
+>          : ^^^^^    ^^                ^^^^^    
 >args : any
 >     : ^^^
 >arguments : any

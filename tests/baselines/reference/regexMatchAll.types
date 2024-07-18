@@ -6,8 +6,8 @@ const matches = /\w/g[Symbol.matchAll]("matchAll");
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >/\w/g[Symbol.matchAll]("matchAll") : BuiltinIterator<RegExpMatchArray, void, undefined>
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->/\w/g[Symbol.matchAll] : (str: string) => BuiltinIterator<RegExpMatchArray, void, undefined>
->                       : ^   ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/\w/g[Symbol.matchAll] : (str: string) => BuiltinIterator<RegExpMatchArray>
+>                       : ^   ^^      ^^^^^                                 
 >/\w/g : RegExp
 >      : ^^^^^^
 >Symbol.matchAll : unique symbol

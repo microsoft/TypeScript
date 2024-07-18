@@ -69,7 +69,7 @@ var a: { id: number; name: string };
 
 var a = new A.A();
 >a : { id: number; name: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^      ^^^^^^^^      ^^^
 >new A.A() : A.A
 >          : ^^^
 >A.A : typeof A.A

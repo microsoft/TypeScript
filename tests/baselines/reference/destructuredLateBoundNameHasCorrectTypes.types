@@ -54,8 +54,8 @@ let { [notPresent]: computed2 } = { prop: "b" };
 >           : ^^^^^^^
 >computed2 : any
 >          : ^^^
->{ prop: "b" } : { prop: string; prop2: any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ prop: "b" } : { prop: string; }
+>              : ^^^^^^^^^^^^^^^^^
 >prop : string
 >     : ^^^^^^
 >"b" : "b"

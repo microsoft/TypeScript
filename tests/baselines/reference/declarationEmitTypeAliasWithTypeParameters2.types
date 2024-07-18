@@ -17,7 +17,7 @@ export const y = (x: Baa<number>) => 1
 >y : (x: Baa<number>) => number
 >  : ^ ^^           ^^^^^^^^^^^
 >(x: Baa<number>) => 1 : (x: Baa<number>) => number
->                      :                           
+>                      : ^ ^^           ^^^^^^^^^^^
 >x : Baa<number>
 >  : ^^^^^^^^^^^
 >1 : 1

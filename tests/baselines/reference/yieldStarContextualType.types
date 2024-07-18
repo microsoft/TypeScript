@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/yieldStarContextualType.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== yieldStarContextualType.ts ===
+declare const g: <T, U, V>() => Generator<T, U, V>;
+>g : <T, U, V>() => Generator<T, U, V>
+>  : ^ ^^ ^^ ^^^^^^^                  
+
+function* f(): Generator<string, void, unknown> {
+>f : () => Generator<string, void, unknown>
+>  : ^^^^^^                                
+
+    const x1 = yield* g();
+>x1 : unknown
+>   : ^^^^^^^
+>yield* g() : unknown
+>           : ^^^^^^^
+>g() : Generator<string, unknown, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : <T, U, V>() => Generator<T, U, V>
+>  : ^ ^^ ^^ ^^^^^^^                  
+
+    const x2: number = yield* g();
+>x2 : number
+>   : ^^^^^^
+>yield* g() : number
+>           : ^^^^^^
+>g() : Generator<string, number, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : <T, U, V>() => Generator<T, U, V>
+>  : ^ ^^ ^^ ^^^^^^^                  
+}

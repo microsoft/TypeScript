@@ -29,8 +29,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /project
-Info seq  [hh:mm:ss:mss] For info: /project/tsconfig.json :: Config file name: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/tsconfig.json ProjectRootPath: undefined:: Result: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/tsconfig.json 2000 undefined Project: /project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -60,11 +59,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/package.json 2000 undefined Project: /project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/package.json 2000 undefined Project: /project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/package.json 2000 undefined Project: /project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.pnpm/@types+react@17.0.7/package.json 2000 undefined Project: /project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.pnpm/package.json 2000 undefined Project: /project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -107,12 +101,8 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.pnpm/@types+react@17.0.7/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.pnpm/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -146,6 +136,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /project/tsconfig.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -156,23 +157,8 @@ watchedFiles::
   {"pollingInterval":500}
 /project/index.ts: *new*
   {"pollingInterval":500}
-/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/package.json: *new*
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts: *new*
   {"pollingInterval":500}
-/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/package.json: *new*
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/package.json: *new*
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/project/node_modules/.pnpm/@types+react@17.0.7/package.json: *new*
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/project/node_modules/.pnpm/package.json: *new*
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -229,8 +215,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /project/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /project
-Info seq  [hh:mm:ss:mss] For info: /project/index.ts :: Config file name: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/index.ts ProjectRootPath: undefined:: Result: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
@@ -244,6 +229,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /project/tsconfig.json ProjectRootPath: unde
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /project/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true
+    }
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -252,23 +245,8 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
-/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts:
   {"pollingInterval":500}
-/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/project/node_modules/.pnpm/@types+react@17.0.7/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/project/node_modules/.pnpm/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /project/tsconfig.json:
   {"pollingInterval":2000}
 
@@ -436,23 +414,8 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
-/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts:
   {"pollingInterval":500}
-/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/project/node_modules/.pnpm/@types+react@17.0.7/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
-/project/node_modules/.pnpm/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /project/tsconfig.json:
   {"pollingInterval":2000}
 

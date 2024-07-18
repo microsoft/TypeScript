@@ -35,8 +35,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/index.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -68,8 +67,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
@@ -154,8 +151,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -165,21 +161,24 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/index.ts P
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/myproject/tsconfig.json: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*

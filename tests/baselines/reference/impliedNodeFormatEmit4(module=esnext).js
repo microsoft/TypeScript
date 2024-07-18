@@ -40,34 +40,22 @@ export {};
 
 
 //// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports._ = void 0;
-exports._ = 0;
+export var _ = 0;
 //// [b.mjs]
 export var _ = 0;
 //// [c.cjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports._ = void 0;
-exports._ = 0;
+export var _ = 0;
 //// [d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports._ = void 0;
-exports._ = 0;
+export var _ = 0;
 //// [e.mjs]
 export var _ = 0;
 //// [f.mjs]
 export var _ = 0;
 //// [g.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [h.mjs]
 export {};
 //// [i.cjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 //// [dummy.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

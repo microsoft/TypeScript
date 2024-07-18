@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/narrowBySwitchDiscriminantUndefinedCase1.ts] ////
+
+=== narrowBySwitchDiscriminantUndefinedCase1.ts ===
+// https://github.com/microsoft/TypeScript/issues/57999
+
+interface A {
+  optionalProp?: "hello";
+>optionalProp : "hello" | undefined
+>             : ^^^^^^^^^^^^^^^^^^^
+}
+
+function func(arg: A) {
+>func : (arg: A) => "hello" | undefined
+>     : ^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : A
+>    : ^
+
+  const { optionalProp } = arg;
+>optionalProp : "hello" | undefined
+>             : ^^^^^^^^^^^^^^^^^^^
+>arg : A
+>    : ^
+
+  switch (optionalProp) {
+>optionalProp : "hello" | undefined
+>             : ^^^^^^^^^^^^^^^^^^^
+
+    case undefined:
+>undefined : undefined
+>          : ^^^^^^^^^
+
+      return undefined;
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    case "hello":
+>"hello" : "hello"
+>        : ^^^^^^^
+
+      return "hello";
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    default:
+      assertUnreachable(optionalProp);
+>assertUnreachable(optionalProp) : never
+>                                : ^^^^^
+>assertUnreachable : (_: never) => never
+>                  : ^ ^^     ^^^^^     
+>optionalProp : never
+>             : ^^^^^
+  }
+}
+
+function func2() {
+>func2 : () => "hello" | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const optionalProp = ["hello" as const][Math.random()];
+>optionalProp : "hello"
+>             : ^^^^^^^
+>["hello" as const][Math.random()] : "hello"
+>                                  : ^^^^^^^
+>["hello" as const] : "hello"[]
+>                   : ^^^^^^^^^
+>"hello" as const : "hello"
+>                 : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+  switch (optionalProp) {
+>optionalProp : "hello"
+>             : ^^^^^^^
+
+    case undefined:
+>undefined : undefined
+>          : ^^^^^^^^^
+
+      return undefined;
+>undefined : undefined
+>          : ^^^^^^^^^
+
+    case "hello":
+>"hello" : "hello"
+>        : ^^^^^^^
+
+      return "hello";
+>"hello" : "hello"
+>        : ^^^^^^^
+
+    default:
+      assertUnreachable(optionalProp);
+>assertUnreachable(optionalProp) : never
+>                                : ^^^^^
+>assertUnreachable : (_: never) => never
+>                  : ^ ^^     ^^^^^     
+>optionalProp : never
+>             : ^^^^^
+  }
+}
+
+function assertUnreachable(_: never): never {
+>assertUnreachable : (_: never) => never
+>                  : ^ ^^     ^^^^^     
+>_ : never
+>  : ^^^^^
+
+  throw new Error("Unreachable path taken");
+>new Error("Unreachable path taken") : Error
+>                                    : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>"Unreachable path taken" : "Unreachable path taken"
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+}
+

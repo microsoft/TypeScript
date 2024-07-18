@@ -30,8 +30,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project
-Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project/a.ts :: Config file name: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/a.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -61,8 +60,6 @@ request import plugin-a
 awaiting config file delete
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
@@ -150,19 +147,22 @@ Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/a.ts ProjectRootP
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
 PolledWatches::
 /home/src/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/projects/package.json: *new*
-  {"pollingInterval":2000}
 /home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/projects/project/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -192,8 +192,7 @@ ScriptInfos::
 before deleteFile
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 2:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project
-Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project/a.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/a.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 2:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.json :: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
@@ -220,25 +219,23 @@ after waitForPendingPlugins
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 0:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project
-Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project/a.ts :: Config file name: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/a.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 0:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.json :: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /home/src/projects/project/tsconfig.json Detected file add/remove of non supported extension: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.json :: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 2
-3: /home/src/projects/project/tsconfig.json
-4: *ensureProjectForOpenFiles*
+2: /home/src/projects/project/tsconfig.json
+3: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project/tsconfig.json]
 {}
 
 
 Timeout callback:: count: 2
 1: *ensureProjectForOpenFiles* *deleted*
-3: /home/src/projects/project/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+2: /home/src/projects/project/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*
@@ -249,7 +246,6 @@ Projects::
     deferredClose: undefined *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -354,7 +350,7 @@ Info seq  [hh:mm:ss:mss] event:
 after waitForPendingPlugins
 
 Timeout callback:: count: 1
-5: /home/src/projects/project/tsconfig.json *new*
+4: /home/src/projects/project/tsconfig.json *new*
 
 Projects::
 /home/src/projects/project/tsconfig.json (Configured) *changed*

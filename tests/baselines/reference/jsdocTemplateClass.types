@@ -37,19 +37,19 @@ class Foo {
      */
     foo(x, y, alpha) {
 >foo : (x: T, y: Id<T>, alpha: (t: T) => T) => T
->    : ^ ^^ ^^ ^^     ^^     ^^^ ^^ ^^^^^^^^^^^ 
+>    : ^ ^^ ^^ ^^     ^^     ^^^ ^^ ^^^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : Id<T>
 >  : ^^^^^
 >alpha : (t: T) => T
->      : ^ ^^ ^^^^^^
+>      : ^ ^^ ^^^^^ 
 
         return alpha(y(x))
 >alpha(y(x)) : T
 >            : ^
 >alpha : (t: T) => T
->      : ^ ^^ ^^^^^^
+>      : ^ ^^ ^^^^^ 
 >y(x) : T
 >     : ^
 >y : Id<T>

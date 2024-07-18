@@ -1,4 +1,8 @@
 import {
+    getRangeOfEnclosingComment,
+    TextRangeWithKind,
+} from "../_namespaces/ts.formatting.js";
+import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     CallExpression,
@@ -52,11 +56,7 @@ import {
     TypeLiteralNode,
     TypeReferenceNode,
     VariableDeclarationList,
-} from "../_namespaces/ts";
-import {
-    getRangeOfEnclosingComment,
-    TextRangeWithKind,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export namespace SmartIndenter {
@@ -92,7 +92,7 @@ export namespace SmartIndenter {
 
         const precedingToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined, /*excludeJsdoc*/ true);
 
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken || null);
         if (enclosingCommentRange && enclosingCommentRange.kind === SyntaxKind.MultiLineCommentTrivia) {
             return getCommentIndent(sourceFile, position, options, enclosingCommentRange);

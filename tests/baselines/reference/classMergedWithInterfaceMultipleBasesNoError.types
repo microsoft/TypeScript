@@ -17,7 +17,7 @@ export default class extends Foo {
 >observer : () => void
 >         : ^^^^^^^^^^
 >this.handleIntersection : () => void
->                        :           
+>                        : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 >handleIntersection : () => void
@@ -27,5 +27,5 @@ export default class extends Foo {
 >handleIntersection : () => void
 >                   : ^^^^^^^^^^
 >() => { } : () => void
->          :           
+>          : ^^^^^^^^^^
 }
