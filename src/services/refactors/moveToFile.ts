@@ -19,6 +19,7 @@ import {
     contains,
     createFutureSourceFile,
     createModuleSpecifierResolutionHost,
+    createTextRangeFromNode,
     createTextRangeFromSpan,
     Debug,
     Declaration,
@@ -962,9 +963,10 @@ function inferNewFileName(importsFromNewFile: Map<Symbol, unknown>, movedSymbols
 }
 
 function forEachReference(node: Node, checker: TypeChecker, enclosingRange: TextRange | undefined, onReference: (s: Symbol, isValidTypeOnlyUseSite: boolean) => void) {
+    const sourceFile = node.getSourceFile();
     node.forEachChild(function cb(node) {
         if (isIdentifier(node) && !isDeclarationName(node)) {
-            if (enclosingRange && !rangeContainsRange(enclosingRange, { pos: node.getStart(), end: node.getEnd() })) {
+            if (enclosingRange && !rangeContainsRange(enclosingRange, createTextRangeFromNode(node, sourceFile))) {
                 return;
             }
             const sym = checker.getSymbolAtLocation(node);
