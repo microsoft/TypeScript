@@ -191,11 +191,7 @@ interface MediaList {
 }
 
 interface MessageEvent<T = any> {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MessageEvent/initMessageEvent)
-     */
+    /** @deprecated */
     initMessageEvent(type: string, bubbles?: boolean, cancelable?: boolean, data?: any, origin?: string, lastEventId?: string, source?: MessageEventSource | null, ports?: Iterable<MessagePort>): void;
 }
 
@@ -248,7 +244,7 @@ interface PluginArray {
 
 interface RTCRtpTransceiver {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpTransceiver/setCodecPreferences) */
-    setCodecPreferences(codecs: Iterable<RTCRtpCodecCapability>): void;
+    setCodecPreferences(codecs: Iterable<RTCRtpCodec>): void;
 }
 
 interface RTCStatsReport extends ReadonlyMap<string, any> {
