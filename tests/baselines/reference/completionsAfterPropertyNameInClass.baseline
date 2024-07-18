@@ -140,7 +140,7 @@
           "commitCharacters": []
         }
       ],
-      "commitCharacters": []
+      "defaultCommitCharacters": []
     }
   },
   {
@@ -248,7 +248,7 @@
           "commitCharacters": []
         }
       ],
-      "commitCharacters": []
+      "defaultCommitCharacters": []
     }
   }
 ]

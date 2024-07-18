@@ -316,7 +316,7 @@
           ]
         }
       ],
-      "commitCharacters": []
+      "defaultCommitCharacters": []
     }
   }
 ]

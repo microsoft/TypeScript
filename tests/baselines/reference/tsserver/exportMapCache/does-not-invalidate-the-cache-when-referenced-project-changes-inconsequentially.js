@@ -527,7 +527,7 @@ Info seq  [hh:mm:ss:mss] response:
             }
           }
         ],
-        "commitCharacters": [
+        "defaultCommitCharacters": [
           ".",
           ",",
           ";"
@@ -667,7 +667,7 @@ Info seq  [hh:mm:ss:mss] response:
           }
         },
         "entries": [],
-        "commitCharacters": [
+        "defaultCommitCharacters": [
           ".",
           ",",
           ";"

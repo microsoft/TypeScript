@@ -701,7 +701,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "z15"
           }
         ],
-        "commitCharacters": [
+        "defaultCommitCharacters": [
           ".",
           ",",
           ";"

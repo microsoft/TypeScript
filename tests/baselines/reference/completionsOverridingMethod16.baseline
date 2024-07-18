@@ -246,7 +246,7 @@
           ]
         }
       ],
-      "commitCharacters": []
+      "defaultCommitCharacters": []
     }
   }
 ]

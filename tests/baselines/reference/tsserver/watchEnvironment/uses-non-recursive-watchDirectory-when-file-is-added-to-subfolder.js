@@ -233,7 +233,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "11"
           }
         ],
-        "commitCharacters": []
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
@@ -397,7 +397,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "11"
           }
         ],
-        "commitCharacters": []
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }

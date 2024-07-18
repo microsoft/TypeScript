@@ -131,7 +131,7 @@
           "commitCharacters": []
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"

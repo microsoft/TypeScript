@@ -718,7 +718,7 @@ export function getCompletionsAtPosition(
                 isNewIdentifierLocation: true,
                 isIncomplete: true,
                 entries: [],
-                commitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ true),
+                defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ true),
             };
         }
         return undefined;
@@ -907,7 +907,7 @@ function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
         isMemberCompletion: false,
         isNewIdentifierLocation: false,
         entries,
-        commitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+        defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
     };
 }
 
@@ -1231,7 +1231,7 @@ function specificKeywordCompletionInfo(entries: readonly CompletionEntry[], isNe
         isMemberCompletion: false,
         isNewIdentifierLocation,
         entries: entries.slice(),
-        commitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
+        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -1407,7 +1407,7 @@ function completionInfoFromData(
         isNewIdentifierLocation,
         optionalReplacementSpan: getOptionalReplacementSpan(location),
         entries,
-        commitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
+        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -1622,7 +1622,7 @@ function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: Sour
             isNewIdentifierLocation: false,
             optionalReplacementSpan: replacementSpan,
             entries: [entry],
-            commitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+            defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
         };
     }
     return;
@@ -2793,7 +2793,7 @@ function getLabelCompletionAtPosition(node: BreakOrContinueStatement): Completio
             isMemberCompletion: false,
             isNewIdentifierLocation: false,
             entries,
-            commitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+            defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
         };
     }
 }

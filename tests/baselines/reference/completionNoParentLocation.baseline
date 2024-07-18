@@ -3589,7 +3589,7 @@
           ]
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"

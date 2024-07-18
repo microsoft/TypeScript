@@ -3745,7 +3745,7 @@
           ]
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"
@@ -7211,7 +7211,7 @@
           ]
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"

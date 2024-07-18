@@ -880,7 +880,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           }
         ],
-        "commitCharacters": [
+        "defaultCommitCharacters": [
           ".",
           ",",
           ";"
@@ -1371,7 +1371,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           }
         ],
-        "commitCharacters": [
+        "defaultCommitCharacters": [
           ".",
           ",",
           ";"

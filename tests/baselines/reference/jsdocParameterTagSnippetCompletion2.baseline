@@ -1593,7 +1593,7 @@
           "documentation": []
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"
@@ -2719,7 +2719,7 @@
           "documentation": []
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"
@@ -3845,7 +3845,7 @@
           "documentation": []
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"
@@ -4971,7 +4971,7 @@
           "documentation": []
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"
@@ -6097,7 +6097,7 @@
           "documentation": []
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"

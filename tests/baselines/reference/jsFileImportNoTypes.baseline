@@ -260,7 +260,7 @@
           "documentation": []
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"

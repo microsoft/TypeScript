@@ -381,7 +381,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           }
         ],
-        "commitCharacters": []
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
@@ -657,7 +657,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           }
         ],
-        "commitCharacters": []
+        "defaultCommitCharacters": []
       },
       "responseRequired": true,
       "performanceData": {

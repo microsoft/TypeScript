@@ -376,7 +376,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "z11"
           }
         ],
-        "commitCharacters": [
+        "defaultCommitCharacters": [
           ".",
           ",",
           ";"
@@ -629,7 +629,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "z11"
           }
         ],
-        "commitCharacters": [
+        "defaultCommitCharacters": [
           ".",
           ",",
           ";"
@@ -882,7 +882,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "z11"
           }
         ],
-        "commitCharacters": [
+        "defaultCommitCharacters": [
           ".",
           ",",
           ";"

@@ -267,7 +267,7 @@ function convertStringLiteralCompletions(
                 isNewIdentifierLocation: completion.hasIndexSignature,
                 optionalReplacementSpan,
                 entries,
-                commitCharacters: getDefaultCommitCharacters(completion.hasIndexSignature),
+                defaultCommitCharacters: getDefaultCommitCharacters(completion.hasIndexSignature),
             };
         }
         case StringLiteralCompletionKind.Types: {
@@ -290,7 +290,7 @@ function convertStringLiteralCompletions(
                 isNewIdentifierLocation: completion.isNewIdentifier,
                 optionalReplacementSpan,
                 entries,
-                commitCharacters: getDefaultCommitCharacters(completion.isNewIdentifier),
+                defaultCommitCharacters: getDefaultCommitCharacters(completion.isNewIdentifier),
             };
         }
         default:
@@ -331,7 +331,7 @@ function convertPathCompletions(pathCompletions: readonly PathCompletion[]): Com
         isMemberCompletion: false,
         isNewIdentifierLocation,
         entries,
-        commitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
+        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 function kindModifiersFromExtension(extension: Extension | undefined): ScriptElementKindModifier {

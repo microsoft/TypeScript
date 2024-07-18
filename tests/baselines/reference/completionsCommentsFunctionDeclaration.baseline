@@ -4772,7 +4772,7 @@
           ]
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"
@@ -8290,7 +8290,7 @@
           ]
         }
       ],
-      "commitCharacters": []
+      "defaultCommitCharacters": []
     }
   },
   {
@@ -12638,7 +12638,7 @@
           ]
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"

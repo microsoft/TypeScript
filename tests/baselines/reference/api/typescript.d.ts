@@ -10698,7 +10698,7 @@ declare namespace ts {
         /**
          * Default commit characters for the completion entries.
          */
-        commitCharacters: string[];
+        defaultCommitCharacters: string[];
     }
     interface CompletionEntryDataAutoImport {
         /**

@@ -767,7 +767,7 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "18"
           }
         ],
-        "commitCharacters": [
+        "defaultCommitCharacters": [
           ".",
           ",",
           ";"

@@ -3561,7 +3561,7 @@
           "displayParts": []
         }
       ],
-      "commitCharacters": [
+      "defaultCommitCharacters": [
         ".",
         ",",
         ";"

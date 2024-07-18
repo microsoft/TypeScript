@@ -1442,7 +1442,7 @@ export interface CompletionInfo {
     /**
      * Default commit characters for the completion entries.
      */
-    commitCharacters: string[];
+    defaultCommitCharacters: string[];
 }
 
 export interface CompletionEntryDataAutoImport {

@@ -891,7 +891,7 @@ Info seq  [hh:mm:ss:mss] response:
             }
           }
         ],
-        "commitCharacters": [
+        "defaultCommitCharacters": [
           ".",
           ",",
           ";"
