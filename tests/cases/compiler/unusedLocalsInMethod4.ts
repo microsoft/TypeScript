@@ -84,3 +84,24 @@ function f7() {
     }
 }
 
+function f8() {
+    function ff() {
+        let _;
+        let rest: {}; // should not error
+
+        [_, ...rest] = bar();
+    }
+}
+declare function bar(): [number, ...string[]];
+
+
+function rw() {
+    let i: number;
+    function inside() {
+        i++;
+        console.log(i); // NaN
+    }
+    inside();
+}
+rw();
+

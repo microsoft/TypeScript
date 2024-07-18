@@ -268,4 +268,50 @@ function f7() {
     }
 }
 
+function f8() {
+>f8 : Symbol(f8, Decl(unusedLocalsInMethod4.ts, 82, 1))
+
+    function ff() {
+>ff : Symbol(ff, Decl(unusedLocalsInMethod4.ts, 84, 15))
+
+        let _;
+>_ : Symbol(_, Decl(unusedLocalsInMethod4.ts, 86, 11))
+
+        let rest: {}; // should not error
+>rest : Symbol(rest, Decl(unusedLocalsInMethod4.ts, 87, 11))
+
+        [_, ...rest] = bar();
+>_ : Symbol(_, Decl(unusedLocalsInMethod4.ts, 86, 11))
+>rest : Symbol(rest, Decl(unusedLocalsInMethod4.ts, 87, 11))
+>bar : Symbol(bar, Decl(unusedLocalsInMethod4.ts, 91, 1))
+    }
+}
+declare function bar(): [number, ...string[]];
+>bar : Symbol(bar, Decl(unusedLocalsInMethod4.ts, 91, 1))
+
+
+function rw() {
+>rw : Symbol(rw, Decl(unusedLocalsInMethod4.ts, 92, 46))
+
+    let i: number;
+>i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 96, 7))
+
+    function inside() {
+>inside : Symbol(inside, Decl(unusedLocalsInMethod4.ts, 96, 18))
+
+        i++;
+>i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 96, 7))
+
+        console.log(i); // NaN
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 96, 7))
+    }
+    inside();
+>inside : Symbol(inside, Decl(unusedLocalsInMethod4.ts, 96, 18))
+}
+rw();
+>rw : Symbol(rw, Decl(unusedLocalsInMethod4.ts, 92, 46))
+
 

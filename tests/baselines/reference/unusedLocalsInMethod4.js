@@ -85,6 +85,27 @@ function f7() {
     }
 }
 
+function f8() {
+    function ff() {
+        let _;
+        let rest: {}; // should not error
+
+        [_, ...rest] = bar();
+    }
+}
+declare function bar(): [number, ...string[]];
+
+
+function rw() {
+    let i: number;
+    function inside() {
+        i++;
+        console.log(i); // NaN
+    }
+    inside();
+}
+rw();
+
 
 
 //// [unusedLocalsInMethod4.js]
@@ -165,3 +186,20 @@ function f7() {
         console.log(key);
     }
 }
+function f8() {
+    function ff() {
+        var _a;
+        var _;
+        var rest; // should not error
+        _a = bar(), _ = _a[0], rest = _a.slice(1);
+    }
+}
+function rw() {
+    var i;
+    function inside() {
+        i++;
+        console.log(i); // NaN
+    }
+    inside();
+}
+rw();

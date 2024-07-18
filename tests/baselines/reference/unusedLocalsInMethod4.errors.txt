@@ -127,4 +127,25 @@ unusedLocalsInMethod4.ts(57,9): error TS2454: Variable 'x' is used before being 
         }
     }
     
+    function f8() {
+        function ff() {
+            let _;
+            let rest: {}; // should not error
+    
+            [_, ...rest] = bar();
+        }
+    }
+    declare function bar(): [number, ...string[]];
+    
+    
+    function rw() {
+        let i: number;
+        function inside() {
+            i++;
+            console.log(i); // NaN
+        }
+        inside();
+    }
+    rw();
+    
     
