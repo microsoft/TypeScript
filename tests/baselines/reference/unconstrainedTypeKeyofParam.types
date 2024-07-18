@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/unconstrainedTypeMapped.ts] ////
+//// [tests/cases/compiler/unconstrainedTypeKeyofParam.ts] ////
 
-=== unconstrainedTypeMapped.ts ===
+=== unconstrainedTypeKeyofParam.ts ===
 function f3<T, U extends T>(x: T, y: U, k: keyof T) {
 >f3 : { <T, U extends T>(x: T, y: U, k: keyof T): void; <T_1 extends unknown, K extends keyof T_1>(obj: T_1, key: K): T_1[K]; }
 >   : ^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^       ^^^^^^^^^^^^^^^^^^^^^^       ^^ ^^^^^^^^^         ^^   ^^   ^^   ^^ ^^^^^^^^^^^^

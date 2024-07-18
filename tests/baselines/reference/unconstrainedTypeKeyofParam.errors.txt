@@ -1,0 +1,195 @@
+unconstrainedTypeKeyofParam.ts(1,10): error TS2393: Duplicate function implementation.
+unconstrainedTypeKeyofParam.ts(3,5): error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
+  Type 'T' is not assignable to type 'U'.
+    'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+unconstrainedTypeKeyofParam.ts(14,10): error TS2393: Duplicate function implementation.
+unconstrainedTypeKeyofParam.ts(36,12): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+unconstrainedTypeKeyofParam.ts(36,12): error TS2536: Type 'keyof T' cannot be used to index type '{}'.
+unconstrainedTypeKeyofParam.ts(40,12): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+unconstrainedTypeKeyofParam.ts(44,12): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+unconstrainedTypeKeyofParam.ts(48,12): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+unconstrainedTypeKeyofParam.ts(48,12): error TS2536: Type 'keyof U' cannot be used to index type '{}'.
+unconstrainedTypeKeyofParam.ts(52,12): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+unconstrainedTypeKeyofParam.ts(93,10): error TS2393: Duplicate function implementation.
+unconstrainedTypeKeyofParam.ts(97,10): error TS2393: Duplicate function implementation.
+unconstrainedTypeKeyofParam.ts(98,12): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+unconstrainedTypeKeyofParam.ts(98,12): error TS2536: Type 'keyof T' cannot be used to index type '{}'.
+unconstrainedTypeKeyofParam.ts(101,10): error TS2393: Duplicate function implementation.
+unconstrainedTypeKeyofParam.ts(102,12): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+unconstrainedTypeKeyofParam.ts(107,10): error TS2393: Duplicate function implementation.
+unconstrainedTypeKeyofParam.ts(108,12): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+unconstrainedTypeKeyofParam.ts(111,10): error TS2393: Duplicate function implementation.
+unconstrainedTypeKeyofParam.ts(112,12): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+unconstrainedTypeKeyofParam.ts(112,12): error TS2536: Type 'keyof U' cannot be used to index type '{}'.
+unconstrainedTypeKeyofParam.ts(115,10): error TS2393: Duplicate function implementation.
+unconstrainedTypeKeyofParam.ts(116,12): error TS18049: 'obj' is possibly 'null' or 'undefined'.
+
+
+==== unconstrainedTypeKeyofParam.ts (23 errors) ====
+    function f3<T, U extends T>(x: T, y: U, k: keyof T) {
+             ~~
+!!! error TS2393: Duplicate function implementation.
+        x[k] = y[k];
+        y[k] = x[k]; 
+        ~~~~
+!!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
+!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 unconstrainedTypeKeyofParam.ts:1:13: This type parameter might need an `extends U` constraint.
+    }
+    
+    function f<T, K extends keyof T>(obj: T, key: K) {
+        return obj[key];
+    }
+    
+    function f2<T extends {} | null | undefined , K extends keyof T>(obj: T, key: K) {
+        return obj[key];
+    }
+    
+    function f3<T extends unknown, K extends keyof T>(obj: T, key: K) {
+             ~~
+!!! error TS2393: Duplicate function implementation.
+        return obj[key];
+    }
+    
+    function f4<T, U extends T, K extends keyof U>(obj: U, key: K) {
+        return obj[key];
+    }
+    
+    function f5<T extends {} | null | undefined, U extends T, K extends keyof U>(obj: U, key: K) {
+        return obj[key];
+    }
+    
+    function f6<T extends unknown, U extends T, K extends keyof U>(obj: U, key: K) {
+        return obj[key];
+    }
+    
+    // ************
+    function g1<T>(obj: T, key: keyof T) {
+        return obj[key];
+    }
+    
+    function g2<T extends {} | null | undefined>(obj: T, key: keyof T) {
+        return obj[key];
+               ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+               ~~~~~~~~
+!!! error TS2536: Type 'keyof T' cannot be used to index type '{}'.
+    }
+    
+    function g3<T extends unknown>(obj: T, key: keyof T) {
+        return obj[key];
+               ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+    }
+    
+    function g4<T, U extends T>(obj: U, key: keyof U) {
+        return obj[key];
+               ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+    }
+    
+    function g5<T extends {} | null | undefined, U extends T>(obj: U, key: keyof U) {
+        return obj[key];
+               ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+               ~~~~~~~~
+!!! error TS2536: Type 'keyof U' cannot be used to index type '{}'.
+    }
+    
+    function g6<T extends unknown, U extends T>(obj: U, key: keyof U) {
+        return obj[key];
+               ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+    }
+    
+    // **************
+    function h1<T, K extends keyof T>(obj: T, other: T, key: K) {
+        obj[key]; 
+        other[key];
+        return;
+    }
+    
+    function h2<T extends {} | null | undefined , K extends keyof T>(obj: T, other: T, key: K) {
+        obj[key]; 
+        other[key];
+        return;}
+    
+    function h3<T extends unknown, K extends keyof T>(obj: T, other: T, key: K) {
+        obj[key]; 
+        other[key];
+        return;
+    }
+    
+    // **************
+    function i1<T, U extends T, K extends keyof T>(obj: T, other: U, key: K) {
+        obj[key]; 
+        other[key];
+        return;
+    }
+    
+    function i2<T extends {} | null | undefined , U extends T, K extends keyof T>(obj: T, other: U, key: K) {
+        obj[key]; 
+        other[key];
+        return;}
+    
+    function i3<T extends unknown, U extends T, K extends keyof T>(obj: T, other: U, key: K) {
+        obj[key]; 
+        other[key];
+        return;
+    }
+    
+    
+    // ************
+    function j1<T, U extends T>(obj: U, key: keyof T) {
+             ~~
+!!! error TS2393: Duplicate function implementation.
+        return obj[key];
+    }
+    
+    function j2<T extends {} | null | undefined, U extends T>(obj: U, key: keyof T) {
+             ~~
+!!! error TS2393: Duplicate function implementation.
+        return obj[key];
+               ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+               ~~~~~~~~
+!!! error TS2536: Type 'keyof T' cannot be used to index type '{}'.
+    }
+    
+    function j3<T extends unknown, U extends T>(obj: U, key: keyof T) {
+             ~~
+!!! error TS2393: Duplicate function implementation.
+        return obj[key];
+               ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+    }
+    
+    
+    // ************
+    function j1<T, U extends T>(obj: U, key: keyof U) {
+             ~~
+!!! error TS2393: Duplicate function implementation.
+        return obj[key];
+               ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+    }
+    
+    function j2<T extends {} | null | undefined, U extends T>(obj: U, key: keyof U) {
+             ~~
+!!! error TS2393: Duplicate function implementation.
+        return obj[key];
+               ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+               ~~~~~~~~
+!!! error TS2536: Type 'keyof U' cannot be used to index type '{}'.
+    }
+    
+    function j3<T extends unknown, U extends T>(obj: U, key: keyof U) {
+             ~~
+!!! error TS2393: Duplicate function implementation.
+        return obj[key];
+               ~~~
+!!! error TS18049: 'obj' is possibly 'null' or 'undefined'.
+    }
+    

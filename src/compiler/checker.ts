@@ -18299,6 +18299,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function shouldDeferIndexType(type: Type, indexFlags = IndexFlags.None) {
         return !!(type.flags & TypeFlags.InstantiableNonPrimitive ||
+            type.flags & TypeFlags.Index && isUnconstrainedTypeParameter((type as IndexType).type) ||
             isGenericTupleType(type) ||
             isGenericMappedType(type) && (!hasDistributiveNameType(type) || getMappedTypeNameTypeKind(type) === MappedTypeNameTypeKind.Remapping) ||
             type.flags & TypeFlags.Union && !(indexFlags & IndexFlags.NoReducibleCheck) && isGenericReducibleType(type) ||
@@ -18987,7 +18988,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 isGenericTupleType(objectType) && !indexTypeLessThan(indexType, getTotalFixedElementCount(objectType.target)) :
                 isGenericObjectType(objectType) && !(isTupleType(objectType) && indexTypeLessThan(indexType, getTotalFixedElementCount(objectType.target))) || isGenericReducibleType(objectType))
         ) {
-            if (objectType.flags & TypeFlags.AnyOrUnknown) {
+            if (objectType.flags & TypeFlags.AnyOrUnknown || (strictNullChecks && (objectType.flags & TypeFlags.Union) && isUnknownLikeUnionType(objectType))) {
                 return objectType;
             }
             // Defer the operation by creating an indexed access type.
@@ -34563,8 +34564,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node.flags & NodeFlags.OptionalChain) {
             return checkElementAccessChain(node as ElementAccessChain, checkMode);
         }
-        if (shouldDeferIndexType(getTypeOfNode(node.expression))) {
-            return checkElementAccessExpression(node, checkExpression(node.expression), checkMode);
+        if (shouldDeferIndexType(getTypeOfNode(node.argumentExpression))) {
+            return checkElementAccessExpression(node, checkExpression(node.expression), checkMode, /*deferredIndexCheck*/ true);
         }
         return checkElementAccessExpression(node, checkNonNullExpression(node.expression), checkMode);
     }
@@ -34575,7 +34576,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return propagateOptionalTypeMarker(checkElementAccessExpression(node, checkNonNullType(nonOptionalType, node.expression), checkMode), node, nonOptionalType !== exprType);
     }
 
-    function checkElementAccessExpression(node: ElementAccessExpression, exprType: Type, checkMode: CheckMode | undefined): Type {
+    function checkElementAccessExpression(node: ElementAccessExpression, exprType: Type, checkMode: CheckMode | undefined, deferredIndexCheck: boolean = false): Type {
         const objectType = getAssignmentTargetKind(node) !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(exprType) : exprType;
         const indexExpression = node.argumentExpression;
         const indexType = checkExpression(indexExpression);
@@ -34602,7 +34603,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, accessFlags, node) || errorType;
-        return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode), node);
+        return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode), node, deferredIndexCheck);
     }
 
     function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement {
@@ -41565,7 +41566,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getTypeFromTypeNode(node);
     }
 
-    function checkIndexedAccessIndexType(type: Type, accessNode: IndexedAccessTypeNode | ElementAccessExpression) {
+    function checkIndexedAccessIndexType(type: Type, accessNode: IndexedAccessTypeNode | ElementAccessExpression, deferredIndexCheck: boolean = false) {
         if (!(type.flags & TypeFlags.IndexedAccess)) {
             return type;
         }
@@ -41595,6 +41596,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return errorType;
                 }
             }
+        }
+        if (deferredIndexCheck && isAccessExpression(accessNode) && isErrorType(checkNonNullExpression(accessNode.expression))) {
+            return errorType;
         }
         error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
         return errorType;

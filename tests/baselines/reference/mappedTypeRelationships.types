@@ -132,16 +132,16 @@ function f5<T, U extends T>(x: T, y: U, k: keyof U) {
 >  : ^^^^^^^
 
     x[k] = y[k];  // Error
->x[k] = y[k] : U[keyof U]
->            : ^^^^^^^^^^
+>x[k] = y[k] : NonNullable<U>[keyof U]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
 >x[k] : any
 >     : ^^^
 >x : T
 >  : ^
 >k : keyof U
 >  : ^^^^^^^
->y[k] : U[keyof U]
->     : ^^^^^^^^^^
+>y[k] : NonNullable<U>[keyof U]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >y : U
 >  : ^
 >k : keyof U
@@ -150,8 +150,8 @@ function f5<T, U extends T>(x: T, y: U, k: keyof U) {
     y[k] = x[k];  // Error
 >y[k] = x[k] : any
 >            : ^^^
->y[k] : U[keyof U]
->     : ^^^^^^^^^^
+>y[k] : NonNullable<U>[keyof U]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >y : U
 >  : ^
 >k : keyof U

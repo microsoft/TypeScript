@@ -1,0 +1,447 @@
+//// [tests/cases/compiler/unconstrainedTypeKeyofParam.ts] ////
+
+=== unconstrainedTypeKeyofParam.ts ===
+function f3<T, U extends T>(x: T, y: U, k: keyof T) {
+>f3 : Symbol(f3, Decl(unconstrainedTypeKeyofParam.ts, 0, 0), Decl(unconstrainedTypeKeyofParam.ts, 11, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 0, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 0, 14))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 0, 12))
+>x : Symbol(x, Decl(unconstrainedTypeKeyofParam.ts, 0, 28))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 0, 12))
+>y : Symbol(y, Decl(unconstrainedTypeKeyofParam.ts, 0, 33))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 0, 14))
+>k : Symbol(k, Decl(unconstrainedTypeKeyofParam.ts, 0, 39))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 0, 12))
+
+    x[k] = y[k];
+>x : Symbol(x, Decl(unconstrainedTypeKeyofParam.ts, 0, 28))
+>k : Symbol(k, Decl(unconstrainedTypeKeyofParam.ts, 0, 39))
+>y : Symbol(y, Decl(unconstrainedTypeKeyofParam.ts, 0, 33))
+>k : Symbol(k, Decl(unconstrainedTypeKeyofParam.ts, 0, 39))
+
+    y[k] = x[k]; 
+>y : Symbol(y, Decl(unconstrainedTypeKeyofParam.ts, 0, 33))
+>k : Symbol(k, Decl(unconstrainedTypeKeyofParam.ts, 0, 39))
+>x : Symbol(x, Decl(unconstrainedTypeKeyofParam.ts, 0, 28))
+>k : Symbol(k, Decl(unconstrainedTypeKeyofParam.ts, 0, 39))
+}
+
+function f<T, K extends keyof T>(obj: T, key: K) {
+>f : Symbol(f, Decl(unconstrainedTypeKeyofParam.ts, 3, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 5, 11))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 5, 13))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 5, 11))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 5, 33))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 5, 11))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 5, 40))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 5, 13))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 5, 33))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 5, 40))
+}
+
+function f2<T extends {} | null | undefined , K extends keyof T>(obj: T, key: K) {
+>f2 : Symbol(f2, Decl(unconstrainedTypeKeyofParam.ts, 7, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 9, 12))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 9, 45))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 9, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 9, 65))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 9, 12))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 9, 72))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 9, 45))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 9, 65))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 9, 72))
+}
+
+function f3<T extends unknown, K extends keyof T>(obj: T, key: K) {
+>f3 : Symbol(f3, Decl(unconstrainedTypeKeyofParam.ts, 0, 0), Decl(unconstrainedTypeKeyofParam.ts, 11, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 13, 12))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 13, 30))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 13, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 13, 50))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 13, 12))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 13, 57))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 13, 30))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 13, 50))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 13, 57))
+}
+
+function f4<T, U extends T, K extends keyof U>(obj: U, key: K) {
+>f4 : Symbol(f4, Decl(unconstrainedTypeKeyofParam.ts, 15, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 17, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 17, 14))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 17, 12))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 17, 27))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 17, 14))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 17, 47))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 17, 14))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 17, 54))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 17, 27))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 17, 47))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 17, 54))
+}
+
+function f5<T extends {} | null | undefined, U extends T, K extends keyof U>(obj: U, key: K) {
+>f5 : Symbol(f5, Decl(unconstrainedTypeKeyofParam.ts, 19, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 21, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 21, 44))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 21, 12))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 21, 57))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 21, 44))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 21, 77))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 21, 44))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 21, 84))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 21, 57))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 21, 77))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 21, 84))
+}
+
+function f6<T extends unknown, U extends T, K extends keyof U>(obj: U, key: K) {
+>f6 : Symbol(f6, Decl(unconstrainedTypeKeyofParam.ts, 23, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 25, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 25, 30))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 25, 12))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 25, 43))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 25, 30))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 25, 63))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 25, 30))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 25, 70))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 25, 43))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 25, 63))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 25, 70))
+}
+
+// ************
+function g1<T>(obj: T, key: keyof T) {
+>g1 : Symbol(g1, Decl(unconstrainedTypeKeyofParam.ts, 27, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 30, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 30, 15))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 30, 12))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 30, 22))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 30, 12))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 30, 15))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 30, 22))
+}
+
+function g2<T extends {} | null | undefined>(obj: T, key: keyof T) {
+>g2 : Symbol(g2, Decl(unconstrainedTypeKeyofParam.ts, 32, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 34, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 34, 45))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 34, 12))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 34, 52))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 34, 12))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 34, 45))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 34, 52))
+}
+
+function g3<T extends unknown>(obj: T, key: keyof T) {
+>g3 : Symbol(g3, Decl(unconstrainedTypeKeyofParam.ts, 36, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 38, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 38, 31))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 38, 12))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 38, 38))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 38, 12))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 38, 31))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 38, 38))
+}
+
+function g4<T, U extends T>(obj: U, key: keyof U) {
+>g4 : Symbol(g4, Decl(unconstrainedTypeKeyofParam.ts, 40, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 42, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 42, 14))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 42, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 42, 28))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 42, 14))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 42, 35))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 42, 14))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 42, 28))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 42, 35))
+}
+
+function g5<T extends {} | null | undefined, U extends T>(obj: U, key: keyof U) {
+>g5 : Symbol(g5, Decl(unconstrainedTypeKeyofParam.ts, 44, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 46, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 46, 44))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 46, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 46, 58))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 46, 44))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 46, 65))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 46, 44))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 46, 58))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 46, 65))
+}
+
+function g6<T extends unknown, U extends T>(obj: U, key: keyof U) {
+>g6 : Symbol(g6, Decl(unconstrainedTypeKeyofParam.ts, 48, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 50, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 50, 30))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 50, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 50, 44))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 50, 30))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 50, 51))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 50, 30))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 50, 44))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 50, 51))
+}
+
+// **************
+function h1<T, K extends keyof T>(obj: T, other: T, key: K) {
+>h1 : Symbol(h1, Decl(unconstrainedTypeKeyofParam.ts, 52, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 55, 12))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 55, 14))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 55, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 55, 34))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 55, 12))
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 55, 41))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 55, 12))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 55, 51))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 55, 14))
+
+    obj[key]; 
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 55, 34))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 55, 51))
+
+    other[key];
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 55, 41))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 55, 51))
+
+    return;
+}
+
+function h2<T extends {} | null | undefined , K extends keyof T>(obj: T, other: T, key: K) {
+>h2 : Symbol(h2, Decl(unconstrainedTypeKeyofParam.ts, 59, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 61, 12))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 61, 45))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 61, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 61, 65))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 61, 12))
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 61, 72))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 61, 12))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 61, 82))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 61, 45))
+
+    obj[key]; 
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 61, 65))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 61, 82))
+
+    other[key];
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 61, 72))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 61, 82))
+
+    return;}
+
+function h3<T extends unknown, K extends keyof T>(obj: T, other: T, key: K) {
+>h3 : Symbol(h3, Decl(unconstrainedTypeKeyofParam.ts, 64, 12))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 66, 12))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 66, 30))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 66, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 66, 50))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 66, 12))
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 66, 57))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 66, 12))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 66, 67))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 66, 30))
+
+    obj[key]; 
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 66, 50))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 66, 67))
+
+    other[key];
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 66, 57))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 66, 67))
+
+    return;
+}
+
+// **************
+function i1<T, U extends T, K extends keyof T>(obj: T, other: U, key: K) {
+>i1 : Symbol(i1, Decl(unconstrainedTypeKeyofParam.ts, 70, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 73, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 73, 14))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 73, 12))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 73, 27))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 73, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 73, 47))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 73, 12))
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 73, 54))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 73, 14))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 73, 64))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 73, 27))
+
+    obj[key]; 
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 73, 47))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 73, 64))
+
+    other[key];
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 73, 54))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 73, 64))
+
+    return;
+}
+
+function i2<T extends {} | null | undefined , U extends T, K extends keyof T>(obj: T, other: U, key: K) {
+>i2 : Symbol(i2, Decl(unconstrainedTypeKeyofParam.ts, 77, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 79, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 79, 45))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 79, 12))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 79, 58))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 79, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 79, 78))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 79, 12))
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 79, 85))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 79, 45))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 79, 95))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 79, 58))
+
+    obj[key]; 
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 79, 78))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 79, 95))
+
+    other[key];
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 79, 85))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 79, 95))
+
+    return;}
+
+function i3<T extends unknown, U extends T, K extends keyof T>(obj: T, other: U, key: K) {
+>i3 : Symbol(i3, Decl(unconstrainedTypeKeyofParam.ts, 82, 12))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 84, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 84, 30))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 84, 12))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 84, 43))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 84, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 84, 63))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 84, 12))
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 84, 70))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 84, 30))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 84, 80))
+>K : Symbol(K, Decl(unconstrainedTypeKeyofParam.ts, 84, 43))
+
+    obj[key]; 
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 84, 63))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 84, 80))
+
+    other[key];
+>other : Symbol(other, Decl(unconstrainedTypeKeyofParam.ts, 84, 70))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 84, 80))
+
+    return;
+}
+
+
+// ************
+function j1<T, U extends T>(obj: U, key: keyof T) {
+>j1 : Symbol(j1, Decl(unconstrainedTypeKeyofParam.ts, 88, 1), Decl(unconstrainedTypeKeyofParam.ts, 102, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 92, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 92, 14))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 92, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 92, 28))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 92, 14))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 92, 35))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 92, 12))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 92, 28))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 92, 35))
+}
+
+function j2<T extends {} | null | undefined, U extends T>(obj: U, key: keyof T) {
+>j2 : Symbol(j2, Decl(unconstrainedTypeKeyofParam.ts, 94, 1), Decl(unconstrainedTypeKeyofParam.ts, 108, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 96, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 96, 44))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 96, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 96, 58))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 96, 44))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 96, 65))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 96, 12))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 96, 58))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 96, 65))
+}
+
+function j3<T extends unknown, U extends T>(obj: U, key: keyof T) {
+>j3 : Symbol(j3, Decl(unconstrainedTypeKeyofParam.ts, 98, 1), Decl(unconstrainedTypeKeyofParam.ts, 112, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 100, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 100, 30))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 100, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 100, 44))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 100, 30))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 100, 51))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 100, 12))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 100, 44))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 100, 51))
+}
+
+
+// ************
+function j1<T, U extends T>(obj: U, key: keyof U) {
+>j1 : Symbol(j1, Decl(unconstrainedTypeKeyofParam.ts, 88, 1), Decl(unconstrainedTypeKeyofParam.ts, 102, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 106, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 106, 14))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 106, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 106, 28))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 106, 14))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 106, 35))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 106, 14))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 106, 28))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 106, 35))
+}
+
+function j2<T extends {} | null | undefined, U extends T>(obj: U, key: keyof U) {
+>j2 : Symbol(j2, Decl(unconstrainedTypeKeyofParam.ts, 94, 1), Decl(unconstrainedTypeKeyofParam.ts, 108, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 110, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 110, 44))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 110, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 110, 58))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 110, 44))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 110, 65))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 110, 44))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 110, 58))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 110, 65))
+}
+
+function j3<T extends unknown, U extends T>(obj: U, key: keyof U) {
+>j3 : Symbol(j3, Decl(unconstrainedTypeKeyofParam.ts, 98, 1), Decl(unconstrainedTypeKeyofParam.ts, 112, 1))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 114, 12))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 114, 30))
+>T : Symbol(T, Decl(unconstrainedTypeKeyofParam.ts, 114, 12))
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 114, 44))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 114, 30))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 114, 51))
+>U : Symbol(U, Decl(unconstrainedTypeKeyofParam.ts, 114, 30))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(unconstrainedTypeKeyofParam.ts, 114, 44))
+>key : Symbol(key, Decl(unconstrainedTypeKeyofParam.ts, 114, 51))
+}
+

@@ -6,11 +6,12 @@ controlFlowGenericTypes.ts(90,44): error TS2355: A function whose declared type 
 controlFlowGenericTypes.ts(91,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
   Property 'foo' does not exist on type 'AA'.
 controlFlowGenericTypes.ts(156,16): error TS18048: 'obj' is possibly 'undefined'.
+controlFlowGenericTypes.ts(156,16): error TS2536: Type 'K' cannot be used to index type 'Record<keyof T, string> | undefined'.
 controlFlowGenericTypes.ts(167,9): error TS18048: 'iSpec' is possibly 'undefined'.
 controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined'.
 
 
-==== controlFlowGenericTypes.ts (8 errors) ====
+==== controlFlowGenericTypes.ts (9 errors) ====
     function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
         if (x) {
             x;
@@ -181,6 +182,8 @@ controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined
         const x1 = obj[key];  // Error
                    ~~~
 !!! error TS18048: 'obj' is possibly 'undefined'.
+                   ~~~~~~~~
+!!! error TS2536: Type 'K' cannot be used to index type 'Record<keyof T, string> | undefined'.
         const x2 = obj && obj[key];
     }
     

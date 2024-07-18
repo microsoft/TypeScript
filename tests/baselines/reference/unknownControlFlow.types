@@ -1096,8 +1096,8 @@ function ff3<T>(t: T, k: keyof (T & {})) {
 >  : ^^^^^^^^^^^^^^
 
     t[k];  // Error
->t[k] : any
->     : ^^^
+>t[k] : NonNullable<T>[keyof (T & {})]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
 >  : ^
 >k : keyof (T & {})

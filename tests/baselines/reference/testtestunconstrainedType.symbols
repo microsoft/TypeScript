@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/testtestunconstrainedType.ts] ////
+
+=== testtestunconstrainedType.ts ===
+function f<T>(obj: T, key: keyof T) {
+>f : Symbol(f, Decl(testtestunconstrainedType.ts, 0, 0))
+>T : Symbol(T, Decl(testtestunconstrainedType.ts, 0, 11))
+>obj : Symbol(obj, Decl(testtestunconstrainedType.ts, 0, 14))
+>T : Symbol(T, Decl(testtestunconstrainedType.ts, 0, 11))
+>key : Symbol(key, Decl(testtestunconstrainedType.ts, 0, 21))
+>T : Symbol(T, Decl(testtestunconstrainedType.ts, 0, 11))
+
+    return obj[key];
+>obj : Symbol(obj, Decl(testtestunconstrainedType.ts, 0, 14))
+>key : Symbol(key, Decl(testtestunconstrainedType.ts, 0, 21))
+}
+
+function ff3<T>(t: T, k: keyof (T & {})) {
+>ff3 : Symbol(ff3, Decl(testtestunconstrainedType.ts, 2, 1))
+>T : Symbol(T, Decl(testtestunconstrainedType.ts, 4, 13))
+>t : Symbol(t, Decl(testtestunconstrainedType.ts, 4, 16))
+>T : Symbol(T, Decl(testtestunconstrainedType.ts, 4, 13))
+>k : Symbol(k, Decl(testtestunconstrainedType.ts, 4, 21))
+>T : Symbol(T, Decl(testtestunconstrainedType.ts, 4, 13))
+
+    t[k];
+>t : Symbol(t, Decl(testtestunconstrainedType.ts, 4, 16))
+>k : Symbol(k, Decl(testtestunconstrainedType.ts, 4, 21))
+}

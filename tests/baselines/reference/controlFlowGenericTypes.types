@@ -662,10 +662,10 @@ function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(o
 >    : ^
 
     const x1 = obj[key];  // Error
->x1 : Record<keyof T, string>[K]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj[key] : Record<keyof T, string>[K]
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x1 : any
+>   : ^^^
+>obj[key] : any
+>         : ^^^
 >obj : Record<keyof T, string> | undefined
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K

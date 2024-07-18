@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/testtestunconstrainedType.ts] ////
+
+=== testtestunconstrainedType.ts ===
+function f<T>(obj: T, key: keyof T) {
+>f : <T>(obj: T, key: keyof T) => T[keyof T]
+>  : ^ ^^   ^^ ^^   ^^       ^^^^^^^^^^^^^^^
+>obj : T
+>    : ^
+>key : keyof T
+>    : ^^^^^^^
+
+    return obj[key];
+>obj[key] : T[keyof T]
+>         : ^^^^^^^^^^
+>obj : T
+>    : ^
+>key : keyof T
+>    : ^^^^^^^
+}
+
+function ff3<T>(t: T, k: keyof (T & {})) {
+>ff3 : <T>(t: T, k: keyof (T & {})) => void
+>    : ^ ^^ ^^ ^^ ^^              ^^^^^^^^^
+>t : T
+>  : ^
+>k : keyof (T & {})
+>  : ^^^^^^^^^^^^^^
+
+    t[k];
+>t[k] : NonNullable<T>[keyof (T & {})]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>t : T
+>  : ^
+>k : keyof (T & {})
+>  : ^^^^^^^^^^^^^^
+}

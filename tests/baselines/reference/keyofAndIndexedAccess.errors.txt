@@ -1,5 +1,6 @@
 keyofAndIndexedAccess.ts(205,24): error TS2533: Object is possibly 'null' or 'undefined'.
 keyofAndIndexedAccess.ts(211,24): error TS2533: Object is possibly 'null' or 'undefined'.
+keyofAndIndexedAccess.ts(216,9): error TS18049: 'target' is possibly 'null' or 'undefined'.
 keyofAndIndexedAccess.ts(216,9): error TS2536: Type 'Extract<keyof NonNullable<T>, string>' cannot be used to index type 'T'.
 keyofAndIndexedAccess.ts(316,5): error TS2322: Type 'T' is not assignable to type '{}'.
 keyofAndIndexedAccess.ts(317,5): error TS2322: Type 'T[keyof T]' is not assignable to type '{}'.
@@ -12,7 +13,7 @@ keyofAndIndexedAccess.ts(566,9): error TS2322: Type 'T[K]' is not assignable to 
     Type 'T' is not assignable to type '{}'.
 
 
-==== keyofAndIndexedAccess.ts (7 errors) ====
+==== keyofAndIndexedAccess.ts (8 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -233,6 +234,8 @@ keyofAndIndexedAccess.ts(566,9): error TS2322: Type 'T[K]' is not assignable to 
     function f60<T>(source: T, target: T) {
         for (let k in source) {
             target[k] = source[k];
+            ~~~~~~
+!!! error TS18049: 'target' is possibly 'null' or 'undefined'.
             ~~~~~~~~~
 !!! error TS2536: Type 'Extract<keyof NonNullable<T>, string>' cannot be used to index type 'T'.
         }

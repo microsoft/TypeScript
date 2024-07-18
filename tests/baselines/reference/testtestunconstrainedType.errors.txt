@@ -1,0 +1,13 @@
+testtestunconstrainedType.ts(6,5): error TS18049: 't' is possibly 'null' or 'undefined'.
+
+
+==== testtestunconstrainedType.ts (1 errors) ====
+    function f<T>(obj: T, key: keyof T) {
+        return obj[key];
+    }
+    
+    function ff3<T>(t: T, k: keyof (T & {})) {
+        t[k];
+        ~
+!!! error TS18049: 't' is possibly 'null' or 'undefined'.
+    }
