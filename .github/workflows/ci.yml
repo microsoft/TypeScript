@@ -69,6 +69,39 @@ jobs:
           git add tests/baselines/reference
           git diff --staged --exit-code
 
+  coverage:
+    runs-on:
+      - 'self-hosted'
+      - '1ES.Pool=TypeScript-1ES-GitHub-Large'
+      - '1ES.ImageOverride=ubuntu-22.04'
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: '*'
+          check-latest: true
+      - run: npm ci
+
+      - name: Run tests with coverage
+        run: npm test -- --no-lint --coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+        with:
+          name: coverage
+          path: coverage
+
+      - uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
+        with:
+          use_oidc: true
+          disable_search: true
+          files: ./coverage/codecov.json
+
   lint:
     runs-on: ubuntu-latest
 

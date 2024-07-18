@@ -4,7 +4,6 @@ import {
     append,
     arrayIsEqualTo,
     CancellationToken,
-    CompilerOptions,
     consumesNodeCoreModules,
     createMultiMap,
     Debug,
@@ -18,9 +17,7 @@ import {
     GetCanonicalFileName,
     getDefaultLikeExportNameFromDeclaration,
     getDirectoryPath,
-    getEmitScriptTarget,
     getLocalSymbolForExportDefault,
-    getNamesForExportedSymbol,
     getNodeModulePathParts,
     getPackageNameFromTypesPackageName,
     getRegexFromPattern,
@@ -46,6 +43,7 @@ import {
     Path,
     pathContainsNodeModules,
     Program,
+    ScriptTarget,
     skipAlias,
     SourceFile,
     startsWith,
@@ -198,7 +196,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
             //    get a better name.
             const names = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
                 ? unescapeLeadingUnderscores(symbolTableKey)
-                : getNamesForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined);
+                : getNamesForExportedSymbol(namedSymbol, checker, /*scriptTarget*/ undefined);
 
             const symbolName = typeof names === "string" ? names : names[0];
             const capitalizedSymbolName = typeof names === "string" ? undefined : names[1];
@@ -572,12 +570,21 @@ function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
     return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) && !isPrivateIdentifierSymbol(symbol);
 }
 
+function getNamesForExportedSymbol(defaultExport: Symbol, checker: TypeChecker, scriptTarget: ScriptTarget | undefined) {
+    let names: string | string[] | undefined;
+    forEachNameOfDefaultExport(defaultExport, checker, scriptTarget, (name, capitalizedName) => {
+        names = capitalizedName ? [name, capitalizedName] : name;
+        return true;
+    });
+    return Debug.checkDefined(names);
+}
+
 /**
  * @internal
  * May call `cb` multiple times with the same name.
  * Terminates when `cb` returns a truthy value.
  */
-export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions, preferCapitalizedNames: boolean, cb: (name: string) => T | undefined): T | undefined {
+export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: TypeChecker, scriptTarget: ScriptTarget | undefined, cb: (name: string, capitalizedName?: string) => T | undefined): T | undefined {
     let chain: Symbol[] | undefined;
     let current: Symbol | undefined = defaultExport;
     const seen = new Map<Symbol, true>();
@@ -604,7 +611,10 @@ export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: Ty
 
     for (const symbol of chain ?? emptyArray) {
         if (symbol.parent && isExternalModuleSymbol(symbol.parent)) {
-            const final = cb(moduleSymbolToValidIdentifier(symbol.parent, getEmitScriptTarget(compilerOptions), preferCapitalizedNames));
+            const final = cb(
+                moduleSymbolToValidIdentifier(symbol.parent, scriptTarget, /*forceCapitalize*/ false),
+                moduleSymbolToValidIdentifier(symbol.parent, scriptTarget, /*forceCapitalize*/ true),
+            );
             if (final) return final;
         }
     }

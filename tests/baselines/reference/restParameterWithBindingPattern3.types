@@ -22,7 +22,7 @@ function b(...[...foo = []]: string[]) { }
 >   : ^^^^^^^^^^^
 
 function c(...{0: a, length, 3: d}: [boolean, string, number]) { }
->c : (__0_0: boolean, __0_1: string, __0_2: number) => void
+>c : (arg_0: boolean, arg_1: string, arg_2: number) => void
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : boolean
 >  : ^^^^^^^
@@ -32,8 +32,8 @@ function c(...{0: a, length, 3: d}: [boolean, string, number]) { }
 >  : ^^^^^^^^^
 
 function d(...[a, , , d]: [boolean, string, number]) { }
->d : (__0_0: boolean, __0_1: string, __0_2: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d : (a: boolean, arg_1: string, arg_2: number) => void
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : boolean
 >  : ^^^^^^^
 > : undefined
@@ -44,7 +44,7 @@ function d(...[a, , , d]: [boolean, string, number]) { }
 >  : ^^^^^^^^^
 
 function e(...{0: a = 1, 1: b = true, ...rest: rest}: [boolean, string, number]) { }
->e : (__0_0: boolean, __0_1: string, __0_2: number) => void
+>e : (arg_0: boolean, arg_1: string, arg_2: number) => void
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : boolean
 >  : ^^^^^^^

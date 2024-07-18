@@ -37,9 +37,9 @@ import {
     getBaseFileName,
     GetCanonicalFileName,
     getConditions,
+    getDefaultResolutionModeForFileWorker,
     getDirectoryPath,
     getEmitModuleResolutionKind,
-    getModeForResolutionAtIndex,
     getModuleNameStringLiteralAt,
     getModuleSpecifierEndingPreference,
     getNodeModulePathParts,
@@ -143,12 +143,13 @@ export interface ModuleSpecifierPreferences {
     /**
      * @param syntaxImpliedNodeFormat Used when the import syntax implies ESM or CJS irrespective of the mode of the file.
      */
-    getAllowedEndingsInPreferredOrder(syntaxImpliedNodeFormat?: SourceFile["impliedNodeFormat"]): ModuleSpecifierEnding[];
+    getAllowedEndingsInPreferredOrder(syntaxImpliedNodeFormat?: ResolutionMode): ModuleSpecifierEnding[];
 }
 
 /** @internal */
 export function getModuleSpecifierPreferences(
     { importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences,
+    host: Pick<ModuleSpecifierResolutionHost, "getDefaultResolutionModeForFile">,
     compilerOptions: CompilerOptions,
     importingSourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat">,
     oldImportSpecifier?: string,
@@ -163,8 +164,10 @@ export function getModuleSpecifierPreferences(
             importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
             RelativePreference.Shortest,
         getAllowedEndingsInPreferredOrder: syntaxImpliedNodeFormat => {
-            const preferredEnding = syntaxImpliedNodeFormat !== importingSourceFile.impliedNodeFormat ? getPreferredEnding(syntaxImpliedNodeFormat) : filePreferredEnding;
-            if ((syntaxImpliedNodeFormat ?? importingSourceFile.impliedNodeFormat) === ModuleKind.ESNext) {
+            const impliedNodeFormat = getDefaultResolutionModeForFile(importingSourceFile, host, compilerOptions);
+            const preferredEnding = syntaxImpliedNodeFormat !== impliedNodeFormat ? getPreferredEnding(syntaxImpliedNodeFormat) : filePreferredEnding;
+            const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+            if ((syntaxImpliedNodeFormat ?? impliedNodeFormat) === ModuleKind.ESNext && ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext) {
                 if (shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName)) {
                     return [ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.JsExtension];
                 }
@@ -204,7 +207,7 @@ export function getModuleSpecifierPreferences(
         }
         return getModuleSpecifierEndingPreference(
             importModuleSpecifierEnding,
-            resolutionMode ?? importingSourceFile.impliedNodeFormat,
+            resolutionMode ?? getDefaultResolutionModeForFile(importingSourceFile, host, compilerOptions),
             compilerOptions,
             isFullSourceFile(importingSourceFile) ? importingSourceFile : undefined,
         );
@@ -225,7 +228,7 @@ export function updateModuleSpecifier(
     oldImportSpecifier: string,
     options: ModuleSpecifierOptions = {},
 ): string | undefined {
-    const res = getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getModuleSpecifierPreferences({}, compilerOptions, importingSourceFile, oldImportSpecifier), {}, options);
+    const res = getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getModuleSpecifierPreferences({}, host, compilerOptions, importingSourceFile, oldImportSpecifier), {}, options);
     if (res === oldImportSpecifier) return undefined;
     return res;
 }
@@ -245,7 +248,7 @@ export function getModuleSpecifier(
     host: ModuleSpecifierResolutionHost,
     options: ModuleSpecifierOptions = {},
 ): string {
-    return getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getModuleSpecifierPreferences({}, compilerOptions, importingSourceFile), {}, options);
+    return getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getModuleSpecifierPreferences({}, host, compilerOptions, importingSourceFile), {}, options);
 }
 
 /** @internal */
@@ -275,7 +278,7 @@ function getModuleSpecifierWorker(
     const info = getInfo(importingSourceFileName, host);
     const modulePaths = getAllModulePaths(info, toFileName, host, userPreferences, compilerOptions, options);
     return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)) ||
-        getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || importingSourceFile.impliedNodeFormat, preferences);
+        getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || getDefaultResolutionModeForFile(importingSourceFile, host, compilerOptions), preferences);
 }
 
 /** @internal */
@@ -403,7 +406,7 @@ export function getLocalModuleSpecifierBetweenFileNames(
         compilerOptions,
         host,
         importMode,
-        getModuleSpecifierPreferences({}, compilerOptions, importingFile),
+        getModuleSpecifierPreferences({}, host, compilerOptions, importingFile),
     );
 }
 
@@ -417,7 +420,7 @@ function computeModuleSpecifiers(
     forAutoImport: boolean,
 ): ModuleSpecifierResult {
     const info = getInfo(importingSourceFile.fileName, host);
-    const preferences = getModuleSpecifierPreferences(userPreferences, compilerOptions, importingSourceFile);
+    const preferences = getModuleSpecifierPreferences(userPreferences, host, compilerOptions, importingSourceFile);
     const existingSpecifier = isFullSourceFile(importingSourceFile) && forEach(modulePaths, modulePath =>
         forEach(
             host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
@@ -425,7 +428,11 @@ function computeModuleSpecifiers(
                 if (reason.kind !== FileIncludeKind.Import || reason.file !== importingSourceFile.path) return undefined;
                 // If the candidate import mode doesn't match the mode we're generating for, don't consider it
                 // TODO: maybe useful to keep around as an alternative option for certain contexts where the mode is overridable
-                if (importingSourceFile.impliedNodeFormat && importingSourceFile.impliedNodeFormat !== getModeForResolutionAtIndex(importingSourceFile, reason.index, compilerOptions)) return undefined;
+                const existingMode = host.getModeForResolutionAtIndex(importingSourceFile, reason.index);
+                const targetMode = options.overrideImportMode ?? host.getDefaultResolutionModeForFile(importingSourceFile);
+                if (existingMode !== targetMode && existingMode !== undefined && targetMode !== undefined) {
+                    return undefined;
+                }
                 const specifier = getModuleNameStringLiteralAt(importingSourceFile, reason.index).text;
                 // If the preference is for non relative and the module specifier is relative, ignore it
                 return preferences.relativePreference !== RelativePreference.NonRelative || !pathIsRelative(specifier) ?
@@ -737,7 +744,7 @@ function getAllModulePathsWorker(info: Info, importedFileName: string, host: Mod
         // This should populate all the relevant symlinks in the symlink cache, and most, if not all, of these resolutions
         // should get (re)used.
         const state = getTemporaryModuleResolutionState(cache.getPackageJsonInfoCache(), host, {});
-        const packageJson = getPackageScopeForPath(info.importingSourceFileName, state);
+        const packageJson = getPackageScopeForPath(getDirectoryPath(info.importingSourceFileName), state);
         if (packageJson) {
             const toResolve = getAllRuntimeDependencies(packageJson.contents.packageJsonContent);
             for (const depName of (toResolve || emptyArray)) {
@@ -1093,7 +1100,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
 
     // Simplify the full file path to something that can be resolved by Node.
 
-    const preferences = getModuleSpecifierPreferences(userPreferences, options, importingSourceFile);
+    const preferences = getModuleSpecifierPreferences(userPreferences, host, options, importingSourceFile);
     const allowedEndings = preferences.getAllowedEndingsInPreferredOrder();
     let moduleSpecifier = path;
     let isPackageRootPath = false;
@@ -1153,7 +1160,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
         const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
         if (isPackageJsonInfo(cachedPackageJson) || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
             const packageJsonContent: Record<string, any> | undefined = cachedPackageJson?.contents.packageJsonContent || tryParseJson(host.readFile!(packageJsonPath)!);
-            const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
+            const importMode = overrideMode || getDefaultResolutionModeForFile(importingSourceFile, host, options);
             if (getResolvePackageJsonExports(options)) {
                 // The package name that we found in node_modules could be different from the package
                 // name in the package.json content via url/filepath dependency specifiers. We need to
@@ -1347,4 +1354,8 @@ function getRelativePathIfInSameVolume(path: string, directoryPath: string, getC
 
 function isPathRelativeToParent(path: string): boolean {
     return startsWith(path, "..");
+}
+
+function getDefaultResolutionModeForFile(file: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, host: Pick<ModuleSpecifierResolutionHost, "getDefaultResolutionModeForFile">, compilerOptions: CompilerOptions) {
+    return isFullSourceFile(file) ? host.getDefaultResolutionModeForFile(file) : getDefaultResolutionModeForFileWorker(file, compilerOptions);
 }
