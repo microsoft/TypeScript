@@ -1,5 +1,4 @@
-// @declaration: true
-// @declarationMap: true,false
+// @sourceMap: true,false
 // @target: es6
 // @filename: variables.ts
 export const a = 1;

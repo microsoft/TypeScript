@@ -893,7 +893,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
                 noEmitHelpers: true,
                 module: compilerOptions.module,
                 target: compilerOptions.target,
-                sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
+                sourceMap: emitOnly !== EmitOnly.BuilderSignature && compilerOptions.declarationMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
