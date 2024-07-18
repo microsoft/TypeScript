@@ -2,7 +2,7 @@ interface PromiseConstructor {
     /**
      * A reference to the prototype.
      */
-    readonly prototype: Promise<any>;
+    prototype: Promise<any>;
 
     /**
      * Creates a new Promise.

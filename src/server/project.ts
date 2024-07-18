@@ -557,7 +557,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     createHash = maybeBind(this.projectService.host, this.projectService.host.createHash);
     /** @internal*/ preferNonRecursiveWatch: boolean | undefined;
 
-    readonly jsDocParsingMode: JSDocParsingMode | undefined;
+    jsDocParsingMode: JSDocParsingMode | undefined;
 
     /** @internal */
     constructor(

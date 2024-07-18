@@ -104,7 +104,7 @@ interface BigInt {
 
 interface BigIntConstructor {
     (value: bigint | boolean | number | string): bigint;
-    readonly prototype: BigInt;
+    prototype: BigInt;
 
     /**
      * Interprets the low bits of a BigInt as a 2's-complement signed integer.
@@ -370,7 +370,7 @@ interface BigInt64Array {
 }
 
 interface BigInt64ArrayConstructor {
-    readonly prototype: BigInt64Array;
+    prototype: BigInt64Array;
     new (length?: number): BigInt64Array;
     new (array: Iterable<bigint>): BigInt64Array;
     new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigInt64Array;
@@ -642,7 +642,7 @@ interface BigUint64Array {
 }
 
 interface BigUint64ArrayConstructor {
-    readonly prototype: BigUint64Array;
+    prototype: BigUint64Array;
     new (length?: number): BigUint64Array;
     new (array: Iterable<bigint>): BigUint64Array;
     new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigUint64Array;

@@ -1,0 +1,621 @@
+//// [tests/cases/compiler/enforceReadonly1.ts] ////
+
+=== enforceReadonly1.ts ===
+// A read-only property is not assignable to a mutable property
+
+function f1(mp: { x: string }, rp: { readonly x: string }, mx: { [x: string]: string }, rx: { readonly [x: string]: string }) {
+>f1 : (mp: { x: string; }, rp: { readonly x: string; }, mx: { [x: string]: string; }, rx: { readonly [x: string]: string; }) => void
+>   : ^  ^^              ^^  ^^                       ^^  ^^                        ^^  ^^                                 ^^^^^^^^^
+>mp : { x: string; }
+>   : ^^^^^      ^^^
+>x : string
+>  : ^^^^^^
+>rp : { readonly x: string; }
+>   : ^^^^^^^^^^^^^^      ^^^
+>x : string
+>  : ^^^^^^
+>mx : { [x: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>rx : { readonly [x: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+
+    mp = rp;  // Error
+>mp = rp : { readonly x: string; }
+>        : ^^^^^^^^^^^^^^      ^^^
+>mp : { x: string; }
+>   : ^^^^^      ^^^
+>rp : { readonly x: string; }
+>   : ^^^^^^^^^^^^^^      ^^^
+
+    rp = mp;
+>rp = mp : { x: string; }
+>        : ^^^^^      ^^^
+>rp : { readonly x: string; }
+>   : ^^^^^^^^^^^^^^      ^^^
+>mp : { x: string; }
+>   : ^^^^^      ^^^
+
+    mx = mp;
+>mx = mp : { x: string; }
+>        : ^^^^^      ^^^
+>mx : { [x: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>mp : { x: string; }
+>   : ^^^^^      ^^^
+
+    mx = rp;
+>mx = rp : { readonly x: string; }
+>        : ^^^^^^^^^^^^^^      ^^^
+>mx : { [x: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>rp : { readonly x: string; }
+>   : ^^^^^^^^^^^^^^      ^^^
+
+    mx = rx;  // Error
+>mx = rx : { readonly [x: string]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mx : { [x: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>rx : { readonly [x: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    rx = mp;
+>rx = mp : { x: string; }
+>        : ^^^^^      ^^^
+>rx : { readonly [x: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mp : { x: string; }
+>   : ^^^^^      ^^^
+
+    rx = rp;
+>rx = rp : { readonly x: string; }
+>        : ^^^^^^^^^^^^^^      ^^^
+>rx : { readonly [x: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>rp : { readonly x: string; }
+>   : ^^^^^^^^^^^^^^      ^^^
+
+    rx = mx;
+>rx = mx : { [x: string]: string; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>rx : { readonly [x: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mx : { [x: string]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type Mutable<T> = { -readonly [P in keyof T]: T[P] };
+>Mutable : Mutable<T>
+>        : ^^^^^^^^^^
+
+function f2<T>(mt: Mutable<T>, tt: T, rt: Readonly<T>) {
+>f2 : <T>(mt: Mutable<T>, tt: T, rt: Readonly<T>) => void
+>   : ^ ^^  ^^          ^^  ^^ ^^  ^^           ^^^^^^^^^
+>mt : Mutable<T>
+>   : ^^^^^^^^^^
+>tt : T
+>   : ^
+>rt : Readonly<T>
+>   : ^^^^^^^^^^^
+
+    mt = tt;  // Error
+>mt = tt : T
+>        : ^
+>mt : Mutable<T>
+>   : ^^^^^^^^^^
+>tt : T
+>   : ^
+
+    mt = rt;  // Error
+>mt = rt : Readonly<T>
+>        : ^^^^^^^^^^^
+>mt : Mutable<T>
+>   : ^^^^^^^^^^
+>rt : Readonly<T>
+>   : ^^^^^^^^^^^
+
+    tt = mt;
+>tt = mt : Mutable<T>
+>        : ^^^^^^^^^^
+>tt : T
+>   : ^
+>mt : Mutable<T>
+>   : ^^^^^^^^^^
+
+    tt = rt;  // Error
+>tt = rt : Readonly<T>
+>        : ^^^^^^^^^^^
+>tt : T
+>   : ^
+>rt : Readonly<T>
+>   : ^^^^^^^^^^^
+
+    rt = mt;
+>rt = mt : Mutable<T>
+>        : ^^^^^^^^^^
+>rt : Readonly<T>
+>   : ^^^^^^^^^^^
+>mt : Mutable<T>
+>   : ^^^^^^^^^^
+
+    rt = tt;
+>rt = tt : T
+>        : ^
+>rt : Readonly<T>
+>   : ^^^^^^^^^^^
+>tt : T
+>   : ^
+}
+
+// A read-only property is assignable to a property declared as a method
+
+function f3(m: { foo(): void }, p: { foo: () => void }, r: { readonly foo: () => void }) {
+>f3 : (m: { foo(): void; }, p: { foo: () => void; }, r: { readonly foo: () => void; }) => void
+>   : ^ ^^                ^^ ^^                    ^^ ^^                             ^^^^^^^^^
+>m : { foo(): void; }
+>  : ^^^^^^^^^    ^^^
+>foo : () => void
+>    : ^^^^^^    
+>p : { foo: () => void; }
+>  : ^^^^^^^          ^^^
+>foo : () => void
+>    : ^^^^^^    
+>r : { readonly foo: () => void; }
+>  : ^^^^^^^^^^^^^^^^          ^^^
+>foo : () => void
+>    : ^^^^^^    
+
+    m = r;
+>m = r : { readonly foo: () => void; }
+>      : ^^^^^^^^^^^^^^^^          ^^^
+>m : { foo(): void; }
+>  : ^^^^^^^^^    ^^^
+>r : { readonly foo: () => void; }
+>  : ^^^^^^^^^^^^^^^^          ^^^
+
+    p = r;  // Error
+>p = r : { readonly foo: () => void; }
+>      : ^^^^^^^^^^^^^^^^          ^^^
+>p : { foo: () => void; }
+>  : ^^^^^^^          ^^^
+>r : { readonly foo: () => void; }
+>  : ^^^^^^^^^^^^^^^^          ^^^
+}
+
+type Paths = string[] & { __brand__: "Paths" };
+>Paths : Paths
+>      : ^^^^^
+>__brand__ : "Paths"
+>          : ^^^^^^^
+
+function f4(rp: Readonly<Paths>, rs: Readonly<string[]>) {
+>f4 : (rp: Readonly<Paths>, rs: Readonly<string[]>) => void
+>   : ^  ^^               ^^  ^^                  ^^^^^^^^^
+>rp : Readonly<Paths>
+>   : ^^^^^^^^^^^^^^^
+>rs : readonly string[]
+>   : ^^^^^^^^^^^^^^^^^
+
+    rs = rp;
+>rs = rp : Readonly<Paths>
+>        : ^^^^^^^^^^^^^^^
+>rs : readonly string[]
+>   : ^^^^^^^^^^^^^^^^^
+>rp : Readonly<Paths>
+>   : ^^^^^^^^^^^^^^^
+}
+
+// A derived interface may not change property from mutable to read-only
+
+interface B1 {
+    x: number;
+>x : number
+>  : ^^^^^^
+}
+
+interface D1 extends B1 {  // Error
+    readonly x: number;
+>x : number
+>  : ^^^^^^
+}
+
+interface B2 {
+    get x(): number;
+>x : number
+>  : ^^^^^^
+
+    set x(value: number);
+>x : number
+>  : ^^^^^^
+>value : number
+>      : ^^^^^^
+}
+
+interface D2 extends B2 {  // Error
+    get x(): number;
+>x : number
+>  : ^^^^^^
+}
+
+class B3 {
+>B3 : B3
+>   : ^^
+
+    x = 0;
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+}
+
+class D3 extends B3 {  // Error
+>D3 : D3
+>   : ^^
+>B3 : B3
+>   : ^^
+
+    readonly x = 1;
+>x : 1
+>  : ^
+>1 : 1
+>  : ^
+}
+
+// readonly is not enforced in comparable relation
+
+type Foo = {
+>Foo : Foo
+>    : ^^^
+
+    readonly a: string | undefined;
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+    readonly b: number | undefined;
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+}
+
+type Bar = {
+>Bar : Bar
+>    : ^^^
+
+    a: string;
+>a : string
+>  : ^^^^^^
+}
+
+function f5(foo: Foo, bar: Bar) {
+>f5 : (foo: Foo, bar: Bar) => boolean
+>   : ^   ^^   ^^   ^^   ^^^^^^^^^^^^
+>foo : Foo
+>    : ^^^
+>bar : Bar
+>    : ^^^
+
+    return foo === bar;
+>foo === bar : boolean
+>            : ^^^^^^^
+>foo : Foo
+>    : ^^^
+>bar : Bar
+>    : ^^^
+}
+
+function f6(a: string) {
+>f6 : (a: string) => Foo
+>   : ^ ^^      ^^^^^   
+>a : string
+>  : ^^^^^^
+
+    return { a } as Foo;
+>{ a } as Foo : Foo
+>             : ^^^
+>{ a } : { a: string; }
+>      : ^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+}
+
+// A const assertion means "as const as possible" without violating constraints
+
+const x1 = { a: "hello", b: 42 };
+>x1 : { a: string; b: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: "hello", b: 42 } : { a: string; b: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>b : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+const x2 = { a: "hello", b: 42 } as const;
+>x2 : { readonly a: "hello"; readonly b: 42; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: "hello", b: 42 } as const : { readonly a: "hello"; readonly b: 42; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: "hello", b: 42 } : { readonly a: "hello"; readonly b: 42; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : "hello"
+>  : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>b : 42
+>  : ^^
+>42 : 42
+>   : ^^
+
+const y1: { a: string, b: number } = { a: "hello", b: 42 };
+>y1 : { a: string; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>{ a: "hello", b: 42 } : { a: string; b: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>b : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+const y2: { a: string, b: number } = { a: "hello", b: 42 } as const;
+>y2 : { a: string; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>{ a: "hello", b: 42 } as const : { a: "hello"; b: 42; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^
+>{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
+>a : "hello"
+>  : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>b : 42
+>  : ^^
+>42 : 42
+>   : ^^
+
+const y3: { a: string, readonly b: number } = { a: "hello", b: 42 };
+>y3 : { a: string; readonly b: number; }
+>   : ^^^^^      ^^^^^^^^^^^^^^      ^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>{ a: "hello", b: 42 } : { a: string; b: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>b : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+const y4: Record<string, unknown> = { a: 1, b: 2 } as const;
+>y4 : Record<string, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 1, b: 2 } as const : { a: 1; b: 2; }
+>                        : ^^^^^^^^^^^^^^^
+>{ a: 1, b: 2 } : { a: 1; b: 2; }
+>               : ^^^^^^^^^^^^^^^
+>a : 1
+>  : ^
+>1 : 1
+>  : ^
+>b : 2
+>  : ^
+>2 : 2
+>  : ^
+
+declare function f10<T>(obj: T): T;
+>f10 : <T>(obj: T) => T
+>    : ^ ^^   ^^ ^^^^^ 
+>obj : T
+>    : ^
+
+declare function f11<const T>(obj: T): T;
+>f11 : <const T>(obj: T) => T
+>    : ^^^^^^^ ^^   ^^ ^^^^^ 
+>obj : T
+>    : ^
+
+declare function f12<const T extends { a: string, b: number }>(obj: T): T;
+>f12 : <const T extends { a: string; b: number; }>(obj: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                         ^^   ^^ ^^^^^ 
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>obj : T
+>    : ^
+
+declare function f13<const T extends { a: string, readonly b: number }>(obj: T): T;
+>f13 : <const T extends { a: string; readonly b: number; }>(obj: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                                  ^^   ^^ ^^^^^ 
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>obj : T
+>    : ^
+
+declare function f14<const T extends Record<string, unknown>>(obj: T): T;
+>f14 : <const T extends Record<string, unknown>>(obj: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                       ^^   ^^ ^^^^^ 
+>obj : T
+>    : ^
+
+declare function f15<const T extends Readonly<Record<string, unknown>>>(obj: T): T;
+>f15 : <const T extends Readonly<Record<string, unknown>>>(obj: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                                 ^^   ^^ ^^^^^ 
+>obj : T
+>    : ^
+
+f10({ a: "hello", b: 42 });  // { a: string; b: number; }
+>f10({ a: "hello", b: 42 }) : { a: string; b: number; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>f10 : <T>(obj: T) => T
+>    : ^ ^^   ^^ ^^^^^ 
+>{ a: "hello", b: 42 } : { a: string; b: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>b : number
+>  : ^^^^^^
+>42 : 42
+>   : ^^
+
+f11({ a: "hello", b: 42 });  // { readonly a: "hello"; readonly b: 42; }
+>f11({ a: "hello", b: 42 }) : { readonly a: "hello"; readonly b: 42; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f11 : <const T>(obj: T) => T
+>    : ^^^^^^^ ^^   ^^ ^^^^^ 
+>{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
+>a : "hello"
+>  : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>b : 42
+>  : ^^
+>42 : 42
+>   : ^^
+
+f12({ a: "hello", b: 42 });  // { a: "hello"; b: 42; }
+>f12({ a: "hello", b: 42 }) : { a: "hello"; b: 42; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^
+>f12 : <const T extends { a: string; b: number; }>(obj: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                         ^^   ^^ ^^^^^ 
+>{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
+>a : "hello"
+>  : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>b : 42
+>  : ^^
+>42 : 42
+>   : ^^
+
+f13({ a: "hello", b: 42 });  // { a: "hello"; readonly b: 42; }
+>f13({ a: "hello", b: 42 }) : { a: "hello"; readonly b: 42; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f13 : <const T extends { a: string; readonly b: number; }>(obj: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                                  ^^   ^^ ^^^^^ 
+>{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
+>a : "hello"
+>  : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>b : 42
+>  : ^^
+>42 : 42
+>   : ^^
+
+f14({ a: "hello", b: 42 });  // { a: "hello"; b: 42; }
+>f14({ a: "hello", b: 42 }) : { a: "hello"; b: 42; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^
+>f14 : <const T extends Record<string, unknown>>(obj: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                       ^^   ^^ ^^^^^ 
+>{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
+>a : "hello"
+>  : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>b : 42
+>  : ^^
+>42 : 42
+>   : ^^
+
+f15({ a: "hello", b: 42 });  // { readonly a: "hello"; readonly b: 42; }
+>f15({ a: "hello", b: 42 }) : { readonly a: "hello"; readonly b: 42; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f15 : <const T extends Readonly<Record<string, unknown>>>(obj: T) => T
+>    : ^^^^^^^ ^^^^^^^^^                                 ^^   ^^ ^^^^^ 
+>{ a: "hello", b: 42 } : { a: "hello"; b: 42; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
+>a : "hello"
+>  : ^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>b : 42
+>  : ^^
+>42 : 42
+>   : ^^
+
+// https://github.com/microsoft/TypeScript/issues/13347
+
+interface MutableValue<T> {
+    value: T;
+>value : T
+>      : ^
+}
+
+interface ImmutableValue<T> {
+    readonly value: T;
+>value : T
+>      : ^
+}
+
+let i: ImmutableValue<string> = { value: "hi" };
+>i : ImmutableValue<string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>{ value: "hi" } : { value: string; }
+>                : ^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+>"hi" : "hi"
+>     : ^^^^
+
+i.value = "Excellent, I can't change it";  // Error
+>i.value = "Excellent, I can't change it" : "Excellent, I can't change it"
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i.value : any
+>        : ^^^
+>i : ImmutableValue<string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>value : any
+>      : ^^^
+>"Excellent, I can't change it" : "Excellent, I can't change it"
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+let m: MutableValue<string> = i;  // Error
+>m : MutableValue<string>
+>  : ^^^^^^^^^^^^^^^^^^^^
+>i : ImmutableValue<string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+m.value = "Oh dear, I can change it";
+>m.value = "Oh dear, I can change it" : "Oh dear, I can change it"
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>m.value : string
+>        : ^^^^^^
+>m : MutableValue<string>
+>  : ^^^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+>"Oh dear, I can change it" : "Oh dear, I can change it"
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
