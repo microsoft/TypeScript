@@ -37,7 +37,7 @@ jobs:
         bundle:
           - 'true'
         include:
-          - node-version: '*'
+          - node-version: 'lts/*'
             bundle: false
             os: ubuntu-latest
         exclude:
