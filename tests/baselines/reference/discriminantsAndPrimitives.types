@@ -260,7 +260,7 @@ if (n.type === "Disjunction") {
 >n.alternatives.slice() : string[]
 >                       : ^^^^^^^^
 >n.alternatives.slice : (start?: number, end?: number) => string[]
->                     : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
+>                     : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >n.alternatives : string[]
 >               : ^^^^^^^^
 >n : Disjunction
@@ -268,14 +268,14 @@ if (n.type === "Disjunction") {
 >alternatives : string[]
 >             : ^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 }
 else {
     n.elements.slice() // n should be narrowed to Pattern
 >n.elements.slice() : string[]
 >                   : ^^^^^^^^
 >n.elements.slice : (start?: number, end?: number) => string[]
->                 : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
+>                 : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 >n.elements : string[]
 >           : ^^^^^^^^
 >n : Pattern
@@ -283,6 +283,6 @@ else {
 >elements : string[]
 >         : ^^^^^^^^
 >slice : (start?: number, end?: number) => string[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^  
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
 }
 
