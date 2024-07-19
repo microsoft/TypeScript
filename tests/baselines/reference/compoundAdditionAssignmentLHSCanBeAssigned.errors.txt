@@ -1,10 +1,12 @@
 compoundAdditionAssignmentLHSCanBeAssigned.ts(32,1): error TS2365: Operator '+=' cannot be applied to types 'number' and 'null'.
 compoundAdditionAssignmentLHSCanBeAssigned.ts(33,1): error TS2365: Operator '+=' cannot be applied to types 'number' and 'undefined'.
+compoundAdditionAssignmentLHSCanBeAssigned.ts(37,1): error TS2322: Type 'number' is not assignable to type 'E'.
+compoundAdditionAssignmentLHSCanBeAssigned.ts(38,1): error TS2322: Type 'number' is not assignable to type 'E'.
 compoundAdditionAssignmentLHSCanBeAssigned.ts(39,1): error TS2365: Operator '+=' cannot be applied to types 'E' and 'null'.
 compoundAdditionAssignmentLHSCanBeAssigned.ts(40,1): error TS2365: Operator '+=' cannot be applied to types 'E' and 'undefined'.
 
 
-==== compoundAdditionAssignmentLHSCanBeAssigned.ts (4 errors) ====
+==== compoundAdditionAssignmentLHSCanBeAssigned.ts (6 errors) ====
     enum E { a, b }
     
     var a: any;
@@ -46,7 +48,11 @@ compoundAdditionAssignmentLHSCanBeAssigned.ts(40,1): error TS2365: Operator '+='
     var x4: E;
     x4 += a;
     x4 += 0;
+    ~~
+!!! error TS2322: Type 'number' is not assignable to type 'E'.
     x4 += E.a;
+    ~~
+!!! error TS2322: Type 'number' is not assignable to type 'E'.
     x4 += null;
     ~~~~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'E' and 'null'.

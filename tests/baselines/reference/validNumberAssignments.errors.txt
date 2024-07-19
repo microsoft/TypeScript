@@ -1,0 +1,18 @@
+validNumberAssignments.ts(7,5): error TS2322: Type 'number' is not assignable to type 'E'.
+validNumberAssignments.ts(9,1): error TS2322: Type 'number' is not assignable to type 'E'.
+
+
+==== validNumberAssignments.ts (2 errors) ====
+    var x = 1;
+    
+    var a: any = x;
+    var b: Object = x;
+    var c: number = x;
+    enum E { A };
+    var d: E = x;
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'E'.
+    var e = E.A;
+    e = x;
+    ~
+!!! error TS2322: Type 'number' is not assignable to type 'E'.

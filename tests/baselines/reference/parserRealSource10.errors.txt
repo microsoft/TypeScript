@@ -9,6 +9,7 @@ parserRealSource10.ts(130,35): error TS2693: 'boolean' only refers to a type, bu
 parserRealSource10.ts(130,43): error TS1011: An element access expression should take an argument.
 parserRealSource10.ts(179,54): error TS2304: Cannot find name 'ErrorRecoverySet'.
 parserRealSource10.ts(184,28): error TS2304: Cannot find name 'ErrorRecoverySet'.
+parserRealSource10.ts(186,58): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Reservation'.
 parserRealSource10.ts(188,34): error TS2304: Cannot find name 'NodeType'.
 parserRealSource10.ts(192,33): error TS2304: Cannot find name 'NodeType'.
 parserRealSource10.ts(198,80): error TS2304: Cannot find name 'NodeType'.
@@ -341,9 +342,10 @@ parserRealSource10.ts(312,149): error TS2304: Cannot find name 'ErrorRecoverySet
 parserRealSource10.ts(355,52): error TS2304: Cannot find name 'NodeType'.
 parserRealSource10.ts(356,53): error TS2304: Cannot find name 'NodeType'.
 parserRealSource10.ts(449,41): error TS1011: An element access expression should take an argument.
+parserRealSource10.ts(452,41): error TS2345: Argument of type 'number' is not assignable to parameter of type 'TokenID'.
 
 
-==== parserRealSource10.ts (343 errors) ====
+==== parserRealSource10.ts (345 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -553,6 +555,8 @@ parserRealSource10.ts(449,41): error TS1011: An element access expression should
 !!! error TS2304: Cannot find name 'ErrorRecoverySet'.
             if (tokenId !== undefined) {
                 tokenTable[tokenId] = new TokenInfo(tokenId, reservation, binopPrecedence,
+                                                             ~~~~~~~~~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Reservation'.
                                                   binopNodeType, unopPrecedence, unopNodeType, text, ers);
                 if (binopNodeType != NodeType.None) {
                                      ~~~~~~~~
@@ -1483,6 +1487,8 @@ parserRealSource10.ts(449,41): error TS1011: An element access expression should
         export function initializeStaticTokens() {
             for (var i = 0; i <= TokenID.LimFixed; i++) {
                 staticTokens[i] = new Token(i);
+                                            ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'TokenID'.
             }
         }
     }

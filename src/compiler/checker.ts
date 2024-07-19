@@ -21536,10 +21536,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive && !(relation === strictSubtypeRelation && isEmptyAnonymousObjectType(source) && !(getObjectFlags(source) & ObjectFlags.FreshLiteral))) return true;
         if (relation === assignableRelation || relation === comparableRelation) {
             if (s & TypeFlags.Any) return true;
-            // Type number is assignable to any computed numeric enum type or any numeric enum literal type, and
+            // Type number is assignable to any computed numeric enum type, and
             // a numeric literal type is assignable any computed numeric enum type or any numeric enum literal type
-            // with a matching value. These rules exist such that enums can be used for bit-flag purposes.
-            if (s & TypeFlags.Number && (t & TypeFlags.Enum || t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral)) return true;
+            // with a matching value.
+            if (s & TypeFlags.Number && t & TypeFlags.Enum) return true;
             if (
                 s & TypeFlags.NumberLiteral && !(s & TypeFlags.EnumLiteral) && (t & TypeFlags.Enum ||
                     t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral &&

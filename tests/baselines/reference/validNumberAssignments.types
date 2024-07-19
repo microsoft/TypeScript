@@ -9,6 +9,7 @@ var x = 1;
 
 var a: any = x;
 >a : any
+>  : ^^^
 >x : number
 >  : ^^^^^^
 

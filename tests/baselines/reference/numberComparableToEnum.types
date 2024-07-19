@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/numberComparableToEnum.ts] ////
+
+=== numberComparableToEnum.ts ===
+enum E { A }
+>E : E
+>  : ^
+>A : E.A
+>  : ^^^
+
+declare let n: number;
+>n : number
+>  : ^^^^^^
+
+declare let e: E;
+>e : E
+>  : ^
+
+e = n as E;
+>e = n as E : E
+>           : ^
+>e : E
+>  : ^
+>n as E : E
+>       : ^
+>n : number
+>  : ^^^^^^
+
+export {}
+

@@ -1,0 +1,65 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/numberAssignableToEnum2.ts] ////
+
+=== numberAssignableToEnum2.ts ===
+declare module mAmbient {
+>mAmbient : typeof mAmbient
+>         : ^^^^^^^^^^^^^^^
+
+    enum e {
+>e : e
+>  : ^
+
+        x,
+>x : e.x
+>  : ^^^
+
+        y,
+>y : e.y
+>  : ^^^
+
+        z
+>z : e.z
+>  : ^^^
+    }
+}
+
+declare const num: number
+>num : number
+>    : ^^^^^^
+
+const test1: mAmbient.e = num
+>test1 : mAmbient.e
+>      : ^^^^^^^^^^
+>mAmbient : any
+>         : ^^^
+>num : number
+>    : ^^^^^^
+
+const test2: mAmbient.e.x = num
+>test2 : mAmbient.e.x
+>      : ^^^^^^^^^^^^
+>mAmbient : any
+>         : ^^^
+>e : any
+>  : ^^^
+>num : number
+>    : ^^^^^^
+
+const test3: mAmbient.e = 42
+>test3 : mAmbient.e
+>      : ^^^^^^^^^^
+>mAmbient : any
+>         : ^^^
+>42 : 42
+>   : ^^
+
+const test4: mAmbient.e.x = 42
+>test4 : mAmbient.e.x
+>      : ^^^^^^^^^^^^
+>mAmbient : any
+>         : ^^^
+>e : any
+>  : ^^^
+>42 : 42
+>   : ^^
+

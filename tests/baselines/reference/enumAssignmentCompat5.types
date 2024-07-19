@@ -51,7 +51,7 @@ let n: number;
 >n : number
 >  : ^^^^^^
 
-let e: E = n; // ok because it's too inconvenient otherwise
+let e: E = n; // error
 >e : E
 >  : ^
 >n : number
@@ -65,7 +65,7 @@ e = 0; // ok, in range
 >0 : 0
 >  : ^
 
-e = 4; // ok, out of range, but allowed computed enums don't have all members
+e = 4; // error, out of range, allowed computed enums don't have all members
 >e = 4 : 4
 >      : ^
 >e : E
@@ -89,7 +89,7 @@ a = 2; // error, 2 !== 0
 >2 : 2
 >  : ^
 
-a = n; // ok
+a = n; // error
 >a = n : number
 >      : ^^^^^^
 >a : E.A
@@ -97,13 +97,13 @@ a = n; // ok
 >n : number
 >  : ^^^^^^
 
-let c: Computed = n; // ok
+let c: Computed = n; // error
 >c : Computed
 >  : ^^^^^^^^
 >n : number
 >  : ^^^^^^
 
-c = n; // ok
+c = n; // error
 >c = n : number
 >      : ^^^^^^
 >c : Computed
@@ -111,7 +111,7 @@ c = n; // ok
 >n : number
 >  : ^^^^^^
 
-c = 4; // ok
+c = 4; // error
 >c = 4 : 4
 >      : ^
 >c : Computed
@@ -126,7 +126,4 @@ let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Comput
 >         : ^^^
 >1 : 1
 >  : ^
-
-
-
 

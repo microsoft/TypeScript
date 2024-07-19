@@ -24,7 +24,7 @@ enum Computed {
 let n: number;
 >n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
 
-let e: E = n; // ok because it's too inconvenient otherwise
+let e: E = n; // error
 >e : Symbol(e, Decl(enumAssignmentCompat5.ts, 9, 3))
 >E : Symbol(E, Decl(enumAssignmentCompat5.ts, 0, 0))
 >n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
@@ -32,7 +32,7 @@ let e: E = n; // ok because it's too inconvenient otherwise
 e = 0; // ok, in range
 >e : Symbol(e, Decl(enumAssignmentCompat5.ts, 9, 3))
 
-e = 4; // ok, out of range, but allowed computed enums don't have all members
+e = 4; // error, out of range, allowed computed enums don't have all members
 >e : Symbol(e, Decl(enumAssignmentCompat5.ts, 9, 3))
 
 let a: E.A = 0; // ok, A === 0
@@ -43,27 +43,24 @@ let a: E.A = 0; // ok, A === 0
 a = 2; // error, 2 !== 0
 >a : Symbol(a, Decl(enumAssignmentCompat5.ts, 12, 3))
 
-a = n; // ok
+a = n; // error
 >a : Symbol(a, Decl(enumAssignmentCompat5.ts, 12, 3))
 >n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
 
-let c: Computed = n; // ok
+let c: Computed = n; // error
 >c : Symbol(c, Decl(enumAssignmentCompat5.ts, 16, 3))
 >Computed : Symbol(Computed, Decl(enumAssignmentCompat5.ts, 2, 1))
 >n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
 
-c = n; // ok
+c = n; // error
 >c : Symbol(c, Decl(enumAssignmentCompat5.ts, 16, 3))
 >n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
 
-c = 4; // ok
+c = 4; // error
 >c : Symbol(c, Decl(enumAssignmentCompat5.ts, 16, 3))
 
 let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Computed has no enum literals
 >ca : Symbol(ca, Decl(enumAssignmentCompat5.ts, 19, 3))
 >Computed : Symbol(Computed, Decl(enumAssignmentCompat5.ts, 2, 1))
 >A : Symbol(Computed.A, Decl(enumAssignmentCompat5.ts, 3, 15))
-
-
-
 

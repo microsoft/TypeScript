@@ -22,6 +22,7 @@ unionSubtypeIfEveryConstituentTypeIsSubtype.ts(85,5): error TS2411: Property 'fo
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(91,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type '<T>(x: T) => T'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(92,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type '<T>(x: T) => T'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(99,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'E2'.
+unionSubtypeIfEveryConstituentTypeIsSubtype.ts(100,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'E2'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(110,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'typeof f'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(111,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'typeof f'.
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(121,5): error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'typeof c'.
@@ -30,7 +31,7 @@ unionSubtypeIfEveryConstituentTypeIsSubtype.ts(128,5): error TS2411: Property 'f
 unionSubtypeIfEveryConstituentTypeIsSubtype.ts(129,5): error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'T'.
 
 
-==== unionSubtypeIfEveryConstituentTypeIsSubtype.ts (30 errors) ====
+==== unionSubtypeIfEveryConstituentTypeIsSubtype.ts (31 errors) ====
     enum e {
         e1,
         e2
@@ -179,6 +180,8 @@ unionSubtypeIfEveryConstituentTypeIsSubtype.ts(129,5): error TS2411: Property 'f
         ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to 'string' index type 'E2'.
         foo2: e | number;
+        ~~~~
+!!! error TS2411: Property 'foo2' of type 'number' is not assignable to 'string' index type 'E2'.
     }
     
     

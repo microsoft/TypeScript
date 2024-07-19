@@ -1,0 +1,47 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/numberAssignableToEnum2.ts] ////
+
+=== numberAssignableToEnum2.ts ===
+declare module mAmbient {
+>mAmbient : Symbol(mAmbient, Decl(numberAssignableToEnum2.ts, 0, 0))
+
+    enum e {
+>e : Symbol(e, Decl(numberAssignableToEnum2.ts, 0, 25))
+
+        x,
+>x : Symbol(e.x, Decl(numberAssignableToEnum2.ts, 1, 12))
+
+        y,
+>y : Symbol(e.y, Decl(numberAssignableToEnum2.ts, 2, 10))
+
+        z
+>z : Symbol(e.z, Decl(numberAssignableToEnum2.ts, 3, 10))
+    }
+}
+
+declare const num: number
+>num : Symbol(num, Decl(numberAssignableToEnum2.ts, 8, 13))
+
+const test1: mAmbient.e = num
+>test1 : Symbol(test1, Decl(numberAssignableToEnum2.ts, 10, 5))
+>mAmbient : Symbol(mAmbient, Decl(numberAssignableToEnum2.ts, 0, 0))
+>e : Symbol(mAmbient.e, Decl(numberAssignableToEnum2.ts, 0, 25))
+>num : Symbol(num, Decl(numberAssignableToEnum2.ts, 8, 13))
+
+const test2: mAmbient.e.x = num
+>test2 : Symbol(test2, Decl(numberAssignableToEnum2.ts, 11, 5))
+>mAmbient : Symbol(mAmbient, Decl(numberAssignableToEnum2.ts, 0, 0))
+>e : Symbol(mAmbient.e, Decl(numberAssignableToEnum2.ts, 0, 25))
+>x : Symbol(mAmbient.e.x, Decl(numberAssignableToEnum2.ts, 1, 12))
+>num : Symbol(num, Decl(numberAssignableToEnum2.ts, 8, 13))
+
+const test3: mAmbient.e = 42
+>test3 : Symbol(test3, Decl(numberAssignableToEnum2.ts, 12, 5))
+>mAmbient : Symbol(mAmbient, Decl(numberAssignableToEnum2.ts, 0, 0))
+>e : Symbol(mAmbient.e, Decl(numberAssignableToEnum2.ts, 0, 25))
+
+const test4: mAmbient.e.x = 42
+>test4 : Symbol(test4, Decl(numberAssignableToEnum2.ts, 13, 5))
+>mAmbient : Symbol(mAmbient, Decl(numberAssignableToEnum2.ts, 0, 0))
+>e : Symbol(mAmbient.e, Decl(numberAssignableToEnum2.ts, 0, 25))
+>x : Symbol(mAmbient.e.x, Decl(numberAssignableToEnum2.ts, 1, 12))
+
