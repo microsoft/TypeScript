@@ -4575,7 +4575,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (ambientModule) {
             return ambientModule;
         }
-        const ignoreImplicitAnyOrNotAModuleErrors = noUncheckedSideEffectImports && isSideEffectImport(location);
         const currentSourceFile = getSourceFileOfNode(location);
         const contextSpecifier = isStringLiteralLike(location)
             ? location
@@ -4624,9 +4623,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (sourceFile.symbol) {
                 if (errorNode && resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
-                    if (!ignoreImplicitAnyOrNotAModuleErrors) {
-                        errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
-                    }
+                    errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
                 if (errorNode && (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext)) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
@@ -4660,7 +4657,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // merged symbol is module declaration symbol combined with all augmentations
                 return getMergedSymbol(sourceFile.symbol);
             }
-            if (errorNode && moduleNotFoundError && !ignoreImplicitAnyOrNotAModuleErrors) {
+            if (errorNode && moduleNotFoundError && !isSideEffectImport(errorNode)) {
                 // report errors only if it was requested
                 error(errorNode, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
             }
@@ -4692,7 +4689,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
                 error(errorNode, diag, moduleReference, resolvedModule!.resolvedFileName);
             }
-            else if (!ignoreImplicitAnyOrNotAModuleErrors) {
+            else {
                 errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, currentSourceFile, mode, resolvedModule!, moduleReference);
             }
             // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
@@ -4765,6 +4762,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function errorOnImplicitAnyModule(isError: boolean, errorNode: Node, sourceFile: SourceFile, mode: ResolutionMode, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): void {
+        if (isSideEffectImport(errorNode)) {
+            return;
+        }
+
         let errorInfo: DiagnosticMessageChain | undefined;
         if (!isExternalModuleNameRelative(moduleReference) && packageId) {
             errorInfo = createModuleNotFoundChain(sourceFile, host, moduleReference, mode, packageId.name);
