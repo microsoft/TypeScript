@@ -88,7 +88,7 @@ function bar(props: {x: number, y: string}) {
 
 foo({x: 1, y: 'foo'});
 
-foo({...{x: 1, y: 'foo'}}); // error here added in #59277 by design
+foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
 
 // -----------------------------------------------------------------------------------------
 

@@ -353,7 +353,7 @@ foo({x: 1, y: 'foo'});
 >'foo' : "foo"
 >      : ^^^^^
 
-foo({...{x: 1, y: 'foo'}}); // error here added in #59277 by design
+foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
 >foo({...{x: 1, y: 'foo'}}) : void
 >                           : ^^^^
 >foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void

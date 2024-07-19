@@ -89,7 +89,7 @@ function bar(props: {x: number, y: string}) {
 
 foo({x: 1, y: 'foo'});
 
-foo({...{x: 1, y: 'foo'}}); // error here added in #59277 by design
+foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
 
 // -----------------------------------------------------------------------------------------
 
@@ -238,7 +238,7 @@ function bar(props) {
     return foo(props); // no error because lack of excess property check by design
 }
 foo({ x: 1, y: 'foo' });
-foo(__assign({ x: 1, y: 'foo' })); // error here added in #59277 by design
+foo(__assign({ x: 1, y: 'foo' })); // no error because lack of excess property check by design
 baz({ x: 1 });
 baz({ x: 1, z: 123 });
 baz({ x: 1, y: 'foo' });

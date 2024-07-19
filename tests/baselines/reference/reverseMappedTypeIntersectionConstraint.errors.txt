@@ -9,7 +9,6 @@ reverseMappedTypeIntersectionConstraint.ts(69,7): error TS2322: Type '{ [K in ke
     '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
 reverseMappedTypeIntersectionConstraint.ts(74,36): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ field: 1; anotherField: "a"; }'.
 reverseMappedTypeIntersectionConstraint.ts(87,12): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
-reverseMappedTypeIntersectionConstraint.ts(89,16): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
 reverseMappedTypeIntersectionConstraint.ts(98,12): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; }'.
 reverseMappedTypeIntersectionConstraint.ts(100,22): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: 1; y: "foo"; }'.
 reverseMappedTypeIntersectionConstraint.ts(113,67): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ prop: "foo"; nested: { prop: string; }; }'.
@@ -18,7 +17,7 @@ reverseMappedTypeIntersectionConstraint.ts(164,3): error TS2353: Object literal 
 reverseMappedTypeIntersectionConstraint.ts(171,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "whatever"; }; }'.
 
 
-==== reverseMappedTypeIntersectionConstraint.ts (15 errors) ====
+==== reverseMappedTypeIntersectionConstraint.ts (14 errors) ====
     type StateConfig<TAction extends string> = {
       entry?: TAction
       states?: Record<string, StateConfig<TAction>>;
@@ -127,9 +126,7 @@ reverseMappedTypeIntersectionConstraint.ts(171,3): error TS2353: Object literal 
                ~
 !!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
     
-    foo({...{x: 1, y: 'foo'}}); // error here added in #59277 by design
-                   ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
+    foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
     
     // -----------------------------------------------------------------------------------------
     
