@@ -1816,6 +1816,7 @@ export function createLanguageService(
             oldProgram: program,
             projectReferences,
         };
+        program = undefined!;
         program = createProgram(options);
 
         // 'getOrCreateSourceFile' depends on caching but should be used past this point.
