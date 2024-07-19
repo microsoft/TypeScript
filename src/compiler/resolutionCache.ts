@@ -112,6 +112,7 @@ export interface ResolutionCache extends Required<CompilerHostSupportingResoluti
     resolutionsWithFailedLookups: Set<ResolutionWithFailedLookupLocations>;
     resolutionsWithOnlyAffectingLocations: Set<ResolutionWithFailedLookupLocations>;
     packageJsonRefCount: Map<Path, number>;
+    watchedResolutionInfoMap: Map<ResolutionWithFailedLookupLocations, WatchedResolutionInfo>;
     directoryWatchesOfFailedLookups: Map<Path, DirectoryWatchesOfFailedLookup>;
     fileWatchesOfAffectingLocations: Map<string, FileWatcherOfAffectingLocation>;
     packageDirWatchers: Map<Path, PackageDirWatcher>;
@@ -190,10 +191,10 @@ export interface RootDirInfo {
 }
 
 /** @internal */
-export interface WatchedResolutionWithFailedLookupLocations {
+export interface WatchedResolutionInfo {
     isInvalidated?: boolean;
     // Files that have this resolution using
-    files?: Set<Path>;
+    files: Set<Path>;
     watchedFailed?: number;
     watchedAffected?: number;
     setAtRoot?: boolean;
@@ -208,15 +209,6 @@ export type ResolutionWithFailedLookupLocations =
         // Just so we can use this directly. These any ways are optional properties
         & Pick<ResolvedModuleWithFailedLookupLocations, "alternateResult" | "globalCacheResolution">
     );
-
-declare module "./types.js" {
-    /** @internal */
-    export interface ResolvedModuleWithFailedLookupLocations extends WatchedResolutionWithFailedLookupLocations {
-    }
-    /** @internal */
-    export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations extends WatchedResolutionWithFailedLookupLocations {
-    }
-}
 
 /** @internal */
 export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
@@ -249,6 +241,7 @@ export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
         result: ResolvedModuleWithFailedLookupLocations,
         data: any,
     ): any;
+    getRootDirInfoForResolution?(resolution: ResolutionWithFailedLookupLocations): RootDirInfo;
 }
 
 /** @internal */
@@ -649,6 +642,7 @@ export function createResolutionCache(
     const resolutionsWithOnlyAffectingLocations = new Set<ResolutionWithFailedLookupLocations>();
     const resolvedFileToResolution = new Map<Path, Set<ResolutionWithFailedLookupLocations>>();
     const impliedFormatPackageJsons = new Map<Path, readonly string[]>();
+    const watchedResolutionInfoMap = new Map<ResolutionWithFailedLookupLocations, WatchedResolutionInfo>();
 
     let hasChangedAutomaticTypeDirectiveNames = false;
     let affectingPathChecksForFile: Set<string> | undefined;
@@ -664,6 +658,7 @@ export function createResolutionCache(
     let potentiallyUnreferencedResolutions: Map<ModuleOrTypeReferenceResolutionCache<ResolutionWithFailedLookupLocations>, Set<ResolutionWithFailedLookupLocations>> | undefined;
     let potentiallyUnreferencedDirWatchers: Set<Path> | undefined;
     let newUnresolvedResolutionCachePassResolutions: Set<ResolutionWithFailedLookupLocations> | undefined;
+    let considerNonWatchedResolutionAsInvalidated = false;
 
     const getCurrentDirectory = memoize(() => resolutionHost.getCurrentDirectory!());
     const cachedDirectoryStructureHost = resolutionHost.getCachedDirectoryStructureHost();
@@ -730,6 +725,7 @@ export function createResolutionCache(
         resolutionsWithFailedLookups,
         resolutionsWithOnlyAffectingLocations,
         packageJsonRefCount,
+        watchedResolutionInfoMap,
         directoryWatchesOfFailedLookups,
         fileWatchesOfAffectingLocations,
         packageDirWatchers,
@@ -816,6 +812,7 @@ export function createResolutionCache(
         resolvedFileToResolution.clear();
         resolutionsWithFailedLookups.clear();
         resolutionsWithOnlyAffectingLocations.clear();
+        watchedResolutionInfoMap.clear();
         resolutionsResolvedWithGlobalCache = 0;
         resolutionsResolvedWithoutGlobalCache = 0;
         failedLookupChecks = undefined;
@@ -857,7 +854,7 @@ export function createResolutionCache(
                 !!collected?.has(path),
             hasInvalidatedLibResolutions: libFileName =>
                 customHasInvalidatedLibResolutions(libFileName) ||
-                !!resolvedLibraries?.get(libFileName)?.isInvalidated,
+                !!watchedResolutionInfoMap.get(resolvedLibraries?.get(libFileName)!)?.isInvalidated,
         };
     }
 
@@ -969,16 +966,13 @@ export function createResolutionCache(
         cache: ModuleOrTypeReferenceResolutionCache<ResolutionWithFailedLookupLocations>,
     ) {
         let needsGc = false;
-        setOfResolutions.forEach(resolution => {
-            if (resolution.files!.size) return;
-            needsGc = true;
-            releaseResolution(resolution);
-        });
+        setOfResolutions.forEach(resolution => needsGc = releaseResolution(resolution) || needsGc);
         if (needsGc) {
+            considerNonWatchedResolutionAsInvalidated = true;
             // Iterate through maps to remove things that have 0 refCount
             cache.directoryToModuleNameMap.forEach((resolutions, dir, redirectsCacheKey, directoryToModuleNameMap) => {
                 resolutions.forEach((resolution, name, mode, key) => {
-                    if (resolution.files?.size) return;
+                    if (watchedResolutionInfoMap.has(resolution)) return;
                     resolutions.delete(name, mode);
                     if (!isExternalModuleNameRelative(name)) {
                         const moduleNameToDirectoryMap = !redirectsCacheKey ?
@@ -991,6 +985,7 @@ export function createResolutionCache(
                 });
                 if (!resolutions.size()) directoryToModuleNameMap.delete(dir);
             });
+            considerNonWatchedResolutionAsInvalidated = false;
         }
     }
 
@@ -1044,7 +1039,8 @@ export function createResolutionCache(
 
     function isInvalidatedResolution(resolution: ResolutionWithFailedLookupLocations | undefined) {
         return !resolution ||
-            resolution.isInvalidated ||
+            (considerNonWatchedResolutionAsInvalidated && !watchedResolutionInfoMap.has(resolution)) ||
+            watchedResolutionInfoMap.get(resolution)?.isInvalidated ||
             (resolutionsWithGlobalCachePassAreInvalidated && isResolvedWithGlobalCachePass(resolution)) ||
             (resolutionsWithoutGlobalCachePassAreInvalidated && isResolvedWithoutGlobalCachePass(resolution)) ||
             // If this is not a new resolution and its unresolved, its invalid
@@ -1150,7 +1146,7 @@ export function createResolutionCache(
                     );
                 }
             }
-            Debug.assert(resolution !== undefined && !resolution.isInvalidated);
+            Debug.assert(resolution !== undefined && !watchedResolutionInfoMap.get(resolution)!.isInvalidated);
             seenNamesInFile.set(name, mode, true);
             resolvedModules.push(resolution);
         }
@@ -1349,7 +1345,7 @@ export function createResolutionCache(
         const path = resolutionHost.toPath(containingFile);
         const resolutionsInFile = resolvedModuleNames.get(path);
         const resolution = resolutionsInFile?.get(moduleName, /*mode*/ undefined);
-        if (resolution && !resolution.isInvalidated) return resolution;
+        if (resolution && !watchedResolutionInfoMap.get(resolution)!.isInvalidated) return resolution;
         const data = resolutionHost.beforeResolveSingleModuleNameWithoutWatching?.(moduleResolutionCache);
         const host = getModuleResolutionHost(resolutionHost);
         // We are not resolving d.ts so just normal resolution instead of doing resolution pass to global cache
@@ -1374,10 +1370,16 @@ export function createResolutionCache(
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
         redirectedReference: ResolvedProjectReference | undefined,
     ) {
-        const firstTime = !resolution.files;
-        (resolution.files ??= new Set()).add(filePath);
-        watchFailedLookupLocationOfResolution(resolution, redirectedReference);
-        watchAffectingLocationsOfResolution(resolution);
+        let watchedResolutionInfo = watchedResolutionInfoMap.get(resolution);
+        const firstTime = !watchedResolutionInfo;
+        if (!watchedResolutionInfo) {
+            watchedResolutionInfoMap.set(resolution, watchedResolutionInfo = { files: new Set([filePath]) });
+        }
+        else {
+            watchedResolutionInfo.files.add(filePath);
+        }
+        watchFailedLookupLocationOfResolution(resolution, redirectedReference, watchedResolutionInfo);
+        watchAffectingLocationsOfResolution(resolution, watchedResolutionInfo);
         if (!firstTime) return;
         if (resolution.globalCacheResolution && !resolution.globalCacheResolution.resolution.resolvedModule) {
             // Add to potentially unreferenced resolutions
@@ -1437,61 +1439,66 @@ export function createResolutionCache(
     function watchFailedLookupLocationOfResolution(
         resolution: ResolutionWithFailedLookupLocations,
         redirectedReference: ResolvedProjectReference | undefined,
+        watchedResolutionInfo: WatchedResolutionInfo,
     ) {
-        Debug.assert(!!resolution.files?.size);
-        const { failedLookupLocations, alternateResult, watchedFailed } = resolution;
+        const { failedLookupLocations, alternateResult } = resolution;
         // There have to be failed lookup locations if there is alternateResult so storing failedLookupLocation length is good enough,
         // alternateResult doesnt change later only failed lookup locations get added on
-        if (watchedFailed === failedLookupLocations?.length) return;
-        if (!watchedFailed) {
+        if (watchedResolutionInfo.watchedFailed === failedLookupLocations?.length) return;
+        if (!watchedResolutionInfo.watchedFailed) {
             resolutionsWithFailedLookups.add(resolution);
-            if (resolution.watchedAffected) resolutionsWithOnlyAffectingLocations.delete(resolution);
+            if (watchedResolutionInfo.watchedAffected) resolutionsWithOnlyAffectingLocations.delete(resolution);
         }
 
-        let setAtRoot = !!resolution.setAtRoot;
-        for (let i = watchedFailed || 0; i < failedLookupLocations!.length; i++) {
+        let setAtRoot = !!watchedResolutionInfo.setAtRoot;
+        for (let i = watchedResolutionInfo.watchedFailed || 0; i < failedLookupLocations!.length; i++) {
             setAtRoot = watchFailedLookupLocation(
                 failedLookupLocations![i],
-                getRootDirInfoForResolution(resolution, redirectedReference),
+                getRootDirInfoForResolution(resolution, redirectedReference, watchedResolutionInfo),
             ) || setAtRoot;
         }
-        if (!watchedFailed && alternateResult) {
+        if (!watchedResolutionInfo.watchedFailed && alternateResult) {
             setAtRoot = watchFailedLookupLocation(
                 alternateResult,
-                getRootDirInfoForResolution(resolution, redirectedReference),
+                getRootDirInfoForResolution(resolution, redirectedReference, watchedResolutionInfo),
             ) || setAtRoot;
         }
-        if (!resolution.setAtRoot && setAtRoot) {
+        if (!watchedResolutionInfo.setAtRoot && setAtRoot) {
             // This is always non recursive
             setDirectoryWatcher(
-                getRootDirInfoForResolution(resolution, redirectedReference).rootDir,
-                getRootDirInfoForResolution(resolution, redirectedReference).rootPath,
+                getRootDirInfoForResolution(resolution, redirectedReference, watchedResolutionInfo).rootDir,
+                getRootDirInfoForResolution(resolution, redirectedReference, watchedResolutionInfo).rootPath,
                 /*packageDir*/ undefined,
                 /*packageDirPath*/ undefined,
                 /*nonRecursive*/ true,
             );
         }
-        resolution.watchedFailed = failedLookupLocations?.length;
-        resolution.setAtRoot = setAtRoot;
+        watchedResolutionInfo.watchedFailed = failedLookupLocations?.length;
+        watchedResolutionInfo.setAtRoot = setAtRoot;
     }
 
     function getRootDirInfoForResolution(
         resolution: ResolutionWithFailedLookupLocations,
         redirectedReference: ResolvedProjectReference | undefined,
+        watchedResolutionInfo: WatchedResolutionInfo,
     ) {
-        return resolution.rootDirInfo ??= getRootDirInfoOfRedirectedReference(redirectedReference);
+        return watchedResolutionInfo.rootDirInfo ??= !resolutionHost.getRootDirInfoForResolution ?
+            getRootDirInfoOfRedirectedReference(redirectedReference) :
+            resolutionHost.getRootDirInfoForResolution(resolution);
     }
 
-    function watchAffectingLocationsOfResolution(resolution: ResolutionWithFailedLookupLocations) {
-        Debug.assert(!!resolution.files?.size);
-        const { affectingLocations, watchedAffected } = resolution;
-        if (affectingLocations?.length === watchedAffected) return;
-        if (!watchedAffected && !resolution.watchedFailed) resolutionsWithOnlyAffectingLocations.add(resolution);
+    function watchAffectingLocationsOfResolution(
+        resolution: ResolutionWithFailedLookupLocations,
+        watchedResolutionInfo: WatchedResolutionInfo,
+    ) {
+        const { affectingLocations } = resolution;
+        if (affectingLocations?.length === watchedResolutionInfo.watchedAffected) return;
+        if (!watchedResolutionInfo.watchedAffected && !watchedResolutionInfo.watchedFailed) resolutionsWithOnlyAffectingLocations.add(resolution);
         // Watch package json
-        for (let i = watchedAffected || 0; i < affectingLocations!.length; i++) {
+        for (let i = watchedResolutionInfo.watchedAffected || 0; i < affectingLocations!.length; i++) {
             createFileWatcherOfAffectingLocation(affectingLocations![i], /*forResolution*/ true);
         }
-        resolution.watchedAffected = affectingLocations?.length;
+        watchedResolutionInfo.watchedAffected = affectingLocations?.length;
     }
 
     function createFileWatcherOfAffectingLocation(affectingLocation: string, forResolution: boolean) {
@@ -1693,18 +1700,18 @@ export function createResolutionCache(
         filePath: Path,
         cache: ModuleOrTypeReferenceResolutionCache<ResolutionWithFailedLookupLocations>,
     ) {
-        Debug.assertIsDefined(resolution.files);
-        resolution.files.delete(filePath);
-        if (resolution.files.size) return;
+        const watchedResolutionInfo = watchedResolutionInfoMap.get(resolution)!;
+        watchedResolutionInfo.files.delete(filePath);
+        if (watchedResolutionInfo.files.size) return;
         let setOfResolutions = potentiallyUnreferencedResolutions?.get(cache);
         if (!setOfResolutions) (potentiallyUnreferencedResolutions ??= new Map()).set(cache, setOfResolutions = new Set());
         setOfResolutions.add(resolution);
     }
 
     function releaseResolution(resolution: ResolutionWithFailedLookupLocations) {
-        resolution.files = undefined;
-        // Even if this is in cache, we cant reuse this resolution after this since we are not watching it any more
-        resolution.isInvalidated = true;
+        const watchedResolutionInfo = watchedResolutionInfoMap.get(resolution)!;
+        if (watchedResolutionInfo.files.size) return false;
+        watchedResolutionInfoMap.delete(resolution);
         if (isResolvedWithGlobalCachePass(resolution)) resolutionsResolvedWithGlobalCache--;
         else if (isResolvedWithoutGlobalCachePass(resolution)) resolutionsResolvedWithoutGlobalCache--;
         const resolved = getModuleOrTypeRefResolved(resolution);
@@ -1714,7 +1721,8 @@ export function createResolutionCache(
             if (resolutions?.delete(resolution) && !resolutions.size) resolvedFileToResolution.delete(key);
         }
 
-        const { failedLookupLocations, affectingLocations, alternateResult, setAtRoot, rootDirInfo } = resolution;
+        const { failedLookupLocations, affectingLocations, alternateResult } = resolution;
+        const { setAtRoot, rootDirInfo } = watchedResolutionInfo;
         if (resolutionsWithFailedLookups.delete(resolution)) {
             if (failedLookupLocations) {
                 for (const failedLookupLocation of failedLookupLocations) {
@@ -1735,6 +1743,7 @@ export function createResolutionCache(
                 closeFileWatcherOfAffectingLocation(watcher, affectingLocation);
             }
         }
+        return true;
     }
 
     function removeDirectoryWatcher(dirPath: Path, delayed: boolean) {
@@ -1799,9 +1808,10 @@ export function createResolutionCache(
         if (!resolutions) return false;
         let invalidated = false;
         resolutions.forEach(resolution => {
-            if (resolution.isInvalidated || !canInvalidate(resolution)) return;
-            resolution.isInvalidated = invalidated = true;
-            for (const containingFilePath of Debug.checkDefined(resolution.files)) {
+            const watchedResolutionInfo = watchedResolutionInfoMap.get(resolution)!;
+            if (watchedResolutionInfo.isInvalidated || !canInvalidate(resolution)) return;
+            watchedResolutionInfo.isInvalidated = invalidated = true;
+            for (const containingFilePath of watchedResolutionInfo.files) {
                 (filesWithInvalidatedResolutions ??= new Set()).add(containingFilePath);
                 // When its a file with inferred types resolution, invalidate type reference directive resolution
                 hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || endsWith(containingFilePath, inferredTypesContainingFile);

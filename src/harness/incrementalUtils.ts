@@ -289,13 +289,10 @@ export function verifyResolutionCache(
     userResolvedModuleNames?: true,
 ): void {
     const currentDirectory = resolutionHostCacheHost.getCurrentDirectory!();
+    resolutionHostCacheHost.getRootDirInfoForResolution = resolution => actual.watchedResolutionInfoMap.get(resolution)!.rootDirInfo!;
     const expected = ts.createResolutionCache(resolutionHostCacheHost, actual.rootDirForResolution);
     expected.startCachingPerDirectoryResolution();
 
-    type ExpectedResolution = ts.ResolvedModuleWithFailedLookupLocations & ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
-
-    const expectedToResolution = new Map<ExpectedResolution, ts.ResolutionWithFailedLookupLocations>();
-    const resolutionToExpected = new Map<ts.ResolutionWithFailedLookupLocations, ExpectedResolution>();
     const resolutionToRefs = new Map<ts.ResolutionWithFailedLookupLocations, ResolutionInfo[]>();
     const inferredTypesPath = resolutionHostCacheHost.toPath(
         ts.getAutomaticTypeDirectiveContainingFile(
@@ -391,30 +388,31 @@ export function verifyResolutionCache(
 
     // Verify ref count
     resolutionToRefs.forEach((info, resolution) => {
+        const actualWatchedResolutionInfo = actual.watchedResolutionInfoMap.get(resolution)!;
         ts.Debug.assert(
-            resolution.files?.size === info.length,
-            `${projectName}:: Expected Resolution ref count ${info.length} but got ${resolution.files?.size}`,
+            actualWatchedResolutionInfo.files?.size === info.length,
+            `${projectName}:: Expected Resolution ref count ${info.length} but got ${actualWatchedResolutionInfo.files?.size}`,
             () =>
                 `Expected from:: ${JSON.stringify(info, undefined, " ")}` +
-                `Actual from: ${resolution.files?.size}`,
+                `Actual from: ${actualWatchedResolutionInfo.files?.size}`,
         );
         ts.Debug.assert(
-            !resolution.isInvalidated,
+            !actualWatchedResolutionInfo.isInvalidated,
             `${projectName}:: Resolution should not be invalidated`,
         );
-        const expected = resolutionToExpected.get(resolution)!;
-        verifySet(expected.files, resolution.files, `${projectName}:: Resolution files`);
+        const expectedWatchedResolutionInfo = expected.watchedResolutionInfoMap.get(resolution)!;
+        verifySet(expectedWatchedResolutionInfo.files, actualWatchedResolutionInfo.files, `${projectName}:: Resolution files`);
         ts.Debug.assert(
-            expected.watchedFailed === resolution.watchedFailed,
-            `${projectName}:: Expected watchedFailed of Resolution ${expected.watchedFailed} but got ${resolution.watchedFailed}`,
+            expectedWatchedResolutionInfo.watchedFailed === actualWatchedResolutionInfo.watchedFailed,
+            `${projectName}:: Expected watchedFailed of Resolution ${expectedWatchedResolutionInfo.watchedFailed} but got ${actualWatchedResolutionInfo.watchedFailed}`,
         );
         ts.Debug.assert(
-            expected.watchedAffected === resolution.watchedAffected,
-            `${projectName}:: Expected watchedAffected of Resolution ${expected.watchedAffected} but got ${resolution.watchedAffected}`,
+            expectedWatchedResolutionInfo.watchedAffected === actualWatchedResolutionInfo.watchedAffected,
+            `${projectName}:: Expected watchedAffected of Resolution ${expectedWatchedResolutionInfo.watchedAffected} but got ${actualWatchedResolutionInfo.watchedAffected}`,
         );
         ts.Debug.assert(
-            expected.setAtRoot === resolution.setAtRoot,
-            `${projectName}:: Expected setAtRoot of Resolution ${expected.setAtRoot} but got ${resolution.setAtRoot}`,
+            expectedWatchedResolutionInfo.setAtRoot === actualWatchedResolutionInfo.setAtRoot,
+            `${projectName}:: Expected setAtRoot of Resolution ${expectedWatchedResolutionInfo.setAtRoot} but got ${actualWatchedResolutionInfo.setAtRoot}`,
         );
     });
     verifyMapOfResolutionSet(expected.resolvedFileToResolution, actual.resolvedFileToResolution, `resolvedFileToResolution`);
@@ -443,9 +441,7 @@ export function verifyResolutionCache(
     actual.resolvedTypeReferenceDirectives.forEach((_resolutions, path) => expected.removeResolutionsOfFile(path));
     expected.finishCachingPerDirectoryResolution(/*newProgram*/ undefined, actualProgram, /*skipCacheCompact*/ true);
 
-    resolutionToExpected.forEach(
-        expected => ts.Debug.assert(!expected.files?.size, `${projectName}:: Shouldnt ref to any files`),
-    );
+    ts.Debug.assert(!expected.watchedResolutionInfoMap.size, `${projectName}:: Shouldnt watch any files`);
     ts.Debug.assert(expected.resolvedFileToResolution.size === 0, `${projectName}:: resolvedFileToResolution should be released`);
     ts.Debug.assert(expected.resolutionsWithFailedLookups.size === 0, `${projectName}:: resolutionsWithFailedLookups should be released`);
     ts.Debug.assert(expected.resolutionsWithOnlyAffectingLocations.size === 0, `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`);
@@ -530,30 +526,17 @@ export function verifyResolutionCache(
         resolvedFileName: string | undefined,
         name: string,
         mode: ts.ResolutionMode,
-    ): ExpectedResolution {
+    ) {
         const existing = resolutionToRefs.get(resolved);
-        let expectedResolution: ExpectedResolution;
         if (existing) {
             existing.push({ cacheType, fileName, name, mode });
-            expectedResolution = resolutionToExpected.get(resolved)!;
         }
         else {
             resolutionToRefs.set(resolved, [{ cacheType, fileName, name, mode }]);
-            expectedResolution = {
-                resolvedModule: (resolved as any).resolvedModule,
-                resolvedTypeReferenceDirective: (resolved as any).resolvedTypeReferenceDirective,
-                failedLookupLocations: resolved.failedLookupLocations,
-                affectingLocations: resolved.affectingLocations,
-                alternateResult: resolved.alternateResult,
-                globalCacheResolution: resolved.globalCacheResolution,
-                rootDirInfo: resolved.rootDirInfo,
-            };
-            expectedToResolution.set(expectedResolution, resolved);
-            resolutionToExpected.set(resolved, expectedResolution);
         }
         // We are passing redirectedReference as undefined because we want to use existing rootDirInfo
-        expected.watchResolution(expectedResolution, fileName, () => ({ resolvedFileName }), /*redirectedReference*/ undefined);
-        return expectedResolution;
+        expected.watchResolution(resolved, fileName, () => ({ resolvedFileName }), /*redirectedReference*/ undefined);
+        return resolved;
     }
 
     function verifyMapOfResolutionSet(
@@ -571,13 +554,13 @@ export function verifyResolutionCache(
     ) {
         expected?.forEach(resolution =>
             ts.Debug.assert(
-                actual?.has(expectedToResolution.get(resolution as ExpectedResolution)!),
+                actual?.has(resolution),
                 `${projectName}:: ${caption}:: Expected resolution should be present in actual resolutions`,
             )
         );
         actual?.forEach(resolution =>
             ts.Debug.assert(
-                expected?.has(resolutionToExpected.get(resolution)!),
+                expected?.has(resolution),
                 `${projectName}:: ${caption}:: Actual resolution should be present in expected resolutions`,
             )
         );
@@ -710,9 +693,9 @@ export function verifyResolutionCache(
         ts.Debug.assert(
             expectedResolution ?
                 // Resolution should match
-                expectedToResolution.get(expectedResolution as ExpectedResolution) === actualResolution :
+                expectedResolution === actualResolution :
                 // Otherwise in actual cache present because of incremental storage and should be referenced somewhere
-                resolutionToExpected.get(actualResolution!) !== undefined,
+                expected.watchedResolutionInfoMap.has(actualResolution!),
             `${projectName}:: ${caption} Expected resolution need to match in actual`,
         );
     }
