@@ -2,8 +2,8 @@
 
 === main.ts ===
 export async function * f() {
->f : () => AsyncGenerator<number, void, undefined>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : () => AsyncGenerator<number, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     await 1;
 >await 1 : 1

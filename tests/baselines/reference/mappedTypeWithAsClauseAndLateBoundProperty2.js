@@ -63,7 +63,7 @@ export declare const thing: {
     fill: (value: number, start?: number, end?: number) => number[];
     copyWithin: (target: number, start: number, end?: number) => number[];
     entries: () => IterableIterator<[number, number]>;
-    keys: () => IterableIterator<number>;
+    keys: () => IterableIterator<number, BuiltinIteratorReturn>;
     values: () => IterableIterator<number>;
     includes: (searchElement: number, fromIndex?: number) => boolean;
     flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[];
@@ -172,7 +172,7 @@ mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(27,118): error TS2526: A 'this'
         fill: (value: number, start?: number, end?: number) => number[];
         copyWithin: (target: number, start: number, end?: number) => number[];
         entries: () => IterableIterator<[number, number]>;
-        keys: () => IterableIterator<number>;
+        keys: () => IterableIterator<number, BuiltinIteratorReturn>;
         values: () => IterableIterator<number>;
         includes: (searchElement: number, fromIndex?: number) => boolean;
         flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[];

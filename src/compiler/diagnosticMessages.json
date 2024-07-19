@@ -6372,6 +6372,10 @@
         "code": 6719
     },
 
+    "Built-in iterators are instantiated with a 'TReturn' type of 'undefined' instead of 'any'.": {
+        "category": "Message",
+        "code": 6720
+    },
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
         "code": 6803
