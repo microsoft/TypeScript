@@ -2318,7 +2318,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     runWithTemporaryFileUpdate(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedFile: SourceFile) => void) {
         const originalProgram = this.program;
         const rootSourceFile = Debug.checkDefined(this.program?.getSourceFile(rootFile), "Expected file to be part of program");
-        const originalText = Debug.checkDefined(rootSourceFile.getText());
+        const originalText = Debug.checkDefined(rootSourceFile.getFullText());
 
         this.getScriptInfo(rootFile)?.editContent(0, originalText.length, updatedText);
         this.updateGraph();
