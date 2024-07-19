@@ -39682,7 +39682,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.LessThanEqualsToken:
             case SyntaxKind.GreaterThanEqualsToken:
                 if (checkForDisallowedESSymbolOperand(operator)) {
-
                     leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(getUnknownIfMaybeUnknown(leftType), left));
                     rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(getUnknownIfMaybeUnknown(rightType), right));
                     reportOperatorErrorUnless((left, right) => {
