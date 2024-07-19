@@ -3911,6 +3911,10 @@
         "category": "Error",
         "code": 2868
     },
+    "Variable '{0}' is used but never initialized.": {
+        "category": "Error",
+        "code": 2869
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

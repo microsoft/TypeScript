@@ -43215,7 +43215,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const type = getTypeFromTypeNode(declaration.type);
                 if (!(type.flags & TypeFlags.AnyOrUnknown) && !containsUndefinedType(type)) {
-                    error(declaration, Diagnostics.Variable_0_is_used_before_being_assigned, idText(declaration.name as Identifier));
+                    error(declaration, Diagnostics.Variable_0_is_used_but_never_initialized, idText(declaration.name as Identifier));
                 }
             }
         });

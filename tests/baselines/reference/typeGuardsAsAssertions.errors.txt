@@ -1,5 +1,5 @@
-typeGuardsAsAssertions.ts(3,5): error TS2454: Variable 'cond' is used before being assigned.
-typeGuardsAsAssertions.ts(123,9): error TS2454: Variable 'x' is used before being assigned.
+typeGuardsAsAssertions.ts(3,5): error TS2869: Variable 'cond' is used but never initialized.
+typeGuardsAsAssertions.ts(123,9): error TS2869: Variable 'x' is used but never initialized.
 
 
 ==== typeGuardsAsAssertions.ts (2 errors) ====
@@ -7,7 +7,7 @@ typeGuardsAsAssertions.ts(123,9): error TS2454: Variable 'x' is used before bein
     
     let cond: boolean;
         ~~~~
-!!! error TS2454: Variable 'cond' is used before being assigned.
+!!! error TS2869: Variable 'cond' is used but never initialized.
     
     export type Optional<a> = Some<a> | None;
     
@@ -129,7 +129,7 @@ typeGuardsAsAssertions.ts(123,9): error TS2454: Variable 'x' is used before bein
     function f7() {
         let x: string;
             ~
-!!! error TS2454: Variable 'x' is used before being assigned.
+!!! error TS2869: Variable 'x' is used but never initialized.
         x!.slice();
     }
     
