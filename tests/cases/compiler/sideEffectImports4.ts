@@ -1,4 +1,4 @@
-// @resolveSideEffectImports: true,false
+// @noUncheckedSideEffectImports: true,false
 // @strict: true
 // @noImplicitReferences: true
 // @module: esnext

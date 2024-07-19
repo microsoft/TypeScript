@@ -6,7 +6,7 @@ import "does-not-exist";
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
-    "resolveSideEffectImports": false
+    "noUncheckedSideEffectImports": false
   }
 }
 
@@ -33,7 +33,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json
 Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts"]
-  options: {"resolveSideEffectImports":false,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"noUncheckedSideEffectImports":false,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
@@ -83,7 +83,7 @@ Program root files: [
   "/user/username/projects/myproject/a.ts"
 ]
 Program options: {
-  "resolveSideEffectImports": false,
+  "noUncheckedSideEffectImports": false,
   "watch": true,
   "project": "/user/username/projects/myproject",
   "extendedDiagnostics": true,
@@ -104,13 +104,13 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Change resolveSideEffectImports to true
+Change:: Change noUncheckedSideEffectImports to true
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
-    "resolveSideEffectImports": true
+    "noUncheckedSideEffectImports": true
   }
 }
 
@@ -136,7 +136,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts"]
-  options: {"resolveSideEffectImports":true,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+  options: {"noUncheckedSideEffectImports":true,"watch":true,"project":"/user/username/projects/myproject","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 [96ma.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2307: [0mCannot find module 'does-not-exist' or its corresponding type declarations.
 
 [7m1[0m import "does-not-exist";
@@ -152,7 +152,7 @@ Program root files: [
   "/user/username/projects/myproject/a.ts"
 ]
 Program options: {
-  "resolveSideEffectImports": true,
+  "noUncheckedSideEffectImports": true,
   "watch": true,
   "project": "/user/username/projects/myproject",
   "extendedDiagnostics": true,

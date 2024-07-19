@@ -3,7 +3,7 @@
 // @allowJs: true
 // @noEmit: true
 // @module: commonjs
-// @resolveSideEffectImports: true
+// @noUncheckedSideEffectImports: true
 
 // @filename: moduleA/a.js
 //// import "b";

@@ -799,7 +799,7 @@ createSomeObject().message;`,
 
     verifyTscWatch({
         scenario: "programUpdates",
-        subScenario: "works when resolveSideEffectImports changes to false",
+        subScenario: "works when noUncheckedSideEffectImports changes to false",
         commandLineArgs: ["-b", "-w"],
         sys: () => {
             const index: File = {
@@ -810,7 +810,7 @@ createSomeObject().message;`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({
                     compilerOptions: {
-                        resolveSideEffectImports: true,
+                        noUncheckedSideEffectImports: true,
                     },
                 }),
             };
@@ -818,13 +818,13 @@ createSomeObject().message;`,
         },
         edits: [
             {
-                caption: "Change tsconfig to set resolveSideEffectImports to false",
+                caption: "Change tsconfig to set noUncheckedSideEffectImports to false",
                 edit: sys =>
                     sys.writeFile(
                         `/user/username/projects/myproject/tsconfig.json`,
                         jsonToReadableText({
                             compilerOptions: {
-                                resolveSideEffectImports: false,
+                                noUncheckedSideEffectImports: false,
                             },
                         }),
                     ),

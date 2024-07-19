@@ -1,4 +1,4 @@
-// @resolveSideEffectImports: true,false
+// @noUncheckedSideEffectImports: true,false
 // @module: nodenext
 // @moduleDetection: legacy,auto,force
 

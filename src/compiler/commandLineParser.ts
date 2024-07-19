@@ -1202,7 +1202,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Conditions_to_set_in_addition_to_the_resolver_specific_defaults_when_resolving_imports,
     },
     {
-        name: "resolveSideEffectImports",
+        name: "noUncheckedSideEffectImports",
         type: "boolean",
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,

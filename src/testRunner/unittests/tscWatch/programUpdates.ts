@@ -2248,7 +2248,7 @@ import { x } from "../b";`,
 
     verifyTscWatch({
         scenario,
-        subScenario: "when changing resolveSideEffectImports of config file",
+        subScenario: "when changing noUncheckedSideEffectImports of config file",
         commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
         sys: () => {
             const module1: File = {
@@ -2259,7 +2259,7 @@ import { x } from "../b";`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({
                     compilerOptions: {
-                        resolveSideEffectImports: false,
+                        noUncheckedSideEffectImports: false,
                     },
                 }),
             };
@@ -2267,13 +2267,13 @@ import { x } from "../b";`,
         },
         edits: [
             {
-                caption: "Change resolveSideEffectImports to true",
+                caption: "Change noUncheckedSideEffectImports to true",
                 edit: sys =>
                     sys.writeFile(
                         `/user/username/projects/myproject/tsconfig.json`,
                         jsonToReadableText({
                             compilerOptions: {
-                                resolveSideEffectImports: true,
+                                noUncheckedSideEffectImports: true,
                             },
                         }),
                     ),

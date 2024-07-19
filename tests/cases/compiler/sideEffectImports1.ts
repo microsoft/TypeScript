@@ -1,4 +1,4 @@
-// @resolveSideEffectImports: true,false
+// @noUncheckedSideEffectImports: true,false
 // @module: commonjs,nodenext,preserve
 
 import "does-not-exist";

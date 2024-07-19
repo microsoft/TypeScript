@@ -6,7 +6,7 @@ import "does-not-exist";
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
-    "resolveSideEffectImports": true
+    "noUncheckedSideEffectImports": true
   }
 }
 
@@ -72,7 +72,7 @@ Program root files: [
   "/user/username/projects/myproject/index.ts"
 ]
 Program options: {
-  "resolveSideEffectImports": true,
+  "noUncheckedSideEffectImports": true,
   "watch": true,
   "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
@@ -92,13 +92,13 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Change tsconfig to set resolveSideEffectImports to false
+Change:: Change tsconfig to set noUncheckedSideEffectImports to false
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {
-    "resolveSideEffectImports": false
+    "noUncheckedSideEffectImports": false
   }
 }
 
@@ -138,7 +138,7 @@ Program root files: [
   "/user/username/projects/myproject/index.ts"
 ]
 Program options: {
-  "resolveSideEffectImports": false,
+  "noUncheckedSideEffectImports": false,
   "watch": true,
   "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
