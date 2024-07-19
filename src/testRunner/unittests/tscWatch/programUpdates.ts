@@ -2245,4 +2245,40 @@ import { x } from "../b";`,
             },
         ],
     });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "when changing resolveSideEffectImports of config file",
+        commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+        sys: () => {
+            const module1: File = {
+                path: `/user/username/projects/myproject/a.ts`,
+                content: `import "does-not-exist";`,
+            };
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        resolveSideEffectImports: false,
+                    },
+                }),
+            };
+            return createWatchedSystem([module1, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+        },
+        edits: [
+            {
+                caption: "Change resolveSideEffectImports to true",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: {
+                                resolveSideEffectImports: true,
+                            },
+                        }),
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
 });

@@ -1,0 +1,157 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+Input::
+//// [/user/username/projects/myproject/index.ts]
+import "does-not-exist";
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "resolveSideEffectImports": true
+  }
+}
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+/a/lib/tsc.js -b -w
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
+
+[96mindex.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS2307: [0mCannot find module 'does-not-exist' or its corresponding type declarations.
+
+[7m1[0m import "does-not-exist";
+[7m [0m [91m       ~~~~~~~~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/user/username/projects/myproject/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("does-not-exist");
+
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"root":["./index.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./index.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 63
+}
+
+
+FsWatches::
+/user/username/projects/myproject/index.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "resolveSideEffectImports": true,
+  "watch": true,
+  "tscBuild": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/index.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
+Change:: Change tsconfig to set resolveSideEffectImports to false
+
+Input::
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "resolveSideEffectImports": false
+  }
+}
+
+
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/user/username/projects/myproject/index.js] file changed its modified time
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"root":["./index.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 49
+}
+
+
+
+Program root files: [
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "resolveSideEffectImports": false,
+  "watch": true,
+  "tscBuild": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/index.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

@@ -796,4 +796,40 @@ createSomeObject().message;`,
             }),
         commandLineArgs: ["--b", "src/project", "-i", "-w"],
     });
+
+    verifyTscWatch({
+        scenario: "programUpdates",
+        subScenario: "works when resolveSideEffectImports changes to false",
+        commandLineArgs: ["-b", "-w"],
+        sys: () => {
+            const index: File = {
+                path: `/user/username/projects/myproject/index.ts`,
+                content: `import "does-not-exist";`,
+            };
+            const configFile: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        resolveSideEffectImports: true,
+                    },
+                }),
+            };
+            return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
+        },
+        edits: [
+            {
+                caption: "Change tsconfig to set resolveSideEffectImports to false",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: {
+                                resolveSideEffectImports: false,
+                            },
+                        }),
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
 });
