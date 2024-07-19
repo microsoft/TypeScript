@@ -1633,6 +1633,7 @@ export function createLanguageService(
 
     const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
     let program: Program;
+    let creatingProgram = false;
     let lastProjectVersion: string;
     let lastTypesRootVersion = 0;
 
@@ -1816,8 +1817,9 @@ export function createLanguageService(
             oldProgram: program,
             projectReferences,
         };
-        program = undefined!;
+        creatingProgram = true;
         program = createProgram(options);
+        creatingProgram = false;
 
         // 'getOrCreateSourceFile' depends on caching but should be used past this point.
         // After this point, the cache needs to be cleared to allow all collected snapshots to be released
@@ -3397,7 +3399,12 @@ export function createLanguageService(
         getEmitOutput,
         getNonBoundSourceFile,
         getProgram,
-        getCurrentProgram: () => program,
+        getCurrentProgram: (acceptOutdatedProgram = true) => {
+            if (!acceptOutdatedProgram && creatingProgram) {
+                return undefined;
+            }
+            return program;
+        },
         getAutoImportProvider,
         updateIsDefinitionOfReferencedSymbols,
         getApplicableRefactors,

@@ -679,7 +679,7 @@ export interface LanguageService {
     getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
 
     getProgram(): Program | undefined;
-    /** @internal */ getCurrentProgram(): Program | undefined;
+    /** @internal */ getCurrentProgram(acceptOutdatedProgram?: boolean): Program | undefined;
 
     /** @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
     /** @internal */ getAutoImportProvider(): Program | undefined;
