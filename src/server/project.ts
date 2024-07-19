@@ -713,7 +713,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 // This was missing path earlier but now the file exists. Update the root
                 existingValue.info = scriptInfo;
             }
-            if (!this.languageService.getCurrentProgram(false)) {
+            if (!this.languageService.getCurrentProgram(/*acceptOutdatedProgram*/ false)) {
                 // Make sure the script is only attached to project during createProgram execution
                 scriptInfo.attachToProject(this);
             }
