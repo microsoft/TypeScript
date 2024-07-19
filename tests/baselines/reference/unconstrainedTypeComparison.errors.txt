@@ -1,11 +1,11 @@
-unconstrainedTypeComparison.ts(2,12): error TS18046: 'a' is of type 'unknown'.
-unconstrainedTypeComparison.ts(2,16): error TS18046: 'b' is of type 'unknown'.
+unconstrainedTypeComparison.ts(2,12): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(2,16): error TS18049: 'b' is possibly 'null' or 'undefined'.
 unconstrainedTypeComparison.ts(6,12): error TS18049: 'a' is possibly 'null' or 'undefined'.
 unconstrainedTypeComparison.ts(6,16): error TS18049: 'b' is possibly 'null' or 'undefined'.
 unconstrainedTypeComparison.ts(10,12): error TS18046: 'a' is of type 'unknown'.
 unconstrainedTypeComparison.ts(10,16): error TS18046: 'b' is of type 'unknown'.
-unconstrainedTypeComparison.ts(14,12): error TS18046: 'a' is of type 'unknown'.
-unconstrainedTypeComparison.ts(14,16): error TS18046: 'b' is of type 'unknown'.
+unconstrainedTypeComparison.ts(14,12): error TS18049: 'a' is possibly 'null' or 'undefined'.
+unconstrainedTypeComparison.ts(14,16): error TS18049: 'b' is possibly 'null' or 'undefined'.
 unconstrainedTypeComparison.ts(18,12): error TS18049: 'a' is possibly 'null' or 'undefined'.
 unconstrainedTypeComparison.ts(18,16): error TS18049: 'b' is possibly 'null' or 'undefined'.
 unconstrainedTypeComparison.ts(22,12): error TS18046: 'a' is of type 'unknown'.
@@ -24,9 +24,9 @@ unconstrainedTypeComparison.ts(45,16): error TS18048: 'b' is possibly 'undefined
     function f1<T>(a: T, b: T): boolean {
         return a > b;
                ~
-!!! error TS18046: 'a' is of type 'unknown'.
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
                    ~
-!!! error TS18046: 'b' is of type 'unknown'.
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
     }
     
     function f2<T extends {} | undefined | null>(a: T, b: T): boolean {
@@ -48,9 +48,9 @@ unconstrainedTypeComparison.ts(45,16): error TS18048: 'b' is possibly 'undefined
     function f4<T, U extends T>(a: U, b: U): boolean {
         return a > b;
                ~
-!!! error TS18046: 'a' is of type 'unknown'.
+!!! error TS18049: 'a' is possibly 'null' or 'undefined'.
                    ~
-!!! error TS18046: 'b' is of type 'unknown'.
+!!! error TS18049: 'b' is possibly 'null' or 'undefined'.
     }
     
     function f5<T extends {} | undefined | null, U extends T>(a: U, b: U): boolean {

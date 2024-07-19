@@ -27495,7 +27495,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // use to determine if a parameter may be undefined or null (or is unknown/unconstrained)
     function getUnknownIfMaybeUnknown(type: Type) {
-        return (strictNullChecks && type.flags & TypeFlags.Instantiable) ? getBaseConstraintOfType(type) || unknownType : type;
+        return (strictNullChecks && type.flags & TypeFlags.Instantiable) ? getBaseConstraintOfType(type) || unknownUnionType : type;
     }
 
     function getTypeWithDefault(type: Type, defaultExpression: Expression) {
