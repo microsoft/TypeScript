@@ -4623,6 +4623,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (sourceFile.symbol) {
                 if (errorNode && resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
+                    if (isSideEffectImport) {
+                        // This a side-effect import; ignore the implicit any.
+                        return undefined;
+                    }
                     errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
                 if (errorNode && (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext)) {
