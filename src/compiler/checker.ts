@@ -22299,6 +22299,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const containerDecl = source.symbol.valueDeclaration;
             if (containerDecl === undefined) return false;
 
+            // we accept extra EPC cases when #59277
             const isValidParent = (n: Node) => {
                 return hasOnlyExpressionInitializer(n) || isSatisfiesExpression(n) || isReturnStatement(n);
             };
@@ -22375,8 +22376,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             function shouldCheckAsExcessProperty(prop: Symbol) {
                 if (prop.valueDeclaration?.parent === containerDecl) return true;
                 if (!checkSpread) return false;
-                // if (prop.valueDeclaration) return isPropFromInlineSpread(prop.valueDeclaration);
-                // check if the property is in a spread inline object top level. This will be optimized as it's probably doing a lot of extra work with big/very nested objects
                 if (prop.declarations) return prop.declarations.some(isPropFromInlineSpread);
                 return false;
 
