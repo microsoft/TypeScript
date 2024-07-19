@@ -720,6 +720,7 @@ import {
     isSetAccessorDeclaration,
     isShorthandAmbientModuleSymbol,
     isShorthandPropertyAssignment,
+    isSideEffectImport,
     isSingleOrDoubleQuote,
     isSourceFile,
     isSourceFileJS,
@@ -1504,7 +1505,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
-    var noUncheckedSideEffectImports = compilerOptions.noUncheckedSideEffectImports;
+    var noUncheckedSideEffectImports = !!compilerOptions.noUncheckedSideEffectImports;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -4574,7 +4575,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (ambientModule) {
             return ambientModule;
         }
-        const isSideEffectImport = isImportDeclaration(location) && !location.importClause;
+        const ignoreImplicitAnyOrNotAModuleErrors = noUncheckedSideEffectImports && isSideEffectImport(location);
         const currentSourceFile = getSourceFileOfNode(location);
         const contextSpecifier = isStringLiteralLike(location)
             ? location
@@ -4623,11 +4624,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (sourceFile.symbol) {
                 if (errorNode && resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
-                    if (isSideEffectImport) {
-                        // This a side-effect import; ignore the implicit any.
-                        return undefined;
+                    if (!ignoreImplicitAnyOrNotAModuleErrors) {
+                        errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                     }
-                    errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
                 if (errorNode && (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext)) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
@@ -4661,11 +4660,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // merged symbol is module declaration symbol combined with all augmentations
                 return getMergedSymbol(sourceFile.symbol);
             }
-            if (errorNode && moduleNotFoundError) {
-                if (isSideEffectImport) {
-                    // This a side-effect import; ignore the fact that it's not a module.
-                    return undefined;
-                }
+            if (errorNode && moduleNotFoundError && !ignoreImplicitAnyOrNotAModuleErrors) {
                 // report errors only if it was requested
                 error(errorNode, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
             }
@@ -4693,15 +4688,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // May be an untyped module. If so, ignore resolutionDiagnostic.
         if (resolvedModule && !resolutionExtensionIsTSOrJson(resolvedModule.extension) && resolutionDiagnostic === undefined || resolutionDiagnostic === Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type) {
-            if (isSideEffectImport) {
-                // This a side-effect import; ignore the implicit any.
-                return undefined;
-            }
             if (isForAugmentation) {
                 const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
                 error(errorNode, diag, moduleReference, resolvedModule!.resolvedFileName);
             }
-            else {
+            else if (!ignoreImplicitAnyOrNotAModuleErrors) {
                 errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, currentSourceFile, mode, resolvedModule!, moduleReference);
             }
             // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.

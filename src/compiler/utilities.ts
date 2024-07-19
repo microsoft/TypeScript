@@ -287,6 +287,7 @@ import {
     isIdentifier,
     isIdentifierStart,
     isIdentifierText,
+    isImportDeclaration,
     isImportTypeNode,
     isInterfaceDeclaration,
     isJSDoc,
@@ -11757,4 +11758,10 @@ export function hasInferredType(node: Node): node is HasInferredType {
             assertType<never>(node);
             return false;
     }
+}
+
+/** @internal */
+export function isSideEffectImport(node: Node): boolean {
+    const ancestor = findAncestor(node, isImportDeclaration);
+    return !!ancestor && !ancestor.importClause;
 }
