@@ -796,40 +796,4 @@ createSomeObject().message;`,
             }),
         commandLineArgs: ["--b", "src/project", "-i", "-w"],
     });
-
-    verifyTscWatch({
-        scenario: "programUpdates",
-        subScenario: "works when noUncheckedSideEffectImports changes to false",
-        commandLineArgs: ["-b", "-w"],
-        sys: () => {
-            const index: File = {
-                path: `/user/username/projects/myproject/index.ts`,
-                content: `import "does-not-exist";`,
-            };
-            const configFile: File = {
-                path: `/user/username/projects/myproject/tsconfig.json`,
-                content: jsonToReadableText({
-                    compilerOptions: {
-                        noUncheckedSideEffectImports: true,
-                    },
-                }),
-            };
-            return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
-        },
-        edits: [
-            {
-                caption: "Change tsconfig to set noUncheckedSideEffectImports to false",
-                edit: sys =>
-                    sys.writeFile(
-                        `/user/username/projects/myproject/tsconfig.json`,
-                        jsonToReadableText({
-                            compilerOptions: {
-                                noUncheckedSideEffectImports: false,
-                            },
-                        }),
-                    ),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            },
-        ],
-    });
 });

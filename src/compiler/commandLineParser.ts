@@ -1207,7 +1207,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
         category: Diagnostics.Modules,
-        description: Diagnostics.Resolve_side_effect_imports,
+        description: Diagnostics.Check_side_effect_imports,
         defaultValueDescription: false,
     },
 

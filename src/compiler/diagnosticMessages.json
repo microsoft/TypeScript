@@ -6388,7 +6388,7 @@
         "category": "Message",
         "code": 6805
     },
-    "Resolve side effect imports.": {
+    "Check side effect imports.": {
         "category": "Message",
         "code": 6806
     },
