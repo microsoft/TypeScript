@@ -1,0 +1,156 @@
+//// [tests/cases/compiler/unconstrainedTypeComparison.ts] ////
+
+=== unconstrainedTypeComparison.ts ===
+function f1<T>(a: T, b: T): boolean {
+>f1 : Symbol(f1, Decl(unconstrainedTypeComparison.ts, 0, 0))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 0, 12))
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 0, 15))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 0, 12))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 0, 20))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 0, 12))
+
+    return a > b;
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 0, 15))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 0, 20))
+}
+
+function f2<T extends {} | undefined | null>(a: T, b: T): boolean {
+>f2 : Symbol(f2, Decl(unconstrainedTypeComparison.ts, 2, 1))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 4, 12))
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 4, 45))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 4, 12))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 4, 50))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 4, 12))
+
+    return a > b;
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 4, 45))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 4, 50))
+}
+
+function f3<T extends unknown>(a: T, b: T): boolean {
+>f3 : Symbol(f3, Decl(unconstrainedTypeComparison.ts, 6, 1))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 8, 12))
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 8, 31))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 8, 12))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 8, 36))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 8, 12))
+
+    return a > b;
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 8, 31))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 8, 36))
+}
+
+function f4<T, U extends T>(a: U, b: U): boolean {
+>f4 : Symbol(f4, Decl(unconstrainedTypeComparison.ts, 10, 1))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 12, 12))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 12, 14))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 12, 12))
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 12, 28))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 12, 14))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 12, 33))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 12, 14))
+
+    return a > b;
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 12, 28))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 12, 33))
+}
+
+function f5<T extends {} | undefined | null, U extends T>(a: U, b: U): boolean {
+>f5 : Symbol(f5, Decl(unconstrainedTypeComparison.ts, 14, 1))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 16, 12))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 16, 44))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 16, 12))
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 16, 58))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 16, 44))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 16, 63))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 16, 44))
+
+    return a > b;
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 16, 58))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 16, 63))
+}
+
+function f6<T extends unknown, U extends T>(a: U, b: U): boolean {
+>f6 : Symbol(f6, Decl(unconstrainedTypeComparison.ts, 18, 1))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 20, 12))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 20, 30))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 20, 12))
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 20, 44))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 20, 30))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 20, 49))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 20, 30))
+
+    return a > b;
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 20, 44))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 20, 49))
+}
+
+function f7<T extends {} | undefined, U extends T>(a: U, b: U): boolean {
+>f7 : Symbol(f7, Decl(unconstrainedTypeComparison.ts, 22, 1))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 24, 12))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 24, 37))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 24, 12))
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 24, 51))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 24, 37))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 24, 56))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 24, 37))
+
+    return a > b;
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 24, 51))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 24, 56))
+}
+
+function f8<T extends {} | null, U extends T>(a: U, b: U): boolean {
+>f8 : Symbol(f8, Decl(unconstrainedTypeComparison.ts, 26, 1))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 28, 12))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 28, 32))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 28, 12))
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 28, 46))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 28, 32))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 28, 51))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 28, 32))
+
+    return a > b;
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 28, 46))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 28, 51))
+}
+
+function f9<T extends undefined | null, U extends T>(a: U, b: U): boolean {
+>f9 : Symbol(f9, Decl(unconstrainedTypeComparison.ts, 30, 1))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 32, 12))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 32, 39))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 32, 12))
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 32, 53))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 32, 39))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 32, 58))
+>U : Symbol(U, Decl(unconstrainedTypeComparison.ts, 32, 39))
+
+    return a > b;
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 32, 53))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 32, 58))
+}
+
+
+function compare<T>(a: T, b: T): boolean {
+>compare : Symbol(compare, Decl(unconstrainedTypeComparison.ts, 34, 1))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 37, 17))
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 37, 20))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 37, 17))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 37, 25))
+>T : Symbol(T, Decl(unconstrainedTypeComparison.ts, 37, 17))
+
+    if (a === undefined) {
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 37, 20))
+>undefined : Symbol(undefined)
+
+        return false;
+    }
+    if (b === null) {
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 37, 25))
+
+        return false;
+    }
+    return a > b;
+>a : Symbol(a, Decl(unconstrainedTypeComparison.ts, 37, 20))
+>b : Symbol(b, Decl(unconstrainedTypeComparison.ts, 37, 25))
+}

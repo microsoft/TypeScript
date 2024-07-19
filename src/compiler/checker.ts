@@ -27493,6 +27493,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type === unknownUnionType ? unknownType : type;
     }
 
+    // use to determine if a parameter may be undefined or null (or is unknown/unconstrained)
+    function getUnknownIfMaybeUnknown(type: Type) {
+        return (strictNullChecks && type.flags & TypeFlags.Instantiable) ? getBaseConstraintOfType(type) || unknownType : type;
+    }
+
     function getTypeWithDefault(type: Type, defaultExpression: Expression) {
         return defaultExpression ?
             getUnionType([getNonUndefinedType(type), getTypeOfExpression(defaultExpression)]) :
@@ -39677,8 +39682,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.LessThanEqualsToken:
             case SyntaxKind.GreaterThanEqualsToken:
                 if (checkForDisallowedESSymbolOperand(operator)) {
-                    leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(leftType, left));
-                    rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(rightType, right));
+
+                    leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(getUnknownIfMaybeUnknown(leftType), left));
+                    rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(getUnknownIfMaybeUnknown(rightType), right));
                     reportOperatorErrorUnless((left, right) => {
                         if (isTypeAny(left) || isTypeAny(right)) {
                             return true;
