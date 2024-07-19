@@ -1,4 +1,5 @@
 // @target: esnext
+// @strict: true
 
 const iterator = Iterator.from([0, 1, 2]);
 
@@ -67,3 +68,9 @@ class BadIterator3 extends Iterator<number> {
     }
   }
 }
+
+declare const g1: Generator<string, number, boolean>;
+const iter1 = Iterator.from(g1);
+
+declare const iter2: BuiltinIterator<string, BuiltinIteratorReturn>;
+const iter3 = iter2.flatMap(() => g1);

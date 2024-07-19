@@ -2,16 +2,16 @@
 
 === stringMatchAll.ts ===
 const matches = "matchAll".matchAll(/\w/g);
->matches : BuiltinIterator<RegExpExecArray, void, undefined>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"matchAll".matchAll(/\w/g) : BuiltinIterator<RegExpExecArray, void, undefined>
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"matchAll".matchAll : (regexp: RegExp) => BuiltinIterator<RegExpExecArray>
->                    : ^      ^^      ^^^^^                                
+>matches : BuiltinIterator<RegExpExecArray, any, any>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"matchAll".matchAll(/\w/g) : BuiltinIterator<RegExpExecArray, any, any>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"matchAll".matchAll : (regexp: RegExp) => BuiltinIterator<RegExpExecArray, BuiltinIteratorReturn>
+>                    : ^      ^^      ^^^^^                                                       
 >"matchAll" : "matchAll"
 >           : ^^^^^^^^^^
->matchAll : (regexp: RegExp) => BuiltinIterator<RegExpExecArray>
->         : ^      ^^      ^^^^^                                
+>matchAll : (regexp: RegExp) => BuiltinIterator<RegExpExecArray, BuiltinIteratorReturn>
+>         : ^      ^^      ^^^^^                                                       
 >/\w/g : RegExp
 >      : ^^^^^^
 
@@ -22,8 +22,8 @@ const array = [...matches];
 >             : ^^^^^^^^^^^^^^^^^
 >...matches : RegExpExecArray
 >           : ^^^^^^^^^^^^^^^
->matches : BuiltinIterator<RegExpExecArray, void, undefined>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>matches : BuiltinIterator<RegExpExecArray, any, any>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const { index, input } = array[0];
 >index : number

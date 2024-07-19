@@ -46,14 +46,12 @@ class C4 {
 >   : ^^
 
     async * f() {
->f : () => AsyncGenerator<number, void, undefined>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : () => AsyncGenerator<number, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         const x = yield* [1];
->x : void
->  : ^^^^
->yield* [1] : void
->           : ^^^^
+>x : any
+>yield* [1] : any
 >[1] : number[]
 >    : ^^^^^^^^
 >1 : 1

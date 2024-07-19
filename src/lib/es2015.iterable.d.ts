@@ -20,43 +20,45 @@ interface IteratorReturnResult<TReturn> {
 
 type IteratorResult<T, TReturn = any> = IteratorYieldResult<T> | IteratorReturnResult<TReturn>;
 
-interface Iterator<T, TReturn = any, TNext = undefined> {
+interface Iterator<T, TReturn = any, TNext = any> {
     // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
-    next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
+    next(...[value]: [] | [TNext]): IteratorResult<T, TReturn>;
     return?(value?: TReturn): IteratorResult<T, TReturn>;
     throw?(e?: any): IteratorResult<T, TReturn>;
 }
 
-interface BuiltinIterator<T, TReturn = void, TNext = undefined> extends Iterator<T, TReturn, TNext> {
+interface Iterable<T, TReturn = any, TNext = any> {
+    [Symbol.iterator](): Iterator<T, TReturn, TNext>;
+}
+
+interface IterableIterator<T, TReturn = any, TNext = any> extends Iterator<T, TReturn, TNext> {
+    [Symbol.iterator](): IterableIterator<T, TReturn, TNext>;
+}
+
+interface BuiltinIterator<T, TReturn = any, TNext = any> extends Iterator<T, TReturn, TNext> {
     [Symbol.iterator](): BuiltinIterator<T, TReturn, TNext>;
 }
 
-interface Iterable<T> {
-    [Symbol.iterator](): Iterator<T>;
-}
-
-interface IterableIterator<T> extends Iterator<T> {
-    [Symbol.iterator](): IterableIterator<T>;
-}
+type BuiltinIteratorReturn = intrinsic;
 
 interface Array<T> {
     /** Iterator */
-    [Symbol.iterator](): BuiltinIterator<T>;
+    [Symbol.iterator](): BuiltinIterator<T, BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of key, value pairs for every entry in the array
      */
-    entries(): BuiltinIterator<[number, T]>;
+    entries(): BuiltinIterator<[number, T], BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of keys in the array
      */
-    keys(): BuiltinIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of values in the array
      */
-    values(): BuiltinIterator<T>;
+    values(): BuiltinIterator<T, BuiltinIteratorReturn>;
 }
 
 interface ArrayConstructor {
@@ -77,67 +79,67 @@ interface ArrayConstructor {
 
 interface ReadonlyArray<T> {
     /** Iterator of values in the array. */
-    [Symbol.iterator](): BuiltinIterator<T>;
+    [Symbol.iterator](): BuiltinIterator<T, BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of key, value pairs for every entry in the array
      */
-    entries(): BuiltinIterator<[number, T]>;
+    entries(): BuiltinIterator<[number, T], BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of keys in the array
      */
-    keys(): BuiltinIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of values in the array
      */
-    values(): BuiltinIterator<T>;
+    values(): BuiltinIterator<T, BuiltinIteratorReturn>;
 }
 
 interface IArguments {
     /** Iterator */
-    [Symbol.iterator](): BuiltinIterator<any>;
+    [Symbol.iterator](): BuiltinIterator<any, BuiltinIteratorReturn>;
 }
 
 interface Map<K, V> {
     /** Returns an iterable of entries in the map. */
-    [Symbol.iterator](): BuiltinIterator<[K, V]>;
+    [Symbol.iterator](): BuiltinIterator<[K, V], BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of key, value pairs for every entry in the map.
      */
-    entries(): BuiltinIterator<[K, V]>;
+    entries(): BuiltinIterator<[K, V], BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of keys in the map
      */
-    keys(): BuiltinIterator<K>;
+    keys(): BuiltinIterator<K, BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of values in the map
      */
-    values(): BuiltinIterator<V>;
+    values(): BuiltinIterator<V, BuiltinIteratorReturn>;
 }
 
 interface ReadonlyMap<K, V> {
     /** Returns an iterable of entries in the map. */
-    [Symbol.iterator](): BuiltinIterator<[K, V]>;
+    [Symbol.iterator](): BuiltinIterator<[K, V], BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of key, value pairs for every entry in the map.
      */
-    entries(): BuiltinIterator<[K, V]>;
+    entries(): BuiltinIterator<[K, V], BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of keys in the map
      */
-    keys(): BuiltinIterator<K>;
+    keys(): BuiltinIterator<K, BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of values in the map
      */
-    values(): BuiltinIterator<V>;
+    values(): BuiltinIterator<V, BuiltinIteratorReturn>;
 }
 
 interface MapConstructor {
@@ -153,40 +155,40 @@ interface WeakMapConstructor {
 
 interface Set<T> {
     /** Iterates over values in the set. */
-    [Symbol.iterator](): BuiltinIterator<T>;
+    [Symbol.iterator](): BuiltinIterator<T, BuiltinIteratorReturn>;
     /**
      * Returns an iterable of [v,v] pairs for every value `v` in the set.
      */
-    entries(): BuiltinIterator<[T, T]>;
+    entries(): BuiltinIterator<[T, T], BuiltinIteratorReturn>;
     /**
      * Despite its name, returns an iterable of the values in the set.
      */
-    keys(): BuiltinIterator<T>;
+    keys(): BuiltinIterator<T, BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of values in the set.
      */
-    values(): BuiltinIterator<T>;
+    values(): BuiltinIterator<T, BuiltinIteratorReturn>;
 }
 
 interface ReadonlySet<T> {
     /** Iterates over values in the set. */
-    [Symbol.iterator](): BuiltinIterator<T>;
+    [Symbol.iterator](): BuiltinIterator<T, BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of [v,v] pairs for every value `v` in the set.
      */
-    entries(): BuiltinIterator<[T, T]>;
+    entries(): BuiltinIterator<[T, T], BuiltinIteratorReturn>;
 
     /**
      * Despite its name, returns an iterable of the values in the set.
      */
-    keys(): BuiltinIterator<T>;
+    keys(): BuiltinIterator<T, BuiltinIteratorReturn>;
 
     /**
      * Returns an iterable of values in the set.
      */
-    values(): BuiltinIterator<T>;
+    values(): BuiltinIterator<T, BuiltinIteratorReturn>;
 }
 
 interface SetConstructor {
@@ -221,23 +223,23 @@ interface PromiseConstructor {
 
 interface String {
     /** Iterator */
-    [Symbol.iterator](): BuiltinIterator<string>;
+    [Symbol.iterator](): BuiltinIterator<string, BuiltinIteratorReturn>;
 }
 
 interface Int8Array {
-    [Symbol.iterator](): BuiltinIterator<number>;
+    [Symbol.iterator](): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
-    entries(): BuiltinIterator<[number, number]>;
+    entries(): BuiltinIterator<[number, number], BuiltinIteratorReturn>;
     /**
      * Returns an list of keys in the array
      */
-    keys(): BuiltinIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an list of values in the array
      */
-    values(): BuiltinIterator<number>;
+    values(): BuiltinIterator<number, BuiltinIteratorReturn>;
 }
 
 interface Int8ArrayConstructor {
@@ -253,19 +255,19 @@ interface Int8ArrayConstructor {
 }
 
 interface Uint8Array {
-    [Symbol.iterator](): BuiltinIterator<number>;
+    [Symbol.iterator](): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
-    entries(): BuiltinIterator<[number, number]>;
+    entries(): BuiltinIterator<[number, number], BuiltinIteratorReturn>;
     /**
      * Returns an list of keys in the array
      */
-    keys(): BuiltinIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an list of values in the array
      */
-    values(): BuiltinIterator<number>;
+    values(): BuiltinIterator<number, BuiltinIteratorReturn>;
 }
 
 interface Uint8ArrayConstructor {
@@ -281,21 +283,21 @@ interface Uint8ArrayConstructor {
 }
 
 interface Uint8ClampedArray {
-    [Symbol.iterator](): BuiltinIterator<number>;
+    [Symbol.iterator](): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
-    entries(): BuiltinIterator<[number, number]>;
+    entries(): BuiltinIterator<[number, number], BuiltinIteratorReturn>;
 
     /**
      * Returns an list of keys in the array
      */
-    keys(): BuiltinIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
 
     /**
      * Returns an list of values in the array
      */
-    values(): BuiltinIterator<number>;
+    values(): BuiltinIterator<number, BuiltinIteratorReturn>;
 }
 
 interface Uint8ClampedArrayConstructor {
@@ -311,21 +313,21 @@ interface Uint8ClampedArrayConstructor {
 }
 
 interface Int16Array {
-    [Symbol.iterator](): BuiltinIterator<number>;
+    [Symbol.iterator](): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
-    entries(): BuiltinIterator<[number, number]>;
+    entries(): BuiltinIterator<[number, number], BuiltinIteratorReturn>;
 
     /**
      * Returns an list of keys in the array
      */
-    keys(): BuiltinIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
 
     /**
      * Returns an list of values in the array
      */
-    values(): BuiltinIterator<number>;
+    values(): BuiltinIterator<number, BuiltinIteratorReturn>;
 }
 
 interface Int16ArrayConstructor {
@@ -341,19 +343,19 @@ interface Int16ArrayConstructor {
 }
 
 interface Uint16Array {
-    [Symbol.iterator](): BuiltinIterator<number>;
+    [Symbol.iterator](): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
-    entries(): BuiltinIterator<[number, number]>;
+    entries(): BuiltinIterator<[number, number], BuiltinIteratorReturn>;
     /**
      * Returns an list of keys in the array
      */
-    keys(): BuiltinIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an list of values in the array
      */
-    values(): BuiltinIterator<number>;
+    values(): BuiltinIterator<number, BuiltinIteratorReturn>;
 }
 
 interface Uint16ArrayConstructor {
@@ -369,19 +371,19 @@ interface Uint16ArrayConstructor {
 }
 
 interface Int32Array {
-    [Symbol.iterator](): BuiltinIterator<number>;
+    [Symbol.iterator](): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
-    entries(): BuiltinIterator<[number, number]>;
+    entries(): BuiltinIterator<[number, number], BuiltinIteratorReturn>;
     /**
      * Returns an list of keys in the array
      */
-    keys(): BuiltinIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an list of values in the array
      */
-    values(): BuiltinIterator<number>;
+    values(): BuiltinIterator<number, BuiltinIteratorReturn>;
 }
 
 interface Int32ArrayConstructor {
@@ -397,19 +399,19 @@ interface Int32ArrayConstructor {
 }
 
 interface Uint32Array {
-    [Symbol.iterator](): BuiltinIterator<number>;
+    [Symbol.iterator](): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
-    entries(): BuiltinIterator<[number, number]>;
+    entries(): BuiltinIterator<[number, number], BuiltinIteratorReturn>;
     /**
      * Returns an list of keys in the array
      */
-    keys(): BuiltinIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an list of values in the array
      */
-    values(): BuiltinIterator<number>;
+    values(): BuiltinIterator<number, BuiltinIteratorReturn>;
 }
 
 interface Uint32ArrayConstructor {
@@ -425,19 +427,19 @@ interface Uint32ArrayConstructor {
 }
 
 interface Float32Array {
-    [Symbol.iterator](): BuiltinIterator<number>;
+    [Symbol.iterator](): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
-    entries(): BuiltinIterator<[number, number]>;
+    entries(): BuiltinIterator<[number, number], BuiltinIteratorReturn>;
     /**
      * Returns an list of keys in the array
      */
-    keys(): BuiltinIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an list of values in the array
      */
-    values(): BuiltinIterator<number>;
+    values(): BuiltinIterator<number, BuiltinIteratorReturn>;
 }
 
 interface Float32ArrayConstructor {
@@ -453,19 +455,19 @@ interface Float32ArrayConstructor {
 }
 
 interface Float64Array {
-    [Symbol.iterator](): BuiltinIterator<number>;
+    [Symbol.iterator](): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
-    entries(): BuiltinIterator<[number, number]>;
+    entries(): BuiltinIterator<[number, number], BuiltinIteratorReturn>;
     /**
      * Returns an list of keys in the array
      */
-    keys(): BuiltinIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
     /**
      * Returns an list of values in the array
      */
-    values(): BuiltinIterator<number>;
+    values(): BuiltinIterator<number, BuiltinIteratorReturn>;
 }
 
 interface Float64ArrayConstructor {

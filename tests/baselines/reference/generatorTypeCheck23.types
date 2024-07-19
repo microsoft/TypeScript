@@ -22,8 +22,8 @@ class Baz { z: number }
 >  : ^^^^^^
 
 function* g3() {
->g3 : () => Generator<Foo | Baz, void, undefined>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g3 : () => Generator<Foo | Baz, void, any>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield;
 >yield : any
@@ -50,8 +50,7 @@ function* g3() {
 >    : ^^^^^^^^^^
 
     yield *[new Bar];
->yield *[new Bar] : void
->                 : ^^^^
+>yield *[new Bar] : any
 >[new Bar] : Bar[]
 >          : ^^^^^
 >new Bar : Bar
@@ -60,8 +59,7 @@ function* g3() {
 >    : ^^^^^^^^^^
 
     yield *[new Baz];
->yield *[new Baz] : void
->                 : ^^^^
+>yield *[new Baz] : any
 >[new Baz] : Baz[]
 >          : ^^^^^
 >new Baz : Baz

@@ -171,3 +171,26 @@ class BadIterator3 extends Iterator<number> {
   }
 }
 
+declare const g1: Generator<string, number, boolean>;
+>g1 : Symbol(g1, Decl(builtinIterator.ts, 68, 13))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+const iter1 = Iterator.from(g1);
+>iter1 : Symbol(iter1, Decl(builtinIterator.ts, 69, 5))
+>Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>from : Symbol(IteratorConstructor.from, Decl(lib.esnext.iterator.d.ts, --, --))
+>g1 : Symbol(g1, Decl(builtinIterator.ts, 68, 13))
+
+declare const iter2: BuiltinIterator<string, BuiltinIteratorReturn>;
+>iter2 : Symbol(iter2, Decl(builtinIterator.ts, 71, 13))
+>BuiltinIterator : Symbol(BuiltinIterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>BuiltinIteratorReturn : Symbol(BuiltinIteratorReturn, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const iter3 = iter2.flatMap(() => g1);
+>iter3 : Symbol(iter3, Decl(builtinIterator.ts, 72, 5))
+>iter2.flatMap : Symbol(BuiltinIterator.flatMap, Decl(lib.esnext.iterator.d.ts, --, --))
+>iter2 : Symbol(iter2, Decl(builtinIterator.ts, 71, 13))
+>flatMap : Symbol(BuiltinIterator.flatMap, Decl(lib.esnext.iterator.d.ts, --, --))
+>g1 : Symbol(g1, Decl(builtinIterator.ts, 68, 13))
+

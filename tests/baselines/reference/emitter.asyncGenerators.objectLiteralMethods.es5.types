@@ -48,20 +48,18 @@ const o3 = {
 }
 === O4.ts ===
 const o4 = {
->o4 : { f(): AsyncGenerator<number, void, undefined>; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{    async * f() {        const x = yield* [1];    }} : { f(): AsyncGenerator<number, void, undefined>; }
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o4 : { f(): AsyncGenerator<number, void, any>; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    async * f() {        const x = yield* [1];    }} : { f(): AsyncGenerator<number, void, any>; }
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     async * f() {
->f : () => AsyncGenerator<number, void, undefined>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : () => AsyncGenerator<number, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         const x = yield* [1];
->x : void
->  : ^^^^
->yield* [1] : void
->           : ^^^^
+>x : any
+>yield* [1] : any
 >[1] : number[]
 >    : ^^^^^^^^
 >1 : 1

@@ -14,12 +14,11 @@ class Baz { z: number }
 >  : ^^^^^^
 
 function* g() {
->g : () => Generator<Foo | Baz, void, undefined>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : () => Generator<Foo | Baz, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [new Foo];
->yield* [new Foo] : void
->                 : ^^^^
+>yield* [new Foo] : any
 >[new Foo] : Foo[]
 >          : ^^^^^
 >new Foo : Foo
@@ -28,8 +27,7 @@ function* g() {
 >    : ^^^^^^^^^^
 
     yield* [new Baz];
->yield* [new Baz] : void
->                 : ^^^^
+>yield* [new Baz] : any
 >[new Baz] : Baz[]
 >          : ^^^^^
 >new Baz : Baz

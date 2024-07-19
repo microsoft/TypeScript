@@ -440,8 +440,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >    : ^
 
             yield [key, value];
->yield [key, value] : unknown
->                   : ^^^^^^^
+>yield [key, value] : any
 >[key, value] : [K, V]
 >             : ^^^^^^
 >key : K

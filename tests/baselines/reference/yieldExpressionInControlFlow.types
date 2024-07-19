@@ -28,8 +28,8 @@ function* f() {
 === alsoFails.ts ===
 // fails in Typescript too
 function* g() {
->g : () => Generator<any, void, undefined>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : () => Generator<any, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var o = []
 >o : any[]
@@ -42,14 +42,14 @@ function* g() {
 >     : ^^^^
 
         o = yield* o
->o = yield* o : void
->             : ^^^^
+>o = yield* o : any
+>             : ^^^
 >o : any[]
 >  : ^^^^^
->yield* o : void
->         : ^^^^
->o : any[]
->  : ^^^^^
+>yield* o : any
+>         : ^^^
+>o : any
+>  : ^^^
     }
 }
 
