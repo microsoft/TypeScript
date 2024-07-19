@@ -799,12 +799,12 @@ const { value, done } = it.next();
 >     : ^^^^^^^^^^^^^^^^^^^
 >it.next() : IteratorResult<number, any>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->it.next : (...args: [] | [any]) => IteratorResult<number, any>
->        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>it.next : (...[value]: [] | [any]) => IteratorResult<number, any>
+>        : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >it : Iterator<number, any, any>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->next : (...args: [] | [any]) => IteratorResult<number, any>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [any]) => IteratorResult<number, any>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (!done) {
 >!done : boolean

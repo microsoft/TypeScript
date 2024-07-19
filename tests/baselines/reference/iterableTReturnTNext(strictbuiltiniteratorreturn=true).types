@@ -19,8 +19,8 @@ const r1: number = map.values().next().value; // error when strictBuiltinIterato
 >                          : ^^^^^^^^^^^^^^^^^^
 >map.values().next() : IteratorResult<number, undefined>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->map.values().next : (...args: [] | [any]) => IteratorResult<number, undefined>
->                  : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map.values().next : (...[value]: [] | [any]) => IteratorResult<number, undefined>
+>                  : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map.values() : IterableIterator<number, undefined>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map.values : () => IterableIterator<number, undefined>
@@ -29,8 +29,8 @@ const r1: number = map.values().next().value; // error when strictBuiltinIterato
 >    : ^^^^^^^^^^^^^^^^^^^
 >values : () => IterableIterator<number, undefined>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->next : (...args: [] | [any]) => IteratorResult<number, undefined>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [any]) => IteratorResult<number, undefined>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 
@@ -49,8 +49,8 @@ const r2: Next<number> = map.values().next(); // error when strictBuiltinIterato
 >   : ^^^^^^^^^^^^
 >map.values().next() : IteratorResult<number, undefined>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->map.values().next : (...args: [] | [any]) => IteratorResult<number, undefined>
->                  : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map.values().next : (...[value]: [] | [any]) => IteratorResult<number, undefined>
+>                  : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map.values() : IterableIterator<number, undefined>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map.values : () => IterableIterator<number, undefined>
@@ -59,8 +59,8 @@ const r2: Next<number> = map.values().next(); // error when strictBuiltinIterato
 >    : ^^^^^^^^^^^^^^^^^^^
 >values : () => IterableIterator<number, undefined>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->next : (...args: [] | [any]) => IteratorResult<number, undefined>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [any]) => IteratorResult<number, undefined>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // based on: https://github.com/graphql/graphql-js/blob/e15c3ec4dc21d9fd1df34fe9798cadf3bf02c6ea/src/execution/__tests__/mapAsyncIterable-test.ts#L175
 async function* source() { yield 1; yield 2; yield 3; }
@@ -105,8 +105,8 @@ const r3: number | undefined = set.values().next().value;
 >                          : ^^^^^^^^^^^^^^^^^^
 >set.values().next() : IteratorResult<number, undefined>
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->set.values().next : (...args: [] | [any]) => IteratorResult<number, undefined>
->                  : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>set.values().next : (...[value]: [] | [any]) => IteratorResult<number, undefined>
+>                  : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >set.values() : IterableIterator<number, undefined>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >set.values : () => IterableIterator<number, undefined>
@@ -115,8 +115,8 @@ const r3: number | undefined = set.values().next().value;
 >    : ^^^^^^^^^^^
 >values : () => IterableIterator<number, undefined>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->next : (...args: [] | [any]) => IteratorResult<number, undefined>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [any]) => IteratorResult<number, undefined>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 
