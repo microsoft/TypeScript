@@ -6876,7 +6876,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     let typeArgumentNodes: readonly TypeNode[] | undefined;
                     if (typeArguments.length > 0) {
-                        let typeParameterCount: number;
+                        let typeParameterCount = 0;
                         if (type.target.typeParameters) {
                             typeParameterCount = Math.min(type.target.typeParameters.length, typeArguments.length);
 
@@ -6905,9 +6905,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     }
                                 }
                             }
-                        }
-                        else {
-                            typeParameterCount = 0;
                         }
 
                         typeArgumentNodes = mapToTypeNodes(typeArguments.slice(i, typeParameterCount), context);
