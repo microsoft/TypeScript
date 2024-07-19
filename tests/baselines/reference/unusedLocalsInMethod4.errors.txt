@@ -12,9 +12,10 @@ unusedLocalsInMethod4.ts(44,17): error TS2454: Variable 'x8' is used before bein
 unusedLocalsInMethod4.ts(45,17): error TS2454: Variable 'x9' is used before being assigned.
 unusedLocalsInMethod4.ts(49,9): error TS2454: Variable 'x' is used before being assigned.
 unusedLocalsInMethod4.ts(57,9): error TS2454: Variable 'x' is used before being assigned.
+unusedLocalsInMethod4.ts(97,9): error TS2454: Variable 'i' is used before being assigned.
 
 
-==== unusedLocalsInMethod4.ts (14 errors) ====
+==== unusedLocalsInMethod4.ts (15 errors) ====
     function f<T, NonNull extends {}>() {
         let x1: number[]; // should error
             ~~
@@ -140,6 +141,8 @@ unusedLocalsInMethod4.ts(57,9): error TS2454: Variable 'x' is used before being 
     
     function rw() {
         let i: number;
+            ~
+!!! error TS2454: Variable 'i' is used before being assigned.
         function inside() {
             i++;
             console.log(i); // NaN

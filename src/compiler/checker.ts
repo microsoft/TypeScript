@@ -29283,6 +29283,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !isPastLastAssignment(symbol, /*location*/ undefined);
     }
 
+    // Check if a parameter or catch variable is assigned definitely
+    function isSymbolAssignedDefinitely(symbol: Symbol) {
+        return symbol.isDefinitelyAssigned || (isSymbolAssigned(symbol) && symbol.isDefinitelyAssigned);
+    }
+
     // Return true if there are no assignments to the given symbol or if the given location
     // is past the last assignment to the symbol.
     function isPastLastAssignment(symbol: Symbol, location: Node | undefined) {
@@ -29331,8 +29336,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function markNodeAssignments(node: Node) {
         switch (node.kind) {
             case SyntaxKind.Identifier:
-                if (isAssignmentTarget(node)) {
+                const assignmentKind = getAssignmentTargetKind(node);
+                if (assignmentKind !== AssignmentKind.None) {
                     const symbol = getResolvedSymbol(node as Identifier);
+                    if (assignmentKind === AssignmentKind.Definite) {
+                        symbol.isDefinitelyAssigned = true;
+                    }
                     if (isParameterOrMutableLocalVariable(symbol) && symbol.lastAssignmentPos !== Number.MAX_VALUE) {
                         const referencingFunction = findAncestor(node, isFunctionOrSourceFile);
                         const declaringFunction = findAncestor(symbol.valueDeclaration, isFunctionOrSourceFile);
@@ -43188,7 +43197,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkUninitializedLocals(nodeWithLocals: HasLocals) {
         nodeWithLocals.locals!.forEach(local => {
-            if (!(local.flags & SymbolFlags.Variable) || isSymbolAssigned(local) || !local.isReferenced) {
+            if (!(local.flags & SymbolFlags.Variable) || !local.isReferenced || isSymbolAssignedDefinitely(local)) {
                 return;
             }
             const declaration = local.valueDeclaration;

@@ -8255,6 +8255,7 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
     this.constEnumOnlyModule = undefined;
     this.isReferenced = undefined;
     this.lastAssignmentPos = undefined;
+    this.isDefinitelyAssigned = undefined;
     (this as any).links = undefined; // used by TransientSymbol
 }
 
