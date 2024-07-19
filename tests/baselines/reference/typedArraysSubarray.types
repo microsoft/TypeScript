@@ -18,34 +18,34 @@ function int8ArraySubarray() {
     arr.subarray();
 >arr.subarray() : Int8Array
 >               : ^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Int8Array | Int8Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^   ^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Int8Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^
 >arr : Int8Array
 >    : ^^^^^^^^^
->subarray : (begin?: number, end?: number) => Int8Array | Int8Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^   ^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Int8Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^
 
     arr.subarray(0);
 >arr.subarray(0) : Int8Array
 >                : ^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Int8Array | Int8Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^   ^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Int8Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^
 >arr : Int8Array
 >    : ^^^^^^^^^
->subarray : (begin?: number, end?: number) => Int8Array | Int8Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^   ^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Int8Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Int8Array
 >                    : ^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Int8Array | Int8Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^   ^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Int8Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^
 >arr : Int8Array
 >    : ^^^^^^^^^
->subarray : (begin?: number, end?: number) => Int8Array | Int8Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^   ^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Int8Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >10 : 10
@@ -69,34 +69,34 @@ function uint8ArraySubarray() {
     arr.subarray();
 >arr.subarray() : Uint8Array
 >               : ^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint8Array | Uint8Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint8Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >arr : Uint8Array
 >    : ^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint8Array | Uint8Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint8Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 
     arr.subarray(0);
 >arr.subarray(0) : Uint8Array
 >                : ^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint8Array | Uint8Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint8Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >arr : Uint8Array
 >    : ^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint8Array | Uint8Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint8Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Uint8Array
 >                    : ^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint8Array | Uint8Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint8Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >arr : Uint8Array
 >    : ^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint8Array | Uint8Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint8Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >10 : 10
@@ -120,34 +120,34 @@ function uint8ClampedArraySubarray() {
     arr.subarray();
 >arr.subarray() : Uint8ClampedArray
 >               : ^^^^^^^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint8ClampedArray | Uint8ClampedArray
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint8ClampedArray
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >arr : Uint8ClampedArray
 >    : ^^^^^^^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint8ClampedArray | Uint8ClampedArray
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint8ClampedArray
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^
 
     arr.subarray(0);
 >arr.subarray(0) : Uint8ClampedArray
 >                : ^^^^^^^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint8ClampedArray | Uint8ClampedArray
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint8ClampedArray
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >arr : Uint8ClampedArray
 >    : ^^^^^^^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint8ClampedArray | Uint8ClampedArray
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint8ClampedArray
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Uint8ClampedArray
 >                    : ^^^^^^^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint8ClampedArray | Uint8ClampedArray
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint8ClampedArray
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >arr : Uint8ClampedArray
 >    : ^^^^^^^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint8ClampedArray | Uint8ClampedArray
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint8ClampedArray
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >10 : 10
@@ -171,34 +171,34 @@ function int16ArraySubarray() {
     arr.subarray();
 >arr.subarray() : Int16Array
 >               : ^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Int16Array | Int16Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Int16Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >arr : Int16Array
 >    : ^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Int16Array | Int16Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Int16Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 
     arr.subarray(0);
 >arr.subarray(0) : Int16Array
 >                : ^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Int16Array | Int16Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Int16Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >arr : Int16Array
 >    : ^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Int16Array | Int16Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Int16Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Int16Array
 >                    : ^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Int16Array | Int16Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Int16Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >arr : Int16Array
 >    : ^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Int16Array | Int16Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Int16Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >10 : 10
@@ -222,34 +222,34 @@ function uint16ArraySubarray() {
     arr.subarray();
 >arr.subarray() : Uint16Array
 >               : ^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint16Array | Uint16Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint16Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 >arr : Uint16Array
 >    : ^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint16Array | Uint16Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint16Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 
     arr.subarray(0);
 >arr.subarray(0) : Uint16Array
 >                : ^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint16Array | Uint16Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint16Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 >arr : Uint16Array
 >    : ^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint16Array | Uint16Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint16Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Uint16Array
 >                    : ^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint16Array | Uint16Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint16Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 >arr : Uint16Array
 >    : ^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint16Array | Uint16Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint16Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >10 : 10
@@ -273,34 +273,34 @@ function int32ArraySubarray() {
     arr.subarray();
 >arr.subarray() : Int32Array
 >               : ^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Int32Array | Int32Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Int32Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >arr : Int32Array
 >    : ^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Int32Array | Int32Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Int32Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 
     arr.subarray(0);
 >arr.subarray(0) : Int32Array
 >                : ^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Int32Array | Int32Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Int32Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >arr : Int32Array
 >    : ^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Int32Array | Int32Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Int32Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Int32Array
 >                    : ^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Int32Array | Int32Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Int32Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >arr : Int32Array
 >    : ^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Int32Array | Int32Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^   ^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Int32Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >10 : 10
@@ -324,34 +324,34 @@ function uint32ArraySubarray() {
     arr.subarray();
 >arr.subarray() : Uint32Array
 >               : ^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint32Array | Uint32Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint32Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 >arr : Uint32Array
 >    : ^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint32Array | Uint32Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint32Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 
     arr.subarray(0);
 >arr.subarray(0) : Uint32Array
 >                : ^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint32Array | Uint32Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint32Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 >arr : Uint32Array
 >    : ^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint32Array | Uint32Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint32Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Uint32Array
 >                    : ^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Uint32Array | Uint32Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Uint32Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 >arr : Uint32Array
 >    : ^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Uint32Array | Uint32Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Uint32Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >10 : 10
@@ -375,34 +375,34 @@ function float32ArraySubarray() {
     arr.subarray();
 >arr.subarray() : Float32Array
 >               : ^^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Float32Array | Float32Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Float32Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 >arr : Float32Array
 >    : ^^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Float32Array | Float32Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Float32Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 
     arr.subarray(0);
 >arr.subarray(0) : Float32Array
 >                : ^^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Float32Array | Float32Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Float32Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 >arr : Float32Array
 >    : ^^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Float32Array | Float32Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Float32Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Float32Array
 >                    : ^^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Float32Array | Float32Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Float32Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 >arr : Float32Array
 >    : ^^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Float32Array | Float32Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Float32Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >10 : 10
@@ -426,34 +426,34 @@ function float64ArraySubarray() {
     arr.subarray();
 >arr.subarray() : Float64Array
 >               : ^^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Float64Array | Float64Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Float64Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 >arr : Float64Array
 >    : ^^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Float64Array | Float64Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Float64Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 
     arr.subarray(0);
 >arr.subarray(0) : Float64Array
 >                : ^^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Float64Array | Float64Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Float64Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 >arr : Float64Array
 >    : ^^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Float64Array | Float64Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Float64Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
     arr.subarray(0, 10);
 >arr.subarray(0, 10) : Float64Array
 >                    : ^^^^^^^^^^^^
->arr.subarray : (begin?: number, end?: number) => Float64Array | Float64Array
->             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>arr.subarray : (begin?: number, end?: number) => Float64Array
+>             : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 >arr : Float64Array
 >    : ^^^^^^^^^^^^
->subarray : (begin?: number, end?: number) => Float64Array | Float64Array
->         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^
+>subarray : (begin?: number, end?: number) => Float64Array
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >10 : 10

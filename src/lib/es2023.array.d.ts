@@ -193,8 +193,8 @@ interface TypedArray<T extends number | bigint, A extends TypedArray<T, A>> {
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
-     * const myNums = Uint8Array.from([11, 2, 22, 1]);
-     * myNums.toSorted((a, b) => a - b) // Uint8Array(4) [1, 2, 11, 22]
+     * const myNums = Int8Array.from([11, 2, 22, 1]);
+     * myNums.toSorted((a, b) => a - b) // Int8Array(4) [1, 2, 11, 22]
      * ```
      */
     toSorted(compareFn?: (a: T, b: T) => number): this;

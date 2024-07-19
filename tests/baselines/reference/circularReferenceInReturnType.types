@@ -34,7 +34,7 @@ const res2 = fn2()(() => res2);
 >fn2()(() => res2) : (a: unknown) => void
 >                  : ^ ^^^^^^^^^^^^^^    
 >fn2() : (cb: () => any) => (a: unknown) => void
->      : ^  ^^         ^^^^^    ^^^^^^^         
+>      : ^  ^^         ^^^^^^ ^^^^^^^^^^^^^^    
 >fn2 : <T>() => (cb: () => any) => (a: T) => void
 >    : ^ ^^^^^^^                                 
 >() => res2 : () => (a: unknown) => void
@@ -58,7 +58,7 @@ const res3 = fn3()(() => res3);
 >fn3()(() => res3) : (a: unknown) => void
 >                  : ^ ^^^^^^^^^^^^^^    
 >fn3() : <T2>(cb: (arg: T2) => any) => (a: unknown) => void
->      : ^  ^^  ^^^   ^^^^^^^^^   ^^^^^    ^^^^^^^         
+>      : ^  ^^  ^^^   ^^^^^^^^^   ^^^^^^ ^^^^^^^^^^^^^^    
 >fn3 : <T>() => <T2>(cb: (arg: T2) => any) => (a: T) => void
 >    : ^ ^^^^^^^                                            
 >() => res3 : () => (a: unknown) => void

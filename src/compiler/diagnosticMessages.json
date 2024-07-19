@@ -967,6 +967,10 @@
         "category": "Error",
         "code": 1292
     },
+    "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
+        "category": "Error",
+        "code": 1293
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1800,6 +1804,10 @@
     "Decimal escape sequences and backreferences are not allowed in a character class.": {
         "category": "Error",
         "code": 1537
+    },
+    "Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.": {
+        "category": "Error",
+        "code": 1538
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -2679,10 +2687,6 @@
     "'await' expressions cannot be used in a parameter initializer.": {
         "category": "Error",
         "code": 2524
-    },
-    "Initializer provides no value for this binding element and the binding element has no default value.": {
-        "category": "Error",
-        "code": 2525
     },
     "A 'this' type is available only in a non-static member of a class or interface.": {
         "category": "Error",
@@ -4212,7 +4216,7 @@
         "category": "Error",
         "code": 4092
     },
-    "Property '{0}' of exported class expression may not be private or protected.": {
+    "Property '{0}' of exported anonymous class type may not be private or protected.": {
         "category": "Error",
         "code": 4094
     },
@@ -5112,10 +5116,6 @@
     "Module '{0}' was resolved as locally declared ambient module in file '{1}'.": {
         "category": "Message",
         "code": 6144
-    },
-    "Module '{0}' was resolved as ambient module declared in '{1}' since this file was not modified.": {
-        "category": "Message",
-        "code": 6145
     },
     "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
         "category": "Message",
