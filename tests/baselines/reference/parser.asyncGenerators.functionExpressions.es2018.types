@@ -188,10 +188,10 @@ const f15 = async function * () {
 };
 === yieldStarWithValueIsOk.ts ===
 const f16 = async function * () {
->f16 : () => AsyncGenerator<any, void, undefined>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->async function * () {    yield * [];} : () => AsyncGenerator<any, void, undefined>
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f16 : () => AsyncGenerator<any, void, any>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield * [];} : () => AsyncGenerator<any, void, any>
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield * [];
 >yield * [] : any
