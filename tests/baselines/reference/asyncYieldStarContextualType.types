@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/asyncYieldStarContextualType.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
 === asyncYieldStarContextualType.ts ===
 // https://github.com/microsoft/TypeScript/issues/57903
 interface Result<T, E> {
