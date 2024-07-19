@@ -915,6 +915,16 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
+        name: "strictBuiltinIteratorReturn",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        strictFlag: true,
+        category: Diagnostics.Type_Checking,
+        description: Diagnostics.Built_in_iterators_are_instantiated_with_a_TReturn_type_of_undefined_instead_of_any,
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+    },
+    {
         name: "noImplicitThis",
         type: "boolean",
         affectsSemanticDiagnostics: true,
