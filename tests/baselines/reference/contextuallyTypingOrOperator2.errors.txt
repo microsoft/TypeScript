@@ -1,9 +1,9 @@
-contextuallyTypingOrOperator2.ts(1,39): error TS2869: This expression is always truthy. Did you mean to test something else?
+contextuallyTypingOrOperator2.ts(1,39): error TS2872: This kind of expression is always truthy.
 
 
 ==== contextuallyTypingOrOperator2.ts (1 errors) ====
     var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
                                           ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     
     var v2 = (s: string) => s.length || function (s) { s.aaa };

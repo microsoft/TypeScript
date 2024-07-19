@@ -1,15 +1,15 @@
-conditionalOperatorConditoinIsStringType.ts(25,1): error TS2870: This expression is always falsy. Did you mean to test something else?
-conditionalOperatorConditoinIsStringType.ts(26,1): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsStringType.ts(27,1): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsStringType.ts(28,1): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsStringType.ts(29,1): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsStringType.ts(30,1): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsStringType.ts(51,20): error TS2870: This expression is always falsy. Did you mean to test something else?
-conditionalOperatorConditoinIsStringType.ts(52,24): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsStringType.ts(53,23): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsStringType.ts(54,23): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsStringType.ts(55,23): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsStringType.ts(56,32): error TS2869: This expression is always truthy. Did you mean to test something else?
+conditionalOperatorConditoinIsStringType.ts(25,1): error TS2873: This kind of expression is always falsy.
+conditionalOperatorConditoinIsStringType.ts(26,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsStringType.ts(27,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsStringType.ts(28,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsStringType.ts(29,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsStringType.ts(30,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsStringType.ts(51,20): error TS2873: This kind of expression is always falsy.
+conditionalOperatorConditoinIsStringType.ts(52,24): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsStringType.ts(53,23): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsStringType.ts(54,23): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsStringType.ts(55,23): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsStringType.ts(56,32): error TS2872: This kind of expression is always truthy.
 
 
 ==== conditionalOperatorConditoinIsStringType.ts (12 errors) ====
@@ -39,22 +39,22 @@ conditionalOperatorConditoinIsStringType.ts(56,32): error TS2869: This expressio
     //Cond is a string type literal
     "" ? exprAny1 : exprAny2;
     ~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     "string" ? exprBoolean1 : exprBoolean2;
     ~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     'c' ? exprNumber1 : exprNumber2;
     ~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     'string' ? exprString1 : exprString2;
     ~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     "  " ? exprIsObject1 : exprIsObject2;
     ~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     "hello " ? exprString1 : exprBoolean1; // union
     ~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     
     //Cond is a string type expression
     function foo() { return "string" };
@@ -77,22 +77,22 @@ conditionalOperatorConditoinIsStringType.ts(56,32): error TS2869: This expressio
     
     var resultIsAny2 = "" ? exprAny1 : exprAny2;
                        ~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     var resultIsBoolean2 = "string" ? exprBoolean1 : exprBoolean2;
                            ~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsNumber2 = 'c' ? exprNumber1 : exprNumber2;
                           ~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsString2 = 'string' ? exprString1 : exprString2;
                           ~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsObject2 = "  " ? exprIsObject1 : exprIsObject2;
                           ~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsStringOrBoolean2 = "hello" ? exprString1 : exprBoolean1; // union
                                    ~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     
     var resultIsAny3 = typeof condString ? exprAny1 : exprAny2;
     var resultIsBoolean3 = condString.toUpperCase ? exprBoolean1 : exprBoolean2;

@@ -1,9 +1,9 @@
-conditionalOperatorConditionIsNumberType.ts(27,1): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditionIsNumberType.ts(29,1): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditionIsNumberType.ts(30,1): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditionIsNumberType.ts(53,23): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditionIsNumberType.ts(55,23): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditionIsNumberType.ts(56,32): error TS2869: This expression is always truthy. Did you mean to test something else?
+conditionalOperatorConditionIsNumberType.ts(27,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsNumberType.ts(29,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsNumberType.ts(30,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsNumberType.ts(53,23): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsNumberType.ts(55,23): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditionIsNumberType.ts(56,32): error TS2872: This kind of expression is always truthy.
 
 
 ==== conditionalOperatorConditionIsNumberType.ts (6 errors) ====
@@ -35,14 +35,14 @@ conditionalOperatorConditionIsNumberType.ts(56,32): error TS2869: This expressio
     0 ? exprBoolean1 : exprBoolean2;
     0.123456789 ? exprNumber1 : exprNumber2;
     ~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     - 10000000000000 ? exprString1 : exprString2;
     1000000000000 ? exprIsObject1 : exprIsObject2;
     ~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     10000 ? exprString1 : exprBoolean1; // Union
     ~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     
     //Cond is a number type expression
     function foo() { return 1 };
@@ -67,14 +67,14 @@ conditionalOperatorConditionIsNumberType.ts(56,32): error TS2869: This expressio
     var resultIsBoolean2 = 0 ? exprBoolean1 : exprBoolean2;
     var resultIsNumber2 = 0.123456789 ? exprNumber1 : exprNumber2;
                           ~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsString2 = - 10000000000000 ? exprString1 : exprString2;
     var resultIsObject2 = 1000000000000 ? exprIsObject1 : exprIsObject2;
                           ~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsStringOrBoolean2 = 10000 ? exprString1 : exprBoolean1; // Union
                                    ~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     
     var resultIsAny3 = 1 * 0 ? exprAny1 : exprAny2;
     var resultIsBoolean3 = 1 + 1 ? exprBoolean1 : exprBoolean2;

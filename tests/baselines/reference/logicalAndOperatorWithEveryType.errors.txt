@@ -1,23 +1,23 @@
 logicalAndOperatorWithEveryType.ts(19,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-logicalAndOperatorWithEveryType.ts(24,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+logicalAndOperatorWithEveryType.ts(24,12): error TS2873: This kind of expression is always falsy.
 logicalAndOperatorWithEveryType.ts(30,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-logicalAndOperatorWithEveryType.ts(35,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+logicalAndOperatorWithEveryType.ts(35,12): error TS2873: This kind of expression is always falsy.
 logicalAndOperatorWithEveryType.ts(41,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-logicalAndOperatorWithEveryType.ts(46,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+logicalAndOperatorWithEveryType.ts(46,12): error TS2873: This kind of expression is always falsy.
 logicalAndOperatorWithEveryType.ts(52,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-logicalAndOperatorWithEveryType.ts(57,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+logicalAndOperatorWithEveryType.ts(57,12): error TS2873: This kind of expression is always falsy.
 logicalAndOperatorWithEveryType.ts(63,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-logicalAndOperatorWithEveryType.ts(68,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+logicalAndOperatorWithEveryType.ts(68,12): error TS2873: This kind of expression is always falsy.
 logicalAndOperatorWithEveryType.ts(74,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-logicalAndOperatorWithEveryType.ts(79,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+logicalAndOperatorWithEveryType.ts(79,12): error TS2873: This kind of expression is always falsy.
 logicalAndOperatorWithEveryType.ts(85,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-logicalAndOperatorWithEveryType.ts(90,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+logicalAndOperatorWithEveryType.ts(90,12): error TS2873: This kind of expression is always falsy.
 logicalAndOperatorWithEveryType.ts(96,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-logicalAndOperatorWithEveryType.ts(101,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+logicalAndOperatorWithEveryType.ts(101,12): error TS2873: This kind of expression is always falsy.
 logicalAndOperatorWithEveryType.ts(107,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-logicalAndOperatorWithEveryType.ts(112,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+logicalAndOperatorWithEveryType.ts(112,12): error TS2873: This kind of expression is always falsy.
 logicalAndOperatorWithEveryType.ts(118,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-logicalAndOperatorWithEveryType.ts(123,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+logicalAndOperatorWithEveryType.ts(123,12): error TS2873: This kind of expression is always falsy.
 
 
 ==== logicalAndOperatorWithEveryType.ts (20 errors) ====
@@ -48,7 +48,7 @@ logicalAndOperatorWithEveryType.ts(123,12): error TS2870: This expression is alw
     var ra9 = null && a1;
     var ra10 = undefined && a1;
                ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     
     var rb1 = a1 && a2;
     var rb2 = a2 && a2;
@@ -63,7 +63,7 @@ logicalAndOperatorWithEveryType.ts(123,12): error TS2870: This expression is alw
     var rb9 = null && a2;
     var rb10 = undefined && a2;
                ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     
     var rc1 = a1 && a3;
     var rc2 = a2 && a3;
@@ -78,7 +78,7 @@ logicalAndOperatorWithEveryType.ts(123,12): error TS2870: This expression is alw
     var rc9 = null && a3;
     var rc10 = undefined && a3;
                ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     
     var rd1 = a1 && a4;
     var rd2 = a2 && a4;
@@ -93,7 +93,7 @@ logicalAndOperatorWithEveryType.ts(123,12): error TS2870: This expression is alw
     var rd9 = null && a4;
     var rd10 = undefined && a4;
                ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     
     var re1 = a1 && a5;
     var re2 = a2 && a5;
@@ -108,7 +108,7 @@ logicalAndOperatorWithEveryType.ts(123,12): error TS2870: This expression is alw
     var re9 = null && a5;
     var re10 = undefined && a5;
                ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     
     var rf1 = a1 && a6;
     var rf2 = a2 && a6;
@@ -123,7 +123,7 @@ logicalAndOperatorWithEveryType.ts(123,12): error TS2870: This expression is alw
     var rf9 = null && a6;
     var rf10 = undefined && a6;
                ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     
     var rg1 = a1 && a7;
     var rg2 = a2 && a7;
@@ -138,7 +138,7 @@ logicalAndOperatorWithEveryType.ts(123,12): error TS2870: This expression is alw
     var rg9 = null && a7;
     var rg10 = undefined && a7;
                ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     
     var rh1 = a1 && a8;
     var rh2 = a2 && a8;
@@ -153,7 +153,7 @@ logicalAndOperatorWithEveryType.ts(123,12): error TS2870: This expression is alw
     var rh9 = null && a8;
     var rh10 = undefined && a8;
                ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     
     var ri1 = a1 && null;
     var ri2 = a2 && null;
@@ -168,7 +168,7 @@ logicalAndOperatorWithEveryType.ts(123,12): error TS2870: This expression is alw
     var ri9 = null && null;
     var ri10 = undefined && null;
                ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     
     var rj1 = a1 && undefined;
     var rj2 = a2 && undefined;
@@ -183,4 +183,4 @@ logicalAndOperatorWithEveryType.ts(123,12): error TS2870: This expression is alw
     var rj9 = null && undefined;
     var rj10 = undefined && undefined;
                ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.

@@ -5,7 +5,7 @@ destructuringParameterProperties1.ts(22,26): error TS2339: Property 'x' does not
 destructuringParameterProperties1.ts(22,35): error TS2339: Property 'y' does not exist on type 'C1'.
 destructuringParameterProperties1.ts(22,43): error TS2339: Property 'y' does not exist on type 'C1'.
 destructuringParameterProperties1.ts(22,52): error TS2339: Property 'z' does not exist on type 'C1'.
-destructuringParameterProperties1.ts(24,30): error TS2869: This expression is always truthy. Did you mean to test something else?
+destructuringParameterProperties1.ts(24,30): error TS2872: This kind of expression is always truthy.
 destructuringParameterProperties1.ts(25,30): error TS2339: Property 'x' does not exist on type 'C2'.
 destructuringParameterProperties1.ts(25,36): error TS2339: Property 'y' does not exist on type 'C2'.
 destructuringParameterProperties1.ts(25,42): error TS2339: Property 'z' does not exist on type 'C2'.
@@ -54,7 +54,7 @@ destructuringParameterProperties1.ts(29,42): error TS2339: Property 'z' does not
     
     var c2 = new C2(["10", 10, !!10]);
                                  ~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     var [c2_x, c2_y, c2_z] = [c2.x, c2.y, c2.z];
                                  ~
 !!! error TS2339: Property 'x' does not exist on type 'C2'.

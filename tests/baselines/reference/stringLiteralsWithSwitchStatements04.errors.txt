@@ -3,11 +3,11 @@ stringLiteralsWithSwitchStatements04.ts(9,10): error TS2695: Left side of comma 
 stringLiteralsWithSwitchStatements04.ts(11,10): error TS2695: Left side of comma operator is unused and has no side effects.
 stringLiteralsWithSwitchStatements04.ts(11,10): error TS2678: Type '"baz"' is not comparable to type '"foo" | "bar"'.
 stringLiteralsWithSwitchStatements04.ts(13,10): error TS2695: Left side of comma operator is unused and has no side effects.
-stringLiteralsWithSwitchStatements04.ts(15,10): error TS2869: This expression is always truthy. Did you mean to test something else?
-stringLiteralsWithSwitchStatements04.ts(17,10): error TS2869: This expression is always truthy. Did you mean to test something else?
-stringLiteralsWithSwitchStatements04.ts(17,20): error TS2869: This expression is always truthy. Did you mean to test something else?
-stringLiteralsWithSwitchStatements04.ts(19,10): error TS2869: This expression is always truthy. Did you mean to test something else?
-stringLiteralsWithSwitchStatements04.ts(19,20): error TS2869: This expression is always truthy. Did you mean to test something else?
+stringLiteralsWithSwitchStatements04.ts(15,10): error TS2872: This kind of expression is always truthy.
+stringLiteralsWithSwitchStatements04.ts(17,10): error TS2872: This kind of expression is always truthy.
+stringLiteralsWithSwitchStatements04.ts(17,20): error TS2872: This kind of expression is always truthy.
+stringLiteralsWithSwitchStatements04.ts(19,10): error TS2872: This kind of expression is always truthy.
+stringLiteralsWithSwitchStatements04.ts(19,20): error TS2872: This kind of expression is always truthy.
 
 
 ==== stringLiteralsWithSwitchStatements04.ts (10 errors) ====
@@ -37,19 +37,19 @@ stringLiteralsWithSwitchStatements04.ts(19,20): error TS2869: This expression is
             break;
         case "baz" && "bar":
              ~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
             break;
         case "baz" && ("foo" || "bar"):
              ~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
                        ~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
             break;
         case "bar" && ("baz" || "bar"):
              ~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
                        ~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
             break;
     }
     

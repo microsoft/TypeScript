@@ -39566,8 +39566,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const leftTarget = skipOuterExpressions(left, OuterExpressionKinds.All);
-            if (getSyntacticNullishnessSemantics(leftTarget) !== PredicateSemantics.Sometimes) {
-                error(leftTarget, Diagnostics.Using_on_this_expression_appears_unintentional_because_it_always_evaluates_to_the_same_nullishness);
+            const nullishSemantics = getSyntacticNullishnessSemantics(leftTarget);
+            if (nullishSemantics !== PredicateSemantics.Sometimes) {
+                if (node.parent.kind === SyntaxKind.BinaryExpression) {
+                    error(leftTarget, Diagnostics.This_binary_expression_is_never_nullish_Are_you_missing_parentheses);
+                }
+                else {
+                    if (nullishSemantics === PredicateSemantics.Always) {
+                        error(leftTarget, Diagnostics.This_expression_is_always_nullish);
+                    }
+                    else {
+                        error(leftTarget, Diagnostics.Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish);
+                    }
+                }
             }
         }
     }
@@ -44250,8 +44261,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(
                     node,
                     semantics === PredicateSemantics.Always ?
-                        Diagnostics.This_expression_is_always_truthy_Did_you_mean_to_test_something_else :
-                        Diagnostics.This_expression_is_always_falsy_Did_you_mean_to_test_something_else,
+                        Diagnostics.This_kind_of_expression_is_always_truthy :
+                        Diagnostics.This_kind_of_expression_is_always_falsy
                 );
             }
         }

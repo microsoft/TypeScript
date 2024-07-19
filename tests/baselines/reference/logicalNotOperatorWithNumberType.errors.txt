@@ -1,5 +1,5 @@
-logicalNotOperatorWithNumberType.ts(23,25): error TS2869: This expression is always truthy. Did you mean to test something else?
-logicalNotOperatorWithNumberType.ts(24,25): error TS2869: This expression is always truthy. Did you mean to test something else?
+logicalNotOperatorWithNumberType.ts(23,25): error TS2872: This kind of expression is always truthy.
+logicalNotOperatorWithNumberType.ts(24,25): error TS2872: This kind of expression is always truthy.
 logicalNotOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
@@ -28,10 +28,10 @@ logicalNotOperatorWithNumberType.ts(45,1): error TS2695: Left side of comma oper
     var ResultIsBoolean3 = !1;
     var ResultIsBoolean4 = !{ x: 1, y: 2};
                             ~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     var ResultIsBoolean5 = !{ x: 1, y: (n: number) => { return n; } };
                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     
     // number type expressions
     var ResultIsBoolean6 = !objA.a;

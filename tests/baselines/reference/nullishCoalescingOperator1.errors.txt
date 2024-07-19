@@ -1,4 +1,4 @@
-nullishCoalescingOperator1.ts(59,5): error TS2871: Using ?? on this expression appears unintentional because it always evaluates to the same nullishness.
+nullishCoalescingOperator1.ts(59,5): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
 
 
 ==== nullishCoalescingOperator1.ts (1 errors) ====
@@ -62,7 +62,7 @@ nullishCoalescingOperator1.ts(59,5): error TS2871: Using ?? on this expression a
     
     if (false ?? true) {
         ~~~~~
-!!! error TS2871: Using ?? on this expression appears unintentional because it always evaluates to the same nullishness.
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
         foo();
     }
     else {

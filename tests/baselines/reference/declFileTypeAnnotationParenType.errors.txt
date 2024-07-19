@@ -1,5 +1,5 @@
-declFileTypeAnnotationParenType.ts(8,29): error TS2869: This expression is always truthy. Did you mean to test something else?
-declFileTypeAnnotationParenType.ts(9,9): error TS2869: This expression is always truthy. Did you mean to test something else?
+declFileTypeAnnotationParenType.ts(8,29): error TS2872: This kind of expression is always truthy.
+declFileTypeAnnotationParenType.ts(9,9): error TS2872: This kind of expression is always truthy.
 
 
 ==== declFileTypeAnnotationParenType.ts (2 errors) ====
@@ -12,7 +12,7 @@ declFileTypeAnnotationParenType.ts(9,9): error TS2869: This expression is always
     
     var k: (() => c) | string = (() => new c()) || "";
                                 ~~~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     var l = (() => new c()) || "";
             ~~~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.

@@ -1,5 +1,5 @@
 parserRegularExpression3.ts(1,1): error TS2304: Cannot find name 'Foo'.
-parserRegularExpression3.ts(1,6): error TS2869: This expression is always truthy. Did you mean to test something else?
+parserRegularExpression3.ts(1,6): error TS2872: This kind of expression is always truthy.
 
 
 ==== parserRegularExpression3.ts (2 errors) ====
@@ -7,4 +7,4 @@ parserRegularExpression3.ts(1,6): error TS2869: This expression is always truthy
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
          ~~~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.

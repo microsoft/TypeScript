@@ -94,4 +94,70 @@ if (!!true) {
 
 }
 
+// Should be OK (special cases)
+while (0) { }
+>0 : 0
+>  : ^
+
+while (1) { }
+>1 : 1
+>  : ^
+
+while (true) { }
+>true : true
+>     : ^^^^
+
+while (false) { }
+>false : false
+>      : ^^^^^
+
+const p5 = {} ?? null;
+>p5 : {}
+>   : ^^
+>{} ?? null : {}
+>           : ^^
+>{} : {}
+>   : ^^
+
+const p6 = 0 > 1 ?? null;
+>p6 : boolean
+>   : ^^^^^^^
+>0 > 1 ?? null : boolean
+>              : ^^^^^^^
+>0 > 1 : boolean
+>      : ^^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+
+const p7 = null ?? null;
+>p7 : any
+>   : ^^^
+>null ?? null : null
+>             : ^^^^
+
+const p8 = (class foo { }) && null;
+>p8 : any
+>   : ^^^
+>(class foo { }) && null : null
+>                        : ^^^^
+>(class foo { }) : typeof foo
+>                : ^^^^^^^^^^
+>class foo { } : typeof foo
+>              : ^^^^^^^^^^
+>foo : typeof foo
+>    : ^^^^^^^^^^
+
+const p9 = (class foo { }) || null;
+>p9 : typeof foo
+>   : ^^^^^^^^^^
+>(class foo { }) || null : typeof foo
+>                        : ^^^^^^^^^^
+>(class foo { }) : typeof foo
+>                : ^^^^^^^^^^
+>class foo { } : typeof foo
+>              : ^^^^^^^^^^
+>foo : typeof foo
+>    : ^^^^^^^^^^
 

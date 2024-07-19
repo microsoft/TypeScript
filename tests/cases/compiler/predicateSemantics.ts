@@ -17,3 +17,14 @@ if (!!true) {
 
 }
 
+// Should be OK (special cases)
+while (0) { }
+while (1) { }
+while (true) { }
+while (false) { }
+
+const p5 = {} ?? null;
+const p6 = 0 > 1 ?? null;
+const p7 = null ?? null;
+const p8 = (class foo { }) && null;
+const p9 = (class foo { }) || null;

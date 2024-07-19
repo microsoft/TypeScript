@@ -1,4 +1,4 @@
-1.ts(1,9): error TS2869: This expression is always truthy. Did you mean to test something else?
+1.ts(1,9): error TS2872: This kind of expression is always truthy.
 
 
 ==== 0.ts (0 errors) ====
@@ -11,5 +11,5 @@
 ==== 1.ts (1 errors) ====
     var x = "hi" || 5;
             ~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     export default x;

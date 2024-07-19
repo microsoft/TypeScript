@@ -1,17 +1,17 @@
 stringLiteralsWithSwitchStatements03.ts(10,10): error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
   Type '"baz"' is not comparable to type '"foo"'.
-stringLiteralsWithSwitchStatements03.ts(10,34): error TS2869: This expression is always truthy. Did you mean to test something else?
+stringLiteralsWithSwitchStatements03.ts(10,34): error TS2872: This kind of expression is always truthy.
 stringLiteralsWithSwitchStatements03.ts(12,10): error TS2678: Type '"bar"' is not comparable to type '"foo"'.
 stringLiteralsWithSwitchStatements03.ts(14,10): error TS2678: Type '"baz"' is not comparable to type '"foo"'.
 stringLiteralsWithSwitchStatements03.ts(14,11): error TS2695: Left side of comma operator is unused and has no side effects.
 stringLiteralsWithSwitchStatements03.ts(14,11): error TS2695: Left side of comma operator is unused and has no side effects.
-stringLiteralsWithSwitchStatements03.ts(18,12): error TS2869: This expression is always truthy. Did you mean to test something else?
+stringLiteralsWithSwitchStatements03.ts(18,12): error TS2872: This kind of expression is always truthy.
 stringLiteralsWithSwitchStatements03.ts(20,10): error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
   Type '"baz"' is not comparable to type '"foo"'.
-stringLiteralsWithSwitchStatements03.ts(20,12): error TS2869: This expression is always truthy. Did you mean to test something else?
+stringLiteralsWithSwitchStatements03.ts(20,12): error TS2872: This kind of expression is always truthy.
 stringLiteralsWithSwitchStatements03.ts(22,10): error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
   Type '"baz"' is not comparable to type '"foo"'.
-stringLiteralsWithSwitchStatements03.ts(23,10): error TS2869: This expression is always truthy. Did you mean to test something else?
+stringLiteralsWithSwitchStatements03.ts(23,10): error TS2872: This kind of expression is always truthy.
 stringLiteralsWithSwitchStatements03.ts(23,10): error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
   Type '"baz"' is not comparable to type '"foo"'.
 
@@ -31,7 +31,7 @@ stringLiteralsWithSwitchStatements03.ts(23,10): error TS2678: Type '"bar" | "baz
 !!! error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
 !!! error TS2678:   Type '"baz"' is not comparable to type '"foo"'.
                                      ~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
             break;
         case (("bar")):
              ~~~~~~~~~
@@ -49,14 +49,14 @@ stringLiteralsWithSwitchStatements03.ts(23,10): error TS2678: Type '"bar" | "baz
             break;
         case (("foo" || ("bar"))):
                ~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
             break;
         case (("bar" || ("baz"))):
              ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
 !!! error TS2678:   Type '"baz"' is not comparable to type '"foo"'.
                ~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
             break;
         case z || "baz":
              ~~~~~~~~~~
@@ -64,7 +64,7 @@ stringLiteralsWithSwitchStatements03.ts(23,10): error TS2678: Type '"bar" | "baz
 !!! error TS2678:   Type '"baz"' is not comparable to type '"foo"'.
         case "baz" || z:
              ~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
              ~~~~~~~~~~
 !!! error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
 !!! error TS2678:   Type '"baz"' is not comparable to type '"foo"'.

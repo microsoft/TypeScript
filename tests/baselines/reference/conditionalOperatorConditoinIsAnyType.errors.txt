@@ -1,12 +1,12 @@
-conditionalOperatorConditoinIsAnyType.ts(28,1): error TS2870: This expression is always falsy. Did you mean to test something else?
-conditionalOperatorConditoinIsAnyType.ts(29,1): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsAnyType.ts(30,1): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsAnyType.ts(31,1): error TS2870: This expression is always falsy. Did you mean to test something else?
-conditionalOperatorConditoinIsAnyType.ts(51,23): error TS2870: This expression is always falsy. Did you mean to test something else?
-conditionalOperatorConditoinIsAnyType.ts(52,23): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsAnyType.ts(53,23): error TS2869: This expression is always truthy. Did you mean to test something else?
-conditionalOperatorConditoinIsAnyType.ts(55,32): error TS2870: This expression is always falsy. Did you mean to test something else?
-conditionalOperatorConditoinIsAnyType.ts(56,32): error TS2869: This expression is always truthy. Did you mean to test something else?
+conditionalOperatorConditoinIsAnyType.ts(28,1): error TS2873: This kind of expression is always falsy.
+conditionalOperatorConditoinIsAnyType.ts(29,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsAnyType.ts(30,1): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsAnyType.ts(31,1): error TS2873: This kind of expression is always falsy.
+conditionalOperatorConditoinIsAnyType.ts(51,23): error TS2873: This kind of expression is always falsy.
+conditionalOperatorConditoinIsAnyType.ts(52,23): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsAnyType.ts(53,23): error TS2872: This kind of expression is always truthy.
+conditionalOperatorConditoinIsAnyType.ts(55,32): error TS2873: This kind of expression is always falsy.
+conditionalOperatorConditoinIsAnyType.ts(56,32): error TS2872: This kind of expression is always truthy.
 
 
 ==== conditionalOperatorConditoinIsAnyType.ts (9 errors) ====
@@ -39,16 +39,16 @@ conditionalOperatorConditoinIsAnyType.ts(56,32): error TS2869: This expression i
     null ? exprBoolean1 : exprBoolean2;
     undefined ? exprNumber1 : exprNumber2;
     ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     [null, undefined] ? exprString1 : exprString2;
     ~~~~~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     [null, undefined] ? exprIsObject1 : exprIsObject2;
     ~~~~~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     undefined ? exprString1 : exprBoolean1; // union
     ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     
     //Cond is an any type expression
     x.doSomeThing() ? exprAny1 : exprAny2;
@@ -70,20 +70,20 @@ conditionalOperatorConditoinIsAnyType.ts(56,32): error TS2869: This expression i
     var resultIsBoolean2 = null ? exprBoolean1 : exprBoolean2;
     var resultIsNumber2 = undefined ? exprNumber1 : exprNumber2;
                           ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     var resultIsString2 = [null, undefined] ? exprString1 : exprString2;
                           ~~~~~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsObject2 = [null, undefined] ? exprIsObject1 : exprIsObject2;
                           ~~~~~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     var resultIsStringOrBoolean2 = null ? exprString1 : exprBoolean1; // union
     var resultIsStringOrBoolean3 = undefined ? exprString1 : exprBoolean1; // union
                                    ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     var resultIsStringOrBoolean4 = [null, undefined] ? exprString1 : exprBoolean1; // union
                                    ~~~~~~~~~~~~~~~~~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     
     var resultIsAny3 = x.doSomeThing() ? exprAny1 : exprAny2;
     var resultIsBoolean3 = x("x") ? exprBoolean1 : exprBoolean2;

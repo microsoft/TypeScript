@@ -1,7 +1,7 @@
-initializersWidened.ts(19,10): error TS2870: This expression is always falsy. Did you mean to test something else?
-initializersWidened.ts(20,10): error TS2870: This expression is always falsy. Did you mean to test something else?
-initializersWidened.ts(23,10): error TS2870: This expression is always falsy. Did you mean to test something else?
-initializersWidened.ts(24,10): error TS2870: This expression is always falsy. Did you mean to test something else?
+initializersWidened.ts(19,10): error TS2873: This kind of expression is always falsy.
+initializersWidened.ts(20,10): error TS2873: This kind of expression is always falsy.
+initializersWidened.ts(23,10): error TS2873: This kind of expression is always falsy.
+initializersWidened.ts(24,10): error TS2873: This kind of expression is always falsy.
 
 
 ==== initializersWidened.ts (4 errors) ====
@@ -25,15 +25,15 @@ initializersWidened.ts(24,10): error TS2870: This expression is always falsy. Di
     var x4 = null || null;
     var y4 = undefined || undefined;
              ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     var z4 = void 0 || void 0;
              ~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     
     var x5 = null || x2;
     var y5 = undefined || y2;
              ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     var z5 = void 0 || y2;
              ~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.

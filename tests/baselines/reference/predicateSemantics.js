@@ -20,10 +20,21 @@ if (!!true) {
 
 }
 
+// Should be OK (special cases)
+while (0) { }
+while (1) { }
+while (true) { }
+while (false) { }
+
+const p5 = {} ?? null;
+const p6 = 0 > 1 ?? null;
+const p7 = null ?? null;
+const p8 = (class foo { }) && null;
+const p9 = (class foo { }) || null;
 
 
 //// [predicateSemantics.js]
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e, _f;
 // OK: One or other operand is possibly nullish
 var test1 = (_a = (cond ? undefined : 32)) !== null && _a !== void 0 ? _a : "possibly reached";
 // Not OK: Both operands nullish
@@ -35,3 +46,21 @@ var test4 = (_d = (cond ? (undefined) : (17))) !== null && _d !== void 0 ? _d : 
 // Should be OK (special case)
 if (!!true) {
 }
+// Should be OK (special cases)
+while (0) { }
+while (1) { }
+while (true) { }
+while (false) { }
+var p5 = (_e = {}) !== null && _e !== void 0 ? _e : null;
+var p6 = (_f = 0 > 1) !== null && _f !== void 0 ? _f : null;
+var p7 = null !== null && null !== void 0 ? null : null;
+var p8 = (/** @class */ (function () {
+    function foo() {
+    }
+    return foo;
+}())) && null;
+var p9 = (/** @class */ (function () {
+    function foo() {
+    }
+    return foo;
+}())) || null;

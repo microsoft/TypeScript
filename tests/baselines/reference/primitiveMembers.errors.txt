@@ -1,7 +1,7 @@
 primitiveMembers.ts(5,3): error TS2339: Property 'toBAZ' does not exist on type 'number'.
 primitiveMembers.ts(11,1): error TS2322: Type 'Number' is not assignable to type 'number'.
   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
-primitiveMembers.ts(21,10): error TS2869: This expression is always truthy. Did you mean to test something else?
+primitiveMembers.ts(21,10): error TS2872: This kind of expression is always truthy.
 
 
 ==== primitiveMembers.ts (3 errors) ====
@@ -32,7 +32,7 @@ primitiveMembers.ts(21,10): error TS2869: This expression is always truthy. Did 
     
     var n3 = 5 || {};
              ~
-!!! error TS2869: This expression is always truthy. Did you mean to test something else?
+!!! error TS2872: This kind of expression is always truthy.
     
     
     class baz { public bar(): void { }; }

@@ -1,4 +1,4 @@
-logicalNotOperatorWithAnyOtherType.ts(33,25): error TS2870: This expression is always falsy. Did you mean to test something else?
+logicalNotOperatorWithAnyOtherType.ts(33,25): error TS2873: This kind of expression is always falsy.
 logicalNotOperatorWithAnyOtherType.ts(45,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
 logicalNotOperatorWithAnyOtherType.ts(46,27): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
 logicalNotOperatorWithAnyOtherType.ts(47,27): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
@@ -40,7 +40,7 @@ logicalNotOperatorWithAnyOtherType.ts(57,1): error TS2695: Left side of comma op
     // any type literal
     var ResultIsBoolean7 = !undefined;
                             ~~~~~~~~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     var ResultIsBoolean8 = !null;
     
     // any type expressions

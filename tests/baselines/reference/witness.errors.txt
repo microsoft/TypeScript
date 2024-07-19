@@ -12,9 +12,9 @@ witness.ts(33,5): error TS2403: Subsequent variable declarations must have the s
 witness.ts(37,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'.
 witness.ts(39,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'.
 witness.ts(43,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'.
-witness.ts(50,11): error TS2870: This expression is always falsy. Did you mean to test something else?
+witness.ts(50,11): error TS2873: This kind of expression is always falsy.
 witness.ts(57,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'.
-witness.ts(58,12): error TS2870: This expression is always falsy. Did you mean to test something else?
+witness.ts(58,12): error TS2873: This kind of expression is always falsy.
 witness.ts(68,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'fnCallResult' must be of type 'never', but here has type 'any'.
 witness.ts(110,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
 witness.ts(121,14): error TS2729: Property 'n' is used before its initialization.
@@ -108,7 +108,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
     var or1: any;
     var or2 = '' || or2;
               ~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     var or2: any;
     var or3 = or3 || or3;
     var or3: any;
@@ -121,7 +121,7 @@ witness.ts(128,19): error TS2729: Property 'q' is used before its initialization
 !!! related TS6203 witness.ts:56:5: 'and1' was also declared here.
     var and2 = '' && and2;
                ~~
-!!! error TS2870: This expression is always falsy. Did you mean to test something else?
+!!! error TS2873: This kind of expression is always falsy.
     var and2: any;
     var and3 = and3 && and3;
     var and3: any;
