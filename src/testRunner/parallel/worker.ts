@@ -1,3 +1,4 @@
+import Mocha from "mocha";
 import {
     createRunner,
     globalTimeout,
@@ -38,9 +39,6 @@ export function start(importTests: () => Promise<unknown>) {
 
     let exceptionsHooked = false;
     hookUncaughtExceptions();
-
-    // Capitalization is aligned with the global `Mocha` namespace for typespace/namespace references.
-    const Mocha = require("mocha") as typeof import("mocha");
 
     /**
      * Mixin helper.

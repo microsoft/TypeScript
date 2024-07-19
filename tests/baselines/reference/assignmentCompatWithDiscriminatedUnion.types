@@ -723,3 +723,129 @@ namespace GH39357 {
 >   : ^^
 }
 
+// https://github.com/microsoft/TypeScript/issues/58603
+namespace GH58603 {
+>GH58603 : typeof GH58603
+>        : ^^^^^^^^^^^^^^
+
+    enum MyEnum { A = 1, B = 2 }
+>MyEnum : MyEnum
+>       : ^^^^^^
+>A : MyEnum.A
+>  : ^^^^^^^^
+>1 : 1
+>  : ^
+>B : MyEnum.B
+>  : ^^^^^^^^
+>2 : 2
+>  : ^
+
+    type TypeA = { kind: MyEnum.A, id?: number };
+>TypeA : TypeA
+>      : ^^^^^
+>kind : MyEnum.A
+>     : ^^^^^^^^
+>MyEnum : any
+>       : ^^^
+>id : number
+>   : ^^^^^^
+    
+    type TypeB = { kind: MyEnum.B } & ({ id?: undefined } | { id: number });
+>TypeB : TypeB
+>      : ^^^^^
+>kind : MyEnum.B
+>     : ^^^^^^^^
+>MyEnum : any
+>       : ^^^
+>id : undefined
+>   : ^^^^^^^^^
+>id : number
+>   : ^^^^^^
+    
+    type MyType = TypeA | TypeB;
+>MyType : MyType
+>       : ^^^^^^
+    
+    function something(a: MyType): void {}
+>something : (a: MyType) => void
+>          : ^ ^^      ^^^^^    
+>a : MyType
+>  : ^^^^^^
+    
+    function indirect(kind: MyEnum, id?: number): void {
+>indirect : (kind: MyEnum, id?: number) => void
+>         : ^    ^^      ^^  ^^^      ^^^^^    
+>kind : MyEnum
+>     : ^^^^^^
+>id : number
+>   : ^^^^^^
+
+        something({ kind, id });
+>something({ kind, id }) : void
+>                        : ^^^^
+>something : (a: MyType) => void
+>          : ^ ^^      ^^^^^    
+>{ kind, id } : { kind: MyEnum; id: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>kind : MyEnum
+>     : ^^^^^^
+>id : number
+>   : ^^^^^^
+    }
+    
+    type Foo = { kind: "a" | "b", value: number } | { kind: "a", value: undefined } | { kind: "b", value: undefined };
+>Foo : Foo
+>    : ^^^
+>kind : "a" | "b"
+>     : ^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>kind : "a"
+>     : ^^^
+>value : undefined
+>      : ^^^^^^^^^
+>kind : "b"
+>     : ^^^
+>value : undefined
+>      : ^^^^^^^^^
+    
+    function test(obj: { kind: "a" | "b", value: number | undefined }) {
+>test : (obj: { kind: "a" | "b"; value: number | undefined; }) => void
+>     : ^   ^^                                               ^^^^^^^^^
+>obj : { kind: "a" | "b"; value: number | undefined; }
+>    : ^^^^^^^^         ^^^^^^^^^                  ^^^
+>kind : "a" | "b"
+>     : ^^^^^^^^^
+>value : number
+>      : ^^^^^^
+
+        let x1: Foo = obj;
+>x1 : Foo
+>   : ^^^
+>obj : { kind: "a" | "b"; value: number | undefined; }
+>    : ^^^^^^^^         ^^^^^^^^^                  ^^^
+
+        let x2: Foo = { kind: obj.kind, value: obj.value };
+>x2 : Foo
+>   : ^^^
+>{ kind: obj.kind, value: obj.value } : { kind: "a" | "b"; value: number; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>kind : "a" | "b"
+>     : ^^^^^^^^^
+>obj.kind : "a" | "b"
+>         : ^^^^^^^^^
+>obj : { kind: "a" | "b"; value: number | undefined; }
+>    : ^^^^^^^^         ^^^^^^^^^                  ^^^
+>kind : "a" | "b"
+>     : ^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>obj.value : number
+>          : ^^^^^^
+>obj : { kind: "a" | "b"; value: number | undefined; }
+>    : ^^^^^^^^         ^^^^^^^^^                  ^^^
+>value : number
+>      : ^^^^^^
+    }
+}
+

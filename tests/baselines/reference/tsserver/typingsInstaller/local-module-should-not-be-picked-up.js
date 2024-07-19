@@ -372,7 +372,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

@@ -71,8 +71,9 @@ function pasteEdits(
         newText = actualPastedText ? newText.slice(0, pos) + actualPastedText[0] + newText.slice(end) : newText.slice(0, pos) + pastedText[i] + newText.slice(end);
     }
 
+    let importAdder: codefix.ImportAdder;
     Debug.checkDefined(host.runWithTemporaryFileUpdate).call(host, targetFile.fileName, newText, (updatedProgram: Program, originalProgram: Program | undefined, updatedFile: SourceFile) => {
-        const importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
+        importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
         if (copiedFrom?.range) {
             Debug.assert(copiedFrom.range.length === pastedText.length);
             copiedFrom.range.forEach(copy => {
@@ -90,7 +91,7 @@ function pasteEdits(
                 }
                 statements.push(...statementsInSourceFile.slice(startNodeIndex, endNodeIndex === -1 ? statementsInSourceFile.length : endNodeIndex + 1));
             });
-            const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()));
+            const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()), { pos: copiedFrom.range[0].pos, end: copiedFrom.range[copiedFrom.range.length - 1].end });
             Debug.assertIsDefined(originalProgram);
             const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFile.fileName, originalProgram, host, !!copiedFrom.file.commonJsModuleIndicator);
             addExportsInOldFile(copiedFrom.file, usage.targetFileImportsFromOldFile, changes, useEsModuleSyntax);
@@ -115,6 +116,13 @@ function pasteEdits(
         }
         importAdder.writeFixes(changes, getQuotePreference(copiedFrom ? copiedFrom.file : targetFile, preferences));
     });
+
+    /**
+     * If there are no import fixes, getPasteEdits should return without making any changes to the file.
+     */
+    if (!importAdder!.hasFixes()) {
+        return;
+    }
     pasteLocations.forEach((paste, i) => {
         changes.replaceRangeWithText(
             targetFile,

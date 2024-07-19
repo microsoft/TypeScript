@@ -967,8 +967,7 @@ export interface CacheWithRedirects<K, V> {
 /** @internal */
 export type RedirectsCacheKey = string & { __compilerOptionsKey: any; };
 
-/** @internal */
-export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined, optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>): CacheWithRedirects<K, V> {
+function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined, optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>): CacheWithRedirects<K, V> {
     const redirectsMap = new Map<CompilerOptions, Map<K, V>>();
     const redirectsKeyToMap = new Map<RedirectsCacheKey, Map<K, V>>();
     let ownMap = new Map<K, V>();
@@ -1752,8 +1751,10 @@ function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: 
         /*conditions*/ undefined,
     );
 }
+
+// knip applies the internal marker to _all_ declarations, not just the one overload.
 export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
-/** @internal */
+/** @internal @knipignore */
 export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, conditions?: string[]): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
 export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, conditions?: string[]): ResolvedModuleWithFailedLookupLocations {
     const containingDirectory = getDirectoryPath(containingFile);
@@ -2381,17 +2382,11 @@ export interface PackageJsonInfoContents {
  *
  * @internal
  */
-export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
-    const parts = getPathComponents(fileName);
-    parts.pop();
-    while (parts.length > 0) {
-        const pkg = getPackageJsonInfo(getPathFromPathComponents(parts), /*onlyRecordFailures*/ false, state);
-        if (pkg) {
-            return pkg;
-        }
-        parts.pop();
-    }
-    return undefined;
+export function getPackageScopeForPath(directory: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
+    return forEachAncestorDirectory(
+        directory,
+        dir => getPackageJsonInfo(dir, /*onlyRecordFailures*/ false, state),
+    );
 }
 
 function getVersionPathsOfPackageJsonInfo(packageJsonInfo: PackageJsonInfo, state: ModuleResolutionState): VersionPaths | undefined {
@@ -2432,8 +2427,7 @@ function readPackageJsonPeerDependencies(packageJsonInfo: PackageJsonInfo, state
     return result;
 }
 
-/** @internal */
-export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PackageJsonInfo | undefined {
+function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PackageJsonInfo | undefined {
     const { host, traceEnabled } = state;
     const packageJsonPath = combinePaths(packageDirectory, "package.json");
     if (onlyRecordFailures) {
@@ -2568,7 +2562,7 @@ function noKeyStartsWithDot(obj: MapLike<unknown>) {
 }
 
 function loadModuleFromSelfNameReference(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-    const directoryPath = getNormalizedAbsolutePath(combinePaths(directory, "dummy"), state.host.getCurrentDirectory?.());
+    const directoryPath = getNormalizedAbsolutePath(directory, state.host.getCurrentDirectory?.());
     const scope = getPackageScopeForPath(directoryPath, state);
     if (!scope || !scope.contents.packageJsonContent.exports) {
         return undefined;
@@ -2649,7 +2643,7 @@ function loadModuleFromImports(extensions: Extensions, moduleName: string, direc
         }
         return toSearchResult(/*value*/ undefined);
     }
-    const directoryPath = getNormalizedAbsolutePath(combinePaths(directory, "dummy"), state.host.getCurrentDirectory?.());
+    const directoryPath = getNormalizedAbsolutePath(directory, state.host.getCurrentDirectory?.());
     const scope = getPackageScopeForPath(directoryPath, state);
     if (!scope) {
         if (state.traceEnabled) {

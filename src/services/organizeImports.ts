@@ -212,8 +212,7 @@ export function organizeImports(
     }
 }
 
-/** @internal */
-export function getDetectionLists(preferences: UserPreferences): { comparersToTest: Comparer<string>[]; typeOrdersToTest: OrganizeImportsTypeOrder[]; } {
+function getDetectionLists(preferences: UserPreferences): { comparersToTest: Comparer<string>[]; typeOrdersToTest: OrganizeImportsTypeOrder[]; } {
     // Returns the possible detection outcomes, given the user's preferences. The earlier in the list, the higher the priority.
     return {
         comparersToTest: typeof preferences.organizeImportsIgnoreCase === "boolean"

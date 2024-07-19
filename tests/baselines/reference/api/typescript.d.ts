@@ -214,6 +214,22 @@ declare namespace ts {
                  * The time spent creating or updating the auto-import program, in milliseconds.
                  */
                 createAutoImportProviderProgramDurationMs?: number;
+                /**
+                 * The time spent computing diagnostics, in milliseconds.
+                 */
+                diagnosticsDuration?: FileDiagnosticPerformanceData[];
+            }
+            /**
+             * Time spent computing each kind of diagnostics, in milliseconds.
+             */
+            export type DiagnosticPerformanceData = {
+                [Kind in DiagnosticEventKind]?: number;
+            };
+            export interface FileDiagnosticPerformanceData extends DiagnosticPerformanceData {
+                /**
+                 * The file for which the performance data is reported.
+                 */
+                file: string;
             }
             /**
              * Arguments for FileRequest messages.
@@ -1902,6 +1918,7 @@ declare namespace ts {
             }
             export interface RequestCompletedEventBody {
                 request_seq: number;
+                performanceData?: PerformanceData;
             }
             /**
              * Item of diagnostic information found in a DiagnosticEvent message.
@@ -1978,10 +1995,6 @@ declare namespace ts {
                  * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
                  */
                 spans?: TextSpan[];
-                /**
-                 * Time spent computing the diagnostics, in milliseconds.
-                 */
-                duration?: number;
             }
             export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
             /**
@@ -2523,6 +2536,7 @@ declare namespace ts {
                 private readonly knownCachesSet;
                 private readonly projectWatchers;
                 private safeList;
+                private pendingRunRequests;
                 private installRunCount;
                 private inFlightRequestCount;
                 abstract readonly typesRegistry: Map<string, MapLike<string>>;
@@ -2649,6 +2663,7 @@ declare namespace ts {
         interface ServerHost extends System {
             watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
             watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
+            preferNonRecursiveWatch?: boolean;
             setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
             clearTimeout(timeoutId: any): void;
             setImmediate(callback: (...args: any[]) => void, ...args: any[]): any;
@@ -2656,6 +2671,18 @@ declare namespace ts {
             gc?(): void;
             trace?(s: string): void;
             require?(initialPath: string, moduleName: string): ModuleImportResult;
+        }
+        interface InstallPackageOptionsWithProject extends InstallPackageOptions {
+            projectName: string;
+            projectRootPath: Path;
+        }
+        interface ITypingsInstaller {
+            isKnownTypesPackageName(name: string): boolean;
+            installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
+            enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
+            attach(projectService: ProjectService): void;
+            onProjectClosed(p: Project): void;
+            readonly globalTypingsCacheLocation: string | undefined;
         }
         function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings;
         function toNormalizedPath(fileName: string): NormalizedPath;
@@ -2715,6 +2742,7 @@ declare namespace ts {
             readonly containingProjects: Project[];
             private formatSettings;
             private preferences;
+            private realpath;
             constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: number);
             isScriptOpen(): boolean;
             open(newText: string | undefined): void;
@@ -2748,19 +2776,6 @@ declare namespace ts {
             positionToLineOffset(position: number): protocol.Location;
             isJavaScript(): boolean;
         }
-        interface InstallPackageOptionsWithProject extends InstallPackageOptions {
-            projectName: string;
-            projectRootPath: Path;
-        }
-        interface ITypingsInstaller {
-            isKnownTypesPackageName(name: string): boolean;
-            installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
-            enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
-            attach(projectService: ProjectService): void;
-            onProjectClosed(p: Project): void;
-            readonly globalTypingsCacheLocation: string | undefined;
-        }
-        const nullTypingsInstaller: ITypingsInstaller;
         function allRootFilesAreJsOrDts(project: Project): boolean;
         function allFilesAreJsOrDts(project: Project): boolean;
         enum ProjectKind {
@@ -2802,33 +2817,31 @@ declare namespace ts {
             private externalFiles;
             private missingFilesMap;
             private generatedFilesMap;
+            private hasAddedorRemovedFiles;
+            private hasAddedOrRemovedSymlinks;
             protected languageService: LanguageService;
             languageServiceEnabled: boolean;
             readonly trace?: (s: string) => void;
             readonly realpath?: (path: string) => string;
             private builderState;
-            /**
-             * Set of files names that were updated since the last call to getChangesSinceVersion.
-             */
             private updatedFileNames;
-            /**
-             * Set of files that was returned from the last call to getChangesSinceVersion.
-             */
             private lastReportedFileNames;
-            /**
-             * Last version that was reported.
-             */
             private lastReportedVersion;
             protected projectErrors: Diagnostic[] | undefined;
             protected isInitialLoadPending: () => boolean;
+            private typingsCache;
+            private typingWatchers;
             private readonly cancellationToken;
             isNonTsProject(): boolean;
             isJsOnlyProject(): boolean;
             static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
+            private exportMapCache;
+            private changedFilesForExportMapCache;
+            private moduleSpecifierCache;
+            private symlinks;
             readonly jsDocParsingMode: JSDocParsingMode | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
-            private get typingsCache();
             getCompilationSettings(): ts.CompilerOptions;
             getCompilerOptions(): ts.CompilerOptions;
             getNewLine(): string;
@@ -2895,6 +2908,8 @@ declare namespace ts {
              * @returns: true if set of files in the project stays the same and false - otherwise.
              */
             updateGraph(): boolean;
+            private closeWatchingTypingLocations;
+            private onTypingInstallerWatchInvoke;
             protected removeExistingTypings(include: string[]): string[];
             private updateGraphWorker;
             private detachScriptInfoFromProject;
@@ -2906,6 +2921,7 @@ declare namespace ts {
             getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
             getScriptInfo(uncheckedFileName: string): ts.server.ScriptInfo | undefined;
             filesToString(writeProjectFileNames: boolean): string;
+            private filesToStringWorker;
             setCompilerOptions(compilerOptions: CompilerOptions): void;
             setTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): void;
             getTypeAcquisition(): ts.TypeAcquisition;
@@ -2914,6 +2930,8 @@ declare namespace ts {
             protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
             /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
             refreshDiagnostics(): void;
+            private isDefaultProjectForOpenFiles;
+            private getCompilerOptionsForNoDtsResolutionProject;
         }
         /**
          * If a file is opened and no tsconfig (or jsconfig) is found,
@@ -2933,6 +2951,7 @@ declare namespace ts {
         }
         class AutoImportProviderProject extends Project {
             private hostProject;
+            private static readonly maxDependencies;
             private rootFileNames;
             updateGraph(): boolean;
             hasRoots(): boolean;
@@ -2949,6 +2968,8 @@ declare namespace ts {
         class ConfiguredProject extends Project {
             readonly canonicalConfigFilePath: NormalizedPath;
             private projectReferences;
+            private compilerHost?;
+            private releaseParsedConfig;
             /**
              * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
              * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -3139,6 +3160,7 @@ declare namespace ts {
             configFileName?: NormalizedPath;
             configFileErrors?: readonly Diagnostic[];
         }
+        const nullTypingsInstaller: ITypingsInstaller;
         interface ProjectServiceOptions {
             host: ServerHost;
             logger: Logger;
@@ -3164,16 +3186,8 @@ declare namespace ts {
         }
         class ProjectService {
             private readonly nodeModulesWatchers;
-            /**
-             * Contains all the deleted script info's version information so that
-             * it does not reset when creating script info again
-             * (and could have potentially collided with version where contents mismatch)
-             */
             private readonly filenameToScriptInfoVersion;
             private readonly allJsFilesForOpenFileTelemetry;
-            /**
-             * maps external project file name to list of config files that were the part of this project
-             */
             private readonly externalProjectToConfiguredProjectMap;
             /**
              * external projects (configuration and list of root files is not controlled by tsserver)
@@ -3191,13 +3205,8 @@ declare namespace ts {
              * Open files: with value being project root path, and key being Path of the file that is open
              */
             readonly openFiles: Map<Path, NormalizedPath | undefined>;
-            /** Config files looked up and cached config files for open script info */
             private readonly configFileForOpenFiles;
-            /** Set of open script infos that are root of inferred project */
             private rootOfInferredProjects;
-            /**
-             * Map of open files that are opened without complete path but have projectRoot as current directory
-             */
             private readonly openFilesWithNonRootedDiskPath;
             private compilerOptionsForInferredProjects;
             private compilerOptionsForInferredProjectsPerProjectRoot;
@@ -3205,18 +3214,11 @@ declare namespace ts {
             private watchOptionsForInferredProjectsPerProjectRoot;
             private typeAcquisitionForInferredProjects;
             private typeAcquisitionForInferredProjectsPerProjectRoot;
-            /**
-             * Project size for configured or external projects
-             */
             private readonly projectToSizeMap;
             private readonly hostConfiguration;
             private safelist;
             private readonly legacySafelist;
             private pendingProjectUpdates;
-            /**
-             * All the open script info that needs recalculation of the default project,
-             * this also caches config file info before config file change was detected to use it in case projects are not updated yet
-             */
             private pendingOpenFileProjectUpdates?;
             readonly currentDirectory: NormalizedPath;
             readonly toCanonicalFileName: (f: string) => string;
@@ -3234,8 +3236,11 @@ declare namespace ts {
             readonly allowLocalPluginLoads: boolean;
             readonly typesMapLocation: string | undefined;
             readonly serverMode: LanguageServiceMode;
-            /** Tracks projects that we have already sent telemetry for. */
             private readonly seenProjects;
+            private readonly sharedExtendedConfigFileWatchers;
+            private readonly extendedConfigCache;
+            private packageJsonFilesMap;
+            private incompleteCompletionsCache;
             private performanceEventHandler?;
             private pendingPluginEnablements?;
             private currentPluginEnablementPromise?;
@@ -3249,20 +3254,9 @@ declare namespace ts {
             setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.InferredProjectCompilerOptions, projectRootPath?: string): void;
             findProject(projectName: string): Project | undefined;
             getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
-            /**
-             * If there is default project calculation pending for this file,
-             * then it completes that calculation so that correct default project is used for the project
-             */
             private tryGetDefaultProjectForEnsuringConfiguredProjectForFile;
             private doEnsureDefaultProjectForFile;
             getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo | undefined;
-            /**
-             * Ensures the project structures are upto date
-             * This means,
-             * - we go through all the projects and update them if they are dirty
-             * - if updates reflect some change in structure or there was pending request to ensure projects for open files
-             *   ensure that each open script info has project
-             */
             private ensureProjectStructuresUptoDate;
             getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
             getPreferences(file: NormalizedPath): protocol.UserPreferences;
@@ -3273,37 +3267,29 @@ declare namespace ts {
             private delayUpdateSourceInfoProjects;
             private delayUpdateProjectsOfScriptInfoPath;
             private handleDeletedFile;
+            private watchWildcardDirectory;
+            private delayUpdateProjectsFromParsedConfigOnConfigFileChange;
+            private onConfigFileChanged;
             private removeProject;
             private assignOrphanScriptInfosToInferredProject;
-            /**
-             * Remove this file from the set of open, non-configured files.
-             * @param info The file that has been closed or newly configured
-             */
             private closeOpenFile;
             private deleteScriptInfo;
             private configFileExists;
-            /**
-             * This function tries to search for a tsconfig.json for the given file.
-             * This is different from the method the compiler uses because
-             * the compiler can assume it will always start searching in the
-             * current directory (the directory in which tsc was invoked).
-             * The server must start searching from the directory containing
-             * the newly opened file.
-             */
+            private createConfigFileWatcherForParsedConfig;
             private forEachConfigFileLocation;
-            /** Get cached configFileName for scriptInfo or ancestor of open script info */
             private getConfigFileNameForFileFromCache;
-            /** Caches the configFilename for script info or ancestor of open script info */
             private setConfigFileNameForFileInCache;
             private printProjects;
             private getConfiguredProjectByCanonicalConfigFilePath;
             private findExternalProjectByProjectName;
-            /** Get a filename if the language service exceeds the maximum allowed program size; otherwise returns undefined. */
             private getFilenameForExceededTotalSizeLimitForNonTsFiles;
             private createExternalProject;
             private addFilesToNonInferredProject;
+            private loadConfiguredProject;
             private updateNonInferredProjectFiles;
             private updateRootAndOptionsOfNonInferredProject;
+            private reloadFileNamesOfParsedConfig;
+            private clearSemanticCache;
             private getOrCreateInferredProjectForProjectRootPathIfEnabled;
             private getOrCreateSingleInferredProjectIfEnabled;
             private getOrCreateSingleInferredWithoutProjectRoot;
@@ -3329,23 +3315,14 @@ declare namespace ts {
             private addSourceInfoToSourceMap;
             private addMissingSourceMapFile;
             setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
+            private getWatchOptionsFromProjectWatchOptions;
             closeLog(): void;
             /**
              * This function rebuilds the project for every file opened by the client
              * This does not reload contents of open files from disk. But we could do that if needed
              */
             reloadProjects(): void;
-            /**
-             * Remove the root of inferred project if script info is part of another project
-             */
             private removeRootOfInferredProjectIfNowPartOfOtherProject;
-            /**
-             * This function is to update the project structure for every inferred project.
-             * It is called on the premise that all the configured projects are
-             * up to date.
-             * This will go through open files and assign them to inferred project if open file is not part of any other project
-             * After that all the inferred project graphs are updated
-             */
             private ensureProjectForOpenFiles;
             /**
              * Open file whose contents is managed by the client
@@ -3356,16 +3333,7 @@ declare namespace ts {
             private findExternalProjectContainingOpenScriptInfo;
             private getOrCreateOpenScriptInfo;
             private assignProjectToOpenedScriptInfo;
-            /**
-             * Finds the default configured project for given info
-             * For any tsconfig found, it looks into that project, if not then all its references,
-             * The search happens for all tsconfigs till projectRootPath
-             */
             private tryFindDefaultConfiguredProjectForOpenScriptInfo;
-            /**
-             * Finds the default configured project, if found, it creates the solution projects (does not load them right away)
-             * with Find: finds the projects even if the project is deferredClosed
-             */
             private tryFindDefaultConfiguredProjectAndLoadAncestorsForOpenScriptInfo;
             private ensureProjectChildren;
             private cleanupConfiguredProjects;
@@ -3381,7 +3349,6 @@ declare namespace ts {
             private collectChanges;
             closeExternalProject(uncheckedFileName: string): void;
             openExternalProjects(projects: protocol.ExternalProject[]): void;
-            /** Makes a filename safe to insert in a RegExp */
             private static readonly filenameEscapeRegexp;
             private static escapeFilenameForRegex;
             resetSafeList(): void;
@@ -3389,9 +3356,12 @@ declare namespace ts {
             private applySafeListWorker;
             openExternalProject(proj: protocol.ExternalProject): void;
             hasDeferredExtension(): boolean;
+            private endEnablePlugin;
             private enableRequestedPluginsAsync;
             private enableRequestedPluginsWorker;
             configurePlugin(args: protocol.ConfigurePluginRequestArguments): void;
+            private watchPackageJsonFile;
+            private onPackageJsonChange;
         }
         function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string;
         interface ServerCancellationToken extends HostCancellationToken {
@@ -3458,6 +3428,7 @@ declare namespace ts {
             constructor(opts: SessionOptions);
             private sendRequestCompletedEvent;
             private addPerformanceData;
+            private addDiagnosticsPerformanceData;
             private performanceEventHandler;
             private defaultEventHandler;
             private projectsUpdatedInBackgroundEvent;
@@ -3471,7 +3442,6 @@ declare namespace ts {
             private suggestionCheck;
             private regionSemanticCheck;
             private sendDiagnosticsEvent;
-            /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
             private updateErrorCheck;
             private cleanProjects;
             private cleanup;
@@ -3518,10 +3488,6 @@ declare namespace ts {
             private toSpanGroups;
             private getReferences;
             private getFileReferences;
-            /**
-             * @param fileName is the name of the file to be opened
-             * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
-             */
             private openClientFile;
             private getPosition;
             private getPositionInFile;
@@ -6025,19 +5991,67 @@ declare namespace ts {
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
         /**
-         * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
-         * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
-         * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
-         * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
-         * impact on module resolution, emit, or type checking.
+         * Calculates the final resolution mode for a given module reference node. This function only returns a result when module resolution
+         * settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided via import attributes,
+         * which cause an `import` or `require` condition to be used during resolution regardless of module resolution settings. In absence of
+         * overriding attributes, and in modes that support differing resolution, the result indicates the syntax the usage would emit to JavaScript.
+         * Some examples:
+         *
+         * ```ts
+         * // tsc foo.mts --module nodenext
+         * import {} from "mod";
+         * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
+         *
+         * // tsc foo.cts --module nodenext
+         * import {} from "mod";
+         * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
+         *
+         * // tsc foo.ts --module preserve --moduleResolution bundler
+         * import {} from "mod";
+         * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
+         * // supports conditional imports/exports
+         *
+         * // tsc foo.ts --module preserve --moduleResolution node10
+         * import {} from "mod";
+         * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
+         * // does not support conditional imports/exports
+         *
+         * // tsc foo.ts --module commonjs --moduleResolution node10
+         * import type {} from "mod" with { "resolution-mode": "import" };
+         * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
+         * ```
          */
         getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
         /**
-         * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
-         * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
-         * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
-         * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
-         * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
+         * Calculates the final resolution mode for an import at some index within a file's `imports` list. This function only returns a result
+         * when module resolution settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided
+         * via import attributes, which cause an `import` or `require` condition to be used during resolution regardless of module resolution
+         * settings. In absence of overriding attributes, and in modes that support differing resolution, the result indicates the syntax the
+         * usage would emit to JavaScript. Some examples:
+         *
+         * ```ts
+         * // tsc foo.mts --module nodenext
+         * import {} from "mod";
+         * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
+         *
+         * // tsc foo.cts --module nodenext
+         * import {} from "mod";
+         * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
+         *
+         * // tsc foo.ts --module preserve --moduleResolution bundler
+         * import {} from "mod";
+         * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
+         * // supports conditional imports/exports
+         *
+         * // tsc foo.ts --module preserve --moduleResolution node10
+         * import {} from "mod";
+         * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
+         * // does not support conditional imports/exports
+         *
+         * // tsc foo.ts --module commonjs --moduleResolution node10
+         * import type {} from "mod" with { "resolution-mode": "import" };
+         * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
+         * ```
          */
         getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
         getProjectReferences(): readonly ProjectReference[] | undefined;
@@ -6994,6 +7008,7 @@ declare namespace ts {
         strictBindCallApply?: boolean;
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
+        strictBuiltinIteratorReturn?: boolean;
         stripInternal?: boolean;
         /** @deprecated */
         suppressExcessPropertyErrors?: boolean;
@@ -9396,24 +9411,43 @@ declare namespace ts {
     function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
     /**
      * Use `program.getModeForUsageLocation`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
-     * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
-     * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
-     * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
-     * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
-     * impact on module resolution, emit, or type checking.
+     * Calculates the final resolution mode for a given module reference node. This function only returns a result when module resolution
+     * settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided via import attributes,
+     * which cause an `import` or `require` condition to be used during resolution regardless of module resolution settings. In absence of
+     * overriding attributes, and in modes that support differing resolution, the result indicates the syntax the usage would emit to JavaScript.
+     * Some examples:
+     *
+     * ```ts
+     * // tsc foo.mts --module nodenext
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
+     *
+     * // tsc foo.cts --module nodenext
+     * import {} from "mod";
+     * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
+     *
+     * // tsc foo.ts --module preserve --moduleResolution bundler
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
+     * // supports conditional imports/exports
+     *
+     * // tsc foo.ts --module preserve --moduleResolution node10
+     * import {} from "mod";
+     * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
+     * // does not support conditional imports/exports
+     *
+     * // tsc foo.ts --module commonjs --moduleResolution node10
+     * import type {} from "mod" with { "resolution-mode": "import" };
+     * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
+     * ```
+     *
      * @param file The file the import or import-like reference is contained within
      * @param usage The module reference string
      * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
      * should be the options of the referenced project, not the referencing project.
      * @returns The final resolution mode of the import
      */
-    function getModeForUsageLocation(
-        file: {
-            impliedNodeFormat?: ResolutionMode;
-        },
-        usage: StringLiteralLike,
-        compilerOptions: CompilerOptions,
-    ): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike, compilerOptions: CompilerOptions): ResolutionMode;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
@@ -9639,6 +9673,7 @@ declare namespace ts {
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         /** If provided, will be used to reset existing delayed compilation */
         clearTimeout?(timeoutId: any): void;
+        preferNonRecursiveWatch?: boolean;
     }
     interface ProgramHost<T extends BuilderProgram> {
         /**

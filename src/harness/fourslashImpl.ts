@@ -1,3 +1,4 @@
+import sourceMapSupport from "source-map-support";
 import * as fakes from "./_namespaces/fakes.js";
 import * as FourSlashInterface from "./_namespaces/FourSlashInterface.js";
 import * as Harness from "./_namespaces/Harness.js";
@@ -2673,17 +2674,12 @@ export class TestState {
         if (info === undefined) return "No completion info.";
         const { entries } = info;
 
-        function pad(s: string, length: number) {
-            return s + new Array(length - s.length + 1).join(" ");
-        }
-        function max<T>(arr: T[], selector: (x: T) => number): number {
-            return arr.reduce((prev, x) => Math.max(prev, selector(x)), 0);
-        }
-        const longestNameLength = max(entries, m => m.name.length);
-        const longestKindLength = max(entries, m => m.kind.length);
+        const longestNameLength = ts.maxBy(entries, 0, m => m.name.length);
+        const longestKindLength = ts.maxBy(entries, 0, m => m.kind.length);
         entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
-        const membersString = entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`).join("\n");
-        Harness.IO.log(membersString);
+
+        const formattedEntries = entries.map(m => `${m.name.padEnd(longestNameLength)} ${m.kind.padEnd(longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source ?? ""}`);
+        Harness.IO.log(formattedEntries.join("\n"));
     }
 
     public printContext() {
@@ -4664,22 +4660,9 @@ function runCode(code: string, state: TestState, fileName: string): void {
     const generatedFile = ts.changeExtension(fileName, ".js");
     const wrappedCode = `(function(ts, test, goTo, config, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled, ignoreInterpolations) {${code}\n//# sourceURL=${ts.getBaseFileName(generatedFile)}\n})`;
 
-    type SourceMapSupportModule = typeof import("source-map-support") & {
-        // TODO(rbuckton): This is missing from the DT definitions and needs to be added.
-        resetRetrieveHandlers(): void;
-    };
-
     // Provide the content of the current test to 'source-map-support' so that it can give us the correct source positions
     // for test failures.
-    let sourceMapSupportModule: SourceMapSupportModule | undefined;
-    try {
-        sourceMapSupportModule = require("source-map-support");
-    }
-    catch {
-        // do nothing
-    }
-
-    sourceMapSupportModule?.install({
+    sourceMapSupport.install({
         retrieveFile: path => {
             return path === generatedFile ? wrappedCode :
                 undefined!;
@@ -4705,7 +4688,7 @@ function runCode(code: string, state: TestState, fileName: string): void {
         throw err;
     }
     finally {
-        sourceMapSupportModule?.resetRetrieveHandlers();
+        sourceMapSupport.resetRetrieveHandlers();
     }
 }
 

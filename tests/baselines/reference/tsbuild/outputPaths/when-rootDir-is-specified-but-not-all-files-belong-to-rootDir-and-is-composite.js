@@ -117,15 +117,15 @@ exports.x = 10;
   "semanticDiagnosticsPerFile": [
     [
       "../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./src/index.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./types/type.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "latestChangedDtsFile": "./types/type.d.ts",

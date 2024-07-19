@@ -6,3 +6,8 @@ class c {
 >  : ^
 }
 
+=== b.js ===
+function bar() {
+>bar : () => void
+>    : ^^^^^^^^^^
+}

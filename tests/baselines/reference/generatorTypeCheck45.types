@@ -22,10 +22,9 @@ foo("", function* () { yield x => x.length }, p => undefined); // T is fixed, sh
 >    : ^ ^^ ^^ ^^ ^^   ^^                           ^^    ^^           ^^^^^ 
 >"" : ""
 >   : ^^
->function* () { yield x => x.length } : () => Generator<(x: string) => number, void, undefined>
->                                     : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->yield x => x.length : undefined
->                    : ^^^^^^^^^
+>function* () { yield x => x.length } : () => Generator<(x: string) => number, void, any>
+>                                     : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield x => x.length : any
 >x => x.length : (x: string) => number
 >              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string

@@ -967,6 +967,10 @@
         "category": "Error",
         "code": 1292
     },
+    "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
+        "category": "Error",
+        "code": 1293
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1028,7 +1032,7 @@
         "category": "Error",
         "code": 1323
     },
-    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 1324
     },
@@ -1801,9 +1805,13 @@
         "category": "Error",
         "code": 1537
     },
-    "A `bigint` literal may not be used as a property name.": {
+    "Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.": {
         "category": "Error",
         "code": 1538
+    },
+    "A `bigint` literal may not be used as a property name.": {
+        "category": "Error",
+        "code": 1539
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -2683,10 +2691,6 @@
     "'await' expressions cannot be used in a parameter initializer.": {
         "category": "Error",
         "code": 2524
-    },
-    "Initializer provides no value for this binding element and the binding element has no default value.": {
-        "category": "Error",
-        "code": 2525
     },
     "A 'this' type is available only in a non-static member of a class or interface.": {
         "category": "Error",
@@ -4216,7 +4220,7 @@
         "category": "Error",
         "code": 4092
     },
-    "Property '{0}' of exported class expression may not be private or protected.": {
+    "Property '{0}' of exported anonymous class type may not be private or protected.": {
         "category": "Error",
         "code": 4094
     },
@@ -5116,10 +5120,6 @@
     "Module '{0}' was resolved as locally declared ambient module in file '{1}'.": {
         "category": "Message",
         "code": 6144
-    },
-    "Module '{0}' was resolved as ambient module declared in '{1}' since this file was not modified.": {
-        "category": "Message",
-        "code": 6145
     },
     "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
         "category": "Message",
@@ -6376,6 +6376,10 @@
         "code": 6719
     },
 
+    "Built-in iterators are instantiated with a 'TReturn' type of 'undefined' instead of 'any'.": {
+        "category": "Message",
+        "code": 6720
+    },
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
         "code": 6803

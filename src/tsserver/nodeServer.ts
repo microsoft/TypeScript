@@ -1,3 +1,8 @@
+import childProcess from "child_process";
+import fs from "fs";
+import net from "net";
+import os from "os";
+import readline from "readline";
 import {
     CharacterCodes,
     combinePaths,
@@ -9,7 +14,6 @@ import {
     getDirectoryPath,
     getRootLength,
     LanguageServiceMode,
-    MapLike,
     noop,
     noopFileWatcher,
     normalizePath,
@@ -35,24 +39,6 @@ interface LogOptions {
     detailLevel?: ts.server.LogLevel;
     traceToConsole?: boolean;
     logToFile?: boolean;
-}
-
-interface NodeChildProcess {
-    send(message: any, sendHandle?: any): void;
-    on(message: "message" | "exit", f: (m: any) => void): void;
-    kill(): void;
-    pid: number;
-}
-
-interface ReadLineOptions {
-    input: NodeJS.ReadableStream;
-    output?: NodeJS.WritableStream;
-    terminal?: boolean;
-    historySize?: number;
-}
-
-interface NodeSocket {
-    write(data: string, encoding: string): boolean;
 }
 
 function parseLoggingEnvironmentString(logEnvStr: string | undefined): LogOptions {
@@ -123,41 +109,6 @@ function parseServerMode(): LanguageServiceMode | string | undefined {
 /** @internal */
 export function initializeNodeSystem(): StartInput {
     const sys = Debug.checkDefined(ts.sys) as ts.server.ServerHost;
-    const childProcess: {
-        execFileSync(file: string, args: string[], options: { stdio: "ignore"; env: MapLike<string>; }): string | Buffer;
-    } = require("child_process");
-
-    interface Stats {
-        isFile(): boolean;
-        isDirectory(): boolean;
-        isBlockDevice(): boolean;
-        isCharacterDevice(): boolean;
-        isSymbolicLink(): boolean;
-        isFIFO(): boolean;
-        isSocket(): boolean;
-        dev: number;
-        ino: number;
-        mode: number;
-        nlink: number;
-        uid: number;
-        gid: number;
-        rdev: number;
-        size: number;
-        blksize: number;
-        blocks: number;
-        atime: Date;
-        mtime: Date;
-        ctime: Date;
-        birthtime: Date;
-    }
-
-    const fs: {
-        openSync(path: string, options: string): number;
-        close(fd: number, callback: (err: NodeJS.ErrnoException) => void): void;
-        writeSync(fd: number, buffer: Buffer, offset: number, length: number, position?: number): number;
-        statSync(path: string): Stats;
-        stat(path: string, callback?: (err: NodeJS.ErrnoException, stats: Stats) => any): void;
-    } = require("fs");
 
     class Logger implements Logger {
         private seq = 0;
@@ -231,7 +182,7 @@ export function initializeNodeSystem(): StartInput {
             if (this.fd >= 0) {
                 const buf = Buffer.from(s);
                 // eslint-disable-next-line no-restricted-syntax
-                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
+                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
             }
             if (this.traceToConsole) {
                 console.warn(s);
@@ -326,7 +277,7 @@ export function initializeNodeSystem(): StartInput {
 
     let cancellationToken: ts.server.ServerCancellationToken;
     try {
-        const factory = require("./cancellationToken");
+        const factory = require("./cancellationToken.js");
         cancellationToken = factory(sys.args);
     }
     catch (e) {
@@ -439,23 +390,6 @@ function parseEventPort(eventPortStr: string | undefined) {
     return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
 }
 function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger, cancellationToken: ts.server.ServerCancellationToken) {
-    const childProcess: {
-        fork(modulePath: string, args: string[], options?: { execArgv: string[]; env?: MapLike<string>; }): NodeChildProcess;
-    } = require("child_process");
-
-    const os: {
-        homedir?(): string;
-        tmpdir(): string;
-    } = require("os");
-
-    const net: {
-        connect(options: { port: number; }, onConnect?: () => void): NodeSocket;
-    } = require("net");
-
-    const readline: {
-        createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
-    } = require("readline");
-
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
@@ -463,7 +397,7 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
     });
 
     class NodeTypingsInstallerAdapter extends ts.server.TypingsInstallerAdapter {
-        protected override installer!: NodeChildProcess;
+        protected override installer!: childProcess.ChildProcess;
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang
         // (see https://github.com/nodejs/node/issues/7657).
@@ -533,7 +467,7 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
 
             const typingsInstaller = combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typingsInstaller.js");
             this.installer = childProcess.fork(typingsInstaller, args, { execArgv });
-            this.installer.on("message", m => this.handleMessage(m));
+            this.installer.on("message", m => this.handleMessage(m as any));
 
             // We have to schedule this event to the next tick
             // cause this fn will be called during
@@ -550,7 +484,7 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
 
     class IOSession extends ts.server.Session {
         private eventPort: number | undefined;
-        private eventSocket: NodeSocket | undefined;
+        private eventSocket: net.Socket | undefined;
         private socketEventQueue: { body: any; eventName: string; }[] | undefined;
         /** No longer needed if syntax target is es6 or above. Any access to "this" before initialized will be a runtime error. */
         private constructed: boolean | undefined;

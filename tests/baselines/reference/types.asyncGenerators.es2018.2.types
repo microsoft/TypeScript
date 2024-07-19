@@ -48,12 +48,12 @@ async function * inferReturnType3() {
 const assignability1: () => AsyncIterableIterator<number> = async function * () {
 >assignability1 : () => AsyncIterableIterator<number>
 >               : ^^^^^^                             
->async function * () {    yield "a";} : () => AsyncGenerator<string, void, undefined>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield "a";} : () => AsyncGenerator<string, void, any>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield "a";
->yield "a" : undefined
->          : ^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 
@@ -61,8 +61,8 @@ const assignability1: () => AsyncIterableIterator<number> = async function * () 
 const assignability2: () => AsyncIterableIterator<number> = async function * () {
 >assignability2 : () => AsyncIterableIterator<number>
 >               : ^^^^^^                             
->async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, undefined>
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, any>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* ["a", "b"];
 >yield* ["a", "b"] : any
@@ -78,20 +78,20 @@ const assignability2: () => AsyncIterableIterator<number> = async function * () 
 const assignability3: () => AsyncIterableIterator<number> = async function * () {
 >assignability3 : () => AsyncIterableIterator<number>
 >               : ^^^^^^                             
->async function * () {    yield* (async function * () { yield "a"; })();} : () => AsyncGenerator<string, void, undefined>
->                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* (async function * () { yield "a"; })();} : () => AsyncGenerator<string, void, any>
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* (async function * () { yield "a"; })();
 >yield* (async function * () { yield "a"; })() : void
 >                                              : ^^^^
->(async function * () { yield "a"; })() : AsyncGenerator<string, void, undefined>
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, undefined>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->async function * () { yield "a"; } : () => AsyncGenerator<string, void, undefined>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->yield "a" : undefined
->          : ^^^^^^^^^
+>(async function * () { yield "a"; })() : AsyncGenerator<string, void, any>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, any>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () { yield "a"; } : () => AsyncGenerator<string, void, any>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 
@@ -99,12 +99,12 @@ const assignability3: () => AsyncIterableIterator<number> = async function * () 
 const assignability4: () => AsyncIterable<number> = async function * () {
 >assignability4 : () => AsyncIterable<number>
 >               : ^^^^^^                     
->async function * () {    yield "a";} : () => AsyncGenerator<string, void, undefined>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield "a";} : () => AsyncGenerator<string, void, any>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield "a";
->yield "a" : undefined
->          : ^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 
@@ -112,8 +112,8 @@ const assignability4: () => AsyncIterable<number> = async function * () {
 const assignability5: () => AsyncIterable<number> = async function * () {
 >assignability5 : () => AsyncIterable<number>
 >               : ^^^^^^                     
->async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, undefined>
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, any>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* ["a", "b"];
 >yield* ["a", "b"] : any
@@ -129,20 +129,20 @@ const assignability5: () => AsyncIterable<number> = async function * () {
 const assignability6: () => AsyncIterable<number> = async function * () {
 >assignability6 : () => AsyncIterable<number>
 >               : ^^^^^^                     
->async function * () {    yield* (async function * () { yield "a"; })();} : () => AsyncGenerator<string, void, undefined>
->                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* (async function * () { yield "a"; })();} : () => AsyncGenerator<string, void, any>
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* (async function * () { yield "a"; })();
 >yield* (async function * () { yield "a"; })() : void
 >                                              : ^^^^
->(async function * () { yield "a"; })() : AsyncGenerator<string, void, undefined>
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, undefined>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->async function * () { yield "a"; } : () => AsyncGenerator<string, void, undefined>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->yield "a" : undefined
->          : ^^^^^^^^^
+>(async function * () { yield "a"; })() : AsyncGenerator<string, void, any>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, any>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () { yield "a"; } : () => AsyncGenerator<string, void, any>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 
@@ -150,12 +150,12 @@ const assignability6: () => AsyncIterable<number> = async function * () {
 const assignability7: () => AsyncIterator<number> = async function * () {
 >assignability7 : () => AsyncIterator<number>
 >               : ^^^^^^                     
->async function * () {    yield "a";} : () => AsyncGenerator<string, void, undefined>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield "a";} : () => AsyncGenerator<string, void, any>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield "a";
->yield "a" : undefined
->          : ^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 
@@ -163,8 +163,8 @@ const assignability7: () => AsyncIterator<number> = async function * () {
 const assignability8: () => AsyncIterator<number> = async function * () {
 >assignability8 : () => AsyncIterator<number>
 >               : ^^^^^^                     
->async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, undefined>
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* ["a", "b"];} : () => AsyncGenerator<string, void, any>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* ["a", "b"];
 >yield* ["a", "b"] : any
@@ -180,20 +180,20 @@ const assignability8: () => AsyncIterator<number> = async function * () {
 const assignability9: () => AsyncIterator<number> = async function * () {
 >assignability9 : () => AsyncIterator<number>
 >               : ^^^^^^                     
->async function * () {    yield* (async function * () { yield "a"; })();} : () => AsyncGenerator<string, void, undefined>
->                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* (async function * () { yield "a"; })();} : () => AsyncGenerator<string, void, any>
+>                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* (async function * () { yield "a"; })();
 >yield* (async function * () { yield "a"; })() : void
 >                                              : ^^^^
->(async function * () { yield "a"; })() : AsyncGenerator<string, void, undefined>
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, undefined>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->async function * () { yield "a"; } : () => AsyncGenerator<string, void, undefined>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->yield "a" : undefined
->          : ^^^^^^^^^
+>(async function * () { yield "a"; })() : AsyncGenerator<string, void, any>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, any>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () { yield "a"; } : () => AsyncGenerator<string, void, any>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 
@@ -203,8 +203,8 @@ async function * explicitReturnType1(): AsyncIterableIterator<number> {
 >                    : ^^^^^^                             
 
     yield "a";
->yield "a" : undefined
->          : ^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 }
@@ -229,14 +229,14 @@ async function * explicitReturnType3(): AsyncIterableIterator<number> {
     yield* (async function * () { yield "a"; })();
 >yield* (async function * () { yield "a"; })() : void
 >                                              : ^^^^
->(async function * () { yield "a"; })() : AsyncGenerator<string, void, undefined>
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, undefined>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->async function * () { yield "a"; } : () => AsyncGenerator<string, void, undefined>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->yield "a" : undefined
->          : ^^^^^^^^^
+>(async function * () { yield "a"; })() : AsyncGenerator<string, void, any>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, any>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () { yield "a"; } : () => AsyncGenerator<string, void, any>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 }
@@ -245,8 +245,8 @@ async function * explicitReturnType4(): AsyncIterable<number> {
 >                    : ^^^^^^                     
 
     yield "a";
->yield "a" : undefined
->          : ^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 }
@@ -271,14 +271,14 @@ async function * explicitReturnType6(): AsyncIterable<number> {
     yield* (async function * () { yield "a"; })();
 >yield* (async function * () { yield "a"; })() : void
 >                                              : ^^^^
->(async function * () { yield "a"; })() : AsyncGenerator<string, void, undefined>
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, undefined>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->async function * () { yield "a"; } : () => AsyncGenerator<string, void, undefined>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->yield "a" : undefined
->          : ^^^^^^^^^
+>(async function * () { yield "a"; })() : AsyncGenerator<string, void, any>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, any>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () { yield "a"; } : () => AsyncGenerator<string, void, any>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 }
@@ -287,8 +287,8 @@ async function * explicitReturnType7(): AsyncIterator<number> {
 >                    : ^^^^^^                     
 
     yield "a";
->yield "a" : undefined
->          : ^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 }
@@ -313,14 +313,14 @@ async function * explicitReturnType9(): AsyncIterator<number> {
     yield* (async function * () { yield "a"; })();
 >yield* (async function * () { yield "a"; })() : void
 >                                              : ^^^^
->(async function * () { yield "a"; })() : AsyncGenerator<string, void, undefined>
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, undefined>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->async function * () { yield "a"; } : () => AsyncGenerator<string, void, undefined>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->yield "a" : undefined
->          : ^^^^^^^^^
+>(async function * () { yield "a"; })() : AsyncGenerator<string, void, any>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(async function * () { yield "a"; }) : () => AsyncGenerator<string, void, any>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () { yield "a"; } : () => AsyncGenerator<string, void, any>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>yield "a" : any
+>          : ^^^
 >"a" : "a"
 >    : ^^^
 }
@@ -329,8 +329,8 @@ async function * explicitReturnType10(): IterableIterator<number> {
 >                     : ^^^^^^                        
 
     yield 1;
->yield 1 : undefined
->        : ^^^^^^^^^
+>yield 1 : any
+>        : ^^^
 >1 : 1
 >  : ^
 }
@@ -349,8 +349,8 @@ async function * explicitReturnType12(): Iterator<number> {
 >                     : ^^^^^^                
 
     yield 1;
->yield 1 : undefined
->        : ^^^^^^^^^
+>yield 1 : any
+>        : ^^^
 >1 : 1
 >  : ^
 }
