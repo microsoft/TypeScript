@@ -218,6 +218,7 @@ export default tseslint.config(
         files: ["src/harness/**", "src/testRunner/**"],
         rules: {
             "no-restricted-globals": "off",
+            "regexp/no-super-linear-backtracking": "off",
         },
     },
     {
