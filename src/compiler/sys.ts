@@ -1488,6 +1488,8 @@ export let sys: System = (() => {
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
         const fsRealpath = !!_fs.realpathSync.native ? process.platform === "win32" ? fsRealPathHandlingLongPath : _fs.realpathSync.native : _fs.realpathSync;
 
+        const statSyncOptions = { throwIfNoEntry: false } as const;
+
         // If our filename is "sys.js", then we are executing unbundled on the raw tsc output.
         // In that case, simulate a faked path in the directory where a bundle would normally
         // appear (e.g. the directory containing lib.*.d.ts files).
@@ -1627,7 +1629,7 @@ export let sys: System = (() => {
         function statSync(path: string): import("fs").Stats | undefined {
             // throwIfNoEntry is available in Node 14.17 and above, which matches our supported range.
             try {
-                return _fs.statSync(path, { throwIfNoEntry: false });
+                return _fs.statSync(path, statSyncOptions);
             }
             catch {
                 // This should never happen as we are passing throwIfNoEntry: false,
