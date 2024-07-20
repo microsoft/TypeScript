@@ -8,7 +8,7 @@ import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 export function sanitizeSysOutput(output: string) {
     return output
         .replace(/Elapsed::\s\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
-        .replace(/\d\d:\d\d:\d\d\s(A|P)M/g, "HH:MM:SS AM");
+        .replace(/\d\d:\d\d:\d\d\s(?:A|P)M/g, "HH:MM:SS AM");
 }
 
 export type CommandLineProgram = [ts.Program, ts.BuilderProgram?];
