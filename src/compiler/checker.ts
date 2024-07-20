@@ -18760,7 +18760,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(indexNode, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(indexType));
             }
             else {
-                const typeString = indexNode.kind === SyntaxKind.BigIntLiteral ? `bigint` : typeToString(indexType);
+                const typeString = indexNode.kind === SyntaxKind.BigIntLiteral ? "bigint" : typeToString(indexType);
                 error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeString);
             }
         }
@@ -43891,7 +43891,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (node.name.kind === SyntaxKind.BigIntLiteral) {
-            error(node.name, Diagnostics.A_bigint_literal_may_not_be_used_as_a_property_name);
+            error(node.name, Diagnostics.A_bigint_literal_cannot_be_used_as_a_property_name);
         }
 
         const type = convertAutoToAny(getTypeOfSymbol(symbol));
@@ -51094,7 +51094,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         checkGrammarNumericLiteral(name);
                     }
                     if (name.kind === SyntaxKind.BigIntLiteral) {
-                        addErrorOrSuggestion(/*isError*/ true, createDiagnosticForNode(name, Diagnostics.A_bigint_literal_may_not_be_used_as_a_property_name));
+                        addErrorOrSuggestion(/*isError*/ true, createDiagnosticForNode(name, Diagnostics.A_bigint_literal_cannot_be_used_as_a_property_name));
                     }
                     currentKind = DeclarationMeaning.PropertyAssignment;
                     break;
