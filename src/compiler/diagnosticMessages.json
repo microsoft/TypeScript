@@ -1809,6 +1809,10 @@
         "category": "Error",
         "code": 1538
     },
+    "A 'bigint' literal cannot be used as a property name.": {
+        "category": "Error",
+        "code": 1539
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

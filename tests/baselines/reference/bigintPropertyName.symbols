@@ -1,0 +1,147 @@
+//// [tests/cases/compiler/bigintPropertyName.ts] ////
+
+=== a.ts ===
+// BigInt cannot be used as an object literal property
+{ ({1n: 123}); };
+>1n : Symbol(1n, Decl(a.ts, 1, 4))
+
+const bigNum: bigint = 0n;
+>bigNum : Symbol(bigNum, Decl(a.ts, 3, 5))
+
+const a = { 1n: 123 };
+>a : Symbol(a, Decl(a.ts, 4, 5))
+>1n : Symbol(1n, Decl(a.ts, 4, 11))
+
+const b = { [1n]: 456 };
+>b : Symbol(b, Decl(a.ts, 5, 5))
+>[1n] : Symbol([1n], Decl(a.ts, 5, 11))
+
+const c = { [bigNum]: 789 };
+>c : Symbol(c, Decl(a.ts, 6, 5))
+>[bigNum] : Symbol([bigNum], Decl(a.ts, 6, 11))
+>bigNum : Symbol(bigNum, Decl(a.ts, 3, 5))
+
+const arr = [1, 2, 3] as const;
+>arr : Symbol(arr, Decl(a.ts, 8, 5))
+>const : Symbol(const)
+
+const { 0: d } = arr;
+>d : Symbol(d, Decl(a.ts, 9, 7))
+>arr : Symbol(arr, Decl(a.ts, 8, 5))
+
+const { "0": e } = arr;
+>e : Symbol(e, Decl(a.ts, 10, 7))
+>arr : Symbol(arr, Decl(a.ts, 8, 5))
+
+const { 0n: f } = arr; // bigint should give an index error
+>f : Symbol(f, Decl(a.ts, 11, 7))
+>arr : Symbol(arr, Decl(a.ts, 8, 5))
+
+// BigInt cannot be used as an property name
+const x = { 0n: 123 };
+>x : Symbol(x, Decl(a.ts, 14, 5))
+>0n : Symbol(0n, Decl(a.ts, 14, 11))
+
+=== g.ts ===
+interface G {
+>G : Symbol(G, Decl(g.ts, 0, 0))
+
+    2n: string;
+>2n : Symbol(G[2n], Decl(g.ts, 0, 13))
+}
+interface H {
+>H : Symbol(H, Decl(g.ts, 2, 1))
+
+    "3n": string;
+>"3n" : Symbol(H["3n"], Decl(g.ts, 3, 13))
+}
+class K {
+>K : Symbol(K, Decl(g.ts, 5, 1))
+
+    4n = 0;
+>4n : Symbol(K[4n], Decl(g.ts, 6, 9))
+}
+ 
+class L {
+>L : Symbol(L, Decl(g.ts, 8, 1))
+
+    "5n" = 0;
+>"5n" : Symbol(L["5n"], Decl(g.ts, 10, 9))
+}
+
+const g : G = { 2n: "propertyNameError2" };
+>g : Symbol(g, Decl(g.ts, 14, 5))
+>G : Symbol(G, Decl(g.ts, 0, 0))
+>2n : Symbol(2n, Decl(g.ts, 14, 15))
+
+const g2 : G = { "2n": "ok2" };
+>g2 : Symbol(g2, Decl(g.ts, 15, 5))
+>G : Symbol(G, Decl(g.ts, 0, 0))
+>"2n" : Symbol("2n", Decl(g.ts, 15, 16))
+
+g[2n];
+>g : Symbol(g, Decl(g.ts, 14, 5))
+
+g2[2n];
+>g2 : Symbol(g2, Decl(g.ts, 15, 5))
+
+const h : H = { 3n: "propertyNameErrorAndMissingProperty3" };
+>h : Symbol(h, Decl(g.ts, 19, 5))
+>H : Symbol(H, Decl(g.ts, 2, 1))
+>3n : Symbol(3n, Decl(g.ts, 19, 15))
+
+const h2 : H = { "3n": "ok3" };
+>h2 : Symbol(h2, Decl(g.ts, 20, 5))
+>H : Symbol(H, Decl(g.ts, 2, 1))
+>"3n" : Symbol("3n", Decl(g.ts, 20, 16))
+
+h[3n];
+>h : Symbol(h, Decl(g.ts, 19, 5))
+
+h2[3n];
+>h2 : Symbol(h2, Decl(g.ts, 20, 5))
+
+const k : K = { 4n: "propertyNameError4" };
+>k : Symbol(k, Decl(g.ts, 24, 5))
+>K : Symbol(K, Decl(g.ts, 5, 1))
+>4n : Symbol(4n, Decl(g.ts, 24, 15))
+
+const k2 : K = { "4n": "ok4" };
+>k2 : Symbol(k2, Decl(g.ts, 25, 5))
+>K : Symbol(K, Decl(g.ts, 5, 1))
+>"4n" : Symbol("4n", Decl(g.ts, 25, 16))
+
+k[4n];
+>k : Symbol(k, Decl(g.ts, 24, 5))
+
+k2[4n];
+>k2 : Symbol(k2, Decl(g.ts, 25, 5))
+
+const l : L = { 5n: "propertyNameErrorAndMissingProperty5" };
+>l : Symbol(l, Decl(g.ts, 29, 5))
+>L : Symbol(L, Decl(g.ts, 8, 1))
+>5n : Symbol(5n, Decl(g.ts, 29, 15))
+
+const l2 : L = { "5n": "ok4" };
+>l2 : Symbol(l2, Decl(g.ts, 30, 5))
+>L : Symbol(L, Decl(g.ts, 8, 1))
+>"5n" : Symbol("5n", Decl(g.ts, 30, 16))
+
+l[5n];
+>l : Symbol(l, Decl(g.ts, 29, 5))
+
+l2[5n];
+>l2 : Symbol(l2, Decl(g.ts, 30, 5))
+
+g.2n; // not valid JS
+>g : Symbol(g, Decl(g.ts, 14, 5))
+
+=== q.ts ===
+type Q = 6n | 7n | 8n;
+>Q : Symbol(Q, Decl(q.ts, 0, 0))
+
+type T = { [t in  Q]: string };
+>T : Symbol(T, Decl(q.ts, 0, 22))
+>t : Symbol(t, Decl(q.ts, 1, 12))
+>Q : Symbol(Q, Decl(q.ts, 0, 0))
+
