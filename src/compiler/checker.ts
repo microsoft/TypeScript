@@ -720,6 +720,7 @@ import {
     isSetAccessorDeclaration,
     isShorthandAmbientModuleSymbol,
     isShorthandPropertyAssignment,
+    isSideEffectImport,
     isSingleOrDoubleQuote,
     isSourceFile,
     isSourceFileJS,
@@ -1505,6 +1506,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
+    var noUncheckedSideEffectImports = !!compilerOptions.noUncheckedSideEffectImports;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -4660,7 +4662,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // merged symbol is module declaration symbol combined with all augmentations
                 return getMergedSymbol(sourceFile.symbol);
             }
-            if (errorNode && moduleNotFoundError) {
+            if (errorNode && moduleNotFoundError && !isSideEffectImport(errorNode)) {
                 // report errors only if it was requested
                 error(errorNode, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
             }
@@ -4765,6 +4767,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function errorOnImplicitAnyModule(isError: boolean, errorNode: Node, sourceFile: SourceFile, mode: ResolutionMode, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): void {
+        if (isSideEffectImport(errorNode)) {
+            return;
+        }
+
         let errorInfo: DiagnosticMessageChain | undefined;
         if (!isExternalModuleNameRelative(moduleReference) && packageId) {
             errorInfo = createModuleNotFoundChain(sourceFile, host, moduleReference, mode, packageId.name);
@@ -47245,6 +47251,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                 }
+            }
+            else if (noUncheckedSideEffectImports && !importClause) {
+                void resolveExternalModuleName(node, node.moduleSpecifier);
             }
         }
         checkImportAttributes(node);
