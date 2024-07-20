@@ -508,7 +508,7 @@ formatter.setConfig({
  * @returns {string}
  */
 function dprint(contents) {
-    const result = formatter.formatText("dummy.d.ts", contents);
+    const result = formatter.formatText({ filePath: "dummy.d.ts", fileText: contents });
     return result.replace(/\r\n/g, "\n");
 }
 

@@ -29,7 +29,7 @@ jobs:
           - windows-latest
           - macos-14
         node-version:
-          - '22'
+          - '22.4.x'
           - '20'
           - '18'
           - '16'
@@ -37,7 +37,7 @@ jobs:
         bundle:
           - 'true'
         include:
-          - node-version: '*'
+          - node-version: 'lts/*'
             bundle: false
             os: ubuntu-latest
         exclude:
@@ -51,7 +51,7 @@ jobs:
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Use node version ${{ matrix.node-version }}
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
           node-version: ${{ matrix.node-version }}
           check-latest: true
@@ -69,15 +69,46 @@ jobs:
           git add tests/baselines/reference
           git diff --staged --exit-code
 
+  coverage:
+    runs-on:
+      - 'self-hosted'
+      - '1ES.Pool=TypeScript-1ES-GitHub-Large'
+      - '1ES.ImageOverride=ubuntu-22.04'
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
+        with:
+          node-version: 'lts/*'
+      - run: npm ci
+
+      - name: Run tests with coverage
+        run: npm test -- --no-lint --coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+        with:
+          name: coverage
+          path: coverage
+
+      - uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
+        with:
+          use_oidc: true
+          disable_search: true
+          files: ./coverage/codecov.json
+
   lint:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: '*'
-          check-latest: true
+          node-version: 'lts/*'
       - run: npm ci
 
       - name: Linter
@@ -88,10 +119,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: '*'
-          check-latest: true
+          node-version: 'lts/*'
       - run: npm ci
 
       - name: Unused exports
@@ -102,10 +132,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: '*'
-          check-latest: true
+          node-version: 'lts/*'
       - run: npm ci
 
       - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
@@ -123,10 +152,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: '*'
-          check-latest: true
+          node-version: 'lts/*'
       - run: npm ci
 
       - name: Installing browsers
@@ -140,10 +168,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: '*'
-          check-latest: true
+          node-version: 'lts/*'
       - run: npm ci
 
       - name: Build src
@@ -155,10 +182,9 @@ jobs:
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: '*'
-          check-latest: true
+          node-version: 'lts/*'
       - run: |
           npm --version
           # corepack enable npm
@@ -204,10 +230,9 @@ jobs:
           path: base
           ref: ${{ github.base_ref }}
 
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: '*'
-          check-latest: true
+          node-version: 'lts/*'
       - run: |
           npm --version
           # corepack enable npm
@@ -238,10 +263,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: '*'
-          check-latest: true
+          node-version: 'lts/*'
       - run: npm ci
 
       - name: Build scripts
@@ -255,10 +279,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: '*'
-          check-latest: true
+          node-version: 'lts/*'
       - run: npm ci
 
       - name: Build tsc
@@ -275,10 +298,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: '*'
-          check-latest: true
+          node-version: 'lts/*'
       - run: npm ci
 
       - name: Remove all baselines

@@ -62,13 +62,13 @@ export declare const thing: {
     findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
     fill: (value: number, start?: number, end?: number) => number[];
     copyWithin: (target: number, start: number, end?: number) => number[];
-    entries: () => IterableIterator<[number, number]>;
-    keys: () => IterableIterator<number>;
-    values: () => IterableIterator<number>;
+    entries: () => BuiltinIterator<[number, number], any, any>;
+    keys: () => BuiltinIterator<number, BuiltinIteratorReturn>;
+    values: () => BuiltinIterator<number, any, any>;
     includes: (searchElement: number, fromIndex?: number) => boolean;
     flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[];
     flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[];
-    [Symbol.iterator]: () => IterableIterator<number>;
+    [Symbol.iterator]: () => BuiltinIterator<number, any, any>;
     readonly [Symbol.unscopables]: {
         [x: number]: boolean;
         length?: boolean;
@@ -171,13 +171,13 @@ mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(27,118): error TS2526: A 'this'
         findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
         fill: (value: number, start?: number, end?: number) => number[];
         copyWithin: (target: number, start: number, end?: number) => number[];
-        entries: () => IterableIterator<[number, number]>;
-        keys: () => IterableIterator<number>;
-        values: () => IterableIterator<number>;
+        entries: () => BuiltinIterator<[number, number], any, any>;
+        keys: () => BuiltinIterator<number, BuiltinIteratorReturn>;
+        values: () => BuiltinIterator<number, any, any>;
         includes: (searchElement: number, fromIndex?: number) => boolean;
         flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[];
         flat: <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[];
-        [Symbol.iterator]: () => IterableIterator<number>;
+        [Symbol.iterator]: () => BuiltinIterator<number, any, any>;
         readonly [Symbol.unscopables]: {
             [x: number]: boolean;
             length?: boolean;

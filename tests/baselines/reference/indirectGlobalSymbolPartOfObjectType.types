@@ -13,8 +13,8 @@ const Symbol = globalThis.Symbol;
 >       : ^^^^^^^^^^^^^^^^^
 
 [][Symbol.iterator];
->[][Symbol.iterator] : () => IterableIterator<undefined>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[][Symbol.iterator] : () => BuiltinIterator<undefined, any, any>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >Symbol.iterator : unique symbol

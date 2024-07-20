@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 1,000 -> 2,500
+
 === esNextWeakRefs_IterableWeakMap.ts ===
 /** `static #cleanup` */
 const IterableWeakMap_cleanup = ({ ref, set }: {
@@ -436,8 +440,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >    : ^
 
             yield [key, value];
->yield [key, value] : unknown
->                   : ^^^^^^^
+>yield [key, value] : any
 >[key, value] : [K, V]
 >             : ^^^^^^
 >key : K

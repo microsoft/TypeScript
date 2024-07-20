@@ -823,7 +823,7 @@ declare function getOrgUser(id: string, orgId: number, options?: {
     y?: number;
     z?: boolean;
 }): void;
-declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args_0: T) => U;
+declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args: T) => U;
 type Numbers = number[];
 type Unbounded = [...Numbers, boolean];
 declare const data: Unbounded;
