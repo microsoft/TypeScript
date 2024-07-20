@@ -40,8 +40,8 @@ function* g002() { // Generator<number, void, unknown>
 }
 
 function* g003() { // Generator<never, void, undefined>
->g003 : () => Generator<never, void, undefined>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g003 : () => Generator<never, void, any>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [];
 >yield* [] : any
@@ -51,8 +51,8 @@ function* g003() { // Generator<never, void, undefined>
 }
 
 function* g004() { // Generator<number, void, undefined>
->g004 : () => Generator<number, void, undefined>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g004 : () => Generator<number, void, any>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* iterableIterator;
 >yield* iterableIterator : any

@@ -37,10 +37,15 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
+
+  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+    Add a type annotation to the variable a.
 
 
 Found 1 error.
@@ -71,7 +76,7 @@ Shape signatures in builder refreshed for::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"affectedFilesPendingEmit":[[2,17]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"affectedFilesPendingEmit":[[2,17]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -115,9 +120,18 @@ Shape signatures in builder refreshed for::
         {
           "start": 6,
           "length": 1,
-          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "messageText": "Property 'p' of exported anonymous class type may not be private or protected.",
           "category": 1,
-          "code": 4094
+          "code": 4094,
+          "relatedInformation": [
+            {
+              "start": 6,
+              "length": 1,
+              "messageText": "Add a type annotation to the variable a.",
+              "category": 1,
+              "code": 9027
+            }
+          ]
         }
       ]
     ]
@@ -132,7 +146,7 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 908
+  "size": 1040
 }
 
 
@@ -150,10 +164,15 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
+
+  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+    Add a type annotation to the variable a.
 
 
 Found 1 error.
@@ -409,10 +428,15 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
+
+  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+    Add a type annotation to the variable a.
 
 
 Found 1 error.
@@ -442,7 +466,7 @@ Shape signatures in builder refreshed for::
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","signature":"-6162671385-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported class expression may not be private or protected.","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"affectedFilesPendingEmit":[[2,17]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","signature":"10386759778-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported anonymous class type may not be private or protected.","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"affectedFilesPendingEmit":[[2,17]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -463,11 +487,11 @@ Shape signatures in builder refreshed for::
     "./a.ts": {
       "original": {
         "version": "7752727223-const a = class { private p = 10; };",
-        "signature": "-6162671385-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported class expression may not be private or protected.",
+        "signature": "10386759778-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported anonymous class type may not be private or protected.",
         "affectsGlobalScope": true
       },
       "version": "7752727223-const a = class { private p = 10; };",
-      "signature": "-6162671385-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported class expression may not be private or protected.",
+      "signature": "10386759778-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported anonymous class type may not be private or protected.",
       "affectsGlobalScope": true
     }
   },
@@ -487,9 +511,18 @@ Shape signatures in builder refreshed for::
         {
           "start": 6,
           "length": 1,
-          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "messageText": "Property 'p' of exported anonymous class type may not be private or protected.",
           "category": 1,
-          "code": 4094
+          "code": 4094,
+          "relatedInformation": [
+            {
+              "start": 6,
+              "length": 1,
+              "messageText": "Add a type annotation to the variable a.",
+              "category": 1,
+              "code": 9027
+            }
+          ]
         }
       ]
     ]
@@ -504,7 +537,7 @@ Shape signatures in builder refreshed for::
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1092
+  "size": 1228
 }
 
 
@@ -522,10 +555,15 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
+
+  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+    Add a type annotation to the variable a.
 
 
 Found 1 error.
@@ -560,7 +598,7 @@ var a = /** @class */ (function () {
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","signature":"-6162671385-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported class expression may not be private or protected.","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"7752727223-const a = class { private p = 10; };","signature":"10386759778-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported anonymous class type may not be private or protected.","affectsGlobalScope":true}],"root":[2],"options":{"declaration":true},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -581,11 +619,11 @@ var a = /** @class */ (function () {
     "./a.ts": {
       "original": {
         "version": "7752727223-const a = class { private p = 10; };",
-        "signature": "-6162671385-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported class expression may not be private or protected.",
+        "signature": "10386759778-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported anonymous class type may not be private or protected.",
         "affectsGlobalScope": true
       },
       "version": "7752727223-const a = class { private p = 10; };",
-      "signature": "-6162671385-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported class expression may not be private or protected.",
+      "signature": "10386759778-declare const a: {\n    new (): {\n        p: number;\n    };\n};\n(6,1)Error4094: Property 'p' of exported anonymous class type may not be private or protected.",
       "affectsGlobalScope": true
     }
   },
@@ -605,15 +643,24 @@ var a = /** @class */ (function () {
         {
           "start": 6,
           "length": 1,
-          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "messageText": "Property 'p' of exported anonymous class type may not be private or protected.",
           "category": 1,
-          "code": 4094
+          "code": 4094,
+          "relatedInformation": [
+            {
+              "start": 6,
+              "length": 1,
+              "messageText": "Add a type annotation to the variable a.",
+              "category": 1,
+              "code": 9027
+            }
+          ]
         }
       ]
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1056
+  "size": 1192
 }
 
 
@@ -631,10 +678,15 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
+
+  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+    Add a type annotation to the variable a.
 
 
 Found 1 error.

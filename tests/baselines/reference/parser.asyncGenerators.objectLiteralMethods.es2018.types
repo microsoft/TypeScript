@@ -247,14 +247,14 @@ const o15 = {
 };
 === yieldStarWithValueIsOk.ts ===
 const o16 = {
->o16 : { f(): AsyncGenerator<any, void, undefined>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{    async * f() {        yield * [];    }} : { f(): AsyncGenerator<any, void, undefined>; }
->                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o16 : { f(): AsyncGenerator<any, void, any>; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    async * f() {        yield * [];    }} : { f(): AsyncGenerator<any, void, any>; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     async * f() {
->f : () => AsyncGenerator<any, void, undefined>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : () => AsyncGenerator<any, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield * [];
 >yield * [] : any

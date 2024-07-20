@@ -1,0 +1,19 @@
+//// [tests/cases/compiler/sideEffectImports3.ts] ////
+
+=== index.ts ===
+
+import "./not-a-module";
+
+=== not-a-module.ts ===
+console.log("Hello, world!");
+>console.log("Hello, world!") : void
+>                             : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>"Hello, world!" : "Hello, world!"
+>                : ^^^^^^^^^^^^^^^
+

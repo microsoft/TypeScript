@@ -6,7 +6,9 @@ unionTypeCallSignatures6.ts(38,4): error TS2349: This expression is not callable
 unionTypeCallSignatures6.ts(39,1): error TS2684: The 'this' context of type 'A & C & { f0: F0 | F3; f1: F1 | F3; f2: F1 | F4; f3: F3 | F4; f4: F3 | F5; }' is not assignable to method's 'this' of type 'B'.
   Property 'b' is missing in type 'A & C & { f0: F0 | F3; f1: F1 | F3; f2: F1 | F4; f3: F3 | F4; f4: F3 | F5; }' but required in type 'B'.
 unionTypeCallSignatures6.ts(48,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
+  Type 'void' is not assignable to type 'A'.
 unionTypeCallSignatures6.ts(55,1): error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
+  Type 'void' is not assignable to type 'A'.
 
 
 ==== unionTypeCallSignatures6.ts (6 errors) ====
@@ -72,6 +74,7 @@ unionTypeCallSignatures6.ts(55,1): error TS2684: The 'this' context of type 'voi
     f3(); // error
     ~~~~
 !!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
+!!! error TS2684:   Type 'void' is not assignable to type 'A'.
     
     interface F7 {
       (this: A & B & C): void;
@@ -81,4 +84,5 @@ unionTypeCallSignatures6.ts(55,1): error TS2684: The 'this' context of type 'voi
     f4(); // error
     ~~~~
 !!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'A & B'.
+!!! error TS2684:   Type 'void' is not assignable to type 'A'.
     

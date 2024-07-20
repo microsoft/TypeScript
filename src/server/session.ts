@@ -1712,7 +1712,7 @@ export class Session<TMessage = string> implements EventSender {
                 const packageDirectory = fileName.substring(0, nodeModulesPathParts.packageRootIndex);
                 const packageJsonCache = project.getModuleResolutionCache()?.getPackageJsonInfoCache();
                 const compilerOptions = project.getCompilationSettings();
-                const packageJson = getPackageScopeForPath(getNormalizedAbsolutePath(packageDirectory + "/package.json", project.getCurrentDirectory()), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
+                const packageJson = getPackageScopeForPath(getNormalizedAbsolutePath(packageDirectory, project.getCurrentDirectory()), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
                 if (!packageJson) return undefined;
                 // Use fake options instead of actual compiler options to avoid following export map if the project uses node16 or nodenext -
                 // Mapping from an export map entry across packages is out of scope for now. Returned entrypoints will only be what can be

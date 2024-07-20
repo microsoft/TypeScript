@@ -192,10 +192,10 @@ declare const t2: [number, boolean, ...string[]];
 (function (...x){})(...t2);
 >(function (...x){})(...t2) : void
 >                           : ^^^^
->(function (...x){}) : (x_0: number, x_1: boolean, ...x_2: string[]) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function (...x){} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function (...x){}) : (x_0: number, x_1: boolean, ...x: string[]) => void
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (...x){} : (x_0: number, x_1: boolean, ...x: string[]) => void
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, ...string[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...t2 : string | number | boolean
@@ -206,10 +206,10 @@ declare const t2: [number, boolean, ...string[]];
 (function (a, ...x){})(...t2);
 >(function (a, ...x){})(...t2) : void
 >                              : ^^^^
->(function (a, ...x){}) : (a: number, x_0: boolean, ...x_1: string[]) => void
->                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function (a, ...x){} : (a: number, x_0: boolean, ...x_1: string[]) => void
->                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function (a, ...x){}) : (a: number, x_0: boolean, ...x: string[]) => void
+>                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (a, ...x){} : (a: number, x_0: boolean, ...x: string[]) => void
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [boolean, ...string[]]
@@ -260,8 +260,8 @@ declare const t2: [number, boolean, ...string[]];
 declare function f2(cb: (...args: typeof t2) => void): void;
 >f2 : (cb: (...args: typeof t2) => void) => void
 >   : ^  ^^                            ^^^^^    
->cb : (args_0: number, args_1: boolean, ...args_2: string[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>cb : (args_0: number, args_1: boolean, ...args: string[]) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >args : [number, boolean, ...string[]]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2 : [number, boolean, ...string[]]
@@ -286,8 +286,8 @@ f2((...x) => {})
 >                 : ^^^^
 >f2 : (cb: (...args: typeof t2) => void) => void
 >   : ^  ^^                            ^^^^^    
->(...x) => {} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(...x) => {} : (x_0: number, x_1: boolean, ...x: string[]) => void
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, ...string[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -296,8 +296,8 @@ f2((a, ...x) => {})
 >                    : ^^^^
 >f2 : (cb: (...args: typeof t2) => void) => void
 >   : ^  ^^                            ^^^^^    
->(a, ...x) => {} : (a: number, x_0: boolean, ...x_1: string[]) => void
->                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(a, ...x) => {} : (a: number, x_0: boolean, ...x: string[]) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [boolean, ...string[]]
@@ -360,10 +360,10 @@ declare const t3: [boolean, ...string[]];
 (function (...x){})(1, ...t3);
 >(function (...x){})(1, ...t3) : void
 >                              : ^^^^
->(function (...x){}) : (x_0: number, x_1: boolean, ...x_2: string[]) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function (...x){} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function (...x){}) : (x_0: number, x_1: boolean, ...x: string[]) => void
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (...x){} : (x_0: number, x_1: boolean, ...x: string[]) => void
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, ...string[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -376,10 +376,10 @@ declare const t3: [boolean, ...string[]];
 (function (a, ...x){})(1, ...t3);
 >(function (a, ...x){})(1, ...t3) : void
 >                                 : ^^^^
->(function (a, ...x){}) : (a: number, x_0: boolean, ...x_1: string[]) => void
->                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function (a, ...x){} : (a: number, x_0: boolean, ...x_1: string[]) => void
->                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function (a, ...x){}) : (a: number, x_0: boolean, ...x: string[]) => void
+>                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (a, ...x){} : (a: number, x_0: boolean, ...x: string[]) => void
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [boolean, ...string[]]
@@ -436,8 +436,8 @@ declare const t3: [boolean, ...string[]];
 declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
 >f3 : (cb: (x: number, ...args: typeof t3) => void) => void
 >   : ^  ^^                                       ^^^^^    
->cb : (x: number, args_0: boolean, ...args_1: string[]) => void
->   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>cb : (x: number, args_0: boolean, ...args: string[]) => void
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >x : number
 >  : ^^^^^^
 >args : [boolean, ...string[]]
@@ -474,8 +474,8 @@ f3((a, ...x) => {})
 >                    : ^^^^
 >f3 : (cb: (x: number, ...args: typeof t3) => void) => void
 >   : ^  ^^                                       ^^^^^    
->(a, ...x) => {} : (a: number, x_0: boolean, ...x_1: string[]) => void
->                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(a, ...x) => {} : (a: number, x_0: boolean, ...x: string[]) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [boolean, ...string[]]
@@ -552,10 +552,10 @@ function f4<T extends any[]>(t: T) {
     (function(a, ...x){})(1, 2, ...t);
 >(function(a, ...x){})(1, 2, ...t) : void
 >                                  : ^^^^
->(function(a, ...x){}) : (a: number, x_0: number, ...x_1: T) => void
->                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function(a, ...x){} : (a: number, x_0: number, ...x_1: T) => void
->                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function(a, ...x){}) : (a: number, x_0: number, ...x: T) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function(a, ...x){} : (a: number, x_0: number, ...x: T) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [number, ...T]

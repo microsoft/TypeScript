@@ -1,0 +1,41 @@
+// === findAllReferences ===
+// === /player.js ===
+// <|import * as [|{| isWriteAccess: true |}C|] from './component.js';|>
+// 
+// /**
+//  * @extends [|C|]/*FIND ALL REFS*/.Component
+//  */
+// export class Player extends Component {}
+
+  // === Definitions ===
+  // === /player.js ===
+  // <|import * as [|C|] from './component.js';|>
+  // 
+  // /**
+  //  * @extends C/*FIND ALL REFS*/.Component
+  //  */
+  // export class Player extends Component {}
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import C",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]

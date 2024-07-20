@@ -2245,4 +2245,40 @@ import { x } from "../b";`,
             },
         ],
     });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "when changing noUncheckedSideEffectImports of config file",
+        commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
+        sys: () => {
+            const module1: File = {
+                path: `/user/username/projects/myproject/a.ts`,
+                content: `import "does-not-exist";`,
+            };
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: jsonToReadableText({
+                    compilerOptions: {
+                        noUncheckedSideEffectImports: false,
+                    },
+                }),
+            };
+            return createWatchedSystem([module1, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+        },
+        edits: [
+            {
+                caption: "Change noUncheckedSideEffectImports to true",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: {
+                                noUncheckedSideEffectImports: true,
+                            },
+                        }),
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
+    });
 });

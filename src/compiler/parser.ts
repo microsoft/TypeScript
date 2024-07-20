@@ -2637,7 +2637,7 @@ namespace Parser {
     function createIdentifier(isIdentifier: boolean, diagnosticMessage?: DiagnosticMessage, privateIdentifierDiagnosticMessage?: DiagnosticMessage): Identifier {
         if (isIdentifier) {
             identifierCount++;
-            const pos = getNodePos();
+            const pos = scanner.hasPrecedingJSDocLeadingAsterisks() ? scanner.getTokenStart() : getNodePos();
             // Store original token kind if it is not just an Identifier so we can report appropriate error later in type checker
             const originalKeywordKind = token();
             const text = internIdentifier(scanner.getTokenValue());
