@@ -1626,7 +1626,13 @@ export let sys: System = (() => {
         /** Calls fs.statSync, returning undefined if any errors are thrown */
         function statSync(path: string): import("fs").Stats | undefined {
             // throwIfNoEntry is available in Node 14.17 and above, which matches our supported range.
-            return _fs.statSync(path, { throwIfNoEntry: false });
+            try {
+                return _fs.statSync(path, { throwIfNoEntry: false });
+            } catch {
+                // This should never happen as we are passing throwIfNoEntry: false,
+                // but guard against this just in case (e.g. a polyfill doesn't check this flag).
+                return undefined;
+            }
         }
 
         /**
