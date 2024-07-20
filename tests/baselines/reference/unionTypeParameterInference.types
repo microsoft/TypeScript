@@ -25,7 +25,7 @@ function unlift<U>(value: U | Foo<U>): U {
 >lift(value) : Foo<U>
 >            : ^^^^^^
 >lift : <U_1>(value: U_1 | Foo<U_1>) => Foo<U_1>
->     : ^   ^^     ^^              ^^^^^        
+>     : ^^^^^^     ^^              ^^^^^        
 >value : U | Foo<U>
 >      : ^^^^^^^^^^
 >prop : U

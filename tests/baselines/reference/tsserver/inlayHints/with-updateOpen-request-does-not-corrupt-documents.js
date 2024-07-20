@@ -155,7 +155,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -215,14 +222,7 @@ Info seq  [hh:mm:ss:mss] response:
       "type": "response",
       "command": "configure",
       "request_seq": 2,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
+      "success": true
     }
 After request
 
@@ -351,7 +351,10 @@ Info seq  [hh:mm:ss:mss] response:
           "whitespaceAfter": true
         }
       ],
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -456,7 +459,10 @@ Info seq  [hh:mm:ss:mss] response:
           "whitespaceAfter": true
         }
       ],
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

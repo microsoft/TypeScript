@@ -92,7 +92,7 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 >fun : <T>(item: { [P in keyof T]: T[P]; }) => void
 >    : ^ ^^    ^^                         ^^^^^^^^^
 >item : { [P in keyof T]: T[P]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
     const strings: string[] = [];
 >strings : string[]
@@ -104,15 +104,15 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 >key : Extract<keyof T, string>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >item : { [P in keyof T]: T[P]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 
         const value = item[key];
 >value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item[key] : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : { [P in keyof T]: T[P]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^^^^^^^^^^^^^
 >key : Extract<keyof T, string>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -122,7 +122,7 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 >typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
@@ -136,7 +136,7 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 >push : (...items: string[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^      
 >value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>] & string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         }
     }
 }

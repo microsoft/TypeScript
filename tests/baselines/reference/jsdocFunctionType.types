@@ -7,7 +7,7 @@
  */
 function id1(c) {
 >id1 : (c: (this: string, arg1: number) => number) => (this: string, arg1: number) => number
->    : ^ ^^^    ^^      ^^    ^^      ^^^^^      ^^^^^^    ^^      ^^    ^^      ^^^^^      
+>    : ^ ^^     ^^            ^^                 ^^^^^     ^^            ^^                 
 >c : (this: string, arg1: number) => number
 >  : ^    ^^      ^^^^^^^^      ^^^^^      
 
@@ -22,7 +22,7 @@ var x = id1(function (n) { return this.length + n });
 >id1(function (n) { return this.length + n }) : (this: string, arg1: number) => number
 >                                             : ^    ^^      ^^^^^^^^      ^^^^^      
 >id1 : (c: (this: string, arg1: number) => number) => (this: string, arg1: number) => number
->    : ^ ^^^    ^^      ^^    ^^      ^^^^^      ^^^^^^    ^^      ^^    ^^      ^^^^^      
+>    : ^ ^^     ^^            ^^                 ^^^^^     ^^            ^^                 
 >function (n) { return this.length + n } : (this: string, n: number) => number
 >                                        : ^    ^^      ^^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -44,7 +44,7 @@ var x = id1(function (n) { return this.length + n });
  */
 function id2(c) {
 >id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
->    : ^ ^^^^^^^    ^^      ^^^^^                   ^^^^^^^^^^    ^^      ^^^^^                   
+>    : ^ ^^         ^^                              ^^^^^         ^^                              
 >c : new (arg1: number) => { length: number; }
 >  : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
 
@@ -82,7 +82,7 @@ var y = id2(C);
 >id2(C) : new (arg1: number) => { length: number; }
 >       : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
 >id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
->    : ^ ^^^^^^^    ^^      ^^^^^                   ^^^^^^^^^^    ^^      ^^^^^                   
+>    : ^ ^^         ^^                              ^^^^^         ^^                              
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -157,7 +157,7 @@ var y2 = id2(D);
 >id2(D) : new (arg1: number) => { length: number; }
 >       : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
 >id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
->    : ^ ^^^^^^^    ^^      ^^^^^                   ^^^^^^^^^^    ^^      ^^^^^                   
+>    : ^ ^^         ^^                              ^^^^^         ^^                              
 >D : typeof D
 >  : ^^^^^^^^
 
@@ -186,9 +186,9 @@ z2.length;
  */
 var construct = function(dref) { return new dref(33); }
 >construct : (dref: new (arg1: number) => D) => D
->          : ^    ^^^^^^^    ^^      ^^^^^ ^^^^^ 
+>          : ^    ^^         ^^            ^^^^^ 
 >function(dref) { return new dref(33); } : (dref: new (arg1: number) => D) => D
->                                        : ^    ^^^^^^^    ^^      ^^^^^ ^^^^^ 
+>                                        : ^    ^^         ^^            ^^^^^ 
 >dref : new (arg1: number) => D
 >     : ^^^^^^^^^^^      ^^^^^^
 >new dref(33) : D
@@ -204,7 +204,7 @@ var z3 = construct(D);
 >construct(D) : D
 >             : ^
 >construct : (dref: new (arg1: number) => D) => D
->          : ^    ^^^^^^^    ^^      ^^^^^ ^^^^^ 
+>          : ^    ^^         ^^            ^^^^^ 
 >D : typeof D
 >  : ^^^^^^^^
 
@@ -250,7 +250,7 @@ var y3 = id2(E);
 >id2(E) : new (arg1: number) => { length: number; }
 >       : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^
 >id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
->    : ^ ^^^^^^^    ^^      ^^^^^                   ^^^^^^^^^^    ^^      ^^^^^                   
+>    : ^ ^^         ^^                              ^^^^^         ^^                              
 >E : typeof E
 >  : ^^^^^^^^
 

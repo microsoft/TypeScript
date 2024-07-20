@@ -5,7 +5,7 @@ declare const fn: <K extends string, V>(object: { [Key in K]: V }) => object;
 >fn : <K extends string, V>(object: { [Key in K]: V; }) => object
 >   : ^ ^^^^^^^^^      ^^ ^^      ^^                  ^^^^^      
 >object : { [Key in K]: V; }
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^^^   ^^^^^^^^^^^^
 
 declare const a: { [index: string]: number };
 >a : { [index: string]: number; }

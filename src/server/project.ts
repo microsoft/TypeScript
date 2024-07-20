@@ -4,6 +4,7 @@ import {
     append,
     ApplyCodeActionCommandResult,
     arrayFrom,
+    arrayIsEqualTo,
     arrayToMap,
     BuilderState,
     CachedDirectoryStructureHost,
@@ -93,7 +94,6 @@ import {
     ParsedCommandLine,
     parsePackageName,
     Path,
-    perfLogger,
     PerformanceEvent,
     PluginImport,
     PollingInterval,
@@ -144,6 +144,7 @@ import {
     ModuleImportResult,
     Msg,
     NormalizedPath,
+    nullTypingsInstaller,
     PackageJsonWatcher,
     ProjectOptions,
     ProjectService,
@@ -151,7 +152,6 @@ import {
     ServerHost,
     Session,
     toNormalizedPath,
-    TypingsCache,
     updateProjectIfDirty,
 } from "./_namespaces/ts.server.js";
 import * as protocol from "./protocol.js";
@@ -307,6 +307,59 @@ const enum TypingWatcherType {
 
 type TypingWatchers = Map<Path, FileWatcher> & { isInvoked?: boolean; };
 
+interface TypingsCacheEntry {
+    readonly typeAcquisition: TypeAcquisition;
+    readonly compilerOptions: CompilerOptions;
+    readonly unresolvedImports: SortedReadonlyArray<string> | undefined;
+}
+
+function setIsEqualTo(arr1: string[] | undefined, arr2: string[] | undefined): boolean {
+    if (arr1 === arr2) {
+        return true;
+    }
+    if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
+        return true;
+    }
+    const set = new Map<string, boolean>();
+    let unique = 0;
+
+    for (const v of arr1!) {
+        if (set.get(v) !== true) {
+            set.set(v, true);
+            unique++;
+        }
+    }
+    for (const v of arr2!) {
+        const isSet = set.get(v);
+        if (isSet === undefined) {
+            return false;
+        }
+        if (isSet === true) {
+            set.set(v, false);
+            unique--;
+        }
+    }
+    return unique === 0;
+}
+
+function typeAcquisitionChanged(opt1: TypeAcquisition, opt2: TypeAcquisition): boolean {
+    return opt1.enable !== opt2.enable ||
+        !setIsEqualTo(opt1.include, opt2.include) ||
+        !setIsEqualTo(opt1.exclude, opt2.exclude);
+}
+
+function compilerOptionsChanged(opt1: CompilerOptions, opt2: CompilerOptions): boolean {
+    // TODO: add more relevant properties
+    return getAllowJSCompilerOption(opt1) !== getAllowJSCompilerOption(opt2);
+}
+
+function unresolvedImportsChanged(imports1: SortedReadonlyArray<string> | undefined, imports2: SortedReadonlyArray<string> | undefined): boolean {
+    if (imports1 === imports2) {
+        return false;
+    }
+    return !arrayIsEqualTo(imports1, imports2);
+}
+
 export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
     private rootFilesMap = new Map<Path, ProjectRootFile>();
     private program: Program | undefined;
@@ -328,9 +381,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     lastCachedUnresolvedImportsList: SortedReadonlyArray<string> | undefined;
-    /** @internal */
     private hasAddedorRemovedFiles = false;
-    /** @internal */
     private hasAddedOrRemovedSymlinks = false;
 
     /** @internal */
@@ -391,7 +442,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     typingFiles: SortedReadonlyArray<string> = emptyArray;
 
-    /** @internal */
+    private typingsCache: TypingsCacheEntry | undefined;
+
     private typingWatchers: TypingWatchers | undefined;
 
     /** @internal */
@@ -493,13 +545,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     public readonly getCanonicalFileName: GetCanonicalFileName;
 
-    /** @internal */
     private exportMapCache: ExportInfoMap | undefined;
-    /** @internal */
     private changedFilesForExportMapCache: Set<Path> | undefined;
-    /** @internal */
     private moduleSpecifierCache = createModuleSpecifierCache(this);
-    /** @internal */
     private symlinks: SymlinkCache | undefined;
     /** @internal */
     autoImportProviderHost: AutoImportProviderProject | false | undefined;
@@ -507,6 +555,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     protected typeAcquisition: TypeAcquisition | undefined;
     /** @internal */
     createHash = maybeBind(this.projectService.host, this.projectService.host.createHash);
+    /** @internal*/ preferNonRecursiveWatch: boolean | undefined;
 
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
@@ -567,6 +616,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.trace = s => host.trace!(s);
         }
         this.realpath = maybeBind(host, host.realpath);
+        this.preferNonRecursiveWatch = this.projectService.canUseWatchEvents || host.preferNonRecursiveWatch;
 
         // Use the current directory as resolution root only if the project created using current directory string
         this.resolutionCache = createResolutionCache(
@@ -586,19 +636,15 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     isKnownTypesPackageName(name: string): boolean {
-        return this.typingsCache.isKnownTypesPackageName(name);
+        return this.projectService.typingsInstaller.isKnownTypesPackageName(name);
     }
     installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
-        return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
+        return this.projectService.typingsInstaller.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
     }
 
     /** @internal */
     getGlobalTypingsCacheLocation() {
         return this.getGlobalCache();
-    }
-
-    private get typingsCache(): TypingsCache {
-        return this.projectService.typingsCache;
     }
 
     /** @internal */
@@ -1031,7 +1077,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition {
-        if (!newTypeAcquisition || !newTypeAcquisition.include) {
+        if (!newTypeAcquisition.enable || !newTypeAcquisition.include) {
             // Nothing to filter out, so just return as-is
             return newTypeAcquisition;
         }
@@ -1067,7 +1113,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     close() {
-        this.projectService.typingsCache.onProjectClosed(this);
+        if (this.typingsCache) this.projectService.typingsInstaller.onProjectClosed(this);
+        this.typingsCache = undefined;
         this.closeWatchingTypingLocations();
         // if we have a program - release all files that are enlisted in program but arent root
         // The releasing of the roots happens later
@@ -1347,6 +1394,24 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
+    onReleaseOldSourceFile(
+        oldSourceFile: SourceFile,
+        _oldOptions: CompilerOptions,
+        hasSourceFileByPath: boolean,
+        newSourceFileByResolvedPath: SourceFile | undefined,
+    ) {
+        if (
+            !newSourceFileByResolvedPath ||
+            (oldSourceFile.resolvedPath === oldSourceFile.path && newSourceFileByResolvedPath.resolvedPath !== oldSourceFile.path)
+        ) {
+            // new program does not contain this file - detach it from the project
+            // - remove resolutions only if the new program doesnt contain source file by the path
+            //   (not resolvedPath since path is used for resolution)
+            this.detachScriptInfoFromProject(oldSourceFile.fileName, hasSourceFileByPath);
+        }
+    }
+
+    /** @internal */
     updateFromProjectInProgress = false;
 
     /** @internal */
@@ -1360,7 +1425,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
      */
     updateGraph(): boolean {
         tracing?.push(tracing.Phase.Session, "updateGraph", { name: this.projectName, kind: ProjectKind[this.projectKind] });
-        perfLogger?.logStartUpdateGraph();
         this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
         const hasNewProgram = this.updateGraphWorker();
@@ -1388,7 +1452,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 this.lastCachedUnresolvedImportsList = getUnresolvedImports(this.program!, this.cachedUnresolvedImportsPerFile);
             }
 
-            this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasAddedorRemovedFiles);
+            this.enqueueInstallTypingsForProject(hasAddedorRemovedFiles);
         }
         else {
             this.lastCachedUnresolvedImportsList = undefined;
@@ -1405,13 +1469,46 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             // Preload auto import provider so it's not created during completions request
             this.getPackageJsonAutoImportProvider();
         }
-        perfLogger?.logStopUpdateGraph();
         tracing?.pop();
         return !hasNewProgram;
     }
 
     /** @internal */
-    updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
+    enqueueInstallTypingsForProject(forceRefresh: boolean) {
+        const typeAcquisition = this.getTypeAcquisition();
+
+        if (!typeAcquisition || !typeAcquisition.enable || this.projectService.typingsInstaller === nullTypingsInstaller) {
+            return;
+        }
+
+        const entry = this.typingsCache;
+        if (
+            forceRefresh ||
+            !entry ||
+            typeAcquisitionChanged(typeAcquisition, entry.typeAcquisition) ||
+            compilerOptionsChanged(this.getCompilationSettings(), entry.compilerOptions) ||
+            unresolvedImportsChanged(this.lastCachedUnresolvedImportsList, entry.unresolvedImports)
+        ) {
+            // Note: entry is now poisoned since it does not really contain typings for a given combination of compiler options\typings options.
+            // instead it acts as a placeholder to prevent issuing multiple requests
+            this.typingsCache = {
+                compilerOptions: this.getCompilationSettings(),
+                typeAcquisition,
+                unresolvedImports: this.lastCachedUnresolvedImportsList,
+            };
+            // something has been changed, issue a request to update typings
+            this.projectService.typingsInstaller.enqueueInstallTypingsRequest(this, typeAcquisition, this.lastCachedUnresolvedImportsList);
+        }
+    }
+
+    /** @internal */
+    updateTypingFiles(compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
+        this.typingsCache = {
+            compilerOptions,
+            typeAcquisition,
+            unresolvedImports,
+        };
+        const typingFiles = !typeAcquisition || !typeAcquisition.enable ? emptyArray : sort(newTypings);
         if (enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()), /*inserted*/ noop, removed => this.detachScriptInfoFromProject(removed))) {
             // If typing files changed, then only schedule project update
             this.typingFiles = typingFiles;
@@ -1421,13 +1518,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
     }
 
-    /** @internal */
     private closeWatchingTypingLocations() {
         if (this.typingWatchers) clearMap(this.typingWatchers, closeFileWatcher);
         this.typingWatchers = undefined;
     }
 
-    /** @internal */
     private onTypingInstallerWatchInvoke() {
         this.typingWatchers!.isInvoked = true;
         this.projectService.updateTypingsForProject({ projectName: this.getProjectName(), kind: ActionInvalidate });
@@ -1532,8 +1627,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     protected removeExistingTypings(include: string[]): string[] {
+        if (!include.length) return include;
         const existing = getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
-        return include.filter(i => !existing.includes(i));
+        return filter(include, i => !existing.includes(i));
     }
 
     private updateGraphWorker() {
@@ -1562,22 +1658,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         let hasNewProgram = false;
         if (this.program && (!oldProgram || (this.program !== oldProgram && this.program.structureIsReused !== StructureIsReused.Completely))) {
             hasNewProgram = true;
-            if (oldProgram) {
-                for (const f of oldProgram.getSourceFiles()) {
-                    const newFile = this.program.getSourceFileByPath(f.resolvedPath);
-                    if (!newFile || (f.resolvedPath === f.path && newFile.resolvedPath !== f.path)) {
-                        // new program does not contain this file - detach it from the project
-                        // - remove resolutions only if the new program doesnt contain source file by the path (not resolvedPath since path is used for resolution)
-                        this.detachScriptInfoFromProject(f.fileName, !!this.program.getSourceFileByPath(f.path), /*syncDirWatcherRemove*/ true);
-                    }
-                }
-
-                oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
-                    if (!this.program!.getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
-                        this.detachScriptInfoFromProject(resolvedProjectReference.sourceFile.fileName, /*noRemoveResolution*/ undefined, /*syncDirWatcherRemove*/ true);
-                    }
-                });
-            }
 
             // Update roots
             this.rootFilesMap.forEach((value, path) => {
@@ -1622,7 +1702,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                                 !sourceFile ||
                                 sourceFile.resolvedPath !== source ||
                                 !this.isValidGeneratedFileWatcher(
-                                    getDeclarationEmitOutputFilePathWorker(sourceFile.fileName, this.compilerOptions, this.currentDirectory, this.program!.getCommonSourceDirectory(), this.getCanonicalFileName),
+                                    getDeclarationEmitOutputFilePathWorker(sourceFile.fileName, this.compilerOptions, this.program!),
                                     watcher,
                                 )
                             ) {
@@ -1714,12 +1794,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.projectService.sendPerformanceEvent(kind, durationMs);
     }
 
-    private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean, syncDirWatcherRemove?: boolean) {
+    private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
         const scriptInfoToDetach = this.projectService.getScriptInfo(uncheckedFileName);
         if (scriptInfoToDetach) {
             scriptInfoToDetach.detachFromProject(this);
             if (!noRemoveResolution) {
-                this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path, syncDirWatcherRemove);
+                this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);
             }
         }
     }
@@ -1831,7 +1911,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return this.filesToStringWorker(writeProjectFileNames, /*writeFileExplaination*/ true, /*writeFileVersionAndText*/ false);
     }
 
-    /** @internal */
     private filesToStringWorker(writeProjectFileNames: boolean, writeFileExplaination: boolean, writeFileVersionAndText: boolean) {
         if (this.isInitialLoadPending()) return "\tFiles (0) InitialLoadPending\n";
         if (!this.program) return "\tFiles (0) NoProgram\n";
@@ -2206,7 +2285,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
     }
 
-    /** @internal */
     private isDefaultProjectForOpenFiles(): boolean {
         return !!forEachEntry(
             this.projectService.openFiles,
@@ -2245,11 +2323,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
         this.getScriptInfo(rootFile)?.editContent(0, originalText.length, updatedText);
         this.updateGraph();
-        cb(this.program!, originalProgram, (this.program?.getSourceFile(rootFile))!);
-        this.getScriptInfo(rootFile)?.editContent(0, this.program!.getSourceFile(rootFile)!.getText().length, originalText);
+        try {
+            cb(this.program!, originalProgram, (this.program?.getSourceFile(rootFile))!);
+        }
+        finally {
+            this.getScriptInfo(rootFile)?.editContent(0, this.program!.getSourceFile(rootFile)!.getText().length, originalText);
+        }
     }
 
-    /** @internal */
     private getCompilerOptionsForNoDtsResolutionProject() {
         return {
             ...this.getCompilerOptions(),
@@ -2442,7 +2523,6 @@ export class AuxiliaryProject extends Project {
 }
 
 export class AutoImportProviderProject extends Project {
-    /** @internal */
     private static readonly maxDependencies = 10;
 
     /** @internal */
@@ -2780,7 +2860,6 @@ export class ConfiguredProject extends Project {
     /** @internal */
     sendLoadingProjectFinish = false;
 
-    /** @internal */
     private compilerHost?: CompilerHost;
 
     /** @internal */
@@ -2844,7 +2923,6 @@ export class ConfiguredProject extends Project {
         this.releaseParsedConfig(asNormalizedPath(this.projectService.toCanonicalFileName(asNormalizedPath(normalizePath(fileName)))));
     }
 
-    /** @internal */
     private releaseParsedConfig(canonicalConfigFilePath: NormalizedPath) {
         this.projectService.stopWatchingWildCards(canonicalConfigFilePath, this);
         this.projectService.releaseParsedConfig(canonicalConfigFilePath, this);

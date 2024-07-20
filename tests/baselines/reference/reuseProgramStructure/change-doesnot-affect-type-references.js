@@ -20,28 +20,28 @@ var x = 1
 resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs/index.d.ts",
-    "node_modules/typerefs/package.json",
-    "node_modules/typerefs.d.ts",
-    "node_modules/typerefs/index.d.ts",
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs.d.ts",
-    "node_modules/@types/typerefs/index.d.ts"
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs/index.d.ts",
+    "/node_modules/typerefs/package.json",
+    "/node_modules/typerefs.d.ts",
+    "/node_modules/typerefs/index.d.ts",
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs.d.ts",
+    "/node_modules/@types/typerefs/index.d.ts"
   ]
 }
 
 automaticTypeDirectiveResolutions:
 a: {
   "failedLookupLocations": [
-    "node_modules/@types/a/package.json",
-    "node_modules/@types/a/index.d.ts",
-    "node_modules/a/package.json",
-    "node_modules/a.d.ts",
-    "node_modules/a/index.d.ts",
-    "node_modules/@types/a/package.json",
-    "node_modules/@types/a.d.ts",
-    "node_modules/@types/a/index.d.ts"
+    "/node_modules/@types/a/package.json",
+    "/node_modules/@types/a/index.d.ts",
+    "/node_modules/a/package.json",
+    "/node_modules/a.d.ts",
+    "/node_modules/a/index.d.ts",
+    "/node_modules/@types/a/package.json",
+    "/node_modules/@types/a.d.ts",
+    "/node_modules/@types/a/index.d.ts"
   ]
 }
 
@@ -77,28 +77,28 @@ var x = 1
 resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs/index.d.ts",
-    "node_modules/typerefs/package.json",
-    "node_modules/typerefs.d.ts",
-    "node_modules/typerefs/index.d.ts",
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs.d.ts",
-    "node_modules/@types/typerefs/index.d.ts"
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs/index.d.ts",
+    "/node_modules/typerefs/package.json",
+    "/node_modules/typerefs.d.ts",
+    "/node_modules/typerefs/index.d.ts",
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs.d.ts",
+    "/node_modules/@types/typerefs/index.d.ts"
   ]
 }
 
 automaticTypeDirectiveResolutions:
 a: {
   "failedLookupLocations": [
-    "node_modules/@types/a/package.json",
-    "node_modules/@types/a/index.d.ts",
-    "node_modules/a/package.json",
-    "node_modules/a.d.ts",
-    "node_modules/a/index.d.ts",
-    "node_modules/@types/a/package.json",
-    "node_modules/@types/a.d.ts",
-    "node_modules/@types/a/index.d.ts"
+    "/node_modules/@types/a/package.json",
+    "/node_modules/@types/a/index.d.ts",
+    "/node_modules/a/package.json",
+    "/node_modules/a.d.ts",
+    "/node_modules/a/index.d.ts",
+    "/node_modules/@types/a/package.json",
+    "/node_modules/@types/a.d.ts",
+    "/node_modules/@types/a/index.d.ts"
   ]
 }
 

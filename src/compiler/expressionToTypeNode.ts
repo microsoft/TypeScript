@@ -350,7 +350,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
             }
             else if (prop.name.kind === SyntaxKind.ComputedPropertyName) {
                 const expression = prop.name.expression;
-                if (!isPrimitiveLiteralValue(expression, /*includeBigInt*/ false)) {
+                if (!isPrimitiveLiteralValue(expression, /*includeBigInt*/ false) && !resolver.isDefinitelyReferenceToGlobalSymbolObject(expression)) {
                     context.tracker.reportInferenceFallback(prop.name);
                     result = false;
                 }

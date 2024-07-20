@@ -144,7 +144,7 @@ fn2 `${ '' }${ 0 }`; // OK
 // Generic overloads with differing arity
 function fn3<T>(strs: TemplateStringsArray, n: T): string;
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T_1, U>(strs: TemplateStringsArray, s: string, t: T_1, u: U): U; <T_1, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T_1): number; }
->    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^   ^^ ^^    ^^                    ^^ ^^      ^^ ^^   ^^ ^^ ^^^ ^^^   ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^   ^^^      ^^^
+>    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^^^^^^ ^^    ^^                    ^^ ^^      ^^ ^^   ^^ ^^ ^^^ ^^^^^^^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^   ^^^      ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >n : T
@@ -152,7 +152,7 @@ function fn3<T>(strs: TemplateStringsArray, n: T): string;
 
 function fn3<T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U;
 >fn3 : { <T_1>(strs: TemplateStringsArray, n: T_1): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T_1, U_1, V>(strs: TemplateStringsArray, v: V, u: U_1, t: T_1): number; }
->    : ^^^   ^^    ^^                    ^^ ^^   ^^^      ^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^   ^^   ^^ ^^    ^^                    ^^ ^^ ^^ ^^   ^^ ^^   ^^^      ^^^
+>    : ^^^^^^^^    ^^                    ^^ ^^   ^^^      ^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^^^^^^^^^^^ ^^    ^^                    ^^ ^^ ^^ ^^   ^^ ^^   ^^^      ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >s : string
@@ -164,7 +164,7 @@ function fn3<T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U;
 
 function fn3<T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number;
 >fn3 : { <T_1>(strs: TemplateStringsArray, n: T_1): string; <T_1, U_1>(strs: TemplateStringsArray, s: string, t: T_1, u: U_1): U_1; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->    : ^^^   ^^    ^^                    ^^ ^^   ^^^      ^^^   ^^   ^^    ^^                    ^^ ^^      ^^ ^^   ^^ ^^   ^^^   ^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
+>    : ^^^^^^^^    ^^                    ^^ ^^   ^^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^   ^^ ^^   ^^^   ^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >v : V
@@ -283,7 +283,7 @@ fn3 ``; // Error
 // Generic overloads with constraints
 function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U);
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T_1 extends number, U_1 extends string>(strs: TemplateStringsArray, n: T_1, m: U_1): any; (strs: TemplateStringsArray): any; }
->    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^   ^^^^^^^^^      ^^   ^^^^^^^^^      ^^    ^^                    ^^ ^^   ^^ ^^   ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^    ^^                    ^^ ^^   ^^ ^^   ^^^^^^^^^    ^^                    ^^^^^^^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >n : T
@@ -293,7 +293,7 @@ function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: 
 
 function fn4<T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U);
 >fn4 : { <T_1 extends string, U_1 extends number>(strs: TemplateStringsArray, n: T_1, m: U_1): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->    : ^^^   ^^^^^^^^^      ^^   ^^^^^^^^^      ^^    ^^                    ^^ ^^   ^^ ^^   ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^      ^^    ^^                    ^^ ^^   ^^ ^^   ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >n : T

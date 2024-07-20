@@ -11,7 +11,7 @@ class A<T> {
 }
 function B1<U>() {
 >B1 : <U>() => typeof (Anonymous class)
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // class expression can use T
     return class extends A<U> { }
@@ -34,7 +34,7 @@ class B2<V> {
 }
 function B3<W>() {
 >B3 : <W>() => typeof Inner
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^
 
     return class Inner<TInner> extends A<W> { }
 >class Inner<TInner> extends A<W> { } : typeof Inner
@@ -51,7 +51,7 @@ class K extends B1<number>() {
 >B1<number>() : B1<number>.(Anonymous class)
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >B1 : <U>() => typeof (Anonymous class)
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     namae: string;
 >namae : string
@@ -81,7 +81,7 @@ let b3Number = B3<number>();
 >B3<number>() : typeof Inner
 >             : ^^^^^^^^^^^^
 >B3 : <W>() => typeof Inner
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^
 
 class S extends b3Number<string> {
 >S : S

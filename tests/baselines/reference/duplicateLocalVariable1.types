@@ -55,11 +55,11 @@ export class TestRunner {
 >arg1.every(function (val, index) { return val === arg2[index] }) : boolean
 >                                                                 : ^^^^^^^
 >arg1.every : { <S extends any>(predicate: (value: any, index: number, array: any[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any): boolean; }
->           : ^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
+>           : ^^^ ^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >arg1 : any[]
 >     : ^^^^^
 >every : { <S extends any>(predicate: (value: any, index: number, array: any[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: any, index: number, array: any[]) => unknown, thisArg?: any): boolean; }
->      : ^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
+>      : ^^^ ^^^^^^^^^^^^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^        ^  ^^^         ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^       ^^       ^^^   ^^^       ^^^
 >function (val, index) { return val === arg2[index] } : (val: any, index: number) => boolean
 >                                                     : ^   ^^^^^^^     ^^^^^^^^^^^^^^^^^^^^
 >val : any

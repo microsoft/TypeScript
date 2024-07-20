@@ -1,16 +1,17 @@
 import { jsonToReadableText } from "../helpers.js";
 import { libContent } from "../helpers/contents.js";
+import { forEachNoEmitTscWatch } from "../helpers/noEmit.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
+describe("unittests:: tsbuildWatch:: watchMode:: with noEmit::", () => {
     function verify(outFile?: object) {
         verifyTscWatch({
             scenario: "noEmit",
-            subScenario: `does not go in loop when watching when no files are emitted${outFile ? " with outFile" : ""}`,
+            subScenario: `${outFile ? "outFile" : "multiFile"}/does not go in loop when watching when no files are emitted`,
             commandLineArgs: ["-b", "-w", "-verbose"],
             sys: () =>
                 createWatchedSystem({
@@ -44,4 +45,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
     }
     verify();
     verify({ outFile: "../out.js" });
+
+    forEachNoEmitTscWatch(["-b", "-verbose"]);
 });

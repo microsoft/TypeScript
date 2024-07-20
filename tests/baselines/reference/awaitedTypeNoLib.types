@@ -52,11 +52,11 @@ class Thenable<T> {
 >this.resolvePromise(result, resolve) : void
 >                                     : ^^^^
 >this.resolvePromise : <TResult_1>(result: Thenable<TResult_1>, resolve: Receiver<TResult_1>) => void
->                    : ^         ^^      ^^                   ^^       ^^                   ^^^^^^^^^
+>                    : ^^^^^^^^^^^^      ^^                   ^^       ^^                   ^^^^^^^^^
 >this : this
 >     : ^^^^
 >resolvePromise : <TResult_1>(result: Thenable<TResult_1>, resolve: Receiver<TResult_1>) => void
->               : ^         ^^      ^^                   ^^       ^^                   ^^^^^^^^^
+>               : ^^^^^^^^^^^^      ^^                   ^^       ^^                   ^^^^^^^^^
 >result : NotPromise<TResult> | Thenable<NotPromise<TResult>>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >resolve : Receiver<TResult>

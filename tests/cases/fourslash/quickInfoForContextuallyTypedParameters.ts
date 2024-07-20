@@ -34,7 +34,7 @@ verify.quickInfos({
     func?: Function;
 }, obj: T, key: "name"): "name"`,
     4: `function foof<Error, "name">(settings: (row: Error) => {
-    value: Error["name"];
+    value: string;
     func?: Function;
 }, obj: Error, key: "name"): "name"`
 });

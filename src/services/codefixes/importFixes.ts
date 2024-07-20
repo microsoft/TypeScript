@@ -47,6 +47,7 @@ import {
     FutureSymbolExportInfo,
     getAllowSyntheticDefaultImports,
     getBaseFileName,
+    getDeclarationOfKind,
     getDefaultLikeExportInfo,
     getDirectoryPath,
     getEmitModuleFormatOfFileWorker,
@@ -55,6 +56,7 @@ import {
     getEmitScriptTarget,
     getExportInfoMap,
     getImpliedNodeFormatForEmitWorker,
+    getIsFileExcluded,
     getMeaningFromLocation,
     getNameForExportedSymbol,
     getOutputExtension,
@@ -279,8 +281,14 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         const checker = program.getTypeChecker();
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
         const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
+        if (!exportInfo) {
+            // If no exportInfo is found, this means export could not be resolved when we have filtered for autoImportFileExcludePatterns,
+            //     so we should not generate an import.
+            Debug.assert(preferences.autoImportFileExcludePatterns?.length);
+            return;
+        }
         const useRequire = shouldUseRequire(sourceFile, program);
-        let fix = getImportFixForSymbol(sourceFile, Debug.checkDefined(exportInfo), program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
+        let fix = getImportFixForSymbol(sourceFile, exportInfo, program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
         if (fix) {
             const localName = tryCast(referenceImport?.name, isIdentifier)?.text ?? symbolName;
             if (
@@ -861,9 +869,16 @@ function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAc
 
 function getAllExportInfoForSymbol(importingFile: SourceFile | FutureSourceFile, symbol: Symbol, symbolName: string, moduleSymbol: Symbol, preferCapitalized: boolean, program: Program, host: LanguageServiceHost, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): readonly SymbolExportInfo[] | undefined {
     const getChecker = createGetChecker(program, host);
+    const isFileExcluded = preferences.autoImportFileExcludePatterns && getIsFileExcluded(host, preferences);
+    const mergedModuleSymbol = program.getTypeChecker().getMergedSymbol(moduleSymbol);
+    const moduleSourceFile = isFileExcluded && mergedModuleSymbol.declarations && getDeclarationOfKind(mergedModuleSymbol, SyntaxKind.SourceFile);
+    const moduleSymbolExcluded = moduleSourceFile && isFileExcluded(moduleSourceFile as SourceFile);
     return getExportInfoMap(importingFile, host, program, preferences, cancellationToken)
         .search(importingFile.path, preferCapitalized, name => name === symbolName, info => {
-            if (skipAlias(info[0].symbol, getChecker(info[0].isFromPackageJson)) === symbol && info.some(i => i.moduleSymbol === moduleSymbol || i.symbol.parent === moduleSymbol)) {
+            if (
+                getChecker(info[0].isFromPackageJson).getMergedSymbol(skipAlias(info[0].symbol, getChecker(info[0].isFromPackageJson))) === symbol
+                && (moduleSymbolExcluded || info.some(i => i.moduleSymbol === moduleSymbol || i.symbol.parent === moduleSymbol))
+            ) {
                 return info;
             }
         });
@@ -1187,7 +1202,7 @@ function getNewImportFixes(
                 const exportEquals = checker.resolveExternalModuleSymbol(exportInfo.moduleSymbol);
                 let namespacePrefix;
                 if (exportEquals !== exportInfo.moduleSymbol) {
-                    namespacePrefix = forEachNameOfDefaultExport(exportEquals, checker, compilerOptions, /*preferCapitalizedNames*/ false, identity)!;
+                    namespacePrefix = forEachNameOfDefaultExport(exportEquals, checker, getEmitScriptTarget(compilerOptions), identity)!;
                 }
                 namespacePrefix ||= moduleSymbolToValidIdentifier(
                     exportInfo.moduleSymbol,
@@ -1544,7 +1559,7 @@ function getExportInfos(
         if (
             defaultInfo
             && symbolFlagsHaveMeaning(checker.getSymbolFlags(defaultInfo.symbol), currentTokenMeaning)
-            && forEachNameOfDefaultExport(defaultInfo.symbol, checker, compilerOptions, isJsxTagName, name => name === symbolName)
+            && forEachNameOfDefaultExport(defaultInfo.symbol, checker, getEmitScriptTarget(compilerOptions), (name, capitalizedName) => (isJsxTagName ? capitalizedName ?? name : name) === symbolName)
         ) {
             addSymbol(moduleSymbol, sourceFile, defaultInfo.symbol, defaultInfo.exportKind, program, isFromPackageJson);
         }

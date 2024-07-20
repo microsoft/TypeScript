@@ -1,75 +1,17 @@
 import { jsonToReadableText } from "../helpers.js";
-import { forEachNoEmitOnErrorScenario } from "../helpers/noEmitOnError.js";
-import {
-    noChangeRun,
-    TestTscEdit,
-    verifyTsc,
-} from "../helpers/tsc.js";
+import { forEachNoEmitOnErrorScenarioTsc } from "../helpers/noEmitOnError.js";
+import { verifyTsc } from "../helpers/tsc.js";
 import {
     loadProjectFromFiles,
     replaceText,
 } from "../helpers/vfs.js";
 
 describe("unittests:: tsc:: noEmitOnError::", () => {
-    forEachNoEmitOnErrorScenario(
-        (fsContents, cwd, executingFilePath) => loadProjectFromFiles(fsContents, { cwd, executingFilePath }),
-        (scnearioName, fs) => {
-            describe(scnearioName("verify noEmitOnError"), () => {
-                function verifyNoEmitOnError(subScenario: string, fixModifyFs: TestTscEdit["edit"], modifyFs?: TestTscEdit["edit"]) {
-                    verifyTsc({
-                        scenario: "noEmitOnError",
-                        subScenario: scnearioName(subScenario),
-                        fs,
-                        commandLineArgs: [],
-                        modifyFs,
-                        edits: [
-                            noChangeRun,
-                            {
-                                caption: "incremental-declaration-doesnt-change",
-                                edit: fixModifyFs,
-                            },
-                            noChangeRun,
-                        ],
-                        baselinePrograms: true,
-                    });
-                }
-                verifyNoEmitOnError(
-                    "syntax errors",
-                    fs =>
-                        fs.writeFileSync(
-                            "src/main.ts",
-                            `import { A } from "../shared/types/db";
-const a = {
-    lastName: 'sdsd'
-};`,
-                            "utf-8",
-                        ),
-                );
-
-                verifyNoEmitOnError(
-                    "semantic errors",
-                    fs =>
-                        fs.writeFileSync(
-                            "src/main.ts",
-                            `import { A } from "../shared/types/db";
-const a: string = "hello";`,
-                            "utf-8",
-                        ),
-                    fs =>
-                        fs.writeFileSync(
-                            "src/main.ts",
-                            `import { A } from "../shared/types/db";
-const a: string = 10;`,
-                            "utf-8",
-                        ),
-                );
-            });
-        },
-    );
+    forEachNoEmitOnErrorScenarioTsc([]);
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: `when declarationMap changes`,
+        subScenario: `multiFile/when declarationMap changes`,
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
@@ -104,7 +46,7 @@ const a: string = 10;`,
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: `when declarationMap changes with outFile`,
+        subScenario: `outFile/when declarationMap changes`,
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
@@ -124,6 +66,10 @@ const a: string = 10;`,
                 caption: "error and enable declarationMap",
                 edit: fs => replaceText(fs, "/src/project/a.ts", "x", "x: 20"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
+                discrepancyExplanation: () => [
+                    `Clean build does not emit any file so will not have outSignature`,
+                    `Incremental build has outSignature from before`,
+                ],
             },
             {
                 caption: "fix error declarationMap",
@@ -135,7 +81,7 @@ const a: string = 10;`,
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: "file deleted before fixing error with noEmitOnError",
+        subScenario: "multiFile/file deleted before fixing error with noEmitOnError",
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({
@@ -157,7 +103,7 @@ const a: string = 10;`,
 
     verifyTsc({
         scenario: "noEmitOnError",
-        subScenario: "file deleted before fixing error with noEmitOnError with outFile",
+        subScenario: "outFile/file deleted before fixing error with noEmitOnError",
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/tsconfig.json": jsonToReadableText({

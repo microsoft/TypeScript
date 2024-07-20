@@ -1,6 +1,9 @@
 import * as fs from "fs";
 
-import { IO } from "../../_namespaces/Harness.js";
+import {
+    IO,
+    skipSysTests,
+} from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import {
     defer,
@@ -30,6 +33,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         watchOptions: Pick<ts.WatchOptions, "watchFile">,
         getFileName?: (file: string) => string,
     ) {
+        if (skipSysTests) return;
         it(scenario, async () => {
             const fileResult = watchFile(file);
             const linkResult = watchFile(link);
@@ -85,6 +89,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         event: "rename" | "change" | readonly ["rename", "change"]; // Its expected event name or any of the event names
         // eslint-disable-next-line no-restricted-syntax
         fileName: string | null | undefined;
+        optional?: boolean; // This event is optional and may or may not be triggered on a given OS (see https://github.com/nodejs/node/issues/53903)
     }
     type FsWatch<System extends ts.System> = (dir: string, recursive: boolean, cb: ts.FsWatchCallback, sys: System) => ts.FileWatcher;
     interface WatchDirectoryResult {
@@ -152,18 +157,39 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         actual: readonly EventAndFileName[],
         expected: readonly ExpectedEventAndFileName[] | undefined,
     ) {
-        assert(actual.length >= (expected?.length ?? 0), `${prefix}:: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)}`);
+        const maxExpected = expected?.length ?? 0;
+        const minExpected = expected?.reduce((m, e) => e.optional ? m : m + 1, 0) ?? maxExpected;
         const sortedActual = ts.sortAndDeduplicate(actual, compareEventAndFileName);
+        assert(sortedActual.length >= minExpected && sortedActual.length <= maxExpected, `${prefix}:: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)}`);
 
+        let actualIndex = 0;
         let expectedIndex = 0;
-        for (const a of sortedActual) {
-            if (isExpectedEventAndFileName(a, expected![expectedIndex])) {
+        while (actualIndex < sortedActual.length && expectedIndex < maxExpected) {
+            const a = sortedActual[actualIndex];
+            const e = expected![expectedIndex];
+            if (isExpectedEventAndFileName(a, e)) {
+                actualIndex++;
                 expectedIndex++;
                 continue;
             }
+            if (e.optional) {
+                expectedIndex++;
+                continue;
+            }
+            break;
+        }
+        if (actualIndex < sortedActual.length) {
             ts.Debug.fail(`${prefix}:: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)} Sorted: ${JSON.stringify(sortedActual)}`);
         }
-        assert(expectedIndex >= (expected?.length ?? 0), `${prefix}:: Should get all events: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)} Sorted: ${JSON.stringify(sortedActual)}`);
+        while (expectedIndex < maxExpected) {
+            const e = expected![expectedIndex];
+            if (e.optional) {
+                expectedIndex++;
+                continue;
+            }
+            break;
+        }
+        assert(expectedIndex >= maxExpected, `${prefix}:: Should get all events: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)} Sorted: ${JSON.stringify(sortedActual)}`);
     }
 
     function isExpectedEventAndFileName(actual: EventAndFileName, expected: ExpectedEventAndFileName | undefined) {
@@ -191,6 +217,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         link: string,
         osFlavor: TestServerHostOsFlavor,
     ) {
+        if (skipSysTests) return;
         it(`watchDirectory using fsEvents ${osFlavorToString(osFlavor)}`, async () => {
             const tableOfEvents: FsEventsForWatchDirectory = osFlavor === TestServerHostOsFlavor.MacOs ?
                 {
@@ -355,6 +382,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         link: string,
         osFlavor: TestServerHostOsFlavor.Windows | TestServerHostOsFlavor.MacOs,
     ) {
+        if (skipSysTests) return;
         const tableOfEvents: RecursiveFsEventsForWatchDirectory = osFlavor === TestServerHostOsFlavor.MacOs ?
             {
                 fileCreate: [
@@ -438,6 +466,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                 ],
                 linkFileDelete: [
                     { event: "rename", fileName: "sub/folder/file2.ts" },
+                    { event: "change", fileName: "sub/folder", optional: osFlavor === TestServerHostOsFlavor.Windows },
                 ],
 
                 linkSubFileCreate: [

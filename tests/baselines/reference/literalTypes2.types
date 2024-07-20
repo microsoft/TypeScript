@@ -1200,11 +1200,11 @@ function append<T>(a: T[], x: T): T[] {
 >a.slice() : T[]
 >          : ^^^
 >a.slice : (start?: number, end?: number) => T[]
->        : ^     ^^^      ^^   ^^^      ^^^^^^  
+>        : ^     ^^^      ^^   ^^^      ^^^^^^^^
 >a : T[]
 >  : ^^^
 >slice : (start?: number, end?: number) => T[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^  
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^
 
     result.push(x);
 >result.push(x) : number
