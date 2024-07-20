@@ -3,7 +3,7 @@
 === unusedLocalsInMethod4.ts ===
 function f<T, NonNull extends {}>() {
 >f : <T, NonNull extends {}>() => void
->  : ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^  ^^^^^^^^^^^
 
     let x1: number[]; // should error
 >x1 : number[]
@@ -162,7 +162,7 @@ function f<T, NonNull extends {}>() {
 
 function f2<T, NonNull extends {}>() {
 >f2 : <T, NonNull extends {}>() => void
->   : ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^  ^^^^^^^^^^^
 
     let x1: number[]; // should error
 >x1 : number[]
