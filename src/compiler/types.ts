@@ -4968,6 +4968,16 @@ export interface TypeChecker {
     getWidenedLiteralType(type: Type): Type;
     /** @internal */
     getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
+    /**
+     * Gets the "awaited type" of a type.
+     *
+     * The "awaited type" of an expression is its "promised type" if the expression is a
+     * Promise-like type; otherwise, it is the type of the expression. If the "promised
+     * type" is itself a Promise-like, the "promised type" is recursively unwrapped until a
+     * non-promise type is found.
+     *
+     * This is used to reflect the runtime behavior of the `await` keyword.
+     */
     getAwaitedType(type: Type): Type | undefined;
     /** @internal */
     isEmptyAnonymousObjectType(type: Type): boolean;
