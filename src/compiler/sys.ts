@@ -1484,11 +1484,11 @@ export let sys: System = (() => {
         const isMacOs = process.platform === "darwin";
         const isLinuxOrMacOs = process.platform === "linux" || isMacOs;
 
+        const statSyncOptions = { throwIfNoEntry: false } as const;
+
         const platform: string = _os.platform();
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
         const fsRealpath = !!_fs.realpathSync.native ? process.platform === "win32" ? fsRealPathHandlingLongPath : _fs.realpathSync.native : _fs.realpathSync;
-
-        const statSyncOptions = { throwIfNoEntry: false } as const;
 
         // If our filename is "sys.js", then we are executing unbundled on the raw tsc output.
         // In that case, simulate a faked path in the directory where a bundle would normally
