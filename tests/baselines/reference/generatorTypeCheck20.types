@@ -18,8 +18,8 @@ function* g(): IterableIterator<Foo> {
 >  : ^^^^^^                     
 
     yield;
->yield : undefined
->      : ^^^^^^^^^
+>yield : any
+>      : ^^^
 
     yield * [new Baz];
 >yield * [new Baz] : any

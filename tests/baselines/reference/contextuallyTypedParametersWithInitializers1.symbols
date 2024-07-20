@@ -303,9 +303,9 @@ export function executeSomething() {
 >debug : Symbol(debug, Decl(contextuallyTypedParametersWithInitializers1.ts, 74, 38))
 
             root.innerHTML = '';
->root.innerHTML : Symbol(InnerHTML.innerHTML, Decl(lib.dom.d.ts, --, --))
+>root.innerHTML : Symbol(Element.innerHTML, Decl(lib.dom.d.ts, --, --))
 >root : Symbol(root, Decl(contextuallyTypedParametersWithInitializers1.ts, 74, 20))
->innerHTML : Symbol(InnerHTML.innerHTML, Decl(lib.dom.d.ts, --, --))
+>innerHTML : Symbol(Element.innerHTML, Decl(lib.dom.d.ts, --, --))
         }
     });
 }

@@ -1,0 +1,428 @@
+//// [tests/cases/compiler/builtinIterator.ts] ////
+
+=== builtinIterator.ts ===
+const iterator = Iterator.from([0, 1, 2]);
+>iterator : BuiltinIterator<number, undefined, any>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from([0, 1, 2]) : BuiltinIterator<number, undefined, any>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => BuiltinIterator<T, undefined>
+>              : ^ ^^     ^^                                                                 ^^^^^                             
+>Iterator : IteratorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+>from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => BuiltinIterator<T, undefined>
+>     : ^ ^^     ^^                                                                 ^^^^^                             
+>[0, 1, 2] : number[]
+>          : ^^^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+const mapped = iterator.map(String);
+>mapped : BuiltinIterator<string, undefined, any>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.map(String) : BuiltinIterator<string, undefined, any>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.map : <U>(callbackfn: (value: number, index: number) => U) => BuiltinIterator<U, undefined, any>
+>             : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator : BuiltinIterator<number, undefined, any>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : <U>(callbackfn: (value: number, index: number) => U) => BuiltinIterator<U, undefined, any>
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+const filtered = iterator.filter(x => x > 0);
+>filtered : BuiltinIterator<number, undefined, any>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.filter(x => x > 0) : BuiltinIterator<number, undefined, any>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.filter : { <S extends number>(predicate: (value: number, index: number) => value is S): BuiltinIterator<S, undefined, any>; (predicate: (value: number, index: number) => unknown): BuiltinIterator<number, undefined, any>; }
+>                : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator : BuiltinIterator<number, undefined, any>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>filter : { <S extends number>(predicate: (value: number, index: number) => value is S): BuiltinIterator<S, undefined, any>; (predicate: (value: number, index: number) => unknown): BuiltinIterator<number, undefined, any>; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => x > 0 : (x: number) => boolean
+>           : ^ ^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x > 0 : boolean
+>      : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+
+function isZero(x: number): x is 0 {
+>isZero : (x: number) => x is 0
+>       : ^ ^^      ^^^^^      
+>x : number
+>  : ^^^^^^
+
+  return x === 0;
+>x === 0 : boolean
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+}
+const zero = iterator.filter(isZero);
+>zero : BuiltinIterator<0, undefined, any>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.filter(isZero) : BuiltinIterator<0, undefined, any>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.filter : { <S extends number>(predicate: (value: number, index: number) => value is S): BuiltinIterator<S, undefined, any>; (predicate: (value: number, index: number) => unknown): BuiltinIterator<number, undefined, any>; }
+>                : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator : BuiltinIterator<number, undefined, any>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>filter : { <S extends number>(predicate: (value: number, index: number) => value is S): BuiltinIterator<S, undefined, any>; (predicate: (value: number, index: number) => unknown): BuiltinIterator<number, undefined, any>; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isZero : (x: number) => x is 0
+>       : ^ ^^      ^^^^^      
+
+const iteratorFromBare = Iterator.from({
+>iteratorFromBare : BuiltinIterator<string, undefined, any>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from({  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },}) : BuiltinIterator<string, undefined, any>
+>                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => BuiltinIterator<T, undefined>
+>              : ^ ^^     ^^                                                                 ^^^^^                             
+>Iterator : IteratorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+>from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => BuiltinIterator<T, undefined>
+>     : ^ ^^     ^^                                                                 ^^^^^                             
+>{  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },} : { next(): { done: boolean; value: string; }; }
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  next() {
+>next : () => { done: boolean; value: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return {
+>{      done: Math.random() < .5,      value: "a string",    } : { done: boolean; value: string; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      done: Math.random() < .5,
+>done : boolean
+>     : ^^^^^^^
+>Math.random() < .5 : boolean
+>                   : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>.5 : 0.5
+>   : ^^^
+
+      value: "a string",
+>value : string
+>      : ^^^^^^
+>"a string" : "a string"
+>           : ^^^^^^^^^^
+
+    };
+  },
+});
+
+
+function* gen() {
+>gen : () => Generator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  yield 0;
+>yield 0 : any
+>        : ^^^
+>0 : 0
+>  : ^
+}
+
+const mappedGen = gen().map(x => x === 0 ? "zero" : "other");
+>mappedGen : BuiltinIterator<"zero" | "other", undefined, any>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>gen().map(x => x === 0 ? "zero" : "other") : BuiltinIterator<"zero" | "other", undefined, any>
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>gen().map : <U>(callbackfn: (value: number, index: number) => U) => BuiltinIterator<U, undefined, any>
+>          : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>gen() : Generator<number, void, unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>gen : () => Generator<number, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : <U>(callbackfn: (value: number, index: number) => U) => BuiltinIterator<U, undefined, any>
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => x === 0 ? "zero" : "other" : (x: number) => "zero" | "other"
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x === 0 ? "zero" : "other" : "zero" | "other"
+>                           : ^^^^^^^^^^^^^^^^
+>x === 0 : boolean
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>"zero" : "zero"
+>       : ^^^^^^
+>"other" : "other"
+>        : ^^^^^^^
+
+const mappedValues = [0, 1, 2].values().map(x => x === 0 ? "zero" : "other");
+>mappedValues : BuiltinIterator<"zero" | "other", undefined, any>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[0, 1, 2].values().map(x => x === 0 ? "zero" : "other") : BuiltinIterator<"zero" | "other", undefined, any>
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[0, 1, 2].values().map : <U>(callbackfn: (value: number, index: number) => U) => BuiltinIterator<U, undefined, any>
+>                       : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[0, 1, 2].values() : BuiltinIterator<number, undefined, any>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[0, 1, 2].values : () => BuiltinIterator<number, undefined, any>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[0, 1, 2] : number[]
+>          : ^^^^^^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>values : () => BuiltinIterator<number, undefined, any>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : <U>(callbackfn: (value: number, index: number) => U) => BuiltinIterator<U, undefined, any>
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => x === 0 ? "zero" : "other" : (x: number) => "zero" | "other"
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x === 0 ? "zero" : "other" : "zero" | "other"
+>                           : ^^^^^^^^^^^^^^^^
+>x === 0 : boolean
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+>"zero" : "zero"
+>       : ^^^^^^
+>"other" : "other"
+>        : ^^^^^^^
+
+
+class GoodIterator extends Iterator<number> {
+>GoodIterator : GoodIterator
+>             : ^^^^^^^^^^^^
+>Iterator : Iterator<number>
+>         : ^^^^^^^^^^^^^^^^
+
+  next() {
+>next : () => { readonly done: false; readonly value: 0; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return { done: false, value: 0 } as const;
+>{ done: false, value: 0 } as const : { readonly done: false; readonly value: 0; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ done: false, value: 0 } : { readonly done: false; readonly value: 0; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+>value : 0
+>      : ^
+>0 : 0
+>  : ^
+  }
+}
+
+// error cases
+new Iterator<number>();
+>new Iterator<number>() : any
+>                       : ^^^
+>Iterator : IteratorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+
+class C extends Iterator<number> {}
+>C : C
+>  : ^
+>Iterator : Iterator<number>
+>         : ^^^^^^^^^^^^^^^^
+
+// it's unfortunate that these are an error
+class BadIterator1 extends Iterator<number> {
+>BadIterator1 : BadIterator1
+>             : ^^^^^^^^^^^^
+>Iterator : Iterator<number>
+>         : ^^^^^^^^^^^^^^^^
+
+  next() {
+>next : () => { readonly done: false; readonly value: 0; } | { readonly done: true; readonly value: "a string"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (Math.random() < .5) {
+>Math.random() < .5 : boolean
+>                   : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>.5 : 0.5
+>   : ^^^
+
+      return { done: false, value: 0 } as const;
+>{ done: false, value: 0 } as const : { readonly done: false; readonly value: 0; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ done: false, value: 0 } : { readonly done: false; readonly value: 0; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : false
+>     : ^^^^^
+>false : false
+>      : ^^^^^
+>value : 0
+>      : ^
+>0 : 0
+>  : ^
+
+    } else {
+      return { done: true, value: "a string" } as const;
+>{ done: true, value: "a string" } as const : { readonly done: true; readonly value: "a string"; }
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ done: true, value: "a string" } : { readonly done: true; readonly value: "a string"; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : true
+>     : ^^^^
+>true : true
+>     : ^^^^
+>value : "a string"
+>      : ^^^^^^^^^^
+>"a string" : "a string"
+>           : ^^^^^^^^^^
+    }
+  }
+}
+
+class BadIterator2 extends Iterator<number> {
+>BadIterator2 : BadIterator2
+>             : ^^^^^^^^^^^^
+>Iterator : Iterator<number>
+>         : ^^^^^^^^^^^^^^^^
+
+  next() {
+>next : () => { done: boolean; value: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return { done: false, value: 0 };
+>{ done: false, value: 0 } : { done: boolean; value: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : boolean
+>     : ^^^^^^^
+>false : false
+>      : ^^^^^
+>value : number
+>      : ^^^^^^
+>0 : 0
+>  : ^
+  }
+}
+
+class BadIterator3 extends Iterator<number> {
+>BadIterator3 : BadIterator3
+>             : ^^^^^^^^^^^^
+>Iterator : Iterator<number>
+>         : ^^^^^^^^^^^^^^^^
+
+  next() {
+>next : () => { done: boolean; value: number; } | { done: boolean; value: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (Math.random() < .5) {
+>Math.random() < .5 : boolean
+>                   : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>.5 : 0.5
+>   : ^^^
+
+      return { done: false, value: 0 };
+>{ done: false, value: 0 } : { done: boolean; value: number; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : boolean
+>     : ^^^^^^^
+>false : false
+>      : ^^^^^
+>value : number
+>      : ^^^^^^
+>0 : 0
+>  : ^
+
+    } else {
+      return { done: true, value: "a string" };
+>{ done: true, value: "a string" } : { done: boolean; value: string; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : boolean
+>     : ^^^^^^^
+>true : true
+>     : ^^^^
+>value : string
+>      : ^^^^^^
+>"a string" : "a string"
+>           : ^^^^^^^^^^
+    }
+  }
+}
+
+declare const g1: Generator<string, number, boolean>;
+>g1 : Generator<string, number, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const iter1 = Iterator.from(g1);
+>iter1 : BuiltinIterator<string, undefined, any>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from(g1) : BuiltinIterator<string, undefined, any>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => BuiltinIterator<T, undefined>
+>              : ^ ^^     ^^                                                                 ^^^^^                             
+>Iterator : IteratorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+>from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => BuiltinIterator<T, undefined>
+>     : ^ ^^     ^^                                                                 ^^^^^                             
+>g1 : Generator<string, number, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const iter2: BuiltinIterator<string, BuiltinIteratorReturn>;
+>iter2 : BuiltinIterator<string, undefined, any>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+const iter3 = iter2.flatMap(() => g1);
+>iter3 : BuiltinIterator<string, undefined, any>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iter2.flatMap(() => g1) : BuiltinIterator<string, undefined, any>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iter2.flatMap : <U>(callback: (value: string, index: number) => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>) => BuiltinIterator<U, undefined, any>
+>              : ^ ^^        ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iter2 : BuiltinIterator<string, undefined, any>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>flatMap : <U>(callback: (value: string, index: number) => Iterator<U, unknown, undefined> | Iterable<U, unknown, undefined>) => BuiltinIterator<U, undefined, any>
+>        : ^ ^^        ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => g1 : () => Generator<string, number, boolean>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g1 : Generator<string, number, boolean>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

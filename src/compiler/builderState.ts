@@ -5,6 +5,7 @@ import {
     computeSignatureWithDiagnostics,
     CustomTransformers,
     Debug,
+    EmitOnly,
     EmitOutput,
     emptyArray,
     GetCanonicalFileName,
@@ -418,7 +419,7 @@ export namespace BuilderState {
                 );
             },
             cancellationToken,
-            /*emitOnly*/ true,
+            EmitOnly.BuilderSignature,
             /*customTransformers*/ undefined,
             /*forceDtsEmit*/ true,
         );

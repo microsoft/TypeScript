@@ -84,6 +84,7 @@
         "esnext.disposable",
         "esnext.collection",
         "esnext.array",
+        "esnext.iterator",
         "decorators",
         "decorators.legacy",
         // Default libraries

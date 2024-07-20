@@ -229,24 +229,7 @@ Info seq  [hh:mm:ss:mss] response:
         "updateGraphDurationMs": *
       },
       "body": {
-        "edits": [
-          {
-            "fileName": "/target.ts",
-            "textChanges": [
-              {
-                "start": {
-                  "line": 2,
-                  "offset": 14
-                },
-                "end": {
-                  "line": 2,
-                  "offset": 14
-                },
-                "newText": "/**\n* Testing comment line 1\n* line 2\n* line 3\n* line 4\n*/"
-              }
-            ]
-          }
-        ],
+        "edits": [],
         "fixId": "providePostPasteEdits"
       }
     }

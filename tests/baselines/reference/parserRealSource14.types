@@ -196,7 +196,7 @@ module TypeScript {
 >this.asts.map((value) => { return value; }) : TypeScript.AST[]
 >                                            : ^^^^^^^^^^^^^^^^
 >this.asts.map : <U>(callbackfn: (value: TypeScript.AST, index: number, array: TypeScript.AST[]) => U, thisArg?: any) => U[]
->              : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>              : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -204,7 +204,7 @@ module TypeScript {
 >asts : TypeScript.AST[]
 >     : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: TypeScript.AST, index: number, array: TypeScript.AST[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >(value) => { return value; } : (value: TypeScript.AST) => TypeScript.AST
 >                             : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : TypeScript.AST
@@ -286,16 +286,16 @@ module TypeScript {
                 this.asts.pop();
 >this.asts.pop() : TypeScript.AST
 >                : ^^^^^^^^^^^^^^
->this.asts.pop : () => TypeScript.AST | undefined
->              : ^^^^^^^^^^^^^^^^^^^^            
+>this.asts.pop : () => TypeScript.AST
+>              : ^^^^^^^^^^^^^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >asts : TypeScript.AST[]
 >     : ^^^^^^^^^^^^^^^^
->pop : () => TypeScript.AST | undefined
->    : ^^^^^^^^^^^^^^^^^^^^            
+>pop : () => TypeScript.AST
+>    : ^^^^^^^^^^^^^^^^^^^^
             }
             return head;
 >head : TypeScript.AST
@@ -335,16 +335,16 @@ module TypeScript {
                 this.asts.pop();
 >this.asts.pop() : TypeScript.AST
 >                : ^^^^^^^^^^^^^^
->this.asts.pop : () => TypeScript.AST | undefined
->              : ^^^^^^^^^^^^^^^^^^^^            
+>this.asts.pop : () => TypeScript.AST
+>              : ^^^^^^^^^^^^^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >asts : TypeScript.AST[]
 >     : ^^^^^^^^^^^^^^^^
->pop : () => TypeScript.AST | undefined
->    : ^^^^^^^^^^^^^^^^^^^^            
+>pop : () => TypeScript.AST
+>    : ^^^^^^^^^^^^^^^^^^^^
             }
             this.top = this.asts.length;
 >this.top = this.asts.length : number

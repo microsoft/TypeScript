@@ -8,7 +8,7 @@
 type PromiseOrValue<T> = Promise<T> | T;
 
 function mapAsyncIterable<T, U, R = undefined>(
-  iterable: AsyncGenerator<T, R, void> | AsyncIterable<T>,
+  iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>,
   callback: (value: T) => PromiseOrValue<U>,
 ): AsyncGenerator<U, R, void> {
   const iterator = iterable[Symbol.asyncIterator]();

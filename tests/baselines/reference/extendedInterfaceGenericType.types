@@ -35,11 +35,11 @@ betaOfNumber.takesArgOfT(5);
 >betaOfNumber.takesArgOfT(5) : Alpha<number>
 >                            : ^^^^^^^^^^^^^
 >betaOfNumber.takesArgOfT : (arg: number) => Alpha<number>
->                         : ^   ^^^^^^^^^^^^^      ^^^^^^ 
+>                         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >betaOfNumber : Beta<number>
 >             : ^^^^^^^^^^^^
 >takesArgOfT : (arg: number) => Alpha<number>
->            : ^   ^^^^^^^^^^^^^      ^^^^^^ 
+>            : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >5 : 5
 >  : ^
 

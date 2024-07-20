@@ -18,8 +18,5 @@ verify.pasteEdits({
         pasteLocations: [range[0]],
         copiedFrom: { file: "a.ts", range: [range[1]] },
     },
-    newFileContents: {
-        "/b.ts":
-`export`
-    }
+    newFileContents: {}
 });

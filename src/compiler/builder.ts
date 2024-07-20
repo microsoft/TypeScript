@@ -21,6 +21,7 @@ import {
     concatenate,
     convertToOptionsWithAbsolutePaths,
     createGetCanonicalFileName,
+    createModeMismatchDetails,
     createModuleNotFoundChain,
     createProgram,
     CustomTransformers,
@@ -70,7 +71,6 @@ import {
     ReadBuildProgramHost,
     ReadonlyCollection,
     RepopulateDiagnosticChainInfo,
-    RepopulateModuleNotFoundDiagnosticChain,
     returnFalse,
     returnUndefined,
     sameMap,
@@ -111,8 +111,8 @@ export interface ReusableDiagnosticRelatedInformation {
 }
 
 /** @internal */
-export interface ReusableRepopulateModuleNotFoundChain {
-    info: RepopulateModuleNotFoundDiagnosticChain;
+export interface ReusableRepopulateInfoChain {
+    info: RepopulateDiagnosticChainInfo;
     next?: ReusableDiagnosticMessageChain[];
 }
 
@@ -122,7 +122,7 @@ export type SerializedDiagnosticMessageChain = Omit<DiagnosticMessageChain, "nex
 };
 
 /** @internal */
-export type ReusableDiagnosticMessageChain = SerializedDiagnosticMessageChain | ReusableRepopulateModuleNotFoundChain;
+export type ReusableDiagnosticMessageChain = SerializedDiagnosticMessageChain | ReusableRepopulateInfoChain;
 
 /**
  * Signature (Hash of d.ts emitted), is string if it was emitted using same d.ts.map option as what compilerOptions indicate, otherwise tuple of string
@@ -538,7 +538,13 @@ function convertOrRepopulateDiagnosticMessageChain<T extends DiagnosticMessageCh
     repopulateInfo: (chain: T) => RepopulateDiagnosticChainInfo | undefined,
 ): DiagnosticMessageChain {
     const info = repopulateInfo(chain);
-    if (info) {
+    if (info === true) {
+        return {
+            ...createModeMismatchDetails(sourceFile!),
+            next: convertOrRepopulateDiagnosticMessageChainArray(chain.next as T[], sourceFile, newProgram, repopulateInfo),
+        };
+    }
+    else if (info) {
         return {
             ...createModuleNotFoundChain(sourceFile!, newProgram, info.moduleReference, info.mode, info.packageName || info.moduleReference),
             next: convertOrRepopulateDiagnosticMessageChainArray(chain.next as T[], sourceFile, newProgram, repopulateInfo),
@@ -600,7 +606,7 @@ function convertToDiagnosticRelatedInformation(
         file: sourceFile,
         messageText: isString(diagnostic.messageText) ?
             diagnostic.messageText :
-            convertOrRepopulateDiagnosticMessageChain(diagnostic.messageText, sourceFile, newProgram, chain => (chain as ReusableRepopulateModuleNotFoundChain).info),
+            convertOrRepopulateDiagnosticMessageChain(diagnostic.messageText, sourceFile, newProgram, chain => (chain as ReusableRepopulateInfoChain).info),
     };
 }
 

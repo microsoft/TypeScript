@@ -15,5 +15,5 @@ interface RegExp {
      * containing the results of that search.
      * @param string A string to search within.
      */
-    [Symbol.matchAll](str: string): IterableIterator<RegExpMatchArray>;
+    [Symbol.matchAll](str: string): BuiltinIterator<RegExpMatchArray, BuiltinIteratorReturn>;
 }
