@@ -371,8 +371,18 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
             symbolName,
             errorIdentifierText: undefined,
         };
-        if (referenceImport && isImportClause(referenceImport)) {
-            info = { ...info, fix: { ...info.fix, importKind: ImportKind.Default, addAsTypeOnly: isTypeOnlyImportDeclaration(referenceImport) ? AddAsTypeOnly.Required : AddAsTypeOnly.NotAllowed } };
+        if (referenceImport && isValidTypeOnlyUseSite && isImportClause(referenceImport)) {
+            info = {
+                ...info,
+                fix: {
+                    kind: ImportFixKind.AddNew,
+                    importKind: isNamespaceImport(referenceImport) ? ImportKind.Namespace : ImportKind.Default,
+                    addAsTypeOnly: isTypeOnlyImportDeclaration(referenceImport) ? AddAsTypeOnly.Allowed : AddAsTypeOnly.NotAllowed,
+                    useRequire,
+                    moduleSpecifierKind: undefined,
+                    moduleSpecifier,
+                },
+            };
         }
         addImport(info);
     }
