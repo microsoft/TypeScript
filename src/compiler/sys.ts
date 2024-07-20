@@ -1628,7 +1628,8 @@ export let sys: System = (() => {
             // throwIfNoEntry is available in Node 14.17 and above, which matches our supported range.
             try {
                 return _fs.statSync(path, { throwIfNoEntry: false });
-            } catch {
+            }
+            catch {
                 // This should never happen as we are passing throwIfNoEntry: false,
                 // but guard against this just in case (e.g. a polyfill doesn't check this flag).
                 return undefined;
