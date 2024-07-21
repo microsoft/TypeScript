@@ -401,7 +401,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     context.onEmitNode = onEmitNode;
 
     let shouldTransformPrivateStaticElementsInFile = false;
-    let enabledSubstitutions: ClassPropertySubstitutionFlags;
+    let enabledSubstitutions!: ClassPropertySubstitutionFlags;
 
     let classAliases: Identifier[];
 

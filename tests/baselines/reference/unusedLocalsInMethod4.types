@@ -487,7 +487,7 @@ function rw() {
 >rw : () => void
 >   : ^^^^^^^^^^
 
-    let i: number;
+    let i: number;  // should error
 >i : number
 >  : ^^^^^^
 
@@ -529,7 +529,7 @@ function createBinder() {
 >createBinder : () => void
 >             : ^^^^^^^^^^
 
-    var file: string;
+    var file: string;   // should not error
 >file : string
 >     : ^^^^^^
 
@@ -556,5 +556,66 @@ function createBinder() {
 >     : ^^^^^^
 >toString : () => string
 >         : ^^^^^^      
+    }
+}
+
+function transformClassFields() {
+>transformClassFields : () => void
+>                     : ^^^^^^^^^^
+
+    enum ClassPropertySubstitutionFlags {
+>ClassPropertySubstitutionFlags : ClassPropertySubstitutionFlags
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        ClassAliases = 1 << 0,
+>ClassAliases : ClassPropertySubstitutionFlags.ClassAliases
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 << 0 : number
+>       : ^^^^^^
+>1 : 1
+>  : ^
+>0 : 0
+>  : ^
+
+        ClassStaticThisOrSuperReference = 1 << 1,
+>ClassStaticThisOrSuperReference : ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 << 1 : number
+>       : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+    }
+
+    let enabledSubstitutions: ClassPropertySubstitutionFlags;   // should error
+>enabledSubstitutions : ClassPropertySubstitutionFlags
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    function enableSubstitutionForClassAliases() {
+>enableSubstitutionForClassAliases : () => void
+>                                  : ^^^^^^^^^^
+
+        enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
+>enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases : number
+>                                                                    : ^^^^^^
+>enabledSubstitutions : ClassPropertySubstitutionFlags
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ClassPropertySubstitutionFlags.ClassAliases : ClassPropertySubstitutionFlags.ClassAliases
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ClassPropertySubstitutionFlags : typeof ClassPropertySubstitutionFlags
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ClassAliases : ClassPropertySubstitutionFlags.ClassAliases
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        enabledSubstitutions.toString();
+>enabledSubstitutions.toString() : string
+>                                : ^^^^^^
+>enabledSubstitutions.toString : (radix?: number) => string
+>                              : ^     ^^^      ^^^^^      
+>enabledSubstitutions : ClassPropertySubstitutionFlags
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
     }
 }

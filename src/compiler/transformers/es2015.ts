@@ -523,7 +523,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * They are persisted between each SourceFile transformation and should not
      * be reset.
      */
-    let enabledSubstitutions: ES2015SubstitutionFlags;
+    let enabledSubstitutions!: ES2015SubstitutionFlags;
 
     return chainBundle(context, transformSourceFile);
 

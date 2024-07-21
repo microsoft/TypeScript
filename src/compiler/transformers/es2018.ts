@@ -170,7 +170,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     context.onSubstituteNode = onSubstituteNode;
 
     let exportedVariableStatement = false;
-    let enabledSubstitutions: ESNextSubstitutionFlags;
+    let enabledSubstitutions!: ESNextSubstitutionFlags;
     let enclosingFunctionFlags: FunctionFlags;
     let parametersWithPrecedingObjectRestOrSpread: Set<ParameterDeclaration> | undefined;
     let enclosingSuperContainerFlags: NodeCheckFlags = 0;

@@ -13,9 +13,10 @@ unusedLocalsInMethod4.ts(45,17): error TS2454: Variable 'x9' is used before bein
 unusedLocalsInMethod4.ts(49,9): error TS2869: Variable 'x' is used but never initialized.
 unusedLocalsInMethod4.ts(57,9): error TS2869: Variable 'x' is used but never initialized.
 unusedLocalsInMethod4.ts(97,9): error TS2869: Variable 'i' is used but never initialized.
+unusedLocalsInMethod4.ts(122,9): error TS2869: Variable 'enabledSubstitutions' is used but never initialized.
 
 
-==== unusedLocalsInMethod4.ts (15 errors) ====
+==== unusedLocalsInMethod4.ts (16 errors) ====
     function f<T, NonNull extends {}>() {
         let x1: number[]; // should error
             ~~
@@ -140,7 +141,7 @@ unusedLocalsInMethod4.ts(97,9): error TS2869: Variable 'i' is used but never ini
     
     
     function rw() {
-        let i: number;
+        let i: number;  // should error
             ~
 !!! error TS2869: Variable 'i' is used but never initialized.
         function inside() {
@@ -152,11 +153,28 @@ unusedLocalsInMethod4.ts(97,9): error TS2869: Variable 'i' is used but never ini
     rw();
     
     function createBinder() {
-        var file: string;
+        var file: string;   // should not error
     
         function bindSourceFile(f: string) {
             file = f;
     
             file.toString();
+        }
+    }
+    
+    function transformClassFields() {
+        enum ClassPropertySubstitutionFlags {
+            ClassAliases = 1 << 0,
+            ClassStaticThisOrSuperReference = 1 << 1,
+        }
+    
+        let enabledSubstitutions: ClassPropertySubstitutionFlags;   // should error
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2869: Variable 'enabledSubstitutions' is used but never initialized.
+    
+        function enableSubstitutionForClassAliases() {
+            enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
+    
+            enabledSubstitutions.toString();
         }
     }

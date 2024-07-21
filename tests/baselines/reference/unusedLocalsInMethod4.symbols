@@ -293,7 +293,7 @@ declare function bar(): [number, ...string[]];
 function rw() {
 >rw : Symbol(rw, Decl(unusedLocalsInMethod4.ts, 92, 46))
 
-    let i: number;
+    let i: number;  // should error
 >i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 96, 7))
 
     function inside() {
@@ -317,7 +317,7 @@ rw();
 function createBinder() {
 >createBinder : Symbol(createBinder, Decl(unusedLocalsInMethod4.ts, 103, 5))
 
-    var file: string;
+    var file: string;   // should not error
 >file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 106, 7))
 
     function bindSourceFile(f: string) {
@@ -332,5 +332,38 @@ function createBinder() {
 >file.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
 >file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 106, 7))
 >toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function transformClassFields() {
+>transformClassFields : Symbol(transformClassFields, Decl(unusedLocalsInMethod4.ts, 113, 1))
+
+    enum ClassPropertySubstitutionFlags {
+>ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 115, 33))
+
+        ClassAliases = 1 << 0,
+>ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 116, 41))
+
+        ClassStaticThisOrSuperReference = 1 << 1,
+>ClassStaticThisOrSuperReference : Symbol(ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference, Decl(unusedLocalsInMethod4.ts, 117, 30))
+    }
+
+    let enabledSubstitutions: ClassPropertySubstitutionFlags;   // should error
+>enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 121, 7))
+>ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 115, 33))
+
+    function enableSubstitutionForClassAliases() {
+>enableSubstitutionForClassAliases : Symbol(enableSubstitutionForClassAliases, Decl(unusedLocalsInMethod4.ts, 121, 61))
+
+        enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
+>enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 121, 7))
+>ClassPropertySubstitutionFlags.ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 116, 41))
+>ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 115, 33))
+>ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 116, 41))
+
+        enabledSubstitutions.toString();
+>enabledSubstitutions.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 121, 7))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
     }
 }

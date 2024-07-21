@@ -97,7 +97,7 @@ declare function bar(): [number, ...string[]];
 
 
 function rw() {
-    let i: number;
+    let i: number;  // should error
     function inside() {
         i++;
         console.log(i); // NaN
@@ -107,12 +107,27 @@ function rw() {
 rw();
 
 function createBinder() {
-    var file: string;
+    var file: string;   // should not error
 
     function bindSourceFile(f: string) {
         file = f;
 
         file.toString();
+    }
+}
+
+function transformClassFields() {
+    enum ClassPropertySubstitutionFlags {
+        ClassAliases = 1 << 0,
+        ClassStaticThisOrSuperReference = 1 << 1,
+    }
+
+    let enabledSubstitutions: ClassPropertySubstitutionFlags;   // should error
+
+    function enableSubstitutionForClassAliases() {
+        enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
+
+        enabledSubstitutions.toString();
     }
 }
 
@@ -203,7 +218,7 @@ function f8() {
     }
 }
 function rw() {
-    var i;
+    var i; // should error
     function inside() {
         i++;
         console.log(i); // NaN
@@ -212,9 +227,21 @@ function rw() {
 }
 rw();
 function createBinder() {
-    var file;
+    var file; // should not error
     function bindSourceFile(f) {
         file = f;
         file.toString();
+    }
+}
+function transformClassFields() {
+    var ClassPropertySubstitutionFlags;
+    (function (ClassPropertySubstitutionFlags) {
+        ClassPropertySubstitutionFlags[ClassPropertySubstitutionFlags["ClassAliases"] = 1] = "ClassAliases";
+        ClassPropertySubstitutionFlags[ClassPropertySubstitutionFlags["ClassStaticThisOrSuperReference"] = 2] = "ClassStaticThisOrSuperReference";
+    })(ClassPropertySubstitutionFlags || (ClassPropertySubstitutionFlags = {}));
+    var enabledSubstitutions; // should error
+    function enableSubstitutionForClassAliases() {
+        enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
+        enabledSubstitutions.toString();
     }
 }

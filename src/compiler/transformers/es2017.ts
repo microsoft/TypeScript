@@ -132,7 +132,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
      * Keeps track of whether expression substitution has been enabled for specific edge cases.
      * They are persisted between each SourceFile transformation and should not be reset.
      */
-    let enabledSubstitutions: ES2017SubstitutionFlags;
+    let enabledSubstitutions!: ES2017SubstitutionFlags;
 
     /**
      * This keeps track of containers where `super` is valid, for use with

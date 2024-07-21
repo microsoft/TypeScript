@@ -272,7 +272,7 @@ export function transformTypeScript(context: TransformationContext) {
      * Keeps track of whether expression substitution has been enabled for specific edge cases.
      * They are persisted between each SourceFile transformation and should not be reset.
      */
-    let enabledSubstitutions: TypeScriptSubstitutionFlags;
+    let enabledSubstitutions!: TypeScriptSubstitutionFlags;
 
     /**
      * Keeps track of whether we are within any containing namespaces when performing
