@@ -29557,13 +29557,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const assignmentKind = getAssignmentTargetKind(node);
                 if (assignmentKind !== AssignmentKind.None) {
                     const symbol = getResolvedSymbol(node as Identifier);
-                    if (assignmentKind === AssignmentKind.Definite) {
-                        symbol.isDefinitelyAssigned = true;
-                    }
-                    if (isParameterOrMutableLocalVariable(symbol) && symbol.lastAssignmentPos !== Number.MAX_VALUE) {
-                        const referencingFunction = findAncestor(node, isFunctionOrSourceFile);
-                        const declaringFunction = findAncestor(symbol.valueDeclaration, isFunctionOrSourceFile);
-                        symbol.lastAssignmentPos = referencingFunction === declaringFunction ? extendAssignmentPosition(node, symbol.valueDeclaration!) : Number.MAX_VALUE;
+                    if (isParameterOrMutableLocalVariable(symbol)) {
+                        if (assignmentKind === AssignmentKind.Definite) {
+                            symbol.isDefinitelyAssigned = true;
+                        }
+
+                        if (symbol.lastAssignmentPos !== Number.MAX_VALUE) {
+                            const referencingFunction = findAncestor(node, isFunctionOrSourceFile);
+                            const declaringFunction = findAncestor(symbol.valueDeclaration, isFunctionOrSourceFile);
+                            symbol.lastAssignmentPos = referencingFunction === declaringFunction ? extendAssignmentPosition(node, symbol.valueDeclaration!) : Number.MAX_VALUE;
+                        }
                     }
                 }
                 return;
@@ -43494,22 +43497,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return;
             }
             const declaration = local.valueDeclaration;
-            if (!declaration) {
+            if (
+                !declaration || !isVariableDeclaration(declaration) || !(getCombinedNodeFlagsCached(declaration) & NodeFlags.BlockScoped) ||
+                getCombinedNodeFlagsCached(declaration) & NodeFlags.Ambient ||
+                declaration.exclamationToken ||
+                declaration.initializer ||
+                !declaration.type
+            ) {
                 return;
             }
-            if (isVariableDeclaration(declaration)) {
-                if (
-                    getCombinedNodeFlagsCached(declaration) & NodeFlags.Ambient ||
-                    declaration.exclamationToken ||
-                    declaration.initializer ||
-                    !declaration.type
-                ) {
-                    return;
-                }
-                const type = getTypeFromTypeNode(declaration.type);
-                if (!(type.flags & TypeFlags.AnyOrUnknown) && !containsUndefinedType(type)) {
-                    error(declaration, Diagnostics.Variable_0_is_used_but_never_initialized, idText(declaration.name as Identifier));
-                }
+            const type = getTypeFromTypeNode(declaration.type);
+            if (!(type.flags & TypeFlags.AnyOrUnknown) && !containsUndefinedType(type)) {
+                error(declaration, Diagnostics.Variable_0_is_used_but_never_initialized, idText(declaration.name as Identifier));
             }
         });
     }

@@ -314,4 +314,23 @@ function rw() {
 rw();
 >rw : Symbol(rw, Decl(unusedLocalsInMethod4.ts, 92, 46))
 
+function createBinder() {
+>createBinder : Symbol(createBinder, Decl(unusedLocalsInMethod4.ts, 103, 5))
 
+    var file: string;
+>file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 106, 7))
+
+    function bindSourceFile(f: string) {
+>bindSourceFile : Symbol(bindSourceFile, Decl(unusedLocalsInMethod4.ts, 106, 21))
+>f : Symbol(f, Decl(unusedLocalsInMethod4.ts, 108, 28))
+
+        file = f;
+>file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 106, 7))
+>f : Symbol(f, Decl(unusedLocalsInMethod4.ts, 108, 28))
+
+        file.toString();
+>file.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+>file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 106, 7))
+>toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+    }
+}

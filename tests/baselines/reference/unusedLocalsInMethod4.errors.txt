@@ -151,4 +151,12 @@ unusedLocalsInMethod4.ts(97,9): error TS2869: Variable 'i' is used but never ini
     }
     rw();
     
+    function createBinder() {
+        var file: string;
     
+        function bindSourceFile(f: string) {
+            file = f;
+    
+            file.toString();
+        }
+    }

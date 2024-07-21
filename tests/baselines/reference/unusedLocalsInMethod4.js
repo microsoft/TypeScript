@@ -106,7 +106,15 @@ function rw() {
 }
 rw();
 
+function createBinder() {
+    var file: string;
 
+    function bindSourceFile(f: string) {
+        file = f;
+
+        file.toString();
+    }
+}
 
 //// [unusedLocalsInMethod4.js]
 "use strict";
@@ -203,3 +211,10 @@ function rw() {
     inside();
 }
 rw();
+function createBinder() {
+    var file;
+    function bindSourceFile(f) {
+        file = f;
+        file.toString();
+    }
+}

@@ -525,4 +525,36 @@ rw();
 >rw : () => void
 >   : ^^^^^^^^^^
 
+function createBinder() {
+>createBinder : () => void
+>             : ^^^^^^^^^^
 
+    var file: string;
+>file : string
+>     : ^^^^^^
+
+    function bindSourceFile(f: string) {
+>bindSourceFile : (f: string) => void
+>               : ^ ^^      ^^^^^^^^^
+>f : string
+>  : ^^^^^^
+
+        file = f;
+>file = f : string
+>         : ^^^^^^
+>file : string
+>     : ^^^^^^
+>f : string
+>  : ^^^^^^
+
+        file.toString();
+>file.toString() : string
+>                : ^^^^^^
+>file.toString : () => string
+>              : ^^^^^^      
+>file : string
+>     : ^^^^^^
+>toString : () => string
+>         : ^^^^^^      
+    }
+}

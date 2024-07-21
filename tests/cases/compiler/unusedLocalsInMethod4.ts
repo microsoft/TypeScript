@@ -105,3 +105,12 @@ function rw() {
 }
 rw();
 
+function createBinder() {
+    var file: string;
+
+    function bindSourceFile(f: string) {
+        file = f;
+
+        file.toString();
+    }
+}
