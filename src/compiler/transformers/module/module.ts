@@ -993,7 +993,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return factory.updateLabeledStatement(
             node,
             node.label,
-            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
+            visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock) ?? factory.createExpressionStatement(factory.createIdentifier("")),
         );
     }
 
