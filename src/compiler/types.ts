@@ -924,6 +924,14 @@ export const enum RelationComparisonResult {
 }
 
 /** @internal */
+export const enum PredicateSemantics {
+    None = 0,
+    Always = 1 << 0,
+    Never = 1 << 1,
+    Sometimes = Always | Never,
+}
+
+/** @internal */
 export type NodeId = number;
 
 export interface Node extends ReadonlyTextRange {

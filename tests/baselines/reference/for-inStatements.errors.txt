@@ -1,9 +1,12 @@
+for-inStatements.ts(21,15): error TS2872: This kind of expression is always truthy.
+for-inStatements.ts(22,15): error TS2873: This kind of expression is always falsy.
+for-inStatements.ts(23,15): error TS2872: This kind of expression is always truthy.
 for-inStatements.ts(33,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
 for-inStatements.ts(50,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
 for-inStatements.ts(79,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'Color.Blue'.
 
 
-==== for-inStatements.ts (3 errors) ====
+==== for-inStatements.ts (6 errors) ====
     var aString: string;
     for (aString in {}) { }
     
@@ -25,8 +28,14 @@ for-inStatements.ts(79,15): error TS2407: The right-hand side of a 'for...in' st
     for (var x in c || d) { }
     for (var x in e ? c : d) { }
     for (var x in 42 ? c : d) { }
+                  ~~
+!!! error TS2872: This kind of expression is always truthy.
     for (var x in '' ? c : d) { }
+                  ~~
+!!! error TS2873: This kind of expression is always falsy.
     for (var x in 42 ? d[x] : c[x]) { }
+                  ~~
+!!! error TS2872: This kind of expression is always truthy.
     for (var x in c[d]) { }
     
     for (var x in (<T>(x: T) => x)) { }

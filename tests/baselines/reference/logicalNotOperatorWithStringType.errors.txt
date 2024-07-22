@@ -1,7 +1,11 @@
+logicalNotOperatorWithStringType.ts(22,25): error TS2873: This kind of expression is always falsy.
+logicalNotOperatorWithStringType.ts(23,25): error TS2872: This kind of expression is always truthy.
+logicalNotOperatorWithStringType.ts(24,25): error TS2872: This kind of expression is always truthy.
+logicalNotOperatorWithStringType.ts(40,2): error TS2873: This kind of expression is always falsy.
 logicalNotOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== logicalNotOperatorWithStringType.ts (1 errors) ====
+==== logicalNotOperatorWithStringType.ts (5 errors) ====
     // ! operator on string type
     var STRING: string;
     var STRING1: string[] = ["", "abc"];
@@ -24,8 +28,14 @@ logicalNotOperatorWithStringType.ts(44,1): error TS2695: Left side of comma oper
     
     // string type literal
     var ResultIsBoolean3 = !"";
+                            ~~
+!!! error TS2873: This kind of expression is always falsy.
     var ResultIsBoolean4 = !{ x: "", y: "" };
+                            ~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     var ResultIsBoolean5 = !{ x: "", y: (s: string) => { return s; } };
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     
     // string type expressions
     var ResultIsBoolean6 = !objA.a;
@@ -42,6 +52,8 @@ logicalNotOperatorWithStringType.ts(44,1): error TS2695: Left side of comma oper
     
     // miss assignment operators
     !"";
+     ~~
+!!! error TS2873: This kind of expression is always falsy.
     !STRING;
     !STRING1;
     !foo();
