@@ -24,6 +24,6 @@ interface AsyncIterableIterator<T, TReturn = any, TNext = any> extends AsyncIter
     [Symbol.asyncIterator](): AsyncIterableIterator<T, TReturn, TNext>;
 }
 
-interface AsyncBuiltinIterator<T, TReturn = any, TNext = any> extends AsyncIterator<T, TReturn, TNext> {
-    [Symbol.asyncIterator](): AsyncBuiltinIterator<T, TReturn, TNext>;
+interface BuiltinAsyncIterator<T, TReturn = any, TNext = any> extends AsyncIterator<T, TReturn, TNext> {
+    [Symbol.asyncIterator](): BuiltinAsyncIterator<T, TReturn, TNext>;
 }

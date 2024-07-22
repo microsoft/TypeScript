@@ -1,6 +1,6 @@
 /// <reference lib="es2018.asynciterable" />
 
-interface AsyncGenerator<T = unknown, TReturn = any, TNext = any> extends AsyncBuiltinIterator<T, TReturn, TNext> {
+interface AsyncGenerator<T = unknown, TReturn = any, TNext = any> extends BuiltinAsyncIterator<T, TReturn, TNext> {
     // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
     next(...[value]: [] | [TNext]): Promise<IteratorResult<T, TReturn>>;
     return(value: TReturn | PromiseLike<TReturn>): Promise<IteratorResult<T, TReturn>>;
