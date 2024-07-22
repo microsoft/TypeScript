@@ -39619,16 +39619,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return PredicateSemantics.Sometimes;
                 }
                 return PredicateSemantics.Never;
-            case SyntaxKind.NullKeyword:
-                return PredicateSemantics.Always;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
             case SyntaxKind.ParenthesizedExpression:
                 return getSyntacticNullishnessSemantics((node as OuterExpression).expression);
             case SyntaxKind.ConditionalExpression:
                 return getSyntacticNullishnessSemantics((node as ConditionalExpression).whenTrue) | getSyntacticNullishnessSemantics((node as ConditionalExpression).whenFalse);
+            case SyntaxKind.NullKeyword:
+                return PredicateSemantics.Always;
             case SyntaxKind.Identifier:
-                if ((node as Identifier).escapedText === "undefined") {
+                if (((node as Identifier).escapedText === "undefined") && (getTypeOfExpression(node as Identifier) === undefinedWideningType)) {
                     return PredicateSemantics.Always;
                 }
                 return PredicateSemantics.Sometimes;
@@ -44302,6 +44302,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.RegularExpressionLiteral:
                 return PredicateSemantics.Always;
             case SyntaxKind.VoidExpression:
+            case SyntaxKind.NullKeyword:
                 return PredicateSemantics.Never;
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral:
@@ -44313,7 +44314,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ConditionalExpression:
                 return getSyntacticTruthySemantics((node as ConditionalExpression).whenTrue) | getSyntacticTruthySemantics((node as ConditionalExpression).whenFalse);
             case SyntaxKind.Identifier:
-                if ((node as Identifier).escapedText === "undefined") {
+                if (((node as Identifier).escapedText === "undefined") && (getTypeOfExpression(node as Identifier) === undefinedWideningType)) {
                     return PredicateSemantics.Never;
                 }
                 return PredicateSemantics.Sometimes;
