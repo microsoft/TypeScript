@@ -1445,7 +1445,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateIfStatement(
             node,
             visitNode(node.expression, visitor, isExpression),
-            Debug.checkDefined(visitNode(node.thenStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
+            visitNode(node.thenStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock) ?? factory.createBlock([]),
             visitNode(node.elseStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock),
         );
     }
