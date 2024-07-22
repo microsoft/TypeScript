@@ -39628,7 +39628,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NullKeyword:
                 return PredicateSemantics.Always;
             case SyntaxKind.Identifier:
-                if (((node as Identifier).escapedText === "undefined") && (getTypeOfExpression(node as Identifier) === undefinedWideningType)) {
+                if (getResolvedSymbol(node as Identifier) === undefinedSymbol) {
                     return PredicateSemantics.Always;
                 }
                 return PredicateSemantics.Sometimes;
@@ -44314,7 +44314,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ConditionalExpression:
                 return getSyntacticTruthySemantics((node as ConditionalExpression).whenTrue) | getSyntacticTruthySemantics((node as ConditionalExpression).whenFalse);
             case SyntaxKind.Identifier:
-                if (((node as Identifier).escapedText === "undefined") && (getTypeOfExpression(node as Identifier) === undefinedWideningType)) {
+                if (getResolvedSymbol(node as Identifier) === undefinedSymbol) {
                     return PredicateSemantics.Never;
                 }
                 return PredicateSemantics.Sometimes;
