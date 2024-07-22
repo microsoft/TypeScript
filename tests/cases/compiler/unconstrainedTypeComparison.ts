@@ -46,11 +46,35 @@ function f11<T, U extends T>(x: T | number, y: U | number) {
     return x < y;
 }
 
-function f12<T, U>(x: T & U, y: T & U) {
+function f12<T, U extends T>(x: T | number, y: U | number) {
+    if (x === undefined) {
+        return false;
+    }
     return x < y;
 }
 
-function f13<T, U extends T>(x: T & number, y: U & number) {
+function f13<T, U extends T | number>(x: U, y: U) {
+    if (x === undefined) {
+        return false;
+    }
+    return x < y;
+}
+
+function f14<T, U>(x: T & U, y: T & U) {
+    return x < y;
+}
+
+function f15<T, U extends T>(x: T & number, y: U & number) {
+    return x < y;
+}
+
+function f16<T, U extends T>(x: T & U, y: U) {
+    if (x === undefined) {
+        return false;
+    }
+    if (y === null) {
+        return false;
+    }
     return x < y;
 }
 

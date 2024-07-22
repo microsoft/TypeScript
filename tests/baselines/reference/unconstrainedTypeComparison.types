@@ -188,8 +188,66 @@ function f11<T, U extends T>(x: T | number, y: U | number) {
 >  : ^^^^^^^^^^
 }
 
-function f12<T, U>(x: T & U, y: T & U) {
->f12 : <T, U>(x: T & U, y: T & U) => boolean
+function f12<T, U extends T>(x: T | number, y: U | number) {
+>f12 : <T, U extends T>(x: T | number, y: U | number) => boolean
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^^^^
+>x : number | T
+>  : ^^^^^^^^^^
+>y : number | U
+>  : ^^^^^^^^^^
+
+    if (x === undefined) {
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : number | T
+>  : ^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return false;
+>false : false
+>      : ^^^^^
+    }
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : number | (T & ({} | null))
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : number | U
+>  : ^^^^^^^^^^
+}
+
+function f13<T, U extends T | number>(x: U, y: U) {
+>f13 : <T, U extends T | number>(x: U, y: U) => boolean
+>    : ^ ^^ ^^^^^^^^^          ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>x : U
+>  : ^
+>y : U
+>  : ^
+
+    if (x === undefined) {
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : U
+>  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return false;
+>false : false
+>      : ^^^^^
+    }
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : U & ({} | null)
+>  : ^^^^^^^^^^^^^^^
+>y : U
+>  : ^
+}
+
+function f14<T, U>(x: T & U, y: T & U) {
+>f14 : <T, U>(x: T & U, y: T & U) => boolean
 >    : ^ ^^ ^^ ^^     ^^ ^^     ^^^^^^^^^^^^
 >x : T & U
 >  : ^^^^^
@@ -205,8 +263,8 @@ function f12<T, U>(x: T & U, y: T & U) {
 >  : ^^^^^
 }
 
-function f13<T, U extends T>(x: T & number, y: U & number) {
->f13 : <T, U extends T>(x: T & number, y: U & number) => boolean
+function f15<T, U extends T>(x: T & number, y: U & number) {
+>f15 : <T, U extends T>(x: T & number, y: U & number) => boolean
 >    : ^ ^^ ^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^^^^
 >x : T & number
 >  : ^^^^^^^^^^
@@ -220,6 +278,45 @@ function f13<T, U extends T>(x: T & number, y: U & number) {
 >  : ^^^^^^^^^^
 >y : U & number
 >  : ^^^^^^^^^^
+}
+
+function f16<T, U extends T>(x: T & U, y: U) {
+>f16 : <T, U extends T>(x: T & U, y: U) => boolean
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^     ^^ ^^ ^^^^^^^^^^^^
+>x : T & U
+>  : ^^^^^
+>y : U
+>  : ^
+
+    if (x === undefined) {
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : T & U
+>  : ^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return false;
+>false : false
+>      : ^^^^^
+    }
+    if (y === null) {
+>y === null : boolean
+>           : ^^^^^^^
+>y : U
+>  : ^
+
+        return false;
+>false : false
+>      : ^^^^^
+    }
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : T & U & ({} | null)
+>  : ^^^^^^^^^^^^^^^^^^^
+>y : U & ({} | undefined)
+>  : ^^^^^^^^^^^^^^^^^^^^
 }
 
 

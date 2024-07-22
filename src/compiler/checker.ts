@@ -24887,10 +24887,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // This like getBaseTypeOfLiteralType, but instead treats enum literals as strings/numbers instead
     // of returning their enum base type (which depends on the types of other literals in the enum).
-    // use to determine if a parameter may be undefined or null (or is unknown/unconstrained)
-    // function getUnknownIfMaybeUnknown(type: Type) {
-    //     return (strictNullChecks && type.flags & TypeFlags.Instantiable) ? getBaseConstraintOfType(type) ?? unknownUnionType : type;
-    // }
+    // It also checks if the type used in the comparison may be undefined or null (or is unknown/unconstrained)
     function getBaseTypeForComparison(type: Type): Type {
         return type.flags & TypeFlags.Instantiable && strictNullChecks ? getBaseConstraintOfType(type) ?? unknownUnionType :
             type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? stringType :
