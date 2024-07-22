@@ -1,10 +1,12 @@
+initializersWidened.ts(18,10): error TS2873: This kind of expression is always falsy.
 initializersWidened.ts(19,10): error TS2873: This kind of expression is always falsy.
 initializersWidened.ts(20,10): error TS2873: This kind of expression is always falsy.
+initializersWidened.ts(22,10): error TS2873: This kind of expression is always falsy.
 initializersWidened.ts(23,10): error TS2873: This kind of expression is always falsy.
 initializersWidened.ts(24,10): error TS2873: This kind of expression is always falsy.
 
 
-==== initializersWidened.ts (4 errors) ====
+==== initializersWidened.ts (6 errors) ====
     // these are widened to any at the point of assignment
     
     var x1 = null;
@@ -23,6 +25,8 @@ initializersWidened.ts(24,10): error TS2873: This kind of expression is always f
     // widen only when all constituents of union are widening
     
     var x4 = null || null;
+             ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var y4 = undefined || undefined;
              ~~~~~~~~~
 !!! error TS2873: This kind of expression is always falsy.
@@ -31,6 +35,8 @@ initializersWidened.ts(24,10): error TS2873: This kind of expression is always f
 !!! error TS2873: This kind of expression is always falsy.
     
     var x5 = null || x2;
+             ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var y5 = undefined || y2;
              ~~~~~~~~~
 !!! error TS2873: This kind of expression is always falsy.

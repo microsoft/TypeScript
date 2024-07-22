@@ -1,3 +1,6 @@
+ifDoWhileStatements.ts(44,5): error TS2873: This kind of expression is always falsy.
+ifDoWhileStatements.ts(45,8): error TS2873: This kind of expression is always falsy.
+ifDoWhileStatements.ts(46,13): error TS2873: This kind of expression is always falsy.
 ifDoWhileStatements.ts(48,5): error TS2873: This kind of expression is always falsy.
 ifDoWhileStatements.ts(49,8): error TS2873: This kind of expression is always falsy.
 ifDoWhileStatements.ts(50,13): error TS2873: This kind of expression is always falsy.
@@ -27,7 +30,7 @@ ifDoWhileStatements.ts(85,8): error TS2872: This kind of expression is always tr
 ifDoWhileStatements.ts(86,13): error TS2872: This kind of expression is always truthy.
 
 
-==== ifDoWhileStatements.ts (27 errors) ====
+==== ifDoWhileStatements.ts (30 errors) ====
     interface I {
         id: number;
     }
@@ -72,8 +75,14 @@ ifDoWhileStatements.ts(86,13): error TS2872: This kind of expression is always t
     do { }while(true)
     
     if (null) { }
+        ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     while (null) { }
+           ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     do { }while(null)
+                ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     if (undefined) { }
         ~~~~~~~~~
