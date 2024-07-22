@@ -32,6 +32,12 @@ const p7 = null ?? null;
 const p8 = (class foo { }) && null;
 const p9 = (class foo { }) || null;
 
+// Outer expression tests
+while ({} as any) { }
+while ({} satisfies unknown) { }
+while ((<any>({}))) { }
+while ((({}))) { }
+
 
 //// [predicateSemantics.js]
 var _a, _b, _c, _d, _e, _f;
@@ -64,3 +70,8 @@ var p9 = (/** @class */ (function () {
     }
     return foo;
 }())) || null;
+// Outer expression tests
+while ({}) { }
+while ({}) { }
+while (({})) { }
+while ((({}))) { }

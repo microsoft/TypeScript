@@ -39597,6 +39597,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSyntacticNullishnessSemantics(node: Node): PredicateSemantics {
+        node = skipOuterExpressions(node);
         switch (node.kind) {
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.CallExpression:
@@ -39619,10 +39620,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return PredicateSemantics.Sometimes;
                 }
                 return PredicateSemantics.Never;
-            case SyntaxKind.TypeAssertionExpression:
-            case SyntaxKind.AsExpression:
-            case SyntaxKind.ParenthesizedExpression:
-                return getSyntacticNullishnessSemantics((node as OuterExpression).expression);
             case SyntaxKind.ConditionalExpression:
                 return getSyntacticNullishnessSemantics((node as ConditionalExpression).whenTrue) | getSyntacticNullishnessSemantics((node as ConditionalExpression).whenFalse);
             case SyntaxKind.NullKeyword:
@@ -44284,6 +44281,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSyntacticTruthySemantics(node: Node): PredicateSemantics {
+        node = skipOuterExpressions(node);
         switch (node.kind) {
             case SyntaxKind.NumericLiteral:
                 // Allow `while(0)` or `while(1)`
@@ -44307,10 +44305,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral:
                 return !!(node as StringLiteral | NoSubstitutionTemplateLiteral).text ? PredicateSemantics.Always : PredicateSemantics.Never;
-            case SyntaxKind.TypeAssertionExpression:
-            case SyntaxKind.AsExpression:
-            case SyntaxKind.ParenthesizedExpression:
-                return getSyntacticTruthySemantics((node as OuterExpression).expression);
             case SyntaxKind.ConditionalExpression:
                 return getSyntacticTruthySemantics((node as ConditionalExpression).whenTrue) | getSyntacticTruthySemantics((node as ConditionalExpression).whenFalse);
             case SyntaxKind.Identifier:

@@ -28,3 +28,9 @@ const p6 = 0 > 1 ?? null;
 const p7 = null ?? null;
 const p8 = (class foo { }) && null;
 const p9 = (class foo { }) || null;
+
+// Outer expression tests
+while ({} as any) { }
+while ({} satisfies unknown) { }
+while ((<any>({}))) { }
+while ((({}))) { }

@@ -161,3 +161,34 @@ const p9 = (class foo { }) || null;
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
+// Outer expression tests
+while ({} as any) { }
+>{} as any : any
+>          : ^^^
+>{} : {}
+>   : ^^
+
+while ({} satisfies unknown) { }
+>{} satisfies unknown : {}
+>                     : ^^
+>{} : {}
+>   : ^^
+
+while ((<any>({}))) { }
+>(<any>({})) : any
+>            : ^^^
+><any>({}) : any
+>          : ^^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+
+while ((({}))) { }
+>(({})) : {}
+>       : ^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+

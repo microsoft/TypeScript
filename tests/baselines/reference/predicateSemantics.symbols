@@ -55,3 +55,9 @@ const p9 = (class foo { }) || null;
 >p9 : Symbol(p9, Decl(predicateSemantics.ts, 29, 5))
 >foo : Symbol(foo, Decl(predicateSemantics.ts, 29, 12))
 
+// Outer expression tests
+while ({} as any) { }
+while ({} satisfies unknown) { }
+while ((<any>({}))) { }
+while ((({}))) { }
+
