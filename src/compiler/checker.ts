@@ -915,7 +915,6 @@ import {
     OptionalTypeNode,
     or,
     orderedRemoveItemAt,
-    OuterExpression,
     OuterExpressionKinds,
     ParameterDeclaration,
     parameterIsThisKeyword,
