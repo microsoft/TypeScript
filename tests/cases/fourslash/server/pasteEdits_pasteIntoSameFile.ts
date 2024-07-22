@@ -17,12 +17,5 @@ verify.pasteEdits({
         pasteLocations: [range[1]],
         copiedFrom: { file: "target.ts", range: [range[0]] },
     },
-    newFileContents: {
-        "/target.ts":
-`const k = 1;
-console.log(k);
-
-console.log(k);
-console.log("test");`
-    }
+    newFileContents: {}
 });

@@ -55,7 +55,9 @@ import {
     generateDjb2Hash,
     getDefaultLibFileName,
     getDirectoryPath,
+    getEmitDeclarations,
     getEmitScriptTarget,
+    getImpliedNodeFormatForEmitWorker,
     getLineAndCharacterOfPosition,
     getNameOfScriptTarget,
     getNewLineCharacter,
@@ -351,13 +353,14 @@ export function explainFiles(program: Program, write: (s: string) => void) {
     for (const file of program.getSourceFiles()) {
         write(`${toFileName(file, relativeFileName)}`);
         reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
-        explainIfFileIsRedirectAndImpliedFormat(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
+        explainIfFileIsRedirectAndImpliedFormat(file, program.getCompilerOptionsForFile(file), relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
     }
 }
 
 /** @internal */
 export function explainIfFileIsRedirectAndImpliedFormat(
     file: SourceFile,
+    options: CompilerOptions,
     fileNameConvertor?: (fileName: string) => string,
 ): DiagnosticMessageChain[] | undefined {
     let result: DiagnosticMessageChain[] | undefined;
@@ -376,7 +379,7 @@ export function explainIfFileIsRedirectAndImpliedFormat(
         ));
     }
     if (isExternalOrCommonJsModule(file)) {
-        switch (file.impliedNodeFormat) {
+        switch (getImpliedNodeFormatForEmitWorker(file, options)) {
             case ModuleKind.ESNext:
                 if (file.packageJsonScope) {
                     (result ??= []).push(chainDiagnosticMessages(
@@ -570,7 +573,7 @@ export function emitFilesAndReportErrors<T extends BuilderProgram>(
     emitResult: EmitResult;
     diagnostics: SortedReadonlyArray<Diagnostic>;
 } {
-    const isListFilesOnly = !!program.getCompilerOptions().listFilesOnly;
+    const options = program.getCompilerOptions();
 
     // First get and report any syntactic errors.
     const allDiagnostics = program.getConfigFileParsingDiagnostics().slice();
@@ -582,17 +585,25 @@ export function emitFilesAndReportErrors<T extends BuilderProgram>(
     if (allDiagnostics.length === configFileParsingDiagnosticsLength) {
         addRange(allDiagnostics, program.getOptionsDiagnostics(cancellationToken));
 
-        if (!isListFilesOnly) {
+        if (!options.listFilesOnly) {
             addRange(allDiagnostics, program.getGlobalDiagnostics(cancellationToken));
 
             if (allDiagnostics.length === configFileParsingDiagnosticsLength) {
                 addRange(allDiagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
             }
+
+            if (
+                options.noEmit &&
+                getEmitDeclarations(options) &&
+                allDiagnostics.length === configFileParsingDiagnosticsLength
+            ) {
+                addRange(allDiagnostics, program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken));
+            }
         }
     }
 
     // Emit and report any errors we ran into.
-    const emitResult = isListFilesOnly
+    const emitResult = options.listFilesOnly
         ? { emitSkipped: true, diagnostics: emptyArray }
         : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
     addRange(allDiagnostics, emitResult.diagnostics);

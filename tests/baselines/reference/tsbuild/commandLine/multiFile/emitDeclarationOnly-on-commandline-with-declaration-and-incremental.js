@@ -367,27 +367,27 @@ export declare const g = 10;
   "semanticDiagnosticsPerFile": [
     [
       "../../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./e.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../../project1/src/a.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./f.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../../project1/src/b.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./g.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -920,27 +920,27 @@ export declare const aaa = 10;
   "semanticDiagnosticsPerFile": [
     [
       "../../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./e.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../../project1/src/a.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./f.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../../project1/src/b.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./g.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -1270,27 +1270,27 @@ exports.g = b_1.b;
   "semanticDiagnosticsPerFile": [
     [
       "../../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./e.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../../project1/src/a.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./f.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../../project1/src/b.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./g.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -2012,27 +2012,27 @@ export declare const aaaaa = 10;
   "semanticDiagnosticsPerFile": [
     [
       "../../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./e.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../../project1/src/a.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./f.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../../project1/src/b.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./g.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -2340,27 +2340,27 @@ exports.a2 = 10;
   "semanticDiagnosticsPerFile": [
     [
       "../../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./e.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../../project1/src/a.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./f.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../../project1/src/b.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./g.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",

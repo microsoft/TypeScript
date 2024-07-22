@@ -2382,17 +2382,11 @@ export interface PackageJsonInfoContents {
  *
  * @internal
  */
-export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
-    const parts = getPathComponents(fileName);
-    parts.pop();
-    while (parts.length > 0) {
-        const pkg = getPackageJsonInfo(getPathFromPathComponents(parts), /*onlyRecordFailures*/ false, state);
-        if (pkg) {
-            return pkg;
-        }
-        parts.pop();
-    }
-    return undefined;
+export function getPackageScopeForPath(directory: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
+    return forEachAncestorDirectory(
+        directory,
+        dir => getPackageJsonInfo(dir, /*onlyRecordFailures*/ false, state),
+    );
 }
 
 function getVersionPathsOfPackageJsonInfo(packageJsonInfo: PackageJsonInfo, state: ModuleResolutionState): VersionPaths | undefined {
@@ -2568,7 +2562,7 @@ function noKeyStartsWithDot(obj: MapLike<unknown>) {
 }
 
 function loadModuleFromSelfNameReference(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-    const directoryPath = getNormalizedAbsolutePath(combinePaths(directory, "dummy"), state.host.getCurrentDirectory?.());
+    const directoryPath = getNormalizedAbsolutePath(directory, state.host.getCurrentDirectory?.());
     const scope = getPackageScopeForPath(directoryPath, state);
     if (!scope || !scope.contents.packageJsonContent.exports) {
         return undefined;
@@ -2649,7 +2643,7 @@ function loadModuleFromImports(extensions: Extensions, moduleName: string, direc
         }
         return toSearchResult(/*value*/ undefined);
     }
-    const directoryPath = getNormalizedAbsolutePath(combinePaths(directory, "dummy"), state.host.getCurrentDirectory?.());
+    const directoryPath = getNormalizedAbsolutePath(directory, state.host.getCurrentDirectory?.());
     const scope = getPackageScopeForPath(directoryPath, state);
     if (!scope) {
         if (state.traceEnabled) {

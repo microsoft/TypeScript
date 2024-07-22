@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/bigintArbirtraryIdentifier.ts] ////
+
+=== foo.ts ===
+const foo = 0n;
+>foo : Symbol(foo, Decl(foo.ts, 0, 5))
+
+export { foo as "0n" };
+>foo : Symbol(foo, Decl(foo.ts, 0, 5))
+>"0n" : Symbol("0n", Decl(foo.ts, 1, 8))
+
+=== correctUse.ts ===
+import { "0n" as foo } from "./foo";
+>foo : Symbol(foo, Decl(correctUse.ts, 0, 8))
+
+export { foo as "0n" };
+>foo : Symbol(foo, Decl(correctUse.ts, 0, 8))
+>"0n" : Symbol("0n", Decl(correctUse.ts, 1, 8))
+
+=== badImport.ts ===
+import { 0n as foo } from "./foo";
+>foo : Symbol(foo)
+
+=== badImport2.ts ===
+import { foo as 0n } from "./foo";
+> : Symbol((Missing), Decl(badImport2.ts, 0, 8))
+
+=== badExport.ts ===
+export { foo as 0n };
+> : Symbol((Missing), Decl(badExport.ts, 0, 8))
+
+=== badExport2.ts ===
+export { 0n as foo };
+>foo : Symbol(foo)
+

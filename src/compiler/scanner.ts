@@ -65,6 +65,8 @@ export interface Scanner {
     hasPrecedingLineBreak(): boolean;
     /** @internal */
     hasPrecedingJSDocComment(): boolean;
+    /** @internal */
+    hasPrecedingJSDocLeadingAsterisks(): boolean;
     isIdentifier(): boolean;
     isReservedWord(): boolean;
     isUnterminated(): boolean;
@@ -1004,7 +1006,7 @@ const enum EscapeSequenceScanningFlags {
     AtomEscape = 1 << 5,
 
     ReportInvalidEscapeErrors = RegularExpression | ReportErrors,
-    ScanExtendedUnicodeEscape = String | AnyUnicodeMode,
+    AllowExtendedUnicodeEscape = String | AnyUnicodeMode,
 }
 
 const enum ClassSetExpressionType {
@@ -1059,6 +1061,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
         hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
         hasPrecedingJSDocComment: () => (tokenFlags & TokenFlags.PrecedingJSDocComment) !== 0,
+        hasPrecedingJSDocLeadingAsterisks: () => (tokenFlags & TokenFlags.PrecedingJSDocLeadingAsterisks) !== 0,
         isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
         isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
         isUnterminated: () => (tokenFlags & TokenFlags.Unterminated) !== 0,
@@ -1606,13 +1609,17 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes.doubleQuote:
                 return '"';
             case CharacterCodes.u:
-                if (
-                    flags & EscapeSequenceScanningFlags.ScanExtendedUnicodeEscape &&
-                    pos < end && charCodeUnchecked(pos) === CharacterCodes.openBrace
-                ) {
+                if (pos < end && charCodeUnchecked(pos) === CharacterCodes.openBrace) {
                     // '\u{DDDDDD}'
                     pos -= 2;
-                    return scanExtendedUnicodeEscape(!!(flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors));
+                    const result = scanExtendedUnicodeEscape(!!(flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors));
+                    if (!(flags & EscapeSequenceScanningFlags.AllowExtendedUnicodeEscape)) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (flags & EscapeSequenceScanningFlags.ReportInvalidEscapeErrors) {
+                            error(Diagnostics.Unicode_escape_sequences_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
+                        }
+                    }
+                    return result;
                 }
                 // '\uDDDD'
                 for (; pos < start + 6; pos++) {
@@ -1637,7 +1644,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     const nextStart = pos;
                     let nextPos = pos + 2;
                     for (; nextPos < nextStart + 6; nextPos++) {
-                        if (!isHexDigit(charCodeUnchecked(pos))) {
+                        if (!isHexDigit(charCodeUnchecked(nextPos))) {
                             // leave the error to the next call
                             return escapedValueString;
                         }
@@ -1874,7 +1881,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function scan(): SyntaxKind {
         fullStartPos = pos;
         tokenFlags = TokenFlags.None;
-        let asteriskSeen = false;
         while (true) {
             tokenStart = pos;
             if (pos >= end) {
@@ -1995,9 +2001,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         return pos += 2, token = SyntaxKind.AsteriskAsteriskToken;
                     }
                     pos++;
-                    if (skipJsDocLeadingAsterisks && !asteriskSeen && (tokenFlags & TokenFlags.PrecedingLineBreak)) {
+                    if (
+                        skipJsDocLeadingAsterisks &&
+                        (tokenFlags & TokenFlags.PrecedingJSDocLeadingAsterisks) === 0 &&
+                        (tokenFlags & TokenFlags.PrecedingLineBreak)
+                    ) {
                         // decoration at the start of a JSDoc comment line
-                        asteriskSeen = true;
+                        tokenFlags |= TokenFlags.PrecedingJSDocLeadingAsterisks;
                         continue;
                     }
                     return token = SyntaxKind.AsteriskToken;
@@ -3546,7 +3556,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
 
         function scanSourceCharacter(): string {
-            const size = anyUnicodeMode ? charSize(charCodeChecked(pos)) : 1;
+            const size = anyUnicodeMode ? charSize(codePointChecked(pos)) : 1;
             pos += size;
             return size > 0 ? text.substring(pos - size, pos) : "";
         }

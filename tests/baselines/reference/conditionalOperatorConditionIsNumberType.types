@@ -8,6 +8,7 @@ var condNumber: number;
 
 var exprAny1: any;
 >exprAny1 : any
+>         : ^^^
 
 var exprBoolean1: boolean;
 >exprBoolean1 : boolean
@@ -27,6 +28,7 @@ var exprIsObject1: Object;
 
 var exprAny2: any;
 >exprAny2 : any
+>         : ^^^
 
 var exprBoolean2: boolean;
 >exprBoolean2 : boolean
@@ -47,10 +49,13 @@ var exprIsObject2: Object;
 //Cond is a number type variable
 condNumber ? exprAny1 : exprAny2;
 >condNumber ? exprAny1 : exprAny2 : any
+>                                 : ^^^
 >condNumber : number
 >           : ^^^^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 condNumber ? exprBoolean1 : exprBoolean2;
 >condNumber ? exprBoolean1 : exprBoolean2 : boolean
@@ -105,10 +110,13 @@ condNumber ? exprString1 : exprBoolean1; // Union
 //Cond is a number type literal
 1 ? exprAny1 : exprAny2;
 >1 ? exprAny1 : exprAny2 : any
+>                        : ^^^
 >1 : 1
 >  : ^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 0 ? exprBoolean1 : exprBoolean2;
 >0 ? exprBoolean1 : exprBoolean2 : boolean
@@ -183,6 +191,7 @@ var array = [1, 2, 3];
 
 1 * 0 ? exprAny1 : exprAny2;
 >1 * 0 ? exprAny1 : exprAny2 : any
+>                            : ^^^
 >1 * 0 : number
 >      : ^^^^^^
 >1 : 1
@@ -190,7 +199,9 @@ var array = [1, 2, 3];
 >0 : 0
 >  : ^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 1 + 1 ? exprBoolean1 : exprBoolean2;
 >1 + 1 ? exprBoolean1 : exprBoolean2 : boolean
@@ -267,11 +278,15 @@ foo() ? exprString1 : exprBoolean1; // Union
 //Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condNumber ? exprAny1 : exprAny2;
 >resultIsAny1 : any
+>             : ^^^
 >condNumber ? exprAny1 : exprAny2 : any
+>                                 : ^^^
 >condNumber : number
 >           : ^^^^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 var resultIsBoolean1 = condNumber ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean1 : boolean
@@ -335,11 +350,15 @@ var resultIsStringOrBoolean1 = condNumber ? exprString1 : exprBoolean1; // Union
 
 var resultIsAny2 = 1 ? exprAny1 : exprAny2;
 >resultIsAny2 : any
+>             : ^^^
 >1 ? exprAny1 : exprAny2 : any
+>                        : ^^^
 >1 : 1
 >  : ^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 var resultIsBoolean2 = 0 ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean2 : boolean
@@ -405,7 +424,9 @@ var resultIsStringOrBoolean2 = 10000 ? exprString1 : exprBoolean1; // Union
 
 var resultIsAny3 = 1 * 0 ? exprAny1 : exprAny2;
 >resultIsAny3 : any
+>             : ^^^
 >1 * 0 ? exprAny1 : exprAny2 : any
+>                            : ^^^
 >1 * 0 : number
 >      : ^^^^^^
 >1 : 1
@@ -413,7 +434,9 @@ var resultIsAny3 = 1 * 0 ? exprAny1 : exprAny2;
 >0 : 0
 >  : ^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 var resultIsBoolean3 = 1 + 1 ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean3 : boolean

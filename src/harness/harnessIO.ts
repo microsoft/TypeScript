@@ -453,7 +453,7 @@ export namespace Compiler {
     ): DeclarationCompilationContext | undefined {
         if (options.declaration && result.diagnostics.length === 0) {
             if (options.emitDeclarationOnly) {
-                if (result.js.size > 0 || result.dts.size === 0) {
+                if (result.js.size > 0 || (result.dts.size === 0 && !options.noEmit)) {
                     throw new Error("Only declaration files should be generated when emitDeclarationOnly:true");
                 }
             }

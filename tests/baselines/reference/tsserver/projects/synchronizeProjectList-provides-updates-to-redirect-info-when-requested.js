@@ -717,31 +717,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/users/username/projects/project/A/tsconfig.json",
         "configFile": "/users/username/projects/project/A/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/users/username/projects/project/B/b2.ts' is not under 'rootDir' '/users/username/projects/project/A'. 'rootDir' is expected to contain all source files.\n  The file is in the program because:\n    Matched by include pattern '../B/b2.ts' in '/users/username/projects/project/A/tsconfig.json'",
-            "code": 6059,
-            "category": "error",
-            "relatedInformation": [
-              {
-                "span": {
-                  "start": {
-                    "line": 8,
-                    "offset": 7
-                  },
-                  "end": {
-                    "line": 8,
-                    "offset": 19
-                  },
-                  "file": "/users/username/projects/project/A/tsconfig.json"
-                },
-                "message": "File is matched by include pattern specified here.",
-                "category": "message",
-                "code": 1408
-              }
-            ]
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/B/tsconfig.json

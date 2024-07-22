@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/objectGroupBy.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
 === objectGroupBy.ts ===
 const basic = Object.groupBy([0, 2, 8], x => x < 5 ? 'small' : 'large');
 >basic : Partial<Record<"small" | "large", number[]>>

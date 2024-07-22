@@ -1,0 +1,15 @@
+regularExpressionExtendedUnicodeEscapes.ts(2,3): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionExtendedUnicodeEscapes.ts(2,13): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+
+
+==== regularExpressionExtendedUnicodeEscapes.ts (2 errors) ====
+    const regexes: RegExp[] = [
+    	/\u{10000}[\u{10000}]/,
+    	 ~~~~~~~~~
+!!! error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	           ~~~~~~~~~
+!!! error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	/\u{10000}[\u{10000}]/u,
+    	/\u{10000}[\u{10000}]/v,
+    ];
+    

@@ -2218,16 +2218,16 @@ declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z
 >  : ^^^^^^^^^^^^^^^^^^^
 
 function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) {
->callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args_0: T) => U
->        : ^ ^^^^^^^^^         ^^^^^^^ ^^^^^^^^^      ^^                              ^^^^^^^^^^^^^^^^^^^^^^^^
+>callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args: T) => U
+>        : ^ ^^^^^^^^^         ^^^^^^^ ^^^^^^^^^      ^^                              ^^^^^^^^^^^^^^^^^^^^^^
 >method : (...args: [...T, object]) => U
 >       : ^^^^    ^^              ^^^^^ 
 >args : [...T, object]
 >     : ^^^^^^^^^^^^^^
 
     return (...args: [...T]) => method(...args, {});
->(...args: [...T]) => method(...args, {}) : (...args_0: T) => U
->                                         : ^^^^^^^^^^^^^^^^^^^
+>(...args: [...T]) => method(...args, {}) : (...args: T) => U
+>                                         : ^^^^^^^^^^^^^^^^^
 >args : [...T]
 >     : ^^^^^^
 >method(...args, {}) : U
@@ -2245,16 +2245,16 @@ function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, ob
 callApi(getUser);
 >callApi(getUser) : (id: string) => string
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
->callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args_0: T) => U
->        : ^ ^^^^^^^^^         ^^^^^^^ ^^^^^^^^^      ^^                              ^^^^^^^^^^^^^^^^^^^^^^^^
+>callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args: T) => U
+>        : ^ ^^^^^^^^^         ^^^^^^^ ^^^^^^^^^      ^^                              ^^^^^^^^^^^^^^^^^^^^^^
 >getUser : (id: string, options?: { x?: string; }) => string
 >        : ^  ^^      ^^       ^^^               ^^^^^      
 
 callApi(getOrgUser);
 >callApi(getOrgUser) : (id: string, orgId: number) => void
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args_0: T) => U
->        : ^ ^^^^^^^^^         ^^^^^^^ ^^^^^^^^^      ^^                              ^^^^^^^^^^^^^^^^^^^^^^^^
+>callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args: T) => U
+>        : ^ ^^^^^^^^^         ^^^^^^^ ^^^^^^^^^      ^^                              ^^^^^^^^^^^^^^^^^^^^^^
 >getOrgUser : (id: string, orgId: number, options?: { y?: number; z?: boolean; }) => void
 >           : ^  ^^      ^^     ^^      ^^       ^^^                            ^^^^^    
 

@@ -1,0 +1,15 @@
+nestedIfStatement.ts(3,12): error TS2872: This kind of expression is always truthy.
+nestedIfStatement.ts(4,12): error TS2872: This kind of expression is always truthy.
+
+
+==== nestedIfStatement.ts (2 errors) ====
+    if (0) {
+    } else if (1) {
+    } else if (2) {
+               ~
+!!! error TS2872: This kind of expression is always truthy.
+    } else if (3) {
+               ~
+!!! error TS2872: This kind of expression is always truthy.
+    } else {
+    }
