@@ -24887,12 +24887,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // This like getBaseTypeOfLiteralType, but instead treats enum literals as strings/numbers instead
     // of returning their enum base type (which depends on the types of other literals in the enum).
-    function getBaseTypeOfLiteralTypeForComparison(type: Type): Type {
-        return type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? stringType :
+    // use to determine if a parameter may be undefined or null (or is unknown/unconstrained)
+    // function getUnknownIfMaybeUnknown(type: Type) {
+    //     return (strictNullChecks && type.flags & TypeFlags.Instantiable) ? getBaseConstraintOfType(type) ?? unknownUnionType : type;
+    // }
+    function getBaseTypeForComparison(type: Type): Type {
+        return type.flags & TypeFlags.Instantiable && strictNullChecks ? getBaseConstraintOfType(type) ?? unknownUnionType :
+            type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? stringType :
             type.flags & (TypeFlags.NumberLiteral | TypeFlags.Enum) ? numberType :
             type.flags & TypeFlags.BigIntLiteral ? bigintType :
             type.flags & TypeFlags.BooleanLiteral ? booleanType :
-            type.flags & TypeFlags.Union ? mapType(type, getBaseTypeOfLiteralTypeForComparison) :
+            type.flags & TypeFlags.Union ? mapType(type, getBaseTypeForComparison) :
+            type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => { return getBaseTypeForComparison(t) === unknownUnionType }) ? unknownUnionType :
             type;
     }
 
@@ -27491,11 +27497,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function recombineUnknownType(type: Type) {
         return type === unknownUnionType ? unknownType : type;
-    }
-
-    // use to determine if a parameter may be undefined or null (or is unknown/unconstrained)
-    function getUnknownIfMaybeUnknown(type: Type) {
-        return (strictNullChecks && type.flags & TypeFlags.Instantiable) ? getBaseConstraintOfType(type) || unknownUnionType : type;
     }
 
     function getTypeWithDefault(type: Type, defaultExpression: Expression) {
@@ -39682,8 +39683,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.LessThanEqualsToken:
             case SyntaxKind.GreaterThanEqualsToken:
                 if (checkForDisallowedESSymbolOperand(operator)) {
-                    leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(getUnknownIfMaybeUnknown(leftType), left));
-                    rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(getUnknownIfMaybeUnknown(rightType), right));
+                    leftType = checkNonNullType(getBaseTypeForComparison(leftType), left);
+                    rightType = checkNonNullType(getBaseTypeForComparison(rightType), right);
                     reportOperatorErrorUnless((left, right) => {
                         if (isTypeAny(left) || isTypeAny(right)) {
                             return true;

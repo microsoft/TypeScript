@@ -38,6 +38,22 @@ function f9<T extends undefined | null, U extends T>(a: U, b: U): boolean {
     return a > b;
 }
 
+function f10<T, U>(x: T | U, y: T | U) {
+    return x < y;
+}
+
+function f11<T, U extends T>(x: T | number, y: U | number) {
+    return x < y;
+}
+
+function f12<T, U>(x: T & U, y: T & U) {
+    return x < y;
+}
+
+function f13<T, U extends T>(x: T & number, y: U & number) {
+    return x < y;
+}
+
 
 function compare<T>(a: T, b: T): boolean {
     if (a === undefined) {

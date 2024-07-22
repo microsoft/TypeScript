@@ -154,6 +154,74 @@ function f9<T extends undefined | null, U extends T>(a: U, b: U): boolean {
 >  : ^
 }
 
+function f10<T, U>(x: T | U, y: T | U) {
+>f10 : <T, U>(x: T | U, y: T | U) => boolean
+>    : ^ ^^ ^^ ^^     ^^ ^^     ^^^^^^^^^^^^
+>x : T | U
+>  : ^^^^^
+>y : T | U
+>  : ^^^^^
+
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : T | U
+>  : ^^^^^
+>y : T | U
+>  : ^^^^^
+}
+
+function f11<T, U extends T>(x: T | number, y: U | number) {
+>f11 : <T, U extends T>(x: T | number, y: U | number) => boolean
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^^^^
+>x : number | T
+>  : ^^^^^^^^^^
+>y : number | U
+>  : ^^^^^^^^^^
+
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : number | T
+>  : ^^^^^^^^^^
+>y : number | U
+>  : ^^^^^^^^^^
+}
+
+function f12<T, U>(x: T & U, y: T & U) {
+>f12 : <T, U>(x: T & U, y: T & U) => boolean
+>    : ^ ^^ ^^ ^^     ^^ ^^     ^^^^^^^^^^^^
+>x : T & U
+>  : ^^^^^
+>y : T & U
+>  : ^^^^^
+
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : T & U
+>  : ^^^^^
+>y : T & U
+>  : ^^^^^
+}
+
+function f13<T, U extends T>(x: T & number, y: U & number) {
+>f13 : <T, U extends T>(x: T & number, y: U & number) => boolean
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^^^^
+>x : T & number
+>  : ^^^^^^^^^^
+>y : U & number
+>  : ^^^^^^^^^^
+
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : T & number
+>  : ^^^^^^^^^^
+>y : U & number
+>  : ^^^^^^^^^^
+}
+
 
 function compare<T>(a: T, b: T): boolean {
 >compare : <T>(a: T, b: T) => boolean
