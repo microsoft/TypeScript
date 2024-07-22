@@ -44275,7 +44275,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     node,
                     semantics === PredicateSemantics.Always ?
                         Diagnostics.This_kind_of_expression_is_always_truthy :
-                        Diagnostics.This_kind_of_expression_is_always_falsy
+                        Diagnostics.This_kind_of_expression_is_always_falsy,
                 );
             }
         }
