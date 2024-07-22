@@ -2416,7 +2416,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             factory.createBlock(
                 setTextRange(
                     factory.createNodeArray(statements),
-                    /*location*/ constructor?.body ? constructor.body.statements : node.members,
+                    /*location*/ constructor?.body?.statements ?? node.members,
                 ),
                 multiLine,
             ),
