@@ -377,7 +377,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 fix: {
                     kind: ImportFixKind.AddNew,
                     importKind: isNamespaceImport(referenceImport) ? ImportKind.Namespace : ImportKind.Default,
-                    addAsTypeOnly: isTypeOnlyImportDeclaration(referenceImport) ? AddAsTypeOnly.Allowed : AddAsTypeOnly.NotAllowed,
+                    addAsTypeOnly: isTypeOnlyImportDeclaration(referenceImport) ? AddAsTypeOnly.Required : AddAsTypeOnly.Allowed,
                     useRequire,
                     moduleSpecifierKind: undefined,
                     moduleSpecifier,
