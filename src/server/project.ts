@@ -2326,7 +2326,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             cb(this.program!, originalProgram, (this.program?.getSourceFile(rootFile))!);
         }
         finally {
-            this.getScriptInfo(rootFile)?.editContent(0, this.program!.getSourceFile(rootFile)!.getText().length, originalText);
+            this.getScriptInfo(rootFile)?.editContent(0, this.program!.getSourceFile(rootFile)!.getFullText().length, originalText);
         }
     }
 
