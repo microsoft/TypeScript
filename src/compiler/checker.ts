@@ -42301,7 +42301,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      *
      * This is used to reflect the runtime behavior of the `await` keyword.
      */
-    function  getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, ...args: DiagnosticArguments): Type | undefined {
+    function getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, ...args: DiagnosticArguments): Type | undefined {
         const awaitedType = getAwaitedTypeNoAlias(type, errorNode, diagnosticMessage, ...args);
         return awaitedType && createAwaitedTypeIfNeeded(awaitedType);
     }
