@@ -1619,7 +1619,7 @@ export let sys: System = (() => {
             setTimeout,
             clearTimeout,
             clearScreen: () => {
-                process.stdout.write("\x1B[2J\x1B[3J\x1BH\x1B[0f");
+                process.stdout.write("\x1B[2J\x1B[3J\x1B[H");
             },
             setBlocking: () => {
                 const handle = (process.stdout as any)?._handle as { setBlocking?: (value: boolean) => void; };
