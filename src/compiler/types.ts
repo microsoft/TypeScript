@@ -4973,7 +4973,6 @@ export interface TypeChecker {
     getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
     /** @internal */
     getAwaitedType(type: Type): Type | undefined;
-    getAwaitedTypeOfPromise(type: Type): Type | undefined;
     /** @internal */
     isEmptyAnonymousObjectType(type: Type): boolean;
     getReturnTypeOfSignature(signature: Signature): Type;
@@ -5288,8 +5287,6 @@ export interface TypeChecker {
      */
     tryGetThisTypeAt(node: Node, includeGlobalThis?: boolean, container?: ThisContainer): Type | undefined;
     /** @internal */ getTypeArgumentConstraint(node: TypeNode): Type | undefined;
-
-    filterType(type: Type, f: (t: Type) => boolean): Type;
 
     /**
      * Does *not* get *all* suggestion diagnostics, just the ones that were convenient to report in the checker.

@@ -5472,7 +5472,7 @@ function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefin
 /** @internal */
 export function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
     const hasCompletionsType = completionsType && completionsType !== contextualType;
-    const promiseFilteredContextualType = checker.filterType(contextualType, t => !checker.getAwaitedTypeOfPromise(t));
+    const promiseFilteredContextualType = checker.getUnionType(filter(contextualType.flags & TypeFlags.Union ? (contextualType as UnionType).types : [contextualType], t => !checker.getAwaitedType(t) || !checker.getPromisedTypeOfPromise(t)));
     const type = hasCompletionsType && !(completionsType.flags & TypeFlags.AnyOrUnknown)
         ? checker.getUnionType([promiseFilteredContextualType, completionsType])
         : promiseFilteredContextualType;
