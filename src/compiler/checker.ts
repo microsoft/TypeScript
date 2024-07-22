@@ -24895,7 +24895,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.flags & TypeFlags.BigIntLiteral ? bigintType :
             type.flags & TypeFlags.BooleanLiteral ? booleanType :
             type.flags & TypeFlags.Union ? mapType(type, getBaseTypeForComparison) :
-            type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => { return getBaseTypeForComparison(t) === unknownUnionType }) ? unknownUnionType :
+            type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => {
+                    return getBaseTypeForComparison(t) === unknownUnionType;
+                }) ? unknownUnionType :
             type;
     }
 
