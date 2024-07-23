@@ -40,6 +40,13 @@ const newLineKind = ts.NewLineKind.LineFeed;
 const newLine = newLineKind === ts.NewLineKind.LineFeed ? "\n" : "\r\n";
 
 /**
+ * @param {ts.Node} node
+ */
+function removeAllComments(node) {
+    /** @type {any} */ (ts).removeAllComments(node);
+}
+
+/**
  * @param {ts.VariableDeclaration} node
  * @returns {ts.VariableStatement}
  */
@@ -422,6 +429,15 @@ function emitAsNamespace(name, parent, moduleSymbol, needExportModifier) {
                     if (ts.isInternalDeclaration(node)) {
                         return undefined;
                     }
+                    // TODO: remove after https://github.com/microsoft/TypeScript/pull/58187 is released
+                    if (ts.canHaveModifiers(node)) {
+                        for (const modifier of ts.getModifiers(node) ?? []) {
+                            if (modifier.kind === ts.SyntaxKind.PrivateKeyword) {
+                                removeAllComments(node);
+                                break;
+                            }
+                        }
+                    }
                     return node;
                 }, /*context*/ undefined);
 
@@ -492,7 +508,7 @@ formatter.setConfig({
  * @returns {string}
  */
 function dprint(contents) {
-    const result = formatter.formatText("dummy.d.ts", contents);
+    const result = formatter.formatText({ filePath: "dummy.d.ts", fileText: contents });
     return result.replace(/\r\n/g, "\n");
 }
 

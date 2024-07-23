@@ -46,8 +46,8 @@ for (let {x = 'a' in {}} = {}; !x; x = !x) console.log(x)
 >    : ^^^
 >{} : {}
 >   : ^^
->{} : { x?: boolean; }
->   : ^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
 >!x : boolean
 >   : ^^^^^^^
 >x : boolean

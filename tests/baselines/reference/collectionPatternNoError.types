@@ -73,11 +73,11 @@ class DataProvider<T extends Message, U extends MessageList<T>> {
 >messageList.methodOnMessageList() : T[]
 >                                  : ^^^
 >messageList.methodOnMessageList : () => T[]
->                                : ^^^^^^^  
+>                                : ^^^^^^^^^
 >messageList : U
 >            : ^
 >methodOnMessageList : () => T[]
->                    : ^^^^^^^  
+>                    : ^^^^^^^^^
   }
 }
 
@@ -102,7 +102,7 @@ function f<
 >fetchMsg(messageList).methodOnMessageList() : T[]
 >                                            : ^^^
 >fetchMsg(messageList).methodOnMessageList : () => T[]
->                                          : ^^^^^^^  
+>                                          : ^^^^^^^^^
 >fetchMsg(messageList) : U["TType"]
 >                      : ^^^^^^^^^^
 >fetchMsg : <V extends Message>(protoCtor: MsgConstructor<V>) => V
@@ -110,6 +110,6 @@ function f<
 >messageList : MsgConstructor<U["TType"]>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >methodOnMessageList : () => T[]
->                    : ^^^^^^^  
+>                    : ^^^^^^^^^
 }
 

@@ -41,18 +41,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/file2/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -131,18 +121,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/file2/index.d.ts: *new*
   {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -197,24 +177,14 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/file2/index.d.ts:
   {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -329,16 +299,10 @@ sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to Pr
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules:
@@ -397,16 +361,10 @@ After running Timeout callback:: count: 2
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -471,18 +429,8 @@ Output::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/file2/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/src/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/node_modules:

@@ -1032,7 +1032,7 @@
         "category": "Error",
         "code": 1323
     },
-    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 1324
     },
@@ -1804,6 +1804,14 @@
     "Decimal escape sequences and backreferences are not allowed in a character class.": {
         "category": "Error",
         "code": 1537
+    },
+    "Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.": {
+        "category": "Error",
+        "code": 1538
+    },
+    "A 'bigint' literal cannot be used as a property name.": {
+        "category": "Error",
+        "code": 1539
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -2683,10 +2691,6 @@
     "'await' expressions cannot be used in a parameter initializer.": {
         "category": "Error",
         "code": 2524
-    },
-    "Initializer provides no value for this binding element and the binding element has no default value.": {
-        "category": "Error",
-        "code": 2525
     },
     "A 'this' type is available only in a non-static member of a class or interface.": {
         "category": "Error",
@@ -3911,7 +3915,26 @@
         "category": "Error",
         "code": 2868
     },
-
+    "Right operand of ?? is unreachable because the left operand is never nullish.": {
+        "category": "Error",
+        "code": 2869
+    },
+    "This binary expression is never nullish. Are you missing parentheses?": {
+        "category": "Error",
+        "code": 2870
+    },
+    "This expression is always nullish.": {
+        "category": "Error",
+        "code": 2871
+    },
+    "This kind of expression is always truthy.": {
+        "category": "Error",
+        "code": 2872
+    },
+    "This kind of expression is always falsy.": {
+        "category": "Error",
+        "code": 2873
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -4216,7 +4239,7 @@
         "category": "Error",
         "code": 4092
     },
-    "Property '{0}' of exported class expression may not be private or protected.": {
+    "Property '{0}' of exported anonymous class type may not be private or protected.": {
         "category": "Error",
         "code": 4094
     },
@@ -4364,10 +4387,6 @@
     "Cannot read file '{0}': {1}.": {
         "category": "Error",
         "code": 5012
-    },
-    "Failed to parse file '{0}': {1}.": {
-        "category": "Error",
-        "code": 5014
     },
     "Unknown compiler option '{0}'.": {
         "category": "Error",
@@ -4616,6 +4635,10 @@
     "Option 'module' must be set to '{0}' when option 'moduleResolution' is set to '{1}'.": {
         "category": "Error",
         "code": 5110
+    },
+    "Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.": {
+        "category": "Error",
+        "code": 5111
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -5116,10 +5139,6 @@
     "Module '{0}' was resolved as locally declared ambient module in file '{1}'.": {
         "category": "Message",
         "code": 6144
-    },
-    "Module '{0}' was resolved as ambient module declared in '{1}' since this file was not modified.": {
-        "category": "Message",
-        "code": 6145
     },
     "Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'.": {
         "category": "Message",
@@ -5692,14 +5711,6 @@
         "category": "Message",
         "code": 6361
     },
-    "Skipping build of project '{0}' because its dependency '{1}' has errors": {
-        "category": "Message",
-        "code": 6362
-    },
-    "Project '{0}' can't be built because its dependency '{1}' has errors": {
-        "category": "Message",
-        "code": 6363
-    },
     "Build one or more projects and their dependencies, if out of date": {
         "category": "Message",
         "code": 6364
@@ -5743,14 +5754,6 @@
     "Project '{0}' is out of date because output for it was generated with version '{1}' that differs with current version '{2}'": {
         "category": "Message",
         "code": 6381
-    },
-    "Skipping build of project '{0}' because its dependency '{1}' was not built": {
-        "category": "Message",
-        "code": 6382
-    },
-    "Project '{0}' can't be built because its dependency '{1}' was not built": {
-        "category": "Message",
-        "code": 6383
     },
     "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
         "category": "Message",
@@ -5893,6 +5896,14 @@
     "Searching all ancestor node_modules directories for fallback extensions: {0}.": {
         "category": "Message",
         "code": 6418
+    },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that program needs to report errors.": {
+        "category": "Message",
+        "code": 6419
+    },
+    "Project '{0}' is out of date because {1}.": {
+        "category": "Message",
+        "code": 6420
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -6384,6 +6395,10 @@
         "code": 6719
     },
 
+    "Built-in iterators are instantiated with a 'TReturn' type of 'undefined' instead of 'any'.": {
+        "category": "Message",
+        "code": 6720
+    },
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
         "code": 6803
@@ -6395,6 +6410,10 @@
     "Disable full type checking (only critical parse and emit errors will be reported).": {
         "category": "Message",
         "code": 6805
+    },
+    "Check side effect imports.": {
+        "category": "Message",
+        "code": 6806
     },
 
     "one of:": {

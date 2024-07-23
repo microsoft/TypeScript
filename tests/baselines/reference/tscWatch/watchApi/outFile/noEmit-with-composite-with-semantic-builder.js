@@ -39,76 +39,49 @@ Output::
 
 
 //// [/user/username/projects/outFile.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-10726455937-export const x = 10;","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"pendingEmit":false},"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-10726455937-export const x = 10;","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"pendingEmit":17,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../a/lib/lib.d.ts",
-      "./myproject/main.ts",
-      "./myproject/other.ts"
-    ],
-    "fileInfos": {
-      "../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/main.ts": {
-        "original": {
-          "version": "-10726455937-export const x = 10;",
-          "impliedFormat": 1
-        },
-        "version": "-10726455937-export const x = 10;",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/other.ts": {
-        "original": {
-          "version": "-13729955264-export const y = 10;",
-          "impliedFormat": 1
-        },
-        "version": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./myproject/main.ts"
-      ],
-      [
-        3,
-        "./myproject/other.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 2,
-      "outFile": "./outFile.js"
-    },
-    "pendingEmit": [
-      "Js | Dts",
-      false
-    ]
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/main.ts",
+    "./myproject/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./myproject/main.ts": "-10726455937-export const x = 10;",
+    "./myproject/other.ts": "-13729955264-export const y = 10;"
   },
+  "root": [
+    [
+      2,
+      "./myproject/main.ts"
+    ],
+    [
+      3,
+      "./myproject/other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "pendingEmit": [
+    "Js | DtsEmit",
+    17
+  ],
   "version": "FakeTSVersion",
-  "size": 759
+  "size": 654
 }
 
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -167,62 +140,39 @@ Output::
 
 
 //// [/user/username/projects/outFile.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-10726455937-export const x = 10;","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-10726455937-export const x = 10;","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../a/lib/lib.d.ts",
-      "./myproject/main.ts",
-      "./myproject/other.ts"
-    ],
-    "fileInfos": {
-      "../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/main.ts": {
-        "original": {
-          "version": "-10726455937-export const x = 10;",
-          "impliedFormat": 1
-        },
-        "version": "-10726455937-export const x = 10;",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/other.ts": {
-        "original": {
-          "version": "-13729955264-export const y = 10;",
-          "impliedFormat": 1
-        },
-        "version": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./myproject/main.ts"
-      ],
-      [
-        3,
-        "./myproject/other.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 2,
-      "outFile": "./outFile.js"
-    },
-    "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
-    "latestChangedDtsFile": "./outFile.d.ts"
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/main.ts",
+    "./myproject/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./myproject/main.ts": "-10726455937-export const x = 10;",
+    "./myproject/other.ts": "-13729955264-export const y = 10;"
   },
+  "root": [
+    [
+      2,
+      "./myproject/main.ts"
+    ],
+    [
+      3,
+      "./myproject/other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
   "version": "FakeTSVersion",
-  "size": 921
+  "size": 819
 }
 
 //// [/user/username/projects/outFile.js]
@@ -253,22 +203,14 @@ declare module "other" {
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500} *new*
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000} *new*
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500} *new*
-/user/username/projects/package.json:
-  {"pollingInterval":2000} *new*
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -338,12 +280,8 @@ export const x = 10;
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches *deleted*::
 /a/lib/lib.d.ts:
@@ -369,78 +307,51 @@ Output::
 
 
 //// [/user/username/projects/outFile.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-14918944530-export const x = 10;\n// SomeComment","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","pendingEmit":false},"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-14918944530-export const x = 10;\n// SomeComment","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","pendingEmit":17,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../a/lib/lib.d.ts",
-      "./myproject/main.ts",
-      "./myproject/other.ts"
-    ],
-    "fileInfos": {
-      "../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/main.ts": {
-        "original": {
-          "version": "-14918944530-export const x = 10;\n// SomeComment",
-          "impliedFormat": 1
-        },
-        "version": "-14918944530-export const x = 10;\n// SomeComment",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/other.ts": {
-        "original": {
-          "version": "-13729955264-export const y = 10;",
-          "impliedFormat": 1
-        },
-        "version": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./myproject/main.ts"
-      ],
-      [
-        3,
-        "./myproject/other.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 2,
-      "outFile": "./outFile.js"
-    },
-    "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
-    "latestChangedDtsFile": "./outFile.d.ts",
-    "pendingEmit": [
-      "Js | Dts",
-      false
-    ]
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/main.ts",
+    "./myproject/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./myproject/main.ts": "-14918944530-export const x = 10;\n// SomeComment",
+    "./myproject/other.ts": "-13729955264-export const y = 10;"
   },
+  "root": [
+    [
+      2,
+      "./myproject/main.ts"
+    ],
+    [
+      3,
+      "./myproject/other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
+  "pendingEmit": [
+    "Js | DtsEmit",
+    17
+  ],
   "version": "FakeTSVersion",
-  "size": 957
+  "size": 852
 }
 
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -499,62 +410,39 @@ Output::
 
 
 //// [/user/username/projects/outFile.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-14918944530-export const x = 10;\n// SomeComment","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-14918944530-export const x = 10;\n// SomeComment","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../a/lib/lib.d.ts",
-      "./myproject/main.ts",
-      "./myproject/other.ts"
-    ],
-    "fileInfos": {
-      "../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/main.ts": {
-        "original": {
-          "version": "-14918944530-export const x = 10;\n// SomeComment",
-          "impliedFormat": 1
-        },
-        "version": "-14918944530-export const x = 10;\n// SomeComment",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/other.ts": {
-        "original": {
-          "version": "-13729955264-export const y = 10;",
-          "impliedFormat": 1
-        },
-        "version": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./myproject/main.ts"
-      ],
-      [
-        3,
-        "./myproject/other.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 2,
-      "outFile": "./outFile.js"
-    },
-    "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
-    "latestChangedDtsFile": "./outFile.d.ts"
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/main.ts",
+    "./myproject/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./myproject/main.ts": "-14918944530-export const x = 10;\n// SomeComment",
+    "./myproject/other.ts": "-13729955264-export const y = 10;"
   },
+  "root": [
+    [
+      2,
+      "./myproject/main.ts"
+    ],
+    [
+      3,
+      "./myproject/other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
   "version": "FakeTSVersion",
-  "size": 937
+  "size": 835
 }
 
 //// [/user/username/projects/outFile.js]
@@ -577,22 +465,14 @@ define("other", ["require", "exports"], function (require, exports) {
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500} *new*
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000} *new*
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500} *new*
-/user/username/projects/package.json:
-  {"pollingInterval":2000} *new*
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -663,12 +543,8 @@ export const x = 10;
 PolledWatches *deleted*::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
 
 FsWatches *deleted*::
 /a/lib/lib.d.ts:
@@ -694,62 +570,39 @@ Output::
 
 
 //// [/user/username/projects/outFile.tsbuildinfo]
-{"program":{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-16105752451-export const x = 10;\n// SomeComment\n// SomeComment","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/main.ts","./myproject/other.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-16105752451-export const x = 10;\n// SomeComment\n// SomeComment","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../a/lib/lib.d.ts",
-      "./myproject/main.ts",
-      "./myproject/other.ts"
-    ],
-    "fileInfos": {
-      "../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "impliedFormat": 1
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/main.ts": {
-        "original": {
-          "version": "-16105752451-export const x = 10;\n// SomeComment\n// SomeComment",
-          "impliedFormat": 1
-        },
-        "version": "-16105752451-export const x = 10;\n// SomeComment\n// SomeComment",
-        "impliedFormat": "commonjs"
-      },
-      "./myproject/other.ts": {
-        "original": {
-          "version": "-13729955264-export const y = 10;",
-          "impliedFormat": 1
-        },
-        "version": "-13729955264-export const y = 10;",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./myproject/main.ts"
-      ],
-      [
-        3,
-        "./myproject/other.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "module": 2,
-      "outFile": "./outFile.js"
-    },
-    "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
-    "latestChangedDtsFile": "./outFile.d.ts"
+  "fileNames": [
+    "../../../a/lib/lib.d.ts",
+    "./myproject/main.ts",
+    "./myproject/other.ts"
+  ],
+  "fileInfos": {
+    "../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+    "./myproject/main.ts": "-16105752451-export const x = 10;\n// SomeComment\n// SomeComment",
+    "./myproject/other.ts": "-13729955264-export const y = 10;"
   },
+  "root": [
+    [
+      2,
+      "./myproject/main.ts"
+    ],
+    [
+      3,
+      "./myproject/other.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 2,
+    "outFile": "./outFile.js"
+  },
+  "outSignature": "3483479585-declare module \"main\" {\n    export const x = 10;\n}\ndeclare module \"other\" {\n    export const y = 10;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
   "version": "FakeTSVersion",
-  "size": 953
+  "size": 851
 }
 
 //// [/user/username/projects/outFile.js]
@@ -773,12 +626,8 @@ define("other", ["require", "exports"], function (require, exports) {
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/package.json: *new*
-  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/package.json: *new*
-  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*

@@ -4,7 +4,6 @@ import {
     append,
     arrayIsEqualTo,
     CancellationToken,
-    CompilerOptions,
     consumesNodeCoreModules,
     createMultiMap,
     Debug,
@@ -18,9 +17,7 @@ import {
     GetCanonicalFileName,
     getDefaultLikeExportNameFromDeclaration,
     getDirectoryPath,
-    getEmitScriptTarget,
     getLocalSymbolForExportDefault,
-    getNamesForExportedSymbol,
     getNodeModulePathParts,
     getPackageNameFromTypesPackageName,
     getRegexFromPattern,
@@ -46,6 +43,7 @@ import {
     Path,
     pathContainsNodeModules,
     Program,
+    ScriptTarget,
     skipAlias,
     SourceFile,
     startsWith,
@@ -198,7 +196,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
             //    get a better name.
             const names = exportKind === ExportKind.Named || isExternalModuleSymbol(namedSymbol)
                 ? unescapeLeadingUnderscores(symbolTableKey)
-                : getNamesForExportedSymbol(namedSymbol, /*scriptTarget*/ undefined);
+                : getNamesForExportedSymbol(namedSymbol, checker, /*scriptTarget*/ undefined);
 
             const symbolName = typeof names === "string" ? names : names[0];
             const capitalizedSymbolName = typeof names === "string" ? undefined : names[1];
@@ -426,12 +424,7 @@ export function forEachExternalModuleToImportFrom(
     cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, isFromPackageJson: boolean) => void,
 ) {
     const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
-    const excludePatterns = preferences.autoImportFileExcludePatterns && mapDefined(preferences.autoImportFileExcludePatterns, spec => {
-        // The client is expected to send rooted path specs since we don't know
-        // what directory a relative path is relative to.
-        const pattern = getSubPatternFromSpec(spec, "", "exclude");
-        return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
-    });
+    const excludePatterns = preferences.autoImportFileExcludePatterns && getIsExcludedPatterns(preferences, useCaseSensitiveFileNames);
 
     forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), excludePatterns, host, (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
     const autoImportProvider = useAutoImportProvider && host.getPackageJsonAutoImportProvider?.();
@@ -451,9 +444,33 @@ export function forEachExternalModuleToImportFrom(
     }
 }
 
+function getIsExcludedPatterns(preferences: UserPreferences, useCaseSensitiveFileNames: boolean) {
+    return mapDefined(preferences.autoImportFileExcludePatterns, spec => {
+        // The client is expected to send rooted path specs since we don't know
+        // what directory a relative path is relative to.
+        const pattern = getSubPatternFromSpec(spec, "", "exclude");
+        return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
+    });
+}
+
 function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, host: LanguageServiceHost, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+    const isExcluded = excludePatterns && getIsExcluded(excludePatterns, host);
+
+    for (const ambient of checker.getAmbientModules()) {
+        if (!ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile())))) {
+            cb(ambient, /*sourceFile*/ undefined);
+        }
+    }
+    for (const sourceFile of allSourceFiles) {
+        if (isExternalOrCommonJsModule(sourceFile) && !isExcluded?.(sourceFile)) {
+            cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
+        }
+    }
+}
+
+function getIsExcluded(excludePatterns: readonly RegExp[], host: LanguageServiceHost) {
     const realpathsWithSymlinks = host.getSymlinkCache?.().getSymlinkedDirectoriesByRealpath();
-    const isExcluded = excludePatterns && (({ fileName, path }: SourceFile) => {
+    return (({ fileName, path }: SourceFile) => {
         if (excludePatterns.some(p => p.test(fileName))) return true;
         if (realpathsWithSymlinks?.size && pathContainsNodeModules(fileName)) {
             let dir = getDirectoryPath(fileName);
@@ -467,17 +484,12 @@ function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly So
         }
         return false;
     });
+}
 
-    for (const ambient of checker.getAmbientModules()) {
-        if (!ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile())))) {
-            cb(ambient, /*sourceFile*/ undefined);
-        }
-    }
-    for (const sourceFile of allSourceFiles) {
-        if (isExternalOrCommonJsModule(sourceFile) && !isExcluded?.(sourceFile)) {
-            cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
-        }
-    }
+/** @internal */
+export function getIsFileExcluded(host: LanguageServiceHost, preferences: UserPreferences) {
+    if (!preferences.autoImportFileExcludePatterns) return () => false;
+    return getIsExcluded(getIsExcludedPatterns(preferences, hostUsesCaseSensitiveFileNames(host)), host);
 }
 
 /** @internal */
@@ -558,14 +570,24 @@ function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
     return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) && !isPrivateIdentifierSymbol(symbol);
 }
 
+function getNamesForExportedSymbol(defaultExport: Symbol, checker: TypeChecker, scriptTarget: ScriptTarget | undefined) {
+    let names: string | string[] | undefined;
+    forEachNameOfDefaultExport(defaultExport, checker, scriptTarget, (name, capitalizedName) => {
+        names = capitalizedName ? [name, capitalizedName] : name;
+        return true;
+    });
+    return Debug.checkDefined(names);
+}
+
 /**
  * @internal
  * May call `cb` multiple times with the same name.
  * Terminates when `cb` returns a truthy value.
  */
-export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions, preferCapitalizedNames: boolean, cb: (name: string) => T | undefined): T | undefined {
+export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: TypeChecker, scriptTarget: ScriptTarget | undefined, cb: (name: string, capitalizedName?: string) => T | undefined): T | undefined {
     let chain: Symbol[] | undefined;
     let current: Symbol | undefined = defaultExport;
+    const seen = new Map<Symbol, true>();
 
     while (current) {
         // The predecessor to this function also looked for a name on the `localSymbol`
@@ -583,12 +605,16 @@ export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: Ty
         }
 
         chain = append(chain, current);
+        if (!addToSeen(seen, current)) break;
         current = current.flags & SymbolFlags.Alias ? checker.getImmediateAliasedSymbol(current) : undefined;
     }
 
     for (const symbol of chain ?? emptyArray) {
         if (symbol.parent && isExternalModuleSymbol(symbol.parent)) {
-            const final = cb(moduleSymbolToValidIdentifier(symbol.parent, getEmitScriptTarget(compilerOptions), preferCapitalizedNames));
+            const final = cb(
+                moduleSymbolToValidIdentifier(symbol.parent, scriptTarget, /*forceCapitalize*/ false),
+                moduleSymbolToValidIdentifier(symbol.parent, scriptTarget, /*forceCapitalize*/ true),
+            );
             if (final) return final;
         }
     }

@@ -8,6 +8,7 @@ var condString: string;
 
 var exprAny1: any;
 >exprAny1 : any
+>         : ^^^
 
 var exprBoolean1: boolean;
 >exprBoolean1 : boolean
@@ -27,6 +28,7 @@ var exprIsObject1: Object;
 
 var exprAny2: any;
 >exprAny2 : any
+>         : ^^^
 
 var exprBoolean2: boolean;
 >exprBoolean2 : boolean
@@ -47,10 +49,13 @@ var exprIsObject2: Object;
 //Cond is a string type variable
 condString ? exprAny1 : exprAny2;
 >condString ? exprAny1 : exprAny2 : any
+>                                 : ^^^
 >condString : string
 >           : ^^^^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 condString ? exprBoolean1 : exprBoolean2;
 >condString ? exprBoolean1 : exprBoolean2 : boolean
@@ -105,10 +110,13 @@ condString ? exprString1 : exprBoolean1; // union
 //Cond is a string type literal
 "" ? exprAny1 : exprAny2;
 >"" ? exprAny1 : exprAny2 : any
+>                         : ^^^
 >"" : ""
 >   : ^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 "string" ? exprBoolean1 : exprBoolean2;
 >"string" ? exprBoolean1 : exprBoolean2 : boolean
@@ -181,12 +189,15 @@ var array = ["1", "2", "3"];
 
 typeof condString ? exprAny1 : exprAny2;
 >typeof condString ? exprAny1 : exprAny2 : any
+>                                        : ^^^
 >typeof condString : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >condString : string
 >           : ^^^^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 condString.toUpperCase ? exprBoolean1 : exprBoolean2;
 >condString.toUpperCase ? exprBoolean1 : exprBoolean2 : boolean
@@ -257,11 +268,15 @@ foo() ? exprString1 : exprBoolean1; // union
 //Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condString ? exprAny1 : exprAny2;
 >resultIsAny1 : any
+>             : ^^^
 >condString ? exprAny1 : exprAny2 : any
+>                                 : ^^^
 >condString : string
 >           : ^^^^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 var resultIsBoolean1 = condString ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean1 : boolean
@@ -325,11 +340,15 @@ var resultIsStringOrBoolean1 = condString ? exprString1 : exprBoolean1; // union
 
 var resultIsAny2 = "" ? exprAny1 : exprAny2;
 >resultIsAny2 : any
+>             : ^^^
 >"" ? exprAny1 : exprAny2 : any
+>                         : ^^^
 >"" : ""
 >   : ^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 var resultIsBoolean2 = "string" ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean2 : boolean
@@ -393,13 +412,17 @@ var resultIsStringOrBoolean2 = "hello" ? exprString1 : exprBoolean1; // union
 
 var resultIsAny3 = typeof condString ? exprAny1 : exprAny2;
 >resultIsAny3 : any
+>             : ^^^
 >typeof condString ? exprAny1 : exprAny2 : any
+>                                        : ^^^
 >typeof condString : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >condString : string
 >           : ^^^^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 var resultIsBoolean3 = condString.toUpperCase ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean3 : boolean

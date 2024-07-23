@@ -18,12 +18,12 @@ function* g(): IterableIterator<Foo> {
 >  : ^^^^^^                     
 
     yield;
->yield : undefined
->      : ^^^^^^^^^
+>yield : any
+>      : ^^^
 
     yield new Baz;
->yield new Baz : undefined
->              : ^^^^^^^^^
+>yield new Baz : any
+>              : ^^^
 >new Baz : Baz
 >        : ^^^
 >Baz : typeof Baz

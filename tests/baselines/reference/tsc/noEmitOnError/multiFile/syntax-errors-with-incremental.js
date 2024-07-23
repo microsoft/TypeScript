@@ -87,101 +87,83 @@ Shape signatures in builder refreshed for::
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","impliedFormat":1},{"version":"-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n","impliedFormat":1},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","impliedFormat":1}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"affectedFilesPendingEmit":[2,3,4]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5014788164-export interface A {\n    name: string;\n}\n","-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"referencedMap":[[3,1]],"affectedFilesPendingEmit":[2,3,4],"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "../shared/types/db.ts",
-      "../src/main.ts",
-      "../src/other.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../shared/types/db.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../shared/types/db.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
-      "../shared/types/db.ts": {
-        "original": {
-          "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-          "impliedFormat": 1
-        },
-        "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "impliedFormat": "commonjs"
-      },
-      "../src/main.ts": {
-        "original": {
-          "version": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
-          "impliedFormat": 1
-        },
-        "version": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
-        "signature": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
-        "impliedFormat": "commonjs"
-      },
-      "../src/other.ts": {
-        "original": {
-          "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-          "impliedFormat": 1
-        },
-        "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "signature": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "impliedFormat": "commonjs"
-      }
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
     },
-    "root": [
+    "../shared/types/db.ts": {
+      "version": "-5014788164-export interface A {\n    name: string;\n}\n",
+      "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+    },
+    "../src/main.ts": {
+      "version": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
+      "signature": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n"
+    },
+    "../src/other.ts": {
+      "version": "9084524823-console.log(\"hi\");\nexport { }\n",
+      "signature": "9084524823-console.log(\"hi\");\nexport { }\n"
+    }
+  },
+  "root": [
+    [
       [
-        [
-          2,
-          4
-        ],
-        [
-          "../shared/types/db.ts",
-          "../src/main.ts",
-          "../src/other.ts"
-        ]
-      ]
-    ],
-    "options": {
-      "noEmitOnError": true,
-      "outDir": "./"
-    },
-    "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
-      ]
-    },
-    "affectedFilesPendingEmit": [
+        2,
+        4
+      ],
       [
         "../shared/types/db.ts",
-        "Js"
-      ],
-      [
         "../src/main.ts",
-        "Js"
-      ],
-      [
-        "../src/other.ts",
-        "Js"
+        "../src/other.ts"
       ]
     ]
+  ],
+  "options": {
+    "noEmitOnError": true,
+    "outDir": "./"
   },
+  "referencedMap": {
+    "../src/main.ts": [
+      "../shared/types/db.ts"
+    ]
+  },
+  "affectedFilesPendingEmit": [
+    [
+      "../shared/types/db.ts",
+      "Js"
+    ],
+    [
+      "../src/main.ts",
+      "Js"
+    ],
+    [
+      "../src/other.ts",
+      "Js"
+    ]
+  ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 1089
+  "size": 983
 }
 
 
@@ -226,7 +208,7 @@ No shapes updated in the builder::
 
 
 
-Change:: incremental-declaration-doesnt-change
+Change:: Fix error
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
@@ -284,88 +266,72 @@ console.log("hi");
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5014788164-export interface A {\n    name: string;\n}\n","impliedFormat":1},{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"9084524823-console.log(\"hi\");\nexport { }\n","impliedFormat":1}],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","../shared/types/db.ts","../src/main.ts","../src/other.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-5014788164-export interface A {\n    name: string;\n}\n",{"version":"-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","signature":"-3531856636-export {};\n"},"9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"noEmitOnError":true,"outDir":"./"},"referencedMap":[[3,1]],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "../shared/types/db.ts",
-      "../src/main.ts",
-      "../src/other.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../shared/types/db.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "../shared/types/db.ts",
+    "../src/main.ts",
+    "../src/other.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../shared/types/db.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "affectsGlobalScope": true
       },
-      "../shared/types/db.ts": {
-        "original": {
-          "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-          "impliedFormat": 1
-        },
-        "version": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
-        "impliedFormat": "commonjs"
-      },
-      "../src/main.ts": {
-        "original": {
-          "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true
+    },
+    "../shared/types/db.ts": {
+      "version": "-5014788164-export interface A {\n    name: string;\n}\n",
+      "signature": "-5014788164-export interface A {\n    name: string;\n}\n"
+    },
+    "../src/main.ts": {
+      "original": {
         "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
-        "signature": "-3531856636-export {};\n",
-        "impliedFormat": "commonjs"
+        "signature": "-3531856636-export {};\n"
       },
-      "../src/other.ts": {
-        "original": {
-          "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-          "impliedFormat": 1
-        },
-        "version": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "signature": "9084524823-console.log(\"hi\");\nexport { }\n",
-        "impliedFormat": "commonjs"
-      }
+      "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
+      "signature": "-3531856636-export {};\n"
     },
-    "root": [
-      [
-        [
-          2,
-          4
-        ],
-        [
-          "../shared/types/db.ts",
-          "../src/main.ts",
-          "../src/other.ts"
-        ]
-      ]
-    ],
-    "options": {
-      "noEmitOnError": true,
-      "outDir": "./"
-    },
-    "referencedMap": {
-      "../src/main.ts": [
-        "../shared/types/db.ts"
-      ]
+    "../src/other.ts": {
+      "version": "9084524823-console.log(\"hi\");\nexport { }\n",
+      "signature": "9084524823-console.log(\"hi\");\nexport { }\n"
     }
   },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "../shared/types/db.ts",
+        "../src/main.ts",
+        "../src/other.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "noEmitOnError": true,
+    "outDir": "./"
+  },
+  "referencedMap": {
+    "../src/main.ts": [
+      "../shared/types/db.ts"
+    ]
+  },
   "version": "FakeTSVersion",
-  "size": 1092
+  "size": 984
 }
 
 

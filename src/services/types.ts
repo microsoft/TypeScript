@@ -430,6 +430,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
+    /** @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean, newSourceFileByResolvedPath: SourceFile | undefined): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
     /** @internal */ runWithTemporaryFileUpdate?(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedPastedText: SourceFile) => void): void;
     jsDocParsingMode?: JSDocParsingMode | undefined;
@@ -443,6 +444,12 @@ export type WithMetadata<T> = T & { metadata?: unknown; };
 export const enum SemanticClassificationFormat {
     Original = "original",
     TwentyTwenty = "2020",
+}
+
+/** @internal */
+export interface RegionDiagnosticsResult {
+    diagnostics: Diagnostic[];
+    spans: TextSpan[];
 }
 
 //
@@ -488,6 +495,12 @@ export interface LanguageService {
      * @param fileName A path to the file you want semantic diagnostics for
      */
     getSemanticDiagnostics(fileName: string): Diagnostic[];
+
+    /**
+     * Similar to {@link getSemanticDiagnostics}, but only checks the specified ranges of the file for diagnostics.
+     * @internal
+     */
+    getRegionSemanticDiagnostics(fileName: string, ranges: TextRange[]): RegionDiagnosticsResult | undefined;
 
     /**
      * Gets suggestion diagnostics for a specific file. These diagnostics tend to

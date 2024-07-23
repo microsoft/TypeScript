@@ -41,11 +41,11 @@ function map<A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) {
 >items.map(f) : B[]
 >             : ^^^
 >items.map : <U>(callbackfn: (value: A, index: number, array: readonly A[]) => U, thisArg?: any) => U[]
->          : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>          : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >items : readonly A[]
 >      : ^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: A, index: number, array: readonly A[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >f : (a: NoInfer<A>) => B
 >  : ^ ^^          ^^^^^ 
 }

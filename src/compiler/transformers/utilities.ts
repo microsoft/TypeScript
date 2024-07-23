@@ -47,6 +47,7 @@ import {
     isClassStaticBlockDeclaration,
     isDefaultImport,
     isExpressionStatement,
+    isFunctionDeclaration,
     isGeneratedIdentifier,
     isGeneratedPrivateIdentifier,
     isIdentifier,
@@ -321,7 +322,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 
     function addExportedFunctionDeclaration(node: FunctionDeclaration, name: ModuleExportName | undefined, isDefault: boolean) {
-        exportedFunctions.add(node);
+        exportedFunctions.add(getOriginalNode(node, isFunctionDeclaration));
         if (isDefault) {
             // export default function() { }
             // function x() { } + export { x as default };
@@ -429,8 +430,7 @@ export class IdentifierNameMap<V> {
     }
 }
 
-/** @internal */
-export class IdentifierNameMultiMap<V> extends IdentifierNameMap<V[]> {
+class IdentifierNameMultiMap<V> extends IdentifierNameMap<V[]> {
     add(key: Identifier, value: V): V[] {
         let values = this.get(key);
         if (values) {
@@ -801,8 +801,7 @@ export interface LexicalEnvironment<in out TEnvData, TPrivateEnvData, TPrivateEn
     readonly previous: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry> | undefined;
 }
 
-/** @internal */
-export function walkUpLexicalEnvironments<TEnvData, TPrivateEnvData, TPrivateEntry, U>(
+function walkUpLexicalEnvironments<TEnvData, TPrivateEnvData, TPrivateEntry, U>(
     env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry> | undefined,
     cb: (env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry>) => U,
 ): U | undefined {
@@ -856,8 +855,7 @@ export function accessPrivateIdentifier<
     return walkUpLexicalEnvironments(env, env => getPrivateIdentifier(env.privateEnv, name));
 }
 
-/** @internal */
-export function isSimpleParameter(node: ParameterDeclaration) {
+function isSimpleParameter(node: ParameterDeclaration) {
     return !node.initializer && isIdentifier(node.name);
 }
 

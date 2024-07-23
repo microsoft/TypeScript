@@ -74,6 +74,7 @@ Output::
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
+TSFILE: /src/project/outFile.js
 TSFILE: /src/project/outFile.tsbuildinfo
 lib/lib.d.ts
   Default library for target 'es5'
@@ -87,63 +88,59 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+//// [/src/project/outFile.js]
+define("index", ["require", "exports", "ky"], function (require, exports, ky_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.api = void 0;
+    exports.api = ky_1.default.extend({});
+});
+
+
 //// [/src/project/outFile.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./ky.d.ts","./src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","impliedFormat":1},{"version":"10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n","impliedFormat":1},{"version":"-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n","impliedFormat":1}],"root":[3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js","skipDefaultLibCheck":true,"skipLibCheck":true},"pendingEmit":false},"version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","./ky.d.ts","./src/index.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n","-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n"],"root":[3],"options":{"declaration":true,"module":2,"outFile":"./outFile.js","skipDefaultLibCheck":true,"skipLibCheck":true},"emitDiagnosticsPerFile":[[3,[{"start":34,"length":3,"messageText":"Exported variable 'api' has or is using name 'KyInstance' from external module \"/src/project/ky\" but cannot be named.","category":1,"code":4023}]]],"version":"FakeTSVersion"}
 
 //// [/src/project/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../lib/lib.d.ts",
-      "./ky.d.ts",
-      "./src/index.ts"
-    ],
-    "fileInfos": {
-      "../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "impliedFormat": 1
-        },
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "impliedFormat": "commonjs"
-      },
-      "./ky.d.ts": {
-        "original": {
-          "version": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
-          "impliedFormat": 1
-        },
-        "version": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
-        "impliedFormat": "commonjs"
-      },
-      "./src/index.ts": {
-        "original": {
-          "version": "-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n",
-          "impliedFormat": 1
-        },
-        "version": "-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n",
-        "impliedFormat": "commonjs"
-      }
-    },
-    "root": [
-      [
-        3,
-        "./src/index.ts"
-      ]
-    ],
-    "options": {
-      "declaration": true,
-      "module": 2,
-      "outFile": "./outFile.js",
-      "skipDefaultLibCheck": true,
-      "skipLibCheck": true
-    },
-    "pendingEmit": [
-      "Js | Dts",
-      false
-    ]
+  "fileNames": [
+    "../../lib/lib.d.ts",
+    "./ky.d.ts",
+    "./src/index.ts"
+  ],
+  "fileInfos": {
+    "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./ky.d.ts": "10101889135-type KyInstance = {\n    extend(options: Record<string,unknown>): KyInstance;\n}\ndeclare const ky: KyInstance;\nexport default ky;\n",
+    "./src/index.ts": "-383421929-import ky from 'ky';\nexport const api = ky.extend({});\n"
   },
+  "root": [
+    [
+      3,
+      "./src/index.ts"
+    ]
+  ],
+  "options": {
+    "declaration": true,
+    "module": 2,
+    "outFile": "./outFile.js",
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
+  },
+  "emitDiagnosticsPerFile": [
+    [
+      "./src/index.ts",
+      [
+        {
+          "start": 34,
+          "length": 3,
+          "messageText": "Exported variable 'api' has or is using name 'KyInstance' from external module \"/src/project/ky\" but cannot be named.",
+          "category": 1,
+          "code": 4023
+        }
+      ]
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1012
+  "size": 1108
 }
 
 
@@ -157,7 +154,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/project/outFile.tsbuildinfo' indicates that some of the changes were not emitted
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because buildinfo file 'src/project/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 

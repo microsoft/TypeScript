@@ -6,7 +6,7 @@ Array.prototype.slice();
 >Array.prototype.slice() : any[]
 >                        : ^^^^^
 >Array.prototype.slice : (start?: number, end?: number) => any[]
->                      : ^     ^^^      ^^   ^^^      ^^^^^^^^  
+>                      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
 >Array.prototype : any[]
 >                : ^^^^^
 >Array : ArrayConstructor
@@ -14,13 +14,13 @@ Array.prototype.slice();
 >prototype : any[]
 >          : ^^^^^
 >slice : (start?: number, end?: number) => any[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^  
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
 
 Array.prototype.slice(0);
 >Array.prototype.slice(0) : any[]
 >                         : ^^^^^
 >Array.prototype.slice : (start?: number, end?: number) => any[]
->                      : ^     ^^^      ^^   ^^^      ^^^^^^^^  
+>                      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
 >Array.prototype : any[]
 >                : ^^^^^
 >Array : ArrayConstructor
@@ -28,7 +28,7 @@ Array.prototype.slice(0);
 >prototype : any[]
 >          : ^^^^^
 >slice : (start?: number, end?: number) => any[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^  
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -36,7 +36,7 @@ Array.prototype.slice(0, 1);
 >Array.prototype.slice(0, 1) : any[]
 >                            : ^^^^^
 >Array.prototype.slice : (start?: number, end?: number) => any[]
->                      : ^     ^^^      ^^   ^^^      ^^^^^^^^  
+>                      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
 >Array.prototype : any[]
 >                : ^^^^^
 >Array : ArrayConstructor
@@ -44,7 +44,7 @@ Array.prototype.slice(0, 1);
 >prototype : any[]
 >          : ^^^^^
 >slice : (start?: number, end?: number) => any[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^  
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
 >0 : 0
 >  : ^
 >1 : 1

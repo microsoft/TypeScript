@@ -4,8 +4,8 @@
 // Allow generators to fallback to IterableIterator if they are not in strictNullChecks mode
 // NOTE: In non-strictNullChecks mode, `undefined` (the default sent value) is assignable to everything.
 function* f() {
->f : () => IterableIterator<number>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : () => IterableIterator<number, void, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x: string = yield 1;
 >x : string

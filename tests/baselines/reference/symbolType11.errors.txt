@@ -1,0 +1,13 @@
+symbolType11.ts(7,1): error TS2872: This kind of expression is always truthy.
+
+
+==== symbolType11.ts (1 errors) ====
+    var s = Symbol.for("logical");
+    s && s;
+    s && [];
+    0 && s;
+    s || s;
+    s || 1;
+    ({}) || s;
+    ~~~~
+!!! error TS2872: This kind of expression is always truthy.

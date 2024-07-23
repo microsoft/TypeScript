@@ -907,8 +907,7 @@ export function startsWithDirectory(fileName: string, directoryName: string, get
 
 //// Relative Paths
 
-/** @internal */
-export function getPathComponentsRelativeTo(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean, getCanonicalFileName: GetCanonicalFileName) {
+function getPathComponentsRelativeTo(from: string, to: string, stringEqualityComparer: (a: string, b: string) => boolean, getCanonicalFileName: GetCanonicalFileName) {
     const fromComponents = reducePathComponents(getPathComponents(from));
     const toComponents = reducePathComponents(getPathComponents(to));
 
