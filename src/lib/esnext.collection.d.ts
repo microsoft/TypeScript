@@ -1,3 +1,5 @@
+/// <reference lib="es2024.collection" />
+
 interface ReadonlySetLike<T> {
     /**
      * Despite its name, returns an iterator of the values in the set-like.

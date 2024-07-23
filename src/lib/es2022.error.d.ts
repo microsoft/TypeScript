@@ -1,3 +1,5 @@
+/// <reference lib="es2021.promise" />
+
 interface ErrorOptions {
     cause?: unknown;
 }
