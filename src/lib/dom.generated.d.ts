@@ -7303,20 +7303,20 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GlobalEve
      * Returns a reference to the first object with the specified value of the ID attribute.
      * @param elementId String that specifies the ID value.
      */
-    getElementById(elementId: string): HTMLElement | null;
+    getElementById<E extends HTMLElement = HTMLElement>(elementId: string): E | null;
     /**
      * Returns a HTMLCollection of the elements in the object on which the method was invoked (a document or an element) that have all the classes given by classNames. The classNames argument is interpreted as a space-separated list of classes.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/getElementsByClassName)
      */
-    getElementsByClassName(classNames: string): HTMLCollectionOf<Element>;
+    getElementsByClassName<E extends Element = Element>(classNames: string): HTMLCollectionOf<E>;
     /**
      * Gets a collection of objects based on the value of the NAME or ID attribute.
      * @param elementName Gets a collection of objects based on the value of the NAME or ID attribute.
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Document/getElementsByName)
      */
-    getElementsByName(elementName: string): NodeListOf<HTMLElement>;
+    getElementsByName<E extends HTMLElement = HTMLElement>(elementName: string): NodeListOf<E>;
     /**
      * Retrieves a collection of objects based on the specified element name.
      * @param name Specifies the name of an element.
