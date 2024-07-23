@@ -4,6 +4,7 @@
 interface Contextual {
     dummy;
 >dummy : any
+>      : ^^^
 
     p?: number;
 >p : number
@@ -13,9 +14,11 @@ interface Contextual {
 interface Ellement {
     dummy;
 >dummy : any
+>      : ^^^
 
     p: any;
 >p : any
+>  : ^^^
 }
 
 var e: Ellement;

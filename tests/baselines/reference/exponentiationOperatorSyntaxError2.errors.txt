@@ -78,6 +78,7 @@ exponentiationOperatorSyntaxError2.ts(52,1): error TS2362: The left-hand side of
 exponentiationOperatorSyntaxError2.ts(52,1): error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 exponentiationOperatorSyntaxError2.ts(53,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorSyntaxError2.ts(53,1): error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+exponentiationOperatorSyntaxError2.ts(53,2): error TS2872: This kind of expression is always truthy.
 exponentiationOperatorSyntaxError2.ts(54,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorSyntaxError2.ts(54,1): error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 exponentiationOperatorSyntaxError2.ts(55,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -88,6 +89,7 @@ exponentiationOperatorSyntaxError2.ts(58,6): error TS2362: The left-hand side of
 exponentiationOperatorSyntaxError2.ts(58,6): error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 exponentiationOperatorSyntaxError2.ts(59,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorSyntaxError2.ts(59,6): error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+exponentiationOperatorSyntaxError2.ts(59,7): error TS2872: This kind of expression is always truthy.
 exponentiationOperatorSyntaxError2.ts(60,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorSyntaxError2.ts(60,6): error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 exponentiationOperatorSyntaxError2.ts(61,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -99,7 +101,7 @@ exponentiationOperatorSyntaxError2.ts(66,1): error TS17007: A type assertion exp
 exponentiationOperatorSyntaxError2.ts(67,1): error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 
 
-==== exponentiationOperatorSyntaxError2.ts (99 errors) ====
+==== exponentiationOperatorSyntaxError2.ts (101 errors) ====
     // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
     var temp: any;
     
@@ -313,6 +315,8 @@ exponentiationOperatorSyntaxError2.ts(67,1): error TS17007: A type assertion exp
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     ~~
 !!! error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+     ~
+!!! error TS2872: This kind of expression is always truthy.
     !temp++ ** 4;
     ~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -339,6 +343,8 @@ exponentiationOperatorSyntaxError2.ts(67,1): error TS17007: A type assertion exp
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
          ~~
 !!! error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+          ~
+!!! error TS2872: This kind of expression is always truthy.
     1 ** !temp++ ** 4;
          ~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

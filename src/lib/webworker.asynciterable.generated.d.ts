@@ -3,13 +3,13 @@
 /////////////////////////////
 
 interface FileSystemDirectoryHandle {
-    [Symbol.asyncIterator](): AsyncBuiltinIterator<[string, FileSystemHandle], BuiltinIteratorReturn>;
-    entries(): AsyncBuiltinIterator<[string, FileSystemHandle], BuiltinIteratorReturn>;
-    keys(): AsyncBuiltinIterator<string, BuiltinIteratorReturn>;
-    values(): AsyncBuiltinIterator<FileSystemHandle, BuiltinIteratorReturn>;
+    [Symbol.asyncIterator](): BuiltinAsyncIterator<[string, FileSystemHandle], BuiltinIteratorReturn>;
+    entries(): BuiltinAsyncIterator<[string, FileSystemHandle], BuiltinIteratorReturn>;
+    keys(): BuiltinAsyncIterator<string, BuiltinIteratorReturn>;
+    values(): BuiltinAsyncIterator<FileSystemHandle, BuiltinIteratorReturn>;
 }
 
 interface ReadableStream<R = any> {
-    [Symbol.asyncIterator](options?: ReadableStreamIteratorOptions): AsyncBuiltinIterator<R, BuiltinIteratorReturn>;
-    values(options?: ReadableStreamIteratorOptions): AsyncBuiltinIterator<R, BuiltinIteratorReturn>;
+    [Symbol.asyncIterator](options?: ReadableStreamIteratorOptions): BuiltinAsyncIterator<R, BuiltinIteratorReturn>;
+    values(options?: ReadableStreamIteratorOptions): BuiltinAsyncIterator<R, BuiltinIteratorReturn>;
 }

@@ -5,8 +5,11 @@ for-inStatementsInvalid.ts(10,10): error TS2404: The left-hand side of a 'for...
 for-inStatementsInvalid.ts(13,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'void'.
 for-inStatementsInvalid.ts(17,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
 for-inStatementsInvalid.ts(18,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+for-inStatementsInvalid.ts(19,15): error TS2872: This kind of expression is always truthy.
 for-inStatementsInvalid.ts(19,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+for-inStatementsInvalid.ts(20,15): error TS2873: This kind of expression is always falsy.
 for-inStatementsInvalid.ts(20,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
+for-inStatementsInvalid.ts(21,15): error TS2872: This kind of expression is always truthy.
 for-inStatementsInvalid.ts(22,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
 for-inStatementsInvalid.ts(29,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
 for-inStatementsInvalid.ts(31,18): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'.
@@ -17,7 +20,7 @@ for-inStatementsInvalid.ts(51,23): error TS2407: The right-hand side of a 'for..
 for-inStatementsInvalid.ts(62,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'.
 
 
-==== for-inStatementsInvalid.ts (17 errors) ====
+==== for-inStatementsInvalid.ts (20 errors) ====
     var aNumber: number;
     for (aNumber in {}) { }
          ~~~~~~~
@@ -51,12 +54,18 @@ for-inStatementsInvalid.ts(62,15): error TS2407: The right-hand side of a 'for..
                   ~~~~~~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
     for (var x in 42 ? c : d) { }
+                  ~~
+!!! error TS2872: This kind of expression is always truthy.
                   ~~~~~~~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
     for (var x in '' ? c : d) { }
+                  ~~
+!!! error TS2873: This kind of expression is always falsy.
                   ~~~~~~~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
     for (var x in 42 ? d[x] : c[x]) { }
+                  ~~
+!!! error TS2872: This kind of expression is always truthy.
     for (var x in c[23]) { }
                   ~~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'.
