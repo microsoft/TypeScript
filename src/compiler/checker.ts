@@ -19673,9 +19673,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isJSConstructor(container) && isNodeDescendantOf(node, container.body)) {
             return getDeclaredTypeOfClassOrInterface(getSymbolOfDeclaration(container)).thisType!;
         }
-        if (!(node.parent.kind === SyntaxKind.TypePredicate && node === (node.parent as TypePredicateNode).parameterName)) {
-            error(node, Diagnostics.A_this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
-        }
+        error(node, Diagnostics.A_this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
         return errorType;
     }
 
@@ -40773,10 +40771,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkSourceElement(node.type);
 
         const { parameterName } = node;
-        if (typePredicate.kind === TypePredicateKind.This || typePredicate.kind === TypePredicateKind.AssertsThis) {
-            getTypeFromThisTypeNode(parameterName as ThisTypeNode);
-        }
-        else {
+        if (typePredicate.kind !== TypePredicateKind.This && typePredicate.kind !== TypePredicateKind.AssertsThis) {
             if (typePredicate.parameterIndex >= 0) {
                 if (signatureHasRestParameter(signature) && typePredicate.parameterIndex === signature.parameters.length - 1) {
                     error(parameterName, Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
