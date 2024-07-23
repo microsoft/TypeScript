@@ -29503,7 +29503,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Check if a parameter or catch variable is assigned definitely
     function isSymbolAssignedDefinitely(symbol: Symbol) {
-        return symbol.isDefinitelyAssigned || (isSymbolAssigned(symbol) && symbol.isDefinitelyAssigned);
+        return symbol.isDefinitelyAssigned ?? (isSymbolAssigned(symbol) && symbol.isDefinitelyAssigned);
     }
 
     // Return true if there are no assignments to the given symbol or if the given location
@@ -29518,6 +29518,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             links.flags |= NodeCheckFlags.AssignmentsMarked;
             if (!hasParentWithAssignmentsMarked(parent)) {
                 markNodeAssignments(parent);
+                symbol.isDefinitelyAssigned ??= false;
             }
         }
         return !symbol.lastAssignmentPos || location && symbol.lastAssignmentPos < location.pos;
@@ -43221,7 +43222,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     if (checkUnused) {
-                        if (node.body) { // Don't report unused parameters in overloads
+                        // Only report unused parameters on the implementation, not overloads.
+                        if (node.body) {
                             checkUnusedLocalsAndParameters(node, addDiagnostic);
                         }
                         checkUnusedTypeParameters(node, addDiagnostic);
