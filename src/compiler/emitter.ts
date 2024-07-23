@@ -961,6 +961,8 @@ export function emitFiles(
     }
 
     function markLinkedReferences(file: SourceFile) {
+        if (ts.isSourceFileJS(file)) return; // JS files don't use reference calculations as theyd on't do import ellision, no need to calculate it
+        if (!length(file.imports)) return; // Nothing to possible elide, no need to bother calculating references
         ts.forEachChildRecursively(file, n => {
             if (isImportEqualsDeclaration(n) && !(ts.getSyntacticModifierFlags(n) & ts.ModifierFlags.Export)) return "skip"; // These are deferred and marked in a chain when referenced
             if (ts.isImportDeclaration(n)) return "skip"; // likewise, these are ultimately what get marked by calls on other nodes - we want to skip them
