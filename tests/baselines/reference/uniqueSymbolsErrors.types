@@ -46,11 +46,11 @@ declare function invalidTypePredicate(n: any): n is unique symbol;
 
 declare function invalidTypeParameterConstraint<T extends unique symbol>(): void;
 >invalidTypeParameterConstraint : <T extends unique symbol>() => void
->                               : ^^^^^^^^^^^             ^^^^^^^    
+>                               : ^ ^^^^^^^^^             ^^^^^^^    
 
 declare function invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T = symbol>() => void
->                            : ^^^^^^^^^^^^^^^^^^    
+>                            : ^ ^^^^^^^^^^^^^^^^    
 
 // classes
 class InvalidClass {
@@ -99,11 +99,11 @@ class InvalidClass {
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void { return; }
 >invalidTypeParameterConstraint : <T extends unique symbol>() => void
->                               : ^^^^^^^^^^^             ^^^^^^^    
+>                               : ^ ^^^^^^^^^             ^^^^^^^    
 
     invalidTypeParameterDefault<T = unique symbol>(): void { return; }
 >invalidTypeParameterDefault : <T = symbol>() => void
->                            : ^^^^^^^^^^^^^^^^^^    
+>                            : ^ ^^^^^^^^^^^^^^^^    
 
     get invalidGetter(): unique symbol { return; }
 >invalidGetter : symbol
@@ -149,11 +149,11 @@ class InvalidClass {
 
     static invalidStaticTypeParameterConstraint<T extends unique symbol>(): void { return; }
 >invalidStaticTypeParameterConstraint : <T extends unique symbol>() => void
->                                     : ^^^^^^^^^^^             ^^^^^^^    
+>                                     : ^ ^^^^^^^^^             ^^^^^^^    
 
     static invalidStaticTypeParameterDefault<T = unique symbol>(): void { return; }
 >invalidStaticTypeParameterDefault : <T = symbol>() => void
->                                  : ^^^^^^^^^^^^^^^^^^    
+>                                  : ^ ^^^^^^^^^^^^^^^^    
 
     static get invalidStaticGetter(): unique symbol { return; }
 >invalidStaticGetter : symbol
@@ -202,11 +202,11 @@ interface InvalidInterface {
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void;
 >invalidTypeParameterConstraint : <T extends unique symbol>() => void
->                               : ^^^^^^^^^^^             ^^^^^^^    
+>                               : ^ ^^^^^^^^^             ^^^^^^^    
 
     invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T = symbol>() => void
->                            : ^^^^^^^^^^^^^^^^^^    
+>                            : ^ ^^^^^^^^^^^^^^^^    
 }
 
 // type literals
@@ -248,11 +248,11 @@ type InvalidTypeLiteral = {
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void;
 >invalidTypeParameterConstraint : <T extends unique symbol>() => void
->                               : ^^^^^^^^^^^             ^^^^^^^    
+>                               : ^ ^^^^^^^^^             ^^^^^^^    
 
     invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T = symbol>() => void
->                            : ^^^^^^^^^^^^^^^^^^    
+>                            : ^ ^^^^^^^^^^^^^^^^    
 
 };
 

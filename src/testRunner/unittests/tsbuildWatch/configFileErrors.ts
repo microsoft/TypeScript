@@ -10,7 +10,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
     function verify(outFile?: object) {
         verifyTscWatch({
             scenario: "configFileErrors",
-            subScenario: `reports syntax errors in config file${outFile ? " with outFile" : ""}`,
+            subScenario: `${outFile ? "outFile" : "multiFile"}/reports syntax errors in config file`,
             sys: () =>
                 createWatchedSystem(
                     [

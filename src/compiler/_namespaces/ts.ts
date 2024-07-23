@@ -5,7 +5,6 @@ export * from "../core.js";
 export * from "../debug.js";
 export * from "../semver.js";
 export * from "../performanceCore.js";
-export * from "../perfLogger.js";
 export * from "../tracing.js";
 export * from "../types.js";
 export * from "../sys.js";

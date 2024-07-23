@@ -21,6 +21,7 @@ import {
     CallExpression,
     CallSignatureDeclaration,
     canHaveLocals,
+    canIncludeBindAndCheckDiagnostics,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
@@ -340,7 +341,6 @@ import {
     PrinterOptions,
     PrintHandlers,
     PrivateIdentifier,
-    ProgramBuildInfo,
     PropertyAccessExpression,
     PropertyAssignment,
     PropertyDeclaration,
@@ -420,6 +420,7 @@ import {
     WithStatement,
     writeCommentRange,
     writeFile,
+    WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -452,17 +453,17 @@ export function forEachEmittedFile<T>(
 ) {
     const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile, forceDtsEmit);
     const options = host.getCompilerOptions();
-    if (options.outFile) {
-        if (sourceFiles.length) {
-            const bundle = factory.createBundle(sourceFiles);
-            const result = action(getOutputPathsFor(bundle, host, forceDtsEmit), bundle);
-            if (result) {
-                return result;
+    if (!onlyBuildInfo) {
+        if (options.outFile) {
+            if (sourceFiles.length) {
+                const bundle = factory.createBundle(sourceFiles);
+                const result = action(getOutputPathsFor(bundle, host, forceDtsEmit), bundle);
+                if (result) {
+                    return result;
+                }
             }
         }
-    }
-    else {
-        if (!onlyBuildInfo) {
+        else {
             for (const sourceFile of sourceFiles) {
                 const result = action(getOutputPathsFor(sourceFile, host, forceDtsEmit), sourceFile);
                 if (result) {
@@ -470,16 +471,16 @@ export function forEachEmittedFile<T>(
                 }
             }
         }
-        if (includeBuildInfo) {
-            const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
-            if (buildInfoPath) return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
-        }
+    }
+    if (includeBuildInfo) {
+        const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
+        if (buildInfoPath) return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
     }
 }
 
 export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
     const configFile = options.configFilePath;
-    if (!isIncrementalCompilation(options)) return undefined;
+    if (!canEmitTsBuildInfo(options)) return undefined;
     if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
     const outPath = options.outFile;
     let buildInfoExtensionLess: string;
@@ -499,14 +500,17 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
 }
 
 /** @internal */
-export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
+export function canEmitTsBuildInfo(options: CompilerOptions) {
+    return isIncrementalCompilation(options) || !!options.tscBuild;
+}
+
+function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
     const outPath = options.outFile!;
     const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
     const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
     const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
     const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-    const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options);
-    return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath };
+    return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath };
 }
 
 /** @internal */
@@ -525,7 +529,7 @@ export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHos
         const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || (getEmitDeclarations(options) && !isJsonFile)) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-        return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath: undefined };
+        return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath };
     }
 }
 
@@ -600,12 +604,11 @@ function createAddOutput() {
 }
 
 function getSingleOutputFileNames(configFile: ParsedCommandLine, addOutput: ReturnType<typeof createAddOutput>["addOutput"]) {
-    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
+    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
     addOutput(jsFilePath);
     addOutput(sourceMapFilePath);
     addOutput(declarationFilePath);
     addOutput(declarationMapPath);
-    addOutput(buildInfoPath);
 }
 
 function getOwnOutputFileNames(configFile: ParsedCommandLine, inputFileName: string, ignoreCase: boolean, addOutput: ReturnType<typeof createAddOutput>["addOutput"], getCommonSourceDirectory?: () => string) {
@@ -678,8 +681,8 @@ export function getAllProjectOutputs(configFile: ParsedCommandLine, ignoreCase: 
         for (const inputFileName of configFile.fileNames) {
             getOwnOutputFileNames(configFile, inputFileName, ignoreCase, addOutput, getCommonSourceDirectory);
         }
-        addOutput(getTsBuildInfoEmitOutputFilePath(configFile.options));
     }
+    addOutput(getTsBuildInfoEmitOutputFilePath(configFile.options));
     return getOutputs();
 }
 
@@ -725,7 +728,16 @@ export function emitResolverSkipsTypeChecking(emitOnly: boolean | EmitOnly | und
 
 /** @internal */
 // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnly?: boolean | EmitOnly, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
+export function emitFiles(
+    resolver: EmitResolver,
+    host: EmitHost,
+    targetSourceFile: SourceFile | undefined,
+    { scriptTransformers, declarationTransformers }: EmitTransformers,
+    emitOnly: boolean | EmitOnly | undefined,
+    onlyBuildInfo: boolean,
+    forceDtsEmit?: boolean,
+    skipBuildInfo?: boolean,
+): EmitResult {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
@@ -747,7 +759,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         getSourceFilesToEmit(host, targetSourceFile, forceDtsEmit),
         forceDtsEmit,
         onlyBuildInfo,
-        !targetSourceFile,
+        !targetSourceFile && !skipBuildInfo,
     );
     exit();
 
@@ -774,12 +786,12 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
 
     function emitBuildInfo(buildInfoPath: string | undefined) {
         // Write build information if applicable
-        if (!buildInfoPath || targetSourceFile || emitSkipped) return;
+        if (!buildInfoPath || targetSourceFile) return;
         if (host.isEmitBlocked(buildInfoPath)) {
             emitSkipped = true;
             return;
         }
-        const buildInfo = host.getBuildInfo() || createBuildInfo(/*program*/ undefined);
+        const buildInfo = host.getBuildInfo() || { version };
         // Pass buildinfo as additional data to avoid having to reparse
         writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
         emittedFilesList?.push(buildInfoPath);
@@ -800,9 +812,14 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             return;
         }
 
-        if (compilerOptions.noCheck) {
-            (isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : filter(sourceFileOrBundle.sourceFiles, isSourceFileNotJson)).forEach(markLinkedReferences);
-        }
+        (isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : filter(sourceFileOrBundle.sourceFiles, isSourceFileNotJson)).forEach(
+            sourceFile => {
+                if (
+                    compilerOptions.noCheck ||
+                    !canIncludeBindAndCheckDiagnostics(sourceFile, compilerOptions)
+                ) markLinkedReferences(sourceFile);
+            },
+        );
 
         // Transform the source files
         const transform = transformNodes(resolver, host, factory, compilerOptions, [sourceFileOrBundle], scriptTransformers, /*allowDtsFiles*/ false);
@@ -859,15 +876,19 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
         // Setup and perform the transformation to retrieve declarations from the input files
         const inputListOrBundle = compilerOptions.outFile ? [factory.createBundle(filesForEmit)] : filesForEmit;
-        if (
-            (emitOnly && !getEmitDeclarations(compilerOptions)) ||
-            compilerOptions.noCheck ||
-            emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit)
-        ) {
-            // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
-            // Do that here when emitting only dts files
-            filesForEmit.forEach(collectLinkedAliases);
-        }
+        // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
+        // Do that here when emitting only dts files
+        filesForEmit.forEach(sourceFile => {
+            if (
+                (emitOnly && !getEmitDeclarations(compilerOptions)) ||
+                compilerOptions.noCheck ||
+                emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit) ||
+                !canIncludeBindAndCheckDiagnostics(sourceFile, compilerOptions)
+            ) {
+                collectLinkedAliases(sourceFile);
+            }
+        });
+
         const declarationTransform = transformNodes(resolver, host, factory, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
         if (length(declarationTransform.diagnostics)) {
             for (const diagnostic of declarationTransform.diagnostics!) {
@@ -886,7 +907,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
                 module: compilerOptions.module,
                 moduleResolution: compilerOptions.moduleResolution,
                 target: compilerOptions.target,
-                sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
+                sourceMap: emitOnly !== EmitOnly.BuilderSignature && compilerOptions.declarationMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
@@ -902,7 +923,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
                 isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
                 substituteNode: declarationTransform.substituteNode,
             });
-            printSourceFileOrBundle(
+            const dtsWritten = printSourceFileOrBundle(
                 declarationFilePath,
                 declarationMapPath,
                 declarationTransform,
@@ -916,7 +937,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
                 },
             );
             if (emittedFilesList) {
-                emittedFilesList.push(declarationFilePath);
+                if (dtsWritten) emittedFilesList.push(declarationFilePath);
                 if (declarationMapPath) {
                     emittedFilesList.push(declarationMapPath);
                 }
@@ -1006,10 +1027,12 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
 
         // Write the output file
         const text = writer.getText();
-        writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos, diagnostics: transform.diagnostics });
+        const data: WriteFileCallbackData = { sourceMapUrlPos, diagnostics: transform.diagnostics };
+        writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, data);
 
         // Reset state
         writer.clear();
+        return !data.skippedDtsWrite;
     }
 
     interface SourceMapOptions {
@@ -1089,11 +1112,6 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
 }
 
 /** @internal */
-export function createBuildInfo(program: ProgramBuildInfo | undefined): BuildInfo {
-    return { program, version };
-}
-
-/** @internal */
 export function getBuildInfoText(buildInfo: BuildInfo) {
     return JSON.stringify(buildInfo);
 }
@@ -1143,6 +1161,7 @@ export const notImplementedResolver: EmitResolver = {
     isBindingCapturedByNode: notImplemented,
     getDeclarationStatementsForSourceFile: notImplemented,
     isImportRequiredByAugmentation: notImplemented,
+    isDefinitelyReferenceToGlobalSymbolObject: notImplemented,
 };
 
 const enum PipelinePhase {
@@ -2072,7 +2091,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     // SyntaxKind.TemplateMiddle
     // SyntaxKind.TemplateTail
     function emitLiteral(node: LiteralLikeNode, jsxAttributeEscape: boolean) {
-        const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape, jsxAttributeEscape);
+        const text = getLiteralTextOfNode(node, /*sourceFile*/ undefined, printerOptions.neverAsciiEscape, jsxAttributeEscape);
         if (
             (printerOptions.sourceMap || printerOptions.inlineSourceMap)
             && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))
@@ -2625,7 +2644,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         expression = skipPartiallyEmittedExpressions(expression);
         if (isNumericLiteral(expression)) {
             // check if numeric literal is a decimal literal that was originally written with a dot
-            const text = getLiteralTextOfNode(expression as LiteralExpression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
+            const text = getLiteralTextOfNode(expression as LiteralExpression, /*sourceFile*/ undefined, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
             // If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
             // if the expression doesn't have any comments that will be emitted.
             return !(expression.numericLiteralFlags & TokenFlags.WithSpecifier)
@@ -5153,7 +5172,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return getSourceTextOfNodeFromSourceFile(sourceFile, node, includeTrivia);
     }
 
-    function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
+    function getLiteralTextOfNode(node: LiteralLikeNode, sourceFile = currentSourceFile, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
         if (node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).textSourceNode) {
             const textSourceNode = (node as StringLiteral).textSourceNode!;
             if (isIdentifier(textSourceNode) || isPrivateIdentifier(textSourceNode) || isNumericLiteral(textSourceNode) || isJsxNamespacedName(textSourceNode)) {
@@ -5163,7 +5182,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     `"${escapeNonAsciiString(text)}"`;
             }
             else {
-                return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
+                return getLiteralTextOfNode(textSourceNode, getSourceFileOfNode(textSourceNode), neverAsciiEscape, jsxAttributeEscape);
             }
         }
 
@@ -5172,7 +5191,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0)
             | (printerOptions.target && printerOptions.target >= ScriptTarget.ES2021 ? GetLiteralTextFlags.AllowNumericSeparator : 0);
 
-        return getLiteralText(node, currentSourceFile, flags);
+        return getLiteralText(node, sourceFile, flags);
     }
 
     /**

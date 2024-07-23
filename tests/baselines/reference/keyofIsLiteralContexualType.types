@@ -5,7 +5,7 @@
 
 function foo<T extends { a: string, b: string }>() {
 >foo : <T extends { a: string; b: string; }>() => void
->    : ^^^^^^^^^^^                         ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                         ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string

@@ -1,0 +1,125 @@
+//// [tests/cases/conformance/types/typeAliases/builtinIteratorReturn.ts] ////
+
+=== builtinIteratorReturn.ts ===
+declare const array: number[];
+>array : Symbol(array, Decl(builtinIteratorReturn.ts, 0, 13))
+
+declare const map: Map<string, number>;
+>map : Symbol(map, Decl(builtinIteratorReturn.ts, 1, 13))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare const set: Set<number>;
+>set : Symbol(set, Decl(builtinIteratorReturn.ts, 2, 13))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+const i0 = array[Symbol.iterator]();
+>i0 : Symbol(i0, Decl(builtinIteratorReturn.ts, 4, 5))
+>array : Symbol(array, Decl(builtinIteratorReturn.ts, 0, 13))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const i1 = array.values();
+>i1 : Symbol(i1, Decl(builtinIteratorReturn.ts, 5, 5))
+>array.values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>array : Symbol(array, Decl(builtinIteratorReturn.ts, 0, 13))
+>values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const i2 = array.keys();
+>i2 : Symbol(i2, Decl(builtinIteratorReturn.ts, 6, 5))
+>array.keys : Symbol(Array.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+>array : Symbol(array, Decl(builtinIteratorReturn.ts, 0, 13))
+>keys : Symbol(Array.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const i3 = array.entries();
+>i3 : Symbol(i3, Decl(builtinIteratorReturn.ts, 7, 5))
+>array.entries : Symbol(Array.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+>array : Symbol(array, Decl(builtinIteratorReturn.ts, 0, 13))
+>entries : Symbol(Array.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+
+for (const x of array);
+>x : Symbol(x, Decl(builtinIteratorReturn.ts, 8, 10))
+>array : Symbol(array, Decl(builtinIteratorReturn.ts, 0, 13))
+
+const i4 = map[Symbol.iterator]();
+>i4 : Symbol(i4, Decl(builtinIteratorReturn.ts, 10, 5))
+>map : Symbol(map, Decl(builtinIteratorReturn.ts, 1, 13))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const i5 = map.values();
+>i5 : Symbol(i5, Decl(builtinIteratorReturn.ts, 11, 5))
+>map.values : Symbol(Map.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>map : Symbol(map, Decl(builtinIteratorReturn.ts, 1, 13))
+>values : Symbol(Map.values, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const i6 = map.keys();
+>i6 : Symbol(i6, Decl(builtinIteratorReturn.ts, 12, 5))
+>map.keys : Symbol(Map.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+>map : Symbol(map, Decl(builtinIteratorReturn.ts, 1, 13))
+>keys : Symbol(Map.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const i7 = map.entries();
+>i7 : Symbol(i7, Decl(builtinIteratorReturn.ts, 13, 5))
+>map.entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+>map : Symbol(map, Decl(builtinIteratorReturn.ts, 1, 13))
+>entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+
+for (const x of map);
+>x : Symbol(x, Decl(builtinIteratorReturn.ts, 14, 10))
+>map : Symbol(map, Decl(builtinIteratorReturn.ts, 1, 13))
+
+const i8 = set[Symbol.iterator]();
+>i8 : Symbol(i8, Decl(builtinIteratorReturn.ts, 16, 5))
+>set : Symbol(set, Decl(builtinIteratorReturn.ts, 2, 13))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const i9 = set.values();
+>i9 : Symbol(i9, Decl(builtinIteratorReturn.ts, 17, 5))
+>set.values : Symbol(Set.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>set : Symbol(set, Decl(builtinIteratorReturn.ts, 2, 13))
+>values : Symbol(Set.values, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const i10 = set.keys();
+>i10 : Symbol(i10, Decl(builtinIteratorReturn.ts, 18, 5))
+>set.keys : Symbol(Set.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+>set : Symbol(set, Decl(builtinIteratorReturn.ts, 2, 13))
+>keys : Symbol(Set.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+
+const i11 = set.entries();
+>i11 : Symbol(i11, Decl(builtinIteratorReturn.ts, 19, 5))
+>set.entries : Symbol(Set.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+>set : Symbol(set, Decl(builtinIteratorReturn.ts, 2, 13))
+>entries : Symbol(Set.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+
+for (const x of set);
+>x : Symbol(x, Decl(builtinIteratorReturn.ts, 20, 10))
+>set : Symbol(set, Decl(builtinIteratorReturn.ts, 2, 13))
+
+declare const i12: IterableIterator<number, undefined>;
+>i12 : Symbol(i12, Decl(builtinIteratorReturn.ts, 22, 13))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+declare const i13: IterableIterator<number, any>;
+>i13 : Symbol(i13, Decl(builtinIteratorReturn.ts, 23, 13))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+declare const i14: IterableIterator<number, boolean>;
+>i14 : Symbol(i14, Decl(builtinIteratorReturn.ts, 24, 13))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+declare const i15: Iterable<number, undefined>;
+>i15 : Symbol(i15, Decl(builtinIteratorReturn.ts, 25, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+declare const i16: Iterable<number, any>;
+>i16 : Symbol(i16, Decl(builtinIteratorReturn.ts, 26, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+
+declare const i17: Iterable<number, boolean>;
+>i17 : Symbol(i17, Decl(builtinIteratorReturn.ts, 27, 13))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+

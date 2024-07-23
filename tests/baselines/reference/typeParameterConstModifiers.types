@@ -71,7 +71,7 @@ const x13 = f1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
 
 declare function f2<const T, U>(x: T | undefined): T;
 >f2 : <const T, U>(x: T | undefined) => T
->   : ^^^^^^^ ^^^^^ ^^             ^^^^^ 
+>   : ^^^^^^^ ^^ ^^ ^^             ^^^^^ 
 >x : T | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -81,7 +81,7 @@ const x21 = f2('a');
 >f2('a') : "a"
 >        : ^^^
 >f2 : <const T, U>(x: T | undefined) => T
->   : ^^^^^^^ ^^^^^ ^^             ^^^^^ 
+>   : ^^^^^^^ ^^ ^^ ^^             ^^^^^ 
 >'a' : "a"
 >    : ^^^
 
@@ -91,7 +91,7 @@ const x22 = f2(['a', ['b', 'c']]);
 >f2(['a', ['b', 'c']]) : readonly ["a", readonly ["b", "c"]]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <const T, U>(x: T | undefined) => T
->   : ^^^^^^^ ^^^^^ ^^             ^^^^^ 
+>   : ^^^^^^^ ^^ ^^ ^^             ^^^^^ 
 >['a', ['b', 'c']] : ["a", ["b", "c"]]
 >                  : ^^^^^^^^^^^^^^^^^
 >'a' : "a"
@@ -109,7 +109,7 @@ const x23 = f2({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
 >f2({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] }) : { readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }
 >                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <const T, U>(x: T | undefined) => T
->   : ^^^^^^^ ^^^^^ ^^             ^^^^^ 
+>   : ^^^^^^^ ^^ ^^ ^^             ^^^^^ 
 >{ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] } : { a: 1; b: "c"; d: ["e", 2, true, { f: "g"; }]; }
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : 1
@@ -448,11 +448,11 @@ const c72 = c71.foo(['a', ['b', 'c']]);
 >c71.foo(['a', ['b', 'c']]) : readonly ["a", readonly ["b", "c"]]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c71.foo : <const U>(x: U) => U
->        : ^^^^^^^^^^ ^^^^^^^^^
+>        : ^^^^^^^ ^^ ^^^^^^^^^
 >c71 : C1<{ readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <const U>(x: U) => U
->    : ^^^^^^^^^^ ^^^^^^^^^
+>    : ^^^^^^^ ^^ ^^^^^^^^^
 >['a', ['b', 'c']] : ["a", ["b", "c"]]
 >                  : ^^^^^^^^^^^^^^^^^
 >'a' : "a"
@@ -756,7 +756,7 @@ const t1_55033 = factory_55033((a: { test: number }, b: string) => {})(
 >factory_55033((a: { test: number }, b: string) => {})(    { test: 123 },    "some string") : readonly [{ readonly test: 123; }, "some string"]
 >                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >factory_55033((a: { test: number }, b: string) => {}) : <const K extends readonly [a: { test: number; }, b: string]>(...args: K) => K
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
+>                                                      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >factory_55033 : <const T extends readonly unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
 >              : ^^^^^^^ ^^^^^^^^^                  ^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
@@ -788,7 +788,7 @@ const t2_55033 = factory_55033((a: { test: number }, b: string) => {})(
 >factory_55033((a: { test: number }, b: string) => {})(    { test: 123 } as const,    "some string") : readonly [{ readonly test: 123; }, "some string"]
 >                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >factory_55033((a: { test: number }, b: string) => {}) : <const K extends readonly [a: { test: number; }, b: string]>(...args: K) => K
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
+>                                                      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >factory_55033 : <const T extends readonly unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
 >              : ^^^^^^^ ^^^^^^^^^                  ^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
@@ -849,7 +849,7 @@ const t1_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
 >factory_55033_2((a: { test: number }, b: string) => {})(    { test: 123 },    "some string") : [{ readonly test: 123; }, "some string"]
 >                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >factory_55033_2((a: { test: number }, b: string) => {}) : <const K extends [a: { test: number; }, b: string]>(...args: K) => K
->                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
+>                                                        : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
 >                : ^^^^^^^ ^^^^^^^^^         ^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
@@ -881,7 +881,7 @@ const t2_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
 >factory_55033_2((a: { test: number }, b: string) => {})(    { test: 123 } as const,    "some string") : [{ readonly test: 123; }, "some string"]
 >                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >factory_55033_2((a: { test: number }, b: string) => {}) : <const K extends [a: { test: number; }, b: string]>(...args: K) => K
->                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
+>                                                        : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
 >                : ^^^^^^^ ^^^^^^^^^         ^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void

@@ -916,11 +916,11 @@ function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
 >callback.bind(1) : (...args: T) => void
 >                 : ^^^^    ^^^^^^^^^^^^
 >callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->              : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T) => void
 >         : ^    ^^ ^^^^^    ^^ ^^^^^    
 >bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->     : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >1 : 1
 >  : ^
 
@@ -928,11 +928,11 @@ function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
 >callback.bind(2) : (...args: T) => void
 >                 : ^^^^    ^^^^^^^^^^^^
 >callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->              : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T) => void
 >         : ^    ^^ ^^^^^    ^^ ^^^^^    
 >bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->     : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >2 : 2
 >  : ^
 }
@@ -951,11 +951,11 @@ function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknow
 >callback.bind(1) : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
 >                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->              : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
 >         : ^    ^^ ^^^^^    ^^                                            ^^^^^    
 >bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->     : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >1 : 1
 >  : ^
 
@@ -963,11 +963,11 @@ function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknow
 >callback.bind(2) : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
 >                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >callback.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->              : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>              : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >callback : (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
 >         : ^    ^^ ^^^^^    ^^                                            ^^^^^    
 >bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->     : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >2 : 2
 >  : ^
 }
@@ -982,7 +982,7 @@ class Foo<T extends unknown[]> {
 >this.fn.bind(this) : (...args: T) => void
 >                   : ^^^^    ^^ ^^^^^    
 >this.fn.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->             : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>             : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >this.fn : (...args: T) => void
 >        : ^^^^    ^^ ^^^^^    
 >this : this
@@ -990,7 +990,7 @@ class Foo<T extends unknown[]> {
 >fn : (...args: T) => void
 >   : ^^^^    ^^ ^^^^^    
 >bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->     : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >this : this
 >     : ^^^^
     }
@@ -1011,7 +1011,7 @@ class Bar<T extends 1 | 2> {
 >this.fn.bind(this) : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
 >                   : ^^^^    ^^                                            ^^^^^^^^^
 >this.fn.bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->             : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>             : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >this.fn : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
 >        : ^^^^    ^^                                            ^^^^^^^^^
 >this : this
@@ -1019,7 +1019,7 @@ class Bar<T extends 1 | 2> {
 >fn : (...args: T extends 1 ? [unknown] : [unknown, unknown]) => void
 >   : ^^^^    ^^                                            ^^^^^^^^^
 >bind : { <T_1>(this: T_1, thisArg: ThisParameterType<T_1>): OmitThisParameter<T_1>; <T_1, A extends any[], B extends any[], R>(this: (this: T_1, ...args: [...A, ...B]) => R, thisArg: T_1, ...args: A): (...args: B) => R; }
->     : ^^^   ^^    ^^   ^^       ^^                      ^^^                      ^^^   ^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
+>     : ^^^^^^^^    ^^   ^^       ^^                      ^^^                      ^^^^^^^^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^ ^^    ^^                                       ^^       ^^   ^^^^^    ^^ ^^^                 ^^^
 >this : this
 >     : ^^^^
     }

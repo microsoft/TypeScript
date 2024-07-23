@@ -546,7 +546,7 @@ Skipped diagnostics
 
 Program 1 Reused:: Not
 Diagnostics:
-/src/project/src/anotherFile.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/anotherFile.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -555,7 +555,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/anotherFile.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/anotherFile.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -564,7 +564,7 @@ Diagnostics:
     Imported via "./struct" from file '/src/project/src/anotherFile.ts'
     Imported via "./Struct" from file '/src/project/src/oneMore.ts'
     Imported via "./struct" from file '/src/project/src/oneMore.ts'
-/src/project/src/oneMore.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/oneMore.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -573,7 +573,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/oneMore.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/oneMore.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -582,7 +582,7 @@ Diagnostics:
     Imported via "./struct" from file '/src/project/src/anotherFile.ts'
     Imported via "./Struct" from file '/src/project/src/oneMore.ts'
     Imported via "./struct" from file '/src/project/src/oneMore.ts'
-/src/project/src/struct.d.ts(3,22): error TS1261: Already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' differs from file name '/src/project/node_modules/fp-ts/lib/struct.d.ts' only in casing.
+src/project/src/struct.d.ts(3,22): error TS1261: Already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' differs from file name '/src/project/node_modules/fp-ts/lib/struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -591,7 +591,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/struct.d.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/struct.d.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -600,7 +600,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/struct.d.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/struct.d.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -885,7 +885,7 @@ MissingPaths:: [
   "lib.d.ts"
 ]
 
-/src/project/src/anotherFile.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/anotherFile.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -894,7 +894,7 @@ MissingPaths:: [
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/anotherFile.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/anotherFile.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -903,7 +903,7 @@ MissingPaths:: [
     Imported via "./struct" from file '/src/project/src/anotherFile.ts'
     Imported via "./Struct" from file '/src/project/src/oneMore.ts'
     Imported via "./struct" from file '/src/project/src/oneMore.ts'
-/src/project/src/oneMore.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/oneMore.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -912,7 +912,7 @@ MissingPaths:: [
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/oneMore.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/oneMore.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -921,7 +921,7 @@ MissingPaths:: [
     Imported via "./struct" from file '/src/project/src/anotherFile.ts'
     Imported via "./Struct" from file '/src/project/src/oneMore.ts'
     Imported via "./struct" from file '/src/project/src/oneMore.ts'
-/src/project/src/struct.d.ts(7,22): error TS1261: Already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' differs from file name '/src/project/node_modules/fp-ts/lib/struct.d.ts' only in casing.
+src/project/src/struct.d.ts(7,22): error TS1261: Already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' differs from file name '/src/project/node_modules/fp-ts/lib/struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -930,7 +930,7 @@ MissingPaths:: [
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/struct.d.ts(8,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/struct.d.ts(8,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -939,7 +939,7 @@ MissingPaths:: [
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/struct.d.ts(9,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/struct.d.ts(9,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -953,7 +953,7 @@ MissingPaths:: [
 
 Program 2 Reused:: Completely
 Diagnostics:
-/src/project/src/anotherFile.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/anotherFile.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -962,7 +962,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/anotherFile.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/anotherFile.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -971,7 +971,7 @@ Diagnostics:
     Imported via "./struct" from file '/src/project/src/anotherFile.ts'
     Imported via "./Struct" from file '/src/project/src/oneMore.ts'
     Imported via "./struct" from file '/src/project/src/oneMore.ts'
-/src/project/src/oneMore.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/oneMore.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -980,7 +980,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/oneMore.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/oneMore.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -989,7 +989,7 @@ Diagnostics:
     Imported via "./struct" from file '/src/project/src/anotherFile.ts'
     Imported via "./Struct" from file '/src/project/src/oneMore.ts'
     Imported via "./struct" from file '/src/project/src/oneMore.ts'
-/src/project/src/struct.d.ts(5,22): error TS1261: Already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' differs from file name '/src/project/node_modules/fp-ts/lib/struct.d.ts' only in casing.
+src/project/src/struct.d.ts(5,22): error TS1261: Already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' differs from file name '/src/project/node_modules/fp-ts/lib/struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -998,7 +998,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/struct.d.ts(6,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/struct.d.ts(6,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -1007,7 +1007,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/struct.d.ts(7,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/struct.d.ts(7,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -1507,7 +1507,7 @@ MissingPaths:: [
   "lib.d.ts"
 ]
 
-/src/project/src/anotherFile.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/anotherFile.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/anotherFile.ts'
@@ -1515,7 +1515,7 @@ MissingPaths:: [
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/anotherFile.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/anotherFile.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -1523,7 +1523,7 @@ MissingPaths:: [
     Imported via "./struct" from file '/src/project/src/anotherFile.ts'
     Imported via "./Struct" from file '/src/project/src/oneMore.ts'
     Imported via "./struct" from file '/src/project/src/oneMore.ts'
-/src/project/src/oneMore.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/oneMore.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/anotherFile.ts'
@@ -1531,7 +1531,7 @@ MissingPaths:: [
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/oneMore.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/oneMore.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -1539,7 +1539,7 @@ MissingPaths:: [
     Imported via "./struct" from file '/src/project/src/anotherFile.ts'
     Imported via "./Struct" from file '/src/project/src/oneMore.ts'
     Imported via "./struct" from file '/src/project/src/oneMore.ts'
-/src/project/src/struct.d.ts(3,22): error TS1261: Already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' differs from file name '/src/project/node_modules/fp-ts/lib/struct.d.ts' only in casing.
+src/project/src/struct.d.ts(3,22): error TS1261: Already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' differs from file name '/src/project/node_modules/fp-ts/lib/struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/anotherFile.ts'
@@ -1547,7 +1547,7 @@ MissingPaths:: [
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/struct.d.ts(4,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/struct.d.ts(4,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -1560,7 +1560,7 @@ MissingPaths:: [
 
 Program 4 Reused:: SafeModules
 Diagnostics:
-/src/project/src/anotherFile.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/anotherFile.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -1569,7 +1569,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/anotherFile.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/anotherFile.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -1577,7 +1577,7 @@ Diagnostics:
     Imported via "./struct" from file '/src/project/src/anotherFile.ts'
     Imported via "./Struct" from file '/src/project/src/oneMore.ts'
     Imported via "./struct" from file '/src/project/src/oneMore.ts'
-/src/project/src/oneMore.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/oneMore.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -1586,7 +1586,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/oneMore.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/oneMore.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'
@@ -1594,7 +1594,7 @@ Diagnostics:
     Imported via "./struct" from file '/src/project/src/anotherFile.ts'
     Imported via "./Struct" from file '/src/project/src/oneMore.ts'
     Imported via "./struct" from file '/src/project/src/oneMore.ts'
-/src/project/src/struct.d.ts(3,22): error TS1261: Already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' differs from file name '/src/project/node_modules/fp-ts/lib/struct.d.ts' only in casing.
+src/project/src/struct.d.ts(3,22): error TS1261: Already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' differs from file name '/src/project/node_modules/fp-ts/lib/struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -1603,7 +1603,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/struct.d.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
+src/project/src/struct.d.ts(4,22): error TS1149: File name '/src/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/src/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/struct.d.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/struct.d.ts'
@@ -1612,7 +1612,7 @@ Diagnostics:
     Imported via "fp-ts/lib/Struct" from file '/src/project/src/oneMore.ts'
     Imported via "fp-ts/lib/struct" from file '/src/project/src/oneMore.ts'
     Root file specified for compilation
-/src/project/src/struct.d.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
+src/project/src/struct.d.ts(5,22): error TS1149: File name '/src/project/src/Struct.d.ts' differs from already included file name '/src/project/src/struct.d.ts' only in casing.
   The file is in the program because:
     Root file specified for compilation
     Imported via "./Struct" from file '/src/project/src/struct.d.ts'

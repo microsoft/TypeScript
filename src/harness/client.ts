@@ -57,6 +57,7 @@ import {
     RefactorTriggerReason,
     ReferencedSymbol,
     ReferenceEntry,
+    RegionDiagnosticsResult,
     RenameInfo,
     RenameInfoFailure,
     RenameInfoSuccess,
@@ -93,8 +94,7 @@ interface RenameEntry {
     readonly locations: RenameLocation[];
 }
 
-/** @internal */
-export function extractMessage(message: string): string {
+function extractMessage(message: string): string {
     // Read the content length
     const contentLengthPrefix = "Content-Length: ";
     const lines = message.split(/\r?\n/);
@@ -226,12 +226,14 @@ export class SessionClient implements LanguageService {
 
     openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
         const args: protocol.OpenRequestArgs = { file, fileContent, scriptKindName };
-        this.processRequest(protocol.CommandTypes.Open, args);
+        const request = this.processRequest(protocol.CommandTypes.Open, args);
+        this.processResponse(request, /*expectEmptyBody*/ true);
     }
 
     closeFile(file: string): void {
         const args: protocol.FileRequestArgs = { file };
-        this.processRequest(protocol.CommandTypes.Close, args);
+        const request = this.processRequest(protocol.CommandTypes.Close, args);
+        this.processResponse(request, /*expectEmptyBody*/ true);
     }
 
     createChangeFileRequestArgs(fileName: string, start: number, end: number, insertString: string): protocol.ChangeRequestArgs {
@@ -241,7 +243,8 @@ export class SessionClient implements LanguageService {
     changeFile(fileName: string, args: protocol.ChangeRequestArgs): void {
         // clear the line map after an edit
         this.lineMaps.set(fileName, undefined!); // TODO: GH#18217
-        this.processRequest(protocol.CommandTypes.Change, args);
+        const request = this.processRequest(protocol.CommandTypes.Change, args);
+        this.processResponse(request, /*expectEmptyBody*/ true);
     }
 
     toLineColumnOffset(fileName: string, position: number) {
@@ -500,6 +503,9 @@ export class SessionClient implements LanguageService {
     }
     getSuggestionDiagnostics(file: string): DiagnosticWithLocation[] {
         return this.getDiagnostics(file, protocol.CommandTypes.SuggestionDiagnosticsSync);
+    }
+    getRegionSemanticDiagnostics(_file: string, _ranges: TextRange[]): RegionDiagnosticsResult | undefined {
+        throw new Error("Method not implemented.");
     }
 
     private getDiagnostics(file: string, command: protocol.CommandTypes): DiagnosticWithLocation[] {
@@ -1023,7 +1029,7 @@ export class SessionClient implements LanguageService {
         };
         const request = this.processRequest<protocol.GetPasteEditsRequest>(protocol.CommandTypes.GetPasteEdits, args);
         const response = this.processResponse<protocol.GetPasteEditsResponse>(request);
-        if (!response.body) {
+        if (response.body.edits.length === 0) {
             return { edits: [] };
         }
         const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);

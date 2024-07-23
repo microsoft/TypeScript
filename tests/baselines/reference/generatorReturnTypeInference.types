@@ -40,8 +40,8 @@ function* g002() { // Generator<number, void, unknown>
 }
 
 function* g003() { // Generator<never, void, undefined>
->g003 : () => Generator<never, void, undefined>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g003 : () => Generator<never, void, any>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [];
 >yield* [] : any
@@ -51,8 +51,8 @@ function* g003() { // Generator<never, void, undefined>
 }
 
 function* g004() { // Generator<number, void, undefined>
->g004 : () => Generator<number, void, undefined>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g004 : () => Generator<number, void, any>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* iterableIterator;
 >yield* iterableIterator : any
@@ -343,7 +343,7 @@ function* g306() { // Generator<number, boolean, "hi">
 
 function* g307<T>() { // Generator<number, T, T>
 >g307 : <T>() => Generator<number, T, T>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const a: T = yield 0;
 >a : T
@@ -379,7 +379,7 @@ function* g308<T>(x: T) { // Generator<T, T, T>
 
 function* g309<T, U, V>(x: T, y: U) { // Generator<T, U, V>
 >g309 : <T, U, V>(x: T, y: U) => Generator<T, U, V>
->     : ^ ^^ ^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 >y : U

@@ -59,7 +59,7 @@ function foo<T extends string[]>(
 
 function bar<T extends string[], K extends number>() {
 >bar : <T extends string[], K extends number>() => void
->    : ^^^^^^^^^^^        ^^^^^^^^^^^^      ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^^^^^^^^      ^^^^^^^^^^^
 
     type T00 = string[]["0"];
 >T00 : string

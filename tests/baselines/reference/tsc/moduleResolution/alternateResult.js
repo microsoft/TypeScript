@@ -387,99 +387,97 @@ export {};
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../lib/lib.d.ts",
+  "fileNames": [
+    "../../../../lib/lib.d.ts",
+    "./node_modules/foo2/index.d.ts",
+    "./node_modules/@types/bar2/index.d.ts",
+    "./index.mts"
+  ],
+  "fileIdsList": [
+    [
       "./node_modules/foo2/index.d.ts",
-      "./node_modules/@types/bar2/index.d.ts",
-      "./index.mts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "./node_modules/@types/bar2/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo2/index.d.ts": {
-        "original": {
-          "version": "-1622383150-export declare const foo2: number;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo2/index.d.ts": {
+      "original": {
         "version": "-1622383150-export declare const foo2: number;",
-        "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar2/index.d.ts": {
-        "original": {
-          "version": "-7439170493-export declare const bar2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-1622383150-export declare const foo2: number;",
+      "signature": "-1622383150-export declare const foo2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar2/index.d.ts": {
+      "original": {
         "version": "-7439170493-export declare const bar2: number;",
-        "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.mts": {
-        "original": {
-          "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-          "impliedFormat": 99
-        },
+      "version": "-7439170493-export declare const bar2: number;",
+      "signature": "-7439170493-export declare const bar2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./index.mts": {
+      "original": {
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-        "signature": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        4,
-        "./index.mts"
-      ]
-    ],
-    "options": {
-      "strict": true
-    },
-    "referencedMap": {
-      "./index.mts": [
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "../../../../lib/lib.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/foo2/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/@types/bar2/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./index.mts",
-        "not cached or not changed"
-      ]
+        "impliedFormat": 99
+      },
+      "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "signature": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "impliedFormat": "esnext"
+    }
+  },
+  "root": [
+    [
+      4,
+      "./index.mts"
+    ]
+  ],
+  "options": {
+    "strict": true
+  },
+  "referencedMap": {
+    "./index.mts": [
+      "./node_modules/foo2/index.d.ts",
+      "./node_modules/@types/bar2/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.mts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1128
+  "size": 1116
 }
 
 
@@ -1597,116 +1595,114 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../lib/lib.d.ts",
+  "fileNames": [
+    "../../../../lib/lib.d.ts",
+    "./node_modules/@types/bar/index.d.ts",
+    "./node_modules/foo2/index.d.ts",
+    "./node_modules/@types/bar2/index.d.ts",
+    "./index.mts"
+  ],
+  "fileIdsList": [
+    [
       "./node_modules/@types/bar/index.d.ts",
       "./node_modules/foo2/index.d.ts",
-      "./node_modules/@types/bar2/index.d.ts",
-      "./index.mts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "./node_modules/@types/bar2/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar/index.d.ts": {
-        "original": {
-          "version": "-9556021903-export declare const bar: number;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar/index.d.ts": {
+      "original": {
         "version": "-9556021903-export declare const bar: number;",
-        "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo2/index.d.ts": {
-        "original": {
-          "version": "-1622383150-export declare const foo2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-9556021903-export declare const bar: number;",
+      "signature": "-9556021903-export declare const bar: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo2/index.d.ts": {
+      "original": {
         "version": "-1622383150-export declare const foo2: number;",
-        "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar2/index.d.ts": {
-        "original": {
-          "version": "-7439170493-export declare const bar2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-1622383150-export declare const foo2: number;",
+      "signature": "-1622383150-export declare const foo2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar2/index.d.ts": {
+      "original": {
         "version": "-7439170493-export declare const bar2: number;",
-        "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.mts": {
-        "original": {
-          "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 99
-        },
+      "version": "-7439170493-export declare const bar2: number;",
+      "signature": "-7439170493-export declare const bar2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./index.mts": {
+      "original": {
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        5,
-        "./index.mts"
-      ]
-    ],
-    "options": {
-      "strict": true
-    },
-    "referencedMap": {
-      "./index.mts": [
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "../../../../lib/lib.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/@types/bar/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/foo2/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/@types/bar2/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./index.mts",
-        "not cached or not changed"
-      ]
+        "impliedFormat": 99
+      },
+      "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "esnext"
+    }
+  },
+  "root": [
+    [
+      5,
+      "./index.mts"
+    ]
+  ],
+  "options": {
+    "strict": true
+  },
+  "referencedMap": {
+    "./index.mts": [
+      "./node_modules/@types/bar/index.d.ts",
+      "./node_modules/foo2/index.d.ts",
+      "./node_modules/@types/bar2/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.mts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1288
+  "size": 1276
 }
 
 
@@ -1877,132 +1873,130 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"fileIdsList":[[2,3,4,5]],"referencedMap":[[6,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4,5]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"referencedMap":[[6,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../lib/lib.d.ts",
+  "fileNames": [
+    "../../../../lib/lib.d.ts",
+    "./node_modules/foo/index.d.ts",
+    "./node_modules/@types/bar/index.d.ts",
+    "./node_modules/foo2/index.d.ts",
+    "./node_modules/@types/bar2/index.d.ts",
+    "./index.mts"
+  ],
+  "fileIdsList": [
+    [
       "./node_modules/foo/index.d.ts",
       "./node_modules/@types/bar/index.d.ts",
       "./node_modules/foo2/index.d.ts",
-      "./node_modules/@types/bar2/index.d.ts",
-      "./index.mts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "./node_modules/@types/bar2/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo/index.d.ts": {
-        "original": {
-          "version": "-5214938848-export declare const foo: number;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo/index.d.ts": {
+      "original": {
         "version": "-5214938848-export declare const foo: number;",
-        "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar/index.d.ts": {
-        "original": {
-          "version": "-9556021903-export declare const bar: number;",
-          "impliedFormat": 1
-        },
+      "version": "-5214938848-export declare const foo: number;",
+      "signature": "-5214938848-export declare const foo: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar/index.d.ts": {
+      "original": {
         "version": "-9556021903-export declare const bar: number;",
-        "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo2/index.d.ts": {
-        "original": {
-          "version": "-1622383150-export declare const foo2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-9556021903-export declare const bar: number;",
+      "signature": "-9556021903-export declare const bar: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo2/index.d.ts": {
+      "original": {
         "version": "-1622383150-export declare const foo2: number;",
-        "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar2/index.d.ts": {
-        "original": {
-          "version": "-7439170493-export declare const bar2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-1622383150-export declare const foo2: number;",
+      "signature": "-1622383150-export declare const foo2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar2/index.d.ts": {
+      "original": {
         "version": "-7439170493-export declare const bar2: number;",
-        "signature": "-7439170493-export declare const bar2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.mts": {
-        "original": {
-          "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 99
-        },
+      "version": "-7439170493-export declare const bar2: number;",
+      "signature": "-7439170493-export declare const bar2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./index.mts": {
+      "original": {
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        6,
-        "./index.mts"
-      ]
-    ],
-    "options": {
-      "strict": true
-    },
-    "referencedMap": {
-      "./index.mts": [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts",
-        "./node_modules/@types/bar2/index.d.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "../../../../lib/lib.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/foo/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/@types/bar/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/foo2/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/@types/bar2/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./index.mts",
-        "not cached or not changed"
-      ]
+        "impliedFormat": 99
+      },
+      "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "esnext"
+    }
+  },
+  "root": [
+    [
+      6,
+      "./index.mts"
+    ]
+  ],
+  "options": {
+    "strict": true
+  },
+  "referencedMap": {
+    "./index.mts": [
+      "./node_modules/foo/index.d.ts",
+      "./node_modules/@types/bar/index.d.ts",
+      "./node_modules/foo2/index.d.ts",
+      "./node_modules/@types/bar2/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.mts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1402
+  "size": 1390
 }
 
 
@@ -2209,116 +2203,114 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../lib/lib.d.ts",
+  "fileNames": [
+    "../../../../lib/lib.d.ts",
+    "./node_modules/foo/index.d.ts",
+    "./node_modules/@types/bar/index.d.ts",
+    "./node_modules/foo2/index.d.ts",
+    "./index.mts"
+  ],
+  "fileIdsList": [
+    [
       "./node_modules/foo/index.d.ts",
       "./node_modules/@types/bar/index.d.ts",
-      "./node_modules/foo2/index.d.ts",
-      "./index.mts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "./node_modules/foo2/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo/index.d.ts": {
-        "original": {
-          "version": "-5214938848-export declare const foo: number;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo/index.d.ts": {
+      "original": {
         "version": "-5214938848-export declare const foo: number;",
-        "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar/index.d.ts": {
-        "original": {
-          "version": "-9556021903-export declare const bar: number;",
-          "impliedFormat": 1
-        },
+      "version": "-5214938848-export declare const foo: number;",
+      "signature": "-5214938848-export declare const foo: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar/index.d.ts": {
+      "original": {
         "version": "-9556021903-export declare const bar: number;",
-        "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo2/index.d.ts": {
-        "original": {
-          "version": "-1622383150-export declare const foo2: number;",
-          "impliedFormat": 1
-        },
+      "version": "-9556021903-export declare const bar: number;",
+      "signature": "-9556021903-export declare const bar: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo2/index.d.ts": {
+      "original": {
         "version": "-1622383150-export declare const foo2: number;",
-        "signature": "-1622383150-export declare const foo2: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.mts": {
-        "original": {
-          "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 99
-        },
+      "version": "-1622383150-export declare const foo2: number;",
+      "signature": "-1622383150-export declare const foo2: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./index.mts": {
+      "original": {
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        5,
-        "./index.mts"
-      ]
-    ],
-    "options": {
-      "strict": true
-    },
-    "referencedMap": {
-      "./index.mts": [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts",
-        "./node_modules/foo2/index.d.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "../../../../lib/lib.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/foo/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/@types/bar/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/foo2/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./index.mts",
-        "not cached or not changed"
-      ]
+        "impliedFormat": 99
+      },
+      "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "esnext"
+    }
+  },
+  "root": [
+    [
+      5,
+      "./index.mts"
+    ]
+  ],
+  "options": {
+    "strict": true
+  },
+  "referencedMap": {
+    "./index.mts": [
+      "./node_modules/foo/index.d.ts",
+      "./node_modules/@types/bar/index.d.ts",
+      "./node_modules/foo2/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo2/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.mts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1279
+  "size": 1267
 }
 
 
@@ -2554,100 +2546,98 @@ Shape signatures in builder refreshed for::
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"fileNames":["../../../../lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../lib/lib.d.ts",
+  "fileNames": [
+    "../../../../lib/lib.d.ts",
+    "./node_modules/foo/index.d.ts",
+    "./node_modules/@types/bar/index.d.ts",
+    "./index.mts"
+  ],
+  "fileIdsList": [
+    [
       "./node_modules/foo/index.d.ts",
-      "./node_modules/@types/bar/index.d.ts",
-      "./index.mts"
-    ],
-    "fileNamesList": [
-      [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../lib/lib.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true,
-          "impliedFormat": 1
-        },
+      "./node_modules/@types/bar/index.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../lib/lib.d.ts": {
+      "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/foo/index.d.ts": {
-        "original": {
-          "version": "-5214938848-export declare const foo: number;",
-          "impliedFormat": 1
-        },
+      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "affectsGlobalScope": true,
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/foo/index.d.ts": {
+      "original": {
         "version": "-5214938848-export declare const foo: number;",
-        "signature": "-5214938848-export declare const foo: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./node_modules/@types/bar/index.d.ts": {
-        "original": {
-          "version": "-9556021903-export declare const bar: number;",
-          "impliedFormat": 1
-        },
+      "version": "-5214938848-export declare const foo: number;",
+      "signature": "-5214938848-export declare const foo: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./node_modules/@types/bar/index.d.ts": {
+      "original": {
         "version": "-9556021903-export declare const bar: number;",
-        "signature": "-9556021903-export declare const bar: number;",
-        "impliedFormat": "commonjs"
+        "impliedFormat": 1
       },
-      "./index.mts": {
-        "original": {
-          "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
-          "signature": "-3531856636-export {};\n",
-          "impliedFormat": 99
-        },
+      "version": "-9556021903-export declare const bar: number;",
+      "signature": "-9556021903-export declare const bar: number;",
+      "impliedFormat": "commonjs"
+    },
+    "./index.mts": {
+      "original": {
         "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
         "signature": "-3531856636-export {};\n",
-        "impliedFormat": "esnext"
-      }
-    },
-    "root": [
-      [
-        4,
-        "./index.mts"
-      ]
-    ],
-    "options": {
-      "strict": true
-    },
-    "referencedMap": {
-      "./index.mts": [
-        "./node_modules/foo/index.d.ts",
-        "./node_modules/@types/bar/index.d.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      [
-        "../../../../lib/lib.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/foo/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./node_modules/@types/bar/index.d.ts",
-        "not cached or not changed"
-      ],
-      [
-        "./index.mts",
-        "not cached or not changed"
-      ]
+        "impliedFormat": 99
+      },
+      "version": "-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n",
+      "signature": "-3531856636-export {};\n",
+      "impliedFormat": "esnext"
+    }
+  },
+  "root": [
+    [
+      4,
+      "./index.mts"
+    ]
+  ],
+  "options": {
+    "strict": true
+  },
+  "referencedMap": {
+    "./index.mts": [
+      "./node_modules/foo/index.d.ts",
+      "./node_modules/@types/bar/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/foo/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./node_modules/@types/bar/index.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./index.mts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 1163
+  "size": 1151
 }
 
 

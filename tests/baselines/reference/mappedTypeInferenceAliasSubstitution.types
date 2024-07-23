@@ -27,7 +27,7 @@ const f = <A extends string, B extends string, R>(x: { [K in A]: Field<B, R> }):
 ><A extends string, B extends string, R>(x: { [K in A]: Field<B, R> }): R => ({} as any) : <A extends string, B extends string, R>(x: { [K in A]: Field<B, R>; }) => R
 >                                                                                        : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^                          ^^^^^ 
 >x : { [K in A]: Field<B, R>; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >({} as any) : any
 >{} as any : any
 >{} : {}

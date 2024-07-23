@@ -11,7 +11,7 @@ declare function forceMatch<T>(matched: {
 >forceMatch : <T>(matched: { [key in keyof T]: key; }) => void
 >           : ^ ^^       ^^                          ^^^^^    
 >matched : { [key in keyof T]: key; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^   ^^^^^^^^^^^^^^^^^^^^
 
   [key in keyof T]: key;
 }): void;

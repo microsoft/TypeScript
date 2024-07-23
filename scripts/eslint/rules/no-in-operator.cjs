@@ -1,5 +1,8 @@
 const { createRule } = require("./utils.cjs");
 
+/** @import { TSESTree } from "@typescript-eslint/utils" */
+void 0;
+
 module.exports = createRule({
     name: "no-in-operator",
     meta: {
@@ -16,7 +19,7 @@ module.exports = createRule({
 
     create(context) {
         const IN_OPERATOR = "in";
-        /** @type {(node: import("@typescript-eslint/utils").TSESTree.BinaryExpression) => void} */
+        /** @type {(node: TSESTree.BinaryExpression) => void} */
         const checkInOperator = node => {
             if (node.operator === IN_OPERATOR) {
                 context.report({ messageId: "noInOperatorError", node });

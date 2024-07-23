@@ -45,6 +45,7 @@ import {
     LanguageServiceHost,
     length,
     map,
+    moduleExportNameTextEscaped,
     NamedImportBindings,
     NamedImports,
     NamespaceImport,
@@ -211,8 +212,7 @@ export function organizeImports(
     }
 }
 
-/** @internal */
-export function getDetectionLists(preferences: UserPreferences): { comparersToTest: Comparer<string>[]; typeOrdersToTest: OrganizeImportsTypeOrder[]; } {
+function getDetectionLists(preferences: UserPreferences): { comparersToTest: Comparer<string>[]; typeOrdersToTest: OrganizeImportsTypeOrder[]; } {
     // Returns the possible detection outcomes, given the user's preferences. The earlier in the list, the higher the priority.
     return {
         comparersToTest: typeof preferences.organizeImportsIgnoreCase === "boolean"
@@ -690,7 +690,7 @@ function hasModuleDeclarationMatchingSpecifier(sourceFile: SourceFile, moduleSpe
 function getNewImportSpecifiers(namedImports: ImportDeclaration[]) {
     return flatMap(namedImports, namedImport =>
         map(tryGetNamedBindingElements(namedImport), importSpecifier =>
-            importSpecifier.name && importSpecifier.propertyName && importSpecifier.name.escapedText === importSpecifier.propertyName.escapedText
+            importSpecifier.name && importSpecifier.propertyName && moduleExportNameTextEscaped(importSpecifier.name) === moduleExportNameTextEscaped(importSpecifier.propertyName)
                 ? factory.updateImportSpecifier(importSpecifier, importSpecifier.isTypeOnly, /*propertyName*/ undefined, importSpecifier.name)
                 : importSpecifier));
 }

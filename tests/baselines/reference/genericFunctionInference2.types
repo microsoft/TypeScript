@@ -13,7 +13,7 @@ declare function combineReducers<S>(reducers: { [K in keyof S]: Reducer<S[K]> })
 >combineReducers : <S>(reducers: { [K in keyof S]: Reducer<S[K]>; }) => Reducer<S>
 >                : ^ ^^        ^^                                  ^^^^^          
 >reducers : { [K in keyof S]: Reducer<S[K]>; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type MyState = { combined: { foo: number } };
 >MyState : MyState

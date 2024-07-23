@@ -122,7 +122,7 @@ function getFunction<T>(item: T) {
 >isFunction(item) : boolean
 >                 : ^^^^^^^
 >isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
->           : ^   ^^     ^^   ^^^^^                               
+>           : ^^^^^^     ^^   ^^^^^                               
 >item : T
 >     : ^
 
@@ -147,7 +147,7 @@ function f10<T>(x: T) {
 >isFunction(x) : boolean
 >              : ^^^^^^^
 >isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
->           : ^   ^^     ^^   ^^^^^                               
+>           : ^^^^^^     ^^   ^^^^^                               
 >x : T
 >  : ^
 
@@ -372,7 +372,7 @@ class Vector<T> implements Seq<T> {
 
     partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
 >partition2 : { <U_1 extends T>(predicate: (v: T) => v is U_1): [Vector<U_1>, Vector<Exclude<T, U_1>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
->           : ^^^   ^^^^^^^^^ ^^         ^^                  ^^^                                      ^^^         ^^                 ^^^                      ^^^
+>           : ^^^^^^^^^^^^^^^ ^^         ^^                  ^^^                                      ^^^         ^^                 ^^^                      ^^^
 >predicate : (v: T) => boolean
 >          : ^ ^^ ^^^^^       
 >v : T
@@ -430,7 +430,7 @@ function foo<T>(value: T) {
 >isFunction(value) : boolean
 >                  : ^^^^^^^
 >isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
->           : ^   ^^     ^^   ^^^^^                               
+>           : ^^^^^^     ^^   ^^^^^                               
 >value : T
 >      : ^
 
@@ -761,7 +761,7 @@ type Wat<K extends string> = { x: { y: 0, z: 1 } } extends { x: { [P in K]: 0 } 
 >z : 1
 >  : ^
 >x : { [P in K]: 0; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >false : false

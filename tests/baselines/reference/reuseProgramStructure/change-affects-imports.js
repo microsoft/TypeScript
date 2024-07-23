@@ -20,14 +20,14 @@ var x = 1
 resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs/index.d.ts",
-    "node_modules/typerefs/package.json",
-    "node_modules/typerefs.d.ts",
-    "node_modules/typerefs/index.d.ts",
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs.d.ts",
-    "node_modules/@types/typerefs/index.d.ts"
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs/index.d.ts",
+    "/node_modules/typerefs/package.json",
+    "/node_modules/typerefs.d.ts",
+    "/node_modules/typerefs/index.d.ts",
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs.d.ts",
+    "/node_modules/@types/typerefs/index.d.ts"
   ]
 }
 
@@ -50,7 +50,7 @@ var z = 1;
 resolvedModules:
 b: {
   "resolvedModule": {
-    "resolvedFileName": "b.ts",
+    "resolvedFileName": "/b.ts",
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
@@ -73,14 +73,14 @@ var x = 1
 resolvedTypeReferenceDirectiveNames:
 typerefs: {
   "failedLookupLocations": [
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs/index.d.ts",
-    "node_modules/typerefs/package.json",
-    "node_modules/typerefs.d.ts",
-    "node_modules/typerefs/index.d.ts",
-    "node_modules/@types/typerefs/package.json",
-    "node_modules/@types/typerefs.d.ts",
-    "node_modules/@types/typerefs/index.d.ts"
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs/index.d.ts",
+    "/node_modules/typerefs/package.json",
+    "/node_modules/typerefs.d.ts",
+    "/node_modules/typerefs/index.d.ts",
+    "/node_modules/@types/typerefs/package.json",
+    "/node_modules/@types/typerefs.d.ts",
+    "/node_modules/@types/typerefs/index.d.ts"
   ]
 }
 

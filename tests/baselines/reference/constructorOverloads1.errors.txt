@@ -17,25 +17,21 @@ constructorOverloads1.ts(17,18): error TS2769: No overload matches this call.
 ==== constructorOverloads1.ts (6 errors) ====
     class Foo {
         constructor(s: string);
-        ~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
         constructor(n: number);
-        ~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
         constructor(x: any) {
-        ~~~~~~~~~~~~~~~~~~~~~
-    
+        ~~~~~~~~~~~
+!!! error TS2392: Multiple constructor implementations are not allowed.
     
         }
-    ~~~~~
-!!! error TS2392: Multiple constructor implementations are not allowed.
         constructor(x: any) {
-        ~~~~~~~~~~~~~~~~~~~~~
-    
+        ~~~~~~~~~~~
+!!! error TS2392: Multiple constructor implementations are not allowed.
     
         }
-    ~~~~~
-!!! error TS2392: Multiple constructor implementations are not allowed.
         bar1() {  /*WScript.Echo("bar1");*/ }
         bar2() {  /*WScript.Echo("bar1");*/ }
     }

@@ -59,6 +59,7 @@ import {
     isFunctionTypeNode,
     isIdentifier,
     isImportMeta,
+    isImportOrExportSpecifier,
     isJSDocOverrideTag,
     isJsxOpeningLikeElement,
     isJumpStatementTarget,
@@ -158,13 +159,13 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     }
 
     if (node.kind === SyntaxKind.AwaitKeyword) {
-        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
+        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n));
         const isAsyncFunction = functionDeclaration && some(functionDeclaration.modifiers, node => node.kind === SyntaxKind.AsyncKeyword);
         return isAsyncFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
     }
 
     if (node.kind === SyntaxKind.YieldKeyword) {
-        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
+        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n));
         const isGeneratorFunction = functionDeclaration && functionDeclaration.asteriskToken;
         return isGeneratorFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
     }
@@ -539,7 +540,12 @@ function getSymbol(node: Node, checker: TypeChecker, stopAtAlias: boolean | unde
 //   (2) when the aliased symbol is originating from an import.
 //
 function shouldSkipAlias(node: Node, declaration: Node): boolean {
-    if (node.kind !== SyntaxKind.Identifier) {
+    // Note: Import aliases can be strings:
+    //
+    //   import { "an alias" as foo } from "./foo";
+    //   export { foo as "an alias" };
+    //
+    if (node.kind !== SyntaxKind.Identifier && (node.kind !== SyntaxKind.StringLiteral || !isImportOrExportSpecifier(node.parent))) {
         return false;
     }
     if (node.parent === declaration) {
@@ -710,8 +716,7 @@ function createDefinitionFromSignatureDeclaration(typeChecker: TypeChecker, decl
     return createDefinitionInfo(decl, typeChecker, decl.symbol, decl, /*unverified*/ false, failedAliasResolution);
 }
 
-/** @internal */
-export function findReferenceInPosition(refs: readonly FileReference[], pos: number): FileReference | undefined {
+function findReferenceInPosition(refs: readonly FileReference[], pos: number): FileReference | undefined {
     return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
 }
 

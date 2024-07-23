@@ -111,8 +111,7 @@ const unprefixedNodeCoreModuleList = [
     "zlib",
 ];
 
-/** @internal */
-export const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
+const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
 
 /** @internal */
 export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];
