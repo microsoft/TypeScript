@@ -3934,7 +3934,8 @@
     "This kind of expression is always falsy.": {
         "category": "Error",
         "code": 2873
-    },    "Variable '{0}' is used but never initialized.": {
+    },
+    "Variable '{0}' is used but never initialized.": {
         "category": "Error",
         "code": 2874
     },
