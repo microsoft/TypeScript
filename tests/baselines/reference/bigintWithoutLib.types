@@ -229,6 +229,34 @@ bigIntArray = new BigInt64Array([1n, 2n, 3n]);
 >3n : 3n
 >   : ^^
 
+bigIntArray = new BigInt64Array({0: 1n, 1: 2n, 2: 3n, length: 3});
+>bigIntArray = new BigInt64Array({0: 1n, 1: 2n, 2: 3n, length: 3}) : any
+>                                                                  : ^^^
+>bigIntArray : BigInt64Array
+>            : ^^^^^^^^^^^^^
+>new BigInt64Array({0: 1n, 1: 2n, 2: 3n, length: 3}) : any
+>                                                    : ^^^
+>BigInt64Array : any
+>              : ^^^
+>{0: 1n, 1: 2n, 2: 3n, length: 3} : { 0: bigint; 1: bigint; 2: bigint; length: number; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : bigint
+>  : ^^^^^^
+>1n : 1n
+>   : ^^
+>1 : bigint
+>  : ^^^^^^
+>2n : 2n
+>   : ^^
+>2 : bigint
+>  : ^^^^^^
+>3n : 3n
+>   : ^^
+>length : number
+>       : ^^^^^^
+>3 : 3
+>  : ^
+
 bigIntArray = new BigInt64Array([1, 2, 3]);
 >bigIntArray = new BigInt64Array([1, 2, 3]) : any
 >                                           : ^^^
@@ -244,6 +272,34 @@ bigIntArray = new BigInt64Array([1, 2, 3]);
 >  : ^
 >2 : 2
 >  : ^
+>3 : 3
+>  : ^
+
+bigIntArray = new BigInt64Array({0: 1, 1: 2, 2: 3, length: 3});
+>bigIntArray = new BigInt64Array({0: 1, 1: 2, 2: 3, length: 3}) : any
+>                                                               : ^^^
+>bigIntArray : BigInt64Array
+>            : ^^^^^^^^^^^^^
+>new BigInt64Array({0: 1, 1: 2, 2: 3, length: 3}) : any
+>                                                 : ^^^
+>BigInt64Array : any
+>              : ^^^
+>{0: 1, 1: 2, 2: 3, length: 3} : { 0: number; 1: number; 2: number; length: number; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>1 : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>2 : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+>length : number
+>       : ^^^^^^
 >3 : 3
 >  : ^
 
@@ -368,6 +424,34 @@ bigUintArray = new BigUint64Array([1n, 2n, 3n]);
 >3n : 3n
 >   : ^^
 
+bigUintArray = new BigUint64Array({0: 1n, 1: 2n, 2: 3n, length: 3});
+>bigUintArray = new BigUint64Array({0: 1n, 1: 2n, 2: 3n, length: 3}) : any
+>                                                                    : ^^^
+>bigUintArray : BigUint64Array
+>             : ^^^^^^^^^^^^^^
+>new BigUint64Array({0: 1n, 1: 2n, 2: 3n, length: 3}) : any
+>                                                     : ^^^
+>BigUint64Array : any
+>               : ^^^
+>{0: 1n, 1: 2n, 2: 3n, length: 3} : { 0: bigint; 1: bigint; 2: bigint; length: number; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : bigint
+>  : ^^^^^^
+>1n : 1n
+>   : ^^
+>1 : bigint
+>  : ^^^^^^
+>2n : 2n
+>   : ^^
+>2 : bigint
+>  : ^^^^^^
+>3n : 3n
+>   : ^^
+>length : number
+>       : ^^^^^^
+>3 : 3
+>  : ^
+
 bigUintArray = new BigUint64Array([1, 2, 3]);
 >bigUintArray = new BigUint64Array([1, 2, 3]) : any
 >                                             : ^^^
@@ -383,6 +467,34 @@ bigUintArray = new BigUint64Array([1, 2, 3]);
 >  : ^
 >2 : 2
 >  : ^
+>3 : 3
+>  : ^
+
+bigUintArray = new BigUint64Array({0: 1, 1: 2, 2: 3, length: 3});
+>bigUintArray = new BigUint64Array({0: 1, 1: 2, 2: 3, length: 3}) : any
+>                                                                 : ^^^
+>bigUintArray : BigUint64Array
+>             : ^^^^^^^^^^^^^^
+>new BigUint64Array({0: 1, 1: 2, 2: 3, length: 3}) : any
+>                                                  : ^^^
+>BigUint64Array : any
+>               : ^^^
+>{0: 1, 1: 2, 2: 3, length: 3} : { 0: number; 1: number; 2: number; length: number; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>0 : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>1 : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>2 : number
+>  : ^^^^^^
+>3 : 3
+>  : ^
+>length : number
+>       : ^^^^^^
 >3 : 3
 >  : ^
 
