@@ -1805,7 +1805,7 @@
         "category": "Error",
         "code": 1537
     },
-    "A namespace declaration should not be declared using the module keyword. Please use the namespace keyword instead.": {
+    "A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.": {
         "category": "Suggestion",
         "code": 1538,
         "reportsDeprecated": true

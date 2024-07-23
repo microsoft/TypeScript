@@ -6,36 +6,25 @@
 ////export declare [|module|] mod4 { export let x: number }
 ////namespace mod5 { export let x: number }
 ////declare namespace mod6 { export let x: number }
+////declare module "module-augmentation" {}
 ////declare global {}
 ////mod1.x = 1;
 ////mod2.x = 1;
 ////mod5.x = 1;
 ////mod6.x = 1;
 
-const ranges = test.ranges();
-verify.getSuggestionDiagnostics([
-    {
-        "code": 1538,
-        "message": "A namespace declaration should not be declared using the module keyword. Please use the namespace keyword instead.",
-        "reportsDeprecated": true,
-        "range": ranges[0]
-    },
-    {
-        "code": 1538,
-        "message": "A namespace declaration should not be declared using the module keyword. Please use the namespace keyword instead.",
-        "reportsDeprecated": true,
-        "range": ranges[1]
-    },
-    {
-        "code": 1538,
-        "message": "A namespace declaration should not be declared using the module keyword. Please use the namespace keyword instead.",
-        "reportsDeprecated": true,
-        "range": ranges[2]
-    },
-    {
-        "code": 1538,
-        "message": "A namespace declaration should not be declared using the module keyword. Please use the namespace keyword instead.",
-        "reportsDeprecated": true,
-        "range": ranges[3]
-    },
-])
+// @Filename: b.ts
+////module "global-ambient-module" {}
+
+goTo.file("a.ts")
+const diagnostics = test.ranges().map(range => ({
+    code: 1538,
+    message: "A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.",
+    reportsDeprecated: true,
+    range,
+}));
+verify.getSuggestionDiagnostics(diagnostics)
+
+goTo.file("b.ts")
+verify.getSuggestionDiagnostics([])
+
