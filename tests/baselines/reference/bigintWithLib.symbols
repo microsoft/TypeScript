@@ -133,6 +133,28 @@ bigIntArray = BigInt64Array.from([1n, 2n, 3n], n => n * 10n);
 >n : Symbol(n, Decl(bigintWithLib.ts, 25, 46))
 >n : Symbol(n, Decl(bigintWithLib.ts, 25, 46))
 
+bigIntArray = BigInt64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3});
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
+>BigInt64Array.from : Symbol(BigInt64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>BigInt64Array : Symbol(BigInt64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>from : Symbol(BigInt64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>0 : Symbol(0, Decl(bigintWithLib.ts, 26, 34))
+>1 : Symbol(1, Decl(bigintWithLib.ts, 26, 40))
+>2 : Symbol(2, Decl(bigintWithLib.ts, 26, 47))
+>length : Symbol(length, Decl(bigintWithLib.ts, 26, 54))
+
+bigIntArray = BigInt64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3}, n => n * 10n);
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
+>BigInt64Array.from : Symbol(BigInt64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>BigInt64Array : Symbol(BigInt64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>from : Symbol(BigInt64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>0 : Symbol(0, Decl(bigintWithLib.ts, 27, 34))
+>1 : Symbol(1, Decl(bigintWithLib.ts, 27, 40))
+>2 : Symbol(2, Decl(bigintWithLib.ts, 27, 47))
+>length : Symbol(length, Decl(bigintWithLib.ts, 27, 54))
+>n : Symbol(n, Decl(bigintWithLib.ts, 27, 66))
+>n : Symbol(n, Decl(bigintWithLib.ts, 27, 66))
+
 bigIntArray = BigInt64Array.from(['1', '2', '3']); // should error
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
 >BigInt64Array.from : Symbol(BigInt64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
@@ -144,12 +166,12 @@ bigIntArray = BigInt64Array.from(['1', '2', '3'], s => BigInt(s));
 >BigInt64Array.from : Symbol(BigInt64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >BigInt64Array : Symbol(BigInt64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >from : Symbol(BigInt64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->s : Symbol(s, Decl(bigintWithLib.ts, 27, 49))
+>s : Symbol(s, Decl(bigintWithLib.ts, 29, 49))
 >BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->s : Symbol(s, Decl(bigintWithLib.ts, 27, 49))
+>s : Symbol(s, Decl(bigintWithLib.ts, 29, 49))
 
 let len: number = bigIntArray.length;
->len : Symbol(len, Decl(bigintWithLib.ts, 28, 3))
+>len : Symbol(len, Decl(bigintWithLib.ts, 30, 3))
 >bigIntArray.length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
 >length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
@@ -160,90 +182,112 @@ bigIntArray.length = 10; // should error
 >length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
 
 let arrayBufferLike: ArrayBufferView = bigIntArray;
->arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithLib.ts, 30, 3))
+>arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithLib.ts, 32, 3))
 >ArrayBufferView : Symbol(ArrayBufferView, Decl(lib.es5.d.ts, --, --))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
 
 // Test BigUint64Array
 let bigUintArray: BigUint64Array = new BigUint64Array();
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 
 bigUintArray = new BigUint64Array(10);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 
 bigUintArray = new BigUint64Array([1n, 2n, 3n]);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 
 bigUintArray = new BigUint64Array({0: 1n, 1: 2n, 2: 3n, length: 3});
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->0 : Symbol(0, Decl(bigintWithLib.ts, 36, 35))
->1 : Symbol(1, Decl(bigintWithLib.ts, 36, 41))
->2 : Symbol(2, Decl(bigintWithLib.ts, 36, 48))
->length : Symbol(length, Decl(bigintWithLib.ts, 36, 55))
+>0 : Symbol(0, Decl(bigintWithLib.ts, 38, 35))
+>1 : Symbol(1, Decl(bigintWithLib.ts, 38, 41))
+>2 : Symbol(2, Decl(bigintWithLib.ts, 38, 48))
+>length : Symbol(length, Decl(bigintWithLib.ts, 38, 55))
 
 bigUintArray = new BigUint64Array([1, 2, 3]); // should error
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 
 bigUintArray = new BigUint64Array({0: 1, 1: 2, 2: 3, length: 3}); // should error
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->0 : Symbol(0, Decl(bigintWithLib.ts, 38, 35))
->1 : Symbol(1, Decl(bigintWithLib.ts, 38, 40))
->2 : Symbol(2, Decl(bigintWithLib.ts, 38, 46))
->length : Symbol(length, Decl(bigintWithLib.ts, 38, 52))
+>0 : Symbol(0, Decl(bigintWithLib.ts, 40, 35))
+>1 : Symbol(1, Decl(bigintWithLib.ts, 40, 40))
+>2 : Symbol(2, Decl(bigintWithLib.ts, 40, 46))
+>length : Symbol(length, Decl(bigintWithLib.ts, 40, 52))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80));
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 bigUintArray = BigUint64Array.from([1n, 2n, 3n]);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array.from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 
 bigUintArray = BigUint64Array.from([1n, 2n, 3n], n => n * 10n);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array.from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->n : Symbol(n, Decl(bigintWithLib.ts, 43, 48))
->n : Symbol(n, Decl(bigintWithLib.ts, 43, 48))
+>n : Symbol(n, Decl(bigintWithLib.ts, 45, 48))
+>n : Symbol(n, Decl(bigintWithLib.ts, 45, 48))
+
+bigUintArray = BigUint64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3});
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
+>BigUint64Array.from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>0 : Symbol(0, Decl(bigintWithLib.ts, 46, 36))
+>1 : Symbol(1, Decl(bigintWithLib.ts, 46, 42))
+>2 : Symbol(2, Decl(bigintWithLib.ts, 46, 49))
+>length : Symbol(length, Decl(bigintWithLib.ts, 46, 56))
+
+bigUintArray = BigUint64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3}, n => n * 10n);
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
+>BigUint64Array.from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>0 : Symbol(0, Decl(bigintWithLib.ts, 47, 36))
+>1 : Symbol(1, Decl(bigintWithLib.ts, 47, 42))
+>2 : Symbol(2, Decl(bigintWithLib.ts, 47, 49))
+>length : Symbol(length, Decl(bigintWithLib.ts, 47, 56))
+>n : Symbol(n, Decl(bigintWithLib.ts, 47, 68))
+>n : Symbol(n, Decl(bigintWithLib.ts, 47, 68))
 
 bigUintArray = BigUint64Array.from(['1', '2', '3']); // should error
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array.from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 
 bigUintArray = BigUint64Array.from(['1', '2', '3'], s => BigInt(s));
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 33, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 35, 3))
 >BigUint64Array.from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >from : Symbol(BigUint64ArrayConstructor.from, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->s : Symbol(s, Decl(bigintWithLib.ts, 45, 51))
+>s : Symbol(s, Decl(bigintWithLib.ts, 49, 51))
 >BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->s : Symbol(s, Decl(bigintWithLib.ts, 45, 51))
+>s : Symbol(s, Decl(bigintWithLib.ts, 49, 51))
 
 len = bigIntArray.length;
->len : Symbol(len, Decl(bigintWithLib.ts, 28, 3))
+>len : Symbol(len, Decl(bigintWithLib.ts, 30, 3))
 >bigIntArray.length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
 >length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
@@ -254,81 +298,81 @@ bigIntArray.length = 10; // should error
 >length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
 
 arrayBufferLike = bigIntArray;
->arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithLib.ts, 30, 3))
+>arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithLib.ts, 32, 3))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
 
 // Test added DataView methods
 const dataView = new DataView(new ArrayBuffer(80));
->dataView : Symbol(dataView, Decl(bigintWithLib.ts, 51, 5))
+>dataView : Symbol(dataView, Decl(bigintWithLib.ts, 55, 5))
 >DataView : Symbol(DataView, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 dataView.setBigInt64(1, -1n);
 >dataView.setBigInt64 : Symbol(DataView.setBigInt64, Decl(lib.es2020.bigint.d.ts, --, --))
->dataView : Symbol(dataView, Decl(bigintWithLib.ts, 51, 5))
+>dataView : Symbol(dataView, Decl(bigintWithLib.ts, 55, 5))
 >setBigInt64 : Symbol(DataView.setBigInt64, Decl(lib.es2020.bigint.d.ts, --, --))
 
 dataView.setBigInt64(1, -1n, true);
 >dataView.setBigInt64 : Symbol(DataView.setBigInt64, Decl(lib.es2020.bigint.d.ts, --, --))
->dataView : Symbol(dataView, Decl(bigintWithLib.ts, 51, 5))
+>dataView : Symbol(dataView, Decl(bigintWithLib.ts, 55, 5))
 >setBigInt64 : Symbol(DataView.setBigInt64, Decl(lib.es2020.bigint.d.ts, --, --))
 
 dataView.setBigInt64(1, -1); // should error
 >dataView.setBigInt64 : Symbol(DataView.setBigInt64, Decl(lib.es2020.bigint.d.ts, --, --))
->dataView : Symbol(dataView, Decl(bigintWithLib.ts, 51, 5))
+>dataView : Symbol(dataView, Decl(bigintWithLib.ts, 55, 5))
 >setBigInt64 : Symbol(DataView.setBigInt64, Decl(lib.es2020.bigint.d.ts, --, --))
 
 dataView.setBigUint64(2, 123n);
 >dataView.setBigUint64 : Symbol(DataView.setBigUint64, Decl(lib.es2020.bigint.d.ts, --, --))
->dataView : Symbol(dataView, Decl(bigintWithLib.ts, 51, 5))
+>dataView : Symbol(dataView, Decl(bigintWithLib.ts, 55, 5))
 >setBigUint64 : Symbol(DataView.setBigUint64, Decl(lib.es2020.bigint.d.ts, --, --))
 
 dataView.setBigUint64(2, 123n, true);
 >dataView.setBigUint64 : Symbol(DataView.setBigUint64, Decl(lib.es2020.bigint.d.ts, --, --))
->dataView : Symbol(dataView, Decl(bigintWithLib.ts, 51, 5))
+>dataView : Symbol(dataView, Decl(bigintWithLib.ts, 55, 5))
 >setBigUint64 : Symbol(DataView.setBigUint64, Decl(lib.es2020.bigint.d.ts, --, --))
 
 dataView.setBigUint64(2, 123); // should error
 >dataView.setBigUint64 : Symbol(DataView.setBigUint64, Decl(lib.es2020.bigint.d.ts, --, --))
->dataView : Symbol(dataView, Decl(bigintWithLib.ts, 51, 5))
+>dataView : Symbol(dataView, Decl(bigintWithLib.ts, 55, 5))
 >setBigUint64 : Symbol(DataView.setBigUint64, Decl(lib.es2020.bigint.d.ts, --, --))
 
 bigintVal = dataView.getBigInt64(1);
 >bigintVal : Symbol(bigintVal, Decl(bigintWithLib.ts, 1, 3))
 >dataView.getBigInt64 : Symbol(DataView.getBigInt64, Decl(lib.es2020.bigint.d.ts, --, --))
->dataView : Symbol(dataView, Decl(bigintWithLib.ts, 51, 5))
+>dataView : Symbol(dataView, Decl(bigintWithLib.ts, 55, 5))
 >getBigInt64 : Symbol(DataView.getBigInt64, Decl(lib.es2020.bigint.d.ts, --, --))
 
 bigintVal = dataView.getBigInt64(1, true);
 >bigintVal : Symbol(bigintVal, Decl(bigintWithLib.ts, 1, 3))
 >dataView.getBigInt64 : Symbol(DataView.getBigInt64, Decl(lib.es2020.bigint.d.ts, --, --))
->dataView : Symbol(dataView, Decl(bigintWithLib.ts, 51, 5))
+>dataView : Symbol(dataView, Decl(bigintWithLib.ts, 55, 5))
 >getBigInt64 : Symbol(DataView.getBigInt64, Decl(lib.es2020.bigint.d.ts, --, --))
 
 bigintVal = dataView.getBigUint64(2);
 >bigintVal : Symbol(bigintVal, Decl(bigintWithLib.ts, 1, 3))
 >dataView.getBigUint64 : Symbol(DataView.getBigUint64, Decl(lib.es2020.bigint.d.ts, --, --))
->dataView : Symbol(dataView, Decl(bigintWithLib.ts, 51, 5))
+>dataView : Symbol(dataView, Decl(bigintWithLib.ts, 55, 5))
 >getBigUint64 : Symbol(DataView.getBigUint64, Decl(lib.es2020.bigint.d.ts, --, --))
 
 bigintVal = dataView.getBigUint64(2, true);
 >bigintVal : Symbol(bigintVal, Decl(bigintWithLib.ts, 1, 3))
 >dataView.getBigUint64 : Symbol(DataView.getBigUint64, Decl(lib.es2020.bigint.d.ts, --, --))
->dataView : Symbol(dataView, Decl(bigintWithLib.ts, 51, 5))
+>dataView : Symbol(dataView, Decl(bigintWithLib.ts, 55, 5))
 >getBigUint64 : Symbol(DataView.getBigUint64, Decl(lib.es2020.bigint.d.ts, --, --))
 
 // Test emitted declarations files
 const w = 12n; // should emit as const w = 12n
->w : Symbol(w, Decl(bigintWithLib.ts, 64, 5))
+>w : Symbol(w, Decl(bigintWithLib.ts, 68, 5))
 
 const x = -12n; // should emit as const x = -12n
->x : Symbol(x, Decl(bigintWithLib.ts, 65, 5))
+>x : Symbol(x, Decl(bigintWithLib.ts, 69, 5))
 
 const y: 12n = 12n; // should emit type 12n
->y : Symbol(y, Decl(bigintWithLib.ts, 66, 5))
+>y : Symbol(y, Decl(bigintWithLib.ts, 70, 5))
 
 let z = 12n; // should emit type bigint in declaration file
->z : Symbol(z, Decl(bigintWithLib.ts, 67, 3))
+>z : Symbol(z, Decl(bigintWithLib.ts, 71, 3))
 
 // Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);

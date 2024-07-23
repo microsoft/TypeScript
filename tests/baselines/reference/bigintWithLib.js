@@ -27,6 +27,8 @@ bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
 bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
 bigIntArray = BigInt64Array.from([1n, 2n, 3n]);
 bigIntArray = BigInt64Array.from([1n, 2n, 3n], n => n * 10n);
+bigIntArray = BigInt64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3});
+bigIntArray = BigInt64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3}, n => n * 10n);
 bigIntArray = BigInt64Array.from(['1', '2', '3']); // should error
 bigIntArray = BigInt64Array.from(['1', '2', '3'], s => BigInt(s));
 let len: number = bigIntArray.length;
@@ -45,6 +47,8 @@ bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
 bigUintArray = BigUint64Array.from([1n, 2n, 3n]);
 bigUintArray = BigUint64Array.from([1n, 2n, 3n], n => n * 10n);
+bigUintArray = BigUint64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3});
+bigUintArray = BigUint64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3}, n => n * 10n);
 bigUintArray = BigUint64Array.from(['1', '2', '3']); // should error
 bigUintArray = BigUint64Array.from(['1', '2', '3'], s => BigInt(s));
 len = bigIntArray.length;
@@ -101,6 +105,8 @@ bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
 bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
 bigIntArray = BigInt64Array.from([1n, 2n, 3n]);
 bigIntArray = BigInt64Array.from([1n, 2n, 3n], n => n * 10n);
+bigIntArray = BigInt64Array.from({ 0: 1n, 1: 2n, 2: 3n, length: 3 });
+bigIntArray = BigInt64Array.from({ 0: 1n, 1: 2n, 2: 3n, length: 3 }, n => n * 10n);
 bigIntArray = BigInt64Array.from(['1', '2', '3']); // should error
 bigIntArray = BigInt64Array.from(['1', '2', '3'], s => BigInt(s));
 let len = bigIntArray.length;
@@ -118,6 +124,8 @@ bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
 bigUintArray = BigUint64Array.from([1n, 2n, 3n]);
 bigUintArray = BigUint64Array.from([1n, 2n, 3n], n => n * 10n);
+bigUintArray = BigUint64Array.from({ 0: 1n, 1: 2n, 2: 3n, length: 3 });
+bigUintArray = BigUint64Array.from({ 0: 1n, 1: 2n, 2: 3n, length: 3 }, n => n * 10n);
 bigUintArray = BigUint64Array.from(['1', '2', '3']); // should error
 bigUintArray = BigUint64Array.from(['1', '2', '3'], s => BigInt(s));
 len = bigIntArray.length;

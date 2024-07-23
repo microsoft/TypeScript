@@ -110,132 +110,164 @@ bigIntArray = BigInt64Array.from([1n, 2n, 3n], n => n * 10n);
 >n : Symbol(n, Decl(bigintWithoutLib.ts, 27, 46))
 >n : Symbol(n, Decl(bigintWithoutLib.ts, 27, 46))
 
+bigIntArray = BigInt64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3});
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
+>0 : Symbol(0, Decl(bigintWithoutLib.ts, 28, 34))
+>1 : Symbol(1, Decl(bigintWithoutLib.ts, 28, 40))
+>2 : Symbol(2, Decl(bigintWithoutLib.ts, 28, 47))
+>length : Symbol(length, Decl(bigintWithoutLib.ts, 28, 54))
+
+bigIntArray = BigInt64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3}, n => n * 10n);
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
+>0 : Symbol(0, Decl(bigintWithoutLib.ts, 29, 34))
+>1 : Symbol(1, Decl(bigintWithoutLib.ts, 29, 40))
+>2 : Symbol(2, Decl(bigintWithoutLib.ts, 29, 47))
+>length : Symbol(length, Decl(bigintWithoutLib.ts, 29, 54))
+>n : Symbol(n, Decl(bigintWithoutLib.ts, 29, 66))
+>n : Symbol(n, Decl(bigintWithoutLib.ts, 29, 66))
+
+bigUintArray = BigUint64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3});
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
+>0 : Symbol(0, Decl(bigintWithoutLib.ts, 30, 36))
+>1 : Symbol(1, Decl(bigintWithoutLib.ts, 30, 42))
+>2 : Symbol(2, Decl(bigintWithoutLib.ts, 30, 49))
+>length : Symbol(length, Decl(bigintWithoutLib.ts, 30, 56))
+
+bigUintArray = BigUint64Array.from({0: 1n, 1: 2n, 2: 3n, length: 3}, n => n * 10n);
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
+>0 : Symbol(0, Decl(bigintWithoutLib.ts, 31, 36))
+>1 : Symbol(1, Decl(bigintWithoutLib.ts, 31, 42))
+>2 : Symbol(2, Decl(bigintWithoutLib.ts, 31, 49))
+>length : Symbol(length, Decl(bigintWithoutLib.ts, 31, 56))
+>n : Symbol(n, Decl(bigintWithoutLib.ts, 31, 68))
+>n : Symbol(n, Decl(bigintWithoutLib.ts, 31, 68))
+
 bigIntArray = BigInt64Array.from(['1', '2', '3']);
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
 
 bigIntArray = BigInt64Array.from(['1', '2', '3'], s => BigInt(s));
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
->s : Symbol(s, Decl(bigintWithoutLib.ts, 29, 49))
->s : Symbol(s, Decl(bigintWithoutLib.ts, 29, 49))
+>s : Symbol(s, Decl(bigintWithoutLib.ts, 33, 49))
+>s : Symbol(s, Decl(bigintWithoutLib.ts, 33, 49))
 
 let len: number = bigIntArray.length;
->len : Symbol(len, Decl(bigintWithoutLib.ts, 30, 3))
+>len : Symbol(len, Decl(bigintWithoutLib.ts, 34, 3))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
 
 bigIntArray.length = 10;
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
 
 let arrayBufferLike: ArrayBufferView = bigIntArray;
->arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithoutLib.ts, 32, 3))
+>arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithoutLib.ts, 36, 3))
 >ArrayBufferView : Symbol(ArrayBufferView, Decl(lib.es5.d.ts, --, --))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
 
 // Test BigUint64Array
 let bigUintArray: BigUint64Array = new BigUint64Array();
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
 >BigUint64Array : Symbol(BigUint64Array)
 
 bigUintArray = new BigUint64Array(10);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
 
 bigUintArray = new BigUint64Array([1n, 2n, 3n]);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
 
 bigUintArray = new BigUint64Array({0: 1n, 1: 2n, 2: 3n, length: 3});
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
->0 : Symbol(0, Decl(bigintWithoutLib.ts, 38, 35))
->1 : Symbol(1, Decl(bigintWithoutLib.ts, 38, 41))
->2 : Symbol(2, Decl(bigintWithoutLib.ts, 38, 48))
->length : Symbol(length, Decl(bigintWithoutLib.ts, 38, 55))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
+>0 : Symbol(0, Decl(bigintWithoutLib.ts, 42, 35))
+>1 : Symbol(1, Decl(bigintWithoutLib.ts, 42, 41))
+>2 : Symbol(2, Decl(bigintWithoutLib.ts, 42, 48))
+>length : Symbol(length, Decl(bigintWithoutLib.ts, 42, 55))
 
 bigUintArray = new BigUint64Array([1, 2, 3]);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
 
 bigUintArray = new BigUint64Array({0: 1, 1: 2, 2: 3, length: 3});
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
->0 : Symbol(0, Decl(bigintWithoutLib.ts, 40, 35))
->1 : Symbol(1, Decl(bigintWithoutLib.ts, 40, 40))
->2 : Symbol(2, Decl(bigintWithoutLib.ts, 40, 46))
->length : Symbol(length, Decl(bigintWithoutLib.ts, 40, 52))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
+>0 : Symbol(0, Decl(bigintWithoutLib.ts, 44, 35))
+>1 : Symbol(1, Decl(bigintWithoutLib.ts, 44, 40))
+>2 : Symbol(2, Decl(bigintWithoutLib.ts, 44, 46))
+>length : Symbol(length, Decl(bigintWithoutLib.ts, 44, 52))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80));
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
 >ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
 >ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
 >ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 bigUintArray = BigUint64Array.from([1n, 2n, 3n]);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
 
 bigUintArray = BigUint64Array.from([1n, 2n, 3n], n => n * 10n);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
->n : Symbol(n, Decl(bigintWithoutLib.ts, 45, 48))
->n : Symbol(n, Decl(bigintWithoutLib.ts, 45, 48))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
+>n : Symbol(n, Decl(bigintWithoutLib.ts, 49, 48))
+>n : Symbol(n, Decl(bigintWithoutLib.ts, 49, 48))
 
 bigUintArray = BigUint64Array.from(['1', '2', '3']);
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
 
 bigUintArray = BigUint64Array.from(['1', '2', '3'], s => BigInt(s));
->bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 35, 3))
->s : Symbol(s, Decl(bigintWithoutLib.ts, 47, 51))
->s : Symbol(s, Decl(bigintWithoutLib.ts, 47, 51))
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 39, 3))
+>s : Symbol(s, Decl(bigintWithoutLib.ts, 51, 51))
+>s : Symbol(s, Decl(bigintWithoutLib.ts, 51, 51))
 
 len = bigIntArray.length;
->len : Symbol(len, Decl(bigintWithoutLib.ts, 30, 3))
+>len : Symbol(len, Decl(bigintWithoutLib.ts, 34, 3))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
 
 bigIntArray.length = 10;
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
 
 arrayBufferLike = bigIntArray;
->arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithoutLib.ts, 32, 3))
+>arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithoutLib.ts, 36, 3))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
 
 // Test added DataView methods
 const dataView = new DataView(new ArrayBuffer(80));
->dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 53, 5))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 57, 5))
 >DataView : Symbol(DataView, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 dataView.setBigInt64(1, -1n);
->dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 53, 5))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 57, 5))
 
 dataView.setBigInt64(1, -1n, true);
->dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 53, 5))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 57, 5))
 
 dataView.setBigInt64(1, -1);
->dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 53, 5))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 57, 5))
 
 dataView.setBigUint64(2, 123n);
->dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 53, 5))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 57, 5))
 
 dataView.setBigUint64(2, 123n, true);
->dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 53, 5))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 57, 5))
 
 dataView.setBigUint64(2, 123);
->dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 53, 5))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 57, 5))
 
 bigintVal = dataView.getBigInt64(1);
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 53, 5))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 57, 5))
 
 bigintVal = dataView.getBigInt64(1, true);
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 53, 5))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 57, 5))
 
 bigintVal = dataView.getBigUint64(2);
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 53, 5))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 57, 5))
 
 bigintVal = dataView.getBigUint64(2, true);
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 53, 5))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 57, 5))
 
 // Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);
