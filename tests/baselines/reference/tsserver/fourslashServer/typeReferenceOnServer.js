@@ -205,6 +205,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "declare",
             "sortText": "11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

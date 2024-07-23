@@ -590,6 +590,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

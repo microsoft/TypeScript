@@ -517,6 +517,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/packages/lib/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true
@@ -656,6 +661,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true

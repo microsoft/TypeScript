@@ -111,22 +111,30 @@
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         },
         {
           "name": "foo",
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         },
         {
           "name": "Foo",
           "kind": "warning",
           "kindModifiers": "",
           "sortText": "18",
-          "isFromUncheckedFile": true
+          "isFromUncheckedFile": true,
+          "commitCharacters": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

@@ -759,6 +759,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/someModule.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

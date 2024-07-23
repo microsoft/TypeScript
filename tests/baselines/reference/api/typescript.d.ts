@@ -10764,6 +10764,10 @@ declare namespace ts {
          */
         isIncomplete?: true;
         entries: CompletionEntry[];
+        /**
+         * Default commit characters for the completion entries.
+         */
+        defaultCommitCharacters?: string[];
     }
     interface CompletionEntryDataAutoImport {
         /**
@@ -10870,6 +10874,10 @@ declare namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+        /**
+         * If this completion entry is selected, typing a commit character will cause the entry to be accepted.
+         */
+        commitCharacters?: string[];
     }
     interface CompletionEntryLabelDetails {
         /**

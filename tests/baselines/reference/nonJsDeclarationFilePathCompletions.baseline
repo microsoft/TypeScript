@@ -50,7 +50,8 @@
           ],
           "tags": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   },
   {
@@ -77,7 +78,8 @@
           ],
           "tags": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

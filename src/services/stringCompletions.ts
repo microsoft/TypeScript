@@ -4,6 +4,7 @@ import {
     createCompletionDetails,
     createCompletionDetailsForSymbol,
     getCompletionEntriesFromSymbols,
+    getDefaultCommitCharacters,
     getPropertiesForObjectExpression,
     Log,
     SortText,
@@ -260,7 +261,14 @@ function convertStringLiteralCompletions(
                 /*isRightOfOpenTag*/ undefined,
                 includeSymbol,
             ); // Target will not be used, so arbitrary
-            return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, optionalReplacementSpan, entries };
+            return {
+                isGlobalCompletion: false,
+                isMemberCompletion: true,
+                isNewIdentifierLocation: completion.hasIndexSignature,
+                optionalReplacementSpan,
+                entries,
+                defaultCommitCharacters: getDefaultCommitCharacters(completion.hasIndexSignature),
+            };
         }
         case StringLiteralCompletionKind.Types: {
             const quoteChar = contextToken.kind === SyntaxKind.NoSubstitutionTemplateLiteral
@@ -274,8 +282,16 @@ function convertStringLiteralCompletions(
                 kind: ScriptElementKind.string,
                 sortText: SortText.LocationPriority,
                 replacementSpan: getReplacementSpanForContextToken(contextToken, position),
+                commitCharacters: [],
             }));
-            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, optionalReplacementSpan, entries };
+            return {
+                isGlobalCompletion: false,
+                isMemberCompletion: false,
+                isNewIdentifierLocation: completion.isNewIdentifier,
+                optionalReplacementSpan,
+                entries,
+                defaultCommitCharacters: getDefaultCommitCharacters(completion.isNewIdentifier),
+            };
         }
         default:
             return Debug.assertNever(completion);
@@ -310,7 +326,13 @@ function convertPathCompletions(pathCompletions: readonly PathCompletion[]): Com
     const isGlobalCompletion = false; // We don't want the editor to offer any other completions, such as snippets, inside a comment.
     const isNewIdentifierLocation = true; // The user may type in a path that doesn't yet exist, creating a "new identifier" with respect to the collection of identifiers the server is aware of.
     const entries = pathCompletions.map(({ name, kind, span, extension }): CompletionEntry => ({ name, kind, kindModifiers: kindModifiersFromExtension(extension), sortText: SortText.LocationPriority, replacementSpan: span }));
-    return { isGlobalCompletion, isMemberCompletion: false, isNewIdentifierLocation, entries };
+    return {
+        isGlobalCompletion,
+        isMemberCompletion: false,
+        isNewIdentifierLocation,
+        entries,
+        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
+    };
 }
 function kindModifiersFromExtension(extension: Extension | undefined): ScriptElementKindModifier {
     switch (extension) {
