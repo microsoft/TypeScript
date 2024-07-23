@@ -49271,11 +49271,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function checkSingleIdentifier(node: Node) {
             const nodeLinks = getNodeLinks(node);
-            nodeLinks.calculatedFlags |= NodeCheckFlags.ConstructorReference | NodeCheckFlags.CapturedBlockScopedBinding | NodeCheckFlags.BlockScopedBindingInLoop;
-            if (isIdentifier(node) && isExpressionNodeOrShorthandPropertyAssignmentName(node) && !(isPropertyAccessExpression(node.parent) && node.parent.name === node)) {
-                const s = getResolvedSymbol(node);
-                if (s && s !== unknownSymbol) {
-                    checkIdentifierCalculateNodeCheckFlags(node, s);
+            nodeLinks.calculatedFlags |= NodeCheckFlags.ConstructorReference;
+            if (isIdentifier(node)) {
+                nodeLinks.calculatedFlags |= NodeCheckFlags.BlockScopedBindingInLoop | NodeCheckFlags.CapturedBlockScopedBinding; // Can't set on all arbitrary nodes (these nodes have this flag set by `checkSingleBlockScopeBinding` only)
+                if (isExpressionNodeOrShorthandPropertyAssignmentName(node) && !(isPropertyAccessExpression(node.parent) && node.parent.name === node)) {
+                    const s = getResolvedSymbol(node);
+                    if (s && s !== unknownSymbol) {
+                        checkIdentifierCalculateNodeCheckFlags(node, s);
+                    }
                 }
             }
         }
