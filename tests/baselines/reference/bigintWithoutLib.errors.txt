@@ -26,42 +26,66 @@ bigintWithoutLib.ts(23,19): error TS2583: Cannot find name 'BigInt64Array'. Do y
 bigintWithoutLib.ts(24,19): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(25,19): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(26,19): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(32,19): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(32,40): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(33,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(34,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(34,36): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(34,40): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(34,44): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(35,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(35,39): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(35,46): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(35,53): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(36,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(27,15): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(27,35): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(27,39): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(27,43): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(28,15): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(28,35): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(28,39): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(28,43): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(28,57): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(29,15): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(30,15): error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(30,56): error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(36,19): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(36,40): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(37,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
 bigintWithoutLib.ts(38,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(38,36): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(38,40): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(38,44): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 bigintWithoutLib.ts(39,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(39,39): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(39,46): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(39,53): error TS2737: BigInt literals are not available when targeting lower than ES2020.
 bigintWithoutLib.ts(40,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(47,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(47,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(48,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(48,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(49,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(50,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(50,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(51,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(51,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(52,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(53,22): error TS2550: Property 'getBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(54,22): error TS2550: Property 'getBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(55,22): error TS2550: Property 'getBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(56,22): error TS2550: Property 'getBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
-bigintWithoutLib.ts(59,36): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
-bigintWithoutLib.ts(59,36): error TS2737: BigInt literals are not available when targeting lower than ES2020.
-bigintWithoutLib.ts(60,36): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
+bigintWithoutLib.ts(41,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(42,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(43,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(44,20): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(45,16): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(45,37): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(45,41): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(45,45): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(46,16): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(46,37): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(46,41): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(46,45): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(46,59): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(47,16): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(48,16): error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(48,58): error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(55,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(55,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(56,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(56,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(57,10): error TS2550: Property 'setBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(58,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(58,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(59,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(59,26): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(60,10): error TS2550: Property 'setBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(61,22): error TS2550: Property 'getBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(62,22): error TS2550: Property 'getBigInt64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(63,22): error TS2550: Property 'getBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(64,22): error TS2550: Property 'getBigUint64' does not exist on type 'DataView'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+bigintWithoutLib.ts(67,36): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
+bigintWithoutLib.ts(67,36): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+bigintWithoutLib.ts(68,36): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
 
 
-==== bigintWithoutLib.ts (61 errors) ====
+==== bigintWithoutLib.ts (85 errors) ====
     // Every line should error because these builtins are not declared
     
     // Test BigInt functions
@@ -144,6 +168,34 @@ bigintWithoutLib.ts(60,36): error TS2345: Argument of type 'bigint' is not assig
     bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
                       ~~~~~~~~~~~~~
 !!! error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+    bigIntArray = BigInt64Array.from([1n, 2n, 3n]);
+                  ~~~~~~~~~~~~~
+!!! error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+                                      ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+                                          ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+                                              ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+    bigIntArray = BigInt64Array.from([1n, 2n, 3n], n => n * 10n);
+                  ~~~~~~~~~~~~~
+!!! error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+                                      ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+                                          ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+                                              ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+                                                            ~~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+    bigIntArray = BigInt64Array.from(['1', '2', '3']);
+                  ~~~~~~~~~~~~~
+!!! error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+    bigIntArray = BigInt64Array.from(['1', '2', '3'], s => BigInt(s));
+                  ~~~~~~~~~~~~~
+!!! error TS2583: Cannot find name 'BigInt64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+                                                           ~~~~~~
+!!! error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
     let len: number = bigIntArray.length;
     bigIntArray.length = 10;
     let arrayBufferLike: ArrayBufferView = bigIntArray;
@@ -190,6 +242,34 @@ bigintWithoutLib.ts(60,36): error TS2345: Argument of type 'bigint' is not assig
     bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
                        ~~~~~~~~~~~~~~
 !!! error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+    bigUintArray = BigUint64Array.from([1n, 2n, 3n]);
+                   ~~~~~~~~~~~~~~
+!!! error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+                                        ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+                                            ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+                                                ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+    bigUintArray = BigUint64Array.from([1n, 2n, 3n], n => n * 10n);
+                   ~~~~~~~~~~~~~~
+!!! error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+                                        ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+                                            ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+                                                ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+                                                              ~~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+    bigUintArray = BigUint64Array.from(['1', '2', '3']);
+                   ~~~~~~~~~~~~~~
+!!! error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+    bigUintArray = BigUint64Array.from(['1', '2', '3'], s => BigInt(s));
+                   ~~~~~~~~~~~~~~
+!!! error TS2583: Cannot find name 'BigUint64Array'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+                                                             ~~~~~~
+!!! error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
     len = bigIntArray.length;
     bigIntArray.length = 10;
     arrayBufferLike = bigIntArray;

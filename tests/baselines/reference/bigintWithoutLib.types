@@ -357,6 +357,114 @@ bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
 >3 : 3
 >  : ^
 
+bigIntArray = BigInt64Array.from([1n, 2n, 3n]);
+>bigIntArray = BigInt64Array.from([1n, 2n, 3n]) : any
+>                                               : ^^^
+>bigIntArray : BigInt64Array
+>            : ^^^^^^^^^^^^^
+>BigInt64Array.from([1n, 2n, 3n]) : any
+>                                 : ^^^
+>BigInt64Array.from : any
+>                   : ^^^
+>BigInt64Array : any
+>              : ^^^
+>from : any
+>     : ^^^
+>[1n, 2n, 3n] : bigint[]
+>             : ^^^^^^^^
+>1n : 1n
+>   : ^^
+>2n : 2n
+>   : ^^
+>3n : 3n
+>   : ^^
+
+bigIntArray = BigInt64Array.from([1n, 2n, 3n], n => n * 10n);
+>bigIntArray = BigInt64Array.from([1n, 2n, 3n], n => n * 10n) : any
+>                                                             : ^^^
+>bigIntArray : BigInt64Array
+>            : ^^^^^^^^^^^^^
+>BigInt64Array.from([1n, 2n, 3n], n => n * 10n) : any
+>                                               : ^^^
+>BigInt64Array.from : any
+>                   : ^^^
+>BigInt64Array : any
+>              : ^^^
+>from : any
+>     : ^^^
+>[1n, 2n, 3n] : bigint[]
+>             : ^^^^^^^^
+>1n : 1n
+>   : ^^
+>2n : 2n
+>   : ^^
+>3n : 3n
+>   : ^^
+>n => n * 10n : (n: any) => bigint
+>             : ^ ^^^^^^^^^^^^^^^^
+>n : any
+>  : ^^^
+>n * 10n : bigint
+>        : ^^^^^^
+>n : any
+>  : ^^^
+>10n : 10n
+>    : ^^^
+
+bigIntArray = BigInt64Array.from(['1', '2', '3']);
+>bigIntArray = BigInt64Array.from(['1', '2', '3']) : any
+>                                                  : ^^^
+>bigIntArray : BigInt64Array
+>            : ^^^^^^^^^^^^^
+>BigInt64Array.from(['1', '2', '3']) : any
+>                                    : ^^^
+>BigInt64Array.from : any
+>                   : ^^^
+>BigInt64Array : any
+>              : ^^^
+>from : any
+>     : ^^^
+>['1', '2', '3'] : string[]
+>                : ^^^^^^^^
+>'1' : "1"
+>    : ^^^
+>'2' : "2"
+>    : ^^^
+>'3' : "3"
+>    : ^^^
+
+bigIntArray = BigInt64Array.from(['1', '2', '3'], s => BigInt(s));
+>bigIntArray = BigInt64Array.from(['1', '2', '3'], s => BigInt(s)) : any
+>                                                                  : ^^^
+>bigIntArray : BigInt64Array
+>            : ^^^^^^^^^^^^^
+>BigInt64Array.from(['1', '2', '3'], s => BigInt(s)) : any
+>                                                    : ^^^
+>BigInt64Array.from : any
+>                   : ^^^
+>BigInt64Array : any
+>              : ^^^
+>from : any
+>     : ^^^
+>['1', '2', '3'] : string[]
+>                : ^^^^^^^^
+>'1' : "1"
+>    : ^^^
+>'2' : "2"
+>    : ^^^
+>'3' : "3"
+>    : ^^^
+>s => BigInt(s) : (s: any) => any
+>               : ^ ^^^^^^^^^^^^^
+>s : any
+>  : ^^^
+>BigInt(s) : any
+>          : ^^^
+>BigInt : any
+>       : ^^^
+>s : any
+>  : ^^^
+
 let len: number = bigIntArray.length;
 >len : number
 >    : ^^^^^^
@@ -551,6 +659,114 @@ bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
 >  : ^
 >3 : 3
 >  : ^
+
+bigUintArray = BigUint64Array.from([1n, 2n, 3n]);
+>bigUintArray = BigUint64Array.from([1n, 2n, 3n]) : any
+>                                                 : ^^^
+>bigUintArray : BigUint64Array
+>             : ^^^^^^^^^^^^^^
+>BigUint64Array.from([1n, 2n, 3n]) : any
+>                                  : ^^^
+>BigUint64Array.from : any
+>                    : ^^^
+>BigUint64Array : any
+>               : ^^^
+>from : any
+>     : ^^^
+>[1n, 2n, 3n] : bigint[]
+>             : ^^^^^^^^
+>1n : 1n
+>   : ^^
+>2n : 2n
+>   : ^^
+>3n : 3n
+>   : ^^
+
+bigUintArray = BigUint64Array.from([1n, 2n, 3n], n => n * 10n);
+>bigUintArray = BigUint64Array.from([1n, 2n, 3n], n => n * 10n) : any
+>                                                               : ^^^
+>bigUintArray : BigUint64Array
+>             : ^^^^^^^^^^^^^^
+>BigUint64Array.from([1n, 2n, 3n], n => n * 10n) : any
+>                                                : ^^^
+>BigUint64Array.from : any
+>                    : ^^^
+>BigUint64Array : any
+>               : ^^^
+>from : any
+>     : ^^^
+>[1n, 2n, 3n] : bigint[]
+>             : ^^^^^^^^
+>1n : 1n
+>   : ^^
+>2n : 2n
+>   : ^^
+>3n : 3n
+>   : ^^
+>n => n * 10n : (n: any) => bigint
+>             : ^ ^^^^^^^^^^^^^^^^
+>n : any
+>  : ^^^
+>n * 10n : bigint
+>        : ^^^^^^
+>n : any
+>  : ^^^
+>10n : 10n
+>    : ^^^
+
+bigUintArray = BigUint64Array.from(['1', '2', '3']);
+>bigUintArray = BigUint64Array.from(['1', '2', '3']) : any
+>                                                    : ^^^
+>bigUintArray : BigUint64Array
+>             : ^^^^^^^^^^^^^^
+>BigUint64Array.from(['1', '2', '3']) : any
+>                                     : ^^^
+>BigUint64Array.from : any
+>                    : ^^^
+>BigUint64Array : any
+>               : ^^^
+>from : any
+>     : ^^^
+>['1', '2', '3'] : string[]
+>                : ^^^^^^^^
+>'1' : "1"
+>    : ^^^
+>'2' : "2"
+>    : ^^^
+>'3' : "3"
+>    : ^^^
+
+bigUintArray = BigUint64Array.from(['1', '2', '3'], s => BigInt(s));
+>bigUintArray = BigUint64Array.from(['1', '2', '3'], s => BigInt(s)) : any
+>                                                                    : ^^^
+>bigUintArray : BigUint64Array
+>             : ^^^^^^^^^^^^^^
+>BigUint64Array.from(['1', '2', '3'], s => BigInt(s)) : any
+>                                                     : ^^^
+>BigUint64Array.from : any
+>                    : ^^^
+>BigUint64Array : any
+>               : ^^^
+>from : any
+>     : ^^^
+>['1', '2', '3'] : string[]
+>                : ^^^^^^^^
+>'1' : "1"
+>    : ^^^
+>'2' : "2"
+>    : ^^^
+>'3' : "3"
+>    : ^^^
+>s => BigInt(s) : (s: any) => any
+>               : ^ ^^^^^^^^^^^^^
+>s : any
+>  : ^^^
+>BigInt(s) : any
+>          : ^^^
+>BigInt : any
+>       : ^^^
+>s : any
+>  : ^^^
 
 len = bigIntArray.length;
 >len = bigIntArray.length : any
