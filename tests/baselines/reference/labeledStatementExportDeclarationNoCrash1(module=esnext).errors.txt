@@ -1,0 +1,18 @@
+labeledStatementExportDeclarationNoCrash1.ts(3,14): error TS1155: 'const' declarations must be initialized.
+labeledStatementExportDeclarationNoCrash1.ts(5,1): error TS1184: Modifiers cannot appear here.
+labeledStatementExportDeclarationNoCrash1.ts(5,14): error TS1155: 'const' declarations must be initialized.
+
+
+==== labeledStatementExportDeclarationNoCrash1.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/59372
+    
+    export const box: string
+                 ~~~
+!!! error TS1155: 'const' declarations must be initialized.
+    subTitle:
+    export const title: string
+    ~~~~~~
+!!! error TS1184: Modifiers cannot appear here.
+                 ~~~~~
+!!! error TS1155: 'const' declarations must be initialized.
+    

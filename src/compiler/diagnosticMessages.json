@@ -3915,9 +3915,28 @@
         "category": "Error",
         "code": 2868
     },
-    "Variable '{0}' is used but never initialized.": {
+    "Right operand of ?? is unreachable because the left operand is never nullish.": {
         "category": "Error",
         "code": 2869
+    },
+    "This binary expression is never nullish. Are you missing parentheses?": {
+        "category": "Error",
+        "code": 2870
+    },
+    "This expression is always nullish.": {
+        "category": "Error",
+        "code": 2871
+    },
+    "This kind of expression is always truthy.": {
+        "category": "Error",
+        "code": 2872
+    },
+    "This kind of expression is always falsy.": {
+        "category": "Error",
+        "code": 2873
+    },    "Variable '{0}' is used but never initialized.": {
+        "category": "Error",
+        "code": 2874
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

@@ -1,0 +1,73 @@
+predicateSemantics.ts(7,16): error TS2871: This expression is always nullish.
+predicateSemantics.ts(10,16): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(26,12): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(27,12): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(28,12): error TS2871: This expression is always nullish.
+predicateSemantics.ts(29,12): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(30,12): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(33,8): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(34,11): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(35,8): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(36,8): error TS2872: This kind of expression is always truthy.
+
+
+==== predicateSemantics.ts (11 errors) ====
+    declare let cond: any;
+    
+    // OK: One or other operand is possibly nullish
+    const test1 = (cond ? undefined : 32) ?? "possibly reached";
+    
+    // Not OK: Both operands nullish
+    const test2 = (cond ? undefined : null) ?? "always reached";
+                   ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
+    
+    // Not OK: Both operands non-nullish
+    const test3 = (cond ? 132 : 17) ?? "unreachable";
+                   ~~~~~~~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    
+    // Parens
+    const test4 = (cond ? (undefined) : (17)) ?? 42;
+    
+    // Should be OK (special case)
+    if (!!true) {
+    
+    }
+    
+    // Should be OK (special cases)
+    while (0) { }
+    while (1) { }
+    while (true) { }
+    while (false) { }
+    
+    const p5 = {} ?? null;
+               ~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    const p6 = 0 > 1 ?? null;
+               ~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    const p7 = null ?? null;
+               ~~~~
+!!! error TS2871: This expression is always nullish.
+    const p8 = (class foo { }) && null;
+               ~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    const p9 = (class foo { }) || null;
+               ~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    
+    // Outer expression tests
+    while ({} as any) { }
+           ~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    while ({} satisfies unknown) { }
+              ~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    while ((<any>({}))) { }
+           ~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    while ((({}))) { }
+           ~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
+    
