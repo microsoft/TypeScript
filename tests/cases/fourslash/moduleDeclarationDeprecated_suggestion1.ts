@@ -18,7 +18,7 @@
 
 goTo.file("a.ts")
 const diagnostics = test.ranges().map(range => ({
-    code: 1538,
+    code: 1540,
     message: "A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.",
     reportsDeprecated: true,
     range,
