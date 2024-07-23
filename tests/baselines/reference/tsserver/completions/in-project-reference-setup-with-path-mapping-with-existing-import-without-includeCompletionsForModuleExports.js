@@ -843,6 +843,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true
@@ -1321,6 +1326,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -1810,6 +1820,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -2312,6 +2327,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,

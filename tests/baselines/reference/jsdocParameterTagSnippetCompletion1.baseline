@@ -2763,6 +2763,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -3895,6 +3900,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -5014,6 +5024,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -6133,6 +6148,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -7252,6 +7272,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -8384,6 +8409,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -9503,6 +9533,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -10622,6 +10657,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -11741,6 +11781,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -12860,6 +12905,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -13979,6 +14029,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -15098,6 +15153,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -16217,6 +16277,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -17349,6 +17414,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -18468,6 +18538,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -19587,6 +19662,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -20706,6 +20786,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

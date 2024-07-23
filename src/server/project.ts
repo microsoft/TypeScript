@@ -1077,7 +1077,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition {
-        if (!newTypeAcquisition || !newTypeAcquisition.include) {
+        if (!newTypeAcquisition.enable || !newTypeAcquisition.include) {
             // Nothing to filter out, so just return as-is
             return newTypeAcquisition;
         }
@@ -1627,8 +1627,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     protected removeExistingTypings(include: string[]): string[] {
+        if (!include.length) return include;
         const existing = getAutomaticTypeDirectiveNames(this.getCompilerOptions(), this.directoryStructureHost);
-        return include.filter(i => !existing.includes(i));
+        return filter(include, i => !existing.includes(i));
     }
 
     private updateGraphWorker() {
@@ -2318,7 +2319,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     runWithTemporaryFileUpdate(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedFile: SourceFile) => void) {
         const originalProgram = this.program;
         const rootSourceFile = Debug.checkDefined(this.program?.getSourceFile(rootFile), "Expected file to be part of program");
-        const originalText = Debug.checkDefined(rootSourceFile.getText());
+        const originalText = Debug.checkDefined(rootSourceFile.getFullText());
 
         this.getScriptInfo(rootFile)?.editContent(0, originalText.length, updatedText);
         this.updateGraph();
@@ -2326,7 +2327,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             cb(this.program!, originalProgram, (this.program?.getSourceFile(rootFile))!);
         }
         finally {
-            this.getScriptInfo(rootFile)?.editContent(0, this.program!.getSourceFile(rootFile)!.getText().length, originalText);
+            this.getScriptInfo(rootFile)?.editContent(0, updatedText.length, originalText);
         }
     }
 

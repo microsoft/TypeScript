@@ -221,8 +221,8 @@ class C16 {
 >    : ^^^
 
     async * f() {
->f : () => AsyncGenerator<any, void, undefined>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : () => AsyncGenerator<any, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield * [];
 >yield * [] : any

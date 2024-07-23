@@ -16,16 +16,17 @@ function mapAsyncIterable<T, U, R = undefined>(
 >U : Symbol(U, Decl(discriminateWithOptionalProperty2.ts, 4, 28))
 >R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
 
-  iterable: AsyncGenerator<T, R, void> | AsyncIterable<T>,
+  iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>,
 >iterable : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 4, 47))
 >AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
 >T : Symbol(T, Decl(discriminateWithOptionalProperty2.ts, 4, 26))
 >R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
 >AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
 >T : Symbol(T, Decl(discriminateWithOptionalProperty2.ts, 4, 26))
+>R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
 
   callback: (value: T) => PromiseOrValue<U>,
->callback : Symbol(callback, Decl(discriminateWithOptionalProperty2.ts, 5, 58))
+>callback : Symbol(callback, Decl(discriminateWithOptionalProperty2.ts, 5, 77))
 >value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 6, 13))
 >T : Symbol(T, Decl(discriminateWithOptionalProperty2.ts, 4, 26))
 >PromiseOrValue : Symbol(PromiseOrValue, Decl(discriminateWithOptionalProperty2.ts, 0, 0))
@@ -70,7 +71,7 @@ function mapAsyncIterable<T, U, R = undefined>(
     try {
       return { value: await callback(result.value), done: false };
 >value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 18, 14))
->callback : Symbol(callback, Decl(discriminateWithOptionalProperty2.ts, 5, 58))
+>callback : Symbol(callback, Decl(discriminateWithOptionalProperty2.ts, 5, 77))
 >result.value : Symbol(IteratorYieldResult.value, Decl(lib.es2015.iterable.d.ts, --, --))
 >result : Symbol(result, Decl(discriminateWithOptionalProperty2.ts, 10, 27))
 >value : Symbol(IteratorYieldResult.value, Decl(lib.es2015.iterable.d.ts, --, --))

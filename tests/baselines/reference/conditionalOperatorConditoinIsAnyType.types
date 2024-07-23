@@ -4,12 +4,15 @@
 //Cond ? Expr1 : Expr2,  Cond is of any type, Expr1 and Expr2 have the same type
 var condAny: any;
 >condAny : any
+>        : ^^^
 
 var x: any;
 >x : any
+>  : ^^^
 
 var exprAny1: any;
 >exprAny1 : any
+>         : ^^^
 
 var exprBoolean1: boolean;
 >exprBoolean1 : boolean
@@ -29,6 +32,7 @@ var exprIsObject1: Object;
 
 var exprAny2: any;
 >exprAny2 : any
+>         : ^^^
 
 var exprBoolean2: boolean;
 >exprBoolean2 : boolean
@@ -49,14 +53,19 @@ var exprIsObject2: Object;
 //Cond is an any type variable
 condAny ? exprAny1 : exprAny2;
 >condAny ? exprAny1 : exprAny2 : any
+>                              : ^^^
 >condAny : any
+>        : ^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 condAny ? exprBoolean1 : exprBoolean2;
 >condAny ? exprBoolean1 : exprBoolean2 : boolean
 >                                      : ^^^^^^^
 >condAny : any
+>        : ^^^
 >exprBoolean1 : boolean
 >             : ^^^^^^^
 >exprBoolean2 : boolean
@@ -66,6 +75,7 @@ condAny ? exprNumber1 : exprNumber2;
 >condAny ? exprNumber1 : exprNumber2 : number
 >                                    : ^^^^^^
 >condAny : any
+>        : ^^^
 >exprNumber1 : number
 >            : ^^^^^^
 >exprNumber2 : number
@@ -75,6 +85,7 @@ condAny ? exprString1 : exprString2;
 >condAny ? exprString1 : exprString2 : string
 >                                    : ^^^^^^
 >condAny : any
+>        : ^^^
 >exprString1 : string
 >            : ^^^^^^
 >exprString2 : string
@@ -84,6 +95,7 @@ condAny ? exprIsObject1 : exprIsObject2;
 >condAny ? exprIsObject1 : exprIsObject2 : Object
 >                                        : ^^^^^^
 >condAny : any
+>        : ^^^
 >exprIsObject1 : Object
 >              : ^^^^^^
 >exprIsObject2 : Object
@@ -93,6 +105,7 @@ condAny ? exprString1 : exprBoolean1; // union
 >condAny ? exprString1 : exprBoolean1 : string | boolean
 >                                     : ^^^^^^^^^^^^^^^^
 >condAny : any
+>        : ^^^
 >exprString1 : string
 >            : ^^^^^^
 >exprBoolean1 : boolean
@@ -101,8 +114,11 @@ condAny ? exprString1 : exprBoolean1; // union
 //Cond is an any type literal
 null ? exprAny1 : exprAny2;
 >null ? exprAny1 : exprAny2 : any
+>                           : ^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 null ? exprBoolean1 : exprBoolean2;
 >null ? exprBoolean1 : exprBoolean2 : boolean
@@ -159,20 +175,27 @@ undefined ? exprString1 : exprBoolean1; // union
 //Cond is an any type expression
 x.doSomeThing() ? exprAny1 : exprAny2;
 >x.doSomeThing() ? exprAny1 : exprAny2 : any
+>                                      : ^^^
 >x.doSomeThing() : any
+>                : ^^^
 >x.doSomeThing : any
+>              : ^^^
 >x : any
 >  : ^^^
 >doSomeThing : any
 >            : ^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 x("x") ? exprBoolean1 : exprBoolean2;
 >x("x") ? exprBoolean1 : exprBoolean2 : boolean
 >                                     : ^^^^^^^
 >x("x") : any
+>       : ^^^
 >x : any
+>  : ^^^
 >"x" : "x"
 >    : ^^^
 >exprBoolean1 : boolean
@@ -184,8 +207,11 @@ x(x) ? exprNumber1 : exprNumber2;
 >x(x) ? exprNumber1 : exprNumber2 : number
 >                                 : ^^^^^^
 >x(x) : any
+>     : ^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 >exprNumber1 : number
 >            : ^^^^^^
 >exprNumber2 : number
@@ -195,7 +221,9 @@ x("x") ? exprString1 : exprString2;
 >x("x") ? exprString1 : exprString2 : string
 >                                   : ^^^^^^
 >x("x") : any
+>       : ^^^
 >x : any
+>  : ^^^
 >"x" : "x"
 >    : ^^^
 >exprString1 : string
@@ -207,7 +235,9 @@ x.doSomeThing() ? exprIsObject1 : exprIsObject2;
 >x.doSomeThing() ? exprIsObject1 : exprIsObject2 : Object
 >                                                : ^^^^^^
 >x.doSomeThing() : any
+>                : ^^^
 >x.doSomeThing : any
+>              : ^^^
 >x : any
 >  : ^^^
 >doSomeThing : any
@@ -221,7 +251,9 @@ x.doSomeThing() ? exprString1 : exprBoolean1; // union
 >x.doSomeThing() ? exprString1 : exprBoolean1 : string | boolean
 >                                             : ^^^^^^^^^^^^^^^^
 >x.doSomeThing() : any
+>                : ^^^
 >x.doSomeThing : any
+>              : ^^^
 >x : any
 >  : ^^^
 >doSomeThing : any
@@ -234,10 +266,15 @@ x.doSomeThing() ? exprString1 : exprBoolean1; // union
 //Results shoud be same as Expr1 and Expr2
 var resultIsAny1 = condAny ? exprAny1 : exprAny2;
 >resultIsAny1 : any
+>             : ^^^
 >condAny ? exprAny1 : exprAny2 : any
+>                              : ^^^
 >condAny : any
+>        : ^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 var resultIsBoolean1 = condAny ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean1 : boolean
@@ -245,6 +282,7 @@ var resultIsBoolean1 = condAny ? exprBoolean1 : exprBoolean2;
 >condAny ? exprBoolean1 : exprBoolean2 : boolean
 >                                      : ^^^^^^^
 >condAny : any
+>        : ^^^
 >exprBoolean1 : boolean
 >             : ^^^^^^^
 >exprBoolean2 : boolean
@@ -256,6 +294,7 @@ var resultIsNumber1 = condAny ? exprNumber1 : exprNumber2;
 >condAny ? exprNumber1 : exprNumber2 : number
 >                                    : ^^^^^^
 >condAny : any
+>        : ^^^
 >exprNumber1 : number
 >            : ^^^^^^
 >exprNumber2 : number
@@ -267,6 +306,7 @@ var resultIsString1 = condAny ? exprString1 : exprString2;
 >condAny ? exprString1 : exprString2 : string
 >                                    : ^^^^^^
 >condAny : any
+>        : ^^^
 >exprString1 : string
 >            : ^^^^^^
 >exprString2 : string
@@ -278,6 +318,7 @@ var resultIsObject1 = condAny ? exprIsObject1 : exprIsObject2;
 >condAny ? exprIsObject1 : exprIsObject2 : Object
 >                                        : ^^^^^^
 >condAny : any
+>        : ^^^
 >exprIsObject1 : Object
 >              : ^^^^^^
 >exprIsObject2 : Object
@@ -289,6 +330,7 @@ var resultIsStringOrBoolean1 = condAny ? exprString1 : exprBoolean1; // union
 >condAny ? exprString1 : exprBoolean1 : string | boolean
 >                                     : ^^^^^^^^^^^^^^^^
 >condAny : any
+>        : ^^^
 >exprString1 : string
 >            : ^^^^^^
 >exprBoolean1 : boolean
@@ -296,9 +338,13 @@ var resultIsStringOrBoolean1 = condAny ? exprString1 : exprBoolean1; // union
 
 var resultIsAny2 = null ? exprAny1 : exprAny2;
 >resultIsAny2 : any
+>             : ^^^
 >null ? exprAny1 : exprAny2 : any
+>                           : ^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 var resultIsBoolean2 = null ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean2 : boolean
@@ -388,15 +434,21 @@ var resultIsStringOrBoolean4 = [null, undefined] ? exprString1 : exprBoolean1; /
 
 var resultIsAny3 = x.doSomeThing() ? exprAny1 : exprAny2;
 >resultIsAny3 : any
+>             : ^^^
 >x.doSomeThing() ? exprAny1 : exprAny2 : any
+>                                      : ^^^
 >x.doSomeThing() : any
+>                : ^^^
 >x.doSomeThing : any
+>              : ^^^
 >x : any
 >  : ^^^
 >doSomeThing : any
 >            : ^^^
 >exprAny1 : any
+>         : ^^^
 >exprAny2 : any
+>         : ^^^
 
 var resultIsBoolean3 = x("x") ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean3 : boolean
@@ -404,7 +456,9 @@ var resultIsBoolean3 = x("x") ? exprBoolean1 : exprBoolean2;
 >x("x") ? exprBoolean1 : exprBoolean2 : boolean
 >                                     : ^^^^^^^
 >x("x") : any
+>       : ^^^
 >x : any
+>  : ^^^
 >"x" : "x"
 >    : ^^^
 >exprBoolean1 : boolean
@@ -418,8 +472,11 @@ var resultIsNumber3 = x(x) ? exprNumber1 : exprNumber2;
 >x(x) ? exprNumber1 : exprNumber2 : number
 >                                 : ^^^^^^
 >x(x) : any
+>     : ^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 >exprNumber1 : number
 >            : ^^^^^^
 >exprNumber2 : number
@@ -431,7 +488,9 @@ var resultIsString3 = x("x") ? exprString1 : exprString2;
 >x("x") ? exprString1 : exprString2 : string
 >                                   : ^^^^^^
 >x("x") : any
+>       : ^^^
 >x : any
+>  : ^^^
 >"x" : "x"
 >    : ^^^
 >exprString1 : string
@@ -445,7 +504,9 @@ var resultIsObject3 = x.doSomeThing() ? exprIsObject1 : exprIsObject2;
 >x.doSomeThing() ? exprIsObject1 : exprIsObject2 : Object
 >                                                : ^^^^^^
 >x.doSomeThing() : any
+>                : ^^^
 >x.doSomeThing : any
+>              : ^^^
 >x : any
 >  : ^^^
 >doSomeThing : any
@@ -461,7 +522,9 @@ var resultIsStringOrBoolean5 = x.doSomeThing() ? exprString1 : exprBoolean1; // 
 >x.doSomeThing() ? exprString1 : exprBoolean1 : string | boolean
 >                                             : ^^^^^^^^^^^^^^^^
 >x.doSomeThing() : any
+>                : ^^^
 >x.doSomeThing : any
+>              : ^^^
 >x : any
 >  : ^^^
 >doSomeThing : any

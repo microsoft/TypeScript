@@ -975,6 +975,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/src/a.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,

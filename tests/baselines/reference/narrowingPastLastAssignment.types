@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/narrowingPastLastAssignment.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 1,000
+
 === narrowingPastLastAssignment.ts ===
 function action(f: Function) {}
 >action : (f: Function) => void

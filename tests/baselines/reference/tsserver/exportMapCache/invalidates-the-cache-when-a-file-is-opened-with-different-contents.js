@@ -380,7 +380,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
@@ -655,7 +656,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true,
       "performanceData": {

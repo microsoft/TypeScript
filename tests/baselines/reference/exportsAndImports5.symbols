@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/es6/modules/exportsAndImports5.ts] ////
+
+=== a.ts ===
+export interface A { }
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+=== b.ts ===
+import { A } from "./a"
+>A : Symbol(A, Decl(b.ts, 0, 8))
+
+export function f(): A {
+>f : Symbol(f, Decl(b.ts, 0, 23))
+>A : Symbol(A, Decl(b.ts, 0, 8))
+
+    return {};
+}
+export { f as fV2 };
+>f : Symbol(f, Decl(b.ts, 0, 23))
+>fV2 : Symbol(fV2, Decl(b.ts, 4, 8))
+

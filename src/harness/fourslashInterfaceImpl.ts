@@ -1797,6 +1797,7 @@ export interface ExpectedCompletionEntryObject {
     readonly labelDetails?: ExpectedCompletionEntryLabelDetails;
     readonly tags?: readonly ts.JSDocTagInfo[];
     readonly sortText?: ts.Completions.SortText;
+    readonly commitCharacters?: string[]; // If not specified, won't assert about this
 }
 
 export interface ExpectedCompletionEntryLabelDetails {
@@ -1820,6 +1821,7 @@ export interface VerifyCompletionsOptions {
     readonly excludes?: ArrayOrSingle<string>;
     readonly preferences?: ts.UserPreferences;
     readonly triggerCharacter?: ts.CompletionsTriggerCharacter;
+    readonly defaultCommitCharacters?: string[]; // Only tested if set
 }
 
 export interface VerifySignatureHelpOptions {

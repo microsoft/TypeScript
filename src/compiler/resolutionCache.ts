@@ -38,7 +38,6 @@ import {
     isDiskPathRoot,
     isEmittedFileOfProgram,
     isExternalModuleNameRelative,
-    isExternalOrCommonJsModule,
     isNodeModulesDirectory,
     isRootedDiskPath,
     isTraceEnabled,
@@ -779,7 +778,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         if (newProgram !== oldProgram) {
             cleanupLibResolutionWatching(newProgram);
             newProgram?.getSourceFiles().forEach(newFile => {
-                const expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations?.length ?? 0 : 0;
+                const expected = newFile.packageJsonLocations?.length ?? 0;
                 const existing = impliedFormatPackageJsons.get(newFile.resolvedPath) ?? emptyArray;
                 for (let i = existing.length; i < expected; i++) {
                     createFileWatcherOfAffectingLocation(newFile.packageJsonLocations![i], /*forResolution*/ false);

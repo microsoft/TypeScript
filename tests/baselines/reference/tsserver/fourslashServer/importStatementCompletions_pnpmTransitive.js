@@ -395,6 +395,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       }
     }

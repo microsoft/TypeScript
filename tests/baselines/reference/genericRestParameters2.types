@@ -64,14 +64,14 @@ declare let f04: (a: number, b: string, c: boolean, ...x: []) => void;
 >  : ^^
 
 declare let f10: (...x: [number, string, ...boolean[]]) => void;
->f10 : (x_0: number, x_1: string, ...x_2: boolean[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f10 : (x_0: number, x_1: string, ...x: boolean[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >x : [number, string, ...boolean[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare let f11: (a: number, ...x: [string, ...boolean[]]) => void;
->f11 : (a: number, x_0: string, ...x_1: boolean[]) => void
->    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f11 : (a: number, x_0: string, ...x: boolean[]) => void
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >a : number
 >  : ^^^^^^
 >x : [string, ...boolean[]]
@@ -108,8 +108,8 @@ declare const sn: [string, number];
 f10(42, "hello");
 >f10(42, "hello") : void
 >                 : ^^^^
->f10 : (x_0: number, x_1: string, ...x_2: boolean[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f10 : (x_0: number, x_1: string, ...x: boolean[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -118,8 +118,8 @@ f10(42, "hello");
 f10(42, "hello", true);
 >f10(42, "hello", true) : void
 >                       : ^^^^
->f10 : (x_0: number, x_1: string, ...x_2: boolean[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f10 : (x_0: number, x_1: string, ...x: boolean[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -130,8 +130,8 @@ f10(42, "hello", true);
 f10(42, "hello", true, false);
 >f10(42, "hello", true, false) : void
 >                              : ^^^^
->f10 : (x_0: number, x_1: string, ...x_2: boolean[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f10 : (x_0: number, x_1: string, ...x: boolean[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -144,8 +144,8 @@ f10(42, "hello", true, false);
 f10(t1[0], t1[1], t1[2], t1[3]);
 >f10(t1[0], t1[1], t1[2], t1[3]) : void
 >                                : ^^^^
->f10 : (x_0: number, x_1: string, ...x_2: boolean[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f10 : (x_0: number, x_1: string, ...x: boolean[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >t1[0] : number
 >      : ^^^^^^
 >t1 : [number, string, ...boolean[]]
@@ -174,8 +174,8 @@ f10(t1[0], t1[1], t1[2], t1[3]);
 f10(...t1);
 >f10(...t1) : void
 >           : ^^^^
->f10 : (x_0: number, x_1: string, ...x_2: boolean[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f10 : (x_0: number, x_1: string, ...x: boolean[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >...t1 : string | number | boolean
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : [number, string, ...boolean[]]
@@ -184,8 +184,8 @@ f10(...t1);
 f10(42, ...t2);
 >f10(42, ...t2) : void
 >               : ^^^^
->f10 : (x_0: number, x_1: string, ...x_2: boolean[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f10 : (x_0: number, x_1: string, ...x: boolean[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >...t2 : string | boolean
@@ -196,8 +196,8 @@ f10(42, ...t2);
 f10(42, "hello", ...t3);
 >f10(42, "hello", ...t3) : void
 >                        : ^^^^
->f10 : (x_0: number, x_1: string, ...x_2: boolean[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f10 : (x_0: number, x_1: string, ...x: boolean[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -210,8 +210,8 @@ f10(42, "hello", ...t3);
 f10(42, "hello", true, ...t4);
 >f10(42, "hello", true, ...t4) : void
 >                              : ^^^^
->f10 : (x_0: number, x_1: string, ...x_2: boolean[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f10 : (x_0: number, x_1: string, ...x: boolean[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -226,8 +226,8 @@ f10(42, "hello", true, ...t4);
 f10(42, "hello", true, ...t4, false, ...t3);
 >f10(42, "hello", true, ...t4, false, ...t3) : void
 >                                            : ^^^^
->f10 : (x_0: number, x_1: string, ...x_2: boolean[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f10 : (x_0: number, x_1: string, ...x: boolean[]) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -248,8 +248,8 @@ f10(42, "hello", true, ...t4, false, ...t3);
 f11(42, "hello");
 >f11(42, "hello") : void
 >                 : ^^^^
->f11 : (a: number, x_0: string, ...x_1: boolean[]) => void
->    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f11 : (a: number, x_0: string, ...x: boolean[]) => void
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -258,8 +258,8 @@ f11(42, "hello");
 f11(42, "hello", true);
 >f11(42, "hello", true) : void
 >                       : ^^^^
->f11 : (a: number, x_0: string, ...x_1: boolean[]) => void
->    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f11 : (a: number, x_0: string, ...x: boolean[]) => void
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -270,8 +270,8 @@ f11(42, "hello", true);
 f11(42, "hello", true, false);
 >f11(42, "hello", true, false) : void
 >                              : ^^^^
->f11 : (a: number, x_0: string, ...x_1: boolean[]) => void
->    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f11 : (a: number, x_0: string, ...x: boolean[]) => void
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -284,8 +284,8 @@ f11(42, "hello", true, false);
 f11(t1[0], t1[1], t1[2], t1[3]);
 >f11(t1[0], t1[1], t1[2], t1[3]) : void
 >                                : ^^^^
->f11 : (a: number, x_0: string, ...x_1: boolean[]) => void
->    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f11 : (a: number, x_0: string, ...x: boolean[]) => void
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >t1[0] : number
 >      : ^^^^^^
 >t1 : [number, string, ...boolean[]]
@@ -314,8 +314,8 @@ f11(t1[0], t1[1], t1[2], t1[3]);
 f11(...t1);
 >f11(...t1) : void
 >           : ^^^^
->f11 : (a: number, x_0: string, ...x_1: boolean[]) => void
->    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f11 : (a: number, x_0: string, ...x: boolean[]) => void
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >...t1 : string | number | boolean
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : [number, string, ...boolean[]]
@@ -324,8 +324,8 @@ f11(...t1);
 f11(42, ...t2);
 >f11(42, ...t2) : void
 >               : ^^^^
->f11 : (a: number, x_0: string, ...x_1: boolean[]) => void
->    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f11 : (a: number, x_0: string, ...x: boolean[]) => void
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >...t2 : string | boolean
@@ -336,8 +336,8 @@ f11(42, ...t2);
 f11(42, "hello", ...t3);
 >f11(42, "hello", ...t3) : void
 >                        : ^^^^
->f11 : (a: number, x_0: string, ...x_1: boolean[]) => void
->    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f11 : (a: number, x_0: string, ...x: boolean[]) => void
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -350,8 +350,8 @@ f11(42, "hello", ...t3);
 f11(42, "hello", true, ...t4);
 >f11(42, "hello", true, ...t4) : void
 >                              : ^^^^
->f11 : (a: number, x_0: string, ...x_1: boolean[]) => void
->    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f11 : (a: number, x_0: string, ...x: boolean[]) => void
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"
@@ -366,8 +366,8 @@ f11(42, "hello", true, ...t4);
 f11(42, "hello", true, ...t4, false, ...t3);
 >f11(42, "hello", true, ...t4, false, ...t3) : void
 >                                            : ^^^^
->f11 : (a: number, x_0: string, ...x_1: boolean[]) => void
->    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>f11 : (a: number, x_0: string, ...x: boolean[]) => void
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >42 : 42
 >   : ^^
 >"hello" : "hello"

@@ -1,4 +1,4 @@
-generatorTypeCheck7.ts(4,17): error TS2741: Property 'hello' is missing in type 'Generator<number, any, undefined>' but required in type 'WeirdIter'.
+generatorTypeCheck7.ts(4,17): error TS2741: Property 'hello' is missing in type 'Generator<number, any, any>' but required in type 'WeirdIter'.
 
 
 ==== generatorTypeCheck7.ts (1 errors) ====
@@ -7,5 +7,5 @@ generatorTypeCheck7.ts(4,17): error TS2741: Property 'hello' is missing in type 
     }
     function* g1(): WeirdIter { }
                     ~~~~~~~~~
-!!! error TS2741: Property 'hello' is missing in type 'Generator<number, any, undefined>' but required in type 'WeirdIter'.
+!!! error TS2741: Property 'hello' is missing in type 'Generator<number, any, any>' but required in type 'WeirdIter'.
 !!! related TS2728 generatorTypeCheck7.ts:2:5: 'hello' is declared here.

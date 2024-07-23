@@ -23,6 +23,7 @@ import {
     isArrayBindingElement,
     isArrayBindingOrAssignmentElement,
     isArrayBindingOrAssignmentPattern,
+    isBigIntLiteral,
     isBindingElement,
     isBindingName,
     isBindingOrAssignmentElement,
@@ -558,7 +559,7 @@ function createDestructuringPropertyAccess(flattenContext: FlattenContext, value
         const argumentExpression = ensureIdentifier(flattenContext, Debug.checkDefined(visitNode(propertyName.expression, flattenContext.visitor, isExpression)), /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
         return flattenContext.context.factory.createElementAccessExpression(value, argumentExpression);
     }
-    else if (isStringOrNumericLiteralLike(propertyName)) {
+    else if (isStringOrNumericLiteralLike(propertyName) || isBigIntLiteral(propertyName)) {
         const argumentExpression = factory.cloneNode(propertyName);
         return flattenContext.context.factory.createElementAccessExpression(value, argumentExpression);
     }

@@ -69,7 +69,6 @@ import {
     modifierToFlag,
     ModuleBlock,
     Node,
-    ObjectLiteralExpression,
     ObjectTypeDeclaration,
     Program,
     ReturnStatement,
@@ -294,7 +293,7 @@ export namespace DocumentHighlights {
 
     function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): readonly Node[] | undefined {
         // Types of node whose children might have modifiers.
-        const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration | ObjectLiteralExpression;
+        const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ObjectTypeDeclaration;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
@@ -332,11 +331,8 @@ export namespace DocumentHighlights {
                 return nodes;
 
             // Syntactically invalid positions that the parser might produce anyway
-            case SyntaxKind.ObjectLiteralExpression:
-                return undefined;
-
             default:
-                Debug.assertNever(container, "Invalid container kind.");
+                return undefined;
         }
     }
 

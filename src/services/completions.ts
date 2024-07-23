@@ -683,6 +683,14 @@ function resolvingModuleSpecifiers<TReturn>(
 }
 
 /** @internal */
+export function getDefaultCommitCharacters(isNewIdentifierLocation: boolean): string[] {
+    if (isNewIdentifierLocation) {
+        return [];
+    }
+    return [".", ",", ";"];
+}
+
+/** @internal */
 export function getCompletionsAtPosition(
     host: LanguageServiceHost,
     program: Program,
@@ -704,7 +712,14 @@ export function getCompletionsAtPosition(
     if (triggerCharacter === " ") {
         // `isValidTrigger` ensures we are at `import |`
         if (preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText) {
-            return { isGlobalCompletion: true, isMemberCompletion: false, isNewIdentifierLocation: true, isIncomplete: true, entries: [] };
+            return {
+                isGlobalCompletion: true,
+                isMemberCompletion: false,
+                isNewIdentifierLocation: true,
+                isIncomplete: true,
+                entries: [],
+                defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ true),
+            };
         }
         return undefined;
     }
@@ -887,7 +902,13 @@ function continuePreviousIncompleteResponse(
 }
 
 function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
-    return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+    return {
+        isGlobalCompletion: false,
+        isMemberCompletion: false,
+        isNewIdentifierLocation: false,
+        entries,
+        defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+    };
 }
 
 function getJSDocParameterCompletions(
@@ -1161,11 +1182,13 @@ function getJSDocParamAnnotation(
                             ? createSnippetPrinter({
                                 removeComments: true,
                                 module: options.module,
+                                moduleResolution: options.moduleResolution,
                                 target: options.target,
                             })
                             : createPrinter({
                                 removeComments: true,
                                 module: options.module,
+                                moduleResolution: options.moduleResolution,
                                 target: options.target,
                             });
                         setEmitFlags(typeNode, EmitFlags.SingleLine);
@@ -1210,6 +1233,7 @@ function specificKeywordCompletionInfo(entries: readonly CompletionEntry[], isNe
         isMemberCompletion: false,
         isNewIdentifierLocation,
         entries: entries.slice(),
+        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -1385,6 +1409,7 @@ function completionInfoFromData(
         isNewIdentifierLocation,
         optionalReplacementSpan: getOptionalReplacementSpan(location),
         entries,
+        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -1459,6 +1484,7 @@ function getExhaustiveCaseSnippets(
         const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,
+            moduleResolution: options.moduleResolution,
             target: options.target,
             newLine: getNewLineKind(newLineChar),
         });
@@ -1593,7 +1619,14 @@ function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: Sour
             kindModifiers: undefined,
             sortText: SortText.LocationPriority,
         };
-        return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: replacementSpan, entries: [entry] };
+        return {
+            isGlobalCompletion: false,
+            isMemberCompletion: true,
+            isNewIdentifierLocation: false,
+            optionalReplacementSpan: replacementSpan,
+            entries: [entry],
+            defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+        };
     }
     return;
 }
@@ -1619,6 +1652,7 @@ function getJSCompletionEntries(
                 kindModifiers: "",
                 sortText: SortText.JavascriptIdentifiers,
                 isFromUncheckedFile: true,
+                commitCharacters: [],
             }, compareCompletionEntries);
         }
     });
@@ -1630,7 +1664,13 @@ function completionNameForLiteral(sourceFile: SourceFile, preferences: UserPrefe
 }
 
 function createCompletionEntryForLiteral(sourceFile: SourceFile, preferences: UserPreferences, literal: string | number | PseudoBigInt): CompletionEntry {
-    return { name: completionNameForLiteral(sourceFile, preferences, literal), kind: ScriptElementKind.string, kindModifiers: ScriptElementKindModifier.none, sortText: SortText.LocationPriority };
+    return {
+        name: completionNameForLiteral(sourceFile, preferences, literal),
+        kind: ScriptElementKind.string,
+        kindModifiers: ScriptElementKindModifier.none,
+        sortText: SortText.LocationPriority,
+        commitCharacters: [],
+    };
 }
 
 function createCompletionEntry(
@@ -1720,7 +1760,7 @@ function createCompletionEntry(
     if (originIsResolvedExport(origin)) {
         sourceDisplay = [textPart(origin.moduleSpecifier)];
         if (importStatementCompletion) {
-            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importStatementCompletion, origin, useSemicolons, sourceFile, options, preferences));
+            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importStatementCompletion, origin, useSemicolons, sourceFile, program, preferences));
             isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined;
         }
     }
@@ -1860,9 +1900,11 @@ function createCompletionEntry(
 
     // Use a 'sortText' of 0' so that all symbol completion entries come before any other
     // entries (like JavaScript identifier entries).
+    const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location);
+    const commitCharacters = (kind === ScriptElementKind.warning || kind === ScriptElementKind.string) ? [] : undefined;
     return {
         name,
-        kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location),
+        kind,
         kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
         sortText,
         source,
@@ -1877,6 +1919,7 @@ function createCompletionEntry(
         isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         isImportStatementCompletion: !!importStatementCompletion || undefined,
         data,
+        commitCharacters,
         ...includeSymbol ? { symbol } : undefined,
     };
 }
@@ -1978,6 +2021,7 @@ function getEntryForMemberCompletion(
     const printer = createSnippetPrinter({
         removeComments: true,
         module: options.module,
+        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: false,
         newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
@@ -2204,6 +2248,7 @@ function getEntryForObjectLiteralMethodCompletion(
     const printer = createSnippetPrinter({
         removeComments: true,
         module: options.module,
+        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: false,
         newLine: getNewLineKind(getNewLineOrDefaultFromHost(host, formatContext?.options)),
@@ -2218,6 +2263,7 @@ function getEntryForObjectLiteralMethodCompletion(
     const signaturePrinter = createPrinter({
         removeComments: true,
         module: options.module,
+        moduleResolution: options.moduleResolution,
         target: options.target,
         omitTrailingSemicolon: true,
     });
@@ -2520,14 +2566,14 @@ function completionEntryDataToSymbolOriginInfo(data: CompletionEntryData, comple
     return unresolvedOrigin;
 }
 
-function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, options: CompilerOptions, preferences: UserPreferences) {
+function getInsertTextAndReplacementSpanForImportCompletion(name: string, importStatementCompletion: ImportStatementCompletionInfo, origin: SymbolOriginInfoResolvedExport, useSemicolons: boolean, sourceFile: SourceFile, program: Program, preferences: UserPreferences) {
     const replacementSpan = importStatementCompletion.replacementSpan;
     const quotedModuleSpecifier = escapeSnippetText(quote(sourceFile, preferences, origin.moduleSpecifier));
     const exportKind = origin.isDefaultExport ? ExportKind.Default :
         origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
         ExportKind.Named;
     const tabStop = preferences.includeCompletionsWithSnippetText ? "$1" : "";
-    const importKind = codefix.getImportKind(sourceFile, exportKind, options, /*forceImportKeyword*/ true);
+    const importKind = codefix.getImportKind(sourceFile, exportKind, program, /*forceImportKeyword*/ true);
     const isImportSpecifierTypeOnly = importStatementCompletion.couldBeTypeOnlyImportSpecifier;
     const topLevelTypeOnlyText = importStatementCompletion.isTopLevelTypeOnly ? ` ${tokenToString(SyntaxKind.TypeKeyword)} ` : " ";
     const importSpecifierTypeOnlyText = isImportSpecifierTypeOnly ? `${tokenToString(SyntaxKind.TypeKeyword)} ` : "";
@@ -2748,7 +2794,13 @@ export function getCompletionEntriesFromSymbols(
 function getLabelCompletionAtPosition(node: BreakOrContinueStatement): CompletionInfo | undefined {
     const entries = getLabelStatementCompletions(node);
     if (entries.length) {
-        return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+        return {
+            isGlobalCompletion: false,
+            isMemberCompletion: false,
+            isNewIdentifierLocation: false,
+            entries,
+            defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+        };
     }
 }
 

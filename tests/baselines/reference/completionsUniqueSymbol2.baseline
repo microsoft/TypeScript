@@ -360,6 +360,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }
