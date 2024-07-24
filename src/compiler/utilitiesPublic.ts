@@ -159,10 +159,8 @@ import {
     isKeyword,
     isModuleBlock,
     isNonNullExpression,
-    isNotEmittedStatement,
     isOmittedExpression,
     isParameter,
-    isPartiallyEmittedExpression,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyAssignment,
@@ -239,7 +237,6 @@ import {
     NodeFlags,
     NonNullChain,
     normalizePath,
-    NotEmittedStatement,
     NullLiteral,
     ObjectBindingOrAssignmentElement,
     ObjectBindingOrAssignmentPattern,
@@ -249,7 +246,6 @@ import {
     OptionalChainRoot,
     OuterExpressionKinds,
     ParameterDeclaration,
-    PartiallyEmittedExpression,
     pathIsRelative,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
@@ -258,7 +254,6 @@ import {
     PrivateIdentifierPropertyAccessExpression,
     PropertyAccessChain,
     PropertyAccessExpression,
-    PropertyDeclaration,
     PropertyName,
     QualifiedName,
     ScriptTarget,
@@ -1265,11 +1260,6 @@ export function getJSDocTags(node: Node): readonly JSDocTag[] {
     return getJSDocTagsWorker(node, /*noCache*/ false);
 }
 
-/** @internal */
-export function getJSDocTagsNoCache(node: Node): readonly JSDocTag[] {
-    return getJSDocTagsWorker(node, /*noCache*/ true);
-}
-
 /** Get the first JSDoc tag of a specified kind, or undefined if not present. */
 function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T, noCache?: boolean): T | undefined {
     return find(getJSDocTagsWorker(node, noCache), predicate);
@@ -1452,10 +1442,6 @@ export function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag
 //
 // All node tests in the following list should *not* reference parent pointers so that
 // they may be used with transformations.
-/** @internal */
-export function isNode(node: Node) {
-    return isNodeKind(node.kind);
-}
 
 /** @internal */
 export function isNodeKind(kind: SyntaxKind) {
@@ -1761,19 +1747,6 @@ export function isMethodOrAccessor(node: Node): node is MethodDeclaration | Acce
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor:
-            return true;
-        default:
-            return false;
-    }
-}
-
-/** @internal */
-export function isNamedClassElement(node: Node): node is MethodDeclaration | AccessorDeclaration | PropertyDeclaration {
-    switch (node.kind) {
-        case SyntaxKind.MethodDeclaration:
-        case SyntaxKind.GetAccessor:
-        case SyntaxKind.SetAccessor:
-        case SyntaxKind.PropertyDeclaration:
             return true;
         default:
             return false;
@@ -2114,12 +2087,6 @@ export function isAssertionExpression(node: Node): node is AssertionExpression {
         || kind === SyntaxKind.AsExpression;
 }
 
-/** @internal */
-export function isNotEmittedOrPartiallyEmittedNode(node: Node): node is NotEmittedStatement | PartiallyEmittedExpression {
-    return isNotEmittedStatement(node)
-        || isPartiallyEmittedExpression(node);
-}
-
 // Statement
 
 export function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
@@ -2139,8 +2106,7 @@ export function isIterationStatement(node: Node, lookInLabeledStatements: boolea
     return false;
 }
 
-/** @internal */
-export function isScopeMarker(node: Node) {
+function isScopeMarker(node: Node) {
     return isExportAssignment(node) || isExportDeclaration(node);
 }
 
@@ -2189,14 +2155,14 @@ export function isModuleBody(node: Node): node is ModuleBody {
         || kind === SyntaxKind.Identifier;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function isNamespaceBody(node: Node): node is NamespaceBody {
     const kind = node.kind;
     return kind === SyntaxKind.ModuleBlock
         || kind === SyntaxKind.ModuleDeclaration;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function isJSDocNamespaceBody(node: Node): node is JSDocNamespaceBody {
     const kind = node.kind;
     return kind === SyntaxKind.Identifier

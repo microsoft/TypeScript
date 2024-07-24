@@ -4,7 +4,7 @@
 // foo("");
 // ^^^
 // | ----------------------------------------------------------------------
-// | function foo<string>(t: string): typeof foo<string>
+// | function foo<string>(t: string): (t: string) => ...
 // | ----------------------------------------------------------------------
 
 [
@@ -79,28 +79,44 @@
           "kind": "space"
         },
         {
-          "text": "typeof",
-          "kind": "keyword"
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "t",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
         },
         {
           "text": " ",
           "kind": "space"
         },
         {
-          "text": "foo",
-          "kind": "functionName"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
           "text": "string",
           "kind": "keyword"
         },
         {
-          "text": ">",
+          "text": ")",
           "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "...",
+          "kind": "text"
         }
       ],
       "documentation": []

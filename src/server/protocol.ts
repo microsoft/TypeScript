@@ -311,6 +311,22 @@ export interface PerformanceData {
      * The time spent creating or updating the auto-import program, in milliseconds.
      */
     createAutoImportProviderProgramDurationMs?: number;
+    /**
+     * The time spent computing diagnostics, in milliseconds.
+     */
+    diagnosticsDuration?: FileDiagnosticPerformanceData[];
+}
+
+/**
+ * Time spent computing each kind of diagnostics, in milliseconds.
+ */
+export type DiagnosticPerformanceData = { [Kind in DiagnosticEventKind]?: number; };
+
+export interface FileDiagnosticPerformanceData extends DiagnosticPerformanceData {
+    /**
+     * The file for which the performance data is reported.
+     */
+    file: string;
 }
 
 /**
@@ -428,7 +444,7 @@ export interface OutliningSpansRequestFull extends FileRequest {
 /**
  * Response to OutliningSpansRequest request.
  *
- * @internal
+ * @internal @knipignore
  */
 export interface OutliningSpansResponseFull extends Response {
     body?: ts.OutliningSpan[];
@@ -1257,7 +1273,7 @@ export interface RenameFullRequest extends FileLocationRequest {
     readonly arguments: RenameRequestArgs;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export interface RenameFullResponse extends Response {
     readonly body: readonly RenameLocation[];
 }
@@ -2588,11 +2604,6 @@ export interface DiagnosticEventBody {
      * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
      */
     spans?: TextSpan[];
-
-    /**
-     * Time spent computing the diagnostics, in milliseconds.
-     */
-    duration?: number;
 }
 
 export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
@@ -2757,7 +2768,7 @@ export interface CloseFileWatcherEventBody {
     readonly id: number;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export type AnyEvent =
     | RequestCompletedEvent
     | DiagnosticEvent

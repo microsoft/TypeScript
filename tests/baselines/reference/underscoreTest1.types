@@ -236,11 +236,11 @@ var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
 >a.concat(b) : number[]
 >            : ^^^^^^^^
 >a.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
->         : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>         : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number[]
 >  : ^^^^^^^^
 >concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : number[]
 >  : ^^^^^^^^
 >[] : undefined[]
@@ -672,7 +672,7 @@ _([1.3, 2.1, 2.4]).groupBy((e: number, i?: number, list?: number[]) => Math.floo
 >_([1.3, 2.1, 2.4]).groupBy((e: number, i?: number, list?: number[]) => Math.floor(e)) : Dictionary<number[]>
 >                                                                                      : ^^^^^^^^^^^^^^^^^^^^
 >_([1.3, 2.1, 2.4]).groupBy : { (iterator?: Iterator_<number, any>, context?: any): Dictionary<number[]>; (propertyName: string): Dictionary<number[]>; }
->                           : ^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^           ^^^^^^   ^^^            ^^      ^^^           ^^^^^^   ^^^
+>                           : ^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_([1.3, 2.1, 2.4]) : Underscore.WrappedArray<number>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : Underscore.Static
@@ -686,7 +686,7 @@ _([1.3, 2.1, 2.4]).groupBy((e: number, i?: number, list?: number[]) => Math.floo
 >2.4 : 2.4
 >    : ^^^
 >groupBy : { (iterator?: Iterator_<number, any>, context?: any): Dictionary<number[]>; (propertyName: string): Dictionary<number[]>; }
->        : ^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^           ^^^^^^   ^^^            ^^      ^^^           ^^^^^^   ^^^
+>        : ^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(e: number, i?: number, list?: number[]) => Math.floor(e) : (e: number, i?: number, list?: number[]) => number
 >                                                          : ^ ^^      ^^ ^^^      ^^    ^^^        ^^^^^^^^^^^
 >e : number
@@ -2230,15 +2230,15 @@ _.chain([1, 2, 3, 200])
 >_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map(function (num) { return num * num }) : Underscore.ChainedArray<number>
 >                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map : <U>(iterator: Iterator_<number, U>, context?: any) => Underscore.ChainedArray<U>
->                                                                                                        : ^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>                                                                                                        : ^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert) : Underscore.ChainedArray<number>
 >                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap : (interceptor: (object: number[]) => void) => Underscore.ChainedArray<number>
->                                                                                    : ^           ^^^      ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^ 
+>                                                                                    : ^           ^^^      ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; }) : Underscore.ChainedArray<number>
 >                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.chain([1, 2, 3, 200])    .filter : (iterator: Iterator_<number, boolean>, context?: any) => Underscore.ChainedArray<number>
->                                   : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^ 
+>                                   : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.chain([1, 2, 3, 200]) : Underscore.ChainedArray<number>
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.chain : { <T>(list: T[]): Underscore.ChainedArray<T>; <T>(list: Dictionary<T>): Underscore.ChainedDictionary<T>; <T>(obj: T): Underscore.ChainedObject<T>; }
@@ -2260,7 +2260,7 @@ _.chain([1, 2, 3, 200])
 
     .filter(function (num) { return num % 2 == 0; })
 >filter : (iterator: Iterator_<number, boolean>, context?: any) => Underscore.ChainedArray<number>
->       : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^ 
+>       : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (num) { return num % 2 == 0; } : (num: number) => boolean
 >                                        : ^   ^^^^^^^^^^^^^^^^^^^^
 >num : number
@@ -2278,7 +2278,7 @@ _.chain([1, 2, 3, 200])
 
     .tap(<any>alert)
 >tap : (interceptor: (object: number[]) => void) => Underscore.ChainedArray<number>
->    : ^           ^^^      ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^ 
+>    : ^           ^^^      ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><any>alert : any
 >           : ^^^
 >alert : { (message?: any): void; (x: string): void; }
@@ -2286,7 +2286,7 @@ _.chain([1, 2, 3, 200])
 
     .map(function (num) { return num * num })
 >map : <U>(iterator: Iterator_<number, U>, context?: any) => Underscore.ChainedArray<U>
->    : ^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^ 
+>    : ^ ^^        ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (num) { return num * num } : (num: number) => number
 >                                    : ^   ^^^^^^^^^^^^^^^^^^^
 >num : number

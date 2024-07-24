@@ -796,9 +796,8 @@ function forEachAncestorProject<T>(
  * Goes through project's resolved project references and finds, creates or reloads project per kind
  * If project for this resolved reference exists its used immediately otherwise,
  * follows all references in order, deciding if references of the visited project can be loaded or not
- * @internal
  */
-export function forEachResolvedProjectReferenceProject<T>(
+function forEachResolvedProjectReferenceProject<T>(
     project: ConfiguredProject,
     fileName: string | undefined,
     cb: (child: ConfiguredProject, sentConfigFileDiag: boolean) => T | undefined,
@@ -1083,13 +1082,17 @@ function getHostWatcherMap<T>(): HostWatcherMap<T> {
     return { idToCallbacks: new Map(), pathToId: new Map() };
 }
 
+function getCanUseWatchEvents(service: ProjectService, canUseWatchEvents: boolean | undefined) {
+    return !!canUseWatchEvents && !!service.eventHandler && !!service.session;
+}
+
 function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseWatchEvents: boolean | undefined): WatchFactoryHost | undefined {
-    if (!canUseWatchEvents || !service.eventHandler || !service.session) return undefined;
+    if (!getCanUseWatchEvents(service, canUseWatchEvents)) return undefined;
     const watchedFiles = getHostWatcherMap<FileWatcherCallback>();
     const watchedDirectories = getHostWatcherMap<DirectoryWatcherCallback>();
     const watchedDirectoriesRecursive = getHostWatcherMap<DirectoryWatcherCallback>();
     let ids = 1;
-    service.session.addProtocolHandler(protocol.CommandTypes.WatchChange, req => {
+    service.session!.addProtocolHandler(protocol.CommandTypes.WatchChange, req => {
         onWatchChange((req as protocol.WatchChangeRequest).arguments);
         return { responseRequired: false };
     });
@@ -1327,6 +1330,7 @@ export class ProjectService {
     /** @internal */ verifyDocumentRegistry = noop;
     /** @internal */ verifyProgram: (project: Project) => void = noop;
     /** @internal */ onProjectCreation: (project: Project) => void = noop;
+    /** @internal */ canUseWatchEvents: boolean;
 
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
@@ -1396,6 +1400,7 @@ export class ProjectService {
                 log,
                 getDetailWatchInfo,
             );
+        this.canUseWatchEvents = getCanUseWatchEvents(this, opts.canUseWatchEvents);
         opts.incrementalVerifier?.(this);
     }
 

@@ -29,9 +29,8 @@ import {
  * @param classThis The identifier to use for the captured static `this` reference, usually with the name `_classThis`.
  * @param thisExpression Overrides the expression to use for the actual `this` reference. This can be used to provide an
  * expression that has already had its `EmitFlags` set or may have been tracked to prevent substitution.
- * @internal
  */
-export function createClassThisAssignmentBlock(factory: NodeFactory, classThis: Identifier, thisExpression = factory.createThis()): ClassThisAssignmentBlock {
+function createClassThisAssignmentBlock(factory: NodeFactory, classThis: Identifier, thisExpression = factory.createThis()): ClassThisAssignmentBlock {
     // produces:
     //
     //  static { _classThis = this; }

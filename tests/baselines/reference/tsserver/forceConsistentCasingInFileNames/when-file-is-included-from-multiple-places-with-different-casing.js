@@ -287,8 +287,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/src/struct.d.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -497,8 +496,7 @@ Info seq  [hh:mm:ss:mss] event:
               }
             ]
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -573,8 +571,7 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ],
-        "duration": *
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -583,7 +580,17 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 2
+        "request_seq": 2,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/src/struct.d.ts"
+            }
+          ]
+        }
       }
     }
 After running Immedidate callback:: count: 0
@@ -832,8 +839,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/src/struct.d.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -1050,8 +1056,7 @@ Info seq  [hh:mm:ss:mss] event:
               }
             ]
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -1126,8 +1131,7 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ],
-        "duration": *
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -1138,7 +1142,15 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "request_seq": 6,
         "performanceData": {
-          "updateGraphDurationMs": *
+          "updateGraphDurationMs": *,
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/src/struct.d.ts"
+            }
+          ]
         }
       }
     }
@@ -1366,8 +1378,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "syntaxDiag",
       "body": {
         "file": "/home/src/projects/project/src/struct.d.ts",
-        "diagnostics": [],
-        "duration": *
+        "diagnostics": []
       }
     }
 After running Timeout callback:: count: 0
@@ -1473,8 +1484,7 @@ Info seq  [hh:mm:ss:mss] event:
               }
             ]
           }
-        ],
-        "duration": *
+        ]
       }
     }
 After running Immedidate callback:: count: 1
@@ -1521,8 +1531,7 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "suggestion",
             "reportsUnnecessary": true
           }
-        ],
-        "duration": *
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -1533,7 +1542,15 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "request_seq": 10,
         "performanceData": {
-          "updateGraphDurationMs": *
+          "updateGraphDurationMs": *,
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "semanticDiag": *,
+              "suggestionDiag": *,
+              "file": "/home/src/projects/project/src/struct.d.ts"
+            }
+          ]
         }
       }
     }

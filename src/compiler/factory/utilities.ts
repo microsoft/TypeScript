@@ -17,8 +17,6 @@ import {
     BindingOrAssignmentPattern,
     BitwiseOperator,
     BitwiseOperatorOrHigher,
-    Block,
-    BooleanLiteral,
     CharacterCodes,
     CommaListExpression,
     compareStringsCaseSensitive,
@@ -53,10 +51,12 @@ import {
     getAllAccessorDeclarations,
     getEmitFlags,
     getEmitHelpers,
+    getEmitModuleFormatOfFileWorker,
     getEmitModuleKind,
     getESModuleInterop,
     getExternalModuleName,
     getExternalModuleNameFromPath,
+    getImpliedNodeFormatForEmitWorker,
     getJSDocType,
     getJSDocTypeTag,
     getModifiers,
@@ -78,7 +78,6 @@ import {
     isAssignmentExpression,
     isAssignmentOperator,
     isAssignmentPattern,
-    isBlock,
     isCommaListExpression,
     isComputedPropertyName,
     isDeclarationBindingElement,
@@ -91,10 +90,8 @@ import {
     isGeneratedPrivateIdentifier,
     isIdentifier,
     isInJSFile,
-    isLiteralExpression,
     isMemberName,
     isMinusToken,
-    isModifierKind,
     isObjectLiteralElementLike,
     isParenthesizedExpression,
     isPlusToken,
@@ -139,7 +136,6 @@ import {
     NodeArray,
     NodeFactory,
     nodeIsSynthesized,
-    NullLiteral,
     NumericLiteral,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
@@ -330,16 +326,6 @@ export function createForOfBindingStatement(factory: NodeFactory, node: ForIniti
     else {
         const updatedExpression = setTextRange(factory.createAssignment(node, boundValue), /*location*/ node);
         return setTextRange(factory.createExpressionStatement(updatedExpression), /*location*/ node);
-    }
-}
-
-/** @internal */
-export function insertLeadingStatement(factory: NodeFactory, dest: Statement, source: Statement): Block {
-    if (isBlock(dest)) {
-        return factory.updateBlock(dest, setTextRange(factory.createNodeArray([source, ...dest.statements]), dest.statements));
-    }
-    else {
-        return factory.createBlock(factory.createNodeArray([dest, source]), /*multiLine*/ true);
     }
 }
 
@@ -680,15 +666,6 @@ export function walkUpOuterExpressions(node: Expression, kinds = OuterExpression
 }
 
 /** @internal */
-export function skipAssertions(node: Expression): Expression;
-/** @internal */
-export function skipAssertions(node: Node): Node;
-/** @internal */
-export function skipAssertions(node: Node): Node {
-    return skipOuterExpressions(node, OuterExpressionKinds.Assertions);
-}
-
-/** @internal */
 export function startOnNewLine<T extends Node>(node: T): T {
     return setStartsOnNewLine(node, /*newLine*/ true);
 }
@@ -712,7 +689,7 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
     if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
         let namedBindings: NamedImportBindings | undefined;
         const moduleKind = getEmitModuleKind(compilerOptions);
-        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
+        if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || getImpliedNodeFormatForEmitWorker(sourceFile, compilerOptions) === ModuleKind.ESNext) {
             // use named imports
             const helpers = getEmitHelpers(sourceFile);
             if (helpers) {
@@ -761,18 +738,15 @@ export function createExternalHelpersImportDeclarationIfNeeded(nodeFactory: Node
     }
 }
 
-/** @internal */
-export function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactory, node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
+function getOrCreateExternalHelpersModuleNameIfNeeded(factory: NodeFactory, node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean, hasImportStarOrImportDefault?: boolean) {
     if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
         const externalHelpersModuleName = getExternalHelpersModuleName(node);
         if (externalHelpersModuleName) {
             return externalHelpersModuleName;
         }
 
-        const moduleKind = getEmitModuleKind(compilerOptions);
         let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
-            && moduleKind !== ModuleKind.System
-            && (moduleKind < ModuleKind.ES2015 || node.impliedNodeFormat === ModuleKind.CommonJS);
+            && getEmitModuleFormatOfFileWorker(node, compilerOptions) < ModuleKind.System;
         if (!create) {
             const helpers = getEmitHelpers(node);
             if (helpers) {
@@ -1116,7 +1090,7 @@ export function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) 
     }
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function canHaveIllegalType(node: Node): node is HasIllegalType {
     const kind = node.kind;
     return kind === SyntaxKind.Constructor
@@ -1181,16 +1155,6 @@ export function isQuestionOrPlusOrMinusToken(node: Node): node is QuestionToken 
 
 export function isModuleName(node: Node): node is ModuleName {
     return isIdentifier(node) || isStringLiteral(node);
-}
-
-/** @internal */
-export function isLiteralTypeLikeExpression(node: Node): node is NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression {
-    const kind = node.kind;
-    return kind === SyntaxKind.NullKeyword
-        || kind === SyntaxKind.TrueKeyword
-        || kind === SyntaxKind.FalseKeyword
-        || isLiteralExpression(node)
-        || isPrefixUnaryExpression(node);
 }
 
 function isExponentiationOperator(kind: SyntaxKind): kind is ExponentiationOperator {
@@ -1519,12 +1483,6 @@ function isExportOrDefaultKeywordKind(kind: SyntaxKind): kind is SyntaxKind.Expo
 export function isExportOrDefaultModifier(node: Node): node is ExportKeyword | DefaultKeyword {
     const kind = node.kind;
     return isExportOrDefaultKeywordKind(kind);
-}
-
-/** @internal */
-export function isNonExportDefaultModifier(node: Node): node is Exclude<Modifier, ExportKeyword | DefaultKeyword> {
-    const kind = node.kind;
-    return isModifierKind(kind) && !isExportOrDefaultKeywordKind(kind);
 }
 
 /**

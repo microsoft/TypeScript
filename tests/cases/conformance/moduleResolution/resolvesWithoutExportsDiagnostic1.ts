@@ -1,3 +1,4 @@
+// @module: preserve
 // @moduleResolution: bundler,node16
 // @strict: true
 // @noTypesAndSymbols: true

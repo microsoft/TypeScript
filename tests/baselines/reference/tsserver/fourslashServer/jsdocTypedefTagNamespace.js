@@ -325,49 +325,57 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "age",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "O",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "People",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Q",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "T",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "x",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "x1",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -375,6 +383,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -573,49 +586,57 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "age",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "O",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "People",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Q",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "T",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "x",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "x1",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -623,6 +644,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -821,49 +847,57 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "age",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "O",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "People",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Q",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "T",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "x",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "x1",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -871,6 +905,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

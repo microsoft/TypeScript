@@ -54,7 +54,7 @@ export * from "../transformers/generators.js";
 export * from "../transformers/module/module.js";
 export * from "../transformers/module/system.js";
 export * from "../transformers/module/esnextAnd2015.js";
-export * from "../transformers/module/node.js";
+export * from "../transformers/module/impliedNodeFormatDependent.js";
 export * from "../transformers/declarations/diagnostics.js";
 export * from "../transformers/declarations.js";
 export * from "../transformer.js";

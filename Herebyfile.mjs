@@ -565,6 +565,13 @@ export const checkFormat = task({
     run: () => exec(process.execPath, ["node_modules/dprint/bin.js", "check"], { ignoreStdout: true }),
 });
 
+export const knip = task({
+    name: "knip",
+    description: "Runs knip.",
+    dependencies: [generateDiagnostics],
+    run: () => exec(process.execPath, ["node_modules/knip/bin/knip.js", "--tags=+internal,-knipignore", "--exclude=duplicates,enumMembers", ...(cmdLineOptions.fix ? ["--fix"] : [])]),
+});
+
 const { main: cancellationToken, watch: watchCancellationToken } = entrypointBuildTask({
     name: "cancellation-token",
     project: "src/cancellationToken",

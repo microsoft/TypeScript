@@ -17,6 +17,7 @@ enum E { x }
 
 var a: any;
 >a : any
+>  : ^^^
 
 extractIndexer({
 >extractIndexer({    [a]: ""}) : string
@@ -30,6 +31,7 @@ extractIndexer({
 >[a] : string
 >    : ^^^^^^
 >a : any
+>  : ^^^
 >"" : ""
 >   : ^^
 

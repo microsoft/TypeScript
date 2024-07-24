@@ -149,15 +149,15 @@ exports.b = 10;
   "semanticDiagnosticsPerFile": [
     [
       "../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./b.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -284,15 +284,15 @@ exports.a = "hello";
   "semanticDiagnosticsPerFile": [
     [
       "../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./b.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -554,7 +554,7 @@ exports.a = "hello;
   "semanticDiagnosticsPerFile": [
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -677,7 +677,7 @@ No shapes updated in the builder::
   "semanticDiagnosticsPerFile": [
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "version": "FakeTSVersion",
@@ -788,7 +788,7 @@ exports.a = "hello";
   "semanticDiagnosticsPerFile": [
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "checkPending": true,
@@ -1157,7 +1157,7 @@ exports.a = "hello;
   "semanticDiagnosticsPerFile": [
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./c.ts",
@@ -1295,7 +1295,7 @@ exports.a = "hello";
   "semanticDiagnosticsPerFile": [
     [
       "./a.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./c.ts",

@@ -322,8 +322,7 @@ export interface SpanEntry {
     readonly fileName: string;
     readonly textSpan: TextSpan;
 }
-/** @internal */
-export function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
+function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
     return {
         kind,
         node: (node as NamedDeclaration).name || node,
@@ -884,8 +883,7 @@ function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSp
     return createTextSpanFromBounds(start, end);
 }
 
-/** @internal */
-export function getTextSpanOfEntry(entry: Entry) {
+function getTextSpanOfEntry(entry: Entry) {
     return entry.kind === EntryKind.Span ? entry.textSpan :
         getTextSpan(entry.node, entry.node.getSourceFile());
 }

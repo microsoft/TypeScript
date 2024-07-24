@@ -100,7 +100,7 @@ export default class Operation {
 >(result || []).concat(innerResult) : IValidationError[]
 >                                   : ^^^^^^^^^^^^^^^^^^
 >(result || []).concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
->                      : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>                      : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(result || []) : IValidationError[]
 >               : ^^^^^^^^^^^^^^^^^^
 >result || [] : IValidationError[]
@@ -110,7 +110,7 @@ export default class Operation {
 >[] : never[]
 >   : ^^^^^^^
 >concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
->       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >innerResult : any
             }
         }

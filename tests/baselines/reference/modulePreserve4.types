@@ -441,6 +441,23 @@ const g2 = require("./g"); // { default: 0 }
 >"./g" : "./g"
 >      : ^^^^^
 
+=== /main4.cjs ===
+exports.x = require("./g");
+>exports.x = require("./g") : typeof import("/g")
+>                           : ^^^^^^^^^^^^^^^^^^^
+>exports.x : typeof import("/g")
+>          : ^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("/main4")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>x : typeof import("/g")
+>  : ^^^^^^^^^^^^^^^^^^^
+>require("./g") : typeof import("/g")
+>               : ^^^^^^^^^^^^^^^^^^^
+>require : any
+>        : ^^^
+>"./g" : "./g"
+>      : ^^^^^
+
 === /dummy.ts ===
 
 export {}; // Silly test harness

@@ -1409,6 +1409,7 @@ export interface System {
      */
     watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
     watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
+    /**@internal */ preferNonRecursiveWatch?: boolean;
     resolvePath(path: string): string;
     fileExists(path: string): boolean;
     directoryExists(path: string): boolean;
@@ -1534,6 +1535,7 @@ export let sys: System = (() => {
             writeFile,
             watchFile,
             watchDirectory,
+            preferNonRecursiveWatch: !fsSupportsRecursiveFsWatch,
             resolvePath: path => _path.resolve(path),
             fileExists,
             directoryExists,
@@ -1602,7 +1604,7 @@ export let sys: System = (() => {
             setTimeout,
             clearTimeout,
             clearScreen: () => {
-                process.stdout.write("\x1Bc");
+                process.stdout.write("\x1B[2J\x1B[3J\x1B[H");
             },
             setBlocking: () => {
                 const handle = (process.stdout as any)?._handle as { setBlocking?: (value: boolean) => void; };
@@ -1994,7 +1996,7 @@ export let sys: System = (() => {
     return sys!;
 })();
 
-/** @internal */
+/** @internal @knipignore */
 export function setSys(s: System) {
     sys = s;
 }

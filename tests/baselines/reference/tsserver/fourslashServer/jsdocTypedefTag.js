@@ -361,109 +361,127 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -471,6 +489,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -537,98 +560,119 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -803,109 +847,127 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -913,6 +975,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1003,110 +1070,133 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1173,98 +1263,119 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1439,109 +1550,127 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -1549,6 +1678,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1639,110 +1773,133 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1809,98 +1966,119 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2075,109 +2253,127 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -2185,6 +2381,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2275,110 +2476,133 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2445,98 +2669,119 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2711,109 +2956,127 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -2821,6 +3084,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z11"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -2911,110 +3179,133 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Animal",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "animalName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "c",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Cat",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "catName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "d",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Dog",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "dogName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "numberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "NumberLike",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "p",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "Person",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personAge",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "personName",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

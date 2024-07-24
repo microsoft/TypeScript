@@ -54129,6 +54129,11 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/lib/a_49.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,

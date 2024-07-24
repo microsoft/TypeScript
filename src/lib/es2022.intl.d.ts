@@ -37,7 +37,7 @@ declare namespace Intl {
         containing(codeUnitIndex?: number): SegmentData;
 
         /** Returns an iterator to iterate over the segments. */
-        [Symbol.iterator](): IterableIterator<SegmentData>;
+        [Symbol.iterator](): BuiltinIterator<SegmentData, BuiltinIteratorReturn>;
     }
 
     interface SegmentData {

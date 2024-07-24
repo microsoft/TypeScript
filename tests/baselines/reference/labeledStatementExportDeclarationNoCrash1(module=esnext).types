@@ -1,0 +1,17 @@
+//// [tests/cases/conformance/statements/labeledStatements/labeledStatementExportDeclarationNoCrash1.ts] ////
+
+=== labeledStatementExportDeclarationNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59372
+
+export const box: string
+>box : string
+>    : ^^^^^^
+
+subTitle:
+>subTitle : any
+>         : ^^^
+
+export const title: string
+>title : string
+>      : ^^^^^^
+

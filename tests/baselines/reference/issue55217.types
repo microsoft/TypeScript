@@ -71,11 +71,11 @@ export const bug = <P extends ProductName>() => {
 >subproducts.map((_: DiscriminatedUnion) => null) : null[]
 >                                                 : ^^^^^^
 >subproducts.map : <U>(callbackfn: (value: DiscriminatedUnion<P, SubproductNameForProductName<P>>, index: number, array: DiscriminatedUnion<P, SubproductNameForProductName<P>>[]) => U, thisArg?: any) => U[]
->                : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>                : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >subproducts : DiscriminatedUnion<P, SubproductNameForProductName<P>>[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: DiscriminatedUnion<P, SubproductNameForProductName<P>>, index: number, array: DiscriminatedUnion<P, SubproductNameForProductName<P>>[]) => U, thisArg?: any) => U[]
->    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^  
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >(_: DiscriminatedUnion) => null : (_: DiscriminatedUnion) => null
 >                                : ^ ^^                  ^^^^^^^^^
 >_ : DiscriminatedUnion
