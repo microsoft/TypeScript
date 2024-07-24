@@ -155,7 +155,7 @@ function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: 
 }
 
 function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
-    const x1 = obj[key];  // Error
+    const x1 = obj[key];
     const x2 = obj && obj[key];
 }
 
@@ -166,8 +166,8 @@ class TableBaseEnum<
     InternalSpec extends Record<keyof PublicSpec, any>  | undefined = undefined> {
     m() {
         let iSpec = null! as InternalSpec;
-        iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
-        iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
+        iSpec[null! as keyof InternalSpec];
+        iSpec[null! as keyof PublicSpec];    // Error
         if (iSpec === undefined) {
             return;
         }
