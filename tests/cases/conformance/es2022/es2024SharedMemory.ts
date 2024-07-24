@@ -3,7 +3,7 @@
 // @noemit: true
 // @strict: true
 
-// ES2024 Atomics.wait was included in the ES2022 type file due to a mistake.
+// ES2024 Atomics.waitAsync was included in the ES2022 type file due to a mistake.
 // This test file checks if it fails successfully.
 // https://github.com/microsoft/TypeScript/pull/58573#issuecomment-2119347142
 
