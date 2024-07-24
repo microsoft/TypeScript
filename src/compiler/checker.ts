@@ -16044,7 +16044,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (needsMapper) {
                 const mapper = createTypeMapper(signature.typeParameters, typeArguments);
                 for (let i = 0; i < typeArguments.length; i++) {
-                    if (typeArguments[i] === signature.typeParameters[i]) {
+                    if (typeArguments[i] === signature.typeParameters[i] && getConstraintFromTypeParameter(typeArguments[i])) {
                         const clone = cloneTypeParameter(typeArguments[i]);
                         clone.mapper = combineTypeMappers(typeArguments[i].mapper, mapper);
                         typeArguments[i] = clone;
