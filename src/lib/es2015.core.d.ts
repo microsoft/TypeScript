@@ -542,38 +542,38 @@ interface StringConstructor {
     raw(template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]): string;
 }
 
-interface Int8Array {
+interface Int8Array<Buffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint8Array {
+interface Uint8Array<Buffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint8ClampedArray {
+interface Uint8ClampedArray<Buffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Int16Array {
+interface Int16Array<Buffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint16Array {
+interface Uint16Array<Buffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Int32Array {
+interface Int32Array<Buffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint32Array {
+interface Uint32Array<Buffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Float32Array {
+interface Float32Array<Buffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Float64Array {
+interface Float64Array<Buffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
