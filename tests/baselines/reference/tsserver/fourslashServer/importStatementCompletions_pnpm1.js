@@ -370,6 +370,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "11",
+            "source": "react",
             "insertText": "import { Component$1 } from \"react\";",
             "replacementSpan": {
               "start": {
@@ -381,14 +382,13 @@ Info seq  [hh:mm:ss:mss] response:
                 "offset": 11
               }
             },
-            "isSnippet": true,
-            "source": "react",
             "sourceDisplay": [
               {
                 "text": "react",
                 "kind": "text"
               }
             ],
+            "isSnippet": true,
             "isImportStatementCompletion": true,
             "data": {
               "exportName": "Component",

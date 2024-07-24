@@ -1047,8 +1047,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "dependency",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "dependency",

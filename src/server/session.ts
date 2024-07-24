@@ -2452,45 +2452,13 @@ export class Session<TMessage = string> implements EventSender {
         const prefix = args.prefix || "";
         const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
             if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                const {
-                    name,
-                    kind,
-                    kindModifiers,
-                    sortText,
-                    insertText,
-                    filterText,
-                    replacementSpan,
-                    hasAction,
-                    source,
-                    sourceDisplay,
-                    labelDetails,
-                    isSnippet,
-                    isRecommended,
-                    isPackageJsonImport,
-                    isImportStatementCompletion,
-                    data,
-                    commitCharacters,
-                } = entry;
-                const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
+                const convertedSpan = entry.replacementSpan ? toProtocolTextSpan(entry.replacementSpan, scriptInfo) : undefined;
                 // Use `hasAction || undefined` to avoid serializing `false`.
                 return {
-                    name,
-                    kind,
-                    kindModifiers,
-                    sortText,
-                    insertText,
-                    filterText,
+                    ...entry,
                     replacementSpan: convertedSpan,
-                    isSnippet,
-                    hasAction: hasAction || undefined,
-                    source,
-                    sourceDisplay,
-                    labelDetails,
-                    isRecommended,
-                    isPackageJsonImport,
-                    isImportStatementCompletion,
-                    data,
-                    commitCharacters,
+                    hasAction: entry.hasAction || undefined,
+                    symbol: undefined,
                 };
             }
         });

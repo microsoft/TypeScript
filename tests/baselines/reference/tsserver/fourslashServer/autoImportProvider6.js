@@ -1789,8 +1789,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@types/react/index",
+            "hasAction": true,
             "data": {
               "exportName": "Component",
               "exportMapKey": "9 * Component ",

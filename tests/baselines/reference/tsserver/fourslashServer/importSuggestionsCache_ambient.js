@@ -993,8 +993,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "ambient",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "ambient",
@@ -5399,8 +5399,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "ambient",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "ambient",
@@ -7551,8 +7551,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "ambient",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "ambient",
@@ -8306,8 +8306,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "ambient",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "ambient",

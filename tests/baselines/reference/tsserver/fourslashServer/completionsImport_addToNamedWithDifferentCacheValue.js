@@ -1134,8 +1134,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "../packages/mylib",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "../packages/mylib",
@@ -1154,8 +1154,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "../packages/mylib",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "../packages/mylib",
@@ -4978,8 +4978,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "mylib",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "mylib",

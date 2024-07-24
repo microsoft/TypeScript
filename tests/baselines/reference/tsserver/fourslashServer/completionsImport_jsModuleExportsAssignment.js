@@ -1060,8 +1060,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "changeDefaults",
               "exportMapKey": "14 * changeDefaults ",
@@ -1073,8 +1073,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "export=",
               "exportMapKey": "8 * defaults ",
@@ -1086,8 +1086,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "defaults",
               "exportMapKey": "8 * defaults ",
@@ -1099,8 +1099,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "getDefaults",
               "exportMapKey": "11 * getDefaults ",
@@ -1984,8 +1984,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "changeDefaults",
               "exportMapKey": "14 * changeDefaults ",
@@ -1997,8 +1997,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "export=",
               "exportMapKey": "8 * defaults ",
@@ -2010,8 +2010,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "alias",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "defaults",
               "exportMapKey": "8 * defaults ",
@@ -2023,8 +2023,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/third_party/marked/src/defaults",
+            "hasAction": true,
             "data": {
               "exportName": "getDefaults",
               "exportMapKey": "11 * getDefaults ",
