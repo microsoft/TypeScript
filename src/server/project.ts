@@ -775,7 +775,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         // As an optimization, don't hit the disks for files we already know don't exist
         // (because we're watching for their creation).
         const path = this.toPath(file);
-        return !this.isWatchedMissingFile(path) && this.directoryStructureHost.fileExists(file);
+        return !!this.projectService.getScriptInfoForPath(path) ||
+            (!this.isWatchedMissingFile(path) && this.directoryStructureHost.fileExists(file));
     }
 
     /** @internal */

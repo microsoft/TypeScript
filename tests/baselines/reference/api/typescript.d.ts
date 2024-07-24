@@ -3268,6 +3268,7 @@ declare namespace ts {
             private delayUpdateProjectsOfScriptInfoPath;
             private handleDeletedFile;
             private watchWildcardDirectory;
+            private onWildCardDirectoryWatcherInvoke;
             private delayUpdateProjectsFromParsedConfigOnConfigFileChange;
             private onConfigFileChanged;
             private removeProject;
@@ -3338,6 +3339,7 @@ declare namespace ts {
             private ensureProjectChildren;
             private cleanupConfiguredProjects;
             private cleanupProjectsAndScriptInfos;
+            private tryInvokeWildCardDirectories;
             openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
             private removeOrphanScriptInfos;
             private telemetryOnOpenFile;
