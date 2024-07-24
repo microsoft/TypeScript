@@ -341,6 +341,7 @@ import {
     getNamespaceDeclarationNode,
     getNewTargetContainer,
     getNonAugmentationDeclaration,
+    getNonModifierTokenPosOfNode,
     getNormalizedAbsolutePath,
     getObjectFlags,
     getOriginalNode,
@@ -46886,6 +46887,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (isIdentifier(node.name)) {
                 checkCollisionsForDeclarationName(node, node.name);
+                if (!(node.flags & (NodeFlags.Namespace | NodeFlags.GlobalAugmentation))) {
+                    const sourceFile = getSourceFileOfNode(node);
+                    const pos = getNonModifierTokenPosOfNode(node);
+                    const span = getSpanOfTokenAtPosition(sourceFile, pos);
+                    suggestionDiagnostics.add(
+                        createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.A_namespace_declaration_should_not_be_declared_using_the_module_keyword_Please_use_the_namespace_keyword_instead),
+                    );
+                }
             }
 
             checkExportsOnMergedDeclarations(node);
