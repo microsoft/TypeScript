@@ -16018,9 +16018,43 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createCanonicalSignature(signature: Signature) {
+        // Create an instantiation of the signature where each unconstrained type parameter is replaced with
+        // its original. When a generic class or interface is instantiated, each generic method in the class or
+        // interface is instantiated with a fresh set of cloned type parameters (which we need to handle scenarios
+        // where different generations of the same type parameter are in scope). This leads to a lot of new type
+        // identities, and potentially a lot of work comparing those identities, so here we create an instantiation
+        // that uses the original type identities for all unconstrained type parameters.
+        //
+        // Whenever a type parameter is replaced with its original other type parameters must be cloned
+        // and appropriate mapper must be associated with them. This is necessary to ensure that their constraints
+        // refer to those replacement type parameters.
+        let typeArguments: TypeParameter[] | undefined;
+        if (signature.typeParameters) {
+            typeArguments = [];
+            let needsMapper = false;
+            for (const tp of signature.typeParameters) {
+                if (tp.target && !getConstraintOfTypeParameter(tp.target)) {
+                    needsMapper = true;
+                    typeArguments.push(tp.target);
+                }
+                else {
+                    typeArguments.push(tp);
+                }
+            }
+            if (needsMapper) {
+                const mapper = createTypeMapper(signature.typeParameters, typeArguments);
+                for (let i = 0; i < typeArguments.length; i++) {
+                    if (typeArguments[i] === signature.typeParameters[i]) {
+                        const clone = cloneTypeParameter(typeArguments[i]);
+                        clone.mapper = combineTypeMappers(typeArguments[i].mapper, mapper);
+                        typeArguments[i] = clone;
+                    }
+                }
+            }
+        }
         return getSignatureInstantiation(
             signature,
-            signature.typeParameters,
+            typeArguments,
             isInJSFile(signature.declaration),
         );
     }
