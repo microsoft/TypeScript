@@ -135,6 +135,7 @@ Output::
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
+TSFILE: /src/project/outFile.js
 TSFILE: /src/project/outFile.tsbuildinfo
 lib/lib.d.ts
   Default library for target 'es5'
@@ -142,18 +143,25 @@ src/project/ky.d.ts
   Imported via 'ky' from file 'src/project/src/index.ts'
 src/project/src/index.ts
   Matched by include pattern 'src' in 'src/project/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/project/tsconfig.json'...
+
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+//// [/src/project/outFile.js] file written with same contents
 //// [/src/project/outFile.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./src/index.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/src/project/outFile.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./src/index.ts"
+  ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 67
 }
 

@@ -77,12 +77,16 @@ function child2() {
 
 
 //// [/src/child/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./child.ts","./child2.ts"],"version":"FakeTSVersion"}
 
 //// [/src/child/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./child.ts",
+    "./child2.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 63
 }
 
 
@@ -98,8 +102,48 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/child/tsconfig.json' is up to date because newest input 'src/child/child.ts' is older than output 'src/child/child.js'
+[[90mHH:MM:SS AM[0m] Project 'src/child/tsconfig.json' is out of date because buildinfo file 'src/child/tsconfig.tsbuildinfo' indicates that file 'src/child/child2.ts' was root file of compilation but not any more.
 
-exitCode:: ExitStatus.Success
+[[90mHH:MM:SS AM[0m] Building project '/src/child/tsconfig.json'...
 
+======== Resolving module '../child/child2' from '/src/child/child.ts'. ========
+Module resolution kind is not specified, using 'Node10'.
+Loading module as file / folder, candidate module location '/src/child/child2', target file types: TypeScript, Declaration.
+File '/src/child/child2.ts' does not exist.
+File '/src/child/child2.tsx' does not exist.
+File '/src/child/child2.d.ts' does not exist.
+Directory '/src/child/child2' does not exist, skipping all lookups in it.
+Loading module as file / folder, candidate module location '/src/child/child2', target file types: JavaScript.
+File '/src/child/child2.js' does not exist.
+File '/src/child/child2.jsx' does not exist.
+Directory '/src/child/child2' does not exist, skipping all lookups in it.
+======== Module name '../child/child2' was not resolved. ========
+[96msrc/child/child.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS2307: [0mCannot find module '../child/child2' or its corresponding type declarations.
+
+[7m1[0m import { child2 } from "../child/child2";
+[7m [0m [91m                       ~~~~~~~~~~~~~~~~~[0m
+
+lib/lib.d.ts
+  Default library for target 'es5'
+src/child/child.ts
+  Matched by default include pattern '**/*'
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
+//// [/src/child/child.js] file written with same contents
+//// [/src/child/tsconfig.tsbuildinfo]
+{"root":["./child.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/src/child/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./child.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 63
+}
 

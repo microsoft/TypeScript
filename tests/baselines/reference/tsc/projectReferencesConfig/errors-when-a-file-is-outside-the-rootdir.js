@@ -60,7 +60,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/alpha/bin/tsconfig.tsbuildinfo]
-{"fileNames":["../../lib/lib.d.ts","../../beta/b.ts","../src/a.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3360792065-export { }","signature":"-3531856636-export {};\n"},{"version":"-5654511483-import * as b from '../../beta/b'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/a.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","../../beta/b.ts","../src/a.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3360792065-export { }","signature":"-3531856636-export {};\n"},{"version":"-5654511483-import * as b from '../../beta/b'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/a.d.ts","errors":true,"version":"FakeTSVersion"}
 
 //// [/alpha/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -117,8 +117,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
     ]
   },
   "latestChangedDtsFile": "./src/a.d.ts",
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 898
+  "size": 912
 }
 
 //// [/beta/b.d.ts]

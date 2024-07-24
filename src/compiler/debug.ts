@@ -61,6 +61,7 @@ import {
     LiteralType,
     map,
     MatchingKeys,
+    maxBy,
     ModifierFlags,
     Node,
     NodeArray,
@@ -78,11 +79,11 @@ import {
     SignatureFlags,
     SnippetKind,
     SortedReadonlyArray,
-    stableSort,
     Symbol,
     SymbolFlags,
     symbolName,
     SyntaxKind,
+    toSorted,
     TransformFlags,
     Type,
     TypeFacts,
@@ -435,7 +436,7 @@ export namespace Debug {
             }
         }
 
-        const sorted = stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
+        const sorted = toSorted<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
         enumMemberCache.set(enumObject, sorted);
         return sorted;
     }
@@ -1126,7 +1127,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
         function renderGraph() {
             const columnCount = columnWidths.length;
-            const laneCount = nodes.reduce((x, n) => Math.max(x, n.lane), 0) + 1;
+            const laneCount = maxBy(nodes, 0, n => n.lane) + 1;
             const lanes: string[] = fill(Array(laneCount), "");
             const grid: (FlowGraphNode | undefined)[][] = columnWidths.map(() => Array(laneCount));
             const connectors: Connection[][] = columnWidths.map(() => fill(Array(laneCount), 0));

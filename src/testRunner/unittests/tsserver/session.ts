@@ -141,6 +141,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
 
             expect(session.executeCommand(req)).to.deep.equal({
                 responseRequired: false,
+                performanceData: undefined,
             });
             expect(lastSent).to.deep.equal({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -350,7 +351,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             };
             const command = "test";
 
-            session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true);
+            session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true, /*performanceData*/ undefined);
 
             expect(lastSent).to.deep.equal({
                 seq: 0,
@@ -470,7 +471,7 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
         };
         const command = "test";
 
-        session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true);
+        session.doOutput(body, command, /*reqSeq*/ 0, /*success*/ true, /*performanceData*/ undefined);
 
         expect(session.lastSent).to.deep.equal({
             seq: 0,
@@ -541,11 +542,11 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
                 response = this.executeCommand(msg).response as ts.server.protocol.Response;
             }
             catch (e) {
-                this.doOutput(/*info*/ undefined, msg.command, msg.seq, /*success*/ false, e.toString());
+                this.doOutput(/*info*/ undefined, msg.command, msg.seq, /*success*/ false, /*performanceData*/ undefined, e.toString());
                 return;
             }
             if (response) {
-                this.doOutput(response, msg.command, msg.seq, /*success*/ true);
+                this.doOutput(response, msg.command, msg.seq, /*success*/ true, /*performanceData*/ undefined);
             }
         }
 

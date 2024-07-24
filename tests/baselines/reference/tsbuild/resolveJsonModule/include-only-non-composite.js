@@ -81,11 +81,14 @@ exports.default = hello_json_1.default.hello;
 
 
 //// [/src/dist/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../src/index.ts"],"version":"FakeTSVersion"}
 
 //// [/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../src/index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 54
 }
 

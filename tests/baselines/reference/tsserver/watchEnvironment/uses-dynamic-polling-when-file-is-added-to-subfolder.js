@@ -160,7 +160,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/username/project/src/index.ts ProjectRoot
 Info seq  [hh:mm:ss:mss] 		Projects: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -220,7 +227,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": ".ts",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
       "responseRequired": true
     }
@@ -309,9 +317,13 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": ".ts",
             "sortText": "11"
           }
-        ]
+        ],
+        "defaultCommitCharacters": []
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

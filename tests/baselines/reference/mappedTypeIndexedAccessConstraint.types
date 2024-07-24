@@ -191,8 +191,8 @@ type PartMappings = SetOptional<Mappings, "foo">;
 >             : ^^^^^^^^^^^^
 
 const mapper: { [K in keyof PartMappings]: (o: MapperArgs<K>) => PartMappings[K] } = {
->mapper : { "12": (o: MapperArgs<"12">) => PartMappings["12"]; 42: (o: MapperArgs<42>) => PartMappings[42]; foo?: ((o: MapperArgs<"foo">) => PartMappings["foo"]) | undefined; }
->       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^             ^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^             ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^ ^^^^^^^^^^^^^^^^
+>mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
+>       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : MapperArgs<K>
 >  : ^^^^^^^^^^^^^
 >{    foo: ({ v, i }) => v.length + i > 4,    "12": ({ v, i }) => Number(v) + i,    42: ({ v, i }) => `${v}${i}`,} : { foo: ({ v, i }: MapperArgs<"foo">) => boolean; "12": ({ v, i }: MapperArgs<"12">) => number; 42: ({ v, i }: MapperArgs<42>) => string; }
@@ -264,8 +264,8 @@ const resolveMapper1 = <K extends keyof typeof mapper>(
 >               : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^
 ><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key](o) : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K]
 >                                                                                : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^
->mapper : { "12": (o: MapperArgs<"12">) => PartMappings["12"]; 42: (o: MapperArgs<42>) => PartMappings[42]; foo?: ((o: MapperArgs<"foo">) => PartMappings["foo"]) | undefined; }
->       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^             ^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^             ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^ ^^^^^^^^^^^^^^^^
+>mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
+>       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     key: K, o: MapperArgs<K>) => mapper[key](o);  // Error
 >key : K
@@ -275,9 +275,9 @@ const resolveMapper1 = <K extends keyof typeof mapper>(
 >mapper[key](o) : PartMappings[K]
 >               : ^^^^^^^^^^^^^^^
 >mapper[key] : ((o: MapperArgs<K>) => PartMappings[K]) | undefined
->            : ^^ ^^^^^^^^^^^^^^^^^^^^             ^ ^^^^^^^^^^^^^
->mapper : { "12": (o: MapperArgs<"12">) => PartMappings["12"]; 42: (o: MapperArgs<42>) => PartMappings[42]; foo?: ((o: MapperArgs<"foo">) => PartMappings["foo"]) | undefined; }
->       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^             ^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^             ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^ ^^^^^^^^^^^^^^^^
+>            : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
+>       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
 >    : ^
 >o : MapperArgs<K>
@@ -288,8 +288,8 @@ const resolveMapper2 = <K extends keyof typeof mapper>(
 >               : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key]?.(o) : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
 >                                                                                  : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->mapper : { "12": (o: MapperArgs<"12">) => PartMappings["12"]; 42: (o: MapperArgs<42>) => PartMappings[42]; foo?: ((o: MapperArgs<"foo">) => PartMappings["foo"]) | undefined; }
->       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^             ^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^             ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^ ^^^^^^^^^^^^^^^^
+>mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
+>       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     key: K, o: MapperArgs<K>) => mapper[key]?.(o)
 >key : K
@@ -299,9 +299,9 @@ const resolveMapper2 = <K extends keyof typeof mapper>(
 >mapper[key]?.(o) : PartMappings[K] | undefined
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapper[key] : ((o: MapperArgs<K>) => PartMappings[K]) | undefined
->            : ^^ ^^^^^^^^^^^^^^^^^^^^             ^ ^^^^^^^^^^^^^
->mapper : { "12": (o: MapperArgs<"12">) => PartMappings["12"]; 42: (o: MapperArgs<42>) => PartMappings[42]; foo?: ((o: MapperArgs<"foo">) => PartMappings["foo"]) | undefined; }
->       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^             ^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^             ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^ ^^^^^^^^^^^^^^^^
+>            : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
+>       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
 >    : ^
 >o : MapperArgs<K>

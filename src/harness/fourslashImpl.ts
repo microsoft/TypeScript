@@ -1,3 +1,4 @@
+import sourceMapSupport from "source-map-support";
 import * as fakes from "./_namespaces/fakes.js";
 import * as FourSlashInterface from "./_namespaces/FourSlashInterface.js";
 import * as Harness from "./_namespaces/Harness.js";
@@ -1023,7 +1024,7 @@ export class TestState {
         }
 
         if (ts.hasProperty(options, "isGlobalCompletion") && actualCompletions.isGlobalCompletion !== options.isGlobalCompletion) {
-            this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
+            this.raiseError(`Expected 'isGlobalCompletion' to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
         }
 
         if (ts.hasProperty(options, "optionalReplacementSpan")) {
@@ -1031,6 +1032,14 @@ export class TestState {
                 actualCompletions.optionalReplacementSpan && actualCompletions.optionalReplacementSpan,
                 options.optionalReplacementSpan && ts.createTextSpanFromRange(options.optionalReplacementSpan),
                 "Expected 'optionalReplacementSpan' properties to match",
+            );
+        }
+
+        if (ts.hasProperty(options, "defaultCommitCharacters")) {
+            assert.deepEqual(
+                actualCompletions.defaultCommitCharacters?.sort(),
+                options.defaultCommitCharacters?.sort(),
+                "Expected 'defaultCommitCharacters' properties to match",
             );
         }
 
@@ -1180,6 +1189,13 @@ export class TestState {
         assert.equal(actual.isSnippet, expected.isSnippet, `At entry ${actual.name}: Expected 'isSnippet' properties to match`);
         assert.equal(actual.source, expected.source, `At entry ${actual.name}: Expected 'source' values to match`);
         assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, `At entry ${actual.name}: Expected 'sortText' properties to match`);
+        if (ts.hasProperty(expected, "commitCharacters")) {
+            assert.deepEqual(
+                actual.commitCharacters?.sort(),
+                expected.commitCharacters?.sort(),
+                `At entry ${actual.name}: Expected 'commitCharacters' values to match`,
+            );
+        }
         if (expected.sourceDisplay && actual.sourceDisplay) {
             assert.equal(ts.displayPartsToString(actual.sourceDisplay), expected.sourceDisplay, `At entry ${actual.name}: Expected 'sourceDisplay' properties to match`);
         }
@@ -1605,7 +1621,7 @@ export class TestState {
             }
         }
         let pos = 0;
-        const sortedDetails = ts.stableSort(details, (a, b) => ts.compareValues(a.location, b.location));
+        const sortedDetails = ts.toSorted(details, (a, b) => ts.compareValues(a.location, b.location));
         if (!canDetermineContextIdInline) {
             // Assign contextIds
             sortedDetails.forEach(({ span, type }) => {
@@ -1799,13 +1815,44 @@ export class TestState {
         this.testDiagnostics(expected, diagnostics, "error");
     }
 
-    public getSemanticDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]) {
-        const diagnostics = this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
+    public getSemanticDiagnostics(): ts.Diagnostic[] {
+        return this.languageService.getSemanticDiagnostics(this.activeFile.fileName);
+    }
+
+    public verifySemanticDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]) {
+        const diagnostics = this.getSemanticDiagnostics();
         this.testDiagnostics(expected, diagnostics, "error");
     }
 
     public getSuggestionDiagnostics(expected: readonly FourSlashInterface.Diagnostic[]): void {
         this.testDiagnostics(expected, this.languageService.getSuggestionDiagnostics(this.activeFile.fileName), "suggestion");
+    }
+
+    public getRegionSemanticDiagnostics(
+        ranges: ts.TextRange[],
+        expectedDiagnostics: readonly FourSlashInterface.Diagnostic[] | undefined,
+        expectedRanges: ts.TextRange[] | undefined,
+    ) {
+        const diagnosticsResult = this.languageService.getRegionSemanticDiagnostics(this.activeFile.fileName, ranges);
+        if (diagnosticsResult && expectedDiagnostics) {
+            this.testDiagnostics(expectedDiagnostics, diagnosticsResult.diagnostics, "error");
+        }
+        else if (diagnosticsResult !== expectedDiagnostics) {
+            if (expectedDiagnostics) this.raiseError("Expected diagnostics to be defined.");
+            else {assert.deepEqual(
+                    diagnosticsResult!.diagnostics,
+                    expectedDiagnostics,
+                    "Expected diagnostics to be undefined.",
+                );}
+        }
+
+        if (expectedRanges && diagnosticsResult) {
+            const spans = expectedRanges.map(range => ({ start: range.pos, length: range.end - range.pos }));
+            assert.deepEqual(diagnosticsResult.spans, spans);
+        }
+        else if (expectedRanges && !diagnosticsResult) {
+            this.raiseError("Expected spans to be defined.");
+        }
     }
 
     private testDiagnostics(expected: readonly FourSlashInterface.Diagnostic[], diagnostics: readonly ts.Diagnostic[], category: string) {
@@ -2642,17 +2689,12 @@ export class TestState {
         if (info === undefined) return "No completion info.";
         const { entries } = info;
 
-        function pad(s: string, length: number) {
-            return s + new Array(length - s.length + 1).join(" ");
-        }
-        function max<T>(arr: T[], selector: (x: T) => number): number {
-            return arr.reduce((prev, x) => Math.max(prev, selector(x)), 0);
-        }
-        const longestNameLength = max(entries, m => m.name.length);
-        const longestKindLength = max(entries, m => m.kind.length);
+        const longestNameLength = ts.maxBy(entries, 0, m => m.name.length);
+        const longestKindLength = ts.maxBy(entries, 0, m => m.kind.length);
         entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
-        const membersString = entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source === undefined ? "" : m.source}`).join("\n");
-        Harness.IO.log(membersString);
+
+        const formattedEntries = entries.map(m => `${m.name.padEnd(longestNameLength)} ${m.kind.padEnd(longestKindLength)} ${m.kindModifiers} ${m.isRecommended ? "recommended " : ""}${m.source ?? ""}`);
+        Harness.IO.log(formattedEntries.join("\n"));
     }
 
     public printContext() {
@@ -4633,22 +4675,9 @@ function runCode(code: string, state: TestState, fileName: string): void {
     const generatedFile = ts.changeExtension(fileName, ".js");
     const wrappedCode = `(function(ts, test, goTo, config, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled, ignoreInterpolations) {${code}\n//# sourceURL=${ts.getBaseFileName(generatedFile)}\n})`;
 
-    type SourceMapSupportModule = typeof import("source-map-support") & {
-        // TODO(rbuckton): This is missing from the DT definitions and needs to be added.
-        resetRetrieveHandlers(): void;
-    };
-
     // Provide the content of the current test to 'source-map-support' so that it can give us the correct source positions
     // for test failures.
-    let sourceMapSupportModule: SourceMapSupportModule | undefined;
-    try {
-        sourceMapSupportModule = require("source-map-support");
-    }
-    catch {
-        // do nothing
-    }
-
-    sourceMapSupportModule?.install({
+    sourceMapSupport.install({
         retrieveFile: path => {
             return path === generatedFile ? wrappedCode :
                 undefined!;
@@ -4674,7 +4703,7 @@ function runCode(code: string, state: TestState, fileName: string): void {
         throw err;
     }
     finally {
-        sourceMapSupportModule?.resetRetrieveHandlers();
+        sourceMapSupport.resetRetrieveHandlers();
     }
 }
 

@@ -48,6 +48,20 @@ export class Test {
     public setTypesRegistry(map: ts.MapLike<void>): void {
         this.state.setTypesRegistry(map);
     }
+
+    public getSemanticDiagnostics(): Diagnostic[] {
+        return this.state.getSemanticDiagnostics().map<Diagnostic>(tsDiag => ({
+            message: ts.flattenDiagnosticMessageText(tsDiag.messageText, "\n"),
+            range: tsDiag.start ? {
+                fileName: this.state.activeFile.fileName,
+                pos: tsDiag.start,
+                end: tsDiag.start + tsDiag.length!,
+            } : undefined,
+            code: tsDiag.code,
+            reportsUnnecessary: tsDiag.reportsUnnecessary ? true : undefined,
+            reportsDeprecated: !!tsDiag.reportsDeprecated ? true : undefined,
+        }));
+    }
 }
 
 export class Config {
@@ -590,7 +604,15 @@ export class Verify extends VerifyNegatable {
     }
 
     public getSemanticDiagnostics(expected: readonly Diagnostic[]) {
-        this.state.getSemanticDiagnostics(expected);
+        this.state.verifySemanticDiagnostics(expected);
+    }
+
+    public getRegionSemanticDiagnostics(
+        ranges: ts.TextRange[],
+        expectedDiagnostics: readonly Diagnostic[],
+        expectedRanges: ts.TextRange[] | undefined,
+    ) {
+        this.state.getRegionSemanticDiagnostics(ranges, expectedDiagnostics, expectedRanges);
     }
 
     public getSuggestionDiagnostics(expected: readonly Diagnostic[]) {
@@ -1099,7 +1121,7 @@ export namespace Completion {
     ].map(keywordEntry);
 
     export function sorted(entries: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
-        return ts.stableSort(entries, compareExpectedCompletionEntries);
+        return ts.toSorted(entries, compareExpectedCompletionEntries);
     }
 
     // If you want to use a function like `globalsPlus`, that function needs to sort
@@ -1775,6 +1797,7 @@ export interface ExpectedCompletionEntryObject {
     readonly labelDetails?: ExpectedCompletionEntryLabelDetails;
     readonly tags?: readonly ts.JSDocTagInfo[];
     readonly sortText?: ts.Completions.SortText;
+    readonly commitCharacters?: string[]; // If not specified, won't assert about this
 }
 
 export interface ExpectedCompletionEntryLabelDetails {
@@ -1798,6 +1821,7 @@ export interface VerifyCompletionsOptions {
     readonly excludes?: ArrayOrSingle<string>;
     readonly preferences?: ts.UserPreferences;
     readonly triggerCharacter?: ts.CompletionsTriggerCharacter;
+    readonly defaultCommitCharacters?: string[]; // Only tested if set
 }
 
 export interface VerifySignatureHelpOptions {

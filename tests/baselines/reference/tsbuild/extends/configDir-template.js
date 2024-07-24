@@ -181,12 +181,16 @@ exports.z = 10;
 
 
 //// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../main.ts","../src/secondary.ts"],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/myproject/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../main.ts",
+    "../src/secondary.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 71
 }
 
 //// [/home/src/projects/myproject/outDir/types/sometype.js]

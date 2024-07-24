@@ -139,7 +139,7 @@ export type ReadableIncrementalBuildInfoDiagnosticOfFile = [file: string, diagno
 export type ReadableIncrementalBuildInfoDiagnostic = [file: string, "not cached or not changed"] | ReadableIncrementalBuildInfoDiagnosticOfFile;
 export type ReadableIncrementalBuildInfoEmitDiagnostic = ReadableIncrementalBuildInfoDiagnosticOfFile;
 export type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
-export type ReadableIncrementalBuilderInfoFilePendingEmit = [original: string | [string], emitKind: ReadableBuilderFileEmit];
+export type ReadableIncrementalBuilderInfoFilePendingEmit = [original: string | [file: string] | [file: string, emitKind: ts.BuilderFileEmit], emitKind: ReadableBuilderFileEmit];
 export type ReadableIncrementalBuildInfoEmitSignature = string | [file: string, signature: ts.EmitSignature | []];
 export type ReadableIncrementalBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo, "impliedFormat"> & {
     impliedFormat: string | undefined;
@@ -181,8 +181,8 @@ export type ReadableIncrementalMultiFileEmitBuildInfo =
         | "referencedMap"
         | "semanticDiagnosticsPerFile"
         | "emitDiagnosticsPerFile"
-        | "affectedFilesPendingEmit"
         | "changeFileSet"
+        | "affectedFilesPendingEmit"
         | "emitSignatures"
     >
     & ReadableIncrementalBuildInfoBase
@@ -276,8 +276,8 @@ function generateBuildInfoBaseline(sys: ts.System, buildInfoPath: string, buildI
             referencedMap: toMapOfReferencedSet(buildInfo.referencedMap),
             semanticDiagnosticsPerFile: toReadableIncrementalBuildInfoDiagnostic(buildInfo.semanticDiagnosticsPerFile),
             emitDiagnosticsPerFile: toReadableIncrementalBuildInfoEmitDiagnostic(buildInfo.emitDiagnosticsPerFile),
-            affectedFilesPendingEmit: buildInfo.affectedFilesPendingEmit?.map(value => toReadableIncrementalBuilderInfoFilePendingEmit(value, fullEmitForOptions!)),
             changeFileSet: buildInfo.changeFileSet?.map(toFileName),
+            affectedFilesPendingEmit: buildInfo.affectedFilesPendingEmit?.map(value => toReadableIncrementalBuilderInfoFilePendingEmit(value, fullEmitForOptions!)),
             emitSignatures: buildInfo.emitSignatures?.map(s =>
                 ts.isNumber(s) ?
                     toFileName(s) :
@@ -345,7 +345,11 @@ function generateBuildInfoBaseline(sys: ts.System, buildInfoPath: string, buildI
         fullEmitForOptions: ts.BuilderFileEmit,
     ): ReadableIncrementalBuilderInfoFilePendingEmit {
         return [
-            ts.isNumber(value) ? toFileName(value) : [toFileName(value[0])],
+            ts.isNumber(value) ?
+                toFileName(value) :
+                !value[1] ?
+                [toFileName(value[0])] :
+                [toFileName(value[0]), value[1]],
             toReadableBuilderFileEmit(ts.toBuilderFileEmit(value, fullEmitForOptions)),
         ];
     }
@@ -356,7 +360,11 @@ function generateBuildInfoBaseline(sys: ts.System, buildInfoPath: string, buildI
             if (emit & ts.BuilderFileEmit.Js) addFlags("Js");
             if (emit & ts.BuilderFileEmit.JsMap) addFlags("JsMap");
             if (emit & ts.BuilderFileEmit.JsInlineMap) addFlags("JsInlineMap");
-            if (emit & ts.BuilderFileEmit.Dts) addFlags("Dts");
+            if ((emit & ts.BuilderFileEmit.Dts) === ts.BuilderFileEmit.Dts) addFlags("Dts");
+            else {
+                if (emit & ts.BuilderFileEmit.DtsEmit) addFlags("DtsEmit");
+                if (emit & ts.BuilderFileEmit.DtsErrors) addFlags("DtsErrors");
+            }
             if (emit & ts.BuilderFileEmit.DtsMap) addFlags("DtsMap");
         }
         return (result || "None") as ReadableBuilderFileEmit;

@@ -143,11 +143,16 @@ function multiply(a, b) { return a * b; }
 
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./anothermodule.ts","./index.ts","./some_decl.d.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./anothermodule.ts",
+    "./index.ts",
+    "./some_decl.d.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 89
 }
 

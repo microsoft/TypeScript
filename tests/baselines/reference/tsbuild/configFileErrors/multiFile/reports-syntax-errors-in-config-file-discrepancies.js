@@ -30,11 +30,8 @@ CleanBuild:
     "composite": true,
     "declaration": true
   },
-  "changeFileSet": [
-    "../lib/lib.d.ts",
-    "./a.ts",
-    "./b.ts"
-  ],
+  "latestChangedDtsFile": "FakeFileName",
+  "errors": true,
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -64,10 +61,7 @@ IncrementalBuild:
   "options": {
     "composite": true
   },
-  "changeFileSet": [
-    "../lib/lib.d.ts",
-    "./a.ts",
-    "./b.ts"
-  ],
+  "latestChangedDtsFile": "FakeFileName",
+  "errors": true,
   "version": "FakeTSVersion"
 }

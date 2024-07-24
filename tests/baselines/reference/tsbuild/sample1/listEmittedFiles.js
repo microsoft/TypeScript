@@ -99,14 +99,14 @@ export const m = mod;
 Output::
 /a/lib/tsc --b tests --listEmittedFiles
 TSFILE: /user/username/projects/sample1/core/anotherModule.js
-TSFILE: /user/username/projects/sample1/core/anotherModule.d.ts.map
 TSFILE: /user/username/projects/sample1/core/anotherModule.d.ts
+TSFILE: /user/username/projects/sample1/core/anotherModule.d.ts.map
 TSFILE: /user/username/projects/sample1/core/index.js
-TSFILE: /user/username/projects/sample1/core/index.d.ts.map
 TSFILE: /user/username/projects/sample1/core/index.d.ts
+TSFILE: /user/username/projects/sample1/core/index.d.ts.map
 TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
-TSFILE: /user/username/projects/sample1/logic/index.js.map
 TSFILE: /user/username/projects/sample1/logic/index.js
+TSFILE: /user/username/projects/sample1/logic/index.js.map
 TSFILE: /user/username/projects/sample1/logic/index.d.ts
 TSFILE: /user/username/projects/sample1/logic/tsconfig.tsbuildinfo
 TSFILE: /user/username/projects/sample1/tests/index.js
@@ -421,11 +421,11 @@ export class someClass { }
 Output::
 /a/lib/tsc --b tests --listEmittedFiles
 TSFILE: /user/username/projects/sample1/core/index.js
-TSFILE: /user/username/projects/sample1/core/index.d.ts.map
 TSFILE: /user/username/projects/sample1/core/index.d.ts
+TSFILE: /user/username/projects/sample1/core/index.d.ts.map
 TSFILE: /user/username/projects/sample1/core/tsconfig.tsbuildinfo
-TSFILE: /user/username/projects/sample1/logic/index.js.map
 TSFILE: /user/username/projects/sample1/logic/index.js
+TSFILE: /user/username/projects/sample1/logic/index.js.map
 TSFILE: /user/username/projects/sample1/logic/tsconfig.tsbuildinfo
 TSFILE: /user/username/projects/sample1/tests/index.js
 TSFILE: /user/username/projects/sample1/tests/tsconfig.tsbuildinfo

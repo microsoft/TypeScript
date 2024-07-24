@@ -126,12 +126,15 @@ var library_1 = require("../Library/library");
 
 
 //// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./app.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./app.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 47
 }
 
 
@@ -316,8 +319,20 @@ Output::
 
 
 
-//// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/sample1/App/app.js] file written with same contents
+//// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo]
+{"root":["./app.ts"],"errors":true,"version":"FakeTSVersion"}
+
+//// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./app.ts"
+  ],
+  "errors": true,
+  "version": "FakeTSVersion",
+  "size": 61
+}
+
 
 
 Program root files: [
@@ -472,8 +487,18 @@ Output::
 
 
 //// [/user/username/projects/sample1/App/app.js] file written with same contents
-//// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo] file written with same contents
-//// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo]
+{"root":["./app.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/sample1/App/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./app.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 47
+}
+
 
 
 Program root files: [

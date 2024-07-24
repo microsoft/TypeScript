@@ -261,18 +261,63 @@ lib/lib.d.ts
   Default library for target 'es5'
 src/child/child.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' can't be built because its dependency 'src/child' has errors
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is out of date because output 'src/mainResult.tsbuildinfo' is older than input 'src/child'
 
-[[90mHH:MM:SS AM[0m] Skipping build of project '/src/main/tsconfig.json' because its dependency '/src/child' has errors
+[[90mHH:MM:SS AM[0m] Building project '/src/main/tsconfig.json'...
 
+======== Resolving module 'child' from '/src/main/main.ts'. ========
+Module resolution kind is not specified, using 'Classic'.
+File '/src/main/child.ts' does not exist.
+File '/src/main/child.tsx' does not exist.
+File '/src/main/child.d.ts' does not exist.
+File '/src/child.ts' does not exist.
+File '/src/child.tsx' does not exist.
+File '/src/child.d.ts' does not exist.
+File '/child.ts' does not exist.
+File '/child.tsx' does not exist.
+File '/child.d.ts' does not exist.
+Searching all ancestor node_modules directories for preferred extensions: Declaration.
+Directory '/src/main/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+File '/src/main/child.js' does not exist.
+File '/src/main/child.jsx' does not exist.
+File '/src/child.js' does not exist.
+File '/src/child.jsx' does not exist.
+File '/child.js' does not exist.
+File '/child.jsx' does not exist.
+======== Module name 'child' was not resolved. ========
+lib/lib.d.ts
+  Default library for target 'es5'
+src/childResult.d.ts
+  Output from referenced project 'src/child/tsconfig.json' included because '--outFile' specified
+src/main/main.ts
+  Matched by default include pattern '**/*'
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+
+//// [/src/childResult.d.ts]
+declare module "child" {
+    export function child(): void;
+}
+
+
+//// [/src/childResult.js]
+define("child", ["require", "exports", "../child/child2"], function (require, exports, child2_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.child = child;
+    function child() {
+        (0, child2_1.child2)();
+    }
+});
 
 
 //// [/src/childResult.tsbuildinfo]
-{"fileNames":["../lib/lib.d.ts","./child/child.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"],"root":[2],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"semanticDiagnosticsPerFile":[[2,[{"start":23,"length":17,"messageText":"Cannot find module '../child/child2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?","category":1,"code":2792}]]],"outSignature":"2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","pendingEmit":false,"version":"FakeTSVersion"}
+{"fileNames":["../lib/lib.d.ts","./child/child.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n"],"root":[2],"options":{"composite":true,"module":2,"outFile":"./childResult.js"},"semanticDiagnosticsPerFile":[[2,[{"start":23,"length":17,"messageText":"Cannot find module '../child/child2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?","category":1,"code":2792}]]],"outSignature":"8966811613-declare module \"child\" {\n    export function child(): void;\n}\n","latestChangedDtsFile":"./childResult.d.ts","version":"FakeTSVersion"}
 
 //// [/src/childResult.tsbuildinfo.readable.baseline.txt]
 {
@@ -309,13 +354,42 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       ]
     ]
   ],
-  "outSignature": "2074776633-declare module \"child2\" {\n    export function child2(): void;\n}\ndeclare module \"child\" {\n    export function child(): void;\n}\n",
+  "outSignature": "8966811613-declare module \"child\" {\n    export function child(): void;\n}\n",
   "latestChangedDtsFile": "./childResult.d.ts",
-  "pendingEmit": [
-    "Js | Dts",
-    false
-  ],
   "version": "FakeTSVersion",
-  "size": 1195
+  "size": 1106
+}
+
+//// [/src/mainResult.js] file written with same contents
+//// [/src/mainResult.tsbuildinfo]
+{"fileNames":["../lib/lib.d.ts","./childresult.d.ts","./main/main.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","8966811613-declare module \"child\" {\n    export function child(): void;\n}\n","-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n"],"root":[3],"options":{"composite":true,"module":2,"outFile":"./mainResult.js"},"outSignature":"7955277823-declare module \"main\" {\n    export function main(): void;\n}\n","latestChangedDtsFile":"./mainResult.d.ts","version":"FakeTSVersion"}
+
+//// [/src/mainResult.tsbuildinfo.readable.baseline.txt]
+{
+  "fileNames": [
+    "../lib/lib.d.ts",
+    "./childresult.d.ts",
+    "./main/main.ts"
+  ],
+  "fileInfos": {
+    "../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./childresult.d.ts": "8966811613-declare module \"child\" {\n    export function child(): void;\n}\n",
+    "./main/main.ts": "-8784613407-import { child } from \"child\";\nexport function main() {\n    child();\n}\n"
+  },
+  "root": [
+    [
+      3,
+      "./main/main.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "module": 2,
+    "outFile": "./mainResult.js"
+  },
+  "outSignature": "7955277823-declare module \"main\" {\n    export function main(): void;\n}\n",
+  "latestChangedDtsFile": "./mainResult.d.ts",
+  "version": "FakeTSVersion",
+  "size": 941
 }
 

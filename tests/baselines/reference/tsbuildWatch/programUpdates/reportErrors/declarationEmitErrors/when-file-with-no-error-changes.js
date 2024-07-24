@@ -35,17 +35,52 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export var myClassWithError = class {
 [7m [0m [91m           ~~~~~~~~~~~~~~~~[0m
+
+  [96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m
+    [7m1[0m export var myClassWithError = class {
+    [7m [0m [96m           ~~~~~~~~~~~~~~~~[0m
+    Add a type annotation to the variable myClassWithError.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
+//// [/user/username/projects/solution/app/fileWithError.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.myClassWithError = void 0;
+exports.myClassWithError = /** @class */ (function () {
+    function class_1() {
+        this.p = 12;
+    }
+    class_1.prototype.tags = function () { };
+    return class_1;
+}());
+
+
+//// [/user/username/projects/solution/app/fileWithoutError.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.myClass = void 0;
+var myClass = /** @class */ (function () {
+    function myClass() {
+    }
+    return myClass;
+}());
+exports.myClass = myClass;
+
+
+//// [/user/username/projects/solution/app/fileWithoutError.d.ts]
+export declare class myClass {
+}
+
+
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",{"version":"-11785903855-export class myClass { }","signature":"-7432826827-export declare class myClass {\n}\n"}],"root":[2,3],"options":{"composite":true},"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",{"version":"-11785903855-export class myClass { }","signature":"-7432826827-export declare class myClass {\n}\n"}],"root":[2,3],"options":{"composite":true},"emitDiagnosticsPerFile":[[2,[{"start":11,"length":16,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":11,"length":16,"messageText":"Add a type annotation to the variable myClassWithError.","category":1,"code":9027}]}]]],"emitSignatures":[2],"latestChangedDtsFile":"./fileWithoutError.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -90,22 +125,35 @@ Output::
   "options": {
     "composite": true
   },
-  "affectedFilesPendingEmit": [
+  "emitDiagnosticsPerFile": [
     [
       "./filewitherror.ts",
-      "Js | Dts"
-    ],
-    [
-      "./filewithouterror.ts",
-      "Js | Dts"
+      [
+        {
+          "start": 11,
+          "length": 16,
+          "messageText": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "category": 1,
+          "code": 4094,
+          "relatedInformation": [
+            {
+              "start": 11,
+              "length": 16,
+              "messageText": "Add a type annotation to the variable myClassWithError.",
+              "category": 1,
+              "code": 9027
+            }
+          ]
+        }
+      ]
     ]
   ],
   "emitSignatures": [
-    "./filewitherror.ts",
-    "./filewithouterror.ts"
+    "./filewitherror.ts"
   ],
+  "latestChangedDtsFile": "./fileWithoutError.d.ts",
   "version": "FakeTSVersion",
-  "size": 847
+  "size": 1184
 }
 
 
@@ -168,17 +216,39 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export var myClassWithError = class {
 [7m [0m [91m           ~~~~~~~~~~~~~~~~[0m
+
+  [96mapp/fileWithError.ts[0m:[93m1[0m:[93m12[0m
+    [7m1[0m export var myClassWithError = class {
+    [7m [0m [96m           ~~~~~~~~~~~~~~~~[0m
+    Add a type annotation to the variable myClassWithError.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
+//// [/user/username/projects/solution/app/fileWithoutError.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.myClass2 = void 0;
+var myClass2 = /** @class */ (function () {
+    function myClass2() {
+    }
+    return myClass2;
+}());
+exports.myClass2 = myClass2;
+
+
+//// [/user/username/projects/solution/app/fileWithoutError.d.ts]
+export declare class myClass2 {
+}
+
+
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",{"version":"-10959532701-export class myClass2 { }","signature":"-8459626297-export declare class myClass2 {\n}\n"}],"root":[2,3],"options":{"composite":true},"affectedFilesPendingEmit":[2,3],"emitSignatures":[2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./filewitherror.ts","./filewithouterror.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8103865863-export var myClassWithError = class {\n        tags() { }\n        private p = 12\n    };",{"version":"-10959532701-export class myClass2 { }","signature":"-8459626297-export declare class myClass2 {\n}\n"}],"root":[2,3],"options":{"composite":true},"emitDiagnosticsPerFile":[[2,[{"start":11,"length":16,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":11,"length":16,"messageText":"Add a type annotation to the variable myClassWithError.","category":1,"code":9027}]}]]],"emitSignatures":[2],"latestChangedDtsFile":"./fileWithoutError.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/solution/app/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -223,22 +293,35 @@ Output::
   "options": {
     "composite": true
   },
-  "affectedFilesPendingEmit": [
+  "emitDiagnosticsPerFile": [
     [
       "./filewitherror.ts",
-      "Js | Dts"
-    ],
-    [
-      "./filewithouterror.ts",
-      "Js | Dts"
+      [
+        {
+          "start": 11,
+          "length": 16,
+          "messageText": "Property 'p' of exported anonymous class type may not be private or protected.",
+          "category": 1,
+          "code": 4094,
+          "relatedInformation": [
+            {
+              "start": 11,
+              "length": 16,
+              "messageText": "Add a type annotation to the variable myClassWithError.",
+              "category": 1,
+              "code": 9027
+            }
+          ]
+        }
+      ]
     ]
   ],
   "emitSignatures": [
-    "./filewitherror.ts",
-    "./filewithouterror.ts"
+    "./filewitherror.ts"
   ],
+  "latestChangedDtsFile": "./fileWithoutError.d.ts",
   "version": "FakeTSVersion",
-  "size": 849
+  "size": 1186
 }
 
 

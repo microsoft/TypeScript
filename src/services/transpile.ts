@@ -26,6 +26,7 @@ import {
     optionDeclarations,
     parseCustomTypeOption,
     ScriptTarget,
+    SourceFile,
     toPath,
     transpileOptionValueCompilerOptions,
 } from "./_namespaces/ts.js";
@@ -109,9 +110,11 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }`;
 const barebonesLibName = "lib.d.ts";
-const barebonesLibSourceFile = createSourceFile(barebonesLibName, barebonesLibContent, { languageVersion: ScriptTarget.Latest });
+let barebonesLibSourceFile: SourceFile | undefined;
 
 function transpileWorker(input: string, transpileOptions: TranspileOptions, declaration?: boolean): TranspileOutput {
+    barebonesLibSourceFile ??= createSourceFile(barebonesLibName, barebonesLibContent, { languageVersion: ScriptTarget.Latest });
+
     const diagnostics: Diagnostic[] = [];
 
     const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : {};

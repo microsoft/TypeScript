@@ -46,10 +46,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -148,7 +144,10 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -204,7 +203,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/file1.ts P
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/project.sln
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true
     }
 After request
 
@@ -312,7 +315,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/file1.ts P
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/project.sln
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "reloadProjects",
+      "request_seq": 4,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -433,7 +443,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/file1.ts P
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/project.sln
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "reloadProjects",
+      "request_seq": 5,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -551,7 +568,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/file1.ts P
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/project.sln
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "reloadProjects",
+      "request_seq": 6,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

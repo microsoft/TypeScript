@@ -374,7 +374,6 @@ import {
     SourceMapSource,
     SpreadAssignment,
     SpreadElement,
-    stableSort,
     Statement,
     StringLiteral,
     supportedJSExtensionsFlat,
@@ -394,6 +393,7 @@ import {
     ThrowStatement,
     TokenFlags,
     tokenToString,
+    toSorted,
     tracing,
     TransformationResult,
     transformNodes,
@@ -420,6 +420,7 @@ import {
     WithStatement,
     writeCommentRange,
     writeFile,
+    WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -503,8 +504,7 @@ export function canEmitTsBuildInfo(options: CompilerOptions) {
     return isIncrementalCompilation(options) || !!options.tscBuild;
 }
 
-/** @internal */
-export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
+function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
     const outPath = options.outFile!;
     const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
     const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
@@ -907,7 +907,7 @@ export function emitFiles(
                 module: compilerOptions.module,
                 moduleResolution: compilerOptions.moduleResolution,
                 target: compilerOptions.target,
-                sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
+                sourceMap: emitOnly !== EmitOnly.BuilderSignature && compilerOptions.declarationMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
@@ -923,7 +923,7 @@ export function emitFiles(
                 isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
                 substituteNode: declarationTransform.substituteNode,
             });
-            printSourceFileOrBundle(
+            const dtsWritten = printSourceFileOrBundle(
                 declarationFilePath,
                 declarationMapPath,
                 declarationTransform,
@@ -937,7 +937,7 @@ export function emitFiles(
                 },
             );
             if (emittedFilesList) {
-                emittedFilesList.push(declarationFilePath);
+                if (dtsWritten) emittedFilesList.push(declarationFilePath);
                 if (declarationMapPath) {
                     emittedFilesList.push(declarationMapPath);
                 }
@@ -961,6 +961,7 @@ export function emitFiles(
     }
 
     function markLinkedReferences(file: SourceFile) {
+        if (ts.isSourceFileJS(file)) return; // JS files don't use reference calculations as they don't do import ellision, no need to calculate it
         ts.forEachChildRecursively(file, n => {
             if (isImportEqualsDeclaration(n) && !(ts.getSyntacticModifierFlags(n) & ts.ModifierFlags.Export)) return "skip"; // These are deferred and marked in a chain when referenced
             if (ts.isImportDeclaration(n)) return "skip"; // likewise, these are ultimately what get marked by calls on other nodes - we want to skip them
@@ -1027,10 +1028,12 @@ export function emitFiles(
 
         // Write the output file
         const text = writer.getText();
-        writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos, diagnostics: transform.diagnostics });
+        const data: WriteFileCallbackData = { sourceMapUrlPos, diagnostics: transform.diagnostics };
+        writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, data);
 
         // Reset state
         writer.clear();
+        return !data.skippedDtsWrite;
     }
 
     interface SourceMapOptions {
@@ -2069,7 +2072,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function getSortedEmitHelpers(node: Node) {
         const helpers = getEmitHelpers(node);
-        return helpers && stableSort(helpers, compareEmitHelpers);
+        return helpers && toSorted(helpers, compareEmitHelpers);
     }
 
     //
@@ -2089,7 +2092,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     // SyntaxKind.TemplateMiddle
     // SyntaxKind.TemplateTail
     function emitLiteral(node: LiteralLikeNode, jsxAttributeEscape: boolean) {
-        const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape, jsxAttributeEscape);
+        const text = getLiteralTextOfNode(node, /*sourceFile*/ undefined, printerOptions.neverAsciiEscape, jsxAttributeEscape);
         if (
             (printerOptions.sourceMap || printerOptions.inlineSourceMap)
             && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))
@@ -2642,7 +2645,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         expression = skipPartiallyEmittedExpressions(expression);
         if (isNumericLiteral(expression)) {
             // check if numeric literal is a decimal literal that was originally written with a dot
-            const text = getLiteralTextOfNode(expression as LiteralExpression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
+            const text = getLiteralTextOfNode(expression as LiteralExpression, /*sourceFile*/ undefined, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
             // If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
             // if the expression doesn't have any comments that will be emitted.
             return !(expression.numericLiteralFlags & TokenFlags.WithSpecifier)
@@ -5170,7 +5173,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return getSourceTextOfNodeFromSourceFile(sourceFile, node, includeTrivia);
     }
 
-    function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
+    function getLiteralTextOfNode(node: LiteralLikeNode, sourceFile = currentSourceFile, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
         if (node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).textSourceNode) {
             const textSourceNode = (node as StringLiteral).textSourceNode!;
             if (isIdentifier(textSourceNode) || isPrivateIdentifier(textSourceNode) || isNumericLiteral(textSourceNode) || isJsxNamespacedName(textSourceNode)) {
@@ -5180,7 +5183,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     `"${escapeNonAsciiString(text)}"`;
             }
             else {
-                return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
+                return getLiteralTextOfNode(textSourceNode, getSourceFileOfNode(textSourceNode), neverAsciiEscape, jsxAttributeEscape);
             }
         }
 
@@ -5189,7 +5192,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             | (printerOptions.terminateUnterminatedLiterals ? GetLiteralTextFlags.TerminateUnterminatedLiterals : 0)
             | (printerOptions.target && printerOptions.target >= ScriptTarget.ES2021 ? GetLiteralTextFlags.AllowNumericSeparator : 0);
 
-        return getLiteralText(node, currentSourceFile, flags);
+        return getLiteralText(node, sourceFile, flags);
     }
 
     /**

@@ -48,8 +48,32 @@ Output::
 
 
 
+//// [/user/username/projects/outFile.js]
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.foo = foo;
+    function foo() { }
+});
+define("b", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.bar = bar;
+    function bar() { }
+});
+
+
+//// [/user/username/projects/outFile.d.ts]
+declare module "a" {
+    export function foo(): void;
+}
+declare module "b" {
+    export function bar(): void;
+}
+
+
 //// [/user/username/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.ts","./myproject/b.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","4646078106-export function foo() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.ts","./myproject/b.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","4646078106-export function foo() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"module":2,"outFile":"./outFile.js"},"outSignature":"-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -78,13 +102,11 @@ Output::
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "../../../a/lib/lib.d.ts",
-    "./myproject/a.ts",
-    "./myproject/b.ts"
-  ],
+  "outSignature": "-5340070911-declare module \"a\" {\n    export function foo(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 660
+  "size": 842
 }
 
 
@@ -114,7 +136,10 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
 
 No shapes updated in the builder::
 
@@ -181,7 +206,7 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -215,8 +240,32 @@ Output::
 
 
 
+//// [/user/username/projects/outFile.js]
+define("a", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.fooBar = fooBar;
+    function fooBar() { }
+});
+define("b", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.bar = bar;
+    function bar() { }
+});
+
+
+//// [/user/username/projects/outFile.d.ts]
+declare module "a" {
+    export function fooBar(): void;
+}
+declare module "b" {
+    export function bar(): void;
+}
+
+
 //// [/user/username/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.ts","./myproject/b.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-3260843409-export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./myproject/a.ts","./myproject/b.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-3260843409-export function fooBar() { }","1045484683-export function bar() { }"],"root":[2,3],"options":{"composite":true,"declaration":true,"module":2,"outFile":"./outFile.js"},"outSignature":"771185302-declare module \"a\" {\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n","latestChangedDtsFile":"./outFile.d.ts","errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -246,13 +295,11 @@ Output::
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "../../../a/lib/lib.d.ts",
-    "./myproject/a.ts",
-    "./myproject/b.ts"
-  ],
+  "outSignature": "771185302-declare module \"a\" {\n    export function fooBar(): void;\n}\ndeclare module \"b\" {\n    export function bar(): void;\n}\n",
+  "latestChangedDtsFile": "./outFile.d.ts",
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 683
+  "size": 866
 }
 
 
@@ -276,7 +323,10 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
 
 No shapes updated in the builder::
 
@@ -329,7 +379,7 @@ Program files::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-No cached semantic diagnostics in the builder::
+Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
@@ -406,30 +456,6 @@ Output::
   "size": 852
 }
 
-//// [/user/username/projects/outFile.js]
-define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.fooBar = fooBar;
-    function fooBar() { }
-});
-define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.bar = bar;
-    function bar() { }
-});
-
-
-//// [/user/username/projects/outFile.d.ts]
-declare module "a" {
-    export function fooBar(): void;
-}
-declare module "b" {
-    export function bar(): void;
-}
-
-
 
 
 Program root files: [
@@ -452,9 +478,6 @@ Program files::
 /user/username/projects/myproject/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
 
 No shapes updated in the builder::
 

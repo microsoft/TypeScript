@@ -298,18 +298,19 @@ lib/lib.d.ts
   Default library for target 'es5'
 src/child/child.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' can't be built because its dependency 'src/child' has errors
+[[90mHH:MM:SS AM[0m] Project 'src/main/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90mHH:MM:SS AM[0m] Skipping build of project '/src/main/tsconfig.json' because its dependency '/src/child' has errors
+[[90mHH:MM:SS AM[0m] Updating output timestamps of project '/src/main/tsconfig.json'...
 
 
 Found 1 error.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
+//// [/src/child/child.js] file written with same contents
 //// [/src/child/tsconfig.tsbuildinfo]
-{"fileNames":["../../lib/lib.d.ts","./child.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n","signature":"-1814288093-export declare function child(): void;\n"}],"root":[2],"options":{"composite":true},"semanticDiagnosticsPerFile":[[2,[{"start":23,"length":17,"messageText":"Cannot find module '../child/child2' or its corresponding type declarations.","category":1,"code":2307}]]],"affectedFilesPendingEmit":[2],"latestChangedDtsFile":"./child.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../lib/lib.d.ts","./child.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11458139532-import { child2 } from \"../child/child2\";\nexport function child() {\n    child2();\n}\n","signature":"-1814288093-export declare function child(): void;\n"}],"root":[2],"options":{"composite":true},"semanticDiagnosticsPerFile":[[2,[{"start":23,"length":17,"messageText":"Cannot find module '../child/child2' or its corresponding type declarations.","category":1,"code":2307}]]],"latestChangedDtsFile":"./child.d.ts","version":"FakeTSVersion"}
 
 //// [/src/child/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -359,14 +360,9 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       ]
     ]
   ],
-  "affectedFilesPendingEmit": [
-    [
-      "./child.ts",
-      "Js | Dts"
-    ]
-  ],
   "latestChangedDtsFile": "./child.d.ts",
   "version": "FakeTSVersion",
-  "size": 1042
+  "size": 1011
 }
 
+//// [/src/main/tsconfig.tsbuildinfo] file changed its modified time

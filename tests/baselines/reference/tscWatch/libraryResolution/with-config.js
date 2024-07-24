@@ -535,7 +535,6 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /home/src/lib/lib.es5.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
 /home/src/lib/lib.webworker.d.ts (used version)
 /home/src/lib/lib.scripthost.d.ts (used version)
 /home/src/projects/project1/core.d.ts (used version)
@@ -544,6 +543,7 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project1/index.ts (computed .d.ts during emit)
 /home/src/projects/project1/utils.d.ts (used version)
 /home/src/projects/project1/typeroot1/sometype/index.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -2417,7 +2417,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts (used version)
 /home/src/lib/lib.scripthost.d.ts (used version)
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 /home/src/projects/project1/file.ts (computed .d.ts)
 /home/src/projects/project1/file2.ts (computed .d.ts)
 /home/src/projects/project1/index.ts (computed .d.ts)
@@ -2724,7 +2723,6 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /home/src/lib/lib.webworker.d.ts (used version)
 /home/src/lib/lib.scripthost.d.ts (used version)
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts (used version)
 /home/src/projects/project1/file.ts (computed .d.ts)
 /home/src/projects/project1/file2.ts (computed .d.ts)
 /home/src/projects/project1/index.ts (computed .d.ts)

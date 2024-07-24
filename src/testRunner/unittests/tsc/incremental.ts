@@ -261,10 +261,6 @@ declare global {
             {
                 caption: "Delete output for class3",
                 edit: fs => fs.unlinkSync("/src/projects/project1/class3.d.ts"),
-                discrepancyExplanation: () => [
-                    "Ts buildinfo will be updated but will retain lib file errors from previous build and not others because they are emitted because of change which results in clearing their semantic diagnostics cache",
-                    "But in clean build because of global diagnostics, semantic diagnostics are not queried so not cached in tsbuildinfo",
-                ],
             },
             {
                 caption: "Create output for class3",

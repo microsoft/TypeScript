@@ -133,12 +133,16 @@ exports.pkg0 = 0;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.ts","../typings/xterm.d.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.ts",
+    "../typings/xterm.d.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 73
 }
 
 //// [/user/username/projects/myproject/pkg1/index.js]
@@ -149,12 +153,16 @@ exports.pkg1 = 1;
 
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.ts","../typings/xterm.d.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.ts",
+    "../typings/xterm.d.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 73
 }
 
 //// [/user/username/projects/myproject/pkg2/index.js]
@@ -165,12 +173,16 @@ exports.pkg2 = 2;
 
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.ts","../typings/xterm.d.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.ts",
+    "../typings/xterm.d.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 73
 }
 
 //// [/user/username/projects/myproject/pkg3/index.js]
@@ -181,12 +193,16 @@ exports.pkg3 = 3;
 
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.ts","../typings/xterm.d.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.ts",
+    "../typings/xterm.d.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 73
 }
 
 

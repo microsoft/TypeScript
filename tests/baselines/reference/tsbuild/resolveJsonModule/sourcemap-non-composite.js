@@ -55,8 +55,8 @@ Output::
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
 TSFILE: /src/dist/hello.json
-TSFILE: /src/dist/index.js.map
 TSFILE: /src/dist/index.js
+TSFILE: /src/dist/index.js.map
 TSFILE: /src/dist/tsconfig.tsbuildinfo
 lib/lib.d.ts
   Default library for target 'es5'
@@ -88,12 +88,16 @@ exports.default = hello_json_1.default.hello;
 {"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":";;;;;AAAA,4DAAgC;AAChC,kBAAe,oBAAK,CAAC,KAAK,CAAA"}
 
 //// [/src/dist/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../src/index.ts","../src/hello.json"],"version":"FakeTSVersion"}
 
 //// [/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../src/index.ts",
+    "../src/hello.json"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 74
 }
 
 

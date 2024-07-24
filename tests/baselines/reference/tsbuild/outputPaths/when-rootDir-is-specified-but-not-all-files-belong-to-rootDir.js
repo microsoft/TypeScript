@@ -50,14 +50,31 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+//// [/src/dist/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
+
+
 //// [/src/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./src/index.ts","./types/type.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./src/index.ts",
+    "./types/type.ts"
+  ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 85
 }
+
+//// [/src/types/type.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
 
 
 
@@ -70,7 +87,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because output file 'src/dist/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/tsconfig.json' is out of date because buildinfo file 'src/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/src/tsconfig.json'...
 
@@ -84,8 +101,10 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+//// [/src/dist/index.js] file written with same contents
 //// [/src/tsconfig.tsbuildinfo] file written with same contents
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/src/types/type.js] file written with same contents
 
 
 Change:: Normal build without change, that does not block emit on error to show files that get emitted
@@ -104,15 +123,5 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 
-//// [/src/dist/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/src/types/type.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
+//// [/src/dist/index.js] file written with same contents
+//// [/src/types/type.js] file written with same contents

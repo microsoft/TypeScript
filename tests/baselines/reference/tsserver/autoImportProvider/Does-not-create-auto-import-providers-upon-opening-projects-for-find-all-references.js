@@ -52,10 +52,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -251,7 +247,15 @@ Info seq  [hh:mm:ss:mss] 	FileName: /packages/b/index.ts ProjectRootPath: undefi
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
     }
 After request
 
@@ -677,7 +681,10 @@ Info seq  [hh:mm:ss:mss] response:
         "symbolStartOffset": 8,
         "symbolDisplayString": "class B"
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

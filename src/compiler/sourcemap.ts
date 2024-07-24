@@ -405,8 +405,7 @@ function isStringOrNull(x: any) {
     return typeof x === "string" || x === null;
 }
 
-/** @internal */
-export function isRawSourceMap(x: any): x is RawSourceMap {
+function isRawSourceMap(x: any): x is RawSourceMap {
     return x !== null
         && typeof x === "object"
         && x.version === 3

@@ -267,11 +267,14 @@ exitCode:: ExitStatus.Success
 
 
 //// [/src/projects/project/packages/b/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.js"],"version":"FakeTSVersion"}
 
 //// [/src/projects/project/packages/b/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.js"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 49
 }
 

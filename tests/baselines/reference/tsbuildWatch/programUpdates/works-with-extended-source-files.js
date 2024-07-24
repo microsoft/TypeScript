@@ -251,12 +251,15 @@ var k = 0;
 
 
 //// [/a/b/project3.tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./other2.ts"],"version":"FakeTSVersion"}
 
 //// [/a/b/project3.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./other2.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 50
 }
 
 
@@ -726,12 +729,18 @@ var z = 0;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./commonfile1.ts","./commonfile2.ts","./other.ts","./other2.ts"],"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./commonfile1.ts",
+    "./commonfile2.ts",
+    "./other.ts",
+    "./other2.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 101
 }
 
 //// [/a/b/other2.js]
@@ -940,7 +949,7 @@ Before running Timeout callback:: count: 1
 Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
-[[90mHH:MM:SS AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'alpha.tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
@@ -1015,7 +1024,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'project3.tsconfig.json' is out of date because output 'other2.js' is older than input 'extendsConfig2.tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'project3.tsconfig.json' is out of date because output 'project3.tsconfig.tsbuildinfo' is older than input 'extendsConfig2.tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] Building project '/a/b/project3.tsconfig.json'...
 
@@ -1026,7 +1035,8 @@ Output::
 
 
 //// [/a/b/other2.js] file changed its modified time
-//// [/a/b/project3.tsconfig.tsbuildinfo] file changed its modified time
+//// [/a/b/project3.tsconfig.tsbuildinfo] file written with same contents
+//// [/a/b/project3.tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Program root files: [
@@ -1094,7 +1104,8 @@ Output::
 
 
 //// [/a/b/other2.js] file changed its modified time
-//// [/a/b/project3.tsconfig.tsbuildinfo] file changed its modified time
+//// [/a/b/project3.tsconfig.tsbuildinfo] file written with same contents
+//// [/a/b/project3.tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 FsWatches::
 /a/b/alpha.tsconfig.json:

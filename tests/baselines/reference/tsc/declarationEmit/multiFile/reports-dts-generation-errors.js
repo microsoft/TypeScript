@@ -144,6 +144,7 @@ Output::
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
+TSFILE: /src/project/index.js
 TSFILE: /src/project/tsconfig.tsbuildinfo
 lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
@@ -153,18 +154,25 @@ src/project/node_modules/ky/distribution/index.d.ts
 src/project/index.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'src/project/package.json' has field "type" with value "module"
+[[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/src/project/tsconfig.json'...
+
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+//// [/src/project/index.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./index.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./index.ts"
+  ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 63
 }
 

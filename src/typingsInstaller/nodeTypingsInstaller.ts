@@ -1,3 +1,4 @@
+import { execFileSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -79,10 +80,8 @@ interface ExecSyncOptions {
     cwd: string;
     encoding: "utf-8";
 }
-type ExecSync = (command: string, options: ExecSyncOptions) => string;
 
 export class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller {
-    private readonly nodeExecSync: ExecSync;
     private readonly npmPath: string;
     readonly typesRegistry: Map<string, MapLike<string>>;
 
@@ -109,7 +108,6 @@ export class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInst
             this.log.writeLine(`NPM location: ${this.npmPath} (explicit '${ts.server.Arguments.NpmLocation}' ${npmLocation === undefined ? "not " : ""} provided)`);
             this.log.writeLine(`validateDefaultNpmLocation: ${validateDefaultNpmLocation}`);
         }
-        ({ execSync: this.nodeExecSync } = require("child_process"));
 
         this.ensurePackageDirectoryExists(globalTypingsCacheLocation);
 
@@ -174,7 +172,7 @@ export class NodeTypingsInstaller extends ts.server.typingsInstaller.TypingsInst
             this.log.writeLine(`Exec: ${command}`);
         }
         try {
-            const stdout = this.nodeExecSync(command, { ...options, encoding: "utf-8" });
+            const stdout = execFileSync(command, { ...options, encoding: "utf-8" });
             if (this.log.isEnabled()) {
                 this.log.writeLine(`    Succeeded. stdout:${indent(sys.newLine, stdout)}`);
             }

@@ -1,3 +1,11 @@
+import { fork } from "child_process";
+import { statSync } from "fs";
+import Mocha from "mocha";
+import ms from "ms";
+import os from "os";
+import path from "path";
+import readline from "readline";
+import tty from "tty";
 import {
     configOption,
     globalTimeout,
@@ -26,20 +34,12 @@ import * as ts from "../_namespaces/ts.js";
 import * as Utils from "../_namespaces/Utils.js";
 
 export function start(importTests: () => Promise<unknown>) {
-    const Mocha = require("mocha") as typeof import("mocha");
     const Base = Mocha.reporters.Base;
     const color = Base.color;
     const cursor = Base.cursor;
-    const ms = require("ms") as typeof import("ms");
-    const readline = require("readline") as typeof import("readline");
-    const os = require("os") as typeof import("os");
-    const tty = require("tty") as typeof import("tty");
     const isatty = tty.isatty(1) && tty.isatty(2);
-    const path = require("path") as typeof import("path");
-    const { fork } = require("child_process") as typeof import("child_process");
-    const { statSync } = require("fs") as typeof import("fs");
 
-    // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
+    // NOTE: paths for module and types for FailedTestReporter _do not_ line up when bundled
     const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.cjs")) as typeof import("../../../scripts/failed-tests.cjs");
 
     const perfdataFileNameFragment = ".parallelperf";

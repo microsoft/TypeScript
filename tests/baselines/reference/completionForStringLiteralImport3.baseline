@@ -16,7 +16,8 @@
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
-      "entries": []
+      "entries": [],
+      "defaultCommitCharacters": []
     }
   }
 ]

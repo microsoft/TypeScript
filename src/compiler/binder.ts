@@ -269,7 +269,6 @@ import {
     ParenthesizedExpression,
     Pattern,
     PatternAmbientModule,
-    perfLogger,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PrivateIdentifier,
@@ -513,9 +512,7 @@ const binder = /* @__PURE__ */ createBinder();
 /** @internal */
 export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
     performance.mark("beforeBind");
-    perfLogger?.logStartBindFile("" + file.fileName);
     binder(file, options);
-    perfLogger?.logStopBindFile();
     performance.mark("afterBind");
     performance.measure("Bind", "beforeBind", "afterBind");
 }

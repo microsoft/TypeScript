@@ -48,12 +48,16 @@ Output::
 
 
 //// [/user/username/projects/out.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./myproject/a.js","./myproject/b.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/out.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./myproject/a.js",
+    "./myproject/b.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 74
 }
 
 

@@ -144,12 +144,15 @@ exitCode:: ExitStatus.Success
 
 
 //// [/src/projects/a/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
 //// [/src/projects/a/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./src/index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 53
 }
 
 //// [/src/projects/b/src/index.js]
@@ -158,12 +161,15 @@ pg.foo();
 
 
 //// [/src/projects/b/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
 //// [/src/projects/b/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "./src/index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 53
 }
 
 

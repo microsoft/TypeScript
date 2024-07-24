@@ -54,12 +54,15 @@ export declare function foo(): void;
 
 
 //// [/user/username/projects/myproject/foo/lib/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../index.ts"],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/foo/lib/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 50
 }
 
 
@@ -192,7 +195,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/bar/index.
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/bar/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -597,7 +607,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/foobar/ind
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/foobar/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -796,7 +813,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/foo/index.
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/foo/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -881,6 +905,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/foo/lib/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/foo/lib/index.d.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/foo/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/foo/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/bar/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -904,7 +929,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/foo/lib/in
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/bar/tsconfig.json,/user/username/projects/myproject/foobar/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 4,
+      "success": true
     }
 After request
 

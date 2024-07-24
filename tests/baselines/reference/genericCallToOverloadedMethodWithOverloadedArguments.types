@@ -31,11 +31,11 @@ module m1 {
 >numPromise.then(testFunction) : Promise<number>
 >                              : ^^^^^^^^^^^^^^^
 >numPromise.then : <U>(cb: (x: number) => Promise<U>) => Promise<U>
->                : ^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^^^        ^ 
+>                : ^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 >then : <U>(cb: (x: number) => Promise<U>) => Promise<U>
->     : ^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^^^        ^ 
+>     : ^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : (n: number) => Promise<number>
 >             : ^ ^^      ^^^^^               
 }
@@ -78,11 +78,11 @@ module m2 {
 >numPromise.then(testFunction) : Promise<string>
 >                              : ^^^^^^^^^^^^^^^
 >numPromise.then : <U>(cb: (x: number) => Promise<U>) => Promise<U>
->                : ^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^^^        ^ 
+>                : ^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 >then : <U>(cb: (x: number) => Promise<U>) => Promise<U>
->     : ^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^^^        ^ 
+>     : ^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
 >             : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^
 }
@@ -131,11 +131,11 @@ module m3 {
 >numPromise.then(testFunction) : Promise<number>
 >                              : ^^^^^^^^^^^^^^^
 >numPromise.then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->                : ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^        ^ ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^     ^^^^     ^^   ^^^^^        ^ ^^^        ^ ^^^
+>                : ^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 >then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->     : ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^        ^ ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^     ^^^^     ^^   ^^^^^        ^ ^^^        ^ ^^^
+>     : ^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : (n: number) => Promise<number>
 >             : ^ ^^      ^^^^^               
 }
@@ -190,11 +190,11 @@ module m4 {
 >numPromise.then(testFunction) : Promise<string>
 >                              : ^^^^^^^^^^^^^^^
 >numPromise.then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->                : ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^        ^ ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^     ^^^^     ^^   ^^^^^        ^ ^^^        ^ ^^^
+>                : ^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 >then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->     : ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^        ^ ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^     ^^^^     ^^   ^^^^^        ^ ^^^        ^ ^^^
+>     : ^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
 >             : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^
 }
@@ -265,11 +265,11 @@ module m5 {
 >numPromise.then(testFunction) : Promise<string>
 >                              : ^^^^^^^^^^^^^^^
 >numPromise.then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
->                : ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^        ^ ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^     ^^^^     ^^   ^^^^^        ^ ^^^        ^ ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^     ^^^^     ^^   ^^^^^^^^        ^^^                           ^^^        ^ ^^^
+>                : ^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                           ^^^^^^^^^^^^^^^^
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 >then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
->     : ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^        ^ ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^     ^^^^     ^^   ^^^^^        ^ ^^^        ^ ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^     ^^^^     ^^   ^^^^^^^^        ^^^                           ^^^        ^ ^^^
+>     : ^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                           ^^^^^^^^^^^^^^^^
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
 >             : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^
 }
@@ -330,11 +330,11 @@ module m6 {
 >numPromise.then(testFunction) : Promise<boolean>
 >                              : ^^^^^^^^^^^^^^^^
 >numPromise.then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->                : ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^        ^ ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^     ^^^^     ^^   ^^^^^        ^ ^^^        ^ ^^^
+>                : ^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numPromise : Promise<number>
 >           : ^^^^^^^^^^^^^^^
 >then : { <U>(cb: (x: number) => Promise<U>): Promise<U>; <U>(cb: (x: number) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->     : ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^^        ^ ^^^ ^^  ^^^ ^^^^^^^^^^^^^        ^ ^^     ^^^^     ^^   ^^^^^        ^ ^^^        ^ ^^^
+>     : ^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }
 >             : ^^^ ^^      ^^^               ^^^ ^^      ^^^               ^^^ ^^       ^^^                ^^^
 }

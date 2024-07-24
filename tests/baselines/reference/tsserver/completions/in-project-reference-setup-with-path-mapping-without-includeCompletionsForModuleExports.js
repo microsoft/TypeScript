@@ -113,10 +113,6 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 1,
       "success": true
     }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
 After request
 
 Before request
@@ -342,7 +338,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/app/src/index.ts Pro
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -817,6 +820,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true
@@ -1281,9 +1289,17 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1753,9 +1769,17 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "",
             "sortText": "15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1786,14 +1810,7 @@ Info seq  [hh:mm:ss:mss] response:
       "type": "response",
       "command": "configure",
       "request_seq": 6,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
+      "success": true
     }
 After request
 
@@ -2297,9 +2314,18 @@ Info seq  [hh:mm:ss:mss] response:
               "isPackageJsonImport": true
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
     }
 After request
 

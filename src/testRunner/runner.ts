@@ -88,6 +88,7 @@ const testConfigContent = customConfig && IO.fileExists(customConfig)
 export let taskConfigsFolder: string;
 export let workerCount: number;
 export let runUnitTests: boolean | undefined;
+export let skipSysTests: boolean | undefined;
 export let stackTraceLimit: number | "full" | undefined;
 export let noColors = false;
 export let keepFailed = false;
@@ -101,6 +102,7 @@ export interface TestConfig {
     test?: string[];
     runners?: string[];
     runUnitTests?: boolean;
+    skipSysTests?: boolean;
     noColors?: boolean;
     timeout?: number;
     keepFailed?: boolean;
@@ -142,6 +144,9 @@ function handleTestConfig() {
         }
         if (testConfig.shards) {
             setShards(testConfig.shards);
+        }
+        if (testConfig.skipSysTests) {
+            skipSysTests = true;
         }
 
         if (testConfig.stackTraceLimit === "full") {

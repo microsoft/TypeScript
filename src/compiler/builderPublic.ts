@@ -13,7 +13,6 @@ import {
     Program,
     ProjectReference,
     ReusableBuilderProgramState,
-    SavedBuildProgramEmitState,
     SourceFile,
     WriteFileCallback,
 } from "./_namespaces/ts.js";
@@ -47,10 +46,6 @@ export type HostForComputeHash = Pick<BuilderProgramHost, "createHash" | "storeS
 export interface BuilderProgram {
     /** @internal */
     state: ReusableBuilderProgramState;
-    /** @internal */
-    saveEmitState(): SavedBuildProgramEmitState;
-    /** @internal */
-    restoreEmitState(saved: SavedBuildProgramEmitState): void;
     /** @internal */
     hasChangedEmitSignature?(): boolean;
     /**

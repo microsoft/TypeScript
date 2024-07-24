@@ -311,6 +311,22 @@ export interface PerformanceData {
      * The time spent creating or updating the auto-import program, in milliseconds.
      */
     createAutoImportProviderProgramDurationMs?: number;
+    /**
+     * The time spent computing diagnostics, in milliseconds.
+     */
+    diagnosticsDuration?: FileDiagnosticPerformanceData[];
+}
+
+/**
+ * Time spent computing each kind of diagnostics, in milliseconds.
+ */
+export type DiagnosticPerformanceData = { [Kind in DiagnosticEventKind]?: number; };
+
+export interface FileDiagnosticPerformanceData extends DiagnosticPerformanceData {
+    /**
+     * The file for which the performance data is reported.
+     */
+    file: string;
 }
 
 /**
@@ -428,7 +444,7 @@ export interface OutliningSpansRequestFull extends FileRequest {
 /**
  * Response to OutliningSpansRequest request.
  *
- * @internal
+ * @internal @knipignore
  */
 export interface OutliningSpansResponseFull extends Response {
     body?: ts.OutliningSpan[];
@@ -762,33 +778,13 @@ export interface ApplyCodeActionCommandRequest extends Request {
 // All we need is the `success` and `message` fields of Response.
 export interface ApplyCodeActionCommandResponse extends Response {}
 
-export interface FileRangeRequestArgs extends FileRequestArgs {
-    /**
-     * The line number for the request (1-based).
-     */
-    startLine: number;
-
-    /**
-     * The character offset (on the line) for the request (1-based).
-     */
-    startOffset: number;
-
+export interface FileRangeRequestArgs extends FileRequestArgs, FileRange {
     /**
      * Position (can be specified instead of line/offset pair)
      *
      * @internal
      */
     startPosition?: number;
-
-    /**
-     * The line number for the request (1-based).
-     */
-    endLine: number;
-
-    /**
-     * The character offset (on the line) for the request (1-based).
-     */
-    endOffset: number;
 
     /**
      * Position (can be specified instead of line/offset pair)
@@ -1277,7 +1273,7 @@ export interface RenameFullRequest extends FileLocationRequest {
     readonly arguments: RenameRequestArgs;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export interface RenameFullResponse extends Response {
     readonly body: readonly RenameLocation[];
 }
@@ -2455,7 +2451,7 @@ export interface GeterrRequestArgs {
      * List of file names for which to compute compiler errors.
      * The files will be checked in list order.
      */
-    files: string[];
+    files: (string | FileRangesRequestArgs)[];
 
     /**
      * Delay in milliseconds to wait before starting to compute
@@ -2479,6 +2475,32 @@ export interface GeterrRequest extends Request {
     arguments: GeterrRequestArgs;
 }
 
+export interface FileRange {
+    /**
+     * The line number for the request (1-based).
+     */
+    startLine: number;
+
+    /**
+     * The character offset (on the line) for the request (1-based).
+     */
+    startOffset: number;
+
+    /**
+     * The line number for the request (1-based).
+     */
+    endLine: number;
+
+    /**
+     * The character offset (on the line) for the request (1-based).
+     */
+    endOffset: number;
+}
+
+export interface FileRangesRequestArgs extends Pick<FileRequestArgs, "file"> {
+    ranges: FileRange[];
+}
+
 export type RequestCompletedEventName = "requestCompleted";
 
 /**
@@ -2491,6 +2513,7 @@ export interface RequestCompletedEvent extends Event {
 
 export interface RequestCompletedEventBody {
     request_seq: number;
+    performanceData?: PerformanceData;
 }
 
 /**
@@ -2576,9 +2599,14 @@ export interface DiagnosticEventBody {
      * An array of diagnostic information items.
      */
     diagnostics: Diagnostic[];
+
+    /**
+     * Spans where the region diagnostic was requested, if this is a region semantic diagnostic event.
+     */
+    spans?: TextSpan[];
 }
 
-export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag";
+export type DiagnosticEventKind = "semanticDiag" | "syntaxDiag" | "suggestionDiag" | "regionSemanticDiag";
 
 /**
  * Event message for DiagnosticEventKind event types.
@@ -2740,7 +2768,7 @@ export interface CloseFileWatcherEventBody {
     readonly id: number;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export type AnyEvent =
     | RequestCompletedEvent
     | DiagnosticEvent

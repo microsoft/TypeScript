@@ -92,13 +92,6 @@ CleanBuild:
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "../../lib/lib.d.ts",
-    "../project1/outfile.d.ts",
-    "./src/e.ts",
-    "./src/f.ts",
-    "./src/g.ts"
-  ],
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -128,13 +121,6 @@ IncrementalBuild:
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "../../lib/lib.d.ts",
-    "../project1/outfile.d.ts",
-    "./src/e.ts",
-    "./src/f.ts",
-    "./src/g.ts"
-  ],
   "version": "FakeTSVersion"
 }
 6:: local change
@@ -169,13 +155,6 @@ CleanBuild:
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "../../lib/lib.d.ts",
-    "../project1/outfile.d.ts",
-    "./src/e.ts",
-    "./src/f.ts",
-    "./src/g.ts"
-  ],
   "version": "FakeTSVersion"
 }
 IncrementalBuild:
@@ -205,12 +184,5 @@ IncrementalBuild:
     "module": 2,
     "outFile": "./outFile.js"
   },
-  "changeFileSet": [
-    "../../lib/lib.d.ts",
-    "../project1/outfile.d.ts",
-    "./src/e.ts",
-    "./src/f.ts",
-    "./src/g.ts"
-  ],
   "version": "FakeTSVersion"
 }

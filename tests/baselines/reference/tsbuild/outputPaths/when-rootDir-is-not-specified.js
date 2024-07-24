@@ -47,12 +47,15 @@ exports.x = 10;
 
 
 //// [/src/dist/tsconfig.tsbuildinfo]
-{"version":"FakeTSVersion"}
+{"root":["../src/index.ts"],"version":"FakeTSVersion"}
 
 //// [/src/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
+  "root": [
+    "../src/index.ts"
+  ],
   "version": "FakeTSVersion",
-  "size": 27
+  "size": 54
 }
 
 

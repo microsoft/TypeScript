@@ -4,6 +4,10 @@ import {
     WatchUtils,
 } from "../../../harness/watchUtils.js";
 import {
+    CreateDirectoryWatcherEventBody,
+    CreateFileWatcherEventBody,
+} from "../../../server/protocol.js";
+import {
     append,
     arrayFrom,
     clear,
@@ -276,11 +280,13 @@ type TimeOutCallback = (...args: any[]) => void;
 export interface TestFileWatcher {
     cb: FileWatcherCallback;
     pollingInterval: PollingInterval;
+    event?: CreateFileWatcherEventBody;
 }
 
 export interface TestFsWatcher {
     cb: FsWatchCallback;
     inode: number | undefined;
+    event?: CreateDirectoryWatcherEventBody;
 }
 
 export interface WatchInvokeOptions {
@@ -362,6 +368,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     watchDirectory: HostWatchDirectory;
     service?: server.ProjectService;
     osFlavor: TestServerHostOsFlavor;
+    preferNonRecursiveWatch: boolean;
     constructor(
         fileOrFolderorSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
         {
@@ -389,6 +396,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.runWithFallbackPolling = !!runWithFallbackPolling;
         const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE");
         const tscWatchDirectory = this.environmentVariables && this.environmentVariables.get("TSC_WATCHDIRECTORY");
+        this.preferNonRecursiveWatch = this.osFlavor === TestServerHostOsFlavor.Linux;
         this.inodeWatching = this.osFlavor !== TestServerHostOsFlavor.Windows;
         if (this.inodeWatching) this.inodes = new Map();
 
@@ -404,7 +412,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             fileSystemEntryExists: this.fileSystemEntryExists.bind(this),
             useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
             getCurrentDirectory: this.getCurrentDirectory.bind(this),
-            fsSupportsRecursiveFsWatch: this.osFlavor !== TestServerHostOsFlavor.Linux,
+            fsSupportsRecursiveFsWatch: !this.preferNonRecursiveWatch,
             getAccessibleSortedChildDirectories: path => this.getDirectories(path),
             realpath: this.realpath.bind(this),
             tscWatchFile,
