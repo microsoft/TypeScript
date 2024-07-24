@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/classImplementsGenericMethod1.ts] ////
+
+=== classImplementsGenericMethod1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59377
+
+interface U<T1, T2> {
+>U : Symbol(U, Decl(classImplementsGenericMethod1.ts, 0, 0))
+>T1 : Symbol(T1, Decl(classImplementsGenericMethod1.ts, 2, 12))
+>T2 : Symbol(T2, Decl(classImplementsGenericMethod1.ts, 2, 15))
+
+  p1: T1;
+>p1 : Symbol(U.p1, Decl(classImplementsGenericMethod1.ts, 2, 21))
+>T1 : Symbol(T1, Decl(classImplementsGenericMethod1.ts, 2, 12))
+
+  p2: T2;
+>p2 : Symbol(U.p2, Decl(classImplementsGenericMethod1.ts, 3, 9))
+>T2 : Symbol(T2, Decl(classImplementsGenericMethod1.ts, 2, 15))
+}
+
+interface IFoo<T> {
+>IFoo : Symbol(IFoo, Decl(classImplementsGenericMethod1.ts, 5, 1))
+>T : Symbol(T, Decl(classImplementsGenericMethod1.ts, 7, 15))
+
+  test<IT2, P extends U<T, IT2>>(t2: IT2, p: P): void;
+>test : Symbol(IFoo.test, Decl(classImplementsGenericMethod1.ts, 7, 19))
+>IT2 : Symbol(IT2, Decl(classImplementsGenericMethod1.ts, 8, 7))
+>P : Symbol(P, Decl(classImplementsGenericMethod1.ts, 8, 11))
+>U : Symbol(U, Decl(classImplementsGenericMethod1.ts, 0, 0))
+>T : Symbol(T, Decl(classImplementsGenericMethod1.ts, 7, 15))
+>IT2 : Symbol(IT2, Decl(classImplementsGenericMethod1.ts, 8, 7))
+>t2 : Symbol(t2, Decl(classImplementsGenericMethod1.ts, 8, 33))
+>IT2 : Symbol(IT2, Decl(classImplementsGenericMethod1.ts, 8, 7))
+>p : Symbol(p, Decl(classImplementsGenericMethod1.ts, 8, 41))
+>P : Symbol(P, Decl(classImplementsGenericMethod1.ts, 8, 11))
+}
+
+class Foo<T> implements IFoo<T> {
+>Foo : Symbol(Foo, Decl(classImplementsGenericMethod1.ts, 9, 1))
+>T : Symbol(T, Decl(classImplementsGenericMethod1.ts, 11, 10))
+>IFoo : Symbol(IFoo, Decl(classImplementsGenericMethod1.ts, 5, 1))
+>T : Symbol(T, Decl(classImplementsGenericMethod1.ts, 11, 10))
+
+  test<T2, P extends U<T, T2>>(t2: T2, p: P): void {}
+>test : Symbol(Foo.test, Decl(classImplementsGenericMethod1.ts, 11, 33))
+>T2 : Symbol(T2, Decl(classImplementsGenericMethod1.ts, 12, 7))
+>P : Symbol(P, Decl(classImplementsGenericMethod1.ts, 12, 10))
+>U : Symbol(U, Decl(classImplementsGenericMethod1.ts, 0, 0))
+>T : Symbol(T, Decl(classImplementsGenericMethod1.ts, 11, 10))
+>T2 : Symbol(T2, Decl(classImplementsGenericMethod1.ts, 12, 7))
+>t2 : Symbol(t2, Decl(classImplementsGenericMethod1.ts, 12, 31))
+>T2 : Symbol(T2, Decl(classImplementsGenericMethod1.ts, 12, 7))
+>p : Symbol(p, Decl(classImplementsGenericMethod1.ts, 12, 38))
+>P : Symbol(P, Decl(classImplementsGenericMethod1.ts, 12, 10))
+}
+

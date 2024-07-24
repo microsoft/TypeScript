@@ -16018,15 +16018,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createCanonicalSignature(signature: Signature) {
-        // Create an instantiation of the signature where each unconstrained type parameter is replaced with
-        // its original. When a generic class or interface is instantiated, each generic method in the class or
-        // interface is instantiated with a fresh set of cloned type parameters (which we need to handle scenarios
-        // where different generations of the same type parameter are in scope). This leads to a lot of new type
-        // identities, and potentially a lot of work comparing those identities, so here we create an instantiation
-        // that uses the original type identities for all unconstrained type parameters.
         return getSignatureInstantiation(
             signature,
-            map(signature.typeParameters, tp => tp.target && !getConstraintOfTypeParameter(tp.target) ? tp.target : tp),
+            signature.typeParameters,
             isInJSFile(signature.declaration),
         );
     }
