@@ -374,7 +374,6 @@ import {
     SourceMapSource,
     SpreadAssignment,
     SpreadElement,
-    stableSort,
     Statement,
     StringLiteral,
     supportedJSExtensionsFlat,
@@ -394,6 +393,7 @@ import {
     ThrowStatement,
     TokenFlags,
     tokenToString,
+    toSorted,
     tracing,
     TransformationResult,
     transformNodes,
@@ -2072,7 +2072,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function getSortedEmitHelpers(node: Node) {
         const helpers = getEmitHelpers(node);
-        return helpers && stableSort(helpers, compareEmitHelpers);
+        return helpers && toSorted(helpers, compareEmitHelpers);
     }
 
     //

@@ -806,7 +806,7 @@ export function sortAndDeduplicate(array: readonly string[]): SortedReadonlyArra
 export function sortAndDeduplicate<T>(array: readonly T[], comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T>;
 /** @internal */
 export function sortAndDeduplicate<T>(array: readonly T[], comparer?: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T> {
-    return deduplicateSorted(sort(array, comparer), equalityComparer ?? comparer ?? compareStringsCaseSensitive as any as Comparer<T>);
+    return deduplicateSorted(toSorted(array, comparer), equalityComparer ?? comparer ?? compareStringsCaseSensitive as any as Comparer<T>);
 }
 
 /** @internal */
@@ -1035,12 +1035,12 @@ function stableSortIndices<T>(array: readonly T[], indices: number[], comparer: 
 }
 
 /**
- * Returns a new sorted array.
+ * Returns a new sorted array. This sort is stable, meaning elements equal to each other maintain their relative position in the array.
  *
  * @internal
  */
-export function sort<T>(array: readonly T[], comparer?: Comparer<T>): SortedReadonlyArray<T> {
-    return (array.length === 0 ? array : array.slice().sort(comparer)) as SortedReadonlyArray<T>;
+export function toSorted<T>(array: readonly T[], comparer?: Comparer<T>): SortedReadonlyArray<T> {
+    return (array.length === 0 ? emptyArray : array.slice().sort(comparer)) as readonly T[] as SortedReadonlyArray<T>;
 }
 
 /** @internal */
@@ -1048,17 +1048,6 @@ export function* arrayReverseIterator<T>(array: readonly T[]) {
     for (let i = array.length - 1; i >= 0; i--) {
         yield array[i];
     }
-}
-
-/**
- * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
- *
- * @internal
- */
-export function stableSort<T>(array: readonly T[], comparer: Comparer<T>): SortedReadonlyArray<T> {
-    const indices = indicesOf(array);
-    stableSortIndices(array, indices, comparer);
-    return indices.map(i => array[i]) as SortedArray<T> as SortedReadonlyArray<T>;
 }
 
 /** @internal */

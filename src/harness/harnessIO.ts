@@ -547,7 +547,7 @@ export namespace Compiler {
     export const diagnosticSummaryMarker = "__diagnosticSummary";
     export const globalErrorsMarker = "__globalErrors";
     export function* iterateErrorBaseline(inputFiles: readonly TestFile[], diagnostics: readonly ts.Diagnostic[], options?: { pretty?: boolean; caseSensitive?: boolean; currentDirectory?: string; }): IterableIterator<[string, string, number]> {
-        diagnostics = ts.sort(diagnostics, ts.compareDiagnostics);
+        diagnostics = ts.toSorted(diagnostics, ts.compareDiagnostics);
         let outputLines = "";
         // Count up all errors that were found in files other than lib.d.ts so we don't miss any
         let totalErrorsReportedInNonLibraryNonTsconfigFiles = 0;
