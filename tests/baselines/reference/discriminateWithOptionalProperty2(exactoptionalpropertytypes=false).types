@@ -141,12 +141,12 @@ function mapAsyncIterable<T, U, R = undefined>(
 >                      : ^^^^^^^^^^^^^^^^^^^^
 >iterator.next() : Promise<IteratorResult<T, R>>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->iterator.next : (...args: [] | [undefined]) => Promise<IteratorResult<T, R>>
->              : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterator.next : (...[value]: [] | [undefined]) => Promise<IteratorResult<T, R>>
+>              : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterator : AsyncIterator<T, R, undefined>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->next : (...args: [] | [undefined]) => Promise<IteratorResult<T, R>>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...[value]: [] | [undefined]) => Promise<IteratorResult<T, R>>
+>     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     },
     async return(): Promise<IteratorResult<U, R>> {

@@ -112,7 +112,6 @@ import {
     returnTrue,
     ScriptKind,
     some,
-    sort,
     sortAndDeduplicate,
     SortedReadonlyArray,
     SourceFile,
@@ -125,6 +124,7 @@ import {
     ThrottledCancellationToken,
     timestamp,
     toPath,
+    toSorted,
     tracing,
     TypeAcquisition,
     updateErrorForNoInputFiles,
@@ -1085,7 +1085,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     getExternalFiles(updateLevel?: ProgramUpdateLevel): SortedReadonlyArray<string> {
-        return sort(flatMap(this.plugins, plugin => {
+        return toSorted(flatMap(this.plugins, plugin => {
             if (typeof plugin.module.getExternalFiles !== "function") return;
             try {
                 return plugin.module.getExternalFiles(this, updateLevel || ProgramUpdateLevel.Update);
@@ -1508,7 +1508,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             typeAcquisition,
             unresolvedImports,
         };
-        const typingFiles = !typeAcquisition || !typeAcquisition.enable ? emptyArray : sort(newTypings);
+        const typingFiles = !typeAcquisition || !typeAcquisition.enable ? emptyArray : toSorted(newTypings);
         if (enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()), /*inserted*/ noop, removed => this.detachScriptInfoFromProject(removed))) {
             // If typing files changed, then only schedule project update
             this.typingFiles = typingFiles;
@@ -2319,7 +2319,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     runWithTemporaryFileUpdate(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedFile: SourceFile) => void) {
         const originalProgram = this.program;
         const rootSourceFile = Debug.checkDefined(this.program?.getSourceFile(rootFile), "Expected file to be part of program");
-        const originalText = Debug.checkDefined(rootSourceFile.getText());
+        const originalText = Debug.checkDefined(rootSourceFile.getFullText());
 
         this.getScriptInfo(rootFile)?.editContent(0, originalText.length, updatedText);
         this.updateGraph();
@@ -2327,7 +2327,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             cb(this.program!, originalProgram, (this.program?.getSourceFile(rootFile))!);
         }
         finally {
-            this.getScriptInfo(rootFile)?.editContent(0, this.program!.getSourceFile(rootFile)!.getText().length, originalText);
+            this.getScriptInfo(rootFile)?.editContent(0, updatedText.length, originalText);
         }
     }
 

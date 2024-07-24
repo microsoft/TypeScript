@@ -287,6 +287,7 @@ import {
     isIdentifier,
     isIdentifierStart,
     isIdentifierText,
+    isImportDeclaration,
     isImportTypeNode,
     isInterfaceDeclaration,
     isJSDoc,
@@ -509,7 +510,6 @@ import {
     skipTrivia,
     SnippetKind,
     some,
-    sort,
     SortedArray,
     SourceFile,
     SourceFileLike,
@@ -544,6 +544,7 @@ import {
     TokenFlags,
     tokenToString,
     toPath,
+    toSorted,
     tracing,
     TransformFlags,
     TransientSymbol,
@@ -1256,6 +1257,16 @@ export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFil
     }
 
     return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastDecorator.end);
+}
+
+/** @internal */
+export function getNonModifierTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
+    const lastModifier = !nodeIsMissing(node) && canHaveModifiers(node) && node.modifiers ? last(node.modifiers) : undefined;
+    if (!lastModifier) {
+        return getTokenPosOfNode(node, sourceFile);
+    }
+
+    return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastModifier.end);
 }
 
 /** @internal */
@@ -2206,6 +2217,7 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
             return name.emitNode?.autoGenerate ? undefined : name.escapedText;
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NumericLiteral:
+        case SyntaxKind.BigIntLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
             return escapeLeadingUnderscores(name.text);
         case SyntaxKind.ComputedPropertyName:
@@ -5220,6 +5232,7 @@ export function getPropertyNameForPropertyNameNode(name: PropertyName | JsxAttri
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
         case SyntaxKind.NumericLiteral:
+        case SyntaxKind.BigIntLiteral:
             return escapeLeadingUnderscores(name.text);
         case SyntaxKind.ComputedPropertyName:
             const nameExpression = name.expression;
@@ -7187,7 +7200,8 @@ export function modifierToFlag(token: SyntaxKind): ModifierFlags {
     return ModifierFlags.None;
 }
 
-function isBinaryLogicalOperator(token: SyntaxKind): boolean {
+/** @internal */
+export function isBinaryLogicalOperator(token: SyntaxKind): boolean {
     return token === SyntaxKind.BarBarToken || token === SyntaxKind.AmpersandAmpersandToken;
 }
 
@@ -9582,7 +9596,7 @@ export function matchFiles(path: string, extensions: readonly string[] | undefin
         visited.set(canonicalPath, true);
         const { files, directories } = getFileSystemEntries(path);
 
-        for (const current of sort<string>(files, compareStringsCaseSensitive)) {
+        for (const current of toSorted<string>(files, compareStringsCaseSensitive)) {
             const name = combinePaths(path, current);
             const absoluteName = combinePaths(absolutePath, current);
             if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
@@ -9605,7 +9619,7 @@ export function matchFiles(path: string, extensions: readonly string[] | undefin
             }
         }
 
-        for (const current of sort<string>(directories, compareStringsCaseSensitive)) {
+        for (const current of toSorted<string>(directories, compareStringsCaseSensitive)) {
             const name = combinePaths(path, current);
             const absoluteName = combinePaths(absolutePath, current);
             if (
@@ -11757,4 +11771,10 @@ export function hasInferredType(node: Node): node is HasInferredType {
             assertType<never>(node);
             return false;
     }
+}
+
+/** @internal */
+export function isSideEffectImport(node: Node): boolean {
+    const ancestor = findAncestor(node, isImportDeclaration);
+    return !!ancestor && !ancestor.importClause;
 }

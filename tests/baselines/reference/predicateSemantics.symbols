@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/predicateSemantics.ts] ////
+
+=== predicateSemantics.ts ===
+declare let cond: any;
+>cond : Symbol(cond, Decl(predicateSemantics.ts, 0, 11))
+
+// OK: One or other operand is possibly nullish
+const test1 = (cond ? undefined : 32) ?? "possibly reached";
+>test1 : Symbol(test1, Decl(predicateSemantics.ts, 3, 5))
+>cond : Symbol(cond, Decl(predicateSemantics.ts, 0, 11))
+>undefined : Symbol(undefined)
+
+// Not OK: Both operands nullish
+const test2 = (cond ? undefined : null) ?? "always reached";
+>test2 : Symbol(test2, Decl(predicateSemantics.ts, 6, 5))
+>cond : Symbol(cond, Decl(predicateSemantics.ts, 0, 11))
+>undefined : Symbol(undefined)
+
+// Not OK: Both operands non-nullish
+const test3 = (cond ? 132 : 17) ?? "unreachable";
+>test3 : Symbol(test3, Decl(predicateSemantics.ts, 9, 5))
+>cond : Symbol(cond, Decl(predicateSemantics.ts, 0, 11))
+
+// Parens
+const test4 = (cond ? (undefined) : (17)) ?? 42;
+>test4 : Symbol(test4, Decl(predicateSemantics.ts, 12, 5))
+>cond : Symbol(cond, Decl(predicateSemantics.ts, 0, 11))
+>undefined : Symbol(undefined)
+
+// Should be OK (special case)
+if (!!true) {
+
+}
+
+// Should be OK (special cases)
+while (0) { }
+while (1) { }
+while (true) { }
+while (false) { }
+
+const p5 = {} ?? null;
+>p5 : Symbol(p5, Decl(predicateSemantics.ts, 25, 5))
+
+const p6 = 0 > 1 ?? null;
+>p6 : Symbol(p6, Decl(predicateSemantics.ts, 26, 5))
+
+const p7 = null ?? null;
+>p7 : Symbol(p7, Decl(predicateSemantics.ts, 27, 5))
+
+const p8 = (class foo { }) && null;
+>p8 : Symbol(p8, Decl(predicateSemantics.ts, 28, 5))
+>foo : Symbol(foo, Decl(predicateSemantics.ts, 28, 12))
+
+const p9 = (class foo { }) || null;
+>p9 : Symbol(p9, Decl(predicateSemantics.ts, 29, 5))
+>foo : Symbol(foo, Decl(predicateSemantics.ts, 29, 12))
+
+// Outer expression tests
+while ({} as any) { }
+while ({} satisfies unknown) { }
+while ((<any>({}))) { }
+while ((({}))) { }
+
