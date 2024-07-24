@@ -307,49 +307,57 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "A",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "b",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "B",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "foo",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "my2",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "MyType",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "yes",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "substr",
@@ -416,49 +424,57 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "a",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "A",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "b",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "B",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "foo",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "my2",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "MyType",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           },
           {
             "name": "yes",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           }
         ],
         "defaultCommitCharacters": [

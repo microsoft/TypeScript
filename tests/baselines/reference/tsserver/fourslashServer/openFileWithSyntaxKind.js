@@ -337,7 +337,8 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "t",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "commitCharacters": []
           }
         ],
         "defaultCommitCharacters": [
