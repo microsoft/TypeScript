@@ -469,7 +469,7 @@ function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(o
 >key : Symbol(key, Decl(controlFlowGenericTypes.ts, 154, 86))
 >K : Symbol(K, Decl(controlFlowGenericTypes.ts, 154, 59))
 
-    const x1 = obj[key];  // Error
+    const x1 = obj[key];
 >x1 : Symbol(x1, Decl(controlFlowGenericTypes.ts, 155, 9))
 >obj : Symbol(obj, Decl(controlFlowGenericTypes.ts, 154, 79))
 >key : Symbol(key, Decl(controlFlowGenericTypes.ts, 154, 86))
@@ -503,11 +503,11 @@ class TableBaseEnum<
 >iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 165, 11))
 >InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 162, 55))
 
-        iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
+        iSpec[null! as keyof InternalSpec];
 >iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 165, 11))
 >InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 162, 55))
 
-        iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
+        iSpec[null! as keyof PublicSpec];    // Error
 >iSpec : Symbol(iSpec, Decl(controlFlowGenericTypes.ts, 165, 11))
 >PublicSpec : Symbol(PublicSpec, Decl(controlFlowGenericTypes.ts, 161, 20))
 

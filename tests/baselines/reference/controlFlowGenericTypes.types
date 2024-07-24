@@ -661,27 +661,27 @@ function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(o
 >key : K
 >    : ^
 
-    const x1 = obj[key];  // Error
->x1 : Record<keyof T, string>[K]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj[key] : Record<keyof T, string>[K]
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj : Record<keyof T, string> | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    const x1 = obj[key];
+>x1 : T[K]
+>   : ^^^^
+>obj[key] : T[K]
+>         : ^^^^
+>obj : T
+>    : ^
 >key : K
 >    : ^
 
     const x2 = obj && obj[key];
->x2 : Record<keyof T, string>[K]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj && obj[key] : Record<keyof T, string>[K]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x2 : NonNullable<T>[K]
+>   : ^^^^^^^^^^^^^^^^^
+>obj && obj[key] : NonNullable<T>[K]
+>                : ^^^^^^^^^^^^^^^^^
 >obj : T
 >    : ^
->obj[key] : Record<keyof T, string>[K]
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->obj : Record<keyof T, string>
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>obj[key] : NonNullable<T>[K]
+>         : ^^^^^^^^^^^^^^^^^
+>obj : NonNullable<T>
+>    : ^^^^^^^^^^^^^^
 >key : K
 >    : ^
 }
@@ -706,21 +706,21 @@ class TableBaseEnum<
 >null! : never
 >      : ^^^^^
 
-        iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
->iSpec[null! as keyof InternalSpec] : Record<keyof PublicSpec, any>[keyof InternalSpec]
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->iSpec : Record<keyof PublicSpec, any> | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        iSpec[null! as keyof InternalSpec];
+>iSpec[null! as keyof InternalSpec] : InternalSpec[keyof InternalSpec]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iSpec : InternalSpec
+>      : ^^^^^^^^^^^^
 >null! as keyof InternalSpec : keyof InternalSpec
 >                            : ^^^^^^^^^^^^^^^^^^
 >null! : never
 >      : ^^^^^
 
-        iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
->iSpec[null! as keyof PublicSpec] : Record<keyof PublicSpec, any>[keyof PublicSpec]
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->iSpec : Record<keyof PublicSpec, any> | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        iSpec[null! as keyof PublicSpec];    // Error
+>iSpec[null! as keyof PublicSpec] : any
+>                                 : ^^^
+>iSpec : InternalSpec
+>      : ^^^^^^^^^^^^
 >null! as keyof PublicSpec : keyof PublicSpec
 >                          : ^^^^^^^^^^^^^^^^
 >null! : never
@@ -737,20 +737,20 @@ class TableBaseEnum<
             return;
         }
         iSpec[null! as keyof InternalSpec];
->iSpec[null! as keyof InternalSpec] : Record<keyof PublicSpec, any>[keyof InternalSpec]
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->iSpec : Record<keyof PublicSpec, any>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iSpec[null! as keyof InternalSpec] : (InternalSpec & {})[keyof InternalSpec]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iSpec : InternalSpec & {}
+>      : ^^^^^^^^^^^^^^^^^
 >null! as keyof InternalSpec : keyof InternalSpec
 >                            : ^^^^^^^^^^^^^^^^^^
 >null! : never
 >      : ^^^^^
 
         iSpec[null! as keyof PublicSpec];
->iSpec[null! as keyof PublicSpec] : Record<keyof PublicSpec, any>[keyof PublicSpec]
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->iSpec : Record<keyof PublicSpec, any>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iSpec[null! as keyof PublicSpec] : (InternalSpec & {})[keyof PublicSpec]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iSpec : InternalSpec & {}
+>      : ^^^^^^^^^^^^^^^^^
 >null! as keyof PublicSpec : keyof PublicSpec
 >                          : ^^^^^^^^^^^^^^^^
 >null! : never
