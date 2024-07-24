@@ -1091,6 +1091,30 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "TypedArray",
+            "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "TypedArrayConstructor",
+            "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "TypedArrayType",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "TypedArrayTypes",
+            "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "TypedPropertyDescriptor",
             "kind": "interface",
             "kindModifiers": "declare",

@@ -6,8 +6,8 @@ new DataView(new Uint8Array(32)); // should error
 >                                 : ^^^^^^^^
 >DataView : DataViewConstructor
 >         : ^^^^^^^^^^^^^^^^^^^
->new Uint8Array(32) : Uint8Array
->                   : ^^^^^^^^^^
+>new Uint8Array(32) : Uint8Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >32 : 32

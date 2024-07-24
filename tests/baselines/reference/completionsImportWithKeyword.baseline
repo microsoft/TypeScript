@@ -57,9 +57,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -73,11 +73,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array
+// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array
+// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
+// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -129,13 +129,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array
+// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array
+// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
+// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -205,9 +205,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -221,11 +221,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array
+// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array
+// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
+// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -277,13 +277,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array
+// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array
+// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
+// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -352,9 +352,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -368,11 +368,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array
+// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array
+// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
+// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -424,13 +424,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array
+// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array
+// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
+// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -500,9 +500,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -516,11 +516,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array
+// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array
+// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
+// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -572,13 +572,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array
+// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array
+// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
+// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -648,9 +648,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -664,11 +664,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array
+// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array
+// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
+// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -720,13 +720,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array
+// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array
+// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
+// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -795,9 +795,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -811,11 +811,11 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array
+// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array
+// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
+// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
@@ -867,13 +867,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array
+// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array
+// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
+// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
@@ -934,9 +934,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -948,11 +948,11 @@
 // | in
 // | var Infinity: number
 // | instanceof
-// | interface Int8Array
+// | interface Int8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
-// | interface Int16Array
+// | interface Int16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
+// | interface Int32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -993,13 +993,13 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint8Array
+// | interface Uint8Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
-// | interface Uint16Array
+// | interface Uint16Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
+// | interface Uint32Array<Buffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | interface URIError
@@ -2292,6 +2292,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -2344,6 +2388,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -2604,6 +2692,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -2658,6 +2790,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -2710,6 +2886,50 @@
             {
               "text": "Int32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -3992,6 +4212,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -4044,6 +4308,50 @@
             {
               "text": "Uint8ClampedArray",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -4100,6 +4408,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -4152,6 +4504,50 @@
             {
               "text": "Uint32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -5820,6 +6216,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -5872,6 +6312,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -6132,6 +6616,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -6186,6 +6714,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -6238,6 +6810,50 @@
             {
               "text": "Int32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -7520,6 +8136,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -7572,6 +8232,50 @@
             {
               "text": "Uint8ClampedArray",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -7628,6 +8332,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -7680,6 +8428,50 @@
             {
               "text": "Uint32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -9336,6 +10128,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -9388,6 +10224,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -9648,6 +10528,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -9702,6 +10626,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -9754,6 +10722,50 @@
             {
               "text": "Int32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -11036,6 +12048,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -11088,6 +12144,50 @@
             {
               "text": "Uint8ClampedArray",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -11144,6 +12244,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -11196,6 +12340,50 @@
             {
               "text": "Uint32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -12868,6 +14056,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -12920,6 +14152,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -13180,6 +14456,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -13234,6 +14554,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -13286,6 +14650,50 @@
             {
               "text": "Int32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -14568,6 +15976,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -14620,6 +16072,50 @@
             {
               "text": "Uint8ClampedArray",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -14676,6 +16172,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -14728,6 +16268,50 @@
             {
               "text": "Uint32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -16384,6 +17968,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -16436,6 +18064,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -16696,6 +18368,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -16750,6 +18466,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -16802,6 +18562,50 @@
             {
               "text": "Int32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -18084,6 +19888,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -18136,6 +19984,50 @@
             {
               "text": "Uint8ClampedArray",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -18192,6 +20084,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -18244,6 +20180,50 @@
             {
               "text": "Uint32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -19900,6 +21880,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -19952,6 +21976,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -20212,6 +22280,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -20266,6 +22378,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -20318,6 +22474,50 @@
             {
               "text": "Int32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -21600,6 +23800,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -21652,6 +23896,50 @@
             {
               "text": "Uint8ClampedArray",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -21708,6 +23996,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -21760,6 +24092,50 @@
             {
               "text": "Uint32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -23245,6 +25621,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -23297,6 +25717,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -23533,6 +25997,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -23587,6 +26095,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -23639,6 +26191,50 @@
             {
               "text": "Int32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -24789,6 +27385,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -24841,6 +27481,50 @@
             {
               "text": "Uint8ClampedArray",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -24897,6 +27581,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -24949,6 +27677,50 @@
             {
               "text": "Uint32Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "Buffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",

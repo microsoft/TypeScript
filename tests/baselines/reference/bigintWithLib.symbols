@@ -105,14 +105,14 @@ bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
 
 let len: number = bigIntArray.length;
 >len : Symbol(len, Decl(bigintWithLib.ts, 22, 3))
->bigIntArray.length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
+>bigIntArray.length : Symbol(TypedArray.length, Decl(lib.es5.d.ts, --, --))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
->length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
+>length : Symbol(TypedArray.length, Decl(lib.es5.d.ts, --, --))
 
 bigIntArray.length = 10; // should error
->bigIntArray.length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
+>bigIntArray.length : Symbol(TypedArray.length, Decl(lib.es5.d.ts, --, --))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
->length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
+>length : Symbol(TypedArray.length, Decl(lib.es5.d.ts, --, --))
 
 let arrayBufferLike: ArrayBufferView = bigIntArray;
 >arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithLib.ts, 24, 3))
@@ -154,14 +154,14 @@ bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
 
 len = bigIntArray.length;
 >len : Symbol(len, Decl(bigintWithLib.ts, 22, 3))
->bigIntArray.length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
+>bigIntArray.length : Symbol(TypedArray.length, Decl(lib.es5.d.ts, --, --))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
->length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
+>length : Symbol(TypedArray.length, Decl(lib.es5.d.ts, --, --))
 
 bigIntArray.length = 10; // should error
->bigIntArray.length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
+>bigIntArray.length : Symbol(TypedArray.length, Decl(lib.es5.d.ts, --, --))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
->length : Symbol(BigInt64Array.length, Decl(lib.es2020.bigint.d.ts, --, --))
+>length : Symbol(TypedArray.length, Decl(lib.es5.d.ts, --, --))
 
 arrayBufferLike = bigIntArray;
 >arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithLib.ts, 24, 3))
