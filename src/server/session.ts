@@ -2469,6 +2469,7 @@ export class Session<TMessage = string> implements EventSender {
                     isPackageJsonImport,
                     isImportStatementCompletion,
                     data,
+                    commitCharacters,
                 } = entry;
                 const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                 // Use `hasAction || undefined` to avoid serializing `false`.
@@ -2489,6 +2490,7 @@ export class Session<TMessage = string> implements EventSender {
                     isPackageJsonImport,
                     isImportStatementCompletion,
                     data,
+                    commitCharacters,
                 };
             }
         });
