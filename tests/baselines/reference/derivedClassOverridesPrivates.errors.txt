@@ -1,10 +1,10 @@
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts(5,7): error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
+derivedClassOverridesPrivates.ts(5,7): error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
   Types have separate declarations of a private property 'x'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts(13,7): error TS2417: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2'.
+derivedClassOverridesPrivates.ts(13,7): error TS2417: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2'.
   Types have separate declarations of a private property 'y'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts (2 errors) ====
+==== derivedClassOverridesPrivates.ts (2 errors) ====
     class Base {
         private x: { foo: string };
     }

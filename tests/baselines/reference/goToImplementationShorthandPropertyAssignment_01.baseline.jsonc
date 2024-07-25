@@ -1,0 +1,95 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationShorthandPropertyAssignment_01.ts ===
+// --- (line: 10) skipped ---
+// }
+// 
+// // Class expression that gets used in a bar implementation
+// var x = <|class [|{| defId: 0 |}Foo|] {
+//     createBarInClassExpression(): Bar {
+//         return {
+//             Foo
+//         };
+//     }
+// 
+//     someFunction() {}
+// }|>;
+// 
+// // Class declaration that gets used in a bar implementation. This class has multiple definitions
+// // (the class declaration and the interface above), but we only want the class returned
+// <|class [|{| defId: 1 |}Foo|] {
+// 
+// }|>
+// 
+// function createBarUsingClassDeclaration(): Bar {
+//     return {
+// --- (line: 32) skipped ---
+
+// --- (line: 37) skipped ---
+//     someFunction() {}
+// };
+// 
+// createBarUsingClassDeclaration().Fo/*GOTO IMPL*/o;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     }
+    ],
+    "kind": "local class"
+   },
+   {
+    "defId": 1,
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   }
+  ]

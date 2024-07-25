@@ -1,90 +1,140 @@
-=== tests/cases/compiler/arrayconcat.ts ===
+//// [tests/cases/compiler/arrayconcat.ts] ////
+
+=== arrayconcat.ts ===
 interface IOptions {
     name?: string;
 >name : string
+>     : ^^^^^^
 
     flag?: boolean;
 >flag : boolean
+>     : ^^^^^^^
 
     short?: string;
 >short : string
+>      : ^^^^^^
 
     usage?: string;
 >usage : string
+>      : ^^^^^^
 
     set?: (s: string) => void;
 >set : (s: string) => void
+>    : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
 
     type?: string;
 >type : string
+>     : ^^^^^^
 
     experimental?: boolean;
 >experimental : boolean
+>             : ^^^^^^^
 }
 
 class parser {
 >parser : parser
+>       : ^^^^^^
 
 	public options: IOptions[];
 >options : IOptions[]
+>        : ^^^^^^^^^^
 
 	public m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
 		this.options = this.options.sort(function(a, b) {
 >this.options = this.options.sort(function(a, b) {            var aName = a.name.toLowerCase();            var bName = b.name.toLowerCase();            if (aName > bName) {                return 1;            } else if (aName < bName) {                return -1;            } else {                return 0;            }        }) : IOptions[]
+>                                                                                                                                                                                                                                                                                                                                          : ^^^^^^^^^^
 >this.options : IOptions[]
+>             : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >options : IOptions[]
+>        : ^^^^^^^^^^
 >this.options.sort(function(a, b) {            var aName = a.name.toLowerCase();            var bName = b.name.toLowerCase();            if (aName > bName) {                return 1;            } else if (aName < bName) {                return -1;            } else {                return 0;            }        }) : IOptions[]
+>                                                                                                                                                                                                                                                                                                                           : ^^^^^^^^^^
 >this.options.sort : (compareFn?: (a: IOptions, b: IOptions) => number) => IOptions[]
+>                  : ^         ^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >this.options : IOptions[]
+>             : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >options : IOptions[]
+>        : ^^^^^^^^^^
 >sort : (compareFn?: (a: IOptions, b: IOptions) => number) => IOptions[]
+>     : ^         ^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >function(a, b) {            var aName = a.name.toLowerCase();            var bName = b.name.toLowerCase();            if (aName > bName) {                return 1;            } else if (aName < bName) {                return -1;            } else {                return 0;            }        } : (a: IOptions, b: IOptions) => 1 | -1 | 0
+>                                                                                                                                                                                                                                                                                                        : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : IOptions
+>  : ^^^^^^^^
 >b : IOptions
+>  : ^^^^^^^^
 
             var aName = a.name.toLowerCase();
 >aName : string
+>      : ^^^^^^
 >a.name.toLowerCase() : string
+>                     : ^^^^^^
 >a.name.toLowerCase : () => string
+>                   : ^^^^^^      
 >a.name : string
+>       : ^^^^^^
 >a : IOptions
+>  : ^^^^^^^^
 >name : string
+>     : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
             var bName = b.name.toLowerCase();
 >bName : string
+>      : ^^^^^^
 >b.name.toLowerCase() : string
+>                     : ^^^^^^
 >b.name.toLowerCase : () => string
+>                   : ^^^^^^      
 >b.name : string
+>       : ^^^^^^
 >b : IOptions
+>  : ^^^^^^^^
 >name : string
+>     : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 
             if (aName > bName) {
 >aName > bName : boolean
+>              : ^^^^^^^
 >aName : string
+>      : ^^^^^^
 >bName : string
+>      : ^^^^^^
 
                 return 1;
 >1 : 1
+>  : ^
 
             } else if (aName < bName) {
 >aName < bName : boolean
+>              : ^^^^^^^
 >aName : string
+>      : ^^^^^^
 >bName : string
+>      : ^^^^^^
 
                 return -1;
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
             } else {
                 return 0;
 >0 : 0
+>  : ^
             }
         });
 	}

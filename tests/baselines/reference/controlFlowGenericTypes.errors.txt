@@ -1,16 +1,16 @@
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(49,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<T>'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(55,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<unknown>'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(81,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
+controlFlowGenericTypes.ts(49,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<T>'.
+controlFlowGenericTypes.ts(55,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'Box<unknown>'.
+controlFlowGenericTypes.ts(81,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
   Property 'foo' does not exist on type 'AA'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(90,44): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(91,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
+controlFlowGenericTypes.ts(90,44): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+controlFlowGenericTypes.ts(91,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
   Property 'foo' does not exist on type 'AA'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(156,16): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(167,9): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS2532: Object is possibly 'undefined'.
+controlFlowGenericTypes.ts(156,16): error TS18048: 'obj' is possibly 'undefined'.
+controlFlowGenericTypes.ts(167,9): error TS18048: 'iSpec' is possibly 'undefined'.
+controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts (8 errors) ====
+==== controlFlowGenericTypes.ts (8 errors) ====
     function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
         if (x) {
             x;
@@ -109,7 +109,7 @@ tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS2
     
     const fn2 = <T extends MyUnion>(value: T): MyUnion => {
                                                ~~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
         value.foo;  // Error
               ~~~
 !!! error TS2339: Property 'foo' does not exist on type 'MyUnion'.
@@ -180,7 +180,7 @@ tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS2
     function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
         const x1 = obj[key];  // Error
                    ~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'obj' is possibly 'undefined'.
         const x2 = obj && obj[key];
     }
     
@@ -193,10 +193,10 @@ tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS2
             let iSpec = null! as InternalSpec;
             iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
             ~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'iSpec' is possibly 'undefined'.
             iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
             ~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'iSpec' is possibly 'undefined'.
             if (iSpec === undefined) {
                 return;
             }
@@ -239,5 +239,13 @@ tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS2
         if (control !== undefined) {
             control[key] = value;
         }
+    }
+    
+    // Repro from #50465
+    
+    type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) & { title?: string; }
+    
+    function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
+      return column[key];
     }
     

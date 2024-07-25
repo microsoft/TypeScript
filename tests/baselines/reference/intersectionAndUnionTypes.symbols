@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts] ////
+
+=== intersectionAndUnionTypes.ts ===
 interface A { a: string }
 >A : Symbol(A, Decl(intersectionAndUnionTypes.ts, 0, 0))
 >a : Symbol(A.a, Decl(intersectionAndUnionTypes.ts, 0, 13))

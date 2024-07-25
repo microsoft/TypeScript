@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectIndexer.ts ===
+//// [tests/cases/compiler/objectIndexer.ts] ////
+
+=== objectIndexer.ts ===
 export interface Callback {
     (value: any): void;
 >value : any
@@ -7,21 +9,29 @@ export interface Callback {
 interface IMap {
     [s: string]: Callback;
 >s : string
+>  : ^^^^^^
 }
 
 class Emitter {
 >Emitter : Emitter
+>        : ^^^^^^^
 
     private listeners: IMap;
 >listeners : IMap
+>          : ^^^^
 
     constructor () {
         this.listeners = {};
 >this.listeners = {} : {}
+>                    : ^^
 >this.listeners : IMap
+>               : ^^^^
 >this : this
+>     : ^^^^
 >listeners : IMap
+>          : ^^^^
 >{} : {}
+>   : ^^
     }
 }
 

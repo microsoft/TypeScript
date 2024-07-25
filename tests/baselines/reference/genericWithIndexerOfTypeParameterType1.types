@@ -1,33 +1,54 @@
-=== tests/cases/compiler/genericWithIndexerOfTypeParameterType1.ts ===
+//// [tests/cases/compiler/genericWithIndexerOfTypeParameterType1.ts] ////
+
+=== genericWithIndexerOfTypeParameterType1.ts ===
 class LazyArray<T> {
 >LazyArray : LazyArray<T>
+>          : ^^^^^^^^^^^^
 
     private objects = <{ [objectId: string]: T; }>{};
 >objects : { [objectId: string]: T; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><{ [objectId: string]: T; }>{} : { [objectId: string]: T; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >objectId : string
+>         : ^^^^^^
 >{} : {}
+>   : ^^
 
     array() {
 >array : () => { [objectId: string]: T; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return this.objects;
 >this.objects : { [objectId: string]: T; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >objects : { [objectId: string]: T; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 var lazyArray = new LazyArray<string>();
 >lazyArray : LazyArray<string>
+>          : ^^^^^^^^^^^^^^^^^
 >new LazyArray<string>() : LazyArray<string>
+>                        : ^^^^^^^^^^^^^^^^^
 >LazyArray : typeof LazyArray
+>          : ^^^^^^^^^^^^^^^^
 
 var value: string = lazyArray.array()["test"]; // used to be an error
 >value : string
+>      : ^^^^^^
 >lazyArray.array()["test"] : string
+>                          : ^^^^^^
 >lazyArray.array() : { [objectId: string]: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lazyArray.array : () => { [objectId: string]: string; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >lazyArray : LazyArray<string>
+>          : ^^^^^^^^^^^^^^^^^
 >array : () => { [objectId: string]: string; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"test" : "test"
+>       : ^^^^^^
 

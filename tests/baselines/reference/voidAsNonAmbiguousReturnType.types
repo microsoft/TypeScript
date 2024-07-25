@@ -1,27 +1,42 @@
-=== tests/cases/compiler/voidAsNonAmbiguousReturnType_1.ts ===
+//// [tests/cases/compiler/voidAsNonAmbiguousReturnType.ts] ////
+
+=== voidAsNonAmbiguousReturnType_1.ts ===
 ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
 import fs = require("./voidAsNonAmbiguousReturnType_0");
 >fs : typeof fs
+>   : ^^^^^^^^^
 
 function main() {
 >main : () => void
+>     : ^^^^^^^^^^
 
  fs.mkdirSync('test'); // should not error - return types are the same
 >fs.mkdirSync('test') : void
+>                     : ^^^^
 >fs.mkdirSync : (path: string, mode?: number) => void
+>             : ^    ^^      ^^    ^^^      ^^^^^    
 >fs : typeof fs
+>   : ^^^^^^^^^
 >mkdirSync : (path: string, mode?: number) => void
+>          : ^    ^^      ^^    ^^^      ^^^^^    
 >'test' : "test"
+>       : ^^^^^^
 }
 
-=== tests/cases/compiler/voidAsNonAmbiguousReturnType_0.ts ===
+=== voidAsNonAmbiguousReturnType_0.ts ===
 export function mkdirSync(path: string, mode?: number): void;
 >mkdirSync : (path: string, mode?: number) => void
+>          : ^    ^^      ^^    ^^^      ^^^^^    
 >path : string
+>     : ^^^^^^
 >mode : number
+>     : ^^^^^^
 
 export function mkdirSync(path: string, mode?: string): void {}
 >mkdirSync : (path: string, mode?: number) => void
+>          : ^    ^^      ^^    ^^^      ^^^^^    
 >path : string
+>     : ^^^^^^
 >mode : string
+>     : ^^^^^^
 

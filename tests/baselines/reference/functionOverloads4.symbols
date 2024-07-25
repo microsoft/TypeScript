@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads4.ts ===
+//// [tests/cases/compiler/functionOverloads4.ts] ////
+
+=== functionOverloads4.ts ===
 function foo():number;
 >foo : Symbol(foo, Decl(functionOverloads4.ts, 0, 0), Decl(functionOverloads4.ts, 0, 22))
 

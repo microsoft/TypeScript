@@ -1,4 +1,4 @@
-// @target: es3,es5,es2015,es2016,es2017,es2018,es2019,esnext
+// @target: es5,es2015,es2016,es2017,es2018,es2019,esnext
 
 1_000_000_000_000
 0b1010_0001_1000_0101

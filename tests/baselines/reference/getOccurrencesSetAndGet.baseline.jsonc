@@ -1,0 +1,25 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSetAndGet.ts ===
+// class Foo {
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}set|] bar(b: any) {
+//     }
+// 
+//     public [|{| kind: "none" |}get|] bar(): any {
+//         return undefined;
+//     }
+// 
+// --- (line: 9) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSetAndGet.ts ===
+// class Foo {
+//     [|{| kind: "none" |}set|] bar(b: any) {
+//     }
+// 
+//     public /*HIGHLIGHTS*/[|{| kind: "none" |}get|] bar(): any {
+//         return undefined;
+//     }
+// 
+// --- (line: 9) skipped ---

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts] ////
+
 //// [classAbstractAssignabilityConstructorFunction.ts]
 abstract class A { }
 

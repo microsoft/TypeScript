@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parameterNamesInTypeParameterList.ts] ////
+
 //// [parameterNamesInTypeParameterList.ts]
 function f0<T extends typeof a>(a: T) {
 	a.b;

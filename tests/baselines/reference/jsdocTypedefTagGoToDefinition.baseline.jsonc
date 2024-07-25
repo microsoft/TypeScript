@@ -1,0 +1,54 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/server/jsdocCompletion_typedef.js ===
+// /**
+//  * @typedef {Object} Person
+//  * @property {string} [|personName|]
+//  * @property {number} personAge
+//  */
+// 
+// /**
+//  * @typedef {{ animalName: string, animalAge: number }} Animal
+//  */
+// 
+// /** @type {Person} */
+// var person; person.personName/*GOTO DEF*/
+// 
+// /** @type {Animal} */
+// var animal; animal.animalName
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/server/jsdocCompletion_typedef.js ===
+// --- (line: 4) skipped ---
+//  */
+// 
+// /**
+//  * @typedef {{ [|animalName|]: string, animalAge: number }} Animal
+//  */
+// 
+// /** @type {Person} */
+// var person; person.personName
+// 
+// /** @type {Animal} */
+// var animal; animal.animalName/*GOTO DEF*/
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

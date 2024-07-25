@@ -1,2 +1,4 @@
 //// [a.js.map]
-{"version":3,"file":"a.js","sourceRoot":"","sources":["../tests/cases/compiler/a.ts"],"names":[],"mappings":"AAAA;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC"}
+{"version":3,"file":"a.js","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC"}
+//// [b.js.map]
+{"version":3,"file":"b.js","sourceRoot":"","sources":["../b.js"],"names":[],"mappings":"AAAA,SAAS,GAAG;AACZ,CAAC"}

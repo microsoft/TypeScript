@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens8.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens8.ts] ////
+
+=== parserSkippedTokens8.ts ===
+
 ;
-No type information for this code./*foo*/ \ /*bar*/
-No type information for this code.
+/*foo*/ \ /*bar*/

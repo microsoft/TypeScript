@@ -18,6 +18,6 @@ verify.completions({
         name: "abc",
         kind: "property",
         kindModifiers: "deprecated,declare,optional",
-        sortText: completion.SortText.DeprecatedOptionalMember
+        sortText: completion.SortText.Deprecated(completion.SortText.OptionalMember),
     }],
 });

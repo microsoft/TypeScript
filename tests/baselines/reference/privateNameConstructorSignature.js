@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameConstructorSignature.ts] ////
+
 //// [privateNameConstructorSignature.ts]
 interface D {
     x: number;

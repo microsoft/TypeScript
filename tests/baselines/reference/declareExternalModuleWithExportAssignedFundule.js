@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declareExternalModuleWithExportAssignedFundule.ts] ////
+
 //// [declareExternalModuleWithExportAssignedFundule.ts]
 declare module "express" {
 

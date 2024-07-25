@@ -1,23 +1,36 @@
-=== tests/cases/compiler/quotedPropertyName3.ts ===
+//// [tests/cases/compiler/quotedPropertyName3.ts] ////
+
+=== quotedPropertyName3.ts ===
 class Test {
 >Test : Test
+>     : ^^^^
 
     "prop1": number;
 >"prop1" : number
+>        : ^^^^^^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         var x = () => this["prop1"];
 >x : () => number
+>  : ^^^^^^^^^^^^
 >() => this["prop1"] : () => number
+>                    : ^^^^^^^^^^^^
 >this["prop1"] : number
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >"prop1" : "prop1"
+>        : ^^^^^^^
 
         var y: number = x();
 >y : number
+>  : ^^^^^^
 >x() : number
+>    : ^^^^^^
 >x : () => number
+>  : ^^^^^^^^^^^^
     }
 }

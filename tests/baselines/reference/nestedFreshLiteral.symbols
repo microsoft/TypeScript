@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedFreshLiteral.ts ===
+//// [tests/cases/compiler/nestedFreshLiteral.ts] ////
+
+=== nestedFreshLiteral.ts ===
 interface CSSProps  {
 >CSSProps : Symbol(CSSProps, Decl(nestedFreshLiteral.ts, 0, 0))
 

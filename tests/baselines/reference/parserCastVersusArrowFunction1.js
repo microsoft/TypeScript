@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserCastVersusArrowFunction1.ts] ////
+
 //// [parserCastVersusArrowFunction1.ts]
 var v = <T>() => 1;
 var v = <T>a;

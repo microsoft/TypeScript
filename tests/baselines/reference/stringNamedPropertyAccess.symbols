@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyAccess.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyAccess.ts] ////
+
+=== stringNamedPropertyAccess.ts ===
 class C {
 >C : Symbol(C, Decl(stringNamedPropertyAccess.ts, 0, 0))
 

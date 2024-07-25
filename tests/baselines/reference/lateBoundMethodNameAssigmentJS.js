@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/lateBoundMethodNameAssigmentJS.ts] ////
+
 //// [lateBoundMethodNameAssigmentJS.js]
 const _symbol = Symbol("_sym");
 export class MyClass {

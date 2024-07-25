@@ -1,94 +1,161 @@
-=== tests/cases/conformance/types/spread/spreadDuplicate.ts ===
+//// [tests/cases/conformance/types/spread/spreadDuplicate.ts] ////
+
+=== spreadDuplicate.ts ===
 // Repro from #44438
 
 declare let a: { a: string };
 >a : { a: string; }
+>  : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
 declare let b: { a?: string };
->b : { a?: string | undefined; }
+>b : { a?: string; }
+>  : ^^^^^^      ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare let c: { a: string | undefined };
 >c : { a: string | undefined; }
+>  : ^^^^^                  ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare let d: { a?: string | undefined };
 >d : { a?: string | undefined; }
+>  : ^^^^^^                  ^^^
 >a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare let t: boolean;
 >t : boolean
+>  : ^^^^^^^
 
 let a1 = { a: 123, ...a };  // string (Error)
 >a1 : { a: string; }
+>   : ^^^^^      ^^^
 >{ a: 123, ...a } : { a: string; }
+>                 : ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 >a : { a: string; }
+>  : ^^^^^      ^^^
 
 let b1 = { a: 123, ...b };  // string | number
 >b1 : { a: string | number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 123, ...b } : { a: string | number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >123 : 123
->b : { a?: string | undefined; }
+>    : ^^^
+>b : { a?: string; }
+>  : ^^^^^^      ^^^
 
 let c1 = { a: 123, ...c };  // string | undefined (Error)
 >c1 : { a: string | undefined; }
+>   : ^^^^^                  ^^^
 >{ a: 123, ...c } : { a: string | undefined; }
+>                 : ^^^^^                  ^^^
 >a : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 >c : { a: string | undefined; }
+>  : ^^^^^                  ^^^
 
 let d1 = { a: 123, ...d };  // string | number
 >d1 : { a: string | number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 123, ...d } : { a: string | number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 >d : { a?: string | undefined; }
+>  : ^^^^^^                  ^^^
 
 let a2 = { a: 123, ...(t ? a : {}) };  // string | number
 >a2 : { a: string | number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 123, ...(t ? a : {}) } : { a: string | number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 >(t ? a : {}) : { a: string; } | {}
+>             : ^^^^^      ^^^^^^^^
 >t ? a : {} : { a: string; } | {}
+>           : ^^^^^      ^^^^^^^^
 >t : boolean
+>  : ^^^^^^^
 >a : { a: string; }
+>  : ^^^^^      ^^^
 >{} : {}
+>   : ^^
 
 let b2 = { a: 123, ...(t ? b : {}) };  // string | number
 >b2 : { a: string | number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 123, ...(t ? b : {}) } : { a: string | number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >123 : 123
->(t ? b : {}) : { a?: string | undefined; }
->t ? b : {} : { a?: string | undefined; }
+>    : ^^^
+>(t ? b : {}) : { a?: string; }
+>             : ^^^^^^      ^^^
+>t ? b : {} : { a?: string; }
+>           : ^^^^^^      ^^^
 >t : boolean
->b : { a?: string | undefined; }
+>  : ^^^^^^^
+>b : { a?: string; }
+>  : ^^^^^^      ^^^
 >{} : {}
+>   : ^^
 
 let c2 = { a: 123, ...(t ? c : {}) };  // string | number
 >c2 : { a: string | number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 123, ...(t ? c : {}) } : { a: string | number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 >(t ? c : {}) : { a: string | undefined; } | {}
+>             : ^^^^^                  ^^^^^^^^
 >t ? c : {} : { a: string | undefined; } | {}
+>           : ^^^^^                  ^^^^^^^^
 >t : boolean
+>  : ^^^^^^^
 >c : { a: string | undefined; }
+>  : ^^^^^                  ^^^
 >{} : {}
+>   : ^^
 
 let d2 = { a: 123, ...(t ? d : {}) };  // string | number
 >d2 : { a: string | number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 123, ...(t ? d : {}) } : { a: string | number; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 >(t ? d : {}) : { a?: string | undefined; }
+>             : ^^^^^^                  ^^^
 >t ? d : {} : { a?: string | undefined; }
+>           : ^^^^^^                  ^^^
 >t : boolean
+>  : ^^^^^^^
 >d : { a?: string | undefined; }
+>  : ^^^^^^                  ^^^
 >{} : {}
+>   : ^^
 

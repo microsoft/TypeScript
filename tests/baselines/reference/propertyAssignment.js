@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyAssignment.ts] ////
+
 //// [propertyAssignment.ts]
 var foo1: { new ():any; }   
 var bar1: { x : number; }

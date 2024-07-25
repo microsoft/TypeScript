@@ -1,13 +1,13 @@
-tests/cases/compiler/bluebirdStaticThis.ts(5,22): error TS2420: Class 'Promise<R>' incorrectly implements interface 'Thenable<R>'.
+bluebirdStaticThis.ts(5,22): error TS2420: Class 'Promise<R>' incorrectly implements interface 'Thenable<R>'.
   Property 'then' is missing in type 'Promise<R>' but required in type 'Thenable<R>'.
-tests/cases/compiler/bluebirdStaticThis.ts(22,51): error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Resolver'.
-tests/cases/compiler/bluebirdStaticThis.ts(57,109): error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Inspection'.
-tests/cases/compiler/bluebirdStaticThis.ts(58,91): error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Inspection'.
-tests/cases/compiler/bluebirdStaticThis.ts(59,91): error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Inspection'.
-tests/cases/compiler/bluebirdStaticThis.ts(60,73): error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Inspection'.
+bluebirdStaticThis.ts(22,51): error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Resolver'.
+bluebirdStaticThis.ts(57,109): error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
+bluebirdStaticThis.ts(58,91): error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
+bluebirdStaticThis.ts(59,91): error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
+bluebirdStaticThis.ts(60,73): error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
 
 
-==== tests/cases/compiler/bluebirdStaticThis.ts (6 errors) ====
+==== bluebirdStaticThis.ts (6 errors) ====
     // This version is reduced from the full d.ts by removing almost all the tests
     // and all the comments.
     // Then it adds explicit `this` arguments to the static members.
@@ -16,7 +16,7 @@ tests/cases/compiler/bluebirdStaticThis.ts(60,73): error TS2694: Namespace '"tes
                          ~~~~~~~
 !!! error TS2420: Class 'Promise<R>' incorrectly implements interface 'Thenable<R>'.
 !!! error TS2420:   Property 'then' is missing in type 'Promise<R>' but required in type 'Thenable<R>'.
-!!! related TS2728 tests/cases/compiler/bluebirdStaticThis.ts:113:3: 'then' is declared here.
+!!! related TS2728 bluebirdStaticThis.ts:113:3: 'then' is declared here.
     	constructor(callback: (resolve: (thenableOrResult: R | Promise.Thenable<R>) => void, reject: (error: any) => void) => void);
         static try<R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>;
         static try<R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>;
@@ -35,7 +35,7 @@ tests/cases/compiler/bluebirdStaticThis.ts(60,73): error TS2694: Namespace '"tes
     
         static defer<R>(dit: typeof Promise): Promise.Resolver<R>;
                                                       ~~~~~~~~
-!!! error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Resolver'.
+!!! error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Resolver'.
     
         static cast<R>(dit: typeof Promise, value: Promise.Thenable<R>): Promise<R>;
         static cast<R>(dit: typeof Promise, value: R): Promise<R>;
@@ -72,16 +72,16 @@ tests/cases/compiler/bluebirdStaticThis.ts(60,73): error TS2694: Namespace '"tes
     
         static settle<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>;
                                                                                                                 ~~~~~~~~~~
-!!! error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Inspection'.
+!!! error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
         static settle<R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>;
                                                                                               ~~~~~~~~~~
-!!! error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Inspection'.
+!!! error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
         static settle<R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>;
                                                                                               ~~~~~~~~~~
-!!! error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Inspection'.
+!!! error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
         static settle<R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>;
                                                                             ~~~~~~~~~~
-!!! error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Inspection'.
+!!! error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Inspection'.
     
         static any<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<R>;
         static any<R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<R>;

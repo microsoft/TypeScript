@@ -1,37 +1,60 @@
-=== tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts ===
+//// [tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts] ////
+
+=== excessPropertyCheckWithEmptyObject.ts ===
 // Repro from #14910
 
 // Excess property error expected here
 Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false });
 >Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false }) : Window & typeof globalThis
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^ 
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"prop" : "prop"
+>       : ^^^^^^
 >{ value: "v1.0.0", readonly: false } : { value: string; readonly: boolean; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
+>      : ^^^^^^
 >"v1.0.0" : "v1.0.0"
+>         : ^^^^^^^^
 >readonly : boolean
+>         : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 interface A { x?: string }
 >x : string
+>  : ^^^^^^
 
 // Excess property error expected here
 let a: A & ThisType<any> = { y: 10 };
 >a : A & ThisType<any>
+>  : ^^^^^^^^^^^^^^^^^
 >{ y: 10 } : { y: number; }
+>          : ^^^^^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 interface Empty {}
 
 // Excess property error expected here
 let x: Empty & { x: number } = { y: "hello" };
 >x : Empty & { x: number; }
+>  : ^^^^^^^^^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >{ y: "hello" } : { y: string; }
+>               : ^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 

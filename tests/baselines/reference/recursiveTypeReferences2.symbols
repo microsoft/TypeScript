@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/recursiveTypes/bug39372.js ===
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypeReferences2.ts] ////
+
+=== bug39372.js ===
 /** @typedef {ReadonlyArray<Json>} JsonArray */
 /** @typedef {{ readonly [key: string]: Json }} JsonRecord */
 /** @typedef {boolean | number | string | null | JsonRecord | JsonArray | readonly []} Json */

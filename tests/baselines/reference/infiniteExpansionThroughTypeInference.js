@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughTypeInference.ts] ////
+
 //// [infiniteExpansionThroughTypeInference.ts]
 interface G<T> {
     x: G<G<T>> // infinitely expanding type reference

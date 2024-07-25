@@ -1,42 +1,63 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments5.ts] ////
+
+=== a.js ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         this.p = 1
 >this.p = 1 : 1
+>           : ^
 >this.p : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >p : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
     }
 }
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 
         // should be OK, and p should have type number from this assignment
         this.p = 1
 >this.p = 1 : 1
+>           : ^
 >this.p : any
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
     }
     test() {
 >test : () => number
+>     : ^^^^^^^^^^^^
 
         return this.p
 >this.p : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >p : number
+>  : ^^^^^^
     }
 }
 

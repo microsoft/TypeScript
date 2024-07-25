@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target.ts] ////
+
 //// [es6modulekindWithES5Target.ts]
 export class C {
     static s = 0;

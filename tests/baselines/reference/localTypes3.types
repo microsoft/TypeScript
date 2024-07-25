@@ -1,134 +1,208 @@
-=== tests/cases/conformance/types/localTypes/localTypes3.ts ===
+//// [tests/cases/conformance/types/localTypes/localTypes3.ts] ////
+
+=== localTypes3.ts ===
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     function f() {
 >f : () => typeof C
+>  : ^^^^^^^^^^^^^^
 
         class C<X, Y> {
 >C : C<X, Y>
+>  : ^^^^^^^
 
             constructor(public x: X, public y: Y) { }
 >x : X
+>  : ^
 >y : Y
+>  : ^
         }
         return C;
 >C : typeof C
+>  : ^^^^^^^^
     }
     let C = f();
 >C : typeof C
+>  : ^^^^^^^^
 >f() : typeof C
+>    : ^^^^^^^^
 >f : () => typeof C
+>  : ^^^^^^^^^^^^^^
 
     let v = new C(10, "hello");
 >v : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >new C(10, "hello") : C<number, string>
+>                   : ^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     let x = v.x;
 >x : number
+>  : ^^^^^^
 >v.x : number
+>    : ^^^^^^
 >v : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     let y = v.y;
 >y : string
+>  : ^^^^^^
 >v.y : string
+>    : ^^^^^^
 >v : C<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 }
 
 function f2() {
 >f2 : () => void
+>   : ^^^^^^^^^^
 
     function f<X>(x: X) {
 >f : <X>(x: X) => typeof C
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^
 >x : X
+>  : ^
 
         class C<Y> {
 >C : C<Y>
+>  : ^^^^
 
             public x = x;
 >x : X
+>  : ^
 >x : X
+>  : ^
 
             constructor(public y: Y) { }
 >y : Y
+>  : ^
         }
         return C;
 >C : typeof C
+>  : ^^^^^^^^
     }
     let C = f(10);
 >C : typeof C
+>  : ^^^^^^^^
 >f(10) : typeof C
+>      : ^^^^^^^^
 >f : <X>(x: X) => typeof C
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 
     let v = new C("hello");
 >v : f<number>.C<string>
+>  : ^^^^^^^^^^^^^^^^^^^
 >new C("hello") : f<number>.C<string>
+>               : ^^^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     let x = v.x;
 >x : number
+>  : ^^^^^^
 >v.x : number
+>    : ^^^^^^
 >v : f<number>.C<string>
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     let y = v.y;
 >y : string
+>  : ^^^^^^
 >v.y : string
+>    : ^^^^^^
 >v : f<number>.C<string>
+>  : ^^^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 }
 
 function f3() {
 >f3 : () => void
+>   : ^^^^^^^^^^
 
     function f<X, Y>(x: X, y: Y) {
 >f : <X, Y>(x: X, y: Y) => typeof C
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^
 >x : X
+>  : ^
 >y : Y
+>  : ^
 
         class C {
 >C : C
+>  : ^
 
             public x = x;
 >x : X
+>  : ^
 >x : X
+>  : ^
 
             public y = y;
 >y : Y
+>  : ^
 >y : Y
+>  : ^
         }
         return C;
 >C : typeof C
+>  : ^^^^^^^^
     }
     let C = f(10, "hello");
 >C : typeof C
+>  : ^^^^^^^^
 >f(10, "hello") : typeof C
+>               : ^^^^^^^^
 >f : <X, Y>(x: X, y: Y) => typeof C
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     let v = new C();
 >v : f<number, string>.C
+>  : ^^^^^^^^^^^^^^^^^^^
 >new C() : f<number, string>.C
+>        : ^^^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
     let x = v.x;
 >x : number
+>  : ^^^^^^
 >v.x : number
+>    : ^^^^^^
 >v : f<number, string>.C
+>  : ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     let y = v.y;
 >y : string
+>  : ^^^^^^
 >v.y : string
+>    : ^^^^^^
 >v : f<number, string>.C
+>  : ^^^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeofInAnonymousType.ts ===
+//// [tests/cases/compiler/declFileTypeofInAnonymousType.ts] ////
+
+=== declFileTypeofInAnonymousType.ts ===
 module m1 {
 >m1 : Symbol(m1, Decl(declFileTypeofInAnonymousType.ts, 0, 0))
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral9.ts(1,3): error TS1005: ';' expected.
+scannerNumericLiteral9.ts(1,1): error TS1489: Decimals with leading zeros are not allowed.
 
 
-==== tests/cases/conformance/scanner/ecmascript5/scannerNumericLiteral9.ts (1 errors) ====
+==== scannerNumericLiteral9.ts (1 errors) ====
     009
-      ~
-!!! error TS1005: ';' expected.
+    ~~~
+!!! error TS1489: Decimals with leading zeros are not allowed.

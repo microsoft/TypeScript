@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/declarationEmitClassSetAccessorParamNameInJs.ts] ////
+
+=== foo.js ===
+// https://github.com/microsoft/TypeScript/issues/55391
+
+export class Foo {
+>Foo : Symbol(Foo, Decl(foo.js, 0, 0))
+
+    /**
+     * Bar.
+     *
+     * @param {string} baz Baz.
+     */
+    set bar(baz) {}
+>bar : Symbol(Foo.bar, Decl(foo.js, 2, 18))
+>baz : Symbol(baz, Decl(foo.js, 8, 12))
+}
+

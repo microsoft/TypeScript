@@ -1,58 +1,88 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity4.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity4.ts] ////
+
+=== derivedClassTransitivity4.ts ===
 // subclassing is not transitive when you can remove required parameters and add optional parameters on protected members
 
 class C {
 >C : C
+>  : ^
 
     protected foo(x: number) { }
 >foo : (x: number) => void
+>    : ^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     protected foo() { } // ok to drop parameters
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 class E extends D {
 >E : E
+>  : ^
 >D : D
+>  : ^
 
     public foo(x?: string) { } // ok to add optional parameters
 >foo : (x?: string) => void
+>    : ^ ^^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 var d: D;
 >d : D
+>  : ^
 
 var e: E;
 >e : E
+>  : ^
 
 c = e;
 >c = e : E
+>      : ^
 >c : C
+>  : ^
 >e : E
+>  : ^
 
 var r = c.foo(1);
 >r : void
+>  : ^^^^
 >c.foo(1) : void
+>         : ^^^^
 >c.foo : (x: number) => void
+>      : ^ ^^      ^^^^^^^^^
 >c : C
+>  : ^
 >foo : (x: number) => void
+>    : ^ ^^      ^^^^^^^^^
 >1 : 1
+>  : ^
 
 var r2 = e.foo('');
 >r2 : void
+>   : ^^^^
 >e.foo('') : void
+>          : ^^^^
 >e.foo : (x?: string) => void
+>      : ^ ^^^      ^^^^^^^^^
 >e : E
+>  : ^
 >foo : (x?: string) => void
+>    : ^ ^^^      ^^^^^^^^^
 >'' : ""
+>   : ^^
 

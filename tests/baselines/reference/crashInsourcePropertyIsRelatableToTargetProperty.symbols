@@ -1,4 +1,6 @@
-=== tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts ===
+//// [tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts] ////
+
+=== crashInsourcePropertyIsRelatableToTargetProperty.ts ===
 class C {
 >C : Symbol(C, Decl(crashInsourcePropertyIsRelatableToTargetProperty.ts, 0, 0))
 

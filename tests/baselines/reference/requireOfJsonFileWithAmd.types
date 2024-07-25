@@ -1,45 +1,71 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileWithAmd.ts] ////
+
+=== file1.ts ===
 import b1 = require('./b');
 >b1 : any
+>   : ^^^
 
 let x = b1.a;
 >x : any
+>  : ^^^
 >b1.a : any
+>     : ^^^
 >b1 : any
+>   : ^^^
 >a : any
+>  : ^^^
 
 import b2 = require('./b.json');
 >b2 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (x) {
 >x : any
+>  : ^^^
 
     let b = b2.b;
 >b : string
+>  : ^^^^^^
 >b2.b : string
+>     : ^^^^^^
 >b2 : { a: boolean; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
     x = (b1.b === b);
 >x = (b1.b === b) : boolean
+>                 : ^^^^^^^
 >x : any
+>  : ^^^
 >(b1.b === b) : boolean
+>             : ^^^^^^^
 >b1.b === b : boolean
+>           : ^^^^^^^
 >b1.b : any
+>     : ^^^
 >b1 : any
+>   : ^^^
 >b : any
+>  : ^^^
 >b : string
+>  : ^^^^^^
 }
 
-=== tests/cases/compiler/b.json ===
+=== b.json ===
 {
 >{    "a": true,    "b": "hello"} : { a: boolean; b: string; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     "a": true,
 >"a" : boolean
+>    : ^^^^^^^
 >true : true
+>     : ^^^^
 
     "b": "hello"
 >"b" : string
+>    : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesModules.ts] ////
+
 //// [augmentedTypesModules.ts]
 // module then var
 module m1 { }

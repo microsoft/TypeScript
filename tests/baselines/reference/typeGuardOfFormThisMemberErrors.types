@@ -1,97 +1,151 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts] ////
+
+=== typeGuardOfFormThisMemberErrors.ts ===
 // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
 namespace Test {
 >Test : typeof Test
+>     : ^^^^^^^^^^^
 
 	export class FileSystemObject {
 >FileSystemObject : FileSystemObject
+>                 : ^^^^^^^^^^^^^^^^
 
 		isFSO: this is FileSystemObject;
 >isFSO : boolean
+>      : ^^^^^^^
 
 		get isFile(): this is File {
 >isFile : boolean
+>       : ^^^^^^^
 
 			return this instanceof File;
 >this instanceof File : boolean
+>                     : ^^^^^^^
 >this : this
+>     : ^^^^
 >File : typeof File
+>     : ^^^^^^^^^^^
 		}
 		set isFile(param) {
 >isFile : boolean
+>       : ^^^^^^^
 >param : boolean
+>      : ^^^^^^^
 
 			// noop
 		}
 		get isDirectory(): this is Directory {
 >isDirectory : boolean
+>            : ^^^^^^^
 
 			return this instanceof Directory;
 >this instanceof Directory : boolean
+>                          : ^^^^^^^
 >this : this
+>     : ^^^^
 >Directory : typeof Directory
+>          : ^^^^^^^^^^^^^^^^
 		}
 		isNetworked: this is (Networked & this);
 >isNetworked : boolean
+>            : ^^^^^^^
 
 		constructor(public path: string) {}
 >path : string
+>     : ^^^^^^
 	}
 
 	export class File extends FileSystemObject {
 >File : File
+>     : ^^^^
 >FileSystemObject : FileSystemObject
+>                 : ^^^^^^^^^^^^^^^^
 
 		constructor(path: string, public content: string) { super(path); }
 >path : string
+>     : ^^^^^^
 >content : string
+>        : ^^^^^^
 >super(path) : void
+>            : ^^^^
 >super : typeof FileSystemObject
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >path : string
+>     : ^^^^^^
 	}
 	export class Directory extends FileSystemObject {
 >Directory : Directory
+>          : ^^^^^^^^^
 >FileSystemObject : FileSystemObject
+>                 : ^^^^^^^^^^^^^^^^
 
 		children: FileSystemObject[];
 >children : FileSystemObject[]
+>         : ^^^^^^^^^^^^^^^^^^
 	}
 	export interface Networked {
 		host: string;
 >host : string
+>     : ^^^^^^
 	}
 
 	let file: FileSystemObject = new File("foo/bar.txt", "foo");
 >file : FileSystemObject
+>     : ^^^^^^^^^^^^^^^^
 >new File("foo/bar.txt", "foo") : File
+>                               : ^^^^
 >File : typeof File
+>     : ^^^^^^^^^^^
 >"foo/bar.txt" : "foo/bar.txt"
+>              : ^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 	file.isNetworked = file.isFile;
 >file.isNetworked = file.isFile : boolean
+>                               : ^^^^^^^
 >file.isNetworked : boolean
+>                 : ^^^^^^^
 >file : FileSystemObject
+>     : ^^^^^^^^^^^^^^^^
 >isNetworked : boolean
+>            : ^^^^^^^
 >file.isFile : boolean
+>            : ^^^^^^^
 >file : FileSystemObject
+>     : ^^^^^^^^^^^^^^^^
 >isFile : boolean
+>       : ^^^^^^^
 
 	file.isFSO = file.isNetworked;
 >file.isFSO = file.isNetworked : boolean
+>                              : ^^^^^^^
 >file.isFSO : boolean
+>           : ^^^^^^^
 >file : FileSystemObject
+>     : ^^^^^^^^^^^^^^^^
 >isFSO : boolean
+>      : ^^^^^^^
 >file.isNetworked : boolean
+>                 : ^^^^^^^
 >file : FileSystemObject
+>     : ^^^^^^^^^^^^^^^^
 >isNetworked : boolean
+>            : ^^^^^^^
 
 	file.isFile = file.isFSO;
 >file.isFile = file.isFSO : boolean
+>                         : ^^^^^^^
 >file.isFile : boolean
+>            : ^^^^^^^
 >file : FileSystemObject
+>     : ^^^^^^^^^^^^^^^^
 >isFile : boolean
+>       : ^^^^^^^
 >file.isFSO : boolean
+>           : ^^^^^^^
 >file : FileSystemObject
+>     : ^^^^^^^^^^^^^^^^
 >isFSO : boolean
+>      : ^^^^^^^
 }

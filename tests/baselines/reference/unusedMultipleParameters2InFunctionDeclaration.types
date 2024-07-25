@@ -1,16 +1,27 @@
-=== tests/cases/compiler/unusedMultipleParameters2InFunctionDeclaration.ts ===
+//// [tests/cases/compiler/unusedMultipleParameters2InFunctionDeclaration.ts] ////
+
+=== unusedMultipleParameters2InFunctionDeclaration.ts ===
 function greeter(person: string, person2: string, person3: string) {
 >greeter : (person: string, person2: string, person3: string) => void
+>        : ^      ^^      ^^       ^^      ^^       ^^      ^^^^^^^^^
 >person : string
+>       : ^^^^^^
 >person2 : string
+>        : ^^^^^^
 >person3 : string
+>        : ^^^^^^
 
     var unused = 20;
 >unused : number
+>       : ^^^^^^
 >20 : 20
+>   : ^^
 
     person2 = "dummy value";
 >person2 = "dummy value" : "dummy value"
+>                        : ^^^^^^^^^^^^^
 >person2 : string
+>        : ^^^^^^
 >"dummy value" : "dummy value"
+>              : ^^^^^^^^^^^^^
 }

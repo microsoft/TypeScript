@@ -1,107 +1,161 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance4.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance4.ts] ////
+
+=== callSignatureAssignabilityInInheritance4.ts ===
 // checking subtype relations for function types as it relates to contextual signature instantiation
 
 class Base { foo: string; }
 >Base : Base
+>     : ^^^^
 >foo : string
+>    : ^^^^^^
 
 class Derived extends Base { bar: string; }
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 >bar : string
+>    : ^^^^^^
 
 class Derived2 extends Derived { baz: string; }
 >Derived2 : Derived2
+>         : ^^^^^^^^
 >Derived : Derived
+>        : ^^^^^^^
 >baz : string
+>    : ^^^^^^
 
 class OtherDerived extends Base { bing: string; }
 >OtherDerived : OtherDerived
+>             : ^^^^^^^^^^^^
 >Base : Base
+>     : ^^^^
 >bing : string
+>     : ^^^^^^
 
 interface A { // T
     // M's
     a: <T>(x: T) => T[];
 >a : <T>(x: T) => T[]
+>  : ^ ^^ ^^ ^^^^^   
 >x : T
+>  : ^
 
     a2: <T>(x: T) => string[];
 >a2 : <T>(x: T) => string[]
+>   : ^ ^^ ^^ ^^^^^        
 >x : T
+>  : ^
 
     a3: <T>(x: T) => void;
 >a3 : <T>(x: T) => void
+>   : ^ ^^ ^^ ^^^^^    
 >x : T
+>  : ^
 
     a4: <T,U>(x: T, y: U) => string;
 >a4 : <T, U>(x: T, y: U) => string
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     a5: <T,U>(x: (arg: T) => U) => T;
 >a5 : <T, U>(x: (arg: T) => U) => T
+>   : ^ ^^ ^^ ^^             ^^^^^ 
 >x : (arg: T) => U
+>  : ^   ^^ ^^^^^ 
 >arg : T
+>    : ^
 
     a6: <T extends Base>(x: (arg: T) => Derived) => T;
 >a6 : <T extends Base>(x: (arg: T) => Derived) => T
+>   : ^ ^^^^^^^^^    ^^ ^^                   ^^^^^ 
 >x : (arg: T) => Derived
+>  : ^   ^^ ^^^^^       
 >arg : T
+>    : ^
 
     a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
 >a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>    : ^ ^^ ^^           ^^ ^^                   ^^^^^    
 >x : { foo: T; }
+>  : ^^^^^^^ ^^^
 >foo : T
+>    : ^
 >y : { foo: T; bar: T; }
+>  : ^^^^^^^ ^^^^^^^ ^^^
 >foo : T
+>    : ^
 >bar : T
+>    : ^
 
     a15: <T>(x: { a: T; b: T }) => T[];
 >a15 : <T>(x: { a: T; b: T; }) => T[]
+>    : ^ ^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
+>  : ^^^^^ ^^^^^ ^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
     a16: <T extends Base>(x: { a: T; b: T }) => T[];
 >a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
+>    : ^ ^^^^^^^^^    ^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
+>  : ^^^^^ ^^^^^ ^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
     a17: {
 >a17 : { <T extends Derived>(x: (a: T) => T): T[]; <T extends Base>(x: (a: T) => T): T[]; }
+>    : ^^^ ^^^^^^^^^       ^^ ^^           ^^^   ^^^ ^^^^^^^^^    ^^ ^^           ^^^   ^^^
 
         <T extends Derived>(x: (a: T) => T): T[];
 >x : (a: T) => T
+>  : ^ ^^ ^^^^^ 
 >a : T
+>  : ^
 
         <T extends Base>(x: (a: T) => T): T[];        
 >x : (a: T) => T
+>  : ^ ^^ ^^^^^ 
 >a : T
+>  : ^
 
     };
     a18: {
 >a18 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
+>    : ^^^ ^^                                                            ^^^     ^^^ ^^                                                             ^^^     ^^^
 
         (x: {
 >x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }
+>  : ^^^ ^^^^^^^^^       ^^ ^^ ^^^ ^^^ ^^^^^^^^^    ^^ ^^ ^^^ ^^^
 
             <T extends Derived>(a: T): T;
 >a : T
+>  : ^
 
             <T extends Base>(a: T): T;
 >a : T
+>  : ^
 
         }): any[];
         (x: {
 >x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }
+>  : ^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^ ^^^^^^^^^    ^^ ^^ ^^^ ^^^
 
             <T extends Derived2>(a: T): T;
 >a : T
+>  : ^
 
             <T extends Base>(a: T): T;
 >a : T
+>  : ^
 
         }): any[];
     };
@@ -112,58 +166,93 @@ interface I extends A {
     // N's
     a: <T>(x: T) => T[]; // ok, instantiation of N is a subtype of M, T is number
 >a : <T>(x: T) => T[]
+>  : ^ ^^ ^^ ^^^^^   
 >x : T
+>  : ^
 
     a2: <T>(x: T) => string[]; // ok
 >a2 : <T>(x: T) => string[]
+>   : ^ ^^ ^^ ^^^^^        
 >x : T
+>  : ^
 
     a3: <T>(x: T) => T; // ok since Base returns void
 >a3 : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
     a4: <T, U>(x: T, y: U) => string; // ok, instantiation of N is a subtype of M, T is string, U is number
 >a4 : <T, U>(x: T, y: U) => string
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     a5: <T, U>(x: (arg: T) => U) => T; // ok, U is in a parameter position so inferences can be made
 >a5 : <T, U>(x: (arg: T) => U) => T
+>   : ^ ^^ ^^ ^^             ^^^^^ 
 >x : (arg: T) => U
+>  : ^   ^^ ^^^^^ 
 >arg : T
+>    : ^
 
     a6: <T extends Base, U extends Derived>(x: (arg: T) => U) => T; // ok, same as a5 but with object type hierarchy
 >a6 : <T extends Base, U extends Derived>(x: (arg: T) => U) => T
+>   : ^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^^^^ 
 >x : (arg: T) => U
+>  : ^   ^^ ^^^^^ 
 >arg : T
+>    : ^
 
     a11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; // ok
 >a11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
+>    : ^ ^^ ^^ ^^           ^^ ^^                   ^^^^^    
 >x : { foo: T; }
+>  : ^^^^^^^ ^^^
 >foo : T
+>    : ^
 >y : { foo: U; bar: U; }
+>  : ^^^^^^^ ^^^^^^^ ^^^
 >foo : U
+>    : ^
 >bar : U
+>    : ^
 
     a15: <U, V>(x: { a: U; b: V; }) => U[]; // ok, T = U, T = V
 >a15 : <U, V>(x: { a: U; b: V; }) => U[]
+>    : ^ ^^ ^^ ^^               ^^^^^   
 >x : { a: U; b: V; }
+>  : ^^^^^ ^^^^^ ^^^
 >a : U
+>  : ^
 >b : V
+>  : ^
 
     a16: <T>(x: { a: T; b: T }) => T[]; // ok, more general parameter type
 >a16 : <T>(x: { a: T; b: T; }) => T[]
+>    : ^ ^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
+>  : ^^^^^ ^^^^^ ^^^
 >a : T
+>  : ^
 >b : T
+>  : ^
 
     a17: <T>(x: (a: T) => T) => T[]; // ok
 >a17 : <T>(x: (a: T) => T) => T[]
+>    : ^ ^^ ^^           ^^^^^   
 >x : (a: T) => T
+>  : ^ ^^ ^^^^^ 
 >a : T
+>  : ^
 
     a18: (x: <T>(a: T) => T) => any[]; // ok
 >a18 : (x: <T>(a: T) => T) => any[]
+>    : ^ ^^              ^^^^^     
 >x : <T>(a: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >a : T
+>  : ^
 }

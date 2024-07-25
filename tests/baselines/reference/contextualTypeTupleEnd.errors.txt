@@ -1,0 +1,72 @@
+contextualTypeTupleEnd.ts(8,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...((arg: number) => void)[], (arg: string) => void]'.
+  Source has 0 element(s) but target requires 1.
+contextualTypeTupleEnd.ts(13,7): error TS2322: Type '[]' is not assignable to type 'Funcs'.
+  Source has 0 element(s) but target requires 1.
+contextualTypeTupleEnd.ts(43,12): error TS2339: Property 'foo' does not exist on type 'number'.
+contextualTypeTupleEnd.ts(44,12): error TS2339: Property 'bar' does not exist on type 'number'.
+
+
+==== contextualTypeTupleEnd.ts (4 errors) ====
+    type Funcs = [...((arg: number) => void)[], (arg: string) => void];
+    
+    declare function num(x: number): void;
+    declare function str(x: string): void;
+    
+    declare function f1(...args: Funcs): void;
+    
+    f1();  // Error
+    ~~~~
+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[...((arg: number) => void)[], (arg: string) => void]'.
+!!! error TS2345:   Source has 0 element(s) but target requires 1.
+    f1(x => str(x));
+    f1(x => num(x), x => str(x));
+    f1(x => num(x), x => num(x), x => str(x));
+    
+    const a0: Funcs = [];  // Error
+          ~~
+!!! error TS2322: Type '[]' is not assignable to type 'Funcs'.
+!!! error TS2322:   Source has 0 element(s) but target requires 1.
+    const a1: Funcs = [x => str(x)];
+    const a2: Funcs = [x => num(x), x => str(x)];
+    const a3: Funcs = [x => num(x), x => num(x), x => str(x)];
+    
+    // Repro from #43122
+    
+    export type Selector<State> = (state: State) => unknown;
+    export type SelectorTuple<State> = Selector<State>[];
+    
+    export type ExampleState = {
+        foo: "foo";
+        bar: 42;
+    };
+    
+    export function createSelector<S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) {
+        console.log(selectors);
+    }
+    
+    createSelector(
+        x => x.foo,
+        x => x.bar,
+        () => 42
+    );
+    
+    // Repro from #43122
+    
+    declare function example(...args: [...((n: number) => void)[], (x: any) => void]): void
+    
+    example(
+        x => x.foo,  // Error
+               ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'number'.
+        x => x.bar,  // Error
+               ~~~
+!!! error TS2339: Property 'bar' does not exist on type 'number'.
+        x => x.baz,
+    );
+    
+    // Repro from #52846
+    
+    declare function test(...args: [...((arg: number) => void)[], (arg: string) => void]): void;
+      
+    test(a => a, b => b, c => c);
+    

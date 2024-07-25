@@ -1,0 +1,45 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propNameConstraining.ts] ////
+
+=== typeSatisfaction_propNameConstraining.ts ===
+type Keys = 'a' | 'b' | 'c' | 'd';
+>Keys : Symbol(Keys, Decl(typeSatisfaction_propNameConstraining.ts, 0, 0))
+
+const p = {
+>p : Symbol(p, Decl(typeSatisfaction_propNameConstraining.ts, 2, 5))
+
+    a: 0,
+>a : Symbol(a, Decl(typeSatisfaction_propNameConstraining.ts, 2, 11))
+
+    b: "hello",
+>b : Symbol(b, Decl(typeSatisfaction_propNameConstraining.ts, 3, 9))
+
+    x: 8 // Should error, 'x' isn't in 'Keys'
+>x : Symbol(x, Decl(typeSatisfaction_propNameConstraining.ts, 4, 15))
+
+} satisfies Partial<Record<Keys, unknown>>;
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Keys : Symbol(Keys, Decl(typeSatisfaction_propNameConstraining.ts, 0, 0))
+
+// Should be OK -- retain info that a is number and b is string
+let a = p.a.toFixed();
+>a : Symbol(a, Decl(typeSatisfaction_propNameConstraining.ts, 9, 3))
+>p.a.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>p.a : Symbol(a, Decl(typeSatisfaction_propNameConstraining.ts, 2, 11))
+>p : Symbol(p, Decl(typeSatisfaction_propNameConstraining.ts, 2, 5))
+>a : Symbol(a, Decl(typeSatisfaction_propNameConstraining.ts, 2, 11))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+let b = p.b.substring(1);
+>b : Symbol(b, Decl(typeSatisfaction_propNameConstraining.ts, 10, 3))
+>p.b.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+>p.b : Symbol(b, Decl(typeSatisfaction_propNameConstraining.ts, 3, 9))
+>p : Symbol(p, Decl(typeSatisfaction_propNameConstraining.ts, 2, 5))
+>b : Symbol(b, Decl(typeSatisfaction_propNameConstraining.ts, 3, 9))
+>substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+
+// Should error even though 'd' is in 'Keys'
+let d = p.d;
+>d : Symbol(d, Decl(typeSatisfaction_propNameConstraining.ts, 12, 3))
+>p : Symbol(p, Decl(typeSatisfaction_propNameConstraining.ts, 2, 5))
+

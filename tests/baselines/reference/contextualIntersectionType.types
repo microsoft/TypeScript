@@ -1,27 +1,45 @@
-=== tests/cases/conformance/types/intersection/contextualIntersectionType.ts ===
+//// [tests/cases/conformance/types/intersection/contextualIntersectionType.ts] ////
+
+=== contextualIntersectionType.ts ===
 var x: { a: (s: string) => string } & { b: (n: number) => number };
 >x : { a: (s: string) => string; } & { b: (n: number) => number; }
+>  : ^^^^^                     ^^^^^^^^^^^                     ^^^
 >a : (s: string) => string
+>  : ^ ^^      ^^^^^      
 >s : string
+>  : ^^^^^^
 >b : (n: number) => number
+>  : ^ ^^      ^^^^^      
 >n : number
+>  : ^^^^^^
 
 x = {
 >x = {    a: s => s,    b: n => n} : { a: (s: string) => string; b: (n: number) => number; }
+>                                  : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >x : { a: (s: string) => string; } & { b: (n: number) => number; }
+>  : ^^^^^                     ^^^^^^^^^^^                     ^^^
 >{    a: s => s,    b: n => n} : { a: (s: string) => string; b: (n: number) => number; }
+>                              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     a: s => s,
 >a : (s: string) => string
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >s => s : (s: string) => string
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 
     b: n => n
 >b : (n: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n : (n: number) => number
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
 };
 

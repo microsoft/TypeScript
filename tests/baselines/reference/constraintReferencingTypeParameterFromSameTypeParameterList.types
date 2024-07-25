@@ -1,10 +1,13 @@
-=== tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts ===
+//// [tests/cases/compiler/constraintReferencingTypeParameterFromSameTypeParameterList.ts] ////
+
+=== constraintReferencingTypeParameterFromSameTypeParameterList.ts ===
 // used to be valid, now an error to do this
 
 interface IComparable<T> {
 }
 function f<T, I extends IComparable<T>>() {
 >f : <T, I extends IComparable<T>>() => void
+>  : ^ ^^ ^^^^^^^^^              ^^^^^^^^^^^
 }
 
 interface I1<T, U extends I1<T, any>> { // Error, any does not satisfy the constraint I1<T, any>
@@ -19,11 +22,14 @@ interface I4<T, U extends () => T> {
 interface I3<T, U extends string> {
     method1<X, Y extends T>();
 >method1 : <X, Y extends T>() => any
+>        : ^ ^^ ^^^^^^^^^ ^^^^^^^^^^
 }
 
 function foo<T, U extends <V extends T>(v: V) => void>() {
 >foo : <T, U extends <V extends T>(v: V) => void>() => void
+>    : ^ ^^ ^^^^^^^^^                           ^^^^^^^^^^^
 >v : V
+>  : ^
 }
 
 

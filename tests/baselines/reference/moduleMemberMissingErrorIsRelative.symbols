@@ -1,6 +1,9 @@
-=== tests/cases/compiler/folder/foo.ts ===
+//// [tests/cases/compiler/moduleMemberMissingErrorIsRelative.ts] ////
+
+=== folder/foo.ts ===
+
 export {};
-No type information for this code.=== tests/cases/compiler/folder/bar.ts ===
+=== folder/bar.ts ===
 import {nosuch} from './foo';
 >nosuch : Symbol(nosuch, Decl(bar.ts, 0, 8))
 

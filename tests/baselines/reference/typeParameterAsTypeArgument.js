@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterAsTypeArgument.ts] ////
+
 //// [typeParameterAsTypeArgument.ts]
 // These are all errors because type parameters cannot reference other type parameters from the same list
 

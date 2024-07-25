@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfactionWithDefaultExport.ts] ////
+
+=== ./a.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+
+    a: number;
+>a : Symbol(Foo.a, Decl(a.ts, 0, 15))
+}
+export default {} satisfies Foo;
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+
+=== ./b.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(b.ts, 0, 0))
+
+    a: number;
+>a : Symbol(Foo.a, Decl(b.ts, 0, 15))
+}
+export default { a: 1 } satisfies Foo;
+>a : Symbol(a, Decl(b.ts, 3, 16))
+>Foo : Symbol(Foo, Decl(b.ts, 0, 0))
+

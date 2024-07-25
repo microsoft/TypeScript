@@ -1,6 +1,9 @@
-=== tests/cases/compiler/substitutionTypeForIndexedAccessType1.ts ===
+//// [tests/cases/compiler/substitutionTypeForIndexedAccessType1.ts] ////
+
+=== substitutionTypeForIndexedAccessType1.ts ===
 type AddPropToObject<Obj extends object, Prop extends string> = Prop extends keyof Obj
 >AddPropToObject : AddPropToObject<Obj, Prop>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   ? Obj[Prop] extends unknown[]
     ? [...Obj[Prop]]

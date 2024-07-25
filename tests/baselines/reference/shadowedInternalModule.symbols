@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts ===
+//// [tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts] ////
+
+=== shadowedInternalModule.ts ===
 // all errors imported modules conflict with local variables
 
 module A {
@@ -69,3 +71,67 @@ module Z {
     var Y = 12;
 >Y : Symbol(Y, Decl(shadowedInternalModule.ts, 28, 10), Decl(shadowedInternalModule.ts, 31, 7))
 }
+
+//
+
+module a {
+>a : Symbol(a, Decl(shadowedInternalModule.ts, 32, 1))
+
+  export type A = number;
+>A : Symbol(A, Decl(shadowedInternalModule.ts, 36, 10))
+}
+
+module b {
+>b : Symbol(b, Decl(shadowedInternalModule.ts, 38, 1))
+
+  export import A = a.A;
+>A : Symbol(A, Decl(shadowedInternalModule.ts, 40, 10), Decl(shadowedInternalModule.ts, 41, 24))
+>a : Symbol(a, Decl(shadowedInternalModule.ts, 32, 1))
+>A : Symbol(A, Decl(shadowedInternalModule.ts, 36, 10))
+
+  export module A {}
+>A : Symbol(A, Decl(shadowedInternalModule.ts, 40, 10), Decl(shadowedInternalModule.ts, 41, 24))
+}
+
+module c {
+>c : Symbol(c, Decl(shadowedInternalModule.ts, 43, 1))
+
+  import any = b.A;
+>any : Symbol(any, Decl(shadowedInternalModule.ts, 45, 10))
+>b : Symbol(b, Decl(shadowedInternalModule.ts, 38, 1))
+>A : Symbol(any, Decl(shadowedInternalModule.ts, 40, 10), Decl(shadowedInternalModule.ts, 41, 24))
+}
+
+//
+
+module q {
+>q : Symbol(q, Decl(shadowedInternalModule.ts, 47, 1))
+
+  export const Q = {};
+>Q : Symbol(Q, Decl(shadowedInternalModule.ts, 52, 14))
+}
+
+module r {
+>r : Symbol(r, Decl(shadowedInternalModule.ts, 53, 1))
+
+  export import Q = q.Q;
+>Q : Symbol(Q, Decl(shadowedInternalModule.ts, 55, 10), Decl(shadowedInternalModule.ts, 56, 24))
+>q : Symbol(q, Decl(shadowedInternalModule.ts, 47, 1))
+>Q : Symbol(Q, Decl(shadowedInternalModule.ts, 52, 14))
+
+  export type Q = number;
+>Q : Symbol(Q, Decl(shadowedInternalModule.ts, 55, 10), Decl(shadowedInternalModule.ts, 56, 24))
+}
+
+module s {
+>s : Symbol(s, Decl(shadowedInternalModule.ts, 58, 1))
+
+  import Q = r.Q;
+>Q : Symbol(Q, Decl(shadowedInternalModule.ts, 60, 10), Decl(shadowedInternalModule.ts, 62, 7))
+>r : Symbol(r, Decl(shadowedInternalModule.ts, 53, 1))
+>Q : Symbol(Q, Decl(shadowedInternalModule.ts, 55, 10), Decl(shadowedInternalModule.ts, 56, 24))
+
+  const Q = 0;
+>Q : Symbol(Q, Decl(shadowedInternalModule.ts, 60, 10), Decl(shadowedInternalModule.ts, 62, 7))
+}
+

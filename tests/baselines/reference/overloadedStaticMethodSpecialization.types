@@ -1,21 +1,28 @@
-=== tests/cases/compiler/overloadedStaticMethodSpecialization.ts ===
+//// [tests/cases/compiler/overloadedStaticMethodSpecialization.ts] ////
+
+=== overloadedStaticMethodSpecialization.ts ===
 class A<T> {
 >A : A<T>
+>  : ^^^^
 
     static B<S>(v: A<S>): A<S>;
->B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
+>B : { <S>(v: A<S>): A<S>; <S_1>(v: S_1): A<S_1>; }
+>  : ^^^ ^^ ^^    ^^^    ^^^^^^^^ ^^   ^^^      ^^^
 >v : A<S>
+>  : ^^^^
 
     static B<S>(v: S): A<S>;
->B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
+>B : { <S_1>(v: A<S_1>): A<S_1>; <S>(v: S): A<S>; }
+>  : ^^^^^^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^    ^^^
 >v : S
+>  : ^
 
     static B<S>(v: any): A<S> {
->B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
+>B : { <S_1>(v: A<S_1>): A<S_1>; <S_1>(v: S_1): A<S_1>; }
+>  : ^^^^^^^^ ^^      ^^^      ^^^^^^^^ ^^   ^^^      ^^^
 >v : any
 
         return null;
->null : null
     }
 }
 

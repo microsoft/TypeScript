@@ -16,7 +16,7 @@ const c = { A };
 
 //// [abc.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
@@ -27,7 +27,7 @@ exports.A = A;
 exports.C = "";
 //// [d.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 new A();
 b.b;
 var c = { A: A };

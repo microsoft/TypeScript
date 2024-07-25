@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature6.ts(2,4): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+parserIndexSignature6.ts(2,4): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
 
 
-==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature6.ts (1 errors) ====
+==== parserIndexSignature6.ts (1 errors) ====
     interface I {
       [a:boolean]
        ~

@@ -1,8 +1,8 @@
-tests/cases/compiler/contextualTypingOfLambdaReturnExpression.ts(5,16): error TS2339: Property 'length' does not exist on type 'number'.
-tests/cases/compiler/contextualTypingOfLambdaReturnExpression.ts(6,18): error TS2339: Property 'length' does not exist on type 'number'.
+contextualTypingOfLambdaReturnExpression.ts(5,16): error TS2339: Property 'length' does not exist on type 'number'.
+contextualTypingOfLambdaReturnExpression.ts(6,18): error TS2339: Property 'length' does not exist on type 'number'.
 
 
-==== tests/cases/compiler/contextualTypingOfLambdaReturnExpression.ts (2 errors) ====
+==== contextualTypingOfLambdaReturnExpression.ts (2 errors) ====
     function callb(lam: (l: number) => void);
     function callb(lam: (n: string) => void);
     function callb(a) { }

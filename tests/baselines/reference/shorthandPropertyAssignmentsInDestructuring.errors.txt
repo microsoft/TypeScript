@@ -1,20 +1,15 @@
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(14,9): error TS2339: Property 's1' does not exist on type '{}'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(20,9): error TS2339: Property 's1' does not exist on type '{}'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(38,9): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(44,12): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(70,5): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(75,8): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(80,5): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(80,20): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(85,8): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(85,19): error TS2322: Type '{ x: number; }' is not assignable to type '{ x: string; }'.
-  Types of property 'x' are incompatible.
-    Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(85,26): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,14): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
+shorthandPropertyAssignmentsInDestructuring.ts(38,9): error TS2322: Type 'number' is not assignable to type 'string'.
+shorthandPropertyAssignmentsInDestructuring.ts(44,12): error TS2322: Type 'number' is not assignable to type 'string'.
+shorthandPropertyAssignmentsInDestructuring.ts(70,5): error TS2322: Type 'number' is not assignable to type 'string'.
+shorthandPropertyAssignmentsInDestructuring.ts(75,8): error TS2322: Type 'number' is not assignable to type 'string'.
+shorthandPropertyAssignmentsInDestructuring.ts(80,5): error TS2322: Type 'number' is not assignable to type 'string'.
+shorthandPropertyAssignmentsInDestructuring.ts(80,20): error TS2322: Type 'number' is not assignable to type 'string'.
+shorthandPropertyAssignmentsInDestructuring.ts(85,8): error TS2322: Type 'number' is not assignable to type 'string'.
+shorthandPropertyAssignmentsInDestructuring.ts(85,26): error TS2322: Type 'number' is not assignable to type 'string'.
+shorthandPropertyAssignmentsInDestructuring.ts(111,14): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
 
 
-==== tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts (12 errors) ====
+==== shorthandPropertyAssignmentsInDestructuring.ts (9 errors) ====
     (function() {
     	var s0;
     	for ({ s0 = 5 } of [{ s0: 1 }]) {
@@ -29,16 +24,12 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,14): err
     (function() {
     	var s1;
     	for ({ s1 = 5 } of [{}]) {
-    	       ~~
-!!! error TS2339: Property 's1' does not exist on type '{}'.
     	}
     });
     
     (function() {
     	var s1;
     	for ({ s1:s1 = 5 } of [{}]) {
-    	       ~~
-!!! error TS2339: Property 's1' does not exist on type '{}'.
     	}
     });
     
@@ -111,7 +102,7 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,14): err
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     	                  ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts:79:24: The expected type comes from property 'x' which is declared here on type '{ x: string; }'
+!!! related TS6500 shorthandPropertyAssignmentsInDestructuring.ts:79:24: The expected type comes from property 'x' which is declared here on type '{ x: string; }'
     });
     
     (function() {
@@ -119,13 +110,9 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,14): err
     	({ y2:y2 = 5, y3:y3 = { x: 1 } } = {})
     	      ~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-    	                 ~~
-!!! error TS2322: Type '{ x: number; }' is not assignable to type '{ x: string; }'.
-!!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'number' is not assignable to type 'string'.
     	                        ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts:84:24: The expected type comes from property 'x' which is declared here on type '{ x: string; }'
+!!! related TS6500 shorthandPropertyAssignmentsInDestructuring.ts:84:24: The expected type comes from property 'x' which is declared here on type '{ x: string; }'
     });
     
     (function() {

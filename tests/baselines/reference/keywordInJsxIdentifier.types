@@ -1,24 +1,34 @@
-=== tests/cases/compiler/keywordInJsxIdentifier.tsx ===
+//// [tests/cases/compiler/keywordInJsxIdentifier.tsx] ////
+
+=== keywordInJsxIdentifier.tsx ===
 declare var React: any;
 >React : any
 
 <foo class-id/>;
 ><foo class-id/> : error
 >foo : any
+>    : ^^^
 >class-id : true
+>         : ^^^^
 
 <foo class/>;
 ><foo class/> : error
 >foo : any
+>    : ^^^
 >class : true
+>      : ^^^^
 
 <foo class-id="1"/>;
 ><foo class-id="1"/> : error
 >foo : any
+>    : ^^^
 >class-id : string
+>         : ^^^^^^
 
 <foo class="1"/>;
 ><foo class="1"/> : error
 >foo : any
+>    : ^^^
 >class : string
+>      : ^^^^^^
 

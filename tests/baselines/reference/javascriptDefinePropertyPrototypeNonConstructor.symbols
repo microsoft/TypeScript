@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/javascriptDefinePropertyPrototypeNonConstructor.ts] ////
+
 === /a.js ===
 function Graphic() {
 >Graphic : Symbol(Graphic, Decl(a.js, 0, 0))

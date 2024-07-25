@@ -1,79 +1,116 @@
-=== tests/cases/compiler/augmentedTypesEnum.ts ===
+//// [tests/cases/compiler/augmentedTypesEnum.ts] ////
+
+=== augmentedTypesEnum.ts ===
 // enum then var
 enum e1111 { One } // error
 >e1111 : e1111
+>      : ^^^^^
 >One : e1111.One
+>    : ^^^^^^^^^
 
 var e1111 = 1; // error
 >e1111 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 // enum then function
 enum e2 { One } // error
 >e2 : e2
+>   : ^^
 >One : e2.One
+>    : ^^^^^^
 
 function e2() { } // error
 >e2 : () => void
+>   : ^^^^^^^^^^
 
 enum e3 { One } // error
 >e3 : e3
+>   : ^^
 >One : e3.One
+>    : ^^^^^^
 
 var e3 = () => { } // error
 >e3 : () => void
+>   : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 // enum then class
 enum e4 { One } // error
 >e4 : e4
+>   : ^^
 >One : e4.One
+>    : ^^^^^^
 
 class e4 { public foo() { } } // error
 >e4 : e4
+>   : ^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 // enum then enum
 enum e5 { One }
 >e5 : e5
+>   : ^^
 >One : e5.One
+>    : ^^^^^^
 
 enum e5 { Two } // error
 >e5 : e5
+>   : ^^
 >Two : e5.One
+>    : ^^^^^^
 
 enum e5a { One } // error
 >e5a : e5a
+>    : ^^^
 >One : e5a.One
+>    : ^^^^^^^
 
 enum e5a { One } // error
 >e5a : e5a
+>    : ^^^
 >One : e5a.One
+>    : ^^^^^^^
 
 // enum then internal module
 enum e6 { One } 
 >e6 : e6
+>   : ^^
 >One : e6.One
+>    : ^^^^^^
 
 module e6 { } // ok
 
 enum e6a { One }
 >e6a : e6a
+>    : ^^^
 >One : e6a.One
+>    : ^^^^^^^
 
 module e6a { var y = 2; } // should be error
 >e6a : typeof e6a
+>    : ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 enum e6b { One }
 >e6b : e6b
+>    : ^^^
 >One : e6b.One
+>    : ^^^^^^^
 
 module e6b { export var y = 2; } // should be error
 >e6b : typeof e6b
+>    : ^^^^^^^^^^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 // enum then import, messes with error reporting
 //enum e7 { One }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/exportEqualsProperty2.ts] ////
+
+=== b.ts ===
 import B = require("./a");
 >B : Symbol(B, Decl(b.ts, 0, 0))
 
@@ -8,25 +10,23 @@ const x: B = { c: B };
 >c : Symbol(c, Decl(b.ts, 1, 14))
 >B : Symbol(B, Decl(b.ts, 0, 0))
 
-=== tests/cases/compiler/a.ts ===
-// This test is just like exportDefaultProperty2, but with `export =`.
-
+=== a.ts ===
 class C {
->C : Symbol(C, Decl(a.ts, 0, 0), Decl(a.ts, 4, 1))
+>C : Symbol(C, Decl(a.ts, 0, 0), Decl(a.ts, 2, 1))
 
     static B: number;
->B : Symbol(C.B, Decl(a.ts, 2, 9), Decl(a.ts, 5, 13))
+>B : Symbol(C.B, Decl(a.ts, 0, 9), Decl(a.ts, 3, 13))
 }
 namespace C {
->C : Symbol(C, Decl(a.ts, 0, 0), Decl(a.ts, 4, 1))
+>C : Symbol(C, Decl(a.ts, 0, 0), Decl(a.ts, 2, 1))
 
     export interface B { c: number }
->B : Symbol(B, Decl(a.ts, 2, 9), Decl(a.ts, 5, 13))
->c : Symbol(B.c, Decl(a.ts, 6, 24))
+>B : Symbol(B, Decl(a.ts, 0, 9), Decl(a.ts, 3, 13))
+>c : Symbol(B.c, Decl(a.ts, 4, 24))
 }
 
 export = C.B;
->C.B : Symbol(C.B, Decl(a.ts, 2, 9), Decl(a.ts, 5, 13))
->C : Symbol(C, Decl(a.ts, 0, 0), Decl(a.ts, 4, 1))
->B : Symbol(C.B, Decl(a.ts, 2, 9), Decl(a.ts, 5, 13))
+>C.B : Symbol(C.B, Decl(a.ts, 0, 9), Decl(a.ts, 3, 13))
+>C : Symbol(C, Decl(a.ts, 0, 0), Decl(a.ts, 2, 1))
+>B : Symbol(C.B, Decl(a.ts, 0, 9), Decl(a.ts, 3, 13))
 

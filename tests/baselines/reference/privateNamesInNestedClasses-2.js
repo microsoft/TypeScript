@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-2.ts] ////
+
 //// [privateNamesInNestedClasses-2.ts]
 class A {
     static #x = 5;
@@ -32,7 +34,7 @@ class A {
                 _B_x.set(this, 5);
                 class C {
                     constructor() {
-                        __classPrivateFieldGet(A, _B_x, "f"); // error
+                        __classPrivateFieldGet(_a, _B_x, "f"); // error
                     }
                 }
             }

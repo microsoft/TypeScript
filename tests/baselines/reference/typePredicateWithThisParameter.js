@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicateWithThisParameter.ts] ////
+
 //// [typePredicateWithThisParameter.ts]
 // Repro from #15310
 

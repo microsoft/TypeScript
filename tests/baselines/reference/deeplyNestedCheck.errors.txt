@@ -1,9 +1,9 @@
-tests/cases/compiler/deeplyNestedCheck.ts(34,25): error TS2741: Property 'i' is missing in type '{}' but required in type 'H'.
-tests/cases/compiler/deeplyNestedCheck.ts(52,35): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/deeplyNestedCheck.ts(53,50): error TS2322: Type 'number' is not assignable to type 'string'.
+deeplyNestedCheck.ts(34,25): error TS2741: Property 'i' is missing in type '{}' but required in type 'H'.
+deeplyNestedCheck.ts(52,35): error TS2322: Type 'number' is not assignable to type 'string'.
+deeplyNestedCheck.ts(53,50): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/deeplyNestedCheck.ts (3 errors) ====
+==== deeplyNestedCheck.ts (3 errors) ====
     // Repro from #14794
     
     interface DataSnapshot<X = {}> {
@@ -44,7 +44,7 @@ tests/cases/compiler/deeplyNestedCheck.ts(53,50): error TS2322: Type 'number' is
                             },
     ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2741: Property 'i' is missing in type '{}' but required in type 'H'.
-!!! related TS2728 tests/cases/compiler/deeplyNestedCheck.ts:20:15: 'i' is declared here.
+!!! related TS2728 deeplyNestedCheck.ts:20:15: 'i' is declared here.
                           ],
                         },
                       },

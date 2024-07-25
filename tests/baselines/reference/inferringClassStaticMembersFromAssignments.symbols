@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/inferringClassStaticMembersFromAssignments.ts] ////
+
+=== a.js ===
 export class C1 { }
 >C1 : Symbol(C1, Decl(a.js, 0, 0), Decl(a.js, 0, 19))
 
@@ -31,7 +33,7 @@ F2.staticProp = 0;
 >F2 : Symbol(F2, Decl(a.js, 9, 10), Decl(a.js, 9, 32))
 >staticProp : Symbol(F2.staticProp, Decl(a.js, 9, 32))
 
-=== tests/cases/conformance/salsa/global.js ===
+=== global.js ===
 class C3 { }
 >C3 : Symbol(C3, Decl(global.js, 0, 0), Decl(global.js, 0, 12))
 
@@ -64,7 +66,7 @@ F4.staticProp = 0;
 >F4 : Symbol(F4, Decl(global.js, 9, 3), Decl(global.js, 9, 25))
 >staticProp : Symbol(F4.staticProp, Decl(global.js, 9, 25))
 
-=== tests/cases/conformance/salsa/b.ts ===
+=== b.ts ===
 import * as a from "./a";
 >a : Symbol(a, Decl(b.ts, 0, 6))
 

@@ -1,18 +1,24 @@
-=== tests/cases/compiler/db.ts ===
+//// [tests/cases/compiler/decoratorMetadataWithImportDeclarationNameCollision5.ts] ////
+
+=== db.ts ===
 export default class db {
 >db : db
+>   : ^^
 
     public doSomething() {
 >doSomething : () => void
+>            : ^^^^^^^^^^
     }
 }
 
-=== tests/cases/compiler/service.ts ===
+=== service.ts ===
 import db from './db';
 >db : typeof db
+>   : ^^^^^^^^^
 
 function someDecorator(target) {
 >someDecorator : (target: any) => any
+>              : ^      ^^^^^^^^^^^^^
 >target : any
 
     return target;
@@ -20,32 +26,48 @@ function someDecorator(target) {
 }
 @someDecorator
 >someDecorator : (target: any) => any
+>              : ^      ^^^^^^^^^^^^^
 
 class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
     db: db;
 >db : db
+>   : ^^
 
     constructor(db: db) { // collision
 >db : db
+>   : ^^
 
         this.db = db;
 >this.db = db : db
+>             : ^^
 >this.db : db
+>        : ^^
 >this : this
+>     : ^^^^
 >db : db
+>   : ^^
 >db : db
+>   : ^^
 
         this.db.doSomething();
 >this.db.doSomething() : void
+>                      : ^^^^
 >this.db.doSomething : () => void
+>                    : ^^^^^^^^^^
 >this.db : db
+>        : ^^
 >this : this
+>     : ^^^^
 >db : db
+>   : ^^
 >doSomething : () => void
+>            : ^^^^^^^^^^
     }
 }
 export {MyClass};
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 

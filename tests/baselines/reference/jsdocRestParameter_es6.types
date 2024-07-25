@@ -1,10 +1,15 @@
+//// [tests/cases/compiler/jsdocRestParameter_es6.ts] ////
+
 === /a.js ===
 /** @param {...number} a */
 function f(...a) {
 >f : (...a: number[]) => void
+>  : ^^^^ ^^        ^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 
     a; // number[]
 >a : number[]
+>  : ^^^^^^^^
 }
 

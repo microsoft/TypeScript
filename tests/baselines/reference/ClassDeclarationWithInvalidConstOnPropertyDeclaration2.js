@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts] ////
+
 //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts]
 class C {
     const

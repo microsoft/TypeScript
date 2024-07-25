@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveClassReferenceTest.ts ===
+//// [tests/cases/compiler/recursiveClassReferenceTest.ts] ////
+
+=== recursiveClassReferenceTest.ts ===
 // Scenario 1: Test reqursive function call with "this" parameter
 // Scenario 2: Test recursive function call with cast and "this" parameter
 
@@ -9,31 +11,43 @@ declare module Sample.Thing {
 	export interface IWidget {
 		getDomNode(): any;
 >getDomNode : () => any
+>           : ^^^^^^   
 
 		destroy();
 >destroy : () => any
+>        : ^^^^^^^^^
 
 		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
 >gar : (runner: (widget: Sample.Thing.IWidget) => any) => any
+>    : ^      ^^                                     ^^^^^   
 >runner : (widget: Sample.Thing.IWidget) => any
+>       : ^      ^^                    ^^^^^   
 >widget : IWidget
+>       : ^^^^^^^
 >Sample : any
+>       : ^^^
 >Thing : any
+>      : ^^^
 	}
 
 	export interface ICodeThing {
   
   		getDomNode(): Element;
 >getDomNode : () => Element
+>           : ^^^^^^       
 		
 		addWidget(widgetId:string, widget:IWidget);
 >addWidget : (widgetId: string, widget: IWidget) => any
+>          : ^        ^^      ^^      ^^       ^^^^^^^^
 >widgetId : string
+>         : ^^^^^^
 >widget : IWidget
+>       : ^^^^^^^
 
 		
 		focus(); 
 >focus : () => any
+>      : ^^^^^^^^^
 		
 		//addWidget(widget: Sample.Thing.Widgets.IWidget);
 	}
@@ -41,91 +55,137 @@ declare module Sample.Thing {
 	export interface IAction {
 		run(Thing:ICodeThing):boolean;
 >run : (Thing: ICodeThing) => boolean
+>    : ^     ^^          ^^^^^       
 >Thing : ICodeThing
+>      : ^^^^^^^^^^
 
 		getId():string;
 >getId : () => string
+>      : ^^^^^^      
 	}	
 }
 
 module Sample.Actions.Thing.Find {
 >Sample : typeof Sample
+>       : ^^^^^^^^^^^^^
 >Actions : typeof Actions
+>        : ^^^^^^^^^^^^^^
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 >Find : typeof Find
+>     : ^^^^^^^^^^^
 
 	export class StartFindAction implements Sample.Thing.IAction {
 >StartFindAction : StartFindAction
+>                : ^^^^^^^^^^^^^^^
 >Sample.Thing : typeof Sample.Thing
+>             : ^^^^^^^^^^^^^^^^^^^
 >Sample : typeof Sample
+>       : ^^^^^^^^^^^^^
 >Thing : typeof Sample.Thing
+>      : ^^^^^^^^^^^^^^^^^^^
 		
 		public getId() { return "yo"; }
 >getId : () => string
+>      : ^^^^^^^^^^^^
 >"yo" : "yo"
+>     : ^^^^
 		
 		public run(Thing:Sample.Thing.ICodeThing):boolean {
 >run : (Thing: Sample.Thing.ICodeThing) => boolean
+>    : ^     ^^                       ^^^^^       
 >Thing : Sample.Thing.ICodeThing
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >Sample : any
+>       : ^^^
 >Thing : any
+>      : ^^^
 
 			return true;
 >true : true
+>     : ^^^^
 		}
 	}
 }
 
 module Sample.Thing.Widgets {
 >Sample : typeof Sample
+>       : ^^^^^^^^^^^^^
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 >Widgets : typeof Widgets
+>        : ^^^^^^^^^^^^^^
 
 	export class FindWidget implements Sample.Thing.IWidget {
 >FindWidget : FindWidget
+>           : ^^^^^^^^^^
 >Sample.Thing : typeof Thing
+>             : ^^^^^^^^^^^^
 >Sample : typeof Sample
+>       : ^^^^^^^^^^^^^
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 
 		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
 >gar : (runner: (widget: Sample.Thing.IWidget) => any) => any
+>    : ^      ^^                                     ^^^^^^^^
 >runner : (widget: Sample.Thing.IWidget) => any
+>       : ^      ^^                    ^^^^^   
 >widget : IWidget
+>       : ^^^^^^^
 >Sample : any
+>       : ^^^
 >Thing : any
+>      : ^^^
 >true : true
+>     : ^^^^
 >runner(this) : any
->runner : (widget: IWidget) => any
+>             : ^^^
+>runner : (widget: Sample.Thing.IWidget) => any
+>       : ^      ^^                    ^^^^^   
 >this : this
+>     : ^^^^
 			
 		private domNode:any = null;
 >domNode : any
->null : null
+>        : ^^^
 
 		constructor(private codeThing: Sample.Thing.ICodeThing) {
 >codeThing : ICodeThing
+>          : ^^^^^^^^^^
 >Sample : any
+>       : ^^^
 >Thing : any
+>      : ^^^
 
 		    // scenario 1
 		    codeThing.addWidget("addWidget", this);
 >codeThing.addWidget("addWidget", this) : any
+>                                       : ^^^
 >codeThing.addWidget : (widgetId: string, widget: IWidget) => any
+>                    : ^        ^^      ^^      ^^       ^^^^^^^^
 >codeThing : ICodeThing
+>          : ^^^^^^^^^^
 >addWidget : (widgetId: string, widget: IWidget) => any
+>          : ^        ^^      ^^      ^^       ^^^^^^^^
 >"addWidget" : "addWidget"
+>            : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
 		}
 		
 		public getDomNode() {
 >getDomNode : () => any
+>           : ^^^^^^^^^
 
 			return domNode;
 >domNode : any
+>        : ^^^
 		}
 		
 		public destroy() {
 >destroy : () => void
+>        : ^^^^^^^^^^
 
 		}
 
@@ -134,67 +194,92 @@ module Sample.Thing.Widgets {
 
 interface IMode { getInitialState(): IState;} 
 >getInitialState : () => IState
+>                : ^^^^^^      
 
 class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
 >AbstractMode : AbstractMode
+>             : ^^^^^^^^^^^^
 >getInitialState : () => IState
->null : null
+>                : ^^^^^^      
 
 interface IState {}
 
 interface Window {
     opener: Window;
 >opener : Window
+>       : ^^^^^^
 }
 declare var self: Window;
 >self : Window
+>     : ^^^^^^
 
 module Sample.Thing.Languages.PlainText {
 >Sample : typeof Sample
+>       : ^^^^^^^^^^^^^
 >Thing : typeof Thing
+>      : ^^^^^^^^^^^^
 >Languages : typeof Languages
+>          : ^^^^^^^^^^^^^^^^
 >PlainText : typeof PlainText
+>          : ^^^^^^^^^^^^^^^^
 	
 	export class State implements IState {		
 >State : State
+>      : ^^^^^
 
         constructor(private mode: IMode) { }
 >mode : IMode
+>     : ^^^^^
 
 		public clone():IState {
 >clone : () => IState
+>      : ^^^^^^      
 
 			return this;
 >this : this
+>     : ^^^^
 		}
 
 		public equals(other:IState):boolean {
 >equals : (other: IState) => boolean
+>       : ^     ^^      ^^^^^       
 >other : IState
+>      : ^^^^^^
 
 			return this === other;
 >this === other : boolean
+>               : ^^^^^^^
 >this : this
+>     : ^^^^
 >other : IState
+>      : ^^^^^^
 		}
 		
 		public getMode(): IMode { return mode; }
 >getMode : () => IMode
+>        : ^^^^^^     
 >mode : any
+>     : ^^^
 	}
 	
 	export class Mode extends AbstractMode {
 >Mode : Mode
+>     : ^^^^
 >AbstractMode : AbstractMode
+>             : ^^^^^^^^^^^^
 
 		// scenario 2
 		public getInitialState(): IState {
 >getInitialState : () => IState
+>                : ^^^^^^      
 
 			return new State(self);
 >new State(self) : State
+>                : ^^^^^
 >State : typeof State
+>      : ^^^^^^^^^^^^
 >self : Window
+>     : ^^^^^^
 		}
 
 

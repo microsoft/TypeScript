@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/autoLift2.ts] ////
+
 //// [autoLift2.ts]
 class A
 

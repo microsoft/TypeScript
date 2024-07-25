@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationFunctionTypeNonlocalShouldNotBeAnError.ts] ////
+
 //// [declarationFunctionTypeNonlocalShouldNotBeAnError.ts]
 namespace foo {
     function bar(): void {}

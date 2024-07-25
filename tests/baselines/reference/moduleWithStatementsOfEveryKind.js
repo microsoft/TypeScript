@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleBody/moduleWithStatementsOfEveryKind.ts] ////
+
 //// [moduleWithStatementsOfEveryKind.ts]
 module A {
     class A { s: string }

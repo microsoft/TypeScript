@@ -1,0 +1,22 @@
+index.js(12,8): error TS2678: Type '"invalid"' is not comparable to type '"foo" | "bar"'.
+
+
+==== index.js (1 errors) ====
+    let value = "";
+    
+    switch (/** @type {"foo" | "bar"} */ (value)) {
+      case "bar":
+        value;
+        break;
+    
+      case "foo":
+        value;
+        break;
+    
+      case "invalid":
+           ~~~~~~~~~
+!!! error TS2678: Type '"invalid"' is not comparable to type '"foo" | "bar"'.
+        value;
+        break;
+    }
+    

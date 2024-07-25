@@ -1,0 +1,107 @@
+//// [tests/cases/compiler/genericIndexedAccessVarianceComparisonResultCorrect.ts] ////
+
+=== genericIndexedAccessVarianceComparisonResultCorrect.ts ===
+class A {
+>A : A
+>  : ^
+
+    x: string = 'A';
+>x : string
+>  : ^^^^^^
+>'A' : "A"
+>    : ^^^
+
+    y: number = 0;
+>y : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+}
+
+class B {
+>B : B
+>  : ^
+
+    x: string = 'B';
+>x : string
+>  : ^^^^^^
+>'B' : "B"
+>    : ^^^
+
+    z: boolean = true;
+>z : boolean
+>  : ^^^^^^^
+>true : true
+>     : ^^^^
+}
+
+type T<X extends { x: any }> = Pick<X, 'x'>;
+>T : T<X>
+>  : ^^^^
+>x : any
+>  : ^^^
+
+type C = T<A>;
+>C : C
+>  : ^
+
+type D = T<B>;
+>D : D
+>  : ^
+
+type C_extends_D = C extends D ? true : false;                                  // true
+>C_extends_D : true
+>            : ^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+type PickA_extends_PickB = Pick<A, 'x'> extends Pick<B, 'x'> ? true : false;    // true
+>PickA_extends_PickB : true
+>                    : ^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+type TA_extends_TB = T<A> extends T<B> ? true : false;                          // should be true
+>TA_extends_TB : false
+>              : ^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+declare let a: T<A>;
+>a : T<A>
+>  : ^^^^
+
+declare let b: T<B>;
+>b : T<B>
+>  : ^^^^
+
+declare let c: C;
+>c : C
+>  : ^
+
+declare let d: D;
+>d : D
+>  : ^
+
+b = a;      // should be no error
+>b = a : T<A>
+>      : ^^^^
+>b : T<B>
+>  : ^^^^
+>a : T<A>
+>  : ^^^^
+
+c = d;
+>c = d : D
+>      : ^
+>c : C
+>  : ^
+>d : D
+>  : ^
+

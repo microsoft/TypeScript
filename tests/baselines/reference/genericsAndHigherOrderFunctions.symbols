@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericsAndHigherOrderFunctions.ts ===
+//// [tests/cases/compiler/genericsAndHigherOrderFunctions.ts] ////
+
+=== genericsAndHigherOrderFunctions.ts ===
 // no errors expected
 
 var combine: <T, S>(f: (_: T) => S) =>

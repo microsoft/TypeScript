@@ -1,17 +1,17 @@
-tests/cases/compiler/restInvalidArgumentType.ts(30,13): error TS2700: Rest types may only be created from object types.
-tests/cases/compiler/restInvalidArgumentType.ts(31,13): error TS2700: Rest types may only be created from object types.
-tests/cases/compiler/restInvalidArgumentType.ts(37,13): error TS2700: Rest types may only be created from object types.
-tests/cases/compiler/restInvalidArgumentType.ts(40,13): error TS2700: Rest types may only be created from object types.
-tests/cases/compiler/restInvalidArgumentType.ts(42,13): error TS2700: Rest types may only be created from object types.
-tests/cases/compiler/restInvalidArgumentType.ts(43,13): error TS2700: Rest types may only be created from object types.
-tests/cases/compiler/restInvalidArgumentType.ts(45,13): error TS2700: Rest types may only be created from object types.
-tests/cases/compiler/restInvalidArgumentType.ts(46,13): error TS2700: Rest types may only be created from object types.
-tests/cases/compiler/restInvalidArgumentType.ts(50,13): error TS2700: Rest types may only be created from object types.
-tests/cases/compiler/restInvalidArgumentType.ts(51,13): error TS2700: Rest types may only be created from object types.
-tests/cases/compiler/restInvalidArgumentType.ts(53,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(30,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(31,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(37,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(40,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(42,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(43,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(45,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(46,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(50,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(51,13): error TS2700: Rest types may only be created from object types.
+restInvalidArgumentType.ts(53,13): error TS2700: Rest types may only be created from object types.
 
 
-==== tests/cases/compiler/restInvalidArgumentType.ts (11 errors) ====
+==== restInvalidArgumentType.ts (11 errors) ====
     enum E { v1, v2 };
     
     function f<T extends { b: string }>(p1: T, p2: T[]) {

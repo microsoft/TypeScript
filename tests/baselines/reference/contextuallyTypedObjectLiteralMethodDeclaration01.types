@@ -1,120 +1,180 @@
-=== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedObjectLiteralMethodDeclaration01.ts ===
+//// [tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedObjectLiteralMethodDeclaration01.ts] ////
+
+=== contextuallyTypedObjectLiteralMethodDeclaration01.ts ===
 interface A {
     numProp: number;
 >numProp : number
+>        : ^^^^^^
 }
 
 interface B  {
     strProp: string;
 >strProp : string
+>        : ^^^^^^
 }
 
 interface Foo {
     method1(arg: A): void;
 >method1 : (arg: A) => void
+>        : ^   ^^ ^^^^^    
 >arg : A
+>    : ^
 
     method2(arg: B): void;
 >method2 : (arg: B) => void
+>        : ^   ^^ ^^^^^    
 >arg : B
+>    : ^
 }
 
 function getFoo1(): Foo {
 >getFoo1 : () => Foo
+>        : ^^^^^^   
 
     return {
 >{        method1(arg) {            arg.numProp = 10;        },        method2(arg) {            arg.strProp = "hello";        }    } : { method1(arg: A): void; method2(arg: B): void; }
+>                                                                                                                                     : ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^
 
         method1(arg) {
 >method1 : (arg: A) => void
+>        : ^   ^^^^^^^^^^^^
 >arg : A
+>    : ^
 
             arg.numProp = 10;
 >arg.numProp = 10 : 10
+>                 : ^^
 >arg.numProp : number
+>            : ^^^^^^
 >arg : A
+>    : ^
 >numProp : number
+>        : ^^^^^^
 >10 : 10
+>   : ^^
 
         },
         method2(arg) {
 >method2 : (arg: B) => void
+>        : ^   ^^^^^^^^^^^^
 >arg : B
+>    : ^
 
             arg.strProp = "hello";
 >arg.strProp = "hello" : "hello"
+>                      : ^^^^^^^
 >arg.strProp : string
+>            : ^^^^^^
 >arg : B
+>    : ^
 >strProp : string
+>        : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
         }
     }
 }
 
 function getFoo2(): Foo {
 >getFoo2 : () => Foo
+>        : ^^^^^^   
 
     return {
 >{        method1: (arg) => {            arg.numProp = 10;        },        method2: (arg) => {            arg.strProp = "hello";        }    } : { method1: (arg: A) => void; method2: (arg: B) => void; }
+>                                                                                                                                               : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
 
         method1: (arg) => {
 >method1 : (arg: A) => void
+>        : ^   ^^^^^^^^^^^^
 >(arg) => {            arg.numProp = 10;        } : (arg: A) => void
+>                                                 : ^   ^^^^^^^^^^^^
 >arg : A
+>    : ^
 
             arg.numProp = 10;
 >arg.numProp = 10 : 10
+>                 : ^^
 >arg.numProp : number
+>            : ^^^^^^
 >arg : A
+>    : ^
 >numProp : number
+>        : ^^^^^^
 >10 : 10
+>   : ^^
 
         },
         method2: (arg) => {
 >method2 : (arg: B) => void
+>        : ^   ^^^^^^^^^^^^
 >(arg) => {            arg.strProp = "hello";        } : (arg: B) => void
+>                                                      : ^   ^^^^^^^^^^^^
 >arg : B
+>    : ^
 
             arg.strProp = "hello";
 >arg.strProp = "hello" : "hello"
+>                      : ^^^^^^^
 >arg.strProp : string
+>            : ^^^^^^
 >arg : B
+>    : ^
 >strProp : string
+>        : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
         }
     }
 }
 
 function getFoo3(): Foo {
 >getFoo3 : () => Foo
+>        : ^^^^^^   
 
     return {
 >{        method1: function (arg) {            arg.numProp = 10;        },        method2: function (arg) {            arg.strProp = "hello";        }    } : { method1: (arg: A) => void; method2: (arg: B) => void; }
+>                                                                                                                                                           : ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
 
         method1: function (arg) {
 >method1 : (arg: A) => void
+>        : ^   ^^^^^^^^^^^^
 >function (arg) {            arg.numProp = 10;        } : (arg: A) => void
+>                                                       : ^   ^^^^^^^^^^^^
 >arg : A
+>    : ^
 
             arg.numProp = 10;
 >arg.numProp = 10 : 10
+>                 : ^^
 >arg.numProp : number
+>            : ^^^^^^
 >arg : A
+>    : ^
 >numProp : number
+>        : ^^^^^^
 >10 : 10
+>   : ^^
 
         },
         method2: function (arg) {
 >method2 : (arg: B) => void
+>        : ^   ^^^^^^^^^^^^
 >function (arg) {            arg.strProp = "hello";        } : (arg: B) => void
+>                                                            : ^   ^^^^^^^^^^^^
 >arg : B
+>    : ^
 
             arg.strProp = "hello";
 >arg.strProp = "hello" : "hello"
+>                      : ^^^^^^^
 >arg.strProp : string
+>            : ^^^^^^
 >arg : B
+>    : ^
 >strProp : string
+>        : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
         }
     }
 }

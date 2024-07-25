@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callOverloads3.ts] ////
+
 //// [callOverloads3.ts]
 function Foo():Foo; // error
 function Foo(s:string):Foo; // error

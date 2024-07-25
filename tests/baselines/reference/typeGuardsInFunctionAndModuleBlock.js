@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInFunctionAndModuleBlock.ts] ////
+
 //// [typeGuardsInFunctionAndModuleBlock.ts]
 // typeguards are scoped in function/module block
 

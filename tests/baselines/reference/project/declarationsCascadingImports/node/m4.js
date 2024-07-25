@@ -1,6 +1,7 @@
 "use strict";
-exports.__esModule = true;
-exports.foo = exports.x = exports.d = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = exports.d = void 0;
+exports.foo = foo;
 var d = /** @class */ (function () {
     function d() {
     }
@@ -11,4 +12,3 @@ exports.d = d;
 function foo() {
     return new d();
 }
-exports.foo = foo;

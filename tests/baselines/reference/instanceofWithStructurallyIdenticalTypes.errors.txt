@@ -1,7 +1,7 @@
-tests/cases/compiler/instanceofWithStructurallyIdenticalTypes.ts(32,18): error TS2339: Property 'item' does not exist on type 'never'.
+instanceofWithStructurallyIdenticalTypes.ts(32,18): error TS2339: Property 'item' does not exist on type 'never'.
 
 
-==== tests/cases/compiler/instanceofWithStructurallyIdenticalTypes.ts (1 errors) ====
+==== instanceofWithStructurallyIdenticalTypes.ts (1 errors) ====
     // Repro from #7271
     
     class C1 { item: string }

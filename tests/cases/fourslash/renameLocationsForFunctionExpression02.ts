@@ -10,4 +10,4 @@
 ////    let foo = () => [|f|]([|f|], g);
 ////}|]
 
-verify.rangesWithSameTextAreRenameLocations("f");
+verify.baselineRenameAtRangesWithText("f");

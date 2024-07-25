@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleVariables.ts] ////
+
 //// [moduleVariables.ts]
 declare var console: any;
  

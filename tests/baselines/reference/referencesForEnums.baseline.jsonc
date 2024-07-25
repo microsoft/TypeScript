@@ -1,0 +1,762 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForEnums.ts ===
+// enum E {
+//     /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}value1|] = 1|>,
+//     "value2" = [|value1|],
+//     111 = 11
+// }
+// 
+// E.[|value1|];
+// E["value2"];
+// E.value2;
+// E[111];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForEnums.ts ===
+  // enum E {
+  //     /*FIND ALL REFS*/<|[|value1|] = 1|>,
+  //     "value2" = value1,
+  //     111 = 11
+  // }
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E.value1 = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "value1",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     /*FIND ALL REFS*/<|"[|{| isWriteAccess: true, isDefinition: true |}value2|]" = value1|>,
+//     111 = 11
+// }
+// 
+// E.value1;
+// E["[|value2|]"];
+// E.[|value2|];
+// E[111];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForEnums.ts ===
+  // enum E {
+  //     value1 = 1,
+  //     /*FIND ALL REFS*/<|"[|value2|]" = value1|>,
+  //     111 = 11
+  // }
+  // 
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E[\"value2\"] = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"value2\"",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     <|"/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}value2|]" = value1|>,
+//     111 = 11
+// }
+// 
+// E.value1;
+// E["[|value2|]"];
+// E.[|value2|];
+// E[111];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForEnums.ts ===
+  // enum E {
+  //     value1 = 1,
+  //     <|"/*FIND ALL REFS*/[|value2|]" = value1|>,
+  //     111 = 11
+  // }
+  // 
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E[\"value2\"] = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"value2\"",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForEnums.ts ===
+// enum E {
+//     <|[|{| isWriteAccess: true |}value1|] = 1|>,
+//     "value2" = /*FIND ALL REFS*/[|value1|],
+//     111 = 11
+// }
+// 
+// E.[|value1|];
+// E["value2"];
+// E.value2;
+// E[111];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForEnums.ts ===
+  // enum E {
+  //     <|[|value1|] = 1|>,
+  //     "value2" = /*FIND ALL REFS*/value1,
+  //     111 = 11
+  // }
+  // 
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E.value1 = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "value1",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     "value2" = value1,
+//     /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}111|] = 11|>
+// }
+// 
+// E.value1;
+// E["value2"];
+// E.value2;
+// E[[|111|]];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForEnums.ts ===
+  // enum E {
+  //     value1 = 1,
+  //     "value2" = value1,
+  //     /*FIND ALL REFS*/<|[|111|] = 11|>
+  // }
+  // 
+  // E.value1;
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E[111] = 11",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "111",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "11",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForEnums.ts ===
+// enum E {
+//     <|[|{| isWriteAccess: true |}value1|] = 1|>,
+//     "value2" = [|value1|],
+//     111 = 11
+// }
+// 
+// E./*FIND ALL REFS*/[|value1|];
+// E["value2"];
+// E.value2;
+// E[111];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForEnums.ts ===
+  // enum E {
+  //     <|[|value1|] = 1|>,
+  //     "value2" = value1,
+  //     111 = 11
+  // }
+  // 
+  // E./*FIND ALL REFS*/value1;
+  // E["value2"];
+  // E.value2;
+  // E[111];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E.value1 = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "value1",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     <|"[|{| isWriteAccess: true |}value2|]" = value1|>,
+//     111 = 11
+// }
+// 
+// E.value1;
+// E["/*FIND ALL REFS*/[|value2|]"];
+// E.[|value2|];
+// E[111];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForEnums.ts ===
+  // enum E {
+  //     value1 = 1,
+  //     <|"[|value2|]" = value1|>,
+  //     111 = 11
+  // }
+  // 
+  // E.value1;
+  // E["/*FIND ALL REFS*/value2"];
+  // E.value2;
+  // E[111];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E[\"value2\"] = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"value2\"",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     <|"[|{| isWriteAccess: true |}value2|]" = value1|>,
+//     111 = 11
+// }
+// 
+// E.value1;
+// E["[|value2|]"];
+// E./*FIND ALL REFS*/[|value2|];
+// E[111];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForEnums.ts ===
+  // enum E {
+  //     value1 = 1,
+  //     <|"[|value2|]" = value1|>,
+  //     111 = 11
+  // }
+  // 
+  // E.value1;
+  // E["value2"];
+  // E./*FIND ALL REFS*/value2;
+  // E[111];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E[\"value2\"] = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"value2\"",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForEnums.ts ===
+// enum E {
+//     value1 = 1,
+//     "value2" = value1,
+//     <|[|{| isWriteAccess: true |}111|] = 11|>
+// }
+// 
+// E.value1;
+// E["value2"];
+// E.value2;
+// E[/*FIND ALL REFS*/[|111|]];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForEnums.ts ===
+  // enum E {
+  //     value1 = 1,
+  //     "value2" = value1,
+  //     <|[|111|] = 11|>
+  // }
+  // 
+  // E.value1;
+  // E["value2"];
+  // E.value2;
+  // E[/*FIND ALL REFS*/111];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) E[111] = 11",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "111",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "11",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts] ////
+
+=== derivedClassWithAny.ts ===
 class C {
 >C : Symbol(C, Decl(derivedClassWithAny.ts, 0, 0))
 

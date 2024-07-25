@@ -2018,7 +2018,7 @@ var publicModule;
         });
         return privateClassWithPrivateModuleSetAccessorTypes;
     }());
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClass = /** @class */ (function () {
@@ -3604,7 +3604,7 @@ export declare class publicClassWithPrivateModuleSetAccessorTypes {
     static set myPublicStaticMethod(param: privateModule.publicClass);
     set myPublicMethod(param: privateModule.publicClass);
 }
-export declare module publicModule {
+export declare namespace publicModule {
     class privateClass {
     }
     export class publicClass {
@@ -3653,7 +3653,7 @@ export declare module publicModule {
     }
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     class privateClass {
     }
     export class publicClass {
@@ -3722,12 +3722,12 @@ declare class publicClassInGlobalWithWithPublicSetAccessorTypes {
     set myPublicMethod(param: publicClassInGlobal);
     private set myPrivateMethod(value);
 }
-declare module publicModuleInGlobal {
+declare namespace publicModuleInGlobal {
     class privateClass {
     }
     export class publicClass {
     }
-    module privateModule {
+    namespace privateModule {
         class privateClass {
         }
         export class publicClass {

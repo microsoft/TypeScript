@@ -1,7 +1,7 @@
-tests/cases/compiler/internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts(12,11): error TS2339: Property 'b' does not exist on type 'typeof c'.
+internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts(12,11): error TS2339: Property 'b' does not exist on type 'typeof c'.
 
 
-==== tests/cases/compiler/internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+==== internalAliasFunctionInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
     export module a {
         export function foo(x: number) {
             return x;

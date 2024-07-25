@@ -1,4 +1,6 @@
-=== tests/cases/compiler/awaitLiteralValues.ts ===
+//// [tests/cases/compiler/awaitLiteralValues.ts] ////
+
+=== awaitLiteralValues.ts ===
 function awaitString() {
 >awaitString : Symbol(awaitString, Decl(awaitLiteralValues.ts, 0, 0))
 

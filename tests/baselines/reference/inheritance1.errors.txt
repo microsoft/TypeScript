@@ -1,20 +1,20 @@
-tests/cases/compiler/inheritance1.ts(14,7): error TS2420: Class 'ImageBase' incorrectly implements interface 'SelectableControl'.
+inheritance1.ts(14,7): error TS2420: Class 'ImageBase' incorrectly implements interface 'SelectableControl'.
   Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
-tests/cases/compiler/inheritance1.ts(18,7): error TS2420: Class 'Locations' incorrectly implements interface 'SelectableControl'.
+inheritance1.ts(18,7): error TS2420: Class 'Locations' incorrectly implements interface 'SelectableControl'.
   Property 'state' is missing in type 'Locations' but required in type 'SelectableControl'.
-tests/cases/compiler/inheritance1.ts(31,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'Button'.
-tests/cases/compiler/inheritance1.ts(37,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'TextBox'.
-tests/cases/compiler/inheritance1.ts(40,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
-tests/cases/compiler/inheritance1.ts(46,1): error TS2322: Type 'Image1' is not assignable to type 'SelectableControl'.
-tests/cases/compiler/inheritance1.ts(52,1): error TS2741: Property 'state' is missing in type 'Locations' but required in type 'SelectableControl'.
-tests/cases/compiler/inheritance1.ts(53,1): error TS2741: Property 'state' is missing in type 'Locations' but required in type 'Control'.
-tests/cases/compiler/inheritance1.ts(55,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'Locations'.
-tests/cases/compiler/inheritance1.ts(58,1): error TS2741: Property 'state' is missing in type 'Locations1' but required in type 'SelectableControl'.
-tests/cases/compiler/inheritance1.ts(59,1): error TS2741: Property 'state' is missing in type 'Locations1' but required in type 'Control'.
-tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'Locations1'.
+inheritance1.ts(31,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'Button'.
+inheritance1.ts(37,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'TextBox'.
+inheritance1.ts(40,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
+inheritance1.ts(46,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
+inheritance1.ts(52,1): error TS2741: Property 'state' is missing in type 'Locations' but required in type 'SelectableControl'.
+inheritance1.ts(53,1): error TS2741: Property 'state' is missing in type 'Locations' but required in type 'Control'.
+inheritance1.ts(55,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'Locations'.
+inheritance1.ts(58,1): error TS2741: Property 'state' is missing in type 'Locations1' but required in type 'SelectableControl'.
+inheritance1.ts(59,1): error TS2741: Property 'state' is missing in type 'Locations1' but required in type 'Control'.
+inheritance1.ts(61,1): error TS2741: Property 'select' is missing in type 'Control' but required in type 'Locations1'.
 
 
-==== tests/cases/compiler/inheritance1.ts (12 errors) ====
+==== inheritance1.ts (12 errors) ====
     class Control {
         private state: any;
     }
@@ -32,7 +32,7 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
           ~~~~~~~~~
 !!! error TS2420: Class 'ImageBase' incorrectly implements interface 'SelectableControl'.
 !!! error TS2420:   Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
-!!! related TS2728 tests/cases/compiler/inheritance1.ts:5:5: 'select' is declared here.
+!!! related TS2728 inheritance1.ts:5:5: 'select' is declared here.
     }
     class Image1 extends Control {
     }
@@ -40,7 +40,7 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
           ~~~~~~~~~
 !!! error TS2420: Class 'Locations' incorrectly implements interface 'SelectableControl'.
 !!! error TS2420:   Property 'state' is missing in type 'Locations' but required in type 'SelectableControl'.
-!!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
+!!! related TS2728 inheritance1.ts:2:13: 'state' is declared here.
         select() { }
     }
     class Locations1 {
@@ -56,7 +56,7 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
     b = c;
     ~
 !!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'Button'.
-!!! related TS2728 tests/cases/compiler/inheritance1.ts:9:5: 'select' is declared here.
+!!! related TS2728 inheritance1.ts:9:5: 'select' is declared here.
     
     var t: TextBox;
     sc = t;
@@ -65,13 +65,13 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
     t = c;
     ~
 !!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'TextBox'.
-!!! related TS2728 tests/cases/compiler/inheritance1.ts:12:5: 'select' is declared here.
+!!! related TS2728 inheritance1.ts:12:5: 'select' is declared here.
     
     var i: ImageBase;
     sc = i;
     ~~
 !!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
-!!! related TS2728 tests/cases/compiler/inheritance1.ts:5:5: 'select' is declared here.
+!!! related TS2728 inheritance1.ts:5:5: 'select' is declared here.
     c = i;
     i = sc;
     i = c;
@@ -79,7 +79,8 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
     var i1: Image1;
     sc = i1;
     ~~
-!!! error TS2322: Type 'Image1' is not assignable to type 'SelectableControl'.
+!!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'SelectableControl'.
+!!! related TS2728 inheritance1.ts:5:5: 'select' is declared here.
     c = i1;
     i1 = sc;
     i1 = c;
@@ -88,28 +89,28 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
     sc = l;
     ~~
 !!! error TS2741: Property 'state' is missing in type 'Locations' but required in type 'SelectableControl'.
-!!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
+!!! related TS2728 inheritance1.ts:2:13: 'state' is declared here.
     c = l;
     ~
 !!! error TS2741: Property 'state' is missing in type 'Locations' but required in type 'Control'.
-!!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
+!!! related TS2728 inheritance1.ts:2:13: 'state' is declared here.
     l = sc;
     l = c;
     ~
 !!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'Locations'.
-!!! related TS2728 tests/cases/compiler/inheritance1.ts:19:5: 'select' is declared here.
+!!! related TS2728 inheritance1.ts:19:5: 'select' is declared here.
     
     var l1: Locations1;
     sc = l1;
     ~~
 !!! error TS2741: Property 'state' is missing in type 'Locations1' but required in type 'SelectableControl'.
-!!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
+!!! related TS2728 inheritance1.ts:2:13: 'state' is declared here.
     c = l1;
     ~
 !!! error TS2741: Property 'state' is missing in type 'Locations1' but required in type 'Control'.
-!!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
+!!! related TS2728 inheritance1.ts:2:13: 'state' is declared here.
     l1 = sc;
     l1 = c;
     ~~
 !!! error TS2741: Property 'select' is missing in type 'Control' but required in type 'Locations1'.
-!!! related TS2728 tests/cases/compiler/inheritance1.ts:22:5: 'select' is declared here.
+!!! related TS2728 inheritance1.ts:22:5: 'select' is declared here.

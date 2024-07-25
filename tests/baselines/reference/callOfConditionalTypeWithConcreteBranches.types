@@ -1,43 +1,69 @@
-=== tests/cases/compiler/callOfConditionalTypeWithConcreteBranches.ts ===
+//// [tests/cases/compiler/callOfConditionalTypeWithConcreteBranches.ts] ////
+
+=== callOfConditionalTypeWithConcreteBranches.ts ===
 type Q<T> = number extends T ? (n: number) => void : never;
 >Q : Q<T>
+>  : ^^^^
 >n : number
+>  : ^^^^^^
 
 function fn<T>(arg: Q<T>) {
 >fn : <T>(arg: Q<T>) => void
+>   : ^ ^^   ^^    ^^^^^^^^^
 >arg : Q<T>
+>    : ^^^^
 
   // Expected: OK
   // Actual: Cannot convert 10 to number & T
   arg(10);
 >arg(10) : void
+>        : ^^^^
 >arg : Q<T>
+>    : ^^^^
 >10 : 10
+>   : ^^
 }
 // Legal invocations are not problematic
 fn<string | number>(m => m.toFixed());
 >fn<string | number>(m => m.toFixed()) : void
+>                                      : ^^^^
 >fn : <T>(arg: Q<T>) => void
+>   : ^ ^^   ^^    ^^^^^^^^^
 >m => m.toFixed() : (m: number) => string
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >m : number
+>  : ^^^^^^
 >m.toFixed() : string
+>            : ^^^^^^
 >m.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >m : number
+>  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 fn<number>(m => m.toFixed());
 >fn<number>(m => m.toFixed()) : void
+>                             : ^^^^
 >fn : <T>(arg: Q<T>) => void
+>   : ^ ^^   ^^    ^^^^^^^^^
 >m => m.toFixed() : (m: number) => string
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >m : number
+>  : ^^^^^^
 >m.toFixed() : string
+>            : ^^^^^^
 >m.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >m : number
+>  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 // Ensure the following real-world example that relies on substitution still works
 type ExtractParameters<T> = "parameters" extends keyof T
 >ExtractParameters : ExtractParameters<T>
+>                  : ^^^^^^^^^^^^^^^^^^^^
 
   // The above allows "parameters" to index `T` since all later
   // instances are actually implicitly `"parameters" & keyof T`
@@ -49,63 +75,97 @@ type ExtractParameters<T> = "parameters" extends keyof T
 // Original example, but with inverted variance
 type Q2<T> = number extends T ? (cb: (n: number) => void) => void : never;
 >Q2 : Q2<T>
+>   : ^^^^^
 >cb : (n: number) => void
+>   : ^ ^^      ^^^^^    
 >n : number
+>  : ^^^^^^
 
 function fn2<T>(arg: Q2<T>) {
 >fn2 : <T>(arg: Q2<T>) => void
+>    : ^ ^^   ^^     ^^^^^^^^^
 >arg : Q2<T>
+>    : ^^^^^
 
   function useT(_arg: T): void {}
 >useT : (_arg: T) => void
+>     : ^    ^^ ^^^^^    
 >_arg : T
+>     : ^
 
   // Expected: OK
   arg(arg => useT(arg));
 >arg(arg => useT(arg)) : void
+>                      : ^^^^
 >arg : Q2<T>
+>    : ^^^^^
 >arg => useT(arg) : (arg: T & number) => void
+>                 : ^   ^^^^^^^^^^^^^^^^^^^^^
 >arg : T & number
+>    : ^^^^^^^^^^
 >useT(arg) : void
+>          : ^^^^
 >useT : (_arg: T) => void
+>     : ^    ^^ ^^^^^    
 >arg : T & number
+>    : ^^^^^^^^^^
 }
 // Legal invocations are not problematic
 fn2<string | number>(m => m(42));
 >fn2<string | number>(m => m(42)) : void
+>                                 : ^^^^
 >fn2 : <T>(arg: Q2<T>) => void
+>    : ^ ^^   ^^     ^^^^^^^^^
 >m => m(42) : (m: (n: number) => void) => void
+>           : ^ ^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^    
 >m(42) : void
+>      : ^^^^
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^    
 >42 : 42
+>   : ^^
 
 fn2<number>(m => m(42));
 >fn2<number>(m => m(42)) : void
+>                        : ^^^^
 >fn2 : <T>(arg: Q2<T>) => void
+>    : ^ ^^   ^^     ^^^^^^^^^
 >m => m(42) : (m: (n: number) => void) => void
+>           : ^ ^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^    
 >m(42) : void
+>      : ^^^^
 >m : (n: number) => void
+>  : ^ ^^^^^^^^^^^^^    
 >42 : 42
+>   : ^^
 
 // webidl-conversions example where substituion must occur, despite contravariance of the position
 // due to the invariant usage in `Parameters`
 
 type X<V> = V extends (...args: any[]) => any ? (...args: Parameters<V>) => void : Function;
 >X : X<V>
+>  : ^^^^
 >args : any[]
+>     : ^^^^^
 >args : Parameters<V>
+>     : ^^^^^^^^^^^^^
 
 // vscode - another `Parameters` example
 export type AddFirstParameterToFunctions<Target> = {
 >AddFirstParameterToFunctions : AddFirstParameterToFunctions<Target>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   [K in keyof Target]: Target[K] extends (...args: any[]) => void
 >args : any[]
+>     : ^^^^^
 
       ? (...args: Parameters<Target[K]>) => void
 >args : Parameters<Target[K]>
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
       : void
 };

@@ -1,7 +1,13 @@
-=== tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment3.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment3.ts] ////
+
+=== parserShorthandPropertyAssignment3.ts ===
 var v = { "" };
 >v : { "": any; }
+>  : ^^^^^^^^^^^^
 >{ "" } : { "": any; }
+>       : ^^^^^^^^^^^^
 >"" : any
+>   : ^^^
 > : any
+> : ^^^
 

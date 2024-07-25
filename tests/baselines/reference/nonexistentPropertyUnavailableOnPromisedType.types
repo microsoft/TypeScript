@@ -1,12 +1,20 @@
-=== tests/cases/compiler/nonexistentPropertyUnavailableOnPromisedType.ts ===
+//// [tests/cases/compiler/nonexistentPropertyUnavailableOnPromisedType.ts] ////
+
+=== nonexistentPropertyUnavailableOnPromisedType.ts ===
 function f(x: Promise<number>) {
 >f : (x: Promise<number>) => void
+>  : ^ ^^               ^^^^^^^^^
 >x : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
     x.toLowerCase();
 >x.toLowerCase() : any
+>                : ^^^
 >x.toLowerCase : any
+>              : ^^^
 >x : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 >toLowerCase : any
+>            : ^^^
 }
 

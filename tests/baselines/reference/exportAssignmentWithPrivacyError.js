@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAssignmentWithPrivacyError.ts] ////
+
 //// [exportAssignmentWithPrivacyError.ts]
 interface connectmodule {
     (res, req, next): void;

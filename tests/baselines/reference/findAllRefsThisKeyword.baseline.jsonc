@@ -1,0 +1,693 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// /*FIND ALL REFS*/[|this|];
+// function f(this) {
+//     return this;
+//     function g(this) { return this; }
+// --- (line: 5) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+  // /*FIND ALL REFS*/[|this|];
+  // function f(this) {
+  //     return this;
+  //     function g(this) { return this; }
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "this",
+      "kind": "keyword"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "globalThis",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}this|]) {
+//     return [|this|];
+//     function g(this) { return this; }
+// }
+// class C {
+// --- (line: 7) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+  // this;
+  // function f(/*FIND ALL REFS*/[|this|]) {
+  //     return this;
+  //     function g(this) { return this; }
+  // }
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f([|{| isWriteAccess: true |}this|]) {
+//     return /*FIND ALL REFS*/[|this|];
+//     function g(this) { return this; }
+// }
+// class C {
+// --- (line: 7) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+  // this;
+  // function f([|this|]) {
+  //     return /*FIND ALL REFS*/this;
+  //     function g(this) { return this; }
+  // }
+  // class C {
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g(/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}this|]) { return [|this|]; }
+// }
+// class C {
+//     static x() {
+// --- (line: 8) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+  // this;
+  // function f(this) {
+  //     return this;
+  //     function g(/*FIND ALL REFS*/[|this|]) { return this; }
+  // }
+  // class C {
+  //     static x() {
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// this;
+// function f(this) {
+//     return this;
+//     function g([|{| isWriteAccess: true |}this|]) { return /*FIND ALL REFS*/[|this|]; }
+// }
+// class C {
+//     static x() {
+// --- (line: 8) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+  // this;
+  // function f(this) {
+  //     return this;
+  //     function g([|this|]) { return /*FIND ALL REFS*/this; }
+  // }
+  // class C {
+  //     static x() {
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// --- (line: 4) skipped ---
+// }
+// class C {
+//     static x() {
+//         /*FIND ALL REFS*/[|this|];
+//     }
+//     static y() {
+//         () => [|this|];
+//     }
+//     constructor() {
+//         this;
+// --- (line: 15) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+  // --- (line: 4) skipped ---
+  // }
+  // class C {
+  //     static x() {
+  //         /*FIND ALL REFS*/[|this|];
+  //     }
+  //     static y() {
+  //         () => this;
+  // --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "this",
+      "kind": "keyword"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// --- (line: 4) skipped ---
+// }
+// class C {
+//     static x() {
+//         [|this|];
+//     }
+//     static y() {
+//         () => /*FIND ALL REFS*/[|this|];
+//     }
+//     constructor() {
+//         this;
+// --- (line: 15) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+  // --- (line: 7) skipped ---
+  //         this;
+  //     }
+  //     static y() {
+  //         () => /*FIND ALL REFS*/[|this|];
+  //     }
+  //     constructor() {
+  //         this;
+  // --- (line: 15) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "this",
+      "kind": "keyword"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// --- (line: 10) skipped ---
+//         () => this;
+//     }
+//     constructor() {
+//         /*FIND ALL REFS*/[|this|];
+//     }
+//     method() {
+//         () => [|this|];
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+  // --- (line: 10) skipped ---
+  //         () => this;
+  //     }
+  //     constructor() {
+  //         /*FIND ALL REFS*/[|this|];
+  //     }
+  //     method() {
+  //         () => this;
+  // --- (line: 18) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "this",
+      "kind": "keyword"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// --- (line: 10) skipped ---
+//         () => this;
+//     }
+//     constructor() {
+//         [|this|];
+//     }
+//     method() {
+//         () => /*FIND ALL REFS*/[|this|];
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { this: 0 }
+// x.this;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+  // --- (line: 13) skipped ---
+  //         this;
+  //     }
+  //     method() {
+  //         () => /*FIND ALL REFS*/[|this|];
+  //     }
+  // }
+  // // These are *not* real uses of the 'this' keyword, they are identifiers.
+  // const x = { this: 0 }
+  // x.this;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "this",
+      "kind": "keyword"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// --- (line: 17) skipped ---
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}this|]: 0|> }
+// x.[|this|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+  // --- (line: 17) skipped ---
+  //     }
+  // }
+  // // These are *not* real uses of the 'this' keyword, they are identifiers.
+  // const x = { /*FIND ALL REFS*/<|[|this|]: 0|> }
+  // x.this;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) this: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+// --- (line: 17) skipped ---
+//     }
+// }
+// // These are *not* real uses of the 'this' keyword, they are identifiers.
+// const x = { <|[|{| isWriteAccess: true |}this|]: 0|> }
+// x./*FIND ALL REFS*/[|this|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsThisKeyword.ts ===
+  // --- (line: 17) skipped ---
+  //     }
+  // }
+  // // These are *not* real uses of the 'this' keyword, they are identifiers.
+  // const x = { <|[|this|]: 0|> }
+  // x./*FIND ALL REFS*/this;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) this: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

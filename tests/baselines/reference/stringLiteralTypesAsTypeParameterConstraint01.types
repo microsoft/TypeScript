@@ -1,69 +1,115 @@
-=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTypeParameterConstraint01.ts ===
+//// [tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTypeParameterConstraint01.ts] ////
+
+=== stringLiteralTypesAsTypeParameterConstraint01.ts ===
 function foo<T extends "foo">(f: (x: T) => T) {
 >foo : <T extends "foo">(f: (x: T) => T) => (x: T) => T
+>    : ^ ^^^^^^^^^     ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >f : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
     return f;
 >f : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 }
 
 function bar<T extends "foo" | "bar">(f: (x: T) => T) {
 >bar : <T extends "foo" | "bar">(f: (x: T) => T) => (x: T) => T
+>    : ^ ^^^^^^^^^             ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >f : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
     return f;
 >f : (x: T) => T
+>  : ^ ^^ ^^^^^ 
 }
 
 let f = foo(x => x);
 >f : (x: "foo") => "foo"
+>  : ^ ^^^^^^^^^^^^^^^^^
 >foo(x => x) : (x: "foo") => "foo"
+>            : ^ ^^^^^^^^^^^^^^^^^
 >foo : <T extends "foo">(f: (x: T) => T) => (x: T) => T
+>    : ^ ^^^^^^^^^     ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >x => x : (x: "foo") => "foo"
+>       : ^ ^^^^^^^^^^^^^^^^^
 >x : "foo"
+>  : ^^^^^
 >x : "foo"
+>  : ^^^^^
 
 let fResult = f("foo");
 >fResult : "foo"
+>        : ^^^^^
 >f("foo") : "foo"
+>         : ^^^^^
 >f : (x: "foo") => "foo"
+>  : ^ ^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 let g = foo((x => x));
 >g : (x: "foo") => "foo"
+>  : ^ ^^^^^^^^^^^^^^^^^
 >foo((x => x)) : (x: "foo") => "foo"
+>              : ^ ^^^^^^^^^^^^^^^^^
 >foo : <T extends "foo">(f: (x: T) => T) => (x: T) => T
+>    : ^ ^^^^^^^^^     ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x => x) : (x: "foo") => "foo"
+>         : ^ ^^^^^^^^^^^^^^^^^
 >x => x : (x: "foo") => "foo"
+>       : ^ ^^^^^^^^^^^^^^^^^
 >x : "foo"
+>  : ^^^^^
 >x : "foo"
+>  : ^^^^^
 
 let gResult = g("foo");
 >gResult : "foo"
+>        : ^^^^^
 >g("foo") : "foo"
+>         : ^^^^^
 >g : (x: "foo") => "foo"
+>  : ^ ^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 let h = bar(x => x);
 >h : (x: "foo" | "bar") => "foo" | "bar"
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar(x => x) : (x: "foo" | "bar") => "foo" | "bar"
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : <T extends "foo" | "bar">(f: (x: T) => T) => (x: T) => T
+>    : ^ ^^^^^^^^^             ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >x => x : (x: "foo" | "bar") => "foo" | "bar"
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 >x : "foo" | "bar"
+>  : ^^^^^^^^^^^^^
 
 let hResult = h("foo");
 >hResult : "foo" | "bar"
+>        : ^^^^^^^^^^^^^
 >h("foo") : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 >h : (x: "foo" | "bar") => "foo" | "bar"
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
 hResult = h("bar");
 >hResult = h("bar") : "foo" | "bar"
+>                   : ^^^^^^^^^^^^^
 >hResult : "foo" | "bar"
+>        : ^^^^^^^^^^^^^
 >h("bar") : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
 >h : (x: "foo" | "bar") => "foo" | "bar"
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"bar" : "bar"
+>      : ^^^^^
 

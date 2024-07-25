@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/privateStaticMemberAccessibility.ts] ////
+
 //// [privateStaticMemberAccessibility.ts]
 class Base {
     private static foo: string;

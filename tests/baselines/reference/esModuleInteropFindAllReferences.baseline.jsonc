@@ -1,0 +1,113 @@
+// === findAllReferences ===
+// === /abc.d.ts ===
+// declare module "a" {
+//     /*FIND ALL REFS*/export const x: number;
+// }
+
+
+
+// === findAllReferences ===
+// === /abc.d.ts ===
+// declare module "a" {
+//     <|export const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|]: number;|>
+// }
+
+// === /b.ts ===
+// import a from "a";
+// a.[|x|];
+
+  // === Definitions ===
+  // === /abc.d.ts ===
+  // declare module "a" {
+  //     <|export const /*FIND ALL REFS*/[|x|]: number;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: number",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /abc.d.ts ===
+// declare module "a" {
+//     <|export const [|{| isWriteAccess: true |}x|]: number;|>
+// }
+
+// === /b.ts ===
+// import a from "a";
+// a./*FIND ALL REFS*/[|x|];
+
+  // === Definitions ===
+  // === /abc.d.ts ===
+  // declare module "a" {
+  //     <|export const [|x|]: number;|>
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: number",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

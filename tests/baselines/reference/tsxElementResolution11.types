@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxElementResolution11.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface ElementAttributesProperty { }
@@ -8,41 +10,61 @@ declare module JSX {
 interface Obj1type {
 	new(n: string): any;
 >n : string
+>  : ^^^^^^
 }
 var Obj1: Obj1type;
 >Obj1 : Obj1type
+>     : ^^^^^^^^
 
 <Obj1 x={10} />; // OK
 ><Obj1 x={10} /> : JSX.Element
+>                : ^^^^^^^^^^^
 >Obj1 : Obj1type
+>     : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 interface Obj2type {
 	new(n: string): { q?: number };
 >n : string
+>  : ^^^^^^
 >q : number
+>  : ^^^^^^
 }
 var Obj2: Obj2type;
 >Obj2 : Obj2type
+>     : ^^^^^^^^
 
 <Obj2 x={10} />; // Error
 ><Obj2 x={10} /> : JSX.Element
+>                : ^^^^^^^^^^^
 >Obj2 : Obj2type
+>     : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 interface Obj3type {
 	new(n: string): { x: number; };
 >n : string
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 }
 var Obj3: Obj3type;
 >Obj3 : Obj3type
+>     : ^^^^^^^^
 
 <Obj3 x={10} />; // OK
 ><Obj3 x={10} /> : JSX.Element
+>                : ^^^^^^^^^^^
 >Obj3 : Obj3type
+>     : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 

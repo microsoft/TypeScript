@@ -1,141 +1,225 @@
-=== tests/cases/compiler/divergentAccessorsTypes3.ts ===
+//// [tests/cases/compiler/divergentAccessorsTypes3.ts] ////
+
+=== divergentAccessorsTypes3.ts ===
 class One {
 >One : One
+>    : ^^^
 
   get prop1(): string { return ""; }
 >prop1 : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
   set prop1(s: string | number) { }
 >prop1 : string
+>      : ^^^^^^
 >s : string | number
+>  : ^^^^^^^^^^^^^^^
 
   get prop2(): string { return ""; }
 >prop2 : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
   set prop2(s: string | number) { }
 >prop2 : string
+>      : ^^^^^^
 >s : string | number
+>  : ^^^^^^^^^^^^^^^
 
   prop3: number;
 >prop3 : number
+>      : ^^^^^^
 
   get prop4(): string { return ""; }
 >prop4 : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
   set prop4(s: string | number) { }
 >prop4 : string
+>      : ^^^^^^
 >s : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 class Two {
 >Two : Two
+>    : ^^^
 
   get prop1(): string { return ""; }
 >prop1 : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
   set prop1(s: string | number) { }
 >prop1 : string
+>      : ^^^^^^
 >s : string | number
+>  : ^^^^^^^^^^^^^^^
 
   get prop2(): string { return ""; }
 >prop2 : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
   set prop2(s: string) { }
 >prop2 : string
+>      : ^^^^^^
 >s : string
+>  : ^^^^^^
 
   get prop3(): string { return ""; }
 >prop3 : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
   set prop3(s: string | boolean) { }
 >prop3 : string
+>      : ^^^^^^
 >s : string | boolean
+>  : ^^^^^^^^^^^^^^^^
 
   get prop4(): string { return ""; }
 >prop4 : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
   set prop4(s: string | boolean) { }
 >prop4 : string
+>      : ^^^^^^
 >s : string | boolean
+>  : ^^^^^^^^^^^^^^^^
 }
 
 declare const u1: One|Two;
 >u1 : One | Two
+>   : ^^^^^^^^^
 
 u1.prop1 = 42;
 >u1.prop1 = 42 : 42
+>              : ^^
 >u1.prop1 : string | number
+>         : ^^^^^^^^^^^^^^^
 >u1 : One | Two
+>   : ^^^^^^^^^
 >prop1 : string | number
+>      : ^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
 u1.prop1 = "hello";
 >u1.prop1 = "hello" : "hello"
+>                   : ^^^^^^^
 >u1.prop1 : string | number
+>         : ^^^^^^^^^^^^^^^
 >u1 : One | Two
+>   : ^^^^^^^^^
 >prop1 : string | number
+>      : ^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 u1.prop2 = 42;
 >u1.prop2 = 42 : 42
+>              : ^^
 >u1.prop2 : string | number
+>         : ^^^^^^^^^^^^^^^
 >u1 : One | Two
+>   : ^^^^^^^^^
 >prop2 : string | number
+>      : ^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
 u1.prop2 = "hello";
 >u1.prop2 = "hello" : "hello"
+>                   : ^^^^^^^
 >u1.prop2 : string | number
+>         : ^^^^^^^^^^^^^^^
 >u1 : One | Two
+>   : ^^^^^^^^^
 >prop2 : string | number
+>      : ^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 u1.prop3 = 42;
 >u1.prop3 = 42 : 42
+>              : ^^
 >u1.prop3 : string | number | boolean
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >u1 : One | Two
+>   : ^^^^^^^^^
 >prop3 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
 u1.prop3 = "hello";
 >u1.prop3 = "hello" : "hello"
+>                   : ^^^^^^^
 >u1.prop3 : string | number | boolean
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >u1 : One | Two
+>   : ^^^^^^^^^
 >prop3 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 u1.prop3 = true;
 >u1.prop3 = true : true
+>                : ^^^^
 >u1.prop3 : string | number | boolean
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >u1 : One | Two
+>   : ^^^^^^^^^
 >prop3 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
 u1.prop4 = 42;
 >u1.prop4 = 42 : 42
+>              : ^^
 >u1.prop4 : string | number | boolean
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >u1 : One | Two
+>   : ^^^^^^^^^
 >prop4 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
 u1.prop4 = "hello";
 >u1.prop4 = "hello" : "hello"
+>                   : ^^^^^^^
 >u1.prop4 : string | number | boolean
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >u1 : One | Two
+>   : ^^^^^^^^^
 >prop4 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 u1.prop4 = true;
 >u1.prop4 = true : true
+>                : ^^^^
 >u1.prop4 : string | number | boolean
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >u1 : One | Two
+>   : ^^^^^^^^^
 >prop4 : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 

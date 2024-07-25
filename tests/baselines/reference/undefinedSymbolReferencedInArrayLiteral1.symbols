@@ -1,4 +1,6 @@
-=== tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts ===
+//// [tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts] ////
+
+=== undefinedSymbolReferencedInArrayLiteral1.ts ===
 var tokens = [{ startIndex: deltaOffset }];
 >tokens : Symbol(tokens, Decl(undefinedSymbolReferencedInArrayLiteral1.ts, 0, 3))
 >startIndex : Symbol(startIndex, Decl(undefinedSymbolReferencedInArrayLiteral1.ts, 0, 15))

@@ -1,175 +1,263 @@
-=== tests/cases/conformance/internalModules/importDeclarations/exportImportAlias.ts ===
+//// [tests/cases/conformance/internalModules/importDeclarations/exportImportAlias.ts] ////
+
+=== exportImportAlias.ts ===
 // expect no errors here
 
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export var x = 'hello world'
 >x : string
+>  : ^^^^^^
 >'hello world' : "hello world"
+>              : ^^^^^^^^^^^^^
 
     export class Point {
 >Point : Point
+>      : ^^^^^
 
         constructor(public x: number, public y: number) { }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
     }
     export module B {
         export interface Id {
             name: string;
 >name : string
+>     : ^^^^^^
         }
     }
 }
 
 module C {
 >C : typeof C
+>  : ^^^^^^^^
 
     export import a = A;
 >a : typeof a
+>  : ^^^^^^^^
 >A : typeof a
+>  : ^^^^^^^^
 }
 
 var a: string = C.a.x;
 >a : string
+>  : ^^^^^^
 >C.a.x : string
+>      : ^^^^^^
 >C.a : typeof A
+>    : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >a : typeof A
+>  : ^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 var b: { x: number; y: number; } = new C.a.Point(0, 0);
 >b : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >new C.a.Point(0, 0) : A.Point
+>                    : ^^^^^^^
 >C.a.Point : typeof A.Point
+>          : ^^^^^^^^^^^^^^
 >C.a : typeof A
+>    : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >a : typeof A
+>  : ^^^^^^^^
 >Point : typeof A.Point
+>      : ^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 var c: { name: string };
 >c : { name: string; }
+>  : ^^^^^^^^      ^^^
 >name : string
+>     : ^^^^^^
 
 var c: C.a.B.Id;
 >c : { name: string; }
+>  : ^^^^^^^^      ^^^
 >C : any
+>  : ^^^
 >a : any
+>  : ^^^
 >B : any
+>  : ^^^
 
 module X {
 >X : typeof X
+>  : ^^^^^^^^
 
     export function Y() {
 >Y : typeof Y
+>  : ^^^^^^^^
 
         return 42;
 >42 : 42
+>   : ^^
     }
 
     export module Y {
 >Y : typeof Y
+>  : ^^^^^^^^
 
         export class Point {
 >Point : Point
+>      : ^^^^^
 
             constructor(public x: number, public y: number) { }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
         }
     }
 }
 
 module Z {
 >Z : typeof Z
+>  : ^^^^^^^^
 
     // 'y' should be a fundule here
     export import y = X.Y;
 >y : typeof y
+>  : ^^^^^^^^
 >X : typeof X
+>  : ^^^^^^^^
 >Y : typeof y
+>  : ^^^^^^^^
 }
 
 var m: number = Z.y();
 >m : number
+>  : ^^^^^^
 >Z.y() : number
+>      : ^^^^^^
 >Z.y : typeof X.Y
+>    : ^^^^^^^^^^
 >Z : typeof Z
+>  : ^^^^^^^^
 >y : typeof X.Y
+>  : ^^^^^^^^^^
 
 var n: { x: number; y: number; } = new Z.y.Point(0, 0);
 >n : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >new Z.y.Point(0, 0) : X.Y.Point
+>                    : ^^^^^^^^^
 >Z.y.Point : typeof X.Y.Point
+>          : ^^^^^^^^^^^^^^^^
 >Z.y : typeof X.Y
+>    : ^^^^^^^^^^
 >Z : typeof Z
+>  : ^^^^^^^^
 >y : typeof X.Y
+>  : ^^^^^^^^^^
 >Point : typeof X.Y.Point
+>      : ^^^^^^^^^^^^^^^^
 >0 : 0
+>  : ^
 >0 : 0
+>  : ^
 
 module K {
 >K : typeof K
+>  : ^^^^^^^^
 
     export class L {
 >L : L
+>  : ^
 
         constructor(public name: string) { }
 >name : string
+>     : ^^^^^^
     }
 
     export module L {
 >L : typeof L
+>  : ^^^^^^^^
 
         export var y = 12;
 >y : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
         export interface Point {
             x: number;
 >x : number
+>  : ^^^^^^
 
             y: number;
 >y : number
+>  : ^^^^^^
         }
     }
 }
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export import D = K.L;
 >D : typeof D
+>  : ^^^^^^^^
 >K : typeof K
+>  : ^^^^^^^^
 >L : D
+>  : ^
 }
 
 var o: { name: string };
 >o : { name: string; }
+>  : ^^^^^^^^      ^^^
 >name : string
+>     : ^^^^^^
 
 var o = new M.D('Hello');
 >o : { name: string; }
+>  : ^^^^^^^^      ^^^
 >new M.D('Hello') : K.L
+>                 : ^^^
 >M.D : typeof K.L
+>    : ^^^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >D : typeof K.L
+>  : ^^^^^^^^^^
 >'Hello' : "Hello"
+>        : ^^^^^^^
 
 var p: { x: number; y: number; }
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var p: M.D.Point;
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >M : any
+>  : ^^^
 >D : any
+>  : ^^^
 

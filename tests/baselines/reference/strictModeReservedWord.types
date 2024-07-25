@@ -1,97 +1,153 @@
-=== tests/cases/compiler/strictModeReservedWord.ts ===
+//// [tests/cases/compiler/strictModeReservedWord.ts] ////
+
+=== strictModeReservedWord.ts ===
 let let = 10;
 >let : number
+>    : ^^^^^^
 >10 : 10
+>   : ^^
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     "use strict"
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
     var public = 10;
 >public : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
 
     var static = "hi";
 >static : string
+>       : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
     let let = "blah";
 >let : string
+>    : ^^^^^^
 >"blah" : "blah"
+>       : ^^^^^^
 
     var package = "hello"
 >package : string
+>        : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
     function package() { }
 >package : () => void
+>        : ^^^^^^^^^^
 
     function bar(private, implements, let) { }
 >bar : (private: any, implements: any, let: any) => void
+>    : ^       ^^^^^^^          ^^^^^^^   ^^^^^^^^^^^^^^
 >private : any
+>        : ^^^
 >implements : any
+>           : ^^^
 >let : any
+>    : ^^^
 
     function baz<implements, protected>() { }
 >baz : <implements, protected>() => void
+>    : ^          ^^         ^^^^^^^^^^^
 
     function barn(cb: (private, public, package) => void) { }
 >barn : (cb: (private: any, public: any, package: any) => void) => void
+>     : ^  ^^          ^^^          ^^^           ^^^         ^^^^^^^^^
 >cb : (private: any, public: any, package: any) => void
+>   : ^       ^^^^^^^      ^^^^^^^       ^^^^^^^^^^    
 >private : any
+>        : ^^^
 >public : any
+>       : ^^^
 >package : any
+>        : ^^^
 
     barn((private, public, package) => { });
 >barn((private, public, package) => { }) : void
+>                                        : ^^^^
 >barn : (cb: (private: any, public: any, package: any) => void) => void
+>     : ^  ^^          ^^^          ^^^           ^^^         ^^^^^^^^^
 >(private, public, package) => { } : (private: any, public: any, package: any) => void
+>                                  : ^       ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^
 >private : any
+>        : ^^^
 >public : any
+>       : ^^^
 >package : any
+>        : ^^^
 
     var myClass = class package extends public {}
 >myClass : typeof package
+>        : ^^^^^^^^^^^^^^
 >class package extends public {} : typeof package
+>                                : ^^^^^^^^^^^^^^
 >package : typeof package
+>        : ^^^^^^^^^^^^^^
 >public : number
+>       : ^^^^^^
 
     var b: public.bar;
 >b : public.bar
+>  : ^^^^^^^^^^
 >public : any
+>       : ^^^
 
     function foo(x: private.x) { }
 >foo : (x: private.x) => void
+>    : ^ ^^         ^^^^^^^^^
 >x : private.x
+>  : ^^^^^^^^^
 >private : any
+>        : ^^^
 
     function foo1(x: private.package.x) { }
 >foo1 : (x: private.package.x) => void
+>     : ^ ^^                 ^^^^^^^^^
 >x : private.package.x
+>  : ^^^^^^^^^^^^^^^^^
 >private : any
+>        : ^^^
 >package : any
+>        : ^^^
 
     function foo2(x: private.package.protected) { }
 >foo2 : (x: private.package.protected) => void
+>     : ^ ^^                         ^^^^^^^^^
 >x : private.package.protected
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >private : any
+>        : ^^^
 >package : any
+>        : ^^^
 
     let b: interface.package.implements.B;
 >b : interface.package.implements.B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >interface : any
+>          : ^^^
 >package : any
+>        : ^^^
 >implements : any
+>           : ^^^
 
     ublic();
 >ublic() : any
+>        : ^^^
 >ublic : any
+>      : ^^^
 
     static();
 >static() : any
+>         : ^^^
 >static : string
+>       : ^^^^^^
 }
 
 

@@ -1,14 +1,22 @@
-=== tests/cases/compiler/invalidConstraint1.ts ===
+//// [tests/cases/compiler/invalidConstraint1.ts] ////
+
+=== invalidConstraint1.ts ===
 function f<T, U extends { a: T }>() {
 >f : <T, U extends { a: T; }>() => any
+>  : ^ ^^ ^^^^^^^^^         ^^^^^^^^^^
 >a : T
+>  : ^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }
 f<string, { a: number }>(); // should error
 >f<string, { a: number }>() : any
+>                           : ^^^
 >f : <T, U extends { a: T; }>() => any
+>  : ^ ^^ ^^^^^^^^^         ^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 
 

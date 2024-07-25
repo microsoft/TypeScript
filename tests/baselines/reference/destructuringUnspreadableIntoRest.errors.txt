@@ -1,50 +1,50 @@
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(22,15): error TS2339: Property 'publicProp' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(23,15): error TS2339: Property 'publicProp' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(25,15): error TS2339: Property 'privateProp' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(26,15): error TS2339: Property 'privateProp' does not exist on type '{ publicProp: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(27,15): error TS2339: Property 'privateProp' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(28,15): error TS2339: Property 'privateProp' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(30,15): error TS2339: Property 'protectedProp' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(31,15): error TS2339: Property 'protectedProp' does not exist on type '{ publicProp: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(32,15): error TS2339: Property 'protectedProp' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(33,15): error TS2339: Property 'protectedProp' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(35,15): error TS2339: Property 'getter' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(36,15): error TS2339: Property 'getter' does not exist on type '{ publicProp: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(37,15): error TS2339: Property 'getter' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(38,15): error TS2339: Property 'getter' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(40,15): error TS2339: Property 'setter' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(41,15): error TS2339: Property 'setter' does not exist on type '{ publicProp: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(42,15): error TS2339: Property 'setter' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(43,15): error TS2339: Property 'setter' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(45,15): error TS2339: Property 'method' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(46,15): error TS2339: Property 'method' does not exist on type '{ publicProp: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(47,15): error TS2339: Property 'method' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(48,15): error TS2339: Property 'method' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(60,11): error TS2339: Property 'publicProp' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(61,11): error TS2339: Property 'publicProp' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(63,11): error TS2339: Property 'privateProp' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(64,11): error TS2339: Property 'privateProp' does not exist on type '{ publicProp: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(65,11): error TS2339: Property 'privateProp' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(66,11): error TS2339: Property 'privateProp' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(68,11): error TS2339: Property 'protectedProp' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(69,11): error TS2339: Property 'protectedProp' does not exist on type '{ publicProp: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(70,11): error TS2339: Property 'protectedProp' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(71,11): error TS2339: Property 'protectedProp' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(73,11): error TS2339: Property 'getter' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(74,11): error TS2339: Property 'getter' does not exist on type '{ publicProp: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(75,11): error TS2339: Property 'getter' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(76,11): error TS2339: Property 'getter' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(78,11): error TS2339: Property 'setter' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(79,11): error TS2339: Property 'setter' does not exist on type '{ publicProp: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(80,11): error TS2339: Property 'setter' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(81,11): error TS2339: Property 'setter' does not exist on type '{}'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(83,11): error TS2339: Property 'method' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(84,11): error TS2339: Property 'method' does not exist on type '{ publicProp: string; }'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(85,11): error TS2339: Property 'method' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
-tests/cases/compiler/destructuringUnspreadableIntoRest.ts(86,11): error TS2339: Property 'method' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(22,15): error TS2339: Property 'publicProp' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(23,15): error TS2339: Property 'publicProp' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(25,15): error TS2339: Property 'privateProp' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(26,15): error TS2339: Property 'privateProp' does not exist on type '{ publicProp: string; }'.
+destructuringUnspreadableIntoRest.ts(27,15): error TS2339: Property 'privateProp' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(28,15): error TS2339: Property 'privateProp' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(30,15): error TS2339: Property 'protectedProp' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(31,15): error TS2339: Property 'protectedProp' does not exist on type '{ publicProp: string; }'.
+destructuringUnspreadableIntoRest.ts(32,15): error TS2339: Property 'protectedProp' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(33,15): error TS2339: Property 'protectedProp' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(35,15): error TS2339: Property 'getter' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(36,15): error TS2339: Property 'getter' does not exist on type '{ publicProp: string; }'.
+destructuringUnspreadableIntoRest.ts(37,15): error TS2339: Property 'getter' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(38,15): error TS2339: Property 'getter' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(40,15): error TS2339: Property 'setter' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(41,15): error TS2339: Property 'setter' does not exist on type '{ publicProp: string; }'.
+destructuringUnspreadableIntoRest.ts(42,15): error TS2339: Property 'setter' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(43,15): error TS2339: Property 'setter' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(45,15): error TS2339: Property 'method' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(46,15): error TS2339: Property 'method' does not exist on type '{ publicProp: string; }'.
+destructuringUnspreadableIntoRest.ts(47,15): error TS2339: Property 'method' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(48,15): error TS2339: Property 'method' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(60,11): error TS2339: Property 'publicProp' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(61,11): error TS2339: Property 'publicProp' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(63,11): error TS2339: Property 'privateProp' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(64,11): error TS2339: Property 'privateProp' does not exist on type '{ publicProp: string; }'.
+destructuringUnspreadableIntoRest.ts(65,11): error TS2339: Property 'privateProp' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(66,11): error TS2339: Property 'privateProp' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(68,11): error TS2339: Property 'protectedProp' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(69,11): error TS2339: Property 'protectedProp' does not exist on type '{ publicProp: string; }'.
+destructuringUnspreadableIntoRest.ts(70,11): error TS2339: Property 'protectedProp' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(71,11): error TS2339: Property 'protectedProp' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(73,11): error TS2339: Property 'getter' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(74,11): error TS2339: Property 'getter' does not exist on type '{ publicProp: string; }'.
+destructuringUnspreadableIntoRest.ts(75,11): error TS2339: Property 'getter' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(76,11): error TS2339: Property 'getter' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(78,11): error TS2339: Property 'setter' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(79,11): error TS2339: Property 'setter' does not exist on type '{ publicProp: string; }'.
+destructuringUnspreadableIntoRest.ts(80,11): error TS2339: Property 'setter' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(81,11): error TS2339: Property 'setter' does not exist on type '{}'.
+destructuringUnspreadableIntoRest.ts(83,11): error TS2339: Property 'method' does not exist on type 'Omit<T, "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(84,11): error TS2339: Property 'method' does not exist on type '{ publicProp: string; }'.
+destructuringUnspreadableIntoRest.ts(85,11): error TS2339: Property 'method' does not exist on type 'Omit<T, "publicProp" | "getter" | "setter" | "method">'.
+destructuringUnspreadableIntoRest.ts(86,11): error TS2339: Property 'method' does not exist on type '{}'.
 
 
-==== tests/cases/compiler/destructuringUnspreadableIntoRest.ts (44 errors) ====
+==== destructuringUnspreadableIntoRest.ts (44 errors) ====
     class A {
         constructor(
             public publicProp: string,

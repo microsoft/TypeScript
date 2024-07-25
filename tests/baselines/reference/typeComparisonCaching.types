@@ -1,51 +1,69 @@
-=== tests/cases/compiler/typeComparisonCaching.ts ===
+//// [tests/cases/compiler/typeComparisonCaching.ts] ////
+
+=== typeComparisonCaching.ts ===
 // Check that we only cache results of type comparisons that are free of assumptions
 
 interface A {
     p: C;
 >p : C
+>  : ^
 
     s: string;
 >s : string
+>  : ^^^^^^
 }
 
 interface B {
     p: D;
 >p : D
+>  : ^
 
     s: number;
 >s : number
+>  : ^^^^^^
 }
 
 interface C {
     q: A;
 >q : A
+>  : ^
 }
 
 interface D {
     q: B;
 >q : B
+>  : ^
 }
 
 var a: A;
 >a : A
+>  : ^
 
 var b: B;
 >b : B
+>  : ^
 
 var c: C;
 >c : C
+>  : ^
 
 var d: D;
 >d : D
+>  : ^
 
 a = b;
 >a = b : B
+>      : ^
 >a : A
+>  : ^
 >b : B
+>  : ^
 
 c = d; // Should not be allowed
 >c = d : D
+>      : ^
 >c : C
+>  : ^
 >d : D
+>  : ^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration1.ts] ////
+
 //// [unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration1.ts]
 function greeter(person: string, person2: string) {
     var unused = 20;

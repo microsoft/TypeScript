@@ -21,6 +21,4 @@
 
 //// <[|RC/*one*/Comp|] />
 
-verify.goToDefinition({
-    "one": "pt1"
-})
+verify.baselineGoToDefinition("one");

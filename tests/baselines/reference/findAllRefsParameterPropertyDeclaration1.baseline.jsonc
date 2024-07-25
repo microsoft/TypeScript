@@ -1,155 +1,111 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration1.ts ===
 // class Foo {
-//     constructor(private /*FIND ALL REFS*/[|privateParam|]: number) {
-//         let localPrivate = [|privateParam|];
-//         this.[|privateParam|] += 10;
+//     constructor(<|private /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}privateParam|]: number|>) {
+//         let localPrivate = [|{| defId: 1 |}privateParam|];
+//         this.[|{| defId: 0, isWriteAccess: true |}privateParam|] += 10;
 //     }
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration1.ts",
-      "kind": "property",
-      "name": "(property) Foo.privateParam: number",
-      "textSpan": {
-        "start": 36,
-        "length": 12
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "privateParam",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 28,
-        "length": 28
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 36,
-          "length": 12
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration1.ts",
-        "contextSpan": {
-          "start": 28,
-          "length": 28
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 12
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration1.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration1.ts ===
+  // class Foo {
+  //     constructor(<|<|private /*FIND ALL REFS*/[|{| contextId: 0, defId: 0 |}[|{| contextId: 1, defId: 1 |}privateParam|]|]: number|>|>) {
+  //         let localPrivate = privateParam;
+  //         this.privateParam += 10;
+  //     }
+  // }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Foo.privateParam: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "privateParam",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration1.ts",
-      "kind": "parameter",
-      "name": "(parameter) privateParam: number",
-      "textSpan": {
-        "start": 36,
-        "length": 12
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "parameter",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "privateParam",
-          "kind": "parameterName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 28,
-        "length": 28
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 87,
-          "length": 12
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration1.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) privateParam: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "privateParam",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

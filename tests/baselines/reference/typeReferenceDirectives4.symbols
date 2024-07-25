@@ -1,6 +1,8 @@
+//// [tests/cases/compiler/typeReferenceDirectives4.ts] ////
+
 === /app.ts ===
 /// <reference path="./ref.d.ts"/>
-/// <reference types="lib"/>
+/// <reference types="lib" preserve="true" />
 
 let x: $;
 >x : Symbol(x, Decl(app.ts, 3, 3))
@@ -11,11 +13,9 @@ let y = () => x
 >x : Symbol(x, Decl(app.ts, 3, 3))
 
 === /ref.d.ts ===
-// $ comes from d.ts file - no need to add type reference directive
-
 interface $ { x }
 >$ : Symbol($, Decl(ref.d.ts, 0, 0), Decl(index.d.ts, 0, 11))
->x : Symbol($.x, Decl(ref.d.ts, 2, 13))
+>x : Symbol($.x, Decl(ref.d.ts, 0, 13))
 
 === /types/lib/index.d.ts ===
 declare let $: { x: number }

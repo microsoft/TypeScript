@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentLeadingCloseBrace.ts] ////
+
 //// [commentLeadingCloseBrace.ts]
 declare function commentedParameters(...args): any;
 

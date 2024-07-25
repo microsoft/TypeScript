@@ -1,28 +1,28 @@
-[96mtests/cases/compiler/file1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
+[96mfile1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
 
 [7m1[0m class A { }
 [7m [0m [91m~~~~~[0m
 
-  [96mtests/cases/compiler/file2.ts[0m:[93m1[0m:[93m1[0m
+  [96mfile2.ts[0m:[93m1[0m:[93m1[0m
     [7m1[0m class A { }
     [7m [0m [96m~~~~~[0m
     Conflicts are in this file.
-[96mtests/cases/compiler/file2.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
+[96mfile2.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
 
 [7m1[0m class A { }
 [7m [0m [91m~~~~~[0m
 
-  [96mtests/cases/compiler/file1.ts[0m:[93m1[0m:[93m1[0m
+  [96mfile1.ts[0m:[93m1[0m:[93m1[0m
     [7m1[0m class A { }
     [7m [0m [96m~~~~~[0m
     Conflicts are in this file.
 
 
-==== tests/cases/compiler/file1.ts (1 errors) ====
+==== file1.ts (1 errors) ====
     class A { }
     ~~~~~
 !!! error TS6200: Definitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
-!!! related TS6201 tests/cases/compiler/file2.ts:1:1: Conflicts are in this file.
+!!! related TS6201 file2.ts:1:1: Conflicts are in this file.
     class B { }
     class C { }
     class D { }
@@ -31,11 +31,11 @@
     class G { }
     class H { }
     class I { }
-==== tests/cases/compiler/file2.ts (1 errors) ====
+==== file2.ts (1 errors) ====
     class A { }
     ~~~~~
 !!! error TS6200: Definitions of the following identifiers conflict with those in another file: A, B, C, D, E, F, G, H, I
-!!! related TS6201 tests/cases/compiler/file1.ts:1:1: Conflicts are in this file.
+!!! related TS6201 file1.ts:1:1: Conflicts are in this file.
     class B { }
     class C { }
     class D { }
@@ -48,5 +48,5 @@
 Found 2 errors in 2 files.
 
 Errors  Files
-     1  tests/cases/compiler/file1.ts[90m:1[0m
-     1  tests/cases/compiler/file2.ts[90m:1[0m
+     1  file1.ts[90m:1[0m
+     1  file2.ts[90m:1[0m

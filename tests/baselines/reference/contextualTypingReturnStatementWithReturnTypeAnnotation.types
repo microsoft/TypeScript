@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/contextualTypingReturnStatementWithReturnTypeAnnotation.ts] ////
+
+=== contextualTypingReturnStatementWithReturnTypeAnnotation.ts ===
+type PropOfRaw<T> = readonly T[] | "not-array" | "no-prop";
+>PropOfRaw : PropOfRaw<T>
+>          : ^^^^^^^^^^^^
+
+declare function isString(text: unknown): text is string;
+>isString : (text: unknown) => text is string
+>         : ^    ^^       ^^^^^              
+>text : unknown
+>     : ^^^^^^^
+
+declare function getPropFromRaw<T>(
+>getPropFromRaw : <T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
+>               : ^ ^^    ^^                                              ^^               ^^                           ^^               ^^      ^^^^^            
+
+  prop: "files" | "include" | "exclude" | "references",
+>prop : "files" | "include" | "exclude" | "references"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  validateElement: (value: unknown) => boolean,
+>validateElement : (value: unknown) => boolean
+>                : ^     ^^       ^^^^^       
+>value : unknown
+>      : ^^^^^^^
+
+  elementTypeName: string
+>elementTypeName : string
+>                : ^^^^^^
+
+): PropOfRaw<T>;
+
+function getSpecsFromRaw(
+>getSpecsFromRaw : (prop: "files" | "include" | "exclude") => PropOfRaw<string>
+>                : ^    ^^                               ^^^^^                 
+
+  prop: "files" | "include" | "exclude"
+>prop : "files" | "include" | "exclude"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): PropOfRaw<string> {
+  return getPropFromRaw(prop, isString, "string");
+>getPropFromRaw(prop, isString, "string") : PropOfRaw<string>
+>                                         : ^^^^^^^^^^^^^^^^^
+>getPropFromRaw : <T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
+>               : ^ ^^    ^^                                              ^^               ^^                           ^^               ^^      ^^^^^            
+>prop : "files" | "include" | "exclude"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isString : (text: unknown) => text is string
+>         : ^    ^^       ^^^^^              
+>"string" : "string"
+>         : ^^^^^^^^
+}
+

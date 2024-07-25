@@ -1,137 +1,220 @@
-=== tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts] ////
+
+=== functionConstraintSatisfaction2.ts ===
 // satisfaction of a constraint to Function, all of these invocations are errors unless otherwise noted
 
 function foo<T extends Function>(x: T): T { return x; }
 >foo : <T extends Function>(x: T) => T
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >x : T
+>  : ^
 
 foo(1);
 >foo(1) : Function
+>       : ^^^^^^^^
 >foo : <T extends Function>(x: T) => T
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
 >1 : 1
+>  : ^
 
 foo(() => { }, 1);
 >foo(() => { }, 1) : () => void
+>                  : ^^^^^^^^^^
 >foo : <T extends Function>(x: T) => T
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
 >() => { } : () => void
+>          : ^^^^^^^^^^
 >1 : 1
+>  : ^
 
 foo(1, () => { });
 >foo(1, () => { }) : Function
+>                  : ^^^^^^^^
 >foo : <T extends Function>(x: T) => T
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
 >1 : 1
+>  : ^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 function foo2<T extends (x: string) => string>(x: T): T { return x; }
 >foo2 : <T extends (x: string) => string>(x: T) => T
+>     : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^ 
 >x : string
+>  : ^^^^^^
 >x : T
+>  : ^
 >x : T
+>  : ^
 
 class C {
 >C : C
+>  : ^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 var b: { new (x: string): string };
 >b : new (x: string) => string
+>  : ^^^^^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 
 class C2<T> {
 >C2 : C2<T>
+>   : ^^^^^
 
     foo: T;
 >foo : T
+>    : ^
 }
 
 var b2: { new <T>(x: T): T };
 >b2 : new <T>(x: T) => T
+>   : ^^^^^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 var r = foo2(new Function());
 >r : (x: string) => string
+>  : ^ ^^      ^^^^^      
 >foo2(new Function()) : (x: string) => string
+>                     : ^ ^^      ^^^^^      
 >foo2 : <T extends (x: string) => string>(x: T) => T
+>     : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^ 
 >new Function() : Function
+>               : ^^^^^^^^
 >Function : FunctionConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
 
 var r2 = foo2((x: string[]) => x);
 >r2 : (x: string) => string
+>   : ^ ^^      ^^^^^      
 >foo2((x: string[]) => x) : (x: string) => string
+>                         : ^ ^^      ^^^^^      
 >foo2 : <T extends (x: string) => string>(x: T) => T
+>     : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^ 
 >(x: string[]) => x : (x: string[]) => string[]
+>                   : ^ ^^        ^^^^^^^^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 >x : string[]
+>  : ^^^^^^^^
 
 var r6 = foo2(C);
 >r6 : (x: string) => string
+>   : ^ ^^      ^^^^^      
 >foo2(C) : (x: string) => string
+>        : ^ ^^      ^^^^^      
 >foo2 : <T extends (x: string) => string>(x: T) => T
+>     : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^ 
 >C : typeof C
+>  : ^^^^^^^^
 
 var r7 = foo2(b);
 >r7 : (x: string) => string
+>   : ^ ^^      ^^^^^      
 >foo2(b) : (x: string) => string
+>        : ^ ^^      ^^^^^      
 >foo2 : <T extends (x: string) => string>(x: T) => T
+>     : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^ 
 >b : new (x: string) => string
+>  : ^^^^^ ^^      ^^^^^      
 
 var r8 = foo2(<U>(x: U) => x); // no error expected
 >r8 : <U>(x: U) => U
+>   : ^ ^^ ^^ ^^^^^^
 >foo2(<U>(x: U) => x) : <U>(x: U) => U
+>                     : ^ ^^ ^^ ^^^^^^
 >foo2 : <T extends (x: string) => string>(x: T) => T
+>     : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^ 
 ><U>(x: U) => x : <U>(x: U) => U
+>               : ^ ^^ ^^ ^^^^^^
 >x : U
+>  : ^
 >x : U
+>  : ^
 
 var r11 = foo2(<U, V>(x: U, y: V) => x);
 >r11 : (x: string) => string
+>    : ^ ^^      ^^^^^      
 >foo2(<U, V>(x: U, y: V) => x) : (x: string) => string
+>                              : ^ ^^      ^^^^^      
 >foo2 : <T extends (x: string) => string>(x: T) => T
+>     : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^ 
 ><U, V>(x: U, y: V) => x : <U, V>(x: U, y: V) => U
+>                        : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : U
+>  : ^
 >y : V
+>  : ^
 >x : U
+>  : ^
 
 var r13 = foo2(C2);
 >r13 : (x: string) => string
+>    : ^ ^^      ^^^^^      
 >foo2(C2) : (x: string) => string
+>         : ^ ^^      ^^^^^      
 >foo2 : <T extends (x: string) => string>(x: T) => T
+>     : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^ 
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
 var r14 = foo2(b2);
 >r14 : (x: string) => string
+>    : ^ ^^      ^^^^^      
 >foo2(b2) : (x: string) => string
+>         : ^ ^^      ^^^^^      
 >foo2 : <T extends (x: string) => string>(x: T) => T
+>     : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^ 
 >b2 : new <T>(x: T) => T
+>   : ^^^^^ ^^ ^^ ^^^^^ 
 
 interface F2 extends Function { foo: string; }
 >foo : string
+>    : ^^^^^^
 
 var f2: F2;
 >f2 : F2
+>   : ^^
 
 var r16 = foo2(f2);
 >r16 : (x: string) => string
+>    : ^ ^^      ^^^^^      
 >foo2(f2) : (x: string) => string
+>         : ^ ^^      ^^^^^      
 >foo2 : <T extends (x: string) => string>(x: T) => T
+>     : ^ ^^^^^^^^^                     ^^ ^^ ^^^^^ 
 >f2 : F2
+>   : ^^
 
 function fff<T extends { (): void }, U extends T>(x: T, y: U) {
->fff : <T extends () => void, U extends T>(x: T, y: U) => void
+>fff : <T extends { (): void; }, U extends T>(x: T, y: U) => void
+>    : ^ ^^^^^^^^^             ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     foo2(x);
 >foo2(x) : (x: string) => string
->foo2 : <T extends (x: string) => string>(x: T) => T
+>        : ^ ^^      ^^^^^      
+>foo2 : <T_1 extends (x: string) => string>(x: T_1) => T_1
+>     : ^^^^^^^^^^^^^                     ^^ ^^   ^^^^^   
 >x : T
+>  : ^
 
     foo2(y);
 >foo2(y) : (x: string) => string
->foo2 : <T extends (x: string) => string>(x: T) => T
+>        : ^ ^^      ^^^^^      
+>foo2 : <T_1 extends (x: string) => string>(x: T_1) => T_1
+>     : ^^^^^^^^^^^^^                     ^^ ^^   ^^^^^   
 >y : U
+>  : ^
 }
 

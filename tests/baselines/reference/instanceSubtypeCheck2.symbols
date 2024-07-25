@@ -1,4 +1,6 @@
-=== tests/cases/compiler/instanceSubtypeCheck2.ts ===
+//// [tests/cases/compiler/instanceSubtypeCheck2.ts] ////
+
+=== instanceSubtypeCheck2.ts ===
 class C1<T> {
 >C1 : Symbol(C1, Decl(instanceSubtypeCheck2.ts, 0, 0))
 >T : Symbol(T, Decl(instanceSubtypeCheck2.ts, 0, 9))

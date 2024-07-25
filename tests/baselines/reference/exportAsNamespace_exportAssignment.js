@@ -35,6 +35,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.ns = void 0;
 exports.ns = __importStar(require("./a"));

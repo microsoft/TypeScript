@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ClassTest2.ts ===
+//// [tests/cases/compiler/es6ClassTest2.ts] ////
+
+=== es6ClassTest2.ts ===
 class BasicMonster {
 >BasicMonster : Symbol(BasicMonster, Decl(es6ClassTest2.ts, 0, 0))
 

@@ -1,8 +1,8 @@
-tests/cases/compiler/chainedAssignment3.ts(18,1): error TS2741: Property 'value' is missing in type 'A' but required in type 'B'.
-tests/cases/compiler/chainedAssignment3.ts(19,5): error TS2322: Type 'A' is not assignable to type 'B'.
+chainedAssignment3.ts(18,1): error TS2741: Property 'value' is missing in type 'A' but required in type 'B'.
+chainedAssignment3.ts(19,5): error TS2741: Property 'value' is missing in type 'A' but required in type 'B'.
 
 
-==== tests/cases/compiler/chainedAssignment3.ts (2 errors) ====
+==== chainedAssignment3.ts (2 errors) ====
     class A {
         id: number;
     }
@@ -23,10 +23,11 @@ tests/cases/compiler/chainedAssignment3.ts(19,5): error TS2322: Type 'A' is not 
     b = a = new A();
     ~
 !!! error TS2741: Property 'value' is missing in type 'A' but required in type 'B'.
-!!! related TS2728 tests/cases/compiler/chainedAssignment3.ts:6:5: 'value' is declared here.
+!!! related TS2728 chainedAssignment3.ts:6:5: 'value' is declared here.
     a = b = new A();
         ~
-!!! error TS2322: Type 'A' is not assignable to type 'B'.
+!!! error TS2741: Property 'value' is missing in type 'A' but required in type 'B'.
+!!! related TS2728 chainedAssignment3.ts:6:5: 'value' is declared here.
     
     
     

@@ -1,88 +1,114 @@
-=== tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts ===
+//// [tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts] ////
+
+=== emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts ===
 // This should behave the same as emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts
 // Begin types from Lodash.
 interface Dictionary<T> {
   [index: string]: T;
 >index : string
+>      : ^^^^^^
 }
 
 interface NumericDictionary<T> {
   [index: number]: T;
 >index : number
+>      : ^^^^^^
 }
 
 type ObjectIterator<TObject, TResult> = (
 >ObjectIterator : ObjectIterator<TObject, TResult>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   value: TObject[keyof TObject],
 >value : TObject[keyof TObject]
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 
   key: string,
 >key : string
+>    : ^^^^^^
 
   collection: TObject
 >collection : TObject
+>           : ^^^^^^^
 
 ) => TResult;
 
 type DictionaryIterator<T, TResult> = ObjectIterator<Dictionary<T>, TResult>;
 >DictionaryIterator : DictionaryIterator<T, TResult>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // In lodash.d.ts this function has many overloads, but this seems to be the problematic one.
 function mapValues<T, TResult>(
 >mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T> | null | undefined, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
+>          : ^ ^^       ^^   ^^                                                       ^^        ^^                              ^^^^^                   
 
   obj: Dictionary<T> | NumericDictionary<T> | null | undefined,
 >obj : Dictionary<T> | NumericDictionary<T>
->null : null
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   callback: DictionaryIterator<T, TResult>
 >callback : DictionaryIterator<T, TResult>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ): Dictionary<TResult> {
   return null as any;
 >null as any : any
->null : null
+>            : ^^^
 }
 // End types from Lodash.
 
 interface Foo {
   foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
 interface Bar {
   bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 export function fooToBar(
 >fooToBar : (foos: Record<string, Foo>) => Record<string, Bar | null>
+>         : ^    ^^                   ^^^^^                          
 
   foos: Record<string, Foo>
 >foos : Record<string, Foo>
+>     : ^^^^^^^^^^^^^^^^^^^
 
 ): Record<string, Bar | null> {
->null : null
-
   const result = foos == null ? {} : mapValues(foos, f => f.foo);
 >result : Dictionary<string>
+>       : ^^^^^^^^^^^^^^^^^^
 >foos == null ? {} : mapValues(foos, f => f.foo) : Dictionary<string>
+>                                                : ^^^^^^^^^^^^^^^^^^
 >foos == null : boolean
+>             : ^^^^^^^
 >foos : Record<string, Foo>
->null : null
+>     : ^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 >mapValues(foos, f => f.foo) : Dictionary<string>
->mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T>, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
+>                            : ^^^^^^^^^^^^^^^^^^
+>mapValues : <T, TResult>(obj: Dictionary<T> | NumericDictionary<T> | null | undefined, callback: DictionaryIterator<T, TResult>) => Dictionary<TResult>
+>          : ^ ^^       ^^   ^^                                                       ^^        ^^                              ^^^^^                   
 >foos : Record<string, Foo>
+>     : ^^^^^^^^^^^^^^^^^^^
 >f => f.foo : (f: Foo) => string
+>           : ^ ^^^^^^^^^^^^^^^^
 >f : Foo
+>  : ^^^
 >f.foo : string
+>      : ^^^^^^
 >f : Foo
+>  : ^^^
 >foo : string
+>    : ^^^^^^
 
   // This line _should_ fail, because `result` is not the right type.
   return result;
 >result : Dictionary<string>
+>       : ^^^^^^^^^^^^^^^^^^
 }
 

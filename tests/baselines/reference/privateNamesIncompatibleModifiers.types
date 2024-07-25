@@ -1,110 +1,163 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts] ////
+
+=== privateNamesIncompatibleModifiers.ts ===
 class A {
 >A : A
+>  : ^
 
     public #foo = 3;         // Error
 >#foo : number
+>     : ^^^^^^
 >3 : 3
+>  : ^
 
     private #bar = 3;        // Error
 >#bar : number
+>     : ^^^^^^
 >3 : 3
+>  : ^
 
     protected #baz = 3;      // Error
 >#baz : number
+>     : ^^^^^^
 >3 : 3
+>  : ^
 
     readonly #qux = 3;       // OK
 >#qux : 3
+>     : ^
 >3 : 3
+>  : ^
 
     declare #what: number;   // Error
 >#what : number
+>      : ^^^^^^
 
     public #fooMethod() { return  3; }         // Error
 >#fooMethod : () => number
+>           : ^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
     private #barMethod() { return  3; }        // Error
 >#barMethod : () => number
+>           : ^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
     protected #bazMethod() { return  3; }      // Error
 >#bazMethod : () => number
+>           : ^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
     readonly #quxMethod() { return  3; }       // Error
 >#quxMethod : () => number
+>           : ^^^^^^^^^^^^
 >3 : 3
+>  : ^
 
     declare #whatMethod()                      // Error
 >#whatMethod : () => any
+>            : ^^^^^^^^^
 
     async #asyncMethod() { return 1; }         //OK
 >#asyncMethod : () => Promise<number>
+>             : ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     *#genMethod() { return 1; }                //OK
 >#genMethod : () => Generator<never, number, unknown>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
     async *#asyncGenMethod() { return 1; }     //OK
 >#asyncGenMethod : () => {}
+>                : ^^^^^^^^
 >1 : 1
+>  : ^
 
     public get #fooProp() { return  3; }         // Error
 >#fooProp : number
+>         : ^^^^^^
 >3 : 3
+>  : ^
 
     public set #fooProp(value: number) {  }      // Error
 >#fooProp : number
+>         : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     private get #barProp() { return  3; }        // Error
 >#barProp : number
+>         : ^^^^^^
 >3 : 3
+>  : ^
 
     private set #barProp(value: number) {  }     // Error
 >#barProp : number
+>         : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     protected get #bazProp() { return  3; }      // Error
 >#bazProp : number
+>         : ^^^^^^
 >3 : 3
+>  : ^
 
     protected set #bazProp(value: number) {  }   // Error
 >#bazProp : number
+>         : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     readonly get #quxProp() { return  3; }       // Error
 >#quxProp : number
+>         : ^^^^^^
 >3 : 3
+>  : ^
 
     readonly set #quxProp(value: number) {  }    // Error
 >#quxProp : number
+>         : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     declare get #whatProp()                      // Error
 >#whatProp : number
+>          : ^^^^^^
 
     declare set #whatProp(value: number)         // Error
 >#whatProp : number
+>          : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     async get #asyncProp() { return 1; }         // Error
 >#asyncProp : number
+>           : ^^^^^^
 >1 : 1
+>  : ^
 
     async set #asyncProp(value: number) { }      // Error
 >#asyncProp : number
+>           : ^^^^^^
 >value : number
+>      : ^^^^^^
 }
 
 abstract class B {
 >B : B
+>  : ^
 
     abstract #quux = 3;      // Error
 >#quux : number
+>      : ^^^^^^
 >3 : 3
+>  : ^
 }
 

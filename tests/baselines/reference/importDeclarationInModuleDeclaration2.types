@@ -1,6 +1,9 @@
-=== tests/cases/compiler/check.js ===
+//// [tests/cases/compiler/importDeclarationInModuleDeclaration2.ts] ////
+
+=== check.js ===
 function container() {
 >container : () => void
+>          : ^^^^^^^^^^
 
     import "fs";
 }

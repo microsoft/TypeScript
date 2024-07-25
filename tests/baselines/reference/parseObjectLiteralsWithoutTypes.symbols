@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parseObjectLiteralsWithoutTypes.ts ===
+//// [tests/cases/compiler/parseObjectLiteralsWithoutTypes.ts] ////
+
+=== parseObjectLiteralsWithoutTypes.ts ===
 let x: { foo, bar }
 >x : Symbol(x, Decl(parseObjectLiteralsWithoutTypes.ts, 0, 3))
 >foo : Symbol(foo, Decl(parseObjectLiteralsWithoutTypes.ts, 0, 8))

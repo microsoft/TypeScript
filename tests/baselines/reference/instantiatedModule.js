@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/instantiatedModule.ts] ////
+
 //// [instantiatedModule.ts]
 // adding the var makes this an instantiated module
 

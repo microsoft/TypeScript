@@ -1,0 +1,200 @@
+// === Completions ===
+=== /tests/cases/fourslash/completionPropertyFromConstraint.ts ===
+// interface Styles {
+//   alignContent: string | null;
+//   alignItems: string | null;
+//   alignmentBaseline: string | null;
+//   // etc..
+//   [key: string]: any
+// }
+// 
+// interface StyleMap {
+//   [name: string]: Partial<Styles>
+// }
+// 
+// declare function createStyles<T extends StyleMap>(styles: T): T
+// 
+// createStyles({
+//   x: {
+//     '': ''
+//      ^
+// | ----------------------------------------------------------------------
+// | (property) alignContent?: string
+// | (property) alignItems?: string
+// | (property) alignmentBaseline?: string
+// | ----------------------------------------------------------------------
+//   }
+// });
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/completionPropertyFromConstraint.ts",
+      "position": 300,
+      "name": "1"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 300,
+        "length": 0
+      },
+      "entries": [
+        {
+          "name": "alignContent",
+          "kind": "property",
+          "kindModifiers": "optional",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 300,
+            "length": 0
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "alignContent",
+              "kind": "propertyName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "alignItems",
+          "kind": "property",
+          "kindModifiers": "optional",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 300,
+            "length": 0
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "alignItems",
+              "kind": "propertyName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "alignmentBaseline",
+          "kind": "property",
+          "kindModifiers": "optional",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 300,
+            "length": 0
+          },
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "alignmentBaseline",
+              "kind": "propertyName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  }
+]

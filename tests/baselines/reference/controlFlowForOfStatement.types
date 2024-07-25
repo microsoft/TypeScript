@@ -1,31 +1,48 @@
-=== tests/cases/conformance/controlFlow/controlFlowForOfStatement.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowForOfStatement.ts] ////
+
+=== controlFlowForOfStatement.ts ===
 let obj: number[];
 >obj : number[]
+>    : ^^^^^^^^
 
 let x: string | number | boolean | RegExp;
 >x : string | number | boolean | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function a() {
 >a : () => void
+>  : ^^^^^^^^^^
 
     x = true;
 >x = true : true
+>         : ^^^^
 >x : string | number | boolean | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
     for (x of obj) {
 >x : string | number | boolean | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : number[]
+>    : ^^^^^^^^
 
         x = x.toExponential();
 >x = x.toExponential() : string
+>                      : ^^^^^^
 >x : string | number | boolean | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.toExponential() : string
+>                  : ^^^^^^
 >x.toExponential : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
     }
     x; // string | boolean
 >x : string | true
+>  : ^^^^^^^^^^^^^
 }
 

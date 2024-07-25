@@ -1,8 +1,10 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/exportStarForValues4.ts] ////
+
+=== file1.ts ===
 export interface Foo { x }
 >x : any
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 export interface A { x }
 >x : any
 
@@ -10,14 +12,18 @@ export * from "file1"
 export * from "file3"
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 export interface B { x }
 >x : any
 
 export * from "file2"
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

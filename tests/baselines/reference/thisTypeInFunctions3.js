@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions3.ts] ////
+
 //// [thisTypeInFunctions3.ts]
 declare class Base {
     check<TProp extends this>(prop: TProp): boolean;

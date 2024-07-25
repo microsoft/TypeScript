@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTagDefault.ts] ////
+
 //// [file.js]
 /**
  * @template {string | number} [T=string] - ok: defaults are permitted
@@ -174,8 +176,8 @@ declare function f3<T = U, U = T>(a: T, b: U): void;
  * @template {string | number} [T=string] - ok: defaults are permitted
  * @typedef {[T]} A
  */
-/** @type {A} */ declare const aDefault1: A<string>;
-/** @type {A} */ declare const aDefault2: A<string>;
+/** @type {A} */ declare const aDefault1: A;
+/** @type {A} */ declare const aDefault2: A;
 /** @type {A<string>} */ declare const aString: A<string>;
 /** @type {A<number>} */ declare const aNumber: A<number>;
 type B<T, U = T> = [T, U];

@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedLocalsInMethod1.ts(3,13): error TS6133: 'x' is declared but its value is never read.
+unusedLocalsInMethod1.ts(3,13): error TS6133: 'x' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedLocalsInMethod1.ts (1 errors) ====
+==== unusedLocalsInMethod1.ts (1 errors) ====
     class greeter {
         public function1() {
             var x = 10;

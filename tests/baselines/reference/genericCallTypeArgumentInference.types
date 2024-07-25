@@ -1,320 +1,508 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallTypeArgumentInference.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallTypeArgumentInference.ts] ////
+
+=== genericCallTypeArgumentInference.ts ===
 // Basic type inference with generic calls, no errors expected
 
 function foo<T>(t: T) {
 >foo : <T>(t: T) => T
+>    : ^ ^^ ^^ ^^^^^^
 >t : T
+>  : ^
 
     return t;
 >t : T
+>  : ^
 }
 
 var r = foo(''); // string
 >r : string
+>  : ^^^^^^
 >foo('') : ""
+>        : ^^
 >foo : <T>(t: T) => T
+>    : ^ ^^ ^^ ^^^^^^
 >'' : ""
+>   : ^^
 
 function foo2<T, U>(t: T, u: U) {
 >foo2 : <T, U>(t: T, u: U) => U
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     return u;
 >u : U
+>  : ^
 }
 
 function foo2b<T, U>(u: U) {
 >foo2b : <T, U>(u: U) => T
+>      : ^ ^^ ^^ ^^ ^^^^^^
 >u : U
+>  : ^
 
     var x: T;
 >x : T
+>  : ^
 
     return x;
 >x : T
+>  : ^
 }
 
 var r2 = foo2('', 1); // number
 >r2 : number
+>   : ^^^^^^
 >foo2('', 1) : 1
+>            : ^
 >foo2 : <T, U>(t: T, u: U) => U
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >'' : ""
+>   : ^^
 >1 : 1
+>  : ^
 
 var r3 = foo2b(1); // {}
 >r3 : unknown
+>   : ^^^^^^^
 >foo2b(1) : unknown
+>         : ^^^^^^^
 >foo2b : <T, U>(u: U) => T
+>      : ^ ^^ ^^ ^^ ^^^^^^
 >1 : 1
+>  : ^
 
 class C<T, U> {
 >C : C<T, U>
+>  : ^^^^^^^
 
     constructor(public t: T, public u: U) {
 >t : T
+>  : ^
 >u : U
+>  : ^
     }
 
     foo(t: T, u: U) {
 >foo : (t: T, u: U) => T
+>    : ^ ^^ ^^ ^^ ^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
         return t;
 >t : T
+>  : ^
     }
 
     foo2(t: T, u: U) {
 >foo2 : (t: T, u: U) => U
+>     : ^ ^^ ^^ ^^ ^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
         return u;
 >u : U
+>  : ^
     }
 
     foo3<T>(t: T, u: U) {
 >foo3 : <T>(t: T, u: U) => T
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
         return t;
 >t : T
+>  : ^
     }
 
     foo4<U>(t: T, u: U) {
 >foo4 : <U>(t: T, u: U) => T
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
         return t;
 >t : T
+>  : ^
     }
 
     foo5<T,U>(t: T, u: U) {
 >foo5 : <T, U>(t: T, u: U) => T
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
         return t;
 >t : T
+>  : ^
     }
 
     foo6<T, U>() {
 >foo6 : <T, U>() => T
+>     : ^ ^^ ^^^^^^^^
 
         var x: T;
 >x : T
+>  : ^
 
         return x;
 >x : T
+>  : ^
     }
 
     foo7<T, U>(u: U) {
 >foo7 : <T, U>(u: U) => T
+>     : ^ ^^ ^^ ^^ ^^^^^^
 >u : U
+>  : ^
 
         var x: T;
 >x : T
+>  : ^
 
         return x;
 >x : T
+>  : ^
     }
 
     foo8<T, U>() {
 >foo8 : <T, U>() => T
+>     : ^ ^^ ^^^^^^^^
 
         var x: T;
 >x : T
+>  : ^
 
         return x;
 >x : T
+>  : ^
     }
 }
 
 var c = new C('', 1);
 >c : C<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >new C('', 1) : C<string, number>
+>             : ^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >'' : ""
+>   : ^^
 >1 : 1
+>  : ^
 
 var r4 = c.foo('', 1); // string
 >r4 : string
+>   : ^^^^^^
 >c.foo('', 1) : string
+>             : ^^^^^^
 >c.foo : (t: string, u: number) => string
+>      : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >c : C<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo : (t: string, u: number) => string
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 >1 : 1
+>  : ^
 
 var r5 = c.foo2('', 1); // number
 >r5 : number
+>   : ^^^^^^
 >c.foo2('', 1) : number
+>              : ^^^^^^
 >c.foo2 : (t: string, u: number) => number
+>       : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >c : C<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo2 : (t: string, u: number) => number
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 >1 : 1
+>  : ^
 
 var r6 = c.foo3(true, 1); // boolean
 >r6 : boolean
+>   : ^^^^^^^
 >c.foo3(true, 1) : true
+>                : ^^^^
 >c.foo3 : <T>(t: T, u: number) => T
+>       : ^ ^^ ^^^^^ ^^^^^^^^^^^^^^
 >c : C<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo3 : <T>(t: T, u: number) => T
+>     : ^ ^^ ^^^^^ ^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 
 var r7 = c.foo4('', true); // string
 >r7 : string
+>   : ^^^^^^
 >c.foo4('', true) : string
+>                 : ^^^^^^
 >c.foo4 : <U>(t: string, u: U) => string
+>       : ^ ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >c : C<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo4 : <U>(t: string, u: U) => string
+>     : ^ ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 >true : true
+>     : ^^^^
 
 var r8 = c.foo5(true, 1); // boolean
 >r8 : boolean
+>   : ^^^^^^^
 >c.foo5(true, 1) : true
+>                : ^^^^
 >c.foo5 : <T, U>(t: T, u: U) => T
+>       : ^ ^^ ^^ ^^^^^ ^^^^^^^^^
 >c : C<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo5 : <T, U>(t: T, u: U) => T
+>     : ^ ^^ ^^ ^^^^^ ^^^^^^^^^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 
 var r9 = c.foo6(); // {}
 >r9 : unknown
+>   : ^^^^^^^
 >c.foo6() : unknown
+>         : ^^^^^^^
 >c.foo6 : <T, U>() => T
+>       : ^ ^^ ^^^^^^^^
 >c : C<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo6 : <T, U>() => T
+>     : ^ ^^ ^^^^^^^^
 
 var r10 = c.foo7(''); // {}
 >r10 : unknown
+>    : ^^^^^^^
 >c.foo7('') : unknown
+>           : ^^^^^^^
 >c.foo7 : <T, U>(u: U) => T
+>       : ^ ^^ ^^ ^^^^^^^^^
 >c : C<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo7 : <T, U>(u: U) => T
+>     : ^ ^^ ^^ ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r11 = c.foo8(); // {}
 >r11 : unknown
+>    : ^^^^^^^
 >c.foo8() : unknown
+>         : ^^^^^^^
 >c.foo8 : <T, U>() => T
+>       : ^ ^^ ^^^^^^^^
 >c : C<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo8 : <T, U>() => T
+>     : ^ ^^ ^^^^^^^^
 
 interface I<T, U> {
     new (t: T, u: U);
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     foo(t: T, u: U): T;
 >foo : (t: T, u: U) => T
+>    : ^ ^^ ^^ ^^ ^^^^^ 
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     foo2(t: T, u: U): U;
 >foo2 : (t: T, u: U) => U
+>     : ^ ^^ ^^ ^^ ^^^^^ 
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     foo3<T>(t: T, u: U): T;
 >foo3 : <T>(t: T, u: U) => T
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     foo4<U>(t: T, u: U): T;
 >foo4 : <U>(t: T, u: U) => T
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     foo5<T, U>(t: T, u: U): T;
 >foo5 : <T, U>(t: T, u: U) => T
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     foo6<T, U>(): T;
 >foo6 : <T, U>() => T
+>     : ^ ^^ ^^^^^^^ 
 
     foo7<T, U>(u: U): T;
 >foo7 : <T, U>(u: U) => T
+>     : ^ ^^ ^^ ^^ ^^^^^ 
 >u : U
+>  : ^
 
     foo8<T, U>(): T;    
 >foo8 : <T, U>() => T
+>     : ^ ^^ ^^^^^^^ 
 }
 
 var i: I<string, number>;
 >i : I<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 
 var r4 = i.foo('', 1); // string
 >r4 : string
+>   : ^^^^^^
 >i.foo('', 1) : string
+>             : ^^^^^^
 >i.foo : (t: string, u: number) => string
+>      : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >i : I<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo : (t: string, u: number) => string
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 >1 : 1
+>  : ^
 
 var r5 = i.foo2('', 1); // number
 >r5 : number
+>   : ^^^^^^
 >i.foo2('', 1) : number
+>              : ^^^^^^
 >i.foo2 : (t: string, u: number) => number
+>       : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >i : I<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo2 : (t: string, u: number) => number
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 >1 : 1
+>  : ^
 
 var r6 = i.foo3(true, 1); // boolean
 >r6 : boolean
+>   : ^^^^^^^
 >i.foo3(true, 1) : true
+>                : ^^^^
 >i.foo3 : <T>(t: T, u: number) => T
+>       : ^ ^^ ^^^^^ ^^^^^^^^^^^^^^
 >i : I<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo3 : <T>(t: T, u: number) => T
+>     : ^ ^^ ^^^^^ ^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 
 var r7 = i.foo4('', true); // string
 >r7 : string
+>   : ^^^^^^
 >i.foo4('', true) : string
+>                 : ^^^^^^
 >i.foo4 : <U>(t: string, u: U) => string
+>       : ^ ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >i : I<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo4 : <U>(t: string, u: U) => string
+>     : ^ ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 >true : true
+>     : ^^^^
 
 var r8 = i.foo5(true, 1); // boolean
 >r8 : boolean
+>   : ^^^^^^^
 >i.foo5(true, 1) : true
+>                : ^^^^
 >i.foo5 : <T, U>(t: T, u: U) => T
+>       : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >i : I<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo5 : <T, U>(t: T, u: U) => T
+>     : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 
 var r9 = i.foo6(); // {}
 >r9 : unknown
+>   : ^^^^^^^
 >i.foo6() : unknown
+>         : ^^^^^^^
 >i.foo6 : <T, U>() => T
+>       : ^ ^^ ^^^^^^^ 
 >i : I<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo6 : <T, U>() => T
+>     : ^ ^^ ^^^^^^^ 
 
 var r10 = i.foo7(''); // {}
 >r10 : unknown
+>    : ^^^^^^^
 >i.foo7('') : unknown
+>           : ^^^^^^^
 >i.foo7 : <T, U>(u: U) => T
+>       : ^ ^^ ^^ ^^ ^^^^^ 
 >i : I<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo7 : <T, U>(u: U) => T
+>     : ^ ^^ ^^ ^^ ^^^^^ 
 >'' : ""
+>   : ^^
 
 var r11 = i.foo8(); // {}
 >r11 : unknown
+>    : ^^^^^^^
 >i.foo8() : unknown
+>         : ^^^^^^^
 >i.foo8 : <T, U>() => T
+>       : ^ ^^ ^^^^^^^ 
 >i : I<string, number>
+>  : ^^^^^^^^^^^^^^^^^
 >foo8 : <T, U>() => T
+>     : ^ ^^ ^^^^^^^ 
 

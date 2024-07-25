@@ -1,0 +1,161 @@
+//// [tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts] ////
+
+=== functionsWithImplicitReturnTypeAssignableToUndefined.ts ===
+function f1(): unknown {
+>f1 : () => unknown
+>   : ^^^^^^       
+
+    if (Math.random() < 0.5) return true;
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>true : true
+>     : ^^^^
+
+    // Implicit return, but undefined is always assignable to unknown.
+}
+
+type MyUnknown = unknown;
+>MyUnknown : unknown
+>          : ^^^^^^^
+
+function f2(): unknown {
+>f2 : () => unknown
+>   : ^^^^^^       
+
+    if (Math.random() < 0.5) return true;
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>true : true
+>     : ^^^^
+
+    // Implicit return, but undefined is always assignable to unknown.
+}
+
+function f3(): any {
+>f3 : () => any
+>   : ^^^^^^   
+
+    // Implicit return, but undefined is always assignable to any.
+}
+
+function f4(): void {
+>f4 : () => void
+>   : ^^^^^^    
+
+    // Implicit return, but undefined is always assignable to void.
+}
+
+function f5(): {} {
+>f5 : () => {}
+>   : ^^^^^^  
+
+    if (Math.random() < 0.5) return {};
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>{} : {}
+>   : ^^
+
+    // Implicit return, but undefined is assignable to object when strictNullChecks is off.
+}
+
+function f6(): Record<string, any> {
+>f6 : () => Record<string, any>
+>   : ^^^^^^                   
+
+    if (Math.random() < 0.5) return { "foo": true };
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>{ "foo": true } : { foo: boolean; }
+>                : ^^^^^^^^^^^^^^^^^
+>"foo" : boolean
+>      : ^^^^^^^
+>true : true
+>     : ^^^^
+
+    // Implicit return, but undefined is assignable to records (which are just fancy objects)
+    // when strictNullChecks is off.
+}
+
+function f7(): null {
+>f7 : () => null
+>   : ^^^^^^    
+
+    if (Math.random() < 0.5) return null;
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+
+    // Implicit return, but undefined is assignable to null when strictNullChecks is off.
+}
+
+function f8(): string | null {
+>f8 : () => string | null
+>   : ^^^^^^             
+
+    if (Math.random() < 0.5) return "foo";
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+    // Implicit return, but undefined is assignable to null when strictNullChecks is off.
+}

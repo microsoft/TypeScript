@@ -1,54 +1,71 @@
-=== tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts ===
+//// [tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts] ////
+
+=== implicitAnyFunctionReturnNullOrUndefined.ts ===
 // this should be an error
 function nullWidenFunction() { return null;}             // error at "nullWidenFunction"
 >nullWidenFunction : () => any
->null : null
+>                  : ^^^^^^^^^
 
 function undefinedWidenFunction() { return undefined; }  // error at "undefinedWidenFunction"
 >undefinedWidenFunction : () => any
+>                       : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 class C {
 >C : C
+>  : ^
 
     nullWidenFuncOfC() {  // error at "nullWidenFuncOfC"
 >nullWidenFuncOfC : () => any
+>                 : ^^^^^^^^^
 
         return null;
->null : null
     }
 
     underfinedWidenFuncOfC() {  // error at "underfinedWidenFuncOfC"
 >underfinedWidenFuncOfC : () => any
+>                       : ^^^^^^^^^
 
         return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
     }
 }
 
 // this should not be an error
 function foo1(): any { return null; }
 >foo1 : () => any
->null : null
+>     : ^^^^^^   
 
 function bar1(): any { return undefined; }
 >bar1 : () => any
+>     : ^^^^^^   
 >undefined : undefined
+>          : ^^^^^^^^^
 
 function fooBar(): number { return 1; }
 >fooBar : () => number
+>       : ^^^^^^      
 >1 : 1
+>  : ^
 
 function fooFoo() { return 5; }
 >fooFoo : () => number
+>       : ^^^^^^^^^^^^
 >5 : 5
+>  : ^
 
 // this should not be an error as the error is raised by expr above
 nullWidenFunction();
 >nullWidenFunction() : any
+>                    : ^^^
 >nullWidenFunction : () => any
+>                  : ^^^^^^^^^
 
 undefinedWidenFunction();
 >undefinedWidenFunction() : any
+>                         : ^^^
 >undefinedWidenFunction : () => any
+>                       : ^^^^^^^^^
 

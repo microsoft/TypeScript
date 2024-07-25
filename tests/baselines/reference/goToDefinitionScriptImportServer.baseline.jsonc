@@ -1,0 +1,66 @@
+// === goToDefinition ===
+// === /scriptThing.ts ===
+// [||]console.log("woooo side effects")
+
+// === /moduleThing.ts ===
+// import /*GOTO DEF*/[|"./scriptThing"|];
+// import "./stylez.css";
+// import "./foo.txt";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /stylez.css ===
+// [||]div {
+//   color: magenta;
+// }
+
+// === /moduleThing.ts ===
+// import "./scriptThing";
+// import /*GOTO DEF*/[|"./stylez.css"|];
+// import "./foo.txt";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": "",
+    "unverified": true
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /foo.txt ===
+// Unavailable file content:
+// textSpan: {"start":0,"length":0}
+
+
+// === /moduleThing.ts ===
+// import "./scriptThing";
+// import "./stylez.css";
+// import /*GOTO DEF*/[|"./foo.txt"|];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": "",
+    "unverified": true
+   }
+  ]

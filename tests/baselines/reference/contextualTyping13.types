@@ -1,8 +1,15 @@
-=== tests/cases/compiler/contextualTyping13.ts ===
+//// [tests/cases/compiler/contextualTyping13.ts] ////
+
+=== contextualTyping13.ts ===
 var foo:(a:number)=>number = function(a){return a};
 >foo : (a: number) => number
+>    : ^ ^^      ^^^^^      
 >a : number
+>  : ^^^^^^
 >function(a){return a} : (a: number) => number
+>                      : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 

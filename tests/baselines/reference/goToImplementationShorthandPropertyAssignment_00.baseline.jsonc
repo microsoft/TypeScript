@@ -1,0 +1,103 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationShorthandPropertyAssignment_00.ts ===
+// --- (line: 9) skipped ---
+//     Foo: FooConstructor;
+// }
+// 
+// var x = <|class [|Foo|] {
+//     createBarInClassExpression(): Bar {
+//         return {
+//             Fo/*GOTO IMPL*/o
+//         };
+//     }
+// 
+//     someFunction() {}
+// }|>
+// 
+// class Foo {
+// 
+// --- (line: 25) skipped ---
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "local class",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     }
+    ],
+    "kind": "local class"
+   }
+  ]
+
+
+
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationShorthandPropertyAssignment_00.ts ===
+// --- (line: 19) skipped ---
+//     someFunction() {}
+// }
+// 
+// <|class [|Foo|] {
+// 
+// }|>
+// 
+// function createBarUsingClassDeclaration(): Bar {
+//     return {
+//         Fo/*GOTO IMPL*/o
+//     };
+// }
+
+  // === Details ===
+  [
+   {
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "interface",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   }
+  ]

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/templateTagOnConstructorFunctions.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTemplateConstructorFunction.ts] ////
+
+=== templateTagOnConstructorFunctions.js ===
 /**
  * @template U
  * @typedef {(u: U) => U} Id
@@ -9,20 +11,30 @@
  */
 function Zet(t) {
 >Zet : typeof Zet
+>    : ^^^^^^^^^^
 >t : T
+>  : ^
 
     /** @type {T} */
     this.u
 >this.u : T
+>       : ^
 >this : this
+>     : ^^^^
 >u : T
+>  : ^
 
     this.t = t
 >this.t = t : T
+>           : ^
 >this.t : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >t : any
+>  : ^^^
 >t : T
+>  : ^
 }
 /**
  * @param {T} v
@@ -30,50 +42,87 @@ function Zet(t) {
  */
 Zet.prototype.add = function(v, id) {
 >Zet.prototype.add = function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
+>                                                                                    : ^ ^^ ^^  ^^     ^^^^^^
 >Zet.prototype.add : any
+>                  : ^^^
 >Zet.prototype : any
+>              : ^^^
 >Zet : typeof Zet
+>    : ^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >add : any
+>    : ^^^
 >function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: T, id: Id<T>) => T
+>                                                                : ^ ^^ ^^  ^^     ^^^^^^
 >v : T
+>  : ^
 >id : Id<T>
+>   : ^^^^^
 
     this.u = v || this.t
 >this.u = v || this.t : T
+>                     : ^
 >this.u : T
+>       : ^
 >this : this
+>     : ^^^^
 >u : T
+>  : ^
 >v || this.t : T
+>            : ^
 >v : T
+>  : ^
 >this.t : T
+>       : ^
 >this : this
+>     : ^^^^
 >t : T
+>  : ^
 
     return id(this.u)
 >id(this.u) : T
+>           : ^
 >id : Id<T>
+>   : ^^^^^
 >this.u : T
+>       : ^
 >this : this
+>     : ^^^^
 >u : T
+>  : ^
 }
 var z = new Zet(1)
 >z : Zet<number>
+>  : ^^^^^^^^^^^
 >new Zet(1) : Zet<number>
+>           : ^^^^^^^^^^^
 >Zet : typeof Zet
+>    : ^^^^^^^^^^
 >1 : 1
+>  : ^
 
 z.t = 2
 >z.t = 2 : 2
+>        : ^
 >z.t : number
+>    : ^^^^^^
 >z : Zet<number>
+>  : ^^^^^^^^^^^
 >t : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 z.u = false
 >z.u = false : false
+>            : ^^^^^
 >z.u : number
+>    : ^^^^^^
 >z : Zet<number>
+>  : ^^^^^^^^^^^
 >u : number
+>  : ^^^^^^
 >false : false
+>      : ^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classIndexer2.ts ===
+//// [tests/cases/compiler/classIndexer2.ts] ////
+
+=== classIndexer2.ts ===
 class C123 {
 >C123 : Symbol(C123, Decl(classIndexer2.ts, 0, 0))
 

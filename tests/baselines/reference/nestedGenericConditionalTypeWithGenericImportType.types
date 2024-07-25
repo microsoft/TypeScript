@@ -1,10 +1,10 @@
-=== tests/cases/compiler/name.ts ===
-// #31824
+//// [tests/cases/compiler/nestedGenericConditionalTypeWithGenericImportType.ts] ////
 
+=== name.ts ===
 export type Name<T> = any;
 >Name : any
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 type T<X> = any extends ((any extends any ? any : string) extends any ? import("./name").Name<X> : any)
 >T : any
 

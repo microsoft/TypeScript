@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implementsIncorrectlyNoAssertion.ts ===
+//// [tests/cases/compiler/implementsIncorrectlyNoAssertion.ts] ////
+
+=== implementsIncorrectlyNoAssertion.ts ===
 declare class Foo {
 >Foo : Symbol(Foo, Decl(implementsIncorrectlyNoAssertion.ts, 0, 0))
 

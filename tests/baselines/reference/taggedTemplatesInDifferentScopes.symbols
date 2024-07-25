@@ -1,4 +1,6 @@
-=== tests/cases/compiler/taggedTemplatesInDifferentScopes.ts ===
+//// [tests/cases/compiler/taggedTemplatesInDifferentScopes.ts] ////
+
+=== taggedTemplatesInDifferentScopes.ts ===
 export function tag(parts: TemplateStringsArray, ...values: any[]) {
 >tag : Symbol(tag, Decl(taggedTemplatesInDifferentScopes.ts, 0, 0))
 >parts : Symbol(parts, Decl(taggedTemplatesInDifferentScopes.ts, 0, 20))

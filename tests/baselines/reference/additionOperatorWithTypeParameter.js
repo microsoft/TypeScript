@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts] ////
+
 //// [additionOperatorWithTypeParameter.ts]
 // type parameter type is not a valid operand of addition operator
 enum E { a, b }

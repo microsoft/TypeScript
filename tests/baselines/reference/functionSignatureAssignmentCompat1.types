@@ -1,36 +1,57 @@
-=== tests/cases/compiler/functionSignatureAssignmentCompat1.ts ===
+//// [tests/cases/compiler/functionSignatureAssignmentCompat1.ts] ////
+
+=== functionSignatureAssignmentCompat1.ts ===
 interface ParserFunc {
     (eventEmitter: number, buffer: string): void;
 >eventEmitter : number
+>             : ^^^^^^
 >buffer : string
+>       : ^^^^^^
 }
 interface Parsers {
     raw: ParserFunc;
 >raw : ParserFunc
+>    : ^^^^^^^^^^
 
     readline(delimiter?: string): ParserFunc;
 >readline : (delimiter?: string) => ParserFunc
+>         : ^         ^^^      ^^^^^          
 >delimiter : string
+>          : ^^^^^^
 }
 var parsers: Parsers;
 >parsers : Parsers
+>        : ^^^^^^^
 
 var c: ParserFunc = parsers.raw; // ok!
 >c : ParserFunc
+>  : ^^^^^^^^^^
 >parsers.raw : ParserFunc
+>            : ^^^^^^^^^^
 >parsers : Parsers
+>        : ^^^^^^^
 >raw : ParserFunc
+>    : ^^^^^^^^^^
 
 var d: ParserFunc = parsers.readline; // not ok
 >d : ParserFunc
+>  : ^^^^^^^^^^
 >parsers.readline : (delimiter?: string) => ParserFunc
+>                 : ^         ^^^      ^^^^^          
 >parsers : Parsers
+>        : ^^^^^^^
 >readline : (delimiter?: string) => ParserFunc
+>         : ^         ^^^      ^^^^^          
 
 var e: ParserFunc = parsers.readline(); // ok
 >e : ParserFunc
+>  : ^^^^^^^^^^
 >parsers.readline() : ParserFunc
+>                   : ^^^^^^^^^^
 >parsers.readline : (delimiter?: string) => ParserFunc
+>                 : ^         ^^^      ^^^^^          
 >parsers : Parsers
+>        : ^^^^^^^
 >readline : (delimiter?: string) => ParserFunc
+>         : ^         ^^^      ^^^^^          
 

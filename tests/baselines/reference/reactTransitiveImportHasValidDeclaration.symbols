@@ -1,4 +1,6 @@
-=== tests/cases/compiler/node_modules/react/index.d.ts ===
+//// [tests/cases/compiler/reactTransitiveImportHasValidDeclaration.ts] ////
+
+=== node_modules/react/index.d.ts ===
 declare namespace React {
 >React : Symbol(React, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 0))
 
@@ -17,7 +19,7 @@ export = React;
 export as namespace React;
 >React : Symbol(React, Decl(index.d.ts, 4, 15))
 
-=== tests/cases/compiler/node_modules/create-emotion-styled/types/react/index.d.ts ===
+=== node_modules/create-emotion-styled/types/react/index.d.ts ===
 /// <reference types="react" />
 declare module 'react' { // augment
 >'react' : Symbol(React, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 0))
@@ -48,10 +50,11 @@ export interface StyledOtherComponent<A, B, C> {}
 >B : Symbol(B, Decl(index.d.ts, 9, 40))
 >C : Symbol(C, Decl(index.d.ts, 9, 43))
 
-=== tests/cases/compiler/node_modules/create-emotion-styled/index.d.ts ===
+=== node_modules/create-emotion-styled/index.d.ts ===
+
 export * from "./types/react";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/node_modules/react-emotion/index.d.ts ===
+
+=== node_modules/react-emotion/index.d.ts ===
 import {StyledOtherComponent, StyledOtherComponentList} from "create-emotion-styled";
 >StyledOtherComponent : Symbol(StyledOtherComponent, Decl(index.d.ts, 0, 8))
 >StyledOtherComponentList : Symbol(StyledOtherComponentList, Decl(index.d.ts, 0, 29))
@@ -63,7 +66,7 @@ export default function styled(tag: string): (o: object) => StyledOtherComponent
 >StyledOtherComponent : Symbol(StyledOtherComponent, Decl(index.d.ts, 0, 8))
 >StyledOtherComponentList : Symbol(StyledOtherComponentList, Decl(index.d.ts, 0, 29))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import styled from "react-emotion"
 >styled : Symbol(styled, Decl(index.ts, 0, 6))
 

@@ -1,398 +1,606 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardsInIfStatement.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInIfStatement.ts] ////
+
+=== typeGuardsInIfStatement.ts ===
 // In the true branch statement of an 'if' statement, 
 // the type of a variable or parameter is narrowed by any type guard in the 'if' condition when true.
 // In the false branch statement of an 'if' statement, 
 // the type of a variable or parameter is narrowed by any type guard in the 'if' condition when false.
 function foo(x: number | string) {
 >foo : (x: number | string) => number
+>    : ^ ^^               ^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         return x.length; // string
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
     }
     else {
         return x++; // number
 >x++ : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
     }
 }
 function foo2(x: number | string) {
 >foo2 : (x: number | string) => number
+>     : ^ ^^               ^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         x = 10;
 >x = 10 : 10
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 
         return x; // number
 >x : number
+>  : ^^^^^^
     }
     else {
         return x; // number
 >x : number
+>  : ^^^^^^
     }
 }
 function foo3(x: number | string) {
 >foo3 : (x: number | string) => string | number
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         x = "Hello";
 >x = "Hello" : "Hello"
+>            : ^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"Hello" : "Hello"
+>        : ^^^^^^^
 
         return x; // string
 >x : string
+>  : ^^^^^^
     }
     else {
         return x; // number
 >x : number
+>  : ^^^^^^
     }
 }
 function foo4(x: number | string) {
 >foo4 : (x: number | string) => string | number
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         return x; // string
 >x : string
+>  : ^^^^^^
     }
     else {
         x = 10;
 >x = 10 : 10
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 
         return x; // number
 >x : number
+>  : ^^^^^^
     }
 }
 function foo5(x: number | string) {
 >foo5 : (x: number | string) => string
+>     : ^ ^^               ^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         return x; // string
 >x : string
+>  : ^^^^^^
     }
     else {
         x = "hello";
 >x = "hello" : "hello"
+>            : ^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
         return x; // string
 >x : string
+>  : ^^^^^^
     }
 }
 function foo6(x: number | string) {
 >foo6 : (x: number | string) => string | number
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         x = 10;
 >x = 10 : 10
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 
         return x; // number
 >x : number
+>  : ^^^^^^
     }
     else {
         x = "hello";
 >x = "hello" : "hello"
+>            : ^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
         return x; // string
 >x : string
+>  : ^^^^^^
     }
 }
 function foo7(x: number | string | boolean) {
 >foo7 : (x: number | string | boolean) => boolean
+>     : ^ ^^                         ^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         return x === "hello"; // string
 >x === "hello" : boolean
+>              : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     else if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
+>                       : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 >"boolean" : "boolean"
+>          : ^^^^^^^^^
 
         return x; // boolean
 >x : boolean
+>  : ^^^^^^^
     }
     else {
         return x == 10; // number
 >x == 10 : boolean
+>        : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 function foo8(x: number | string | boolean) {
 >foo8 : (x: number | string | boolean) => boolean
+>     : ^ ^^                         ^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         return x === "hello"; // string
 >x === "hello" : boolean
+>              : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     else {
         var b: number | boolean = x; //  number | boolean
 >b : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 >x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 
         if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
+>                       : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 >"boolean" : "boolean"
+>          : ^^^^^^^^^
 
             return x; // boolean
 >x : boolean
+>  : ^^^^^^^
         }
         else {
             return x == 10; // number
 >x == 10 : boolean
+>        : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
         }
     }
 }
 function foo9(x: number | string) {
 >foo9 : (x: number | string) => boolean
+>     : ^ ^^               ^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     var y = 10;
 >y : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
         y = x.length; 
 >y = x.length : number
+>             : ^^^^^^
 >y : number
+>  : ^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
         return x === "hello"; // string
 >x === "hello" : boolean
+>              : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     else {
         return x == 10; // number
 >x == 10 : boolean
+>        : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 function foo10(x: number | string | boolean) {
 >foo10 : (x: number | string | boolean) => boolean
+>      : ^ ^^                         ^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         return x === "hello"; // string
 >x === "hello" : boolean
+>              : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
     }
     else {
         var y: boolean | string;
 >y : string | boolean
+>  : ^^^^^^^^^^^^^^^^
 
         var b = x; // number | boolean
 >b : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 >x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 
         return typeof x === "number"
 >typeof x === "number"            ? x === 10 // number            : x : boolean
+>                                                                     : ^^^^^^^
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
             ? x === 10 // number
 >x === 10 : boolean
+>         : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
             : x; // x should be boolean
 >x : boolean
+>  : ^^^^^^^
     }
 }
 function foo11(x: number | string | boolean) {
 >foo11 : (x: number | string | boolean) => string
+>      : ^ ^^                         ^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
     // Assigning value to x deep inside another guard stops narrowing of type too
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         return x; // string | number | boolean - x changed in else branch
 >x : string
+>  : ^^^^^^
     }
     else {
         var y: number| boolean | string;
 >y : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         var b = x; // number | boolean | string - because below we are changing value of x in if statement
 >b : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 >x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 
         return typeof x === "number"
 >typeof x === "number"            ? (            // change value of x            x = 10 && x.toString() // number | boolean | string            )            : (            // do not change value            y = x && x.toString() // number | boolean | string            ) : string
+>                                                                                                                                                                                                                                                                             : ^^^^^^
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
             ? (
 >(            // change value of x            x = 10 && x.toString() // number | boolean | string            ) : string
+>                                                                                                              : ^^^^^^
 
             // change value of x
             x = 10 && x.toString() // number | boolean | string
 >x = 10 && x.toString() : string
+>                       : ^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >10 && x.toString() : string
+>                   : ^^^^^^
 >10 : 10
+>   : ^^
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
             )
             : (
 >(            // do not change value            y = x && x.toString() // number | boolean | string            ) : string
+>                                                                                                               : ^^^^^^
 
             // do not change value
             y = x && x.toString() // number | boolean | string
 >y = x && x.toString() : string
+>                      : ^^^^^^
 >y : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x && x.toString() : string
+>                  : ^^^^^^
 >x : boolean
+>  : ^^^^^^^
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : () => string
+>           : ^^^^^^      
 >x : true
+>  : ^^^^
 >toString : () => string
+>         : ^^^^^^      
 
             );
     }
 }
 function foo12(x: number | string | boolean) {
 >foo12 : (x: number | string | boolean) => any
+>      : ^ ^^                         ^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
     // Assigning value to x in outer guard shouldn't stop narrowing in the inner expression
     if (typeof x === "string") {
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         return x.toString(); // string | number | boolean - x changed in else branch
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : () => string
+>           : ^^^^^^      
 >x : string
+>  : ^^^^^^
 >toString : () => string
+>         : ^^^^^^      
     }
     else {
         x = 10;
 >x = 10 : 10
+>       : ^^
 >x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 
         var b = x; // number | boolean | string
 >b : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
         return typeof x === "number"
 >typeof x === "number"            ? x.toString() // number            : x.toString() : any
+>                                                                                    : ^^^
 >typeof x === "number" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 
             ? x.toString() // number
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 
             : x.toString(); // boolean | string
 >x.toString() : any
+>             : ^^^
 >x.toString : any
+>           : ^^^
 >x : never
+>  : ^^^^^
 >toString : any
+>         : ^^^
     }
 }

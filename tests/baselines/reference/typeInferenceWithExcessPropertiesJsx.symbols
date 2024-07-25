@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/typeInferenceWithExcessPropertiesJsx.tsx] ////
+
+=== typeInferenceWithExcessPropertiesJsx.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React = require('react');
+>React : Symbol(React, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 0, 0))
+
+type TranslationEntry = {
+>TranslationEntry : Symbol(TranslationEntry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 2, 32))
+
+    args: [] | [unknown];
+>args : Symbol(args, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 4, 25))
+}
+type Translations = {
+>Translations : Symbol(Translations, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 6, 1))
+
+    a: { args: [string] },
+>a : Symbol(a, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 7, 21))
+>args : Symbol(args, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 8, 8))
+
+    b: { args: [] }
+>b : Symbol(b, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 8, 26))
+>args : Symbol(args, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 9, 8))
+}
+type TProps<Entry extends TranslationEntry> = {
+>TProps : Symbol(TProps, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 10, 1))
+>Entry : Symbol(Entry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 11, 12))
+>TranslationEntry : Symbol(TranslationEntry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 2, 32))
+
+    getTranslationEntry: (allTranslations: Translations) => Entry,
+>getTranslationEntry : Symbol(getTranslationEntry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 11, 47))
+>allTranslations : Symbol(allTranslations, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 12, 26))
+>Translations : Symbol(Translations, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 6, 1))
+>Entry : Symbol(Entry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 11, 12))
+
+} & (Entry["args"] extends [unknown] ? {
+>Entry : Symbol(Entry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 11, 12))
+
+    args: Entry["args"][0]
+>args : Symbol(args, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 13, 40))
+>Entry : Symbol(Entry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 11, 12))
+
+} : {});
+
+declare function T<Entry extends TranslationEntry>(
+>T : Symbol(T, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 15, 8))
+>Entry : Symbol(Entry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 17, 19))
+>TranslationEntry : Symbol(TranslationEntry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 2, 32))
+
+    props: TProps<Entry>
+>props : Symbol(props, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 17, 51))
+>TProps : Symbol(TProps, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 10, 1))
+>Entry : Symbol(Entry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 17, 19))
+
+): JSX.Element;
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
+
+<T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" />
+>T : Symbol(T, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 15, 8))
+>getTranslationEntry : Symbol(getTranslationEntry, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 2))
+>allTranslations : Symbol(allTranslations, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 25))
+>allTranslations.a : Symbol(a, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 7, 21))
+>allTranslations : Symbol(allTranslations, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 25))
+>a : Symbol(a, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 7, 21))
+>args : Symbol(args, Decl(typeInferenceWithExcessPropertiesJsx.tsx, 21, 63))
+

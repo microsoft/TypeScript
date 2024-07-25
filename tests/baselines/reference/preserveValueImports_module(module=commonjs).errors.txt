@@ -1,7 +1,9 @@
-error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.
+error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+  Use 'verbatimModuleSyntax' instead.
 
 
-!!! error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.
-==== tests/cases/conformance/externalModules/typeOnly/preserveValueImports_module.ts (0 errors) ====
+!!! error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'verbatimModuleSyntax' instead.
+==== preserveValueImports_module.ts (0 errors) ====
     export {};
     

@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithEnumIndexer.ts] ////
+
+=== assignmentCompatWithEnumIndexer.ts ===
+enum E {
+>E : Symbol(E, Decl(assignmentCompatWithEnumIndexer.ts, 0, 0))
+
+    A
+>A : Symbol(E.A, Decl(assignmentCompatWithEnumIndexer.ts, 0, 8))
+}
+
+let foo: Record<E, any> = {}
+>foo : Symbol(foo, Decl(assignmentCompatWithEnumIndexer.ts, 4, 3))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(assignmentCompatWithEnumIndexer.ts, 0, 0))
+

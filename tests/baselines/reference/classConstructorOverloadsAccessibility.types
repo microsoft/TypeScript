@@ -1,15 +1,21 @@
-=== tests/cases/conformance/classes/constructorDeclarations/classConstructorOverloadsAccessibility.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorOverloadsAccessibility.ts] ////
+
+=== classConstructorOverloadsAccessibility.ts ===
 class A {
 >A : A
+>  : ^
 
 	public constructor(a: boolean) // error
 >a : boolean
+>  : ^^^^^^^
 
 	protected constructor(a: number) // error
 >a : number
+>  : ^^^^^^
 
 	private constructor(a: string)
 >a : string
+>  : ^^^^^^
 
 	private constructor() { 
 		
@@ -18,12 +24,15 @@ class A {
 
 class B {
 >B : B
+>  : ^
 
 	protected constructor(a: number) // error
 >a : number
+>  : ^^^^^^
 
 	constructor(a: string)
 >a : string
+>  : ^^^^^^
 
 	constructor() { 
 		
@@ -32,12 +41,15 @@ class B {
 
 class C {
 >C : C
+>  : ^
 
 	protected constructor(a: number)
 >a : number
+>  : ^^^^^^
 
 	protected constructor(a: string)
 >a : string
+>  : ^^^^^^
 
 	protected constructor() { 
 		
@@ -46,12 +58,15 @@ class C {
 
 class D {
 >D : D
+>  : ^
 
 	constructor(a: number)
 >a : number
+>  : ^^^^^^
 
 	constructor(a: string)
 >a : string
+>  : ^^^^^^
 
 	public constructor() { 
 		

@@ -1,10 +1,10 @@
-tests/cases/compiler/amdDependencyCommentName4.ts(8,21): error TS2792: Cannot find module 'aliasedModule1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-tests/cases/compiler/amdDependencyCommentName4.ts(11,26): error TS2792: Cannot find module 'aliasedModule2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-tests/cases/compiler/amdDependencyCommentName4.ts(14,15): error TS2792: Cannot find module 'aliasedModule3'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-tests/cases/compiler/amdDependencyCommentName4.ts(17,21): error TS2792: Cannot find module 'aliasedModule4'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+amdDependencyCommentName4.ts(8,21): error TS2792: Cannot find module 'aliasedModule1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+amdDependencyCommentName4.ts(11,26): error TS2792: Cannot find module 'aliasedModule2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+amdDependencyCommentName4.ts(14,15): error TS2792: Cannot find module 'aliasedModule3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+amdDependencyCommentName4.ts(17,21): error TS2792: Cannot find module 'aliasedModule4'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/amdDependencyCommentName4.ts (4 errors) ====
+==== amdDependencyCommentName4.ts (4 errors) ====
     ///<amd-dependency path='aliasedModule5' name='n1'/>
     ///<amd-dependency path='unaliasedModule3'/>
     ///<amd-dependency path='aliasedModule6' name='n2'/>
@@ -14,22 +14,22 @@ tests/cases/compiler/amdDependencyCommentName4.ts(17,21): error TS2792: Cannot f
     
     import r1 = require("aliasedModule1");
                         ~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'aliasedModule1'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'aliasedModule1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     r1;
     
     import {p1, p2, p3} from "aliasedModule2";
                              ~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'aliasedModule2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'aliasedModule2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     p1;
     
     import d from "aliasedModule3";
                   ~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'aliasedModule3'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'aliasedModule3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     d;
     
     import * as ns from "aliasedModule4";
                         ~~~~~~~~~~~~~~~~
-!!! error TS2792: Cannot find module 'aliasedModule4'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'aliasedModule4'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     ns;
     
     import "unaliasedModule2";

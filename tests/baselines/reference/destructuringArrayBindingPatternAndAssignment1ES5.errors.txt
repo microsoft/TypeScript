@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES5.ts(43,6): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
-tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES5.ts(44,8): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
-tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES5.ts(44,18): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+destructuringArrayBindingPatternAndAssignment1ES5.ts(43,6): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+destructuringArrayBindingPatternAndAssignment1ES5.ts(44,8): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
+destructuringArrayBindingPatternAndAssignment1ES5.ts(44,18): error TS2493: Tuple type '[]' of length '0' has no element at index '0'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES5.ts (3 errors) ====
+==== destructuringArrayBindingPatternAndAssignment1ES5.ts (3 errors) ====
     /* AssignmentPattern:
      *      ObjectAssignmentPattern
      *      ArrayAssignmentPattern

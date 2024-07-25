@@ -1,12 +1,14 @@
-=== tests/cases/compiler/include.d.ts ===
+//// [tests/cases/compiler/importExportInternalComments.ts] ////
+
+=== include.d.ts ===
 declare module "foo";
 >"foo" : Symbol("foo", Decl(include.d.ts, 0, 0))
 
-=== tests/cases/compiler/default.ts ===
+=== default.ts ===
 /*1*/ export /*2*/ default /*3*/ Array /*4*/;
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 /*1*/ import /*2*/ D /*3*/, /*4*/ { /*5*/ A /*6*/, /*7*/ B /*8*/ as /*9*/ C /*10*/ } /*11*/ from /*12*/ "foo";
 >D : Symbol(D, Decl(index.ts, 0, 12))
 >A : Symbol(A, Decl(index.ts, 0, 35))

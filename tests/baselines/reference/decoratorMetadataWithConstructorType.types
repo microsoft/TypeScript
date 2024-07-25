@@ -1,39 +1,58 @@
-=== tests/cases/compiler/decoratorMetadataWithConstructorType.ts ===
+//// [tests/cases/compiler/decoratorMetadataWithConstructorType.ts] ////
+
+=== decoratorMetadataWithConstructorType.ts ===
 declare var console: {
 >console : { log(msg: string): void; }
+>        : ^^^^^^   ^^      ^^^    ^^^
 
     log(msg: string): void;
 >log : (msg: string) => void
+>    : ^   ^^      ^^^^^    
 >msg : string
+>    : ^^^^^^
 
 };
 
 class A {
 >A : A
+>  : ^
 
     constructor() { console.log('new A'); }
 >console.log('new A') : void
+>                     : ^^^^
 >console.log : (msg: string) => void
+>            : ^   ^^      ^^^^^    
 >console : { log(msg: string): void; }
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (msg: string) => void
+>    : ^   ^^      ^^^^^    
 >'new A' : "new A"
+>        : ^^^^^^^
 }
 
 function decorator(target: Object, propertyKey: string) {
 >decorator : (target: Object, propertyKey: string) => void
+>          : ^      ^^      ^^           ^^      ^^^^^^^^^
 >target : Object
+>       : ^^^^^^
 >propertyKey : string
+>            : ^^^^^^
 }
 
 export class B {
 >B : B
+>  : ^
 
     @decorator
 >decorator : (target: Object, propertyKey: string) => void
+>          : ^      ^^      ^^           ^^      ^^^^^^^^^
 
     x: A = new A();
 >x : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 }
 

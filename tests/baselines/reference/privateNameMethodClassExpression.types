@@ -1,54 +1,91 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts] ////
+
+=== privateNameMethodClassExpression.ts ===
 const C = class {
 >C : typeof C
+>  : ^^^^^^^^
 >class {    #field = this.#method();    #method() { return 42; }    static getInstance() { return new C(); }    getField() { return this.#field };} : typeof C
+>                                                                                                                                                   : ^^^^^^^^
 
     #field = this.#method();
 >#field : number
+>       : ^^^^^^
 >this.#method() : number
+>               : ^^^^^^
 >this.#method : () => number
+>             : ^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 
     #method() { return 42; }
 >#method : () => number
+>        : ^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
     static getInstance() { return new C(); }
 >getInstance : () => C
+>            : ^^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
     getField() { return this.#field };
 >getField : () => number
+>         : ^^^^^^^^^^^^
 >this.#field : number
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 }
 
 console.log(C.getInstance().getField());
 >console.log(C.getInstance().getField()) : void
+>                                        : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >C.getInstance().getField() : number
+>                           : ^^^^^^
 >C.getInstance().getField : () => number
+>                         : ^^^^^^^^^^^^
 >C.getInstance() : C
+>                : ^
 >C.getInstance : () => C
+>              : ^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >getInstance : () => C
+>            : ^^^^^^^
 >getField : () => number
+>         : ^^^^^^^^^^^^
 
 C.getInstance().#method; // Error
 >C.getInstance().#method : any
+>                        : ^^^
 >C.getInstance() : C
+>                : ^
 >C.getInstance : () => C
+>              : ^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >getInstance : () => C
+>            : ^^^^^^^
 
 C.getInstance().#field; // Error
 >C.getInstance().#field : any
+>                       : ^^^
 >C.getInstance() : C
+>                : ^
 >C.getInstance : () => C
+>              : ^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >getInstance : () => C
+>            : ^^^^^^^
 
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/timer.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionClassesCjsExportAssignment.ts] ////
+
+=== timer.js ===
 /**
  * @param {number} timeout
  */
@@ -18,7 +20,7 @@ module.exports = Timer;
 >exports : Symbol(export=, Decl(timer.js, 5, 1))
 >Timer : Symbol(Timer, Decl(timer.js, 0, 0))
 
-=== tests/cases/conformance/jsdoc/declarations/hook.js ===
+=== hook.js ===
 /**
  * @typedef {(arg: import("./context")) => void} HookHandler
  */
@@ -41,7 +43,7 @@ module.exports = Hook;
 >exports : Symbol(export=, Decl(hook.js, 8, 1))
 >Hook : Symbol(Hook, Decl(hook.js, 0, 0))
 
-=== tests/cases/conformance/jsdoc/declarations/context.js ===
+=== context.js ===
 /**
  * Imports
  *

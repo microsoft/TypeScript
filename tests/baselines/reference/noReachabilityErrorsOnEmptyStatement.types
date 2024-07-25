@@ -1,7 +1,11 @@
-=== tests/cases/compiler/noReachabilityErrorsOnEmptyStatement.ts ===
+//// [tests/cases/compiler/noReachabilityErrorsOnEmptyStatement.ts] ////
+
+=== noReachabilityErrorsOnEmptyStatement.ts ===
 function foo() {
 >foo : () => number
+>    : ^^^^^^^^^^^^
 
     return 1;;
 >1 : 1
+>  : ^
 }

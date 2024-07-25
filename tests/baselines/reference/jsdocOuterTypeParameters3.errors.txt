@@ -1,13 +1,13 @@
-error TS5055: Cannot write file 'tests/cases/conformance/jsdoc/jsdocOuterTypeParameters3.js' because it would overwrite input file.
+error TS5055: Cannot write file 'jsdocOuterTypeParameters3.js' because it would overwrite input file.
   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
-tests/cases/conformance/jsdoc/jsdocOuterTypeParameters3.js(1,16): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/jsdoc/jsdocOuterTypeParameters3.js(1,18): error TS1069: Unexpected token. A type parameter name was expected without curly braces.
-tests/cases/conformance/jsdoc/jsdocOuterTypeParameters3.js(5,43): error TS2339: Property 'foo' does not exist on type 'Bar'.
+jsdocOuterTypeParameters3.js(1,16): error TS2304: Cannot find name 'T'.
+jsdocOuterTypeParameters3.js(1,18): error TS1069: Unexpected token. A type parameter name was expected without curly braces.
+jsdocOuterTypeParameters3.js(5,43): error TS2339: Property 'foo' does not exist on type 'Bar'.
 
 
-!!! error TS5055: Cannot write file 'tests/cases/conformance/jsdoc/jsdocOuterTypeParameters3.js' because it would overwrite input file.
+!!! error TS5055: Cannot write file 'jsdocOuterTypeParameters3.js' because it would overwrite input file.
 !!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
-==== tests/cases/conformance/jsdoc/jsdocOuterTypeParameters3.js (3 errors) ====
+==== jsdocOuterTypeParameters3.js (3 errors) ====
     /** @template {T} */
                    ~
 !!! error TS2304: Cannot find name 'T'.

@@ -1,42 +1,59 @@
-=== tests/cases/compiler/emitDecoratorMetadata_restArgs.ts ===
+//// [tests/cases/compiler/emitDecoratorMetadata_restArgs.ts] ////
+
+=== emitDecoratorMetadata_restArgs.ts ===
 declare const MyClassDecorator: ClassDecorator;
 >MyClassDecorator : ClassDecorator
+>                 : ^^^^^^^^^^^^^^
 
 declare const MyMethodDecorator: MethodDecorator;
 >MyMethodDecorator : MethodDecorator
+>                  : ^^^^^^^^^^^^^^^
 
 @MyClassDecorator
 >MyClassDecorator : ClassDecorator
+>                 : ^^^^^^^^^^^^^^
 
 class A {
 >A : A
+>  : ^
 
     constructor(...args) {}
 >args : any[]
+>     : ^^^^^
 
     @MyMethodDecorator
 >MyMethodDecorator : MethodDecorator
+>                  : ^^^^^^^^^^^^^^^
 
     method(...args) {}
 >method : (...args: any[]) => void
+>       : ^^^^    ^^^^^^^^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 }
 
 @MyClassDecorator
 >MyClassDecorator : ClassDecorator
+>                 : ^^^^^^^^^^^^^^
 
 class B {
 >B : B
+>  : ^
 
     constructor(...args: number[]) {}
 >args : number[]
+>     : ^^^^^^^^
 
     @MyMethodDecorator
 >MyMethodDecorator : MethodDecorator
+>                  : ^^^^^^^^^^^^^^^
 
     method(this: this, ...args: string[]) {}
 >method : (this: this, ...args: string[]) => void
+>       : ^    ^^    ^^^^^    ^^        ^^^^^^^^^
 >this : this
+>     : ^^^^
 >args : string[]
+>     : ^^^^^^^^
 }
 

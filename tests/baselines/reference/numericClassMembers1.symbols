@@ -1,4 +1,6 @@
-=== tests/cases/compiler/numericClassMembers1.ts ===
+//// [tests/cases/compiler/numericClassMembers1.ts] ////
+
+=== numericClassMembers1.ts ===
 class C234 {
 >C234 : Symbol(C234, Decl(numericClassMembers1.ts, 0, 0))
 

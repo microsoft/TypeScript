@@ -1,196 +1,341 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment9_1.ts] ////
+
+=== a.js ===
 var my = my ?? {};
 >my : typeof my
+>   : ^^^^^^^^^
 >my ?? {} : typeof my | {}
+>         : ^^^^^^^^^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 /** @param {number} n */
 my.method = function(n) {
 >my.method = function(n) {    return n + 1;} : (n: number) => number
+>                                            : ^ ^^      ^^^^^^^^^^^
 >my.method : (n: number) => number
+>          : ^ ^^      ^^^^^^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >method : (n: number) => number
+>       : ^ ^^      ^^^^^^^^^^^
 >function(n) {    return n + 1;} : (n: number) => number
+>                                : ^ ^^      ^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
     return n + 1;
 >n + 1 : number
+>      : ^^^^^^
 >n : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 my.number = 1;
 >my.number = 1 : 1
+>              : ^
 >my.number : number
+>          : ^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >number : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 my.object = {};
 >my.object = {} : {}
+>               : ^^
 >my.object : {}
+>          : ^^
 >my : typeof my
+>   : ^^^^^^^^^
 >object : {}
+>       : ^^
 >{} : {}
+>   : ^^
 
 my.predicate = my.predicate ?? {};
 >my.predicate = my.predicate ?? {} : typeof my.predicate
+>                                  : ^^^^^^^^^^^^^^^^^^^
 >my.predicate : typeof my.predicate
+>             : ^^^^^^^^^^^^^^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >predicate : typeof my.predicate
+>          : ^^^^^^^^^^^^^^^^^^^
 >my.predicate ?? {} : {}
+>                   : ^^
 >my.predicate : typeof my.predicate
+>             : ^^^^^^^^^^^^^^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >predicate : typeof my.predicate
+>          : ^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 my.predicate.query = function () {
 >my.predicate.query = function () {    var me = this;    me.property = false;} : typeof query
+>                                                                              : ^^^^^^^^^^^^
 >my.predicate.query : typeof query
+>                   : ^^^^^^^^^^^^
 >my.predicate : typeof my.predicate
+>             : ^^^^^^^^^^^^^^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >predicate : typeof my.predicate
+>          : ^^^^^^^^^^^^^^^^^^^
 >query : typeof query
+>      : ^^^^^^^^^^^^
 >function () {    var me = this;    me.property = false;} : typeof query
+>                                                         : ^^^^^^^^^^^^
 
     var me = this;
 >me : this
+>   : ^^^^
 >this : this
+>     : ^^^^
 
     me.property = false;
 >me.property = false : false
+>                    : ^^^^^
 >me.property : any
 >me : this
+>   : ^^^^
 >property : any
+>         : ^^^
 >false : false
+>      : ^^^^^
 
 };
 var q = new my.predicate.query();
 >q : query
+>  : ^^^^^
 >new my.predicate.query() : query
+>                         : ^^^^^
 >my.predicate.query : typeof query
+>                   : ^^^^^^^^^^^^
 >my.predicate : typeof my.predicate
+>             : ^^^^^^^^^^^^^^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >predicate : typeof my.predicate
+>          : ^^^^^^^^^^^^^^^^^^^
 >query : typeof query
+>      : ^^^^^^^^^^^^
 
 my.predicate.query.another = function () {
 >my.predicate.query.another = function () {    return 1;} : () => number
+>                                                         : ^^^^^^^^^^^^
 >my.predicate.query.another : () => number
+>                           : ^^^^^^^^^^^^
 >my.predicate.query : typeof query
+>                   : ^^^^^^^^^^^^
 >my.predicate : typeof my.predicate
+>             : ^^^^^^^^^^^^^^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >predicate : typeof my.predicate
+>          : ^^^^^^^^^^^^^^^^^^^
 >query : typeof query
+>      : ^^^^^^^^^^^^
 >another : () => number
+>        : ^^^^^^^^^^^^
 >function () {    return 1;} : () => number
+>                            : ^^^^^^^^^^^^
 
     return 1;
 >1 : 1
+>  : ^
 }
 my.predicate.query.result = 'none'
 >my.predicate.query.result = 'none' : "none"
+>                                   : ^^^^^^
 >my.predicate.query.result : string
+>                          : ^^^^^^
 >my.predicate.query : typeof query
+>                   : ^^^^^^^^^^^^
 >my.predicate : typeof my.predicate
+>             : ^^^^^^^^^^^^^^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >predicate : typeof my.predicate
+>          : ^^^^^^^^^^^^^^^^^^^
 >query : typeof query
+>      : ^^^^^^^^^^^^
 >result : string
+>       : ^^^^^^
 >'none' : "none"
+>       : ^^^^^^
 
 /** @param {number} first
  *  @param {number} second
  */
 my.predicate.sort = my.predicate.sort ?? function (first, second) {
 >my.predicate.sort = my.predicate.sort ?? function (first, second) {    return first > second ? first : second;} : (first: number, second: number) => number
+>                                                                                                                : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >my.predicate.sort : (first: number, second: number) => number
+>                  : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >my.predicate : typeof my.predicate
+>             : ^^^^^^^^^^^^^^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >predicate : typeof my.predicate
+>          : ^^^^^^^^^^^^^^^^^^^
 >sort : (first: number, second: number) => number
+>     : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >my.predicate.sort ?? function (first, second) {    return first > second ? first : second;} : (first: number, second: number) => number
+>                                                                                            : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >my.predicate.sort : (first: number, second: number) => number
+>                  : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >my.predicate : typeof my.predicate
+>             : ^^^^^^^^^^^^^^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >predicate : typeof my.predicate
+>          : ^^^^^^^^^^^^^^^^^^^
 >sort : (first: number, second: number) => number
+>     : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >function (first, second) {    return first > second ? first : second;} : (first: number, second: number) => number
+>                                                                       : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >first : number
+>      : ^^^^^^
 >second : number
+>       : ^^^^^^
 
     return first > second ? first : second;
 >first > second ? first : second : number
+>                                : ^^^^^^
 >first > second : boolean
+>               : ^^^^^^^
 >first : number
+>      : ^^^^^^
 >second : number
+>       : ^^^^^^
 >first : number
+>      : ^^^^^^
 >second : number
+>       : ^^^^^^
 }
 my.predicate.type = class {
 >my.predicate.type = class {    m() { return 101; }} : typeof type
+>                                                    : ^^^^^^^^^^^
 >my.predicate.type : typeof type
+>                  : ^^^^^^^^^^^
 >my.predicate : typeof my.predicate
+>             : ^^^^^^^^^^^^^^^^^^^
 >my : typeof my
+>   : ^^^^^^^^^
 >predicate : typeof my.predicate
+>          : ^^^^^^^^^^^^^^^^^^^
 >type : typeof type
+>     : ^^^^^^^^^^^
 >class {    m() { return 101; }} : typeof type
+>                                : ^^^^^^^^^^^
 
     m() { return 101; }
 >m : () => number
+>  : ^^^^^^^^^^^^
 >101 : 101
+>    : ^^^
 }
 
 
 // global-ish prefixes
 var min = window.min ?? {};
 >min : typeof min
+>    : ^^^^^^^^^^
 >window.min ?? {} : typeof min | {}
+>                 : ^^^^^^^^^^^^^^^
 >window.min : typeof min
+>           : ^^^^^^^^^^
 >window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >min : typeof min
+>    : ^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 min.nest = this.min.nest ?? function () { };
 >min.nest = this.min.nest ?? function () { } : { (): void; other: typeof other; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >min.nest : { (): void; other: typeof other; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >min : typeof min
+>    : ^^^^^^^^^^
 >nest : { (): void; other: typeof other; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.min.nest ?? function () { } : { (): void; other: typeof other; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.min.nest : { (): void; other: typeof other; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.min : typeof min
+>         : ^^^^^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 >min : typeof min
+>    : ^^^^^^^^^^
 >nest : { (): void; other: typeof other; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function () { } : { (): void; other: typeof other; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 min.nest.other = self.min.nest.other ?? class { };
 >min.nest.other = self.min.nest.other ?? class { } : typeof other
+>                                                  : ^^^^^^^^^^^^
 >min.nest.other : typeof other
+>               : ^^^^^^^^^^^^
 >min.nest : { (): void; other: typeof other; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >min : typeof min
+>    : ^^^^^^^^^^
 >nest : { (): void; other: typeof other; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >other : typeof other
+>      : ^^^^^^^^^^^^
 >self.min.nest.other ?? class { } : typeof other
+>                                 : ^^^^^^^^^^^^
 >self.min.nest.other : typeof other
+>                    : ^^^^^^^^^^^^
 >self.min.nest : { (): void; other: typeof other; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >self.min : typeof min
+>         : ^^^^^^^^^^
 >self : Window & typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >min : typeof min
+>    : ^^^^^^^^^^
 >nest : { (): void; other: typeof other; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >other : typeof other
+>      : ^^^^^^^^^^^^
 >class { } : typeof other
+>          : ^^^^^^^^^^^^
 
 min.property = global.min.property ?? {};
 >min.property = global.min.property ?? {} : {}
+>                                         : ^^
 >min.property : {}
+>             : ^^
 >min : typeof min
+>    : ^^^^^^^^^^
 >property : {}
+>         : ^^
 >global.min.property ?? {} : {}
+>                          : ^^
 >global.min.property : error
 >global.min : any
+>           : ^^^
 >global : any
+>       : ^^^
 >min : any
+>    : ^^^
 >property : any
+>         : ^^^
 >{} : {}
+>   : ^^
 

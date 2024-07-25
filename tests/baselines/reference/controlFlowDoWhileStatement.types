@@ -1,216 +1,311 @@
-=== tests/cases/conformance/controlFlow/controlFlowDoWhileStatement.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowDoWhileStatement.ts] ////
+
+=== controlFlowDoWhileStatement.ts ===
 let cond: boolean;
 >cond : boolean
+>     : ^^^^^^^
 
 function a() {
 >a : () => void
+>  : ^^^^^^^^^^
 
     let x: string | number;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     do {
         x; // string
 >x : string
+>  : ^^^^^^
 
     } while (cond)
 >cond : boolean
+>     : ^^^^^^^
 }
 function b() {
 >b : () => void
+>  : ^^^^^^^^^^
 
     let x: string | number;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     do {
         x; // string
 >x : string
+>  : ^^^^^^
 
         x = 42;
 >x = 42 : 42
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
         break;
     } while (cond)
 >cond : boolean
+>     : ^^^^^^^
 }
 function c() {
 >c : () => void
+>  : ^^^^^^^^^^
 
     let x: string | number;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     do {
         x; // string
 >x : string
+>  : ^^^^^^
 
         x = undefined;
 >x = undefined : undefined
+>              : ^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
         if (typeof x === "string") continue;
 >typeof x === "string" : boolean
+>                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 
         break;
     } while (cond)
 >cond : boolean
+>     : ^^^^^^^
 }
 function d() {
 >d : () => void
+>  : ^^^^^^^^^^
 
     let x: string | number;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     x = 1000;
 >x = 1000 : 1000
+>         : ^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >1000 : 1000
+>     : ^^^^
 
     do {
         x; // number
 >x : number
+>  : ^^^^^^
 
         x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     } while (x = x.length)
 >x = x.length : number
+>             : ^^^^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >x.length : number
+>         : ^^^^^^
 >x : string
+>  : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     x; // number
 >x : number
+>  : ^^^^^^
 }
 function e() {
 >e : () => void
+>  : ^^^^^^^^^^
 
     let x: string | number;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     do {
         x = 42;
 >x = 42 : 42
+>       : ^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
     } while (cond)
 >cond : boolean
+>     : ^^^^^^^
 
     x; // number
 >x : number
+>  : ^^^^^^
 }
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     let x: string | number | boolean | RegExp | Function;
 >x : string | number | boolean | Function | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number | boolean | Function | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     do {
         if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
             x = 42;
 >x = 42 : 42
+>       : ^^
 >x : string | number | boolean | Function | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
             break;
         }
         if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
             x = true;
 >x = true : true
+>         : ^^^^
 >x : string | number | boolean | Function | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
             continue;
         }
         x = /a/;
 >x = /a/ : RegExp
+>        : ^^^^^^
 >x : string | number | boolean | Function | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >/a/ : RegExp
+>    : ^^^^^^
 
     } while (cond)
 >cond : boolean
+>     : ^^^^^^^
 
     x; // number | boolean | RegExp
 >x : number | true | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 }
 function g() {
 >g : () => void
+>  : ^^^^^^^^^^
 
     let x: string | number | boolean | RegExp | Function;
 >x : string | number | boolean | Function | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x = "";
 >x = "" : ""
+>       : ^^
 >x : string | number | boolean | Function | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 
     do {
         if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
             x = 42;
 >x = 42 : 42
+>       : ^^
 >x : string | number | boolean | Function | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
+>   : ^^
 
             break;
         }
         if (cond) {
 >cond : boolean
+>     : ^^^^^^^
 
             x = true;
 >x = true : true
+>         : ^^^^
 >x : string | number | boolean | Function | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 
             continue;
         }
         x = /a/;
 >x = /a/ : RegExp
+>        : ^^^^^^
 >x : string | number | boolean | Function | RegExp
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >/a/ : RegExp
+>    : ^^^^^^
 
     } while (true)
 >true : true
+>     : ^^^^
 
     x; // number
 >x : number
+>  : ^^^^^^
 }
 

@@ -1,48 +1,77 @@
-=== tests/cases/compiler/arrayLiteralAndArrayConstructorEquivalence1.ts ===
+//// [tests/cases/compiler/arrayLiteralAndArrayConstructorEquivalence1.ts] ////
+
+=== arrayLiteralAndArrayConstructorEquivalence1.ts ===
 var myCars=new Array(); 
 >myCars : any[]
+>       : ^^^^^
 >new Array() : any[]
+>            : ^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 
 var myCars3 = new Array({});
 >myCars3 : {}[]
+>        : ^^^^
 >new Array({}) : {}[]
+>              : ^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var myCars4: Array; // error
 >myCars4 : any
+>        : ^^^
 
 var myCars5: Array<any>[];
 >myCars5 : any[][]
+>        : ^^^^^^^
  
 myCars = myCars3;
 >myCars = myCars3 : {}[]
+>                 : ^^^^
 >myCars : any[]
+>       : ^^^^^
 >myCars3 : {}[]
+>        : ^^^^
 
 myCars = myCars4;
 >myCars = myCars4 : any
+>                 : ^^^
 >myCars : any[]
+>       : ^^^^^
 >myCars4 : any
+>        : ^^^
 
 myCars = myCars5;
 >myCars = myCars5 : any[][]
+>                 : ^^^^^^^
 >myCars : any[]
+>       : ^^^^^
 >myCars5 : any[][]
+>        : ^^^^^^^
  
 myCars3 = myCars;
 >myCars3 = myCars : any[]
+>                 : ^^^^^
 >myCars3 : {}[]
+>        : ^^^^
 >myCars : any[]
+>       : ^^^^^
 
 myCars3 = myCars4;
 >myCars3 = myCars4 : any
+>                  : ^^^
 >myCars3 : {}[]
+>        : ^^^^
 >myCars4 : any
+>        : ^^^
 
 myCars3 = myCars5;   
 >myCars3 = myCars5 : any[][]
+>                  : ^^^^^^^
 >myCars3 : {}[]
+>        : ^^^^
 >myCars5 : any[][]
+>        : ^^^^^^^
 

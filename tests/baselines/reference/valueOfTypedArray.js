@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/valueOfTypedArray.ts] ////
+
 //// [valueOfTypedArray.ts]
 // All declarations should pass, as valueOf has been specialized for all TypedArrays
 const typedArray0: Int8Array = (new Int8Array()).valueOf();

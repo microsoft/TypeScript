@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnConstInBaseWithBadImplementationInDerived.ts ===
+//// [tests/cases/compiler/overloadOnConstInBaseWithBadImplementationInDerived.ts] ////
+
+=== overloadOnConstInBaseWithBadImplementationInDerived.ts ===
 interface I {
 >I : Symbol(I, Decl(overloadOnConstInBaseWithBadImplementationInDerived.ts, 0, 0))
 

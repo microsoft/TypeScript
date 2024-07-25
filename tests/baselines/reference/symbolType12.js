@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType12.ts] ////
+
 //// [symbolType12.ts]
 var s = Symbol.for("assign");
 var str = "";

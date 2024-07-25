@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyGloFunc.ts] ////
+
 //// [privacyGloFunc.ts]
 export module m1 {
     export class C1_public {
@@ -533,8 +535,14 @@ export function f12_public(): C5_private { //error
 //// [privacyGloFunc.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
-    exports.f12_public = exports.f10_public = exports.f8_public = exports.f6_public = exports.f4_public = exports.f2_public = exports.C11_public = exports.C9_public = exports.C7_public = exports.C6_public = exports.m1 = void 0;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.C11_public = exports.C9_public = exports.C7_public = exports.C6_public = exports.m1 = void 0;
+    exports.f2_public = f2_public;
+    exports.f4_public = f4_public;
+    exports.f6_public = f6_public;
+    exports.f8_public = f8_public;
+    exports.f10_public = f10_public;
+    exports.f12_public = f12_public;
     var m1;
     (function (m1) {
         var C1_public = /** @class */ (function () {
@@ -685,7 +693,7 @@ define(["require", "exports"], function (require, exports) {
             return new C2_private(); //error
         }
         m1.f12_public = f12_public;
-    })(m1 = exports.m1 || (exports.m1 = {}));
+    })(m1 || (exports.m1 = m1 = {}));
     var m2;
     (function (m2) {
         var m2_C1_public = /** @class */ (function () {
@@ -951,38 +959,32 @@ define(["require", "exports"], function (require, exports) {
     }
     function f2_public(f2_arg) {
     }
-    exports.f2_public = f2_public;
     function f3_private(f3_arg) {
     }
     function f4_public(f4_arg) {
     }
-    exports.f4_public = f4_public;
     function f5_private() {
         return new C6_public();
     }
     function f6_public() {
         return new C6_public();
     }
-    exports.f6_public = f6_public;
     function f7_private() {
         return new C5_private();
     }
     function f8_public() {
         return new C5_private(); //error
     }
-    exports.f8_public = f8_public;
     function f9_private() {
         return new C6_public();
     }
     function f10_public() {
         return new C6_public();
     }
-    exports.f10_public = f10_public;
     function f11_private() {
         return new C5_private();
     }
     function f12_public() {
         return new C5_private(); //error
     }
-    exports.f12_public = f12_public;
 });

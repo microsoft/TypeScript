@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration5_es6.ts(3,1): error TS1003: Identifier expected.
+MemberFunctionDeclaration5_es6.ts(3,1): error TS1003: Identifier expected.
 
 
-==== tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration5_es6.ts (1 errors) ====
+==== MemberFunctionDeclaration5_es6.ts (1 errors) ====
     class C {
        *
     }

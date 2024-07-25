@@ -1,15 +1,24 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/missingSemicolonInModuleSpecifier.ts] ////
+
+=== a.ts ===
 export const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import {x} from "./a"
 >x : 1
+>  : ^
 
 (function() { return 1; }())
 >(function() { return 1; }()) : number
+>                             : ^^^^^^
 >function() { return 1; }() : number
+>                           : ^^^^^^
 >function() { return 1; } : () => number
+>                         : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 

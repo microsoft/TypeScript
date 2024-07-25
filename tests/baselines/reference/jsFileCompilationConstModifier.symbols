@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationConstModifier.ts] ////
+
+=== a.js ===
 const c = 10;
 >c : Symbol(c, Decl(a.js, 0, 5))
 

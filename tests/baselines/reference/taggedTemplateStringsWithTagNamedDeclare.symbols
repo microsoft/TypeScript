@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagNamedDeclare.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagNamedDeclare.ts] ////
+
+=== taggedTemplateStringsWithTagNamedDeclare.ts ===
 function declare(x: any, ...ys: any[]) {
 >declare : Symbol(declare, Decl(taggedTemplateStringsWithTagNamedDeclare.ts, 0, 0))
 >x : Symbol(x, Decl(taggedTemplateStringsWithTagNamedDeclare.ts, 0, 17))

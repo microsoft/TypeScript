@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName41.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName41.ts] ////
+
+=== parserComputedPropertyName41.ts ===
 var v = {
 >v : Symbol(v, Decl(parserComputedPropertyName41.ts, 0, 3))
 

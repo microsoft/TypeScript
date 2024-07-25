@@ -1,15 +1,15 @@
-tests/cases/compiler/types1.ts(2,17): error TS1110: Type expected.
-tests/cases/compiler/types1.ts(3,1): error TS1005: '=' expected.
-tests/cases/compiler/types2.ts(2,19): error TS1110: Type expected.
-tests/cases/compiler/types3.ts(2,13): error TS2456: Type alias 'test' circularly references itself.
+types1.ts(2,17): error TS1110: Type expected.
+types1.ts(3,1): error TS1005: '=' expected.
+types2.ts(2,19): error TS1110: Type expected.
+types3.ts(2,13): error TS2456: Type alias 'test' circularly references itself.
 
 
-==== tests/cases/compiler/test.js (0 errors) ====
+==== ./test.js (0 errors) ====
     module.exports = {
        message: ""
     }
     
-==== tests/cases/compiler/types1.ts (2 errors) ====
+==== ./types1.ts (2 errors) ====
     import test from "./test";
     export type test
                     
@@ -17,13 +17,13 @@ tests/cases/compiler/types3.ts(2,13): error TS2456: Type alias 'test' circularly
     
     
 !!! error TS1005: '=' expected.
-==== tests/cases/compiler/types2.ts (1 errors) ====
+==== ./types2.ts (1 errors) ====
     import test from "./test";
     export type test = 
                       
 !!! error TS1110: Type expected.
     
-==== tests/cases/compiler/types3.ts (1 errors) ====
+==== ./types3.ts (1 errors) ====
     import test from "./test";
     export type test = test;
                 ~~~~

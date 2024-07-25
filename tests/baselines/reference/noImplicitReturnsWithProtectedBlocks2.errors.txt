@@ -1,7 +1,7 @@
-tests/cases/compiler/noImplicitReturnsWithProtectedBlocks2.ts(4,20): error TS7030: Not all code paths return a value.
+noImplicitReturnsWithProtectedBlocks2.ts(4,20): error TS7030: Not all code paths return a value.
 
 
-==== tests/cases/compiler/noImplicitReturnsWithProtectedBlocks2.ts (1 errors) ====
+==== noImplicitReturnsWithProtectedBlocks2.ts (1 errors) ====
     declare function log(s: string): void;
     declare function get(): number;
     

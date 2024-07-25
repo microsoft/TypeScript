@@ -1,18 +1,31 @@
-=== tests/cases/compiler/jsElementAccessNoContextualTypeCrash.js ===
+//// [tests/cases/compiler/jsElementAccessNoContextualTypeCrash.ts] ////
+
+=== jsElementAccessNoContextualTypeCrash.js ===
 var Common = {};
 >Common : typeof Common
+>       : ^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 self['Common'] = self['Common'] || {};
 >self['Common'] = self['Common'] || {} : {}
+>                                      : ^^
 >self['Common'] : typeof Common
+>               : ^^^^^^^^^^^^^
 >self : Window & typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'Common' : "Common"
+>         : ^^^^^^^^
 >self['Common'] || {} : {}
+>                     : ^^
 >self['Common'] : typeof Common
+>               : ^^^^^^^^^^^^^
 >self : Window & typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'Common' : "Common"
+>         : ^^^^^^^^
 >{} : {}
+>   : ^^
 
 /**
  * @param {string} string
@@ -20,13 +33,20 @@ self['Common'] = self['Common'] || {};
  */
 Common.localize = function (string) {
 >Common.localize = function (string) {    return string;} : (string: string) => string
+>                                                         : ^      ^^      ^^^^^      
 >Common.localize : (string: string) => string
+>                : ^      ^^      ^^^^^      
 >Common : typeof Common
+>       : ^^^^^^^^^^^^^
 >localize : (string: string) => string
+>         : ^      ^^      ^^^^^      
 >function (string) {    return string;} : (string: string) => string
+>                                       : ^      ^^      ^^^^^      
 >string : string
+>       : ^^^^^^
 
     return string;
 >string : string
+>       : ^^^^^^
 
 };

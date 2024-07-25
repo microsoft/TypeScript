@@ -10,4 +10,6 @@
 ////interface ImportMeta {
 ////}
 
-verify.goToDefinition("reference", []);
+verify.baselineGoToDefinition("reference");
+
+verify.noErrors();

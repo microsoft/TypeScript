@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsModules.ts ===
+//// [tests/cases/compiler/commentsModules.ts] ////
+
+=== commentsModules.ts ===
 /** Module comment*/
 module m1 {
 >m1 : Symbol(m1, Decl(commentsModules.ts, 0, 0))

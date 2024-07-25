@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultClassInNamespace.ts] ////
+
 //// [exportDefaultClassInNamespace.ts]
 namespace ns_class {
     export default class {}

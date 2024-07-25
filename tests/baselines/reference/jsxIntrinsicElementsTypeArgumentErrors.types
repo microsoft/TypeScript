@@ -1,73 +1,124 @@
-=== tests/cases/compiler/jsxIntrinsicElementsTypeArgumentErrors.tsx ===
+//// [tests/cases/compiler/jsxIntrinsicElementsTypeArgumentErrors.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
+
+=== jsxIntrinsicElementsTypeArgumentErrors.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 // opening + closing
 const a = <div<>></div>; // empty type args
 >a : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<>></div> : JSX.Element
+>              : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 const b = <div<number,>></div>; // trailing comma type args
 >b : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<number,>></div> : JSX.Element
+>                     : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 const c = <div<Missing>></div>; // nonexistant type args
 >c : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<Missing>></div> : JSX.Element
+>                     : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 const d = <div<Missing<AlsoMissing>>></div>; // nested missing type args
 >d : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<Missing<AlsoMissing>>></div> : JSX.Element
+>                                  : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 const e = <div<Record<object, object>>></div>; // existing but incorrect nested type args
 >e : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<Record<object, object>>></div> : JSX.Element
+>                                    : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 const f = <div<number>></div>; // existing type argument with no internal issues
 >f : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<number>></div> : JSX.Element
+>                    : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 // self-closing
 const g = <div<>/>; // empty type args
 >g : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<>/> : JSX.Element
+>         : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
 const h = <div<number,>/>; // trailing comma type args
 >h : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<number,>/> : JSX.Element
+>                : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
 const i = <div<Missing>/>; // nonexistant type args
 >i : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<Missing>/> : JSX.Element
+>                : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
 const j = <div<Missing<AlsoMissing>>/>; // nested missing type args
 >j : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<Missing<AlsoMissing>>/> : JSX.Element
+>                             : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
 const k = <div<Record<object, object>>/>; // existing but incorrect nested type args
 >k : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<Record<object, object>>/> : JSX.Element
+>                               : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
 const l = <div<number>/>; // existing type argument with no internal issues
 >l : JSX.Element
+>  : ^^^^^^^^^^^
 ><div<number>/> : JSX.Element
+>               : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 

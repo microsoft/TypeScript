@@ -1,155 +1,251 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts] ////
+
+=== propertyAccessOnTypeParameterWithConstraints5.ts ===
 class A {
 >A : A
+>  : ^
 
     foo(): string { return ''; }
 >foo : () => string
+>    : ^^^^^^      
 >'' : ""
+>   : ^^
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     bar(): string {
 >bar : () => string
+>    : ^^^^^^      
 
         return '';
 >'' : ""
+>   : ^^
     }
 }
 
 class C<U extends T, T extends A> {
 >C : C<U, T>
+>  : ^^^^^^^
 
     f() {
 >f : () => string
+>  : ^^^^^^^^^^^^
 
         var x: U;
 >x : U
+>  : ^
 
         var a = x['foo'](); // should be string
 >a : string
+>  : ^^^^^^
 >x['foo']() : string
+>           : ^^^^^^
 >x['foo'] : () => string
+>         : ^^^^^^      
 >x : U
+>  : ^
 >'foo' : "foo"
+>      : ^^^^^
 
         return a + x.foo() + x.notHere();
 >a + x.foo() + x.notHere() : string
+>                          : ^^^^^^
 >a + x.foo() : string
+>            : ^^^^^^
 >a : string
+>  : ^^^^^^
 >x.foo() : string
+>        : ^^^^^^
 >x.foo : () => string
+>      : ^^^^^^      
 >x : U
+>  : ^
 >foo : () => string
+>    : ^^^^^^      
 >x.notHere() : any
+>            : ^^^
 >x.notHere : any
+>          : ^^^
 >x : U
+>  : ^
 >notHere : any
+>        : ^^^
     }
 }
 
 var r = (new C<B, A>()).f();
 >r : string
+>  : ^^^^^^
 >(new C<B, A>()).f() : string
+>                    : ^^^^^^
 >(new C<B, A>()).f : () => string
+>                  : ^^^^^^^^^^^^
 >(new C<B, A>()) : C<B, A>
+>                : ^^^^^^^
 >new C<B, A>() : C<B, A>
+>              : ^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >f : () => string
+>  : ^^^^^^^^^^^^
 
 interface I<U extends T, T extends A> {
     foo: U;
 >foo : U
+>    : ^
 }
 var i: I<B, A>;
 >i : I<B, A>
+>  : ^^^^^^^
 
 var r2 = i.foo.notHere();
 >r2 : any
+>   : ^^^
 >i.foo.notHere() : any
+>                : ^^^
 >i.foo.notHere : any
+>              : ^^^
 >i.foo : B
+>      : ^
 >i : I<B, A>
+>  : ^^^^^^^
 >foo : B
+>    : ^
 >notHere : any
+>        : ^^^
 
 var r2b = i.foo['foo']();
 >r2b : string
+>    : ^^^^^^
 >i.foo['foo']() : string
+>               : ^^^^^^
 >i.foo['foo'] : () => string
+>             : ^^^^^^      
 >i.foo : B
+>      : ^
 >i : I<B, A>
+>  : ^^^^^^^
 >foo : B
+>    : ^
 >'foo' : "foo"
+>      : ^^^^^
 
 var a: {
 >a : <U extends T, T extends A>() => U
+>  : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^^ 
 
     <U extends T, T extends A>(): U;
 }
 // BUG 794164
 var r3: string = a().notHere();
 >r3 : string
+>   : ^^^^^^
 >a().notHere() : any
+>              : ^^^
 >a().notHere : any
+>            : ^^^
 >a() : A
+>    : ^
 >a : <U extends T, T extends A>() => U
+>  : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^^ 
 >notHere : any
+>        : ^^^
 
 var r3b: string = a()['foo']();
 >r3b : string
+>    : ^^^^^^
 >a()['foo']() : string
+>             : ^^^^^^
 >a()['foo'] : () => string
+>           : ^^^^^^      
 >a() : A
+>    : ^
 >a : <U extends T, T extends A>() => U
+>  : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^^ 
 >'foo' : "foo"
+>      : ^^^^^
 
 var b = {
 >b : any
+>  : ^^^
 >{    foo: <U extends T, T extends A>(x: U): U => {        var a = x['foo'](); // should be string        return a + x.notHere();    },    // BUG 794164    bar: b.foo(1).notHere()} : { foo: <U extends T, T extends A>(x: U) => U; bar: any; }
+>                                                                                                                                                                                    : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 
     foo: <U extends T, T extends A>(x: U): U => {
 >foo : <U extends T, T extends A>(x: U) => U
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^ 
 ><U extends T, T extends A>(x: U): U => {        var a = x['foo'](); // should be string        return a + x.notHere();    } : <U extends T, T extends A>(x: U) => U
+>                                                                                                                            : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^ 
 >x : U
+>  : ^
 
         var a = x['foo'](); // should be string
 >a : string
+>  : ^^^^^^
 >x['foo']() : string
+>           : ^^^^^^
 >x['foo'] : () => string
+>         : ^^^^^^      
 >x : U
+>  : ^
 >'foo' : "foo"
+>      : ^^^^^
 
         return a + x.notHere();
 >a + x.notHere() : string
+>                : ^^^^^^
 >a : string
+>  : ^^^^^^
 >x.notHere() : any
+>            : ^^^
 >x.notHere : any
+>          : ^^^
 >x : U
+>  : ^
 >notHere : any
+>        : ^^^
 
     },
     // BUG 794164
     bar: b.foo(1).notHere()
 >bar : any
+>    : ^^^
 >b.foo(1).notHere() : any
+>                   : ^^^
 >b.foo(1).notHere : any
+>                 : ^^^
 >b.foo(1) : any
+>         : ^^^
 >b.foo : any
+>      : ^^^
 >b : any
+>  : ^^^
 >foo : any
+>    : ^^^
 >1 : 1
+>  : ^
 >notHere : any
+>        : ^^^
 }
 
 var r4 = b.foo(new B()); // error after constraints above made illegal, doesn't matter
 >r4 : any
+>   : ^^^
 >b.foo(new B()) : any
+>               : ^^^
 >b.foo : any
+>      : ^^^
 >b : any
+>  : ^^^
 >foo : any
+>    : ^^^
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 

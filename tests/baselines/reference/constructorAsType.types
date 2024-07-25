@@ -1,18 +1,31 @@
-=== tests/cases/compiler/constructorAsType.ts ===
+//// [tests/cases/compiler/constructorAsType.ts] ////
+
+=== constructorAsType.ts ===
 var Person:new () => {name: string;} = function () {return {name:"joe"};};
->Person : new () => {    name: string;}
+>Person : new () => { name: string; }
+>       : ^^^^^^^^^^                 
 >name : string
+>     : ^^^^^^
 >function () {return {name:"joe"};} : () => { name: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{name:"joe"} : { name: string; }
+>             : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"joe" : "joe"
+>      : ^^^^^
 
 var Person2:{new() : {name:string;};};
->Person2 : new () => {    name: string;}
+>Person2 : new () => { name: string; }
+>        : ^^^^^^^^^^                 
 >name : string
+>     : ^^^^^^
 
 Person = Person2;
 >Person = Person2 : new () => { name: string; }
+>                 : ^^^^^^^^^^                 
 >Person : new () => { name: string; }
+>       : ^^^^^^^^^^                 
 >Person2 : new () => { name: string; }
+>        : ^^^^^^^^^^                 
 

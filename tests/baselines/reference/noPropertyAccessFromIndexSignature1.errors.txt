@@ -1,9 +1,9 @@
-tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(24,3): error TS4111: Property 'foo' comes from an index signature, so it must be accessed with ['foo'].
-tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(32,3): error TS4111: Property 'bar' comes from an index signature, so it must be accessed with ['bar'].
-tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts(40,4): error TS4111: Property 'bar' comes from an index signature, so it must be accessed with ['bar'].
+noPropertyAccessFromIndexSignature1.ts(24,3): error TS4111: Property 'foo' comes from an index signature, so it must be accessed with ['foo'].
+noPropertyAccessFromIndexSignature1.ts(32,3): error TS4111: Property 'bar' comes from an index signature, so it must be accessed with ['bar'].
+noPropertyAccessFromIndexSignature1.ts(40,4): error TS4111: Property 'bar' comes from an index signature, so it must be accessed with ['bar'].
 
 
-==== tests/cases/conformance/additionalChecks/noPropertyAccessFromIndexSignature1.ts (3 errors) ====
+==== noPropertyAccessFromIndexSignature1.ts (3 errors) ====
     interface A {
         foo: string
     }

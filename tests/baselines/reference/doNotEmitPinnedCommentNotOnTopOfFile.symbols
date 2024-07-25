@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doNotEmitPinnedCommentNotOnTopOfFile.ts ===
+//// [tests/cases/compiler/doNotEmitPinnedCommentNotOnTopOfFile.ts] ////
+
+=== doNotEmitPinnedCommentNotOnTopOfFile.ts ===
 var x = 10;
 >x : Symbol(x, Decl(doNotEmitPinnedCommentNotOnTopOfFile.ts, 0, 3), Decl(doNotEmitPinnedCommentNotOnTopOfFile.ts, 8, 3))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts] ////
+
 //// [staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts]
 interface A {
     prop();

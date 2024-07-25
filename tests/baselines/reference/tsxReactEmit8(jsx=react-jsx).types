@@ -1,15 +1,31 @@
-=== tests/cases/conformance/jsx/tsxReactEmit8.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmit8.tsx] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
+
+=== tsxReactEmit8.tsx ===
 /// <reference path="react16.d.ts" />
 
 <div>1</div>;
 ><div>1</div> : JSX.Element
+>             : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 <div key={"key-attr"}>2</div>;
 ><div key={"key-attr"}>2</div> : JSX.Element
+>                              : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >key : string
+>    : ^^^^^^
 >"key-attr" : "key-attr"
+>           : ^^^^^^^^^^
 >div : any
+>    : ^^^
 

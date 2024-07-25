@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericOfACloduleType1.ts ===
+//// [tests/cases/compiler/genericOfACloduleType1.ts] ////
+
+=== genericOfACloduleType1.ts ===
 class G<T>{ bar(x: T) { return x; } }
 >G : Symbol(G, Decl(genericOfACloduleType1.ts, 0, 0))
 >T : Symbol(T, Decl(genericOfACloduleType1.ts, 0, 8))

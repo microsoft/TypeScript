@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypeObjectSpreadExpression.ts] ////
+
 //// [contextualTypeObjectSpreadExpression.ts]
 interface I {
     a: "a";

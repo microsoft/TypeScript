@@ -1,7 +1,9 @@
-=== tests/cases/compiler/breakTarget4.ts ===
+//// [tests/cases/compiler/breakTarget4.ts] ////
+
+=== breakTarget4.ts ===
+
 target1:
-No type information for this code.target2:
-No type information for this code.while (true) {
-No type information for this code.  break target2;
-No type information for this code.}
-No type information for this code.
+target2:
+while (true) {
+  break target2;
+}

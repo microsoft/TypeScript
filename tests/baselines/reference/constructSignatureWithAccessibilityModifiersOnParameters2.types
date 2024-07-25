@@ -1,70 +1,93 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts] ////
+
+=== constructSignatureWithAccessibilityModifiersOnParameters2.ts ===
 // Parameter properties are not valid in overloads of constructors
 
 class C {
 >C : C
+>  : ^
 
     constructor(public x, private y);
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     constructor(public x, private y) { }
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 }
 
 class C2 {
 >C2 : C2
+>   : ^^
 
     constructor(private x);
 >x : any
+>  : ^^^
 
     constructor(public x) { }
 >x : any
+>  : ^^^
 }
 
 class C3 {
 >C3 : C3
+>   : ^^
 
     constructor(private x);
 >x : any
+>  : ^^^
 
     constructor(private y) { }
 >y : any
+>  : ^^^
 }
 
 interface I {
     new (public x);
 >x : any
+>  : ^^^
 
     new (public x);
 >x : any
+>  : ^^^
 }
 
 interface I2 {
     new (private x);
 >x : any
+>  : ^^^
 
     new (private x);
 >x : any
+>  : ^^^
 }
 
 var a: {
 >a : { new (x: any): any; new (y: any): any; }
+>  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 
     new (public x);
 >x : any
+>  : ^^^
 
     new (public y);
 >y : any
+>  : ^^^
 }
 
 var b: {
 >b : { new (x: any): any; new (y: any): any; }
+>  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 
     new (private x);
 >x : any
+>  : ^^^
 
     new (private y);
 >y : any
+>  : ^^^
 }

@@ -1,0 +1,33 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesYield.ts ===
+// function* f() {
+//  /*HIGHLIGHTS*/[|{| kind: "none" |}yield|] 100;
+//  [|{| kind: "none" |}yield|] [|{| kind: "none" |}yield|] 200;
+//   class Foo {
+//       *memberFunction() {
+//           return yield 1;
+// --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesYield.ts ===
+// function* f() {
+//  [|{| kind: "none" |}yield|] 100;
+//  /*HIGHLIGHTS*/[|{| kind: "none" |}yield|] [|{| kind: "none" |}yield|] 200;
+//   class Foo {
+//       *memberFunction() {
+//           return yield 1;
+// --- (line: 7) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesYield.ts ===
+// function* f() {
+//  [|{| kind: "none" |}yield|] 100;
+//  [|{| kind: "none" |}yield|] /*HIGHLIGHTS*/[|{| kind: "none" |}yield|] 200;
+//   class Foo {
+//       *memberFunction() {
+//           return yield 1;
+// --- (line: 7) skipped ---

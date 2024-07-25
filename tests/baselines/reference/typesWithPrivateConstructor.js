@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/typesWithPrivateConstructor.ts] ////
+
 //// [typesWithPrivateConstructor.ts]
 class C {
     private constructor() { }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticMethodReferencingTypeArgument1.ts] ////
+
 //// [staticMethodReferencingTypeArgument1.ts]
 module Editor {
     export class List<T> {

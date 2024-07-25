@@ -1,109 +1,171 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution4.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface PoisonedProp {
     x: string;
 >x : string
+>  : ^^^^^^
 
     y: 2;
 >y : 2
+>  : ^
 }
 
 class Poisoned extends React.Component<PoisonedProp, {}> {
 >Poisoned : Poisoned
+>         : ^^^^^^^^
 >React.Component : React.Component<PoisonedProp, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return <div>Hello</div>;
 ><div>Hello</div> : JSX.Element
+>                 : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
     }
 }
 
 const obj: PoisonedProp = {
 >obj : PoisonedProp
+>    : ^^^^^^^^^^^^
 >{    x: "hello world",    y: 2} : { x: string; y: 2; }
+>                                : ^^^^^^^^^^^^^^^^^^^^
 
     x: "hello world",
 >x : string
+>  : ^^^^^^
 >"hello world" : "hello world"
+>              : ^^^^^^^^^^^^^
 
     y: 2
 >y : 2
+>  : ^
 >2 : 2
+>  : ^
 
 };
 
 // OK
 let p = <Poisoned {...obj} />;
 >p : JSX.Element
+>  : ^^^^^^^^^^^
 ><Poisoned {...obj} /> : JSX.Element
+>                      : ^^^^^^^^^^^
 >Poisoned : typeof Poisoned
+>         : ^^^^^^^^^^^^^^^
 >obj : PoisonedProp
+>    : ^^^^^^^^^^^^
 
 class EmptyProp extends React.Component<{}, {}> {
 >EmptyProp : EmptyProp
+>          : ^^^^^^^^^
 >React.Component : React.Component<{}, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => JSX.Element
+>       : ^^^^^^^^^^^^^^^^^
 
         return <div>Default hi</div>;
 ><div>Default hi</div> : JSX.Element
+>                      : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
     }
 }
 
 // OK
 let j: any;
 >j : any
+>  : ^^^
 
 let e1 = <EmptyProp {...{}} />;
 >e1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><EmptyProp {...{}} /> : JSX.Element
+>                      : ^^^^^^^^^^^
 >EmptyProp : typeof EmptyProp
+>          : ^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 let e2 = <EmptyProp {...j} />
 >e2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><EmptyProp {...j} /> : JSX.Element
+>                     : ^^^^^^^^^^^
 >EmptyProp : typeof EmptyProp
+>          : ^^^^^^^^^^^^^^^^
 >j : any
+>  : ^^^
 
 let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
 >e3 : JSX.Element
+>   : ^^^^^^^^^^^
 ><EmptyProp {...{ ref: (input) => { this.textInput = input; } }} /> : JSX.Element
+>                                                                   : ^^^^^^^^^^^
 >EmptyProp : typeof EmptyProp
+>          : ^^^^^^^^^^^^^^^^
 >{ ref: (input) => { this.textInput = input; } } : { ref: (input: EmptyProp) => void; }
+>                                                : ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >ref : (input: EmptyProp) => void
+>    : ^     ^^^^^^^^^^^^^^^^^^^^
 >(input) => { this.textInput = input; } : (input: EmptyProp) => void
+>                                       : ^     ^^^^^^^^^^^^^^^^^^^^
 >input : EmptyProp
+>      : ^^^^^^^^^
 >this.textInput = input : EmptyProp
+>                       : ^^^^^^^^^
 >this.textInput : any
+>               : ^^^
 >this : undefined
+>     : ^^^^^^^^^
 >textInput : any
+>          : ^^^
 >input : EmptyProp
+>      : ^^^^^^^^^
 
 let e4 = <EmptyProp data-prop />
 >e4 : JSX.Element
+>   : ^^^^^^^^^^^
 ><EmptyProp data-prop /> : JSX.Element
+>                        : ^^^^^^^^^^^
 >EmptyProp : typeof EmptyProp
+>          : ^^^^^^^^^^^^^^^^
 >data-prop : true
+>          : ^^^^
 
 let e5 = <EmptyProp {...{ "data-prop": true}} />
 >e5 : JSX.Element
+>   : ^^^^^^^^^^^
 ><EmptyProp {...{ "data-prop": true}} /> : JSX.Element
+>                                        : ^^^^^^^^^^^
 >EmptyProp : typeof EmptyProp
+>          : ^^^^^^^^^^^^^^^^
 >{ "data-prop": true} : { "data-prop": boolean; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"data-prop" : boolean
+>            : ^^^^^^^
 >true : true
+>     : ^^^^
 

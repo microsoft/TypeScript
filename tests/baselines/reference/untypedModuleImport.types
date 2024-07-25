@@ -1,7 +1,11 @@
+//// [tests/cases/conformance/moduleResolution/untypedModuleImport.ts] ////
+
 === /c.ts ===
 import foo, { bar } from "foo";
 >foo : any
+>    : ^^^
 >bar : any
+>    : ^^^
 
 import "./a";
 import "./b";
@@ -19,11 +23,14 @@ foo.bar();
 >foo.bar() : error
 >foo.bar : error
 >foo : any
+>    : ^^^
 >bar : any
+>    : ^^^
 
 === /b.ts ===
 import foo = require("foo");
 >foo : any
+>    : ^^^
 
 foo();
 >foo() : error

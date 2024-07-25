@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsThisTypes.ts] ////
+
 //// [index.js]
 export class A {
     /** @returns {this} */
@@ -27,7 +29,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
@@ -48,7 +50,7 @@ var Base = /** @class */ (function (_super) {
     Base.prototype.verify = function () { };
     return Base;
 }(A));
-exports["default"] = Base;
+exports.default = Base;
 
 
 //// [index.d.ts]

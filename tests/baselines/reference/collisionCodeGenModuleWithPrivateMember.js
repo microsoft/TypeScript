@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionCodeGenModuleWithPrivateMember.ts] ////
+
 //// [collisionCodeGenModuleWithPrivateMember.ts]
 module m1 {
     class m1 {

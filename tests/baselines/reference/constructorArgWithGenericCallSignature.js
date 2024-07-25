@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorArgWithGenericCallSignature.ts] ////
+
 //// [constructorArgWithGenericCallSignature.ts]
 module Test {
     export interface MyFunc {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesInterface.ts] ////
+
 //// [augmentedTypesInterface.ts]
 // interface then interface
 

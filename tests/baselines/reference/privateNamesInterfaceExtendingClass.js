@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInterfaceExtendingClass.ts] ////
+
 //// [privateNamesInterfaceExtendingClass.ts]
 class C {
     #prop;

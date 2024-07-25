@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override20.ts] ////
+
 //// [override20.ts]
 const Foo: C1 & C2 =
     class {

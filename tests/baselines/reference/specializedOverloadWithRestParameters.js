@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specializedOverloadWithRestParameters.ts] ////
+
 //// [specializedOverloadWithRestParameters.ts]
 class Base { foo() { } }
 class Derived1 extends Base { bar() { } }

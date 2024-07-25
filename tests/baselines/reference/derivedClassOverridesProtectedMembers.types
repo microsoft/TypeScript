@@ -1,122 +1,191 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers.ts] ////
+
+=== derivedClassOverridesProtectedMembers.ts ===
 var x: { foo: string; }
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
 
 var y: { foo: string; bar: string; }
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
 >bar : string
+>    : ^^^^^^
 
 class Base {
 >Base : Base
+>     : ^^^^
 
     protected a: typeof x;
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected b(a: typeof x) { }
 >b : (a: typeof x) => void
+>  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected get c() { return x; }
 >c : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected set c(v: typeof x) { }
 >c : { foo: string; }
+>  : ^^^^^^^      ^^^
 >v : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected d: (a: typeof x) => void;
 >d : (a: typeof x) => void
+>  : ^ ^^        ^^^^^    
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected static r: typeof x;
 >r : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected static s(a: typeof x) { }
 >s : (a: typeof x) => void
+>  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected static get t() { return x; }
 >t : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected static set t(v: typeof x) { }
 >t : { foo: string; }
+>  : ^^^^^^^      ^^^
 >v : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     protected static u: (a: typeof x) => void;
 >u : (a: typeof x) => void
+>  : ^ ^^        ^^^^^    
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     constructor(a: typeof x) { }
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     protected a: typeof y;
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     protected b(a: typeof y) { }
 >b : (a: typeof y) => void
+>  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     protected get c() { return y; }
 >c : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     protected set c(v: typeof y) { }
 >c : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >v : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     protected d: (a: typeof y) => void;
 >d : (a: typeof y) => void
+>  : ^ ^^        ^^^^^    
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     protected static r: typeof y;
 >r : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     protected static s(a: typeof y) { }
 >s : (a: typeof y) => void
+>  : ^ ^^        ^^^^^^^^^
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     protected static get t() { return y; }
 >t : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     protected static set t(a: typeof y) { }
 >t : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     protected static u: (a: typeof y) => void;
 >u : (a: typeof y) => void
+>  : ^ ^^        ^^^^^    
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     constructor(a: typeof y) { super(x) }
 >a : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 >super(x) : void
+>         : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >x : { foo: string; }
+>  : ^^^^^^^      ^^^
 }
 

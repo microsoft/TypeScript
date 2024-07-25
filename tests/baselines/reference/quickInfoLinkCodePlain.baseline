@@ -1,3 +1,18 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoLinkCodePlain.ts ===
+// export class C {
+//      /**
+//       * @deprecated Use {@linkplain PerspectiveCamera#setFocalLength .setFocalLength()} and {@linkcode PerspectiveCamera#filmGauge .filmGauge} instead.
+//       */
+//     m() { }
+// }
+// new C().m
+//         ^
+// | ----------------------------------------------------------------------
+// | (method) C.m(): void
+// | @deprecated Use {@linkplain PerspectiveCamera#setFocalLength .setFocalLength()} and {@linkcode PerspectiveCamera#filmGauge .filmGauge} instead.
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +20,7 @@
       "position": 210,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "deprecated",
       "textSpan": {

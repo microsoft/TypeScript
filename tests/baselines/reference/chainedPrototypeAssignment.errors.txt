@@ -1,8 +1,8 @@
-tests/cases/conformance/salsa/use.js(5,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/salsa/use.js(6,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+use.js(5,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+use.js(6,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
-==== tests/cases/conformance/salsa/use.js (2 errors) ====
+==== use.js (2 errors) ====
     /// <reference path='./types.d.ts'/>
     var mod = require('./mod');
     var a = new mod.A()
@@ -14,10 +14,10 @@ tests/cases/conformance/salsa/use.js(6,5): error TS2345: Argument of type 'strin
         ~~~~~~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
-==== tests/cases/conformance/salsa/types.d.ts (0 errors) ====
+==== types.d.ts (0 errors) ====
     declare function require(name: string): any;
     declare var exports: any;
-==== tests/cases/conformance/salsa/mod.js (0 errors) ====
+==== mod.js (0 errors) ====
     /// <reference path='./types.d.ts'/>
     var A = function A() {
         this.a = 1

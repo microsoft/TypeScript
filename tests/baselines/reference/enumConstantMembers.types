@@ -1,133 +1,204 @@
-=== tests/cases/conformance/enums/enumConstantMembers.ts ===
+//// [tests/cases/conformance/enums/enumConstantMembers.ts] ////
+
+=== enumConstantMembers.ts ===
 // Constant members allow negatives, but not decimals. Also hex literals are allowed
 enum E1 {
 >E1 : E1
+>   : ^^
 
     a = 1,
 >a : E1.a
+>  : ^^^^
 >1 : 1
+>  : ^
 
     b
 >b : E1.b
+>  : ^^^^
 }
 enum E2 {
 >E2 : E2
+>   : ^^
 
     a = - 1,
 >a : E2.a
+>  : ^^^^
 >- 1 : -1
+>    : ^^
 >1 : 1
+>  : ^
 
     b
 >b : E2.b
+>  : ^^^^
 }
 enum E3 {
 >E3 : E3
+>   : ^^
 
     a = 0.1,
 >a : E3.a
+>  : ^^^^
 >0.1 : 0.1
+>    : ^^^
 
     b // Error because 0.1 is not a constant
 >b : E3.b
+>  : ^^^^
 }
 
 declare enum E4 {
 >E4 : E4
+>   : ^^
 
     a = 1,
 >a : E4.a
+>  : ^^^^
 >1 : 1
+>  : ^
 
     b = -1,
 >b : E4.b
+>  : ^^^^
 >-1 : -1
+>   : ^^
 >1 : 1
+>  : ^
 
     c = 0.1 // Not a constant
 >c : E4.c
+>  : ^^^^
 >0.1 : 0.1
+>    : ^^^
 }
 
 enum E5 {
 >E5 : E5
+>   : ^^
 
     a = 1 / 0,
->a : E5
+>a : E5.a
+>  : ^^^^
 >1 / 0 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >0 : 0
+>  : ^
 
     b = 2 / 0.0,
->b : E5
+>b : E5.a
+>  : ^^^^
 >2 / 0.0 : number
+>        : ^^^^^^
 >2 : 2
+>  : ^
 >0.0 : 0
+>    : ^
 
     c = 1.0 / 0.0,
->c : E5
+>c : E5.a
+>  : ^^^^
 >1.0 / 0.0 : number
+>          : ^^^^^^
 >1.0 : 1
+>    : ^
 >0.0 : 0
+>    : ^
 
     d = 0.0 / 0.0,
->d : E5
+>d : E5.d
+>  : ^^^^
 >0.0 / 0.0 : number
+>          : ^^^^^^
 >0.0 : 0
+>    : ^
 >0.0 : 0
+>    : ^
 
     e = NaN,
->e : E5
+>e : E5.d
+>  : ^^^^
 >NaN : number
+>    : ^^^^^^
 
     f = Infinity,
->f : E5
+>f : E5.a
+>  : ^^^^
 >Infinity : number
+>         : ^^^^^^
 
     g = -Infinity
->g : E5
+>g : E5.g
+>  : ^^^^
 >-Infinity : number
+>          : ^^^^^^
 >Infinity : number
+>         : ^^^^^^
 }
 
 const enum E6 {
 >E6 : E6
+>   : ^^
 
     a = 1 / 0,
->a : E6
+>a : E6.a
+>  : ^^^^
 >1 / 0 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >0 : 0
+>  : ^
 
     b = 2 / 0.0,
->b : E6
+>b : E6.a
+>  : ^^^^
 >2 / 0.0 : number
+>        : ^^^^^^
 >2 : 2
+>  : ^
 >0.0 : 0
+>    : ^
 
     c = 1.0 / 0.0,
->c : E6
+>c : E6.a
+>  : ^^^^
 >1.0 / 0.0 : number
+>          : ^^^^^^
 >1.0 : 1
+>    : ^
 >0.0 : 0
+>    : ^
 
     d = 0.0 / 0.0,
->d : E6
+>d : E6.d
+>  : ^^^^
 >0.0 / 0.0 : number
+>          : ^^^^^^
 >0.0 : 0
+>    : ^
 >0.0 : 0
+>    : ^
 
     e = NaN,
->e : E6
+>e : E6.d
+>  : ^^^^
 >NaN : number
+>    : ^^^^^^
 
     f = Infinity,
->f : E6
+>f : E6.a
+>  : ^^^^
 >Infinity : number
+>         : ^^^^^^
 
     g = -Infinity
->g : E6
+>g : E6.g
+>  : ^^^^
 >-Infinity : number
+>          : ^^^^^^
 >Infinity : number
+>         : ^^^^^^
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticModifierAlreadySeen.ts ===
+//// [tests/cases/compiler/staticModifierAlreadySeen.ts] ////
+
+=== staticModifierAlreadySeen.ts ===
 class C {
 >C : Symbol(C, Decl(staticModifierAlreadySeen.ts, 0, 0))
 

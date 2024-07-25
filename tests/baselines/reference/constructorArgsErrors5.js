@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorArgsErrors5.ts] ////
+
 //// [constructorArgsErrors5.ts]
 class foo {
     constructor (export a: number) {

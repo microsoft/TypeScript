@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeUnionConstraintInferences.ts] ////
+
 //// [mappedTypeUnionConstraintInferences.ts]
 export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export declare type PartialProperties<T, K extends keyof T> = Partial<Pick<T, K>> & Omit<T, K>;
@@ -20,13 +22,13 @@ b = {} // fine
 
 //// [mappedTypeUnionConstraintInferences.js]
 "use strict";
-exports.__esModule = true;
-exports.b = exports.a = exports.doSomething_Actual = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
+exports.doSomething_Actual = doSomething_Actual;
 function doSomething_Actual(a) {
     var x = null;
     return x;
 }
-exports.doSomething_Actual = doSomething_Actual;
 exports.a = doSomething_Actual({ prop: "test" });
 exports.a = {}; // should be fine, equivalent to below
 exports.b = doSomething_Expected({ prop: "test" });
@@ -38,7 +40,7 @@ export declare type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export declare type PartialProperties<T, K extends keyof T> = Partial<Pick<T, K>> & Omit<T, K>;
 export declare function doSomething_Actual<T extends {
     prop: string;
-}>(a: T): PartialProperties<T, "prop"> extends infer T_1 ? { [P in keyof T_1]: PartialProperties<T, "prop">[P]; } : never;
+}>(a: T): { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; };
 export declare function doSomething_Expected<T extends {
     prop: string;
 }>(a: T): {

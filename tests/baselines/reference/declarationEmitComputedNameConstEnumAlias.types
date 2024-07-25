@@ -1,27 +1,40 @@
-=== tests/cases/compiler/EnumExample.ts ===
+//// [tests/cases/compiler/declarationEmitComputedNameConstEnumAlias.ts] ////
+
+=== EnumExample.ts ===
 enum EnumExample {
 >EnumExample : EnumExample
+>            : ^^^^^^^^^^^
 
     TEST = 'TEST',
 >TEST : EnumExample.TEST
+>     : ^^^^^^^^^^^^^^^^
 >'TEST' : "TEST"
+>       : ^^^^^^
 }
 
 export default EnumExample;
 >EnumExample : EnumExample
+>            : ^^^^^^^^^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import EnumExample from './EnumExample';
 >EnumExample : typeof EnumExample
+>            : ^^^^^^^^^^^^^^^^^^
 
 export default {
 >{    [EnumExample.TEST]: {},} : { TEST: {}; }
+>                              : ^^^^^^^^^^^^^
 
     [EnumExample.TEST]: {},
 >[EnumExample.TEST] : {}
+>                   : ^^
 >EnumExample.TEST : EnumExample
+>                 : ^^^^^^^^^^^
 >EnumExample : typeof EnumExample
+>            : ^^^^^^^^^^^^^^^^^^
 >TEST : EnumExample
+>     : ^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 };

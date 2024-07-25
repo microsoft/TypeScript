@@ -1,122 +1,205 @@
-=== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraintTransitively.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraintTransitively.ts] ////
+
+=== typeParameterAsTypeParameterConstraintTransitively.ts ===
 // using a type parameter as a constraint for a type parameter is valid
 // no errors expected
 
 interface A { foo: number }
 >foo : number
+>    : ^^^^^^
 
 interface B extends A { bar: string; }
 >bar : string
+>    : ^^^^^^
 
 interface C extends B { baz: boolean; }
 >baz : boolean
+>    : ^^^^^^^
 
 var a: A;
 >a : A
+>  : ^
 
 var b: B;
 >b : B
+>  : ^
 
 var c: C;
 >c : C
+>  : ^
 
 function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
 >foo : <T, U, V>(x: T, y: U, z: V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >y : U
+>  : ^
 >z : V
+>  : ^
 >z : V
+>  : ^
 
 //function foo<T, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }
 
 foo(1, 2, 3);
 >foo(1, 2, 3) : 3
+>             : ^
 >foo : <T, U, V>(x: T, y: U, z: V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 
 foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: '', z: true });
 >foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: '', z: true }) : { x: number; y: string; z: boolean; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U, V>(x: T, y: U, z: V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >{ x: 1, y: '' } : { x: number; y: string; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >{ x: 2, y: '', z: true } : { x: number; y: string; z: true; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >y : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 >z : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 
 foo(a, b, c);
 >foo(a, b, c) : C
+>             : ^
 >foo : <T, U, V>(x: T, y: U, z: V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 foo(a, b, { foo: 1, bar: '', hm: true });
 >foo(a, b, { foo: 1, bar: '', hm: true }) : { foo: number; bar: string; hm: boolean; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U, V>(x: T, y: U, z: V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >a : A
+>  : ^
 >b : B
+>  : ^
 >{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: true; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >bar : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 >hm : true
+>   : ^^^^
 >true : true
+>     : ^^^^
 
 foo((x: number, y) => { }, (x) => { }, () => { });
 >foo((x: number, y) => { }, (x) => { }, () => { }) : () => void
+>                                                  : ^^^^^^^^^^
 >foo : <T, U, V>(x: T, y: U, z: V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >(x: number, y) => { } : (x: number, y: any) => void
+>                      : ^ ^^      ^^ ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : any
 >(x) => { } : (x: any) => void
+>           : ^ ^^^^^^^^^^^^^^
 >x : any
 >() => { } : () => void
+>          : ^^^^^^^^^^
 
 function foo2<T extends A, U, V>(x: T, y: U, z: V): V { return z; }
 >foo2 : <T extends A, U, V>(x: T, y: U, z: V) => V
+>     : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 >y : U
+>  : ^
 >z : V
+>  : ^
 >z : V
+>  : ^
 
 //function foo2<T extends A, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }
 foo(a, a, a);
 >foo(a, a, a) : A
+>             : ^
 >foo : <T, U, V>(x: T, y: U, z: V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >a : A
+>  : ^
 >a : A
+>  : ^
 >a : A
+>  : ^
 
 foo(a, b, c);
 >foo(a, b, c) : C
+>             : ^
 >foo : <T, U, V>(x: T, y: U, z: V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 
 foo(b, b, { foo: 1, bar: '', hm: '' });
 >foo(b, b, { foo: 1, bar: '', hm: '' }) : { foo: number; bar: string; hm: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U, V>(x: T, y: U, z: V) => V
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >b : B
+>  : ^
 >b : B
+>  : ^
 >{ foo: 1, bar: '', hm: '' } : { foo: number; bar: string; hm: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >bar : string
+>    : ^^^^^^
 >'' : ""
+>   : ^^
 >hm : string
+>   : ^^^^^^
 >'' : ""
+>   : ^^
 

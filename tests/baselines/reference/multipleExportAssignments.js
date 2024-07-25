@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multipleExportAssignments.ts] ////
+
 //// [multipleExportAssignments.ts]
 interface connectModule {
     (res, req, next): void;

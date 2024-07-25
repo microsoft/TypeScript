@@ -1,62 +1,93 @@
-=== tests/cases/conformance/jsdoc/jsdocTypeReferenceToImport.js ===
-// #34802
+//// [tests/cases/conformance/jsdoc/jsdocTypeReferenceToImport.ts] ////
 
+=== jsdocTypeReferenceToImport.js ===
 const C = require('./ex').C;
 >C : typeof C
+>  : ^^^^^^^^
 >require('./ex').C : typeof C
->require('./ex') : typeof import("tests/cases/conformance/jsdoc/ex")
+>                  : ^^^^^^^^
+>require('./ex') : typeof import("ex")
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./ex' : "./ex"
+>       : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 const D = require('./ex')?.C;
 >D : typeof C
+>  : ^^^^^^^^
 >require('./ex')?.C : typeof C
->require('./ex') : typeof import("tests/cases/conformance/jsdoc/ex")
+>                   : ^^^^^^^^
+>require('./ex') : typeof import("ex")
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./ex' : "./ex"
+>       : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 /** @type {C} c */
 var c = new C()
 >c : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 c.start
 >c.start : number
+>        : ^^^^^^
 >c : C
+>  : ^
 >start : number
+>      : ^^^^^^
 
 c.end
 >c.end : number
+>      : ^^^^^^
 >c : C
+>  : ^
 >end : number
+>    : ^^^^^^
 
 /** @type {D} c */
 var d = new D()
 >d : C
+>  : ^
 >new D() : C
+>        : ^
 >D : typeof C
+>  : ^^^^^^^^
 
 d.start
 >d.start : number
+>        : ^^^^^^
 >d : C
+>  : ^
 >start : number
+>      : ^^^^^^
 
 d.end
 >d.end : number
+>      : ^^^^^^
 >d : C
+>  : ^
 >end : number
+>    : ^^^^^^
 
-=== tests/cases/conformance/jsdoc/ex.d.ts ===
+=== ex.d.ts ===
 export class C {
 >C : C
+>  : ^
 
     start: number
 >start : number
+>      : ^^^^^^
 
     end: number
 >end : number
+>    : ^^^^^^
 }
 

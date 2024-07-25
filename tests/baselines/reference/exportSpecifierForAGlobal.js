@@ -13,13 +13,13 @@ export function f() {
 
 //// [b.js]
 "use strict";
-exports.__esModule = true;
-exports.f = exports.X = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.X = void 0;
+exports.f = f;
 function f() {
     var x;
     return x;
 }
-exports.f = f;
 
 
 //// [b.d.ts]

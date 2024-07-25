@@ -7,9 +7,9 @@
 ////
 ////    }
 ////
-////    [|public /**/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}start|](){
+////    public /*1*/start(){
 ////        return this;
-////    }|]
+////    }
 ////
 ////    public stop(){
 ////        return this;
@@ -20,18 +20,13 @@
 ////import Second = require("./findAllRefsOnDefinition-import");
 ////
 ////var second = new Second.Test()
-////second.[|start|]();
+////second./*2*/start();
 ////second.stop();
 
-checkRefs();
-
+verify.baselineFindAllReferences("1");
 cancellation.setCancelled();
-verifyOperationIsCancelled(checkRefs);
+verifyOperationIsCancelled(() => verify.baselineFindAllReferences('1'));
 
 // verify that internal state is still correct
 cancellation.resetCancelled();
-checkRefs();
-
-function checkRefs() {
-    verify.singleReferenceGroup("(method) Test.start(): this", "start");
-}
+verify.baselineFindAllReferences("1");

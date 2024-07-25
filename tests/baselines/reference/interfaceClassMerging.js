@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceClassMerging.ts] ////
+
 //// [interfaceClassMerging.ts]
 interface Foo {
     method(a: number): string;

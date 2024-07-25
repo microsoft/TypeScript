@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/unmetTypeConstraintInImportCall.ts] ////
+
+=== file1.ts ===
+export type Foo<T extends string> = { foo: T }
+>Foo : Foo<T>
+>    : ^^^^^^
+>foo : T
+>    : ^
+
+=== file2.ts ===
+type Bar<T> = import('./file1').Foo<T>;
+>Bar : Bar<T>
+>    : ^^^^^^
+

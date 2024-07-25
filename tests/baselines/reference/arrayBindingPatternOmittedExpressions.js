@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayBindingPatternOmittedExpressions.ts] ////
+
 //// [arrayBindingPatternOmittedExpressions.ts]
 var results: string[];
 

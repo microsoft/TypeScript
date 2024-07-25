@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedMultipleParameter2InFunctionExpression.ts] ////
+
 //// [unusedMultipleParameter2InFunctionExpression.ts]
 var func = function(person: string, person2: string, person3: string) {
     var unused = 20;

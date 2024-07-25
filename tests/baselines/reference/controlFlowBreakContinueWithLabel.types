@@ -1,46 +1,72 @@
-=== tests/cases/compiler/controlFlowBreakContinueWithLabel.ts ===
+//// [tests/cases/compiler/controlFlowBreakContinueWithLabel.ts] ////
+
+=== controlFlowBreakContinueWithLabel.ts ===
 enum User { A, B }
 >User : User
+>     : ^^^^
 >A : User.A
+>  : ^^^^^^
 >B : User.B
+>  : ^^^^^^
 
 let user: User = User.A
 >user : User
+>     : ^^^^
 >User.A : User.A
+>       : ^^^^^^
 >User : typeof User
+>     : ^^^^^^^^^^^
 >A : User.A
+>  : ^^^^^^
 
 label: while (true) {
 >label : any
+>      : ^^^
 >true : true
+>     : ^^^^
 
     switch (user) {
 >user : User
+>     : ^^^^
 
         case User.A:
 >User.A : User.A
+>       : ^^^^^^
 >User : typeof User
+>     : ^^^^^^^^^^^
 >A : User.A
+>  : ^^^^^^
 
             user = User.B;
 >user = User.B : User.B
+>              : ^^^^^^
 >user : User
+>     : ^^^^
 >User.B : User.B
+>       : ^^^^^^
 >User : typeof User
+>     : ^^^^^^^^^^^
 >B : User.B
+>  : ^^^^^^
 
             continue label;
 >label : any
+>      : ^^^
 
         case User.B:
 >User.B : User.B
+>       : ^^^^^^
 >User : typeof User
+>     : ^^^^^^^^^^^
 >B : User.B
+>  : ^^^^^^
 
             break label;
 >label : any
+>      : ^^^
     }
 }
 user;
 >user : User.B
+>     : ^^^^^^
 

@@ -1,3 +1,89 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoForJSDocUnknownTag.ts ===
+// /**
+//  * @example
+//  * if (true) {
+//  *     foo()
+//  * }
+//  */
+// function foo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | function foo(): string
+// | @example if (true) {
+// |     foo()
+// | }
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  @example
+//  {
+//      foo()
+//  }
+//  */
+// function foo2() {
+//          ^^^^
+// | ----------------------------------------------------------------------
+// | function foo2(): string
+// | @example {
+// |     foo()
+// | }
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  * @example
+//  *   x y
+//  *   12345
+//  *      b
+//  */
+// function moo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | function moo(): string
+// | @example   x y
+// |   12345
+// |      b
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  * @func
+//  * @example
+//  *   x y
+//  *   12345
+//  *      b
+//  */
+// function boo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | function boo(): string
+// | @func 
+// | @example   x y
+// |   12345
+// |      b
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+// /**
+//  * @func
+//  * @example    x y
+//  *             12345
+//  *                b
+//  */
+// function goo() {
+//          ^^^
+// | ----------------------------------------------------------------------
+// | function goo(): string
+// | @func 
+// | @example x y
+// | 12345
+// |    b
+// | ----------------------------------------------------------------------
+//     return '2';
+// }
+
 [
   {
     "marker": {
@@ -5,7 +91,7 @@
       "position": 64,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -66,7 +152,7 @@
       "position": 134,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -127,7 +213,7 @@
       "position": 219,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -188,7 +274,7 @@
       "position": 313,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -252,7 +338,7 @@
       "position": 426,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

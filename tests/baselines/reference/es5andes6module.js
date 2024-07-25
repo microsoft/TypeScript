@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5andes6module.ts] ////
+
 //// [es5andes6module.ts]
 export default class A
 {

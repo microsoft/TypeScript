@@ -1,8 +1,15 @@
-=== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors9.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors9.ts] ////
+
+=== parserAccessors9.ts ===
 var v = { set foo(a, b) { } }
 >v : { foo: any; }
+>  : ^^^^^^^^^^^^^
 >{ set foo(a, b) { } } : { foo: any; }
+>                      : ^^^^^^^^^^^^^
 >foo : any
+>    : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 

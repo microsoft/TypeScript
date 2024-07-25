@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts] ////
+
 //// [errorForUsingPropertyOfTypeAsType01.ts]
 namespace Test1 {
     export interface Foo {

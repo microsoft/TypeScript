@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/classVarianceCircularity.ts] ////
+
+=== classVarianceCircularity.ts ===
+// Issue #52813
+
+function f() {
+>f : () => void
+>  : ^^^^^^^^^^
+
+    const b = new Bar();
+>b : Bar<unknown>
+>  : ^^^^^^^^^^^^
+>new Bar() : Bar<unknown>
+>          : ^^^^^^^^^^^^
+>Bar : typeof Bar
+>    : ^^^^^^^^^^
+
+    // Uncomment to create error
+    console.log(b.Value);
+>console.log(b.Value) : void
+>                     : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>b.Value : number
+>        : ^^^^^^
+>b : Bar<unknown>
+>  : ^^^^^^^^^^^^
+>Value : number
+>      : ^^^^^^
+}
+
+class Bar<T> {
+>Bar : Bar<T>
+>    : ^^^^^^
+
+    num!: number;
+>num : number
+>    : ^^^^^^
+
+    // Or swap these two lines
+    Field: number = (this as Bar<any>).num;
+>Field : number
+>      : ^^^^^^
+>(this as Bar<any>).num : number
+>                       : ^^^^^^
+>(this as Bar<any>) : Bar<any>
+>                   : ^^^^^^^^
+>this as Bar<any> : Bar<any>
+>                 : ^^^^^^^^
+>this : this
+>     : ^^^^
+>num : number
+>    : ^^^^^^
+
+    Value = (this as Bar<any>).num;
+>Value : number
+>      : ^^^^^^
+>(this as Bar<any>).num : number
+>                       : ^^^^^^
+>(this as Bar<any>) : Bar<any>
+>                   : ^^^^^^^^
+>this as Bar<any> : Bar<any>
+>                 : ^^^^^^^^
+>this : this
+>     : ^^^^
+>num : number
+>    : ^^^^^^
+}

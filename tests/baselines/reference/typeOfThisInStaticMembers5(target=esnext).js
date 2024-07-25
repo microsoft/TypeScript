@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers5.ts] ////
+
 //// [typeOfThisInStaticMembers5.ts]
 class C {
     static create = () => new this("yep")

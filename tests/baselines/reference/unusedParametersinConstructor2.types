@@ -1,16 +1,26 @@
-=== tests/cases/compiler/unusedParametersinConstructor2.ts ===
+//// [tests/cases/compiler/unusedParametersinConstructor2.ts] ////
+
+=== unusedParametersinConstructor2.ts ===
 class greeter {
 >greeter : greeter
+>        : ^^^^^^^
 
     constructor(param1: string, param2: string) {
 >param1 : string
+>       : ^^^^^^
 >param2 : string
+>       : ^^^^^^
 
         param2 = param2 + "dummy value";
 >param2 = param2 + "dummy value" : string
+>                                : ^^^^^^
 >param2 : string
+>       : ^^^^^^
 >param2 + "dummy value" : string
+>                       : ^^^^^^
 >param2 : string
+>       : ^^^^^^
 >"dummy value" : "dummy value"
+>              : ^^^^^^^^^^^^^
     }
 }

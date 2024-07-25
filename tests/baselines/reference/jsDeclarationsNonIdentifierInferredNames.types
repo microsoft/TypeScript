@@ -1,21 +1,39 @@
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsNonIdentifierInferredNames.jsx ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsNonIdentifierInferredNames.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
+
+=== jsDeclarationsNonIdentifierInferredNames.jsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 const dynPropName = "data-dyn";
 >dynPropName : "data-dyn"
+>            : ^^^^^^^^^^
 >"data-dyn" : "data-dyn"
+>           : ^^^^^^^^^^
 
 export const ExampleFunctionalComponent = ({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (
 >ExampleFunctionalComponent : ({ "data-testid": dataTestId, [dynPropName]: dynProp }: { "data-testid": any; "data-dyn": any; }) => JSX.Element
+>                           : ^                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (    <>Hello</>) : ({ "data-testid": dataTestId, [dynPropName]: dynProp }: { "data-testid": any; "data-dyn": any; }) => JSX.Element
+>                                                                            : ^                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dataTestId : any
+>           : ^^^
 >dynPropName : "data-dyn"
+>            : ^^^^^^^^^^
 >dynProp : any
+>        : ^^^
 >(    <>Hello</>) : JSX.Element
+>                 : ^^^^^^^^^^^
 
     <>Hello</>
 ><>Hello</> : JSX.Element
+>           : ^^^^^^^^^^^
 
 );

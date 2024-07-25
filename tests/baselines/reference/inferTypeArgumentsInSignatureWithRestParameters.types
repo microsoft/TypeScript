@@ -1,50 +1,83 @@
-=== tests/cases/compiler/inferTypeArgumentsInSignatureWithRestParameters.ts ===
+//// [tests/cases/compiler/inferTypeArgumentsInSignatureWithRestParameters.ts] ////
+
+=== inferTypeArgumentsInSignatureWithRestParameters.ts ===
 function f<T>(array: T[], ...args) { }
 >f : <T>(array: T[], ...args: any[]) => void
+>  : ^ ^^     ^^   ^^^^^    ^^^^^^^^^^^^^^^^
 >array : T[]
+>      : ^^^
 >args : any[]
+>     : ^^^^^
 
 function g(array: number[], ...args) { }
 >g : (array: number[], ...args: any[]) => void
+>  : ^     ^^        ^^^^^    ^^^^^^^^^^^^^^^^
 >array : number[]
+>      : ^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 function h<T>(nonarray: T, ...args) { }
 >h : <T>(nonarray: T, ...args: any[]) => void
+>  : ^ ^^        ^^ ^^^^^    ^^^^^^^^^^^^^^^^
 >nonarray : T
+>         : ^
 >args : any[]
+>     : ^^^^^
 
 function i<T>(array: T[], opt?: any[]) { }
 >i : <T>(array: T[], opt?: any[]) => void
+>  : ^ ^^     ^^   ^^   ^^^     ^^^^^^^^^
 >array : T[]
+>      : ^^^
 >opt : any[]
+>    : ^^^^^
 
 var a = [1, 2, 3, 4, 5];
 >a : number[]
+>  : ^^^^^^^^
 >[1, 2, 3, 4, 5] : number[]
+>                : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >5 : 5
+>  : ^
 
 f(a); // OK
 >f(a) : void
+>     : ^^^^
 >f : <T>(array: T[], ...args: any[]) => void
+>  : ^ ^^     ^^   ^^^^^    ^^^^^^^^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 
 g(a); // OK
 >g(a) : void
+>     : ^^^^
 >g : (array: number[], ...args: any[]) => void
+>  : ^     ^^        ^^^^^    ^^^^^^^^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 
 h(a); // OK
 >h(a) : void
+>     : ^^^^
 >h : <T>(nonarray: T, ...args: any[]) => void
+>  : ^ ^^        ^^ ^^^^^    ^^^^^^^^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 
 i(a); // OK
 >i(a) : void
+>     : ^^^^
 >i : <T>(array: T[], opt?: any[]) => void
+>  : ^ ^^     ^^   ^^   ^^^     ^^^^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 

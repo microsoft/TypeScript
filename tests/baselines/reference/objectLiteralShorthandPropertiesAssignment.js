@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignment.ts] ////
+
 //// [objectLiteralShorthandPropertiesAssignment.ts]
 var id: number = 10000;
 var name: string = "my name";

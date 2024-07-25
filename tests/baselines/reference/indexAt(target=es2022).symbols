@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexAt.ts ===
+//// [tests/cases/compiler/indexAt.ts] ////
+
+=== indexAt.ts ===
 [0].at(0);
 >[0].at : Symbol(Array.at, Decl(lib.es2022.array.d.ts, --, --))
 >at : Symbol(Array.at, Decl(lib.es2022.array.d.ts, --, --))
@@ -9,47 +11,47 @@
 
 new Int8Array().at(0);
 >new Int8Array().at : Symbol(Int8Array.at, Decl(lib.es2022.array.d.ts, --, --))
->Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >at : Symbol(Int8Array.at, Decl(lib.es2022.array.d.ts, --, --))
 
 new Uint8Array().at(0);
 >new Uint8Array().at : Symbol(Uint8Array.at, Decl(lib.es2022.array.d.ts, --, --))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >at : Symbol(Uint8Array.at, Decl(lib.es2022.array.d.ts, --, --))
 
 new Uint8ClampedArray().at(0);
 >new Uint8ClampedArray().at : Symbol(Uint8ClampedArray.at, Decl(lib.es2022.array.d.ts, --, --))
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >at : Symbol(Uint8ClampedArray.at, Decl(lib.es2022.array.d.ts, --, --))
 
 new Int16Array().at(0);
 >new Int16Array().at : Symbol(Int16Array.at, Decl(lib.es2022.array.d.ts, --, --))
->Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >at : Symbol(Int16Array.at, Decl(lib.es2022.array.d.ts, --, --))
 
 new Uint16Array().at(0);
 >new Uint16Array().at : Symbol(Uint16Array.at, Decl(lib.es2022.array.d.ts, --, --))
->Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >at : Symbol(Uint16Array.at, Decl(lib.es2022.array.d.ts, --, --))
 
 new Int32Array().at(0);
 >new Int32Array().at : Symbol(Int32Array.at, Decl(lib.es2022.array.d.ts, --, --))
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >at : Symbol(Int32Array.at, Decl(lib.es2022.array.d.ts, --, --))
 
 new Uint32Array().at(0);
 >new Uint32Array().at : Symbol(Uint32Array.at, Decl(lib.es2022.array.d.ts, --, --))
->Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >at : Symbol(Uint32Array.at, Decl(lib.es2022.array.d.ts, --, --))
 
 new Float32Array().at(0);
 >new Float32Array().at : Symbol(Float32Array.at, Decl(lib.es2022.array.d.ts, --, --))
->Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >at : Symbol(Float32Array.at, Decl(lib.es2022.array.d.ts, --, --))
 
 new Float64Array().at(0);
 >new Float64Array().at : Symbol(Float64Array.at, Decl(lib.es2022.array.d.ts, --, --))
->Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >at : Symbol(Float64Array.at, Decl(lib.es2022.array.d.ts, --, --))
 
 new BigInt64Array().at(0);

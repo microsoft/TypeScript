@@ -1,0 +1,199 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     }
+//     private method() { }
+// }
+// /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}RCComp|] = RC1 || RC2;|>
+// <|<[|RCComp|] />|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 8) skipped ---
+  //     }
+  //     private method() { }
+  // }
+  // /*FIND ALL REFS*/<|var [|RCComp|] = RC1 || RC2;|>
+  // <RCComp />
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var RCComp: typeof RC1",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "RCComp",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "RC1",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     }
+//     private method() { }
+// }
+// <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}RCComp|] = RC1 || RC2;|>
+// <|<[|RCComp|] />|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 8) skipped ---
+  //     }
+  //     private method() { }
+  // }
+  // <|var /*FIND ALL REFS*/[|RCComp|] = RC1 || RC2;|>
+  // <RCComp />
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var RCComp: typeof RC1",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "RCComp",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "RC1",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 9) skipped ---
+//     private method() { }
+// }
+// var RCComp = RC1 || RC2;
+// /*FIND ALL REFS*/<RCComp />
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     }
+//     private method() { }
+// }
+// <|var [|{| isWriteAccess: true |}RCComp|] = RC1 || RC2;|>
+// <|</*FIND ALL REFS*/[|RCComp|] />|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 8) skipped ---
+  //     }
+  //     private method() { }
+  // }
+  // <|var [|RCComp|] = RC1 || RC2;|>
+  // </*FIND ALL REFS*/RCComp />
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var RCComp: typeof RC1",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "RCComp",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "typeof",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "RC1",
+      "kind": "className"
+     }
+    ]
+   }
+  ]

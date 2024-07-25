@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/salsa/requireTwoPropertyAccesses.ts] ////
 
 //// [mod.js]
-// @declaration
 module.exports = {
     x: {
         y: "value"
@@ -13,7 +12,6 @@ console.log(value)
 
 
 //// [mod.js]
-// @declaration
 module.exports = {
     x: {
         y: "value"

@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/constructorDeclarations/superCalls/superCallInConstructorWithNoBaseType.ts(3,9): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/superCallInConstructorWithNoBaseType.ts(9,9): error TS2335: 'super' can only be referenced in a derived class.
+superCallInConstructorWithNoBaseType.ts(3,9): error TS2335: 'super' can only be referenced in a derived class.
+superCallInConstructorWithNoBaseType.ts(9,9): error TS2335: 'super' can only be referenced in a derived class.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/superCallInConstructorWithNoBaseType.ts (2 errors) ====
+==== superCallInConstructorWithNoBaseType.ts (2 errors) ====
     class C {
         constructor() {
             super(); // error

@@ -1,195 +1,306 @@
-=== tests/cases/conformance/internalModules/moduleDeclarations/instantiatedModule.ts ===
+//// [tests/cases/conformance/internalModules/moduleDeclarations/instantiatedModule.ts] ////
+
+=== instantiatedModule.ts ===
 // adding the var makes this an instantiated module
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export interface Point { x: number; y: number }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     export var Point = 1;
 >Point : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 // primary expression
 var m: typeof M;
 >m : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 var m = M;
 >m : typeof M
+>  : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 var a1: number;
 >a1 : number
+>   : ^^^^^^
 
 var a1 = M.Point;
 >a1 : number
+>   : ^^^^^^
 >M.Point : number
+>        : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >Point : number
+>      : ^^^^^^
 
 var a1 = m.Point;
 >a1 : number
+>   : ^^^^^^
 >m.Point : number
+>        : ^^^^^^
 >m : typeof M
+>  : ^^^^^^^^
 >Point : number
+>      : ^^^^^^
 
 var p1: { x: number; y: number; }
 >p1 : { x: number; y: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var p1: M.Point;
 >p1 : { x: number; y: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >M : any
+>  : ^^^
 
 // making the point a class instead of an interface 
 // makes this an instantiated mmodule
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     export class Point {
 >Point : Point
+>      : ^^^^^
 
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
 
         static Origin(): Point {
 >Origin : () => Point
+>       : ^^^^^^     
 
             return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
         }
     }
 }
 
 var m2: typeof M2;
 >m2 : typeof M2
+>   : ^^^^^^^^^
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
 var m2 = M2;
 >m2 : typeof M2
+>   : ^^^^^^^^^
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
 // static side of the class
 var a2: typeof M2.Point;
 >a2 : typeof M2.Point
+>   : ^^^^^^^^^^^^^^^
 >M2.Point : typeof M2.Point
+>         : ^^^^^^^^^^^^^^^
 >M2 : typeof M2
+>   : ^^^^^^^^^
 >Point : typeof M2.Point
+>      : ^^^^^^^^^^^^^^^
 
 var a2 = m2.Point;
 >a2 : typeof M2.Point
+>   : ^^^^^^^^^^^^^^^
 >m2.Point : typeof M2.Point
+>         : ^^^^^^^^^^^^^^^
 >m2 : typeof M2
+>   : ^^^^^^^^^
 >Point : typeof M2.Point
+>      : ^^^^^^^^^^^^^^^
 
 var a2 = M2.Point;
 >a2 : typeof M2.Point
+>   : ^^^^^^^^^^^^^^^
 >M2.Point : typeof M2.Point
+>         : ^^^^^^^^^^^^^^^
 >M2 : typeof M2
+>   : ^^^^^^^^^
 >Point : typeof M2.Point
+>      : ^^^^^^^^^^^^^^^
 
 var o: M2.Point = a2.Origin();
 >o : M2.Point
+>  : ^^^^^^^^
 >M2 : any
+>   : ^^^
 >a2.Origin() : M2.Point
+>            : ^^^^^^^^
 >a2.Origin : () => M2.Point
+>          : ^^^^^^^^^^^^^^
 >a2 : typeof M2.Point
+>   : ^^^^^^^^^^^^^^^
 >Origin : () => M2.Point
+>       : ^^^^^^^^^^^^^^
 
 var p2: { x: number; y: number }
 >p2 : { x: number; y: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var p2: M2.Point;
 >p2 : { x: number; y: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >M2 : any
+>   : ^^^
 
 var p2 = new m2.Point();
 >p2 : { x: number; y: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >new m2.Point() : M2.Point
+>               : ^^^^^^^^
 >m2.Point : typeof M2.Point
+>         : ^^^^^^^^^^^^^^^
 >m2 : typeof M2
+>   : ^^^^^^^^^
 >Point : typeof M2.Point
+>      : ^^^^^^^^^^^^^^^
 
 var p2 = new M2.Point();
 >p2 : { x: number; y: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >new M2.Point() : M2.Point
+>               : ^^^^^^^^
 >M2.Point : typeof M2.Point
+>         : ^^^^^^^^^^^^^^^
 >M2 : typeof M2
+>   : ^^^^^^^^^
 >Point : typeof M2.Point
+>      : ^^^^^^^^^^^^^^^
 
 module M3 {
 >M3 : typeof M3
+>   : ^^^^^^^^^
 
     export enum Color { Blue, Red }
 >Color : Color
+>      : ^^^^^
 >Blue : Color.Blue
+>     : ^^^^^^^^^^
 >Red : Color.Red
+>    : ^^^^^^^^^
 }
 
 var m3: typeof M3;
 >m3 : typeof M3
+>   : ^^^^^^^^^
 >M3 : typeof M3
+>   : ^^^^^^^^^
 
 var m3 = M3;
 >m3 : typeof M3
+>   : ^^^^^^^^^
 >M3 : typeof M3
+>   : ^^^^^^^^^
 
 var a3: typeof M3.Color;
 >a3 : typeof M3.Color
+>   : ^^^^^^^^^^^^^^^
 >M3.Color : typeof M3.Color
+>         : ^^^^^^^^^^^^^^^
 >M3 : typeof M3
+>   : ^^^^^^^^^
 >Color : typeof M3.Color
+>      : ^^^^^^^^^^^^^^^
 
 var a3 = m3.Color;
 >a3 : typeof M3.Color
+>   : ^^^^^^^^^^^^^^^
 >m3.Color : typeof M3.Color
+>         : ^^^^^^^^^^^^^^^
 >m3 : typeof M3
+>   : ^^^^^^^^^
 >Color : typeof M3.Color
+>      : ^^^^^^^^^^^^^^^
 
 var a3 = M3.Color;
 >a3 : typeof M3.Color
+>   : ^^^^^^^^^^^^^^^
 >M3.Color : typeof M3.Color
+>         : ^^^^^^^^^^^^^^^
 >M3 : typeof M3
+>   : ^^^^^^^^^
 >Color : typeof M3.Color
+>      : ^^^^^^^^^^^^^^^
 
 var blue: M3.Color = a3.Blue;
 >blue : M3.Color
+>     : ^^^^^^^^
 >M3 : any
+>   : ^^^
 >a3.Blue : M3.Color.Blue
+>        : ^^^^^^^^^^^^^
 >a3 : typeof M3.Color
+>   : ^^^^^^^^^^^^^^^
 >Blue : M3.Color.Blue
+>     : ^^^^^^^^^^^^^
 
 var p3: M3.Color;
 >p3 : M3.Color
+>   : ^^^^^^^^
 >M3 : any
+>   : ^^^
 
 var p3 = M3.Color.Red;
 >p3 : M3.Color
+>   : ^^^^^^^^
 >M3.Color.Red : M3.Color.Red
+>             : ^^^^^^^^^^^^
 >M3.Color : typeof M3.Color
+>         : ^^^^^^^^^^^^^^^
 >M3 : typeof M3
+>   : ^^^^^^^^^
 >Color : typeof M3.Color
+>      : ^^^^^^^^^^^^^^^
 >Red : M3.Color.Red
+>    : ^^^^^^^^^^^^
 
 var p3 = m3.Color.Blue;
 >p3 : M3.Color
+>   : ^^^^^^^^
 >m3.Color.Blue : M3.Color.Blue
+>              : ^^^^^^^^^^^^^
 >m3.Color : typeof M3.Color
+>         : ^^^^^^^^^^^^^^^
 >m3 : typeof M3
+>   : ^^^^^^^^^
 >Color : typeof M3.Color
+>      : ^^^^^^^^^^^^^^^
 >Blue : M3.Color.Blue
+>     : ^^^^^^^^^^^^^
 

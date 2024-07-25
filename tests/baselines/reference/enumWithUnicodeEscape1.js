@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumWithUnicodeEscape1.ts] ////
+
 //// [enumWithUnicodeEscape1.ts]
 enum E {
   'gold \u2730'

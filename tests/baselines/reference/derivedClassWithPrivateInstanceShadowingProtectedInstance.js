@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingProtectedInstance.ts] ////
+
 //// [derivedClassWithPrivateInstanceShadowingProtectedInstance.ts]
 class Base {
     protected x: string;

@@ -1,15 +1,19 @@
-=== tests/cases/compiler/modules.d.ts ===
+//// [tests/cases/compiler/reactNamespaceImportPresevation.tsx] ////
+
+=== modules.d.ts ===
 declare module "my-React-Lib" {
 >"my-React-Lib" : typeof import("my-React-Lib")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var a: any;
 >a : any
 
     export = a;
 >a : any
+>  : ^^^
 }
 
-=== tests/cases/compiler/test.tsx ===
+=== test.tsx ===
 import * as myReactLib from "my-React-Lib"; // should not be elided
 >myReactLib : any
 
@@ -19,5 +23,7 @@ declare var foo: any;
 <foo data/>;
 ><foo data/> : error
 >foo : any
+>    : ^^^
 >data : true
+>     : ^^^^
 

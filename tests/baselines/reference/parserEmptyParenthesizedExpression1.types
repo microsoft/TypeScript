@@ -1,11 +1,19 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserEmptyParenthesizedExpression1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserEmptyParenthesizedExpression1.ts] ////
+
+=== parserEmptyParenthesizedExpression1.ts ===
 function getObj() {
 >getObj : () => void
+>       : ^^^^^^^^^^
 
    ().toString();
 >().toString() : any
+>              : ^^^
 >().toString : any
+>            : ^^^
 >() : any
+>   : ^^^
 > : any
+> : ^^^
 >toString : any
+>         : ^^^
 }

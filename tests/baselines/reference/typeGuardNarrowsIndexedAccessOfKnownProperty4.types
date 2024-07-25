@@ -1,36 +1,56 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty4.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty4.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty4.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     x: number | undefined;
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     constructor() {
         this.x = 5;
 >this.x = 5 : 5
+>           : ^
 >this.x : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >5 : 5
+>  : ^
 
         this.x;    // number
 >this.x : number
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : number
+>  : ^^^^^^
 
         this['x']; // number
 >this['x'] : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >'x' : "x"
+>    : ^^^
 
         const key = 'x';
 >key : "x"
+>    : ^^^
 >'x' : "x"
+>    : ^^^
 
         this[key]; // number
 >this[key] : number
+>          : ^^^^^^
 >this : this
+>     : ^^^^
 >key : "x"
+>    : ^^^
     }
 }
 

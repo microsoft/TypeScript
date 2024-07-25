@@ -1,4 +1,6 @@
-=== tests/cases/conformance/override/override9.ts ===
+//// [tests/cases/conformance/override/override9.ts] ////
+
+=== override9.ts ===
 interface B {
 >B : Symbol(B, Decl(override9.ts, 0, 0))
 

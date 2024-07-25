@@ -1,3 +1,34 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoForObjectBindingElementName04.ts ===
+// interface Options {
+//    /**
+//     * A description of 'a'
+//     */
+//     a: {
+//        /**
+//         * A description of 'b'
+//         */
+//        b: string;
+//    }
+// }
+// 
+// function f({ a, a: { b } }: Options) {
+//     a;
+//     ^
+// | ----------------------------------------------------------------------
+// | (parameter) a: {
+// |     b: string;
+// | }
+// | A description of 'a'
+// | ----------------------------------------------------------------------
+//     b;
+//     ^
+// | ----------------------------------------------------------------------
+// | (parameter) b: string
+// | A description of 'b'
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,7 +36,7 @@
       "position": 193,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -96,7 +127,7 @@
       "position": 200,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {

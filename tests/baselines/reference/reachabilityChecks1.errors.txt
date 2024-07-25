@@ -1,11 +1,11 @@
-tests/cases/compiler/reachabilityChecks1.ts(2,1): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks1.ts(6,5): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks1.ts(18,5): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks1.ts(30,5): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks1.ts(47,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(2,1): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(6,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(18,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(30,5): error TS7027: Unreachable code detected.
+reachabilityChecks1.ts(47,5): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/compiler/reachabilityChecks1.ts (5 errors) ====
+==== reachabilityChecks1.ts (5 errors) ====
     while (true);
     var x = 1;
     ~~~~~~~~~~

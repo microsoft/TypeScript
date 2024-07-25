@@ -12,6 +12,6 @@ verify.completions({
         name: "foo",
         kind: "var",
         kindModifiers: "export,deprecated",
-        sortText: completion.SortText.DeprecatedLocationPriority
+        sortText: completion.SortText.Deprecated(completion.SortText.LocationPriority),
     }]
 });

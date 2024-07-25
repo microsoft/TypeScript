@@ -1,25 +1,43 @@
-=== tests/cases/compiler/arityErrorRelatedSpanBindingPattern.ts ===
+//// [tests/cases/compiler/arityErrorRelatedSpanBindingPattern.ts] ////
+
+=== arityErrorRelatedSpanBindingPattern.ts ===
 function foo(a, b, {c}): void {}
 >foo : (a: any, b: any, { c }: { c: any; }) => void
+>    : ^ ^^^^^^^ ^^^^^^^     ^^^^^^^^^^^^^^^^^^    
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 function bar(a, b, [c]): void {}
 >bar : (a: any, b: any, [c]: [any]) => void
+>    : ^ ^^^^^^^ ^^^^^^^   ^^^^^^^^^^^^    
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 foo("", 0);
 >foo("", 0) : void
+>           : ^^^^
 >foo : (a: any, b: any, { c }: { c: any; }) => void
+>    : ^ ^^^^^^^ ^^^^^^^     ^^^^^^^^^^^^^^^^^^    
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 
 bar("", 0);
 >bar("", 0) : void
+>           : ^^^^
 >bar : (a: any, b: any, [c]: [any]) => void
+>    : ^ ^^^^^^^ ^^^^^^^   ^^^^^^^^^^^^    
 >"" : ""
+>   : ^^
 >0 : 0
+>  : ^
 

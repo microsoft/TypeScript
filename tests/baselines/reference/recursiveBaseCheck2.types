@@ -1,45 +1,76 @@
-=== tests/cases/compiler/recursiveBaseCheck2.ts ===
+//// [tests/cases/compiler/recursiveBaseCheck2.ts] ////
+
+=== recursiveBaseCheck2.ts ===
 declare module Box2D.Collision.Shapes {
 >Box2D : typeof Box2D
+>      : ^^^^^^^^^^^^
 >Collision : typeof Collision
+>          : ^^^^^^^^^^^^^^^^
 >Shapes : typeof Shapes
+>       : ^^^^^^^^^^^^^
 
     export class b2CircleShape extends b2Shape {
 >b2CircleShape : b2CircleShape
+>              : ^^^^^^^^^^^^^
 >b2Shape : typeof b2Shape
+>        : ^^^^^^^^^^^^^^
     }
     export class b2Shape extends Box2D.Collision.Shapes.b2CircleShape {
 >b2Shape : b2Shape
+>        : ^^^^^^^
 >Box2D.Collision.Shapes.b2CircleShape : typeof b2CircleShape
+>                                     : ^^^^^^^^^^^^^^^^^^^^
 >Box2D.Collision.Shapes : typeof Shapes
+>                       : ^^^^^^^^^^^^^
 >Box2D.Collision : typeof Collision
+>                : ^^^^^^^^^^^^^^^^
 >Box2D : typeof Box2D
+>      : ^^^^^^^^^^^^
 >Collision : typeof Collision
+>          : ^^^^^^^^^^^^^^^^
 >Shapes : typeof Shapes
+>       : ^^^^^^^^^^^^^
 >b2CircleShape : typeof b2CircleShape
+>              : ^^^^^^^^^^^^^^^^^^^^
     }
 }
 declare module Box2D.Dynamics {
 >Box2D : typeof Box2D
+>      : ^^^^^^^^^^^^
 >Dynamics : typeof Dynamics
+>         : ^^^^^^^^^^^^^^^
 
     export class b2ContactListener extends Box2D.Collision.Shapes.b2Shape {
 >b2ContactListener : b2ContactListener
+>                  : ^^^^^^^^^^^^^^^^^
 >Box2D.Collision.Shapes.b2Shape : Collision.Shapes.b2Shape
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Box2D.Collision.Shapes : typeof Collision.Shapes
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
 >Box2D.Collision : typeof Collision
+>                : ^^^^^^^^^^^^^^^^
 >Box2D : typeof Box2D
+>      : ^^^^^^^^^^^^
 >Collision : typeof Collision
+>          : ^^^^^^^^^^^^^^^^
 >Shapes : typeof Collision.Shapes
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >b2Shape : typeof Collision.Shapes.b2Shape
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     export class b2FixtureDef extends Box2D.Dynamics.b2ContactListener {
 >b2FixtureDef : b2FixtureDef
+>             : ^^^^^^^^^^^^
 >Box2D.Dynamics.b2ContactListener : b2ContactListener
+>                                 : ^^^^^^^^^^^^^^^^^
 >Box2D.Dynamics : typeof Dynamics
+>               : ^^^^^^^^^^^^^^^
 >Box2D : typeof Box2D
+>      : ^^^^^^^^^^^^
 >Dynamics : typeof Dynamics
+>         : ^^^^^^^^^^^^^^^
 >b2ContactListener : typeof b2ContactListener
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

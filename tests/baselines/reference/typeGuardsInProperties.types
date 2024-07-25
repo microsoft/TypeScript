@@ -1,124 +1,209 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardsInProperties.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsInProperties.ts] ////
+
+=== typeGuardsInProperties.ts ===
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
 
 var num: number;
 >num : number
+>    : ^^^^^^
 
 var strOrNum: string | number;
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 
 class C1 {
 >C1 : C1
+>   : ^^
 
     private pp1: string | number;
 >pp1 : string | number
+>    : ^^^^^^^^^^^^^^^
 
     pp2: string | number;
 >pp2 : string | number
+>    : ^^^^^^^^^^^^^^^
 
     // Inside public accessor getter
     get pp3() {
 >pp3 : string | number
+>    : ^^^^^^^^^^^^^^^
 
         return strOrNum;
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
     }
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         strOrNum = typeof this.pp1 === "string" && this.pp1; // string | number
 >strOrNum = typeof this.pp1 === "string" && this.pp1 : string
+>                                                    : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >typeof this.pp1 === "string" && this.pp1 : string
+>                                         : ^^^^^^
 >typeof this.pp1 === "string" : boolean
+>                             : ^^^^^^^
 >typeof this.pp1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.pp1 : string | number
+>         : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >pp1 : string | number
+>    : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >this.pp1 : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >pp1 : string
+>    : ^^^^^^
 
         strOrNum = typeof this.pp2 === "string" && this.pp2; // string | number
 >strOrNum = typeof this.pp2 === "string" && this.pp2 : string
+>                                                    : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >typeof this.pp2 === "string" && this.pp2 : string
+>                                         : ^^^^^^
 >typeof this.pp2 === "string" : boolean
+>                             : ^^^^^^^
 >typeof this.pp2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.pp2 : string | number
+>         : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >pp2 : string | number
+>    : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >this.pp2 : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >pp2 : string
+>    : ^^^^^^
 
         strOrNum = typeof this.pp3 === "string" && this.pp3; // string | number
 >strOrNum = typeof this.pp3 === "string" && this.pp3 : string
+>                                                    : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >typeof this.pp3 === "string" && this.pp3 : string
+>                                         : ^^^^^^
 >typeof this.pp3 === "string" : boolean
+>                             : ^^^^^^^
 >typeof this.pp3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.pp3 : string | number
+>         : ^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >pp3 : string | number
+>    : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >this.pp3 : string
+>         : ^^^^^^
 >this : this
+>     : ^^^^
 >pp3 : string
+>    : ^^^^^^
     }
 }
 var c1: C1;
 >c1 : C1
+>   : ^^
 
 strOrNum = typeof c1.pp2 === "string" && c1.pp2; // string | number
 >strOrNum = typeof c1.pp2 === "string" && c1.pp2 : string
+>                                                : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >typeof c1.pp2 === "string" && c1.pp2 : string
+>                                     : ^^^^^^
 >typeof c1.pp2 === "string" : boolean
+>                           : ^^^^^^^
 >typeof c1.pp2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c1.pp2 : string | number
+>       : ^^^^^^^^^^^^^^^
 >c1 : C1
+>   : ^^
 >pp2 : string | number
+>    : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >c1.pp2 : string
+>       : ^^^^^^
 >c1 : C1
+>   : ^^
 >pp2 : string
+>    : ^^^^^^
 
 strOrNum = typeof c1.pp3 === "string" && c1.pp3; // string | number
 >strOrNum = typeof c1.pp3 === "string" && c1.pp3 : string
+>                                                : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >typeof c1.pp3 === "string" && c1.pp3 : string
+>                                     : ^^^^^^
 >typeof c1.pp3 === "string" : boolean
+>                           : ^^^^^^^
 >typeof c1.pp3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c1.pp3 : string | number
+>       : ^^^^^^^^^^^^^^^
 >c1 : C1
+>   : ^^
 >pp3 : string | number
+>    : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >c1.pp3 : string
+>       : ^^^^^^
 >c1 : C1
+>   : ^^
 >pp3 : string
+>    : ^^^^^^
 
 var obj1: {
 >obj1 : { x: string | number; }
+>     : ^^^^^               ^^^
 
     x: string | number;
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 
 };
 strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
 >strOrNum = typeof obj1.x === "string" && obj1.x : string
+>                                                : ^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 >typeof obj1.x === "string" && obj1.x : string
+>                                     : ^^^^^^
 >typeof obj1.x === "string" : boolean
+>                           : ^^^^^^^
 >typeof obj1.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj1.x : string | number
+>       : ^^^^^^^^^^^^^^^
 >obj1 : { x: string | number; }
+>     : ^^^^^               ^^^
 >x : string | number
+>  : ^^^^^^^^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >obj1.x : string
+>       : ^^^^^^
 >obj1 : { x: string | number; }
+>     : ^^^^^               ^^^
 >x : string
+>  : ^^^^^^
 

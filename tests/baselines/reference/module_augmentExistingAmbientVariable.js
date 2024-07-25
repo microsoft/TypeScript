@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/module_augmentExistingAmbientVariable.ts] ////
+
 //// [module_augmentExistingAmbientVariable.ts]
 declare var console: any;
 

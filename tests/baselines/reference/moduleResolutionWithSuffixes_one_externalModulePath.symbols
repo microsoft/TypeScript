@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_one_externalModulePath.ts] ////
+
+=== /index.ts ===
+import { iosfoo } from "some-library/foo";
+>iosfoo : Symbol(iosfoo, Decl(index.ts, 0, 8))
+
+=== /node_modules/some-library/foo.ios.d.ts ===
+export declare function iosfoo(): void;
+>iosfoo : Symbol(iosfoo, Decl(foo.ios.d.ts, 0, 0))
+

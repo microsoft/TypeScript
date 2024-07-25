@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesAndFields.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAndFields.ts] ////
+
+=== privateNamesAndFields.ts ===
 class A {
 >A : Symbol(A, Decl(privateNamesAndFields.ts, 0, 0))
 

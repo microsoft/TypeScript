@@ -1,53 +1,84 @@
-=== tests/cases/compiler/unusedParametersWithUnderscore.ts ===
+//// [tests/cases/compiler/unusedParametersWithUnderscore.ts] ////
+
+=== unusedParametersWithUnderscore.ts ===
 function f(a, _b, c, ___, d,e___, _f) {
 >f : (a: any, _b: any, c: any, ___: any, d: any, e___: any, _f: any) => void
+>  : ^ ^^^^^^^  ^^^^^^^ ^^^^^^^   ^^^^^^^ ^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >_b : any
+>   : ^^^
 >c : any
+>  : ^^^
 >___ : any
+>    : ^^^
 >d : any
+>  : ^^^
 >e___ : any
+>     : ^^^
 >_f : any
+>   : ^^^
 }
 
 
 function f2({_a, __b}) {
 >f2 : ({ _a, __b }: { _a: any; __b: any; }) => void
+>   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_a : any
+>   : ^^^
 >__b : any
+>    : ^^^
 }
 
 function f3([_a, ,__b]) {
 >f3 : ([_a, , __b]: [any, any, any]) => void
+>   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_a : any
+>   : ^^^
 > : undefined
+> : ^^^^^^^^^
 >__b : any
+>    : ^^^
 }
 
 function f4(...arg) {
 >f4 : (...arg: any[]) => void
+>   : ^^^^   ^^^^^^^^^^^^^^^^
 >arg : any[]
+>    : ^^^^^
 }
 
 function f5(..._arg) {
 >f5 : (..._arg: any[]) => void
+>   : ^^^^    ^^^^^^^^^^^^^^^^
 >_arg : any[]
+>     : ^^^^^
 }
 
 function f6(arg?, _arg?) {
 >f6 : (arg?: any, _arg?: any) => void
+>   : ^   ^^^^^^^^    ^^^^^^^^^^^^^^^
 >arg : any
+>    : ^^^
 >_arg : any
+>     : ^^^
 }
 
 var f7 = _ => undefined;
 >f7 : (_: any) => any
+>   : ^ ^^^^^^^^^^^^^
 >_ => undefined : (_: any) => any
+>               : ^ ^^^^^^^^^^^^^
 >_ : any
+>  : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var f8 = function (_) { };
 >f8 : (_: any) => void
+>   : ^ ^^^^^^^^^^^^^^
 >function (_) { } : (_: any) => void
+>                 : ^ ^^^^^^^^^^^^^^
 >_ : any
+>  : ^^^
 

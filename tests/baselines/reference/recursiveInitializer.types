@@ -1,15 +1,22 @@
-=== tests/cases/conformance/statements/VariableStatements/recursiveInitializer.ts ===
+//// [tests/cases/conformance/statements/VariableStatements/recursiveInitializer.ts] ////
+
+=== recursiveInitializer.ts ===
 // number unless otherwise specified
 var n1 = n1++;
 >n1 : any
 >n1++ : number
+>     : ^^^^^^
 >n1 : any
 
 var n2: number = n2 + n2;
 >n2 : number
+>   : ^^^^^^
 >n2 + n2 : number
+>        : ^^^^^^
 >n2 : number
+>   : ^^^^^^
 >n2 : number
+>   : ^^^^^^
 
 var n3 /* any */ = n3 + n3;
 >n3 : any
@@ -21,8 +28,10 @@ var n3 /* any */ = n3 + n3;
 var s1 = s1 + '';
 >s1 : any
 >s1 + '' : string
+>        : ^^^^^^
 >s1 : any
 >'' : ""
+>   : ^^
 
 var s2 /* any */ = s2 + s2;
 >s2 : any
@@ -32,32 +41,42 @@ var s2 /* any */ = s2 + s2;
 
 var s3 : string = s3 + s3;
 >s3 : string
+>   : ^^^^^^
 >s3 + s3 : string
+>        : ^^^^^^
 >s3 : string
+>   : ^^^^^^
 >s3 : string
+>   : ^^^^^^
 
 var s4 = '' + s4;
 >s4 : any
 >'' + s4 : string
+>        : ^^^^^^
 >'' : ""
+>   : ^^
 >s4 : any
 
 // boolean unless otherwise specified
 var b1 = !b1;
 >b1 : any
 >!b1 : boolean
+>    : ^^^^^^^
 >b1 : any
 
 var b2 = !!b2;
 >b2 : any
 >!!b2 : boolean
+>     : ^^^^^^^
 >!b2 : boolean
+>    : ^^^^^^^
 >b2 : any
 
 var b3 = !b3 || b3; // expected boolean here. actually 'any'
 >b3 : any
 >!b3 || b3 : any
 >!b3 : boolean
+>    : ^^^^^^^
 >b3 : any
 >b3 : any
 
@@ -65,16 +84,23 @@ var b4 = (!b4) && b4; // expected boolean here. actually 'any'
 >b4 : any
 >(!b4) && b4 : any
 >(!b4) : boolean
+>      : ^^^^^^^
 >!b4 : boolean
+>    : ^^^^^^^
 >b4 : any
 >b4 : any
 
 // (x:string) => any
 var f = (x: string) => f(x);
 >f : (x: string) => any
+>  : ^ ^^      ^^^^^^^^
 >(x: string) => f(x) : (x: string) => any
+>                    : ^ ^^      ^^^^^^^^
 >x : string
+>  : ^^^^^^
 >f(x) : any
 >f : (x: string) => any
+>  : ^ ^^      ^^^^^^^^
 >x : string
+>  : ^^^^^^
 

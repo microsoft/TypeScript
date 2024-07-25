@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts] ////
+
 //// [for-inStatementsInvalid.ts]
 var aNumber: number;
 for (aNumber in {}) { }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFactoryIdentifierWithAbsentParameter.ts] ////
+
 //// [test.tsx]
 declare module JSX {
     interface IntrinsicElements {

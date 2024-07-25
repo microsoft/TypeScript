@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asiInES6Classes.ts] ////
+
 //// [asiInES6Classes.ts]
 class Foo {
 

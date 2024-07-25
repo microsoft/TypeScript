@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayLiteralAndArrayConstructorEquivalence1.ts ===
+//// [tests/cases/compiler/arrayLiteralAndArrayConstructorEquivalence1.ts] ////
+
+=== arrayLiteralAndArrayConstructorEquivalence1.ts ===
 var myCars=new Array(); 
 >myCars : Symbol(myCars, Decl(arrayLiteralAndArrayConstructorEquivalence1.ts, 0, 3))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

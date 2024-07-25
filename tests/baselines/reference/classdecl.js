@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classdecl.ts] ////
+
 //// [classdecl.ts]
 class a {
     //constructor ();
@@ -233,14 +235,14 @@ declare class a {
 }
 declare class b extends a {
 }
-declare module m1 {
+declare namespace m1 {
     class b {
     }
     interface ib {
     }
 }
-declare module m2 {
-    module m3 {
+declare namespace m2 {
+    namespace m3 {
         class c extends b {
         }
         class ib2 implements m1.ib {

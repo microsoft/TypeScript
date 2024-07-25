@@ -1,0 +1,65 @@
+// === findAllReferences ===
+// === /a.ts ===
+// /*FIND ALL REFS*/<|export { [|{| isWriteAccess: true, isDefinition: true |}x|] } from "nonsense";|>
+
+  // === Definitions ===
+  // === /a.ts ===
+  // /*FIND ALL REFS*/<|export { [|x|] } from "nonsense";|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export x",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.ts ===
+// <|export { /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|] } from "nonsense";|>
+
+  // === Definitions ===
+  // === /a.ts ===
+  // <|export { /*FIND ALL REFS*/[|x|] } from "nonsense";|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export x",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfBoolean.ts] ////
+
 //// [typeGuardOfFormTypeOfBoolean.ts]
 class C { private p: string };
 

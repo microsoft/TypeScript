@@ -1,4 +1,6 @@
-=== tests/cases/compiler/matchingOfObjectLiteralConstraints.ts ===
+//// [tests/cases/compiler/matchingOfObjectLiteralConstraints.ts] ////
+
+=== matchingOfObjectLiteralConstraints.ts ===
 function foo2<T, U extends { y: T; }>(x: U, z: T) { }
 >foo2 : Symbol(foo2, Decl(matchingOfObjectLiteralConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(matchingOfObjectLiteralConstraints.ts, 0, 14))

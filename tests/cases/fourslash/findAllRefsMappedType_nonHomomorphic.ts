@@ -3,8 +3,8 @@
 // @strict: true
 
 ////function f(x: { [K in "m"]: number; }) {
-////    x.[|m|];
-////    x.[|m|]
+////    x./*1*/m;
+////    x./*2*/m
 ////}
 
-verify.singleReferenceGroup("(property) m: number");
+verify.baselineFindAllReferences('1', '2');

@@ -1,0 +1,72 @@
+//// [tests/cases/conformance/jsdoc/extendsTag5.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef {{
+*     a: number | string;
+*     b: boolean | string[];
+* }} Foo
+*/
+
+/**
+* @template {Foo} T
+*/
+class A {
+>A : A<T>
+>  : ^^^^
+
+   /**
+    * @param {T} a
+    */
+   constructor(a) {
+>a : T
+>  : ^
+
+       return a
+>a : T
+>  : ^
+   }
+}
+
+/**
+* @extends {A<{
+*     a: string,
+*     b: string[]
+* }>}
+*/
+class B extends A {}
+>B : B
+>  : ^
+>A : A<{ a: string; b: string[]; }>
+>  : ^^^^^^^      ^^^^^        ^^^^
+
+/**
+ * @extends {A<{
+ *     a: string,
+ *     b: string
+ * }>}
+ */
+class C extends A {}
+>C : C
+>  : ^
+>A : A<{ a: string; b: string; }>
+>  : ^^^^^^^      ^^^^^      ^^^^
+
+/**
+ * @extends {A<{a: string, b: string[]}>}
+ */
+class D extends A {}
+>D : D
+>  : ^
+>A : A<{ a: string; b: string[]; }>
+>  : ^^^^^^^      ^^^^^        ^^^^
+
+/**
+ * @extends {A<{a: string, b: string}>}
+ */
+class E extends A {}
+>E : E
+>  : ^
+>A : A<{ a: string; b: string; }>
+>  : ^^^^^^^      ^^^^^      ^^^^
+

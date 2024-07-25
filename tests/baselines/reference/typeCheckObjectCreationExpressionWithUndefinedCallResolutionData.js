@@ -13,16 +13,15 @@ f.foo();
 
 //// [file1.js]
 "use strict";
-exports.__esModule = true;
-exports.foo = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = foo;
 function foo() {
     var classes = undefined;
     return new classes(null);
 }
-exports.foo = foo;
 //// [file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var f = require("./file1");
 f.foo();
 

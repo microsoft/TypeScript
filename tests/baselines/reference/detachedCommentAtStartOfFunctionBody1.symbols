@@ -1,4 +1,6 @@
-=== tests/cases/compiler/detachedCommentAtStartOfFunctionBody1.ts ===
+//// [tests/cases/compiler/detachedCommentAtStartOfFunctionBody1.ts] ////
+
+=== detachedCommentAtStartOfFunctionBody1.ts ===
 class TestFile {
 >TestFile : Symbol(TestFile, Decl(detachedCommentAtStartOfFunctionBody1.ts, 0, 0))
 

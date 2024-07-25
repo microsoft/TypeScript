@@ -1,47 +1,70 @@
-=== tests/cases/compiler/staticMethodReferencingTypeArgument1.ts ===
+//// [tests/cases/compiler/staticMethodReferencingTypeArgument1.ts] ////
+
+=== staticMethodReferencingTypeArgument1.ts ===
 module Editor {
 >Editor : typeof Editor
+>       : ^^^^^^^^^^^^^
 
     export class List<T> {
 >List : List<T>
+>     : ^^^^^^^
 
         next: List<T>;
 >next : List<T>
+>     : ^^^^^^^
 
         prev: List<T>;
 >prev : List<T>
+>     : ^^^^^^^
 
         constructor(public isHead: boolean, public data: T) {
 >isHead : boolean
+>       : ^^^^^^^
 >data : T
+>     : ^
         }
 
         static MakeHead(): List<T> {
 >MakeHead : () => List<T>
+>         : ^^^^^^       
 
             var entry: List<T> = new List<T>(true, null); // can't access T here
 >entry : List<T>
+>      : ^^^^^^^
 >new List<T>(true, null) : List<T>
+>                        : ^^^^^^^
 >List : typeof List
+>     : ^^^^^^^^^^^
 >true : true
->null : null
+>     : ^^^^
 
             entry.prev = entry;
 >entry.prev = entry : List<T>
+>                   : ^^^^^^^
 >entry.prev : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >prev : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             entry.next = entry;
 >entry.next = entry : List<T>
+>                   : ^^^^^^^
 >entry.next : List<T>
+>           : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 >next : List<T>
+>     : ^^^^^^^
 >entry : List<T>
+>      : ^^^^^^^
 
             return entry;
 >entry : List<T>
+>      : ^^^^^^^
         }
     }
 }

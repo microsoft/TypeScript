@@ -1,5 +1,7 @@
-=== tests/cases/compiler/jsxDeclarationsWithEsModuleInteropNoCrash.jsx ===
-/// <reference path="react16.d.ts" />
+//// [tests/cases/compiler/jsxDeclarationsWithEsModuleInteropNoCrash.tsx] ////
+
+=== jsxDeclarationsWithEsModuleInteropNoCrash.jsx ===
+/// <reference path="react16.d.ts" preserve="true" />
 import PropTypes from 'prop-types';
 >PropTypes : Symbol(PropTypes, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 1, 6))
 

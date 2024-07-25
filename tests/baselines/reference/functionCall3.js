@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionCall3.ts] ////
+
 //// [functionCall3.ts]
 function foo():any[]{return [1];} 
 var x = foo();

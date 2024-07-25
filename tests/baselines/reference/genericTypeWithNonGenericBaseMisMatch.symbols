@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts ===
+//// [tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts] ////
+
+=== genericTypeWithNonGenericBaseMisMatch.ts ===
 interface I {
 >I : Symbol(I, Decl(genericTypeWithNonGenericBaseMisMatch.ts, 0, 0))
 

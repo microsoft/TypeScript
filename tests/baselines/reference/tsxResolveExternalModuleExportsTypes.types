@@ -1,38 +1,55 @@
+//// [tests/cases/compiler/tsxResolveExternalModuleExportsTypes.ts] ////
+
+=== Performance Stats ===
+Type Count: 2,500
+Instantiation count: 1,000
+
 === /node_modules/@types/a/index.d.ts ===
 declare var a: a.Foo;
 >a : import("/node_modules/@types/a/index.d.ts").Foo
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 
 declare namespace a {
     interface Foo {}
 }
 export = a;
 >a : import("/node_modules/@types/a/index.d.ts").Foo
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === /node_modules/@types/b/index.d.ts ===
 import * as a from 'a';
 >a : a.Foo
+>  : ^^^^^
 
 declare module 'a' {
 >'a' : Foo
+>    : ^^^
 
     namespace Test {}
 
     interface Foo {
         Test: null;
 >Test : null
->null : null
+>     : ^^^^
     }
 }
 
-=== tests/cases/compiler/foo.tsx ===
+=== foo.tsx ===
 import { Test } from 'a';
 >Test : null
+>     : ^^^^
 
 const Foo = (<h1></h1>);
 >Foo : JSX.Element
+>    : ^^^^^^^^^^^
 >(<h1></h1>) : JSX.Element
+>            : ^^^^^^^^^^^
 ><h1></h1> : JSX.Element
+>          : ^^^^^^^^^^^
 >h1 : any
+>   : ^^^
 >h1 : any
+>   : ^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts ===
+//// [tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts] ////
+
+=== getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts ===
 declare function _<T>(value: Array<T>): _<T>;
 >_ : Symbol(_, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 0), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 45), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 1, 38), Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 12, 1))
 >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 0, 19))

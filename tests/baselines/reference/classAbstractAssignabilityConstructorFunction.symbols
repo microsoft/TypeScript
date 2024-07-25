@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts] ////
+
+=== classAbstractAssignabilityConstructorFunction.ts ===
 abstract class A { }
 >A : Symbol(A, Decl(classAbstractAssignabilityConstructorFunction.ts, 0, 0))
 

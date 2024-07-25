@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportAssignmentWithDeclareModifier.ts] ////
+
 //// [exportAssignmentWithDeclareModifier.ts]
 var x;
 declare export = x;

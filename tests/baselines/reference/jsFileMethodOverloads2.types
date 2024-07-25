@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/jsFileMethodOverloads2.ts] ////
+
+=== jsFileMethodOverloads2.js ===
+// Also works if all @overload tags are combined in one comment.
+/**
+ * @template T
+ */
+ class Example {
+>Example : Example<T>
+>        : ^^^^^^^^^^
+
+  /**
+   * @param {T} value 
+   */
+  constructor(value) {
+>value : T
+>      : ^
+
+    this.value = value;
+>this.value = value : T
+>                   : ^
+>this.value : any
+>this : this
+>     : ^^^^
+>value : any
+>      : ^^^
+>value : T
+>      : ^
+  }
+
+  /**
+   * @overload
+   * @param {Example<number>} this
+   * @returns {'number'}
+   *
+   * @overload
+   * @param {Example<string>} this
+   * @returns {'string'}
+   *
+   * @returns {string}
+   */
+  getTypeName() {
+>getTypeName : { (this: Example<number>): "number"; (this: Example<string>): "string"; }
+>            : ^^^    ^^               ^^^        ^^^    ^^               ^^^        ^^^
+
+    return typeof this.value;
+>typeof this.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.value : T
+>           : ^
+>this : this
+>     : ^^^^
+>value : T
+>      : ^
+  }
+
+  /**
+   * @template U
+   * @overload
+   * @param {(y: T) => U} fn
+   * @returns {U}
+   *
+   * @overload
+   * @returns {T}
+   *
+   * @param {(y: T) => unknown} [fn]
+   * @returns {unknown}
+   */
+  transform(fn) {
+>transform : { <U>(fn: (y: T) => U): U; <U>(): T; }
+>          : ^^^ ^^  ^^           ^^^ ^^^ ^^^^^ ^^^
+>fn : (y: T) => unknown
+>   : ^ ^^ ^^^^^       
+
+    return fn ? fn(this.value) : this.value;
+>fn ? fn(this.value) : this.value : unknown
+>                                 : ^^^^^^^
+>fn : (y: T) => unknown
+>   : ^ ^^ ^^^^^       
+>fn(this.value) : unknown
+>               : ^^^^^^^
+>fn : (y: T) => unknown
+>   : ^ ^^ ^^^^^       
+>this.value : T
+>           : ^
+>this : this
+>     : ^^^^
+>value : T
+>      : ^
+>this.value : T
+>           : ^
+>this : this
+>     : ^^^^
+>value : T
+>      : ^
+  }
+}
+

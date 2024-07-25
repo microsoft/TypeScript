@@ -1,4 +1,6 @@
-=== tests/cases/compiler/isArray.ts ===
+//// [tests/cases/compiler/isArray.ts] ////
+
+=== isArray.ts ===
 /// @errors: 2322 4104
 
 // https://github.com/microsoft/TypeScript/issues/17002

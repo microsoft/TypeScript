@@ -1,28 +1,28 @@
-tests/cases/compiler/client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(2,12): error TS2323: Cannot redeclare exported variable 'x1'.
-tests/cases/compiler/client.ts(3,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(3,34): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
-tests/cases/compiler/client.ts(4,12): error TS2323: Cannot redeclare exported variable 'x1'.
-tests/cases/compiler/client.ts(5,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(5,34): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
-tests/cases/compiler/client.ts(6,12): error TS2323: Cannot redeclare exported variable 'x1'.
-tests/cases/compiler/client.ts(7,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(7,34): error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?
-tests/cases/compiler/client.ts(7,37): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
-tests/cases/compiler/client.ts(8,12): error TS2323: Cannot redeclare exported variable 'x1'.
-tests/cases/compiler/client.ts(9,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(9,34): error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?
-tests/cases/compiler/client.ts(10,12): error TS2323: Cannot redeclare exported variable 'x1'.
-tests/cases/compiler/client.ts(11,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(11,34): error TS2614: Module '"./server"' has no exported member 'm'. Did you mean to use 'import m from "./server"' instead?
-tests/cases/compiler/client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(2,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(3,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(3,34): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
+client.ts(4,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(5,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(5,34): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
+client.ts(6,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(7,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(7,34): error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?
+client.ts(7,37): error TS2614: Module '"./server"' has no exported member 'a'. Did you mean to use 'import a from "./server"' instead?
+client.ts(8,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(9,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(9,34): error TS2614: Module '"./server"' has no exported member 'x'. Did you mean to use 'import x from "./server"' instead?
+client.ts(10,12): error TS2323: Cannot redeclare exported variable 'x1'.
+client.ts(11,1): error TS1191: An import declaration cannot have modifiers.
+client.ts(11,34): error TS2614: Module '"./server"' has no exported member 'm'. Did you mean to use 'import m from "./server"' instead?
+client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
 
 
-==== tests/cases/compiler/server.ts (0 errors) ====
+==== server.ts (0 errors) ====
     var a = 10;
     export default a;
     
-==== tests/cases/compiler/client.ts (18 errors) ====
+==== client.ts (18 errors) ====
     export import defaultBinding1, { } from "./server";
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.

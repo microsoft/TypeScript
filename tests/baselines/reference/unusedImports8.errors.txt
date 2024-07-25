@@ -1,7 +1,7 @@
-tests/cases/compiler/file2.ts(1,50): error TS6133: 't2' is declared but its value is never read.
+file2.ts(1,50): error TS6133: 't2' is declared but its value is never read.
 
 
-==== tests/cases/compiler/file1.ts (0 errors) ====
+==== file1.ts (0 errors) ====
     export class Calculator {
         handleChar() {}
     }
@@ -14,7 +14,7 @@ tests/cases/compiler/file2.ts(1,50): error TS6133: 't2' is declared but its valu
     
     }
     
-==== tests/cases/compiler/file2.ts (1 errors) ====
+==== file2.ts (1 errors) ====
     import {Calculator as calc, test as t1, test2 as t2} from "./file1"
                                                      ~~
 !!! error TS6133: 't2' is declared but its value is never read.

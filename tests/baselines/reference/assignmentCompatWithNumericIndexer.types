@@ -1,117 +1,173 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer.ts] ////
+
+=== assignmentCompatWithNumericIndexer.ts ===
 // Derived type indexer must be subtype of base type indexer
 
 interface Base { foo: string; }
 >foo : string
+>    : ^^^^^^
 
 interface Derived extends Base { bar: string; }
 >bar : string
+>    : ^^^^^^
 
 interface Derived2 extends Derived { baz: string; }
 >baz : string
+>    : ^^^^^^
 
 class A {
 >A : A
+>  : ^
 
     [x: number]: Base;
 >x : number
+>  : ^^^^^^
 }
 
 var a: A;
 >a : A
+>  : ^
 
 var b: { [x: number]: Derived; }
 >b : { [x: number]: Derived; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 a = b;
 >a = b : { [x: number]: Derived; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A
+>  : ^
 >b : { [x: number]: Derived; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 b = a; // error
 >b = a : A
+>      : ^
 >b : { [x: number]: Derived; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A
+>  : ^
 
 var b2: { [x: number]: Derived2; }
 >b2 : { [x: number]: Derived2; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 a = b2;
 >a = b2 : { [x: number]: Derived2; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A
+>  : ^
 >b2 : { [x: number]: Derived2; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 b2 = a; // error
 >b2 = a : A
+>       : ^
 >b2 : { [x: number]: Derived2; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A
+>  : ^
 
 module Generics {
 >Generics : typeof Generics
+>         : ^^^^^^^^^^^^^^^
 
     class A<T extends Base> {
 >A : A<T>
+>  : ^^^^
 
         [x: number]: T;
 >x : number
+>  : ^^^^^^
     }
 
     class B extends A<Base> {
 >B : B
+>  : ^
 >A : A<Base>
+>  : ^^^^^^^
 
         [x: number]: Derived; // ok
 >x : number
+>  : ^^^^^^
     }
 
     function foo<T extends Base>() {
 >foo : <T extends Base>() => void
+>    : ^ ^^^^^^^^^    ^^^^^^^^^^^
 
         var a: A<T>;
 >a : A<T>
+>  : ^^^^
 
         var b: { [x: number]: Derived; }
 >b : { [x: number]: Derived; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         a = b; // error
 >a = b : { [x: number]: Derived; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A<T>
+>  : ^^^^
 >b : { [x: number]: Derived; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         b = a; // error
 >b = a : A<T>
+>      : ^^^^
 >b : { [x: number]: Derived; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A<T>
+>  : ^^^^
 
         var b2: { [x: number]: Derived2; }
 >b2 : { [x: number]: Derived2; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         a = b2; // error
 >a = b2 : { [x: number]: Derived2; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A<T>
+>  : ^^^^
 >b2 : { [x: number]: Derived2; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         b2 = a; // error
 >b2 = a : A<T>
+>       : ^^^^
 >b2 : { [x: number]: Derived2; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A<T>
+>  : ^^^^
 
         var b3: { [x: number]: T; }
 >b3 : { [x: number]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
         a = b3; // ok
 >a = b3 : { [x: number]: T; }
+>       : ^^^^^^^^^^^^^^^^^^^
 >a : A<T>
+>  : ^^^^
 >b3 : { [x: number]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^
 
         b3 = a; // ok
 >b3 = a : A<T>
+>       : ^^^^
 >b3 : { [x: number]: T; }
+>   : ^^^^^^^^^^^^^^^^^^^
 >a : A<T>
+>  : ^^^^
     }
 }

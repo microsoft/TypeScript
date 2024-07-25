@@ -1,9 +1,9 @@
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames.ts(6,5): error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'string', but here has type 'number'.
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames.ts(15,9): error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'T', but here has type 'number'.
-tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames.ts(39,9): error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'T', but here has type 'number'.
+mergedInterfacesWithConflictingPropertyNames.ts(6,5): error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'string', but here has type 'number'.
+mergedInterfacesWithConflictingPropertyNames.ts(15,9): error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'T', but here has type 'number'.
+mergedInterfacesWithConflictingPropertyNames.ts(39,9): error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'T', but here has type 'number'.
 
 
-==== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames.ts (3 errors) ====
+==== mergedInterfacesWithConflictingPropertyNames.ts (3 errors) ====
     interface A {
         x: string; // error
     }
@@ -12,7 +12,7 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConfli
         x: number;
         ~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'string', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames.ts:2:5: 'x' was also declared here.
+!!! related TS6203 mergedInterfacesWithConflictingPropertyNames.ts:2:5: 'x' was also declared here.
     }
     
     module M {
@@ -24,7 +24,7 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConfli
             x: number;  // error
             ~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'T', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames.ts:11:9: 'x' was also declared here.
+!!! related TS6203 mergedInterfacesWithConflictingPropertyNames.ts:11:9: 'x' was also declared here.
         }
     }
     
@@ -51,6 +51,6 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConfli
             x: number;  // error
             ~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'x' must be of type 'T', but here has type 'number'.
-!!! related TS6203 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames.ts:33:9: 'x' was also declared here.
+!!! related TS6203 mergedInterfacesWithConflictingPropertyNames.ts:33:9: 'x' was also declared here.
         }
     }

@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/jsFileMethodOverloads3.ts] ////
+
+=== /a.js ===
+/**
+ * @overload
+ * @param {number} x
+ */
+
+/**
+ * @overload
+ * @param {string} x
+ */
+
+/**
+ * @param {string | number} x
+ * @returns {string | number}
+ */
+function id(x) {
+>id : Symbol(id, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 14, 12))
+
+    return x;
+>x : Symbol(x, Decl(a.js, 14, 12))
+}
+
+export let a = id(123);
+>a : Symbol(a, Decl(a.js, 18, 10))
+>id : Symbol(id, Decl(a.js, 0, 0))
+
+export let b = id("hello");
+>b : Symbol(b, Decl(a.js, 19, 10))
+>id : Symbol(id, Decl(a.js, 0, 0))
+

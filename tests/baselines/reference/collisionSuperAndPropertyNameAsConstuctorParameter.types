@@ -1,68 +1,93 @@
-=== tests/cases/compiler/collisionSuperAndPropertyNameAsConstuctorParameter.ts ===
+//// [tests/cases/compiler/collisionSuperAndPropertyNameAsConstuctorParameter.ts] ////
+
+=== collisionSuperAndPropertyNameAsConstuctorParameter.ts ===
 class a {
 >a : a
+>  : ^
 }
 
 class b1 extends a {
 >b1 : b1
+>   : ^^
 >a : a
+>  : ^
 
     constructor(_super: number) { // should be error
 >_super : number
+>       : ^^^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof a
+>      : ^^^^^^^^
     }
 }
 
 class b2 extends a {
 >b2 : b2
+>   : ^^
 >a : a
+>  : ^
 
     constructor(private _super: number) { // should be error
 >_super : number
+>       : ^^^^^^
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof a
+>      : ^^^^^^^^
     }
 }
 
 class b3 extends a {
 >b3 : b3
+>   : ^^
 >a : a
+>  : ^
 
     constructor(_super: number); // no code gen - no error
 >_super : number
+>       : ^^^^^^
 
     constructor(_super: string);// no code gen - no error
 >_super : string
+>       : ^^^^^^
 
     constructor(_super: any) { // should be error
 >_super : any
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof a
+>      : ^^^^^^^^
     }
 }
 
 class b4 extends a {
 >b4 : b4
+>   : ^^
 >a : a
+>  : ^
 
     constructor(_super: number); // no code gen - no error
 >_super : number
+>       : ^^^^^^
 
     constructor(_super: string);// no code gen - no error
 >_super : string
+>       : ^^^^^^
 
     constructor(private _super: any) { // should be error
 >_super : any
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof a
+>      : ^^^^^^^^
     }
 }

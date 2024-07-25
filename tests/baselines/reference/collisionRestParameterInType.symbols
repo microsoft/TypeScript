@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionRestParameterInType.ts ===
+//// [tests/cases/compiler/collisionRestParameterInType.ts] ////
+
+=== collisionRestParameterInType.ts ===
 var v1: (_i: number, ...restParameters) => void; // no error - no code gen
 >v1 : Symbol(v1, Decl(collisionRestParameterInType.ts, 0, 3))
 >_i : Symbol(_i, Decl(collisionRestParameterInType.ts, 0, 9))

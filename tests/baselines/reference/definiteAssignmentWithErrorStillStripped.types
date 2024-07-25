@@ -1,7 +1,11 @@
-=== tests/cases/compiler/definiteAssignmentWithErrorStillStripped.ts ===
+//// [tests/cases/compiler/definiteAssignmentWithErrorStillStripped.ts] ////
+
+=== definiteAssignmentWithErrorStillStripped.ts ===
 class C {
 >C : C
+>  : ^
 
     p!;
 >p : any
+>  : ^^^
 }

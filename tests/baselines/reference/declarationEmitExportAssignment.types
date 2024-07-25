@@ -1,16 +1,22 @@
-=== tests/cases/compiler/utils.ts ===
+//// [tests/cases/compiler/declarationEmitExportAssignment.ts] ////
+
+=== utils.ts ===
 export function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
 export function bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
 
 export interface Buzz { }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import {foo} from "./utils";
 >foo : () => void
+>    : ^^^^^^^^^^
 
 export = foo;
 >foo : () => void
+>    : ^^^^^^^^^^
 

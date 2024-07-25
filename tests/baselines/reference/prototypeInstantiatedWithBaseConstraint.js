@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/prototypeInstantiatedWithBaseConstraint.ts] ////
+
 //// [prototypeInstantiatedWithBaseConstraint.ts]
 class C<T> {
     x: T;

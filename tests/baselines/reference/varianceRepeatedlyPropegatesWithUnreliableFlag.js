@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varianceRepeatedlyPropegatesWithUnreliableFlag.ts] ////
+
 //// [varianceRepeatedlyPropegatesWithUnreliableFlag.ts]
 type A = { a: number };
 type B = { b: number };

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads7.ts] ////
+
 //// [functionOverloads7.ts]
 class foo { 
    private bar();

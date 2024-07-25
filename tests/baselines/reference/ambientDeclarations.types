@@ -1,4 +1,6 @@
-=== tests/cases/conformance/ambient/ambientDeclarations.ts ===
+//// [tests/cases/conformance/ambient/ambientDeclarations.ts] ////
+
+=== ambientDeclarations.ts ===
 // Ambient variable without type annotation
 declare var n;
 >n : any
@@ -6,65 +8,87 @@ declare var n;
 // Ambient variable with type annotation
 declare var m: string;
 >m : string
+>  : ^^^^^^
 
 // Ambient function with no type annotations
 declare function fn1();
 >fn1 : () => any
+>    : ^^^^^^^^^
 
 // Ambient function with type annotations
 declare function fn2(n: string): number;
 >fn2 : (n: string) => number
+>    : ^ ^^      ^^^^^      
 >n : string
+>  : ^^^^^^
 
 // Ambient function with valid overloads
 declare function fn3(n: string): number;
 >fn3 : (n: string) => number
+>    : ^ ^^      ^^^^^      
 >n : string
+>  : ^^^^^^
 
 declare function fn4(n: number, y: number): string;
 >fn4 : (n: number, y: number) => string
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >n : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 // Ambient function with optional parameters
 declare function fn5(x, y?);
 >fn5 : (x: any, y?: any) => any
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >y : any
 
 declare function fn6(e?);
 >fn6 : (e?: any) => any
+>    : ^ ^^^^^^^^^^^^^^
 >e : any
 
 declare function fn7(x, y?, ...z);
 >fn7 : (x: any, y?: any, ...z: any[]) => any
+>    : ^ ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >x : any
 >y : any
 >z : any[]
+>  : ^^^^^
 
 declare function fn8(y?, ...z: number[]);
 >fn8 : (y?: any, ...z: number[]) => any
+>    : ^ ^^^^^^^^^^^ ^^        ^^^^^^^^
 >y : any
 >z : number[]
+>  : ^^^^^^^^
 
 declare function fn9(...q: {}[]);
 >fn9 : (...q: {}[]) => any
+>    : ^^^^ ^^    ^^^^^^^^
 >q : {}[]
+>  : ^^^^
 
 declare function fn10<T>(...q: T[]);
 >fn10 : <T>(...q: T[]) => any
+>     : ^ ^^^^^ ^^   ^^^^^^^^
 >q : T[]
+>  : ^^^
 
 // Ambient class
 declare class cls {
 >cls : cls
+>    : ^^^
 
     constructor();
     method(): cls;
 >method : () => cls
+>       : ^^^^^^   
 
     static static(p): number;
 >static : (p: any) => number
+>       : ^ ^^^^^^^^^^      
 >p : any
 
     static q;
@@ -72,56 +96,73 @@ declare class cls {
 
     private fn();
 >fn : () => any
+>   : ^^^^^^^^^
 
     private static fns();
 >fns : () => any
+>    : ^^^^^^^^^
 }
 
 // Ambient enum
 declare enum E1 {
 >E1 : E1
+>   : ^^
 
     x,
->x : E1
+>x : E1.x
+>  : ^^^^
 
     y,
->y : E1
+>y : E1.y
+>  : ^^^^
 
     z
->z : E1
+>z : E1.z
+>  : ^^^^
 }
 
 // Ambient enum with integer literal initializer
 declare enum E2 {
 >E2 : E2
+>   : ^^
 
     q,
->q : E2
+>q : E2.q
+>  : ^^^^
 
     a = 1,
->a : E2
+>a : E2.a
+>  : ^^^^
 >1 : 1
+>  : ^
 
     b,
->b : E2
+>b : E2.b
+>  : ^^^^
 
     c = 2,
->c : E2
+>c : E2.c
+>  : ^^^^
 >2 : 2
+>  : ^
 
     d
->d : E2
+>d : E2.d
+>  : ^^^^
 }
 
 // Ambient enum members are always exported with or without export keyword
 declare enum E3 {
 >E3 : E3
+>   : ^^
 
     A
->A : E3
+>A : E3.A
+>  : ^^^^
 }
 declare module E3 {
 >E3 : typeof E3
+>   : ^^^^^^^^^
 
     var B;
 >B : any
@@ -130,17 +171,21 @@ var x = E3.B;
 >x : any
 >E3.B : any
 >E3 : typeof E3
+>   : ^^^^^^^^^
 >B : any
+>  : ^^^
 
 // Ambient module
 declare module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
     var x;
 >x : any
 
     function fn(): number;
 >fn : () => number
+>   : ^^^^^^      
 }
 
 // Ambient module members are always exported with or without export keyword
@@ -148,19 +193,27 @@ var p = M1.x;
 >p : any
 >M1.x : any
 >M1 : typeof M1
+>   : ^^^^^^^^^
 >x : any
+>  : ^^^
 
 var q = M1.fn();
 >q : number
+>  : ^^^^^^
 >M1.fn() : number
+>        : ^^^^^^
 >M1.fn : () => number
+>      : ^^^^^^      
 >M1 : typeof M1
+>   : ^^^^^^^^^
 >fn : () => number
+>   : ^^^^^^      
 
 // Ambient external module in the global module
 // Ambient external module with a string literal name that is a top level external module name
 declare module 'external1' {
 >'external1' : typeof import("external1")
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var q;
 >q : any

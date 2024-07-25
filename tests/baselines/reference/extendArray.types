@@ -1,93 +1,156 @@
-=== tests/cases/compiler/extendArray.ts ===
+//// [tests/cases/compiler/extendArray.ts] ////
+
+=== extendArray.ts ===
 var a = [1,2];
 >a : number[]
+>  : ^^^^^^^^
 >[1,2] : number[]
+>      : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 a.forEach(function (v,i,a) {});
 >a.forEach(function (v,i,a) {}) : void
+>                               : ^^^^
 >a.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>          : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >a : number[]
+>  : ^^^^^^^^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >function (v,i,a) {} : (v: number, i: number, a: number[]) => void
+>                    : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >v : number
+>  : ^^^^^^
 >i : number
+>  : ^^^^^^
 >a : number[]
+>  : ^^^^^^^^
 
 
 declare module _Core {
   interface Array {
     collect(fn:(e:_element) => _element[]) : any[];
 >collect : (fn: (e: _element) => _element[]) => any[]
+>        : ^  ^^                           ^^^^^     
 >fn : (e: _element) => _element[]
+>   : ^ ^^        ^^^^^          
 >e : _element
+>  : ^^^^^^^^
   }
 }
 
 
 var arr = (<any>Array).prototype;
 >arr : any
+>    : ^^^
 >(<any>Array).prototype : any
+>                       : ^^^
 >(<any>Array) : any
+>             : ^^^
 ><any>Array : any
+>           : ^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >prototype : any
+>          : ^^^
 
 arr.collect = function (fn) {
 >arr.collect = function (fn) {    var res = [];    for (var i = 0; i < this.length; ++i) {        var tmp = fn(this[i]);        for (var j = 0; j < tmp.length; ++j) {            res.push(tmp[j]);        }    }    return res;} : (fn: any) => any[]
+>                                                                                                                                                                                                                                 : ^  ^^^^^^^^^^^^^^^
 >arr.collect : any
+>            : ^^^
 >arr : any
+>    : ^^^
 >collect : any
+>        : ^^^
 >function (fn) {    var res = [];    for (var i = 0; i < this.length; ++i) {        var tmp = fn(this[i]);        for (var j = 0; j < tmp.length; ++j) {            res.push(tmp[j]);        }    }    return res;} : (fn: any) => any[]
+>                                                                                                                                                                                                                   : ^  ^^^^^^^^^^^^^^^
 >fn : any
+>   : ^^^
 
     var res = [];
 >res : any[]
+>    : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     for (var i = 0; i < this.length; ++i) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < this.length : boolean
+>                : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >this.length : any
+>            : ^^^
 >this : any
+>     : ^^^
 >length : any
+>       : ^^^
 >++i : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
         var tmp = fn(this[i]);
 >tmp : any
+>    : ^^^
 >fn(this[i]) : any
+>            : ^^^
 >fn : any
+>   : ^^^
 >this[i] : any
+>        : ^^^
 >this : any
+>     : ^^^
 >i : number
+>  : ^^^^^^
 
         for (var j = 0; j < tmp.length; ++j) {
 >j : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >j < tmp.length : boolean
+>               : ^^^^^^^
 >j : number
+>  : ^^^^^^
 >tmp.length : any
+>           : ^^^
 >tmp : any
+>    : ^^^
 >length : any
+>       : ^^^
 >++j : number
+>    : ^^^^^^
 >j : number
+>  : ^^^^^^
 
             res.push(tmp[j]);
 >res.push(tmp[j]) : number
+>                 : ^^^^^^
 >res.push : (...items: any[]) => number
+>         : ^^^^     ^^^^^^^^^^^^      
 >res : any[]
+>    : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >tmp[j] : any
+>       : ^^^
 >tmp : any
+>    : ^^^
 >j : number
+>  : ^^^^^^
         }
     }
     return res;
 >res : any[]
+>    : ^^^^^
 
 };
 

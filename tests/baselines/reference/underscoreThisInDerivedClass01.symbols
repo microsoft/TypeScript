@@ -1,4 +1,6 @@
-=== tests/cases/compiler/underscoreThisInDerivedClass01.ts ===
+//// [tests/cases/compiler/underscoreThisInDerivedClass01.ts] ////
+
+=== underscoreThisInDerivedClass01.ts ===
 // @target es5
 
 // Original test intent:

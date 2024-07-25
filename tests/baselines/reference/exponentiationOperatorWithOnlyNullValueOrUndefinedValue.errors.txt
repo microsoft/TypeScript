@@ -1,33 +1,33 @@
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(2,10): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(2,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(3,10): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(3,18): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(4,10): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(4,23): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(5,10): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(5,23): error TS2532: Object is possibly 'undefined'.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(2,10): error TS18050: The value 'null' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(2,18): error TS18050: The value 'null' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(3,10): error TS18050: The value 'null' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(3,18): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(4,10): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(4,23): error TS18050: The value 'null' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(5,10): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts(5,23): error TS18050: The value 'undefined' cannot be used here.
 
 
-==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts (8 errors) ====
+==== exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts (8 errors) ====
     // operator **
     var r1 = null ** null;
              ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r2 = null ** undefined;
              ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
                      ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     var r3 = undefined ** null;
              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     var r4 = undefined ** undefined;
              ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
                           ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18050: The value 'undefined' cannot be used here.
     

@@ -16,9 +16,7 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 15,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "originalKeywordKind": "ReturnKeyword",
                 "escapedText": "return"
             },
             "comment": "Description text follows",
@@ -32,7 +30,6 @@
                     "kind": "NumberKeyword",
                     "pos": 17,
                     "end": 23,
-                    "modifierFlagsCache": 0,
                     "transformFlags": 1
                 }
             }

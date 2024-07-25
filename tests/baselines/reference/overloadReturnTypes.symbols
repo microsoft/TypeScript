@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadReturnTypes.ts ===
+//// [tests/cases/compiler/overloadReturnTypes.ts] ////
+
+=== overloadReturnTypes.ts ===
 class Accessor {}
 >Accessor : Symbol(Accessor, Decl(overloadReturnTypes.ts, 0, 0))
 

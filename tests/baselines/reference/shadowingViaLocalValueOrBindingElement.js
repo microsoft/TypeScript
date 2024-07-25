@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shadowingViaLocalValueOrBindingElement.ts] ////
+
 //// [shadowingViaLocalValueOrBindingElement.ts]
 if (true) {
     let x;

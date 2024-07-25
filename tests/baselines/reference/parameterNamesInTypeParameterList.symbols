@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parameterNamesInTypeParameterList.ts ===
+//// [tests/cases/compiler/parameterNamesInTypeParameterList.ts] ////
+
+=== parameterNamesInTypeParameterList.ts ===
 function f0<T extends typeof a>(a: T) {
 >f0 : Symbol(f0, Decl(parameterNamesInTypeParameterList.ts, 0, 0))
 >T : Symbol(T, Decl(parameterNamesInTypeParameterList.ts, 0, 12))

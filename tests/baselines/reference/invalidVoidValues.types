@@ -1,88 +1,139 @@
-=== tests/cases/conformance/types/primitives/void/invalidVoidValues.ts ===
+//// [tests/cases/conformance/types/primitives/void/invalidVoidValues.ts] ////
+
+=== invalidVoidValues.ts ===
 var x: void;
 >x : void
+>  : ^^^^
 
 x = 1;
 >x = 1 : 1
+>      : ^
 >x : void
+>  : ^^^^
 >1 : 1
+>  : ^
 
 x = '';
 >x = '' : ""
+>       : ^^
 >x : void
+>  : ^^^^
 >'' : ""
+>   : ^^
 
 x = true;
 >x = true : true
+>         : ^^^^
 >x : void
+>  : ^^^^
 >true : true
+>     : ^^^^
 
 enum E { A }
 >E : E
+>  : ^
 >A : E.A
+>  : ^^^
 
 x = E;
 >x = E : typeof E
+>      : ^^^^^^^^
 >x : void
+>  : ^^^^
 >E : typeof E
+>  : ^^^^^^^^
 
 x = E.A;
 >x = E.A : E
+>        : ^
 >x : void
+>  : ^^^^
 >E.A : E
+>    : ^
 >E : typeof E
+>  : ^^^^^^^^
 >A : E
+>  : ^
 
 class C { foo: string }
 >C : C
+>  : ^
 >foo : string
+>    : ^^^^^^
 
 var a: C;
 >a : C
+>  : ^
 
 x = a;
 >x = a : C
+>      : ^
 >x : void
+>  : ^^^^
 >a : C
+>  : ^
 
 interface I { foo: string }
 >foo : string
+>    : ^^^^^^
 
 var b: I;
 >b : I
+>  : ^
 
 x = b;
 >x = b : I
+>      : ^
 >x : void
+>  : ^^^^
 >b : I
+>  : ^
 
 x = { f() {} }
 >x = { f() {} } : { f(): void; }
+>               : ^^^^^^^^^^^^^^
 >x : void
+>  : ^^^^
 >{ f() {} } : { f(): void; }
+>           : ^^^^^^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 
 module M { export var x = 1; }
 >M : typeof M
+>  : ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 x = M;
 >x = M : typeof M
+>      : ^^^^^^^^
 >x : void
+>  : ^^^^
 >M : typeof M
+>  : ^^^^^^^^
 
 function f<T>(a: T) {
 >f : <T>(a: T) => void
+>  : ^ ^^ ^^ ^^^^^^^^^
 >a : T
+>  : ^
 
     x = a;
 >x = a : T
+>      : ^
 >x : void
+>  : ^^^^
 >a : T
+>  : ^
 }
 x = f;
 >x = f : <T>(a: T) => void
+>      : ^ ^^ ^^ ^^^^^^^^^
 >x : void
+>  : ^^^^
 >f : <T>(a: T) => void
+>  : ^ ^^ ^^ ^^^^^^^^^
 

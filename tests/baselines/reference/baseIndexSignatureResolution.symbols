@@ -1,4 +1,6 @@
-=== tests/cases/compiler/baseIndexSignatureResolution.ts ===
+//// [tests/cases/compiler/baseIndexSignatureResolution.ts] ////
+
+=== baseIndexSignatureResolution.ts ===
 class Base { private a: string; }
 >Base : Symbol(Base, Decl(baseIndexSignatureResolution.ts, 0, 0))
 >a : Symbol(Base.a, Decl(baseIndexSignatureResolution.ts, 0, 12))

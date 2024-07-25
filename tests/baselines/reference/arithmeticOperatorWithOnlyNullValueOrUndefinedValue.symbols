@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts] ////
+
+=== arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts ===
 // operator *
 var ra1 = null * null;
 >ra1 : Symbol(ra1, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 1, 3))

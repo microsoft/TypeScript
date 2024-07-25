@@ -1,45 +1,71 @@
-=== tests/cases/compiler/enumPropertyAccess.ts ===
+//// [tests/cases/compiler/enumPropertyAccess.ts] ////
+
+=== enumPropertyAccess.ts ===
 enum Colors {
 >Colors : Colors
+>       : ^^^^^^
 
     Red,
 >Red : Colors.Red
+>    : ^^^^^^^^^^
 
     Green
 >Green : Colors.Green
+>      : ^^^^^^^^^^^^
 }
 
 var x = Colors.Red; // type of 'x' should be 'Colors'
 >x : Colors
+>  : ^^^^^^
 >Colors.Red : Colors.Red
+>           : ^^^^^^^^^^
 >Colors : typeof Colors
+>       : ^^^^^^^^^^^^^
 >Red : Colors.Red
+>    : ^^^^^^^^^^
 
 var p = x.Green; // error
 >p : any
+>  : ^^^
 >x.Green : any
+>        : ^^^
 >x : Colors.Red
+>  : ^^^^^^^^^^
 >Green : any
+>      : ^^^
 
 x.toFixed(); // ok
 >x.toFixed() : string
+>            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >x : Colors.Red
+>  : ^^^^^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 // Now with generics
 function fill<B extends Colors>(f: B) {
 >fill : <B extends Colors>(f: B) => void
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >f : B
+>  : ^
 
     f.Green; // error
 >f.Green : any
+>        : ^^^
 >f : Colors
+>  : ^^^^^^
 >Green : any
+>      : ^^^
 
     f.toFixed(); // ok
 >f.toFixed() : string
+>            : ^^^^^^
 >f.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >f : Colors
+>  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 }

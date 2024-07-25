@@ -5,11 +5,9 @@
 ////    export = $;
 ////}
 
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}$|] = require("jquery");|]
-////[|$|]("a");
+/////*1*/import /*2*/$ = require("jquery");
+/////*3*/$("a");
 
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}$|] = require("jquery");|]
+/////*4*/import /*5*/$ = require("jquery");
 
-const [r0Def, r0, r1, r2Def, r2] = test.ranges();
-verify.singleReferenceGroup('import $ = require("jquery")', [r0, r1]);
-verify.singleReferenceGroup('import $ = require("jquery")', [r2]);
+verify.baselineFindAllReferences('1', '2', '3', '4', '5');

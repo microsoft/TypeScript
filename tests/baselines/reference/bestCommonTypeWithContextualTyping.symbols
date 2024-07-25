@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bestCommonTypeWithContextualTyping.ts ===
+//// [tests/cases/compiler/bestCommonTypeWithContextualTyping.ts] ////
+
+=== bestCommonTypeWithContextualTyping.ts ===
 interface Contextual {
 >Contextual : Symbol(Contextual, Decl(bestCommonTypeWithContextualTyping.ts, 0, 0))
 

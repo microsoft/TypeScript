@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/react.d.ts ===
+//// [tests/cases/conformance/jsx/tsxAttributeResolution12.tsx] ////
+
+=== react.d.ts ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -6,86 +8,123 @@ declare module JSX {
 	interface ElementAttributesProperty {
 		props;
 >props : any
+>      : ^^^
 	}
 	interface IntrinsicAttributes {
 		ref?: string;
 >ref : string
+>    : ^^^^^^
 	}
 }
 
-=== tests/cases/conformance/jsx/file.tsx ===
+=== file.tsx ===
 declare class Component<P, S>  {
 >Component : Component<P, S>
+>          : ^^^^^^^^^^^^^^^
 
 	constructor(props?: P, context?: any);
 >props : P
+>      : ^
 >context : any
+>        : ^^^
 
 	setState(f: (prevState: S, props: P) => S, callback?: () => any): void;
 >setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
+>         : ^^^ ^^                             ^^        ^^^         ^^^    ^^^     ^^ ^^        ^^^         ^^^    ^^^
 >f : (prevState: S, props: P) => S
+>  : ^         ^^ ^^     ^^ ^^^^^ 
 >prevState : S
+>          : ^
 >props : P
+>      : ^
 >callback : () => any
+>         : ^^^^^^   
 
 	setState(state: S, callback?: () => any): void;
 >setState : { (f: (prevState: S, props: P) => S, callback?: () => any): void; (state: S, callback?: () => any): void; }
+>         : ^^^ ^^                             ^^        ^^^         ^^^    ^^^     ^^ ^^        ^^^         ^^^    ^^^
 >state : S
+>      : ^
 >callback : () => any
+>         : ^^^^^^   
 
 	forceUpdate(callBack?: () => any): void;
 >forceUpdate : (callBack?: () => any) => void
+>            : ^        ^^^         ^^^^^    
 >callBack : () => any
+>         : ^^^^^^   
 
 	render(): JSX.Element;
 >render : () => JSX.Element
+>       : ^^^^^^           
 >JSX : any
+>    : ^^^
 
 	props: P;
 >props : P
+>      : ^
 
 	state: S;
 >state : S
+>      : ^
 
 	context: {};
 >context : {}
+>        : ^^
 }
 
 
 interface ComponentClass<P> {
 	new (props?: P, context?: any): Component<P, any>;
 >props : P
+>      : ^
 >context : any
+>        : ^^^
 }
 
 declare module TestMod {
 >TestMod : typeof TestMod
+>        : ^^^^^^^^^^^^^^
 
 	interface TestClass extends ComponentClass<{reqd: any}> {
 >reqd : any
+>     : ^^^
 	}
 	var Test: TestClass;
 >Test : TestClass
+>     : ^^^^^^^^^
 }
 
 // Errors correctly
 const T = TestMod.Test;
 >T : TestMod.TestClass
+>  : ^^^^^^^^^^^^^^^^^
 >TestMod.Test : TestMod.TestClass
+>             : ^^^^^^^^^^^^^^^^^
 >TestMod : typeof TestMod
+>        : ^^^^^^^^^^^^^^
 >Test : TestMod.TestClass
+>     : ^^^^^^^^^^^^^^^^^
 
 var t1 = <T />;
 >t1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><T /> : JSX.Element
+>      : ^^^^^^^^^^^
 >T : TestMod.TestClass
+>  : ^^^^^^^^^^^^^^^^^
 
 // Should error
 var t2 = <TestMod.Test />;
 >t2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><TestMod.Test /> : JSX.Element
+>                 : ^^^^^^^^^^^
 >TestMod.Test : TestMod.TestClass
+>             : ^^^^^^^^^^^^^^^^^
 >TestMod : typeof TestMod
+>        : ^^^^^^^^^^^^^^
 >Test : TestMod.TestClass
+>     : ^^^^^^^^^^^^^^^^^
 
 

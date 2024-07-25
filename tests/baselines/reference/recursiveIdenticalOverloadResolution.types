@@ -1,39 +1,63 @@
-=== tests/cases/compiler/recursiveIdenticalOverloadResolution.ts ===
+//// [tests/cases/compiler/recursiveIdenticalOverloadResolution.ts] ////
+
+=== recursiveIdenticalOverloadResolution.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
    interface I { (i: I): I; }
 >i : I
+>  : ^
 
    function f(p: I) { return f };
 >f : (p: I) => typeof f
+>  : ^ ^^ ^^^^^^^^^^^^^
 >p : I
+>  : ^
 >f : (p: I) => typeof f
+>  : ^ ^^ ^^^^^^^^^^^^^
 
    var i: I;
 >i : I
+>  : ^
 
    f(i);
 >f(i) : (p: I) => typeof f
+>     : ^ ^^ ^^^^^^^^^^^^^
 >f : (p: I) => typeof f
+>  : ^ ^^ ^^^^^^^^^^^^^
 >i : I
+>  : ^
 
    f(f(i));
 >f(f(i)) : (p: I) => typeof f
+>        : ^ ^^ ^^^^^^^^^^^^^
 >f : (p: I) => typeof f
+>  : ^ ^^ ^^^^^^^^^^^^^
 >f(i) : (p: I) => typeof f
+>     : ^ ^^ ^^^^^^^^^^^^^
 >f : (p: I) => typeof f
+>  : ^ ^^ ^^^^^^^^^^^^^
 >i : I
+>  : ^
 
    f((f(f(i))));
 >f((f(f(i)))) : (p: I) => typeof f
+>             : ^ ^^ ^^^^^^^^^^^^^
 >f : (p: I) => typeof f
+>  : ^ ^^ ^^^^^^^^^^^^^
 >(f(f(i))) : (p: I) => typeof f
+>          : ^ ^^ ^^^^^^^^^^^^^
 >f(f(i)) : (p: I) => typeof f
+>        : ^ ^^ ^^^^^^^^^^^^^
 >f : (p: I) => typeof f
+>  : ^ ^^ ^^^^^^^^^^^^^
 >f(i) : (p: I) => typeof f
+>     : ^ ^^ ^^^^^^^^^^^^^
 >f : (p: I) => typeof f
+>  : ^ ^^ ^^^^^^^^^^^^^
 >i : I
+>  : ^
 
 }
 

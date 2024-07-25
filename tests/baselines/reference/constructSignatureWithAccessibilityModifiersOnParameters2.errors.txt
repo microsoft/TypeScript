@@ -1,23 +1,23 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,17): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,27): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,24): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,35): error TS2300: Duplicate identifier 'y'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,17): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,25): error TS2687: All declarations of 'x' must have identical modifiers.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(10,24): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(10,24): error TS2687: All declarations of 'x' must have identical modifiers.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(14,17): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(19,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(20,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(24,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(25,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(29,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(30,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(34,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts(35,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,17): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(4,27): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,24): error TS2300: Duplicate identifier 'x'.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(5,35): error TS2300: Duplicate identifier 'y'.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,17): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(9,25): error TS2687: All declarations of 'x' must have identical modifiers.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(10,24): error TS2300: Duplicate identifier 'x'.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(10,24): error TS2687: All declarations of 'x' must have identical modifiers.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(14,17): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(19,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(20,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(24,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(25,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(29,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(30,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(34,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters2.ts(35,10): error TS2369: A parameter property is only allowed in a constructor implementation.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters2.ts (17 errors) ====
+==== constructSignatureWithAccessibilityModifiersOnParameters2.ts (17 errors) ====
     // Parameter properties are not valid in overloads of constructors
     
     class C {

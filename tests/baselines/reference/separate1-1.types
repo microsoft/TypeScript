@@ -1,7 +1,13 @@
-=== tests/cases/compiler/separate1-1.ts ===
+//// [tests/cases/compiler/separate1-1.ts] ////
+
+=== separate1-1.ts ===
 X.f();
 >X.f() : any
+>      : ^^^
 >X.f : any
+>    : ^^^
 >X : any
+>  : ^^^
 >f : any
+>  : ^^^
 

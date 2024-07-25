@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement23.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement23.ts] ////
+
+=== parserForOfStatement23.ts ===
 async function foo(x: any) {
 >foo : Symbol(foo, Decl(parserForOfStatement23.ts, 0, 0))
 >x : Symbol(x, Decl(parserForOfStatement23.ts, 0, 19))

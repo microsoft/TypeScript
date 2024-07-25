@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionSignaturesWithThisParameter.ts ===
+//// [tests/cases/compiler/unionSignaturesWithThisParameter.ts] ////
+
+=== unionSignaturesWithThisParameter.ts ===
 // Repro from #20802
 
 function x<T>(ctor: {

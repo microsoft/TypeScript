@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatBug3.ts ===
+//// [tests/cases/compiler/assignmentCompatBug3.ts] ////
+
+=== assignmentCompatBug3.ts ===
 function makePoint(x: number, y: number) {
 >makePoint : Symbol(makePoint, Decl(assignmentCompatBug3.ts, 0, 0))
 >x : Symbol(x, Decl(assignmentCompatBug3.ts, 0, 19))

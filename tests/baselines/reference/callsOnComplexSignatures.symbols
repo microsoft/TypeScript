@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callsOnComplexSignatures.tsx ===
+//// [tests/cases/compiler/callsOnComplexSignatures.tsx] ////
+
+=== callsOnComplexSignatures.tsx ===
 /// <reference path="react16.d.ts" />
 import React from "react";
 >React : Symbol(React, Decl(callsOnComplexSignatures.tsx, 1, 6))

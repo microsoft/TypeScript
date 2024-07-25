@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassIncludesInheritedMembers.ts] ////
+
 //// [derivedClassIncludesInheritedMembers.ts]
 class Base {
     a: string;

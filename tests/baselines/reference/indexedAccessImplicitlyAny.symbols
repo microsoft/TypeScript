@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexedAccessImplicitlyAny.ts ===
+//// [tests/cases/compiler/indexedAccessImplicitlyAny.ts] ////
+
+=== indexedAccessImplicitlyAny.ts ===
 interface I { foof: number };
 >I : Symbol(I, Decl(indexedAccessImplicitlyAny.ts, 0, 0))
 >foof : Symbol(I.foof, Decl(indexedAccessImplicitlyAny.ts, 0, 13))

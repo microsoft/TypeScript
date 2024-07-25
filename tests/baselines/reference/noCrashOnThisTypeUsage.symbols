@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noCrashOnThisTypeUsage.ts ===
+//// [tests/cases/compiler/noCrashOnThisTypeUsage.ts] ////
+
+=== noCrashOnThisTypeUsage.ts ===
 interface IListenable {
 >IListenable : Symbol(IListenable, Decl(noCrashOnThisTypeUsage.ts, 0, 0))
 

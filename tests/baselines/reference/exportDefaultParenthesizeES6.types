@@ -1,7 +1,12 @@
-=== tests/cases/compiler/classexpr.ts ===
+//// [tests/cases/compiler/exportDefaultParenthesizeES6.ts] ////
+
+=== classexpr.ts ===
 export default (class Foo {} as any);
 >(class Foo {} as any) : any
+>                      : ^^^
 >class Foo {} as any : any
 >class Foo {} : typeof Foo
+>             : ^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 

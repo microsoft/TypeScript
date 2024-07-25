@@ -1,39 +1,59 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/umd5.ts] ////
+
+=== a.ts ===
 import * as Bar from './foo';
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
 Bar.fn();
 >Bar.fn() : void
+>         : ^^^^
 >Bar.fn : () => void
+>       : ^^^^^^    
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 >fn : () => void
+>   : ^^^^^^    
 
 let x: Bar.Thing;
 >x : Bar.Thing
+>  : ^^^^^^^^^
 >Bar : any
+>    : ^^^
 
 let y: number = x.n;
 >y : number
+>  : ^^^^^^
 >x.n : number
+>    : ^^^^^^
 >x : Bar.Thing
+>  : ^^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 // should error
 let z = Foo;
 >z : typeof Bar
+>  : ^^^^^^^^^^
 >Foo : typeof Bar
+>    : ^^^^^^^^^^
 
-=== tests/cases/conformance/externalModules/foo.d.ts ===
+=== foo.d.ts ===
 export var x: number;
 >x : number
+>  : ^^^^^^
 
 export function fn(): void;
 >fn : () => void
+>   : ^^^^^^    
 
 export interface Thing { n: typeof x }
 >n : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 export as namespace Foo;
->Foo : typeof import("tests/cases/conformance/externalModules/foo")
+>Foo : typeof import("foo")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

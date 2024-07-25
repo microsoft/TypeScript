@@ -1,9 +1,9 @@
-tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts(24,1): error TS2322: Type 'Number' is not assignable to type 'number'.
+assignFromNumberInterface2.ts(24,1): error TS2322: Type 'Number' is not assignable to type 'number'.
   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
-tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts(25,1): error TS2322: Type 'NotNumber' is not assignable to type 'number'.
+assignFromNumberInterface2.ts(25,1): error TS2322: Type 'NotNumber' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts (2 errors) ====
+==== assignFromNumberInterface2.ts (2 errors) ====
     interface Number {
         doStuff(): string;
     }

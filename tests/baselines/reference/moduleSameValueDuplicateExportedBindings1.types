@@ -1,12 +1,18 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/moduleSameValueDuplicateExportedBindings1.ts] ////
+
+=== a.ts ===
+
 export * from "./b";
-No type information for this code.export * from "./c";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/b.ts ===
 export * from "./c";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/c.ts ===
+
+=== b.ts ===
+
+export * from "./c";
+
+=== c.ts ===
 export var foo = 42;
 >foo : number
+>    : ^^^^^^
 >42 : 42
+>   : ^^
 

@@ -1,71 +1,106 @@
-=== tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts ===
+//// [tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts] ////
+
+=== assignFromNumberInterface2.ts ===
 interface Number {
     doStuff(): string;
 >doStuff : () => string
+>        : ^^^^^^      
 }
 
 interface NotNumber {
     toString(radix?: number): string;
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 >radix : number
+>      : ^^^^^^
 
     toFixed(fractionDigits?: number): string;
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 >fractionDigits : number
+>               : ^^^^^^
 
     toExponential(fractionDigits?: number): string;
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 >fractionDigits : number
+>               : ^^^^^^
 
     toPrecision(precision?: number): string;
 >toPrecision : (precision?: number) => string
+>            : ^         ^^^      ^^^^^      
 >precision : number
+>          : ^^^^^^
 
     valueOf(): number;
 >valueOf : () => number
+>        : ^^^^^^      
 
     doStuff(): string;
 >doStuff : () => string
+>        : ^^^^^^      
 }
 
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 var a: Number;
 >a : Number
+>  : ^^^^^^
 
 var b: NotNumber;
 >b : NotNumber
+>  : ^^^^^^^^^
 
 a = x; 
 >a = x : number
+>      : ^^^^^^
 >a : Number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
 a = b; 
 >a = b : NotNumber
+>      : ^^^^^^^^^
 >a : Number
+>  : ^^^^^^
 >b : NotNumber
+>  : ^^^^^^^^^
 
 b = a; 
 >b = a : Number
+>      : ^^^^^^
 >b : NotNumber
+>  : ^^^^^^^^^
 >a : Number
+>  : ^^^^^^
 
 b = x; 
 >b = x : number
+>      : ^^^^^^
 >b : NotNumber
+>  : ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 x = a; // expected error
 >x = a : Number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >a : Number
+>  : ^^^^^^
 
 x = b; // expected error
 >x = b : NotNumber
+>      : ^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >b : NotNumber
+>  : ^^^^^^^^^
 
 

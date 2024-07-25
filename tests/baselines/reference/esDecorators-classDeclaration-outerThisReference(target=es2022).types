@@ -1,0 +1,119 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-outerThisReference.ts] ////
+
+=== esDecorators-classDeclaration-outerThisReference.ts ===
+declare let dec: any;
+>dec : any
+
+declare let f: any;
+>f : any
+
+// `this` should point to the outer `this` in both cases.
+@dec(this)
+>dec(this) : any
+>dec : any
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+
+class A {
+>A : A
+>  : ^
+
+    @dec(this)
+>dec(this) : any
+>dec : any
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+
+    b = 2;
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+}
+
+// `this` should point to the outer `this`, and maintain the correct evaluation order with respect to computed
+// property names.
+
+@dec(this)
+>dec(this) : any
+>dec : any
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+
+class B {
+>B : B
+>  : ^
+
+    // @ts-ignore
+    [f(this)] = 1;
+>[f(this)] : number
+>          : ^^^^^^
+>f(this) : any
+>f : any
+>this : this
+>     : ^^^^
+>1 : 1
+>  : ^
+
+    @dec(this)
+>dec(this) : any
+>dec : any
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+
+    b = 2;
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
+    // @ts-ignore
+    [f(this)] = 3;
+>[f(this)] : number
+>          : ^^^^^^
+>f(this) : any
+>f : any
+>this : this
+>     : ^^^^
+>3 : 3
+>  : ^
+}
+
+// The `this` transformation should ensure that decorators inside the class body have privileged access to
+// private names.
+@dec(this)
+>dec(this) : any
+>dec : any
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+
+class C {
+>C : C
+>  : ^
+
+    #a = 1;
+>#a : number
+>   : ^^^^^^
+>1 : 1
+>  : ^
+
+    @dec(this, (x: C) => x.#a)
+>dec(this, (x: C) => x.#a) : any
+>dec : any
+>this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
+>(x: C) => x.#a : (x: C) => number
+>               : ^ ^^ ^^^^^^^^^^^
+>x : C
+>  : ^
+>x.#a : number
+>     : ^^^^^^
+>x : C
+>  : ^
+
+    b = 2;
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+}

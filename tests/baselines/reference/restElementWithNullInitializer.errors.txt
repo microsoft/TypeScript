@@ -1,9 +1,9 @@
-tests/cases/conformance/es6/destructuring/restElementWithNullInitializer.ts(1,15): error TS2461: Type 'null' is not an array type.
-tests/cases/conformance/es6/destructuring/restElementWithNullInitializer.ts(4,15): error TS2461: Type 'undefined' is not an array type.
-tests/cases/conformance/es6/destructuring/restElementWithNullInitializer.ts(7,15): error TS2461: Type '{}' is not an array type.
+restElementWithNullInitializer.ts(1,15): error TS2461: Type 'null' is not an array type.
+restElementWithNullInitializer.ts(4,15): error TS2461: Type 'undefined' is not an array type.
+restElementWithNullInitializer.ts(7,15): error TS2461: Type '{}' is not an array type.
 
 
-==== tests/cases/conformance/es6/destructuring/restElementWithNullInitializer.ts (3 errors) ====
+==== restElementWithNullInitializer.ts (3 errors) ====
     function foo1([...r] = null) {
                   ~~~~~~
 !!! error TS2461: Type 'null' is not an array type.

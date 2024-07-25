@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assigningFromObjectToAnythingElse.ts ===
+//// [tests/cases/compiler/assigningFromObjectToAnythingElse.ts] ////
+
+=== assigningFromObjectToAnythingElse.ts ===
 var x: Object;
 >x : Symbol(x, Decl(assigningFromObjectToAnythingElse.ts, 0, 3))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

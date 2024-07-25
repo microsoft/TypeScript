@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-commonjs4.ts] ////
+
 //// [es5-commonjs4.ts]
 export default class A
 {

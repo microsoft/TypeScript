@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts] ////
+
+=== typeGuardFunctionOfFormThisErrors.ts ===
 class RoyalGuard {
 >RoyalGuard : Symbol(RoyalGuard, Decl(typeGuardFunctionOfFormThisErrors.ts, 0, 0))
 

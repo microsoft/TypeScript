@@ -1,58 +1,88 @@
-=== tests/cases/compiler/genericIndexedAccessMethodIntersectionCanBeAccessed.ts ===
+//// [tests/cases/compiler/genericIndexedAccessMethodIntersectionCanBeAccessed.ts] ////
+
+=== genericIndexedAccessMethodIntersectionCanBeAccessed.ts ===
 type ExtendedService<T> = {
 >ExtendedService : ExtendedService<T>
+>                : ^^^^^^^^^^^^^^^^^^
 
     [K in keyof T]: T[K] & {
         __$daemonMode?: string;
 >__$daemonMode : string | undefined
+>              : ^^^^^^^^^^^^^^^^^^
 
         __$action?: string;
 >__$action : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
     };
 };
 
 type Service<T> = {
 >Service : Service<T>
+>        : ^^^^^^^^^^
 
     [K in keyof T]: T[K] & {id?: string};
 >id : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
 };
 
 export const createService = <T>(
 >createService : <T>(ServiceCtr: ExtendedService<T> & Service<T>) => void
+>              : ^ ^^          ^^                               ^^^^^^^^^
 ><T>(    ServiceCtr: ExtendedService<T> & Service<T>) => {    Object.keys(ServiceCtr).forEach(key => {        const method = (ServiceCtr)[key as keyof T];        const {__$daemonMode, __$action, id} = method;    })} : <T>(ServiceCtr: ExtendedService<T> & Service<T>) => void
+>                                                                                                                                                                                                                       : ^ ^^          ^^                               ^^^^^^^^^
 
     ServiceCtr: ExtendedService<T> & Service<T>
 >ServiceCtr : ExtendedService<T> & Service<T>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ) => {
     Object.keys(ServiceCtr).forEach(key => {
 >Object.keys(ServiceCtr).forEach(key => {        const method = (ServiceCtr)[key as keyof T];        const {__$daemonMode, __$action, id} = method;    }) : void
+>                                                                                                                                                         : ^^^^
 >Object.keys(ServiceCtr).forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>                                : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >Object.keys(ServiceCtr) : string[]
+>                        : ^^^^^^^^
 >Object.keys : (o: object) => string[]
+>            : ^ ^^      ^^^^^        
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
+>     : ^ ^^      ^^^^^        
 >ServiceCtr : ExtendedService<T> & Service<T>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >key => {        const method = (ServiceCtr)[key as keyof T];        const {__$daemonMode, __$action, id} = method;    } : (key: string) => void
+>                                                                                                                        : ^   ^^^^^^^^^^^^^^^^^
 >key : string
+>    : ^^^^^^
 
         const method = (ServiceCtr)[key as keyof T];
 >method : (ExtendedService<T> & Service<T>)[keyof T]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(ServiceCtr)[key as keyof T] : (ExtendedService<T> & Service<T>)[keyof T]
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(ServiceCtr) : ExtendedService<T> & Service<T>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ServiceCtr : ExtendedService<T> & Service<T>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key as keyof T : keyof T
+>               : ^^^^^^^
 >key : string
+>    : ^^^^^^
 
         const {__$daemonMode, __$action, id} = method;
 >__$daemonMode : string | undefined
+>              : ^^^^^^^^^^^^^^^^^^
 >__$action : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 >id : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >method : (ExtendedService<T> & Service<T>)[keyof T]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     })
 }

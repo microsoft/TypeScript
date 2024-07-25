@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unaryOperatorsInStrictMode.ts ===
+//// [tests/cases/compiler/unaryOperatorsInStrictMode.ts] ////
+
+=== unaryOperatorsInStrictMode.ts ===
 "use strict"
 
 ++eval;

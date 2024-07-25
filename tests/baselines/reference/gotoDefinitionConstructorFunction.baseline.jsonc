@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/gotoDefinitionConstructorFunction.js ===
+// <|function [|StringStreamm|]() {
+// }|>
+// StringStreamm.prototype = {
+// };
+// 
+// function runMode () {
+// new /*GOTO DEF*/StringStreamm()
+// };
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "StringStreamm",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]

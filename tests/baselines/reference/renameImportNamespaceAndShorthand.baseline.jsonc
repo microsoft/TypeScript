@@ -1,0 +1,11 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportNamespaceAndShorthand.ts ===
+// <|import * as /*RENAME*/[|fooRENAME|] from 'bar';|>
+// const bar = { /*START PREFIX*/foo: [|fooRENAME|] };
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameImportNamespaceAndShorthand.ts ===
+// <|import * as [|fooRENAME|] from 'bar';|>
+// const bar = { /*START PREFIX*/foo: /*RENAME*/[|fooRENAME|] };

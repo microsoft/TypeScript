@@ -1,12 +1,12 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints5.ts(18,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
+genericCallWithObjectTypeArgsAndConstraints5.ts(18,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
   Property 'y' is missing in type 'C' but required in type 'D'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints5.ts(19,23): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
+genericCallWithObjectTypeArgsAndConstraints5.ts(19,23): error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.
   Type 'void' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints5.ts(22,24): error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.
+genericCallWithObjectTypeArgsAndConstraints5.ts(22,24): error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'C'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints5.ts (3 errors) ====
+==== genericCallWithObjectTypeArgsAndConstraints5.ts (3 errors) ====
     // Generic call with constraints infering type parameter from object member properties
     
     class C {
@@ -28,7 +28,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
                     ~
 !!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
 !!! error TS2345:   Property 'y' is missing in type 'C' but required in type 'D'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints5.ts:9:5: 'y' is declared here.
+!!! related TS2728 genericCallWithObjectTypeArgsAndConstraints5.ts:9:5: 'y' is declared here.
     var r9 = foo(() => 1, () => { }); // the constraints are self-referencing, no downstream error
                           ~~~~~~~~~
 !!! error TS2345: Argument of type '() => void' is not assignable to parameter of type '() => number'.

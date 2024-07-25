@@ -1,4 +1,6 @@
-=== tests/cases/compiler/getterErrorMessageNotDuplicated.ts ===
+//// [tests/cases/compiler/getterErrorMessageNotDuplicated.ts] ////
+
+=== getterErrorMessageNotDuplicated.ts ===
 interface Thing {
 >Thing : Symbol(Thing, Decl(getterErrorMessageNotDuplicated.ts, 0, 0))
 

@@ -1,20 +1,30 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingOptionalChain.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingOptionalChain.ts] ////
+
+=== classExtendingOptionalChain.ts ===
 namespace A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export class B {}
 >B : B
+>  : ^
 }
 
 // ok
 class C1 extends A?.B {}
 >C1 : C1
+>   : ^^
 >A?.B : A.B
+>     : ^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B : typeof A.B
+>  : ^^^^^^^^^^
 
 // error
 class C2 implements A?.B {}
 >C2 : C2
+>   : ^^
 >A : typeof A
+>  : ^^^^^^^^
 

@@ -1,69 +1,97 @@
-=== tests/cases/compiler/inheritance.ts ===
+//// [tests/cases/compiler/inheritance.ts] ////
+
+=== inheritance.ts ===
 class B1 {
 >B1 : B1
+>   : ^^
 
     public x;
 >x : any
+>  : ^^^
 }
 
 class B2 {
 >B2 : B2
+>   : ^^
 
     public x;
 >x : any
+>  : ^^^
 }
 
 
 class D1 extends B1 {
 >D1 : D1
+>   : ^^
 >B1 : B1
+>   : ^^
 }
 
 class D2 extends B2 {
 >D2 : D2
+>   : ^^
 >B2 : B2
+>   : ^^
 }
 
 
 class N {
 >N : N
+>  : ^
 
     public y:number;
 >y : number
+>  : ^^^^^^
 }
 
 class ND extends N { // any is assignable to number
 >ND : ND
+>   : ^^
 >N : N
+>  : ^
 
     public y;
 >y : any
+>  : ^^^
 }
 
 class Good {
 >Good : Good
+>     : ^^^^
 
     public f: () => number = function () { return 0; }
 >f : () => number
+>  : ^^^^^^      
 >function () { return 0; } : () => number
+>                          : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 
     public g() { return 0; }
 >g : () => number
+>  : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 }
 
 class Baad extends Good {
 >Baad : Baad
+>     : ^^^^
 >Good : Good
+>     : ^^^^
 
     public f(): number { return 0; }
 >f : () => number
+>  : ^^^^^^      
 >0 : 0
+>  : ^
 
     public g(n: number) { return 0; }
 >g : (n: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 

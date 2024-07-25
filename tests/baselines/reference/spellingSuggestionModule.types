@@ -1,22 +1,33 @@
-=== tests/cases/compiler/spellingSuggestionModule.ts ===
+//// [tests/cases/compiler/spellingSuggestionModule.ts] ////
+
+=== spellingSuggestionModule.ts ===
 declare module "foobar" { export const x: number; }
 >"foobar" : typeof import("foobar")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 foobar;
 >foobar : any
+>       : ^^^
 
 declare module 'barfoo' { export const x: number; }
 >'barfoo' : typeof import("barfoo")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 barfoo;
 >barfoo : any
+>       : ^^^
 
 declare module farboo { export const x: number; }
 >farboo : typeof farboo
+>       : ^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
 faroo;
 >faroo : any
+>      : ^^^
 

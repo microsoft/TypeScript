@@ -1,15 +1,24 @@
-=== tests/cases/compiler/expandoFunctionContextualTypesNoValue.ts ===
+//// [tests/cases/compiler/expandoFunctionContextualTypesNoValue.ts] ////
+
+=== expandoFunctionContextualTypesNoValue.ts ===
 // GH #38532
 import Foo from "blah";
 >Foo : any
+>    : ^^^
 
 export function Foo() { }
->Foo : typeof import("tests/cases/compiler/expandoFunctionContextualTypesNoValue").Foo
+>Foo : typeof import("expandoFunctionContextualTypesNoValue").Foo
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Foo.bar = () => { };
 >Foo.bar = () => { } : () => void
+>                    : ^^^^^^^^^^
 >Foo.bar : () => void
->Foo : typeof import("tests/cases/compiler/expandoFunctionContextualTypesNoValue").Foo
+>        : ^^^^^^^^^^
+>Foo : typeof import("expandoFunctionContextualTypesNoValue").Foo
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : () => void
+>    : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 

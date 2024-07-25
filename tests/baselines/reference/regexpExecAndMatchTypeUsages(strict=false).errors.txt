@@ -1,0 +1,33 @@
+error TS5052: Option 'exactOptionalPropertyTypes' cannot be specified without specifying option 'strictNullChecks'.
+regexpExecAndMatchTypeUsages.ts(20,9): error TS2322: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray'.
+  Property 'index' is optional in type 'RegExpMatchArray' but required in type 'RegExpExecArray'.
+
+
+!!! error TS5052: Option 'exactOptionalPropertyTypes' cannot be specified without specifying option 'strictNullChecks'.
+==== regexpExecAndMatchTypeUsages.ts (1 errors) ====
+    export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) {
+        matchResult[0].length;
+        matchResult[999].length;
+        matchResult.index + 0;
+        matchResult.input.length;
+        matchResult.groups["someVariable"].length;
+        matchResult.groups = undefined;
+    
+        execResult[0].length;
+        execResult[999].length;
+        execResult.index + 0;
+        execResult.input.length;
+        execResult.groups["someVariable"].length;
+        execResult.groups = undefined;
+    
+        if (Math.random()) {
+            matchResult = execResult;
+        }
+        else {
+            execResult = matchResult
+            ~~~~~~~~~~
+!!! error TS2322: Type 'RegExpMatchArray' is not assignable to type 'RegExpExecArray'.
+!!! error TS2322:   Property 'index' is optional in type 'RegExpMatchArray' but required in type 'RegExpExecArray'.
+        }
+    }
+    

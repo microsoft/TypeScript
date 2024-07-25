@@ -1,12 +1,12 @@
 error TS2318: Cannot find global type 'AsyncIterableIterator'.
-tests/cases/conformance/types/forAwait/types.forAwait.es2018.3.ts(3,27): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
-tests/cases/conformance/types/forAwait/types.forAwait.es2018.3.ts(5,21): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
-tests/cases/conformance/types/forAwait/types.forAwait.es2018.3.ts(10,27): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
-tests/cases/conformance/types/forAwait/types.forAwait.es2018.3.ts(12,21): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+types.forAwait.es2018.3.ts(3,27): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+types.forAwait.es2018.3.ts(5,21): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+types.forAwait.es2018.3.ts(10,27): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+types.forAwait.es2018.3.ts(12,21): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
 
 
 !!! error TS2318: Cannot find global type 'AsyncIterableIterator'.
-==== tests/cases/conformance/types/forAwait/types.forAwait.es2018.3.ts (4 errors) ====
+==== types.forAwait.es2018.3.ts (4 errors) ====
     async function f1() {
         let y: number;
         for await (const x of {}) {

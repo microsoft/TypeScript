@@ -1,4 +1,6 @@
-=== tests/cases/compiler/returnTypeTypeArguments.ts ===
+//// [tests/cases/compiler/returnTypeTypeArguments.ts] ////
+
+=== returnTypeTypeArguments.ts ===
 class One<T>{
 >One : Symbol(One, Decl(returnTypeTypeArguments.ts, 0, 0))
 >T : Symbol(T, Decl(returnTypeTypeArguments.ts, 0, 10))

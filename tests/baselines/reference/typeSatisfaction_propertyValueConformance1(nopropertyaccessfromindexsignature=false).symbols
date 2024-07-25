@@ -1,0 +1,66 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance1.ts] ////
+
+=== typeSatisfaction_propertyValueConformance1.ts ===
+type Facts = { [key: string]: boolean };
+>Facts : Symbol(Facts, Decl(typeSatisfaction_propertyValueConformance1.ts, 0, 0))
+>key : Symbol(key, Decl(typeSatisfaction_propertyValueConformance1.ts, 0, 16))
+
+declare function checkTruths(x: Facts): void;
+>checkTruths : Symbol(checkTruths, Decl(typeSatisfaction_propertyValueConformance1.ts, 0, 40))
+>x : Symbol(x, Decl(typeSatisfaction_propertyValueConformance1.ts, 1, 29))
+>Facts : Symbol(Facts, Decl(typeSatisfaction_propertyValueConformance1.ts, 0, 0))
+
+declare function checkM(x: { m: boolean }): void;
+>checkM : Symbol(checkM, Decl(typeSatisfaction_propertyValueConformance1.ts, 1, 45))
+>x : Symbol(x, Decl(typeSatisfaction_propertyValueConformance1.ts, 2, 24))
+>m : Symbol(m, Decl(typeSatisfaction_propertyValueConformance1.ts, 2, 28))
+
+const x = {
+>x : Symbol(x, Decl(typeSatisfaction_propertyValueConformance1.ts, 3, 5))
+
+    m: true
+>m : Symbol(m, Decl(typeSatisfaction_propertyValueConformance1.ts, 3, 11))
+
+};
+
+// Should be OK
+checkTruths(x);
+>checkTruths : Symbol(checkTruths, Decl(typeSatisfaction_propertyValueConformance1.ts, 0, 40))
+>x : Symbol(x, Decl(typeSatisfaction_propertyValueConformance1.ts, 3, 5))
+
+// Should be OK
+checkM(x);
+>checkM : Symbol(checkM, Decl(typeSatisfaction_propertyValueConformance1.ts, 1, 45))
+>x : Symbol(x, Decl(typeSatisfaction_propertyValueConformance1.ts, 3, 5))
+
+// Should fail under --noPropertyAccessFromIndexSignature
+console.log(x.z);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(typeSatisfaction_propertyValueConformance1.ts, 3, 5))
+
+const m: boolean = x.m;
+>m : Symbol(m, Decl(typeSatisfaction_propertyValueConformance1.ts, 13, 5))
+>x.m : Symbol(m, Decl(typeSatisfaction_propertyValueConformance1.ts, 3, 11))
+>x : Symbol(x, Decl(typeSatisfaction_propertyValueConformance1.ts, 3, 5))
+>m : Symbol(m, Decl(typeSatisfaction_propertyValueConformance1.ts, 3, 11))
+
+// Should be 'm'
+type M = keyof typeof x;
+>M : Symbol(M, Decl(typeSatisfaction_propertyValueConformance1.ts, 13, 23))
+>x : Symbol(x, Decl(typeSatisfaction_propertyValueConformance1.ts, 3, 5))
+
+// Should be able to detect a failure here
+const x2 = {
+>x2 : Symbol(x2, Decl(typeSatisfaction_propertyValueConformance1.ts, 19, 5))
+
+    m: true,
+>m : Symbol(m, Decl(typeSatisfaction_propertyValueConformance1.ts, 19, 12))
+
+    s: "false"
+>s : Symbol(s, Decl(typeSatisfaction_propertyValueConformance1.ts, 20, 12))
+
+} satisfies Facts;
+>Facts : Symbol(Facts, Decl(typeSatisfaction_propertyValueConformance1.ts, 0, 0))
+

@@ -1,8 +1,8 @@
-tests/cases/compiler/conflictingMemberTypesInBases.ts(12,11): error TS2320: Interface 'E' cannot simultaneously extend types 'B' and 'D'.
+conflictingMemberTypesInBases.ts(12,11): error TS2320: Interface 'E' cannot simultaneously extend types 'B' and 'D'.
   Named property 'm' of types 'B' and 'D' are not identical.
 
 
-==== tests/cases/compiler/conflictingMemberTypesInBases.ts (1 errors) ====
+==== conflictingMemberTypesInBases.ts (1 errors) ====
     interface A {
         m: string;
     }

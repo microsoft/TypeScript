@@ -1,77 +1,111 @@
-=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties2.ts] ////
+
+=== constructorParameterProperties2.ts ===
 class C {
 >C : C
+>  : ^
 
     y: number;
 >y : number
+>  : ^^^^^^
 
     constructor(y: number) { } // ok
 >y : number
+>  : ^^^^^^
 }
 
 var c: C;
 >c : C
+>  : ^
 
 var r = c.y;
 >r : number
+>  : ^^^^^^
 >c.y : number
+>    : ^^^^^^
 >c : C
+>  : ^
 >y : number
+>  : ^^^^^^
 
 class D {
 >D : D
+>  : ^
 
     y: number;
 >y : number
+>  : ^^^^^^
 
     constructor(public y: number) { } // error
 >y : number
+>  : ^^^^^^
 }
 
 var d: D;
 >d : D
+>  : ^
 
 var r2 = d.y;
 >r2 : number
+>   : ^^^^^^
 >d.y : number
+>    : ^^^^^^
 >d : D
+>  : ^
 >y : number
+>  : ^^^^^^
 
 class E {
 >E : E
+>  : ^
 
     y: number;
 >y : number
+>  : ^^^^^^
 
     constructor(private y: number) { } // error
 >y : number
+>  : ^^^^^^
 }
 
 var e: E;
 >e : E
+>  : ^
 
 var r3 = e.y; // error
 >r3 : number
+>   : ^^^^^^
 >e.y : number
+>    : ^^^^^^
 >e : E
+>  : ^
 >y : number
+>  : ^^^^^^
 
 class F {
 >F : F
+>  : ^
 
     y: number;
 >y : number
+>  : ^^^^^^
 
     constructor(protected y: number) { } // error
 >y : number
+>  : ^^^^^^
 }
 
 var f: F;
 >f : F
+>  : ^
 
 var r4 = f.y; // error
 >r4 : number
+>   : ^^^^^^
 >f.y : number
+>    : ^^^^^^
 >f : F
+>  : ^
 >y : number
+>  : ^^^^^^
 

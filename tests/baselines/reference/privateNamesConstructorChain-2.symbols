@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-2.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesConstructorChain-2.ts] ////
+
+=== privateNamesConstructorChain-2.ts ===
 class Parent<T> {
 >Parent : Symbol(Parent, Decl(privateNamesConstructorChain-2.ts, 0, 0))
 >T : Symbol(T, Decl(privateNamesConstructorChain-2.ts, 0, 13))

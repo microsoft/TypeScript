@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionsStrictPropertyInitializationStrict.ts ===
+//// [tests/cases/compiler/optionsStrictPropertyInitializationStrict.ts] ////
+
+=== optionsStrictPropertyInitializationStrict.ts ===
 var x;
 >x : any
 

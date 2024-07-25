@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringWithBackslashEscapes01.ts] ////
+
 //// [templateStringWithBackslashEscapes01.ts]
 var a = `hello\world`;
 var b = `hello\\world`;

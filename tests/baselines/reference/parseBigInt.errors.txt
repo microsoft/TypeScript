@@ -1,23 +1,24 @@
-tests/cases/compiler/parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type 'bigint'.
-tests/cases/compiler/parseBigInt.ts(52,23): error TS2736: Operator '+' cannot be applied to type 'bigint'.
-tests/cases/compiler/parseBigInt.ts(56,25): error TS1005: ',' expected.
-tests/cases/compiler/parseBigInt.ts(57,22): error TS1352: A bigint literal cannot use exponential notation.
-tests/cases/compiler/parseBigInt.ts(58,19): error TS1353: A bigint literal must be an integer.
-tests/cases/compiler/parseBigInt.ts(59,26): error TS1353: A bigint literal must be an integer.
-tests/cases/compiler/parseBigInt.ts(60,23): error TS1177: Binary digit expected.
-tests/cases/compiler/parseBigInt.ts(61,20): error TS1178: Octal digit expected.
-tests/cases/compiler/parseBigInt.ts(62,20): error TS1125: Hexadecimal digit expected.
-tests/cases/compiler/parseBigInt.ts(63,26): error TS2304: Cannot find name '_123n'.
-tests/cases/compiler/parseBigInt.ts(64,30): error TS6188: Numeric separators are not allowed here.
-tests/cases/compiler/parseBigInt.ts(65,33): error TS6189: Multiple consecutive numeric separators are not permitted.
-tests/cases/compiler/parseBigInt.ts(69,15): error TS2345: Argument of type '0n' is not assignable to parameter of type '1n | 3n | 2n'.
-tests/cases/compiler/parseBigInt.ts(70,15): error TS2345: Argument of type '0' is not assignable to parameter of type '1n | 3n | 2n'.
-tests/cases/compiler/parseBigInt.ts(70,34): error TS2345: Argument of type '1' is not assignable to parameter of type '1n | 3n | 2n'.
-tests/cases/compiler/parseBigInt.ts(70,53): error TS2345: Argument of type '2' is not assignable to parameter of type '1n | 3n | 2n'.
-tests/cases/compiler/parseBigInt.ts(70,72): error TS2345: Argument of type '3' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type 'bigint'.
+parseBigInt.ts(52,23): error TS2736: Operator '+' cannot be applied to type 'bigint'.
+parseBigInt.ts(56,21): error TS1121: Octal literals are not allowed. Use the syntax '0o123'.
+parseBigInt.ts(56,25): error TS1005: ',' expected.
+parseBigInt.ts(57,22): error TS1352: A bigint literal cannot use exponential notation.
+parseBigInt.ts(58,19): error TS1353: A bigint literal must be an integer.
+parseBigInt.ts(59,26): error TS1353: A bigint literal must be an integer.
+parseBigInt.ts(60,23): error TS1177: Binary digit expected.
+parseBigInt.ts(61,20): error TS1178: Octal digit expected.
+parseBigInt.ts(62,20): error TS1125: Hexadecimal digit expected.
+parseBigInt.ts(63,26): error TS2304: Cannot find name '_123n'.
+parseBigInt.ts(64,30): error TS6188: Numeric separators are not allowed here.
+parseBigInt.ts(65,33): error TS6189: Multiple consecutive numeric separators are not permitted.
+parseBigInt.ts(69,15): error TS2345: Argument of type '0n' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,15): error TS2345: Argument of type '0' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,34): error TS2345: Argument of type '1' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,53): error TS2345: Argument of type '2' is not assignable to parameter of type '1n | 3n | 2n'.
+parseBigInt.ts(70,72): error TS2345: Argument of type '3' is not assignable to parameter of type '1n | 3n | 2n'.
 
 
-==== tests/cases/compiler/parseBigInt.ts (17 errors) ====
+==== parseBigInt.ts (18 errors) ====
     // All bases should allow "n" suffix
     const bin = 0b101, binBig = 0b101n; // 5, 5n
     const oct = 0o567, octBig = 0o567n; // 375, 375n
@@ -78,6 +79,8 @@ tests/cases/compiler/parseBigInt.ts(70,72): error TS2345: Argument of type '3' i
     // Parsing errors
     // In separate blocks because they each declare an "n" variable
     { const legacyOct = 0123n; }
+                        ~~~~
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o123'.
                             ~
 !!! error TS1005: ',' expected.
     { const scientific = 1e2n; }

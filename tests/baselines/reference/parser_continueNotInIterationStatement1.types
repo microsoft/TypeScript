@@ -1,3 +1,5 @@
-=== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueNotInIterationStatement1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueNotInIterationStatement1.ts] ////
+
+=== parser_continueNotInIterationStatement1.ts ===
+
 continue;
-No type information for this code.

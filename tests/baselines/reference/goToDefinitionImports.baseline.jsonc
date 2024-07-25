@@ -1,0 +1,102 @@
+// === goToDefinition ===
+// === /b.ts ===
+// import f, { x } from "./a";
+// <|import * as [|a|] from "./a";|>
+// import b = require("./b");
+// f;
+// x;
+// /*GOTO DEF*/a;
+// b;
+
+  // === Details ===
+  [
+   {
+    "kind": "alias",
+    "name": "a",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// <|export default function [|f|]() {}|>
+// export const x = 0;
+
+// === /b.ts ===
+// import f, { x } from "./a";
+// import * as a from "./a";
+// import b = require("./b");
+// /*GOTO DEF*/[|f|];
+// x;
+// a;
+// b;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "f",
+    "containerName": "a",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.ts ===
+// export default function f() {}
+// <|export const [|x|] = 0;|>
+
+// === /b.ts ===
+// import f, { x } from "./a";
+// import * as a from "./a";
+// import b = require("./b");
+// f;
+// /*GOTO DEF*/[|x|];
+// a;
+// b;
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "x",
+    "containerName": "a",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /b.ts ===
+// [|import f, { x } from "./a";
+// import * as a from "./a";
+// import b = require("./b");
+// f;
+// x;
+// a;
+// /*GOTO DEF*/b;|]
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"/b\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

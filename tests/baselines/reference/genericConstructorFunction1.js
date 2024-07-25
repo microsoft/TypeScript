@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericConstructorFunction1.ts] ////
+
 //// [genericConstructorFunction1.ts]
 function f1<T>(args: T) {
     var v1: { [index: string]: new (arg: T) => Date };

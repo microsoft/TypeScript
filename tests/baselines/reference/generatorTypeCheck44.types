@@ -1,18 +1,26 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck44.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck44.ts] ////
+
+=== generatorTypeCheck44.ts ===
 function* g() {
 >g : () => Generator<number, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let x = {
 >x : { [x: number]: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{        get [yield 0]() {            return 0;        }    } : { [x: number]: number; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         get [yield 0]() {
 >[yield 0] : number
+>          : ^^^^^^
 >yield 0 : any
 >0 : 0
+>  : ^
 
             return 0;
 >0 : 0
+>  : ^
         }
     }
 }

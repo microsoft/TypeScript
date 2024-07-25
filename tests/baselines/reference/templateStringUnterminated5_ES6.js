@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringUnterminated5_ES6.ts] ////
+
 //// [templateStringUnterminated5_ES6.ts]
 `\\\\\`
 

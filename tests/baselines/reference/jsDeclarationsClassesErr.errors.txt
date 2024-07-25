@@ -1,27 +1,27 @@
-tests/cases/conformance/jsdoc/declarations/index.js(4,16): error TS8004: Type parameter declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(5,12): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(8,16): error TS8004: Type parameter declarations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(8,29): error TS8011: Type arguments can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(9,12): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(13,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(19,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(23,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(27,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(28,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(32,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(39,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(43,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(47,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(48,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(52,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(53,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(59,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(63,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(67,11): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/conformance/jsdoc/declarations/index.js(68,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(4,16): error TS8004: Type parameter declarations can only be used in TypeScript files.
+index.js(5,12): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(8,16): error TS8004: Type parameter declarations can only be used in TypeScript files.
+index.js(8,29): error TS8011: Type arguments can only be used in TypeScript files.
+index.js(9,12): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(13,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(19,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(23,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(27,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(28,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(32,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(39,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(43,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(47,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(48,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(52,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(53,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(59,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(63,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(67,11): error TS8010: Type annotations can only be used in TypeScript files.
+index.js(68,11): error TS8010: Type annotations can only be used in TypeScript files.
 
 
-==== tests/cases/conformance/jsdoc/declarations/index.js (21 errors) ====
+==== index.js (21 errors) ====
     // Pretty much all of this should be an error, (since index signatures and generics are forbidden in js),
     // but we should be able to synthesize declarations from the symbols regardless
     

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileAliasUseBeforeDeclaration2.ts ===
+//// [tests/cases/compiler/declFileAliasUseBeforeDeclaration2.ts] ////
+
+=== declFileAliasUseBeforeDeclaration2.ts ===
 declare module "test" {
 >"test" : Symbol("test", Decl(declFileAliasUseBeforeDeclaration2.ts, 0, 0))
 

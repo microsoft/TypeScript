@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of50.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of50.ts] ////
+
+=== for-of50.ts ===
 var map = new Map([["", true]]);
 >map : Symbol(map, Decl(for-of50.ts, 0, 3))
 >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

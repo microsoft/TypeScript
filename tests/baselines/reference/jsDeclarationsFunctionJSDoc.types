@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/source.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsFunctionJSDoc.ts] ////
+
+=== source.js ===
 /**
  * Foos a bar together using an `a` and a `b`
  * @param {number} a
@@ -6,14 +8,18 @@
  */
 export function foo(a, b) {}
 >foo : (a: number, b: string) => void
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >b : string
+>  : ^^^^^^
 
 /**
  * Legacy - DO NOT USE
  */
 export class Aleph {
 >Aleph : Aleph
+>      : ^^^^^
 
     /**
      * Impossible to construct.
@@ -22,17 +28,23 @@ export class Aleph {
      */
     constructor(a, b) {
 >a : Aleph
+>  : ^^^^^
 >b : null
+>  : ^^^^
 
         /**
          * Field is always null
          */
         this.field = b;
 >this.field = b : null
+>               : ^^^^
 >this.field : any
 >this : this
+>     : ^^^^
 >field : any
+>      : ^^^
 >b : null
+>  : ^^^^
     }
 
     /**
@@ -41,6 +53,7 @@ export class Aleph {
      */
     doIt() {}
 >doIt : () => void
+>     : ^^^^^^    
 }
 
 /**
@@ -48,5 +61,7 @@ export class Aleph {
  */
 export const c = 12;
 >c : 12
+>  : ^^
 >12 : 12
+>   : ^^
 

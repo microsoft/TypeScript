@@ -1,321 +1,506 @@
-=== tests/cases/compiler/destructuringUnspreadableIntoRest.ts ===
+//// [tests/cases/compiler/destructuringUnspreadableIntoRest.ts] ////
+
+=== destructuringUnspreadableIntoRest.ts ===
 class A {
 >A : A
+>  : ^
 
     constructor(
         public publicProp: string,
 >publicProp : string
+>           : ^^^^^^
 
         private privateProp: string,
 >privateProp : string
+>            : ^^^^^^
 
         protected protectedProp: string,
 >protectedProp : string
+>              : ^^^^^^
 
     ) {}
 
     get getter(): number {
 >getter : number
+>       : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 
     set setter(_v: number) {}
 >setter : number
+>       : ^^^^^^
 >_v : number
+>   : ^^^^^^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         const {                 ...rest1 } = this;
 >rest1 : Omit<this, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         const {                 ...rest2 } = this as A;
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >this as A : A
+>          : ^
 >this : this
+>     : ^^^^
 
         const { publicProp: _1, ...rest3 } = this;
 >publicProp : any
+>           : ^^^
 >_1 : string
+>   : ^^^^^^
 >rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         const { publicProp: _2, ...rest4 } = this as A;
 >publicProp : any
+>           : ^^^
 >_2 : string
+>   : ^^^^^^
 >rest4 : {}
+>      : ^^
 >this as A : A
+>          : ^
 >this : this
+>     : ^^^^
 
         rest1.publicProp;
 >rest1.publicProp : this["publicProp"]
+>                 : ^^^^^^^^^^^^^^^^^^
 >rest1 : Omit<this, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >publicProp : this["publicProp"]
+>           : ^^^^^^^^^^^^^^^^^^
 
         rest2.publicProp;
 >rest2.publicProp : string
+>                 : ^^^^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >publicProp : string
+>           : ^^^^^^
 
         rest3.publicProp;
 >rest3.publicProp : any
+>                 : ^^^
 >rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >publicProp : any
+>           : ^^^
 
         rest4.publicProp;
 >rest4.publicProp : any
+>                 : ^^^
 >rest4 : {}
+>      : ^^
 >publicProp : any
+>           : ^^^
 
         rest1.privateProp;
 >rest1.privateProp : any
+>                  : ^^^
 >rest1 : Omit<this, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >privateProp : any
+>            : ^^^
 
         rest2.privateProp;
 >rest2.privateProp : any
+>                  : ^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >privateProp : any
+>            : ^^^
 
         rest3.privateProp;
 >rest3.privateProp : any
+>                  : ^^^
 >rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >privateProp : any
+>            : ^^^
 
         rest4.privateProp;
 >rest4.privateProp : any
+>                  : ^^^
 >rest4 : {}
+>      : ^^
 >privateProp : any
+>            : ^^^
 
         rest1.protectedProp;
 >rest1.protectedProp : any
+>                    : ^^^
 >rest1 : Omit<this, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >protectedProp : any
+>              : ^^^
 
         rest2.protectedProp;
 >rest2.protectedProp : any
+>                    : ^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >protectedProp : any
+>              : ^^^
 
         rest3.protectedProp;
 >rest3.protectedProp : any
+>                    : ^^^
 >rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >protectedProp : any
+>              : ^^^
 
         rest4.protectedProp;
 >rest4.protectedProp : any
+>                    : ^^^
 >rest4 : {}
+>      : ^^
 >protectedProp : any
+>              : ^^^
 
         rest1.getter;
 >rest1.getter : any
+>             : ^^^
 >rest1 : Omit<this, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getter : any
+>       : ^^^
 
         rest2.getter;
 >rest2.getter : any
+>             : ^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >getter : any
+>       : ^^^
 
         rest3.getter;
 >rest3.getter : any
+>             : ^^^
 >rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getter : any
+>       : ^^^
 
         rest4.getter;
 >rest4.getter : any
+>             : ^^^
 >rest4 : {}
+>      : ^^
 >getter : any
+>       : ^^^
 
         rest1.setter;
 >rest1.setter : any
+>             : ^^^
 >rest1 : Omit<this, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >setter : any
+>       : ^^^
 
         rest2.setter;
 >rest2.setter : any
+>             : ^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >setter : any
+>       : ^^^
 
         rest3.setter;
 >rest3.setter : any
+>             : ^^^
 >rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >setter : any
+>       : ^^^
 
         rest4.setter;
 >rest4.setter : any
+>             : ^^^
 >rest4 : {}
+>      : ^^
 >setter : any
+>       : ^^^
 
         rest1.method;
 >rest1.method : any
+>             : ^^^
 >rest1 : Omit<this, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >method : any
+>       : ^^^
 
         rest2.method;
 >rest2.method : any
+>             : ^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >method : any
+>       : ^^^
 
         rest3.method;
 >rest3.method : any
+>             : ^^^
 >rest3 : Omit<this, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >method : any
+>       : ^^^
 
         rest4.method;
 >rest4.method : any
+>             : ^^^
 >rest4 : {}
+>      : ^^
 >method : any
+>       : ^^^
     }
 }
 
 function destructure<T extends A>(x: T) {
 >destructure : <T extends A>(x: T) => void
+>            : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 
     const {                 ...rest1 } = x;
 >rest1 : Omit<T, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     const {                 ...rest2 } = x as A;
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >x as A : A
+>       : ^
 >x : T
+>  : ^
 
     const { publicProp: _1, ...rest3 } = x;
 >publicProp : any
+>           : ^^^
 >_1 : string
+>   : ^^^^^^
 >rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
+>  : ^
 
     const { publicProp: _2, ...rest4 } = x as A;
 >publicProp : any
+>           : ^^^
 >_2 : string
+>   : ^^^^^^
 >rest4 : {}
+>      : ^^
 >x as A : A
+>       : ^
 >x : T
+>  : ^
 
     rest1.publicProp;
 >rest1.publicProp : T["publicProp"]
+>                 : ^^^^^^^^^^^^^^^
 >rest1 : Omit<T, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >publicProp : T["publicProp"]
+>           : ^^^^^^^^^^^^^^^
 
     rest2.publicProp;
 >rest2.publicProp : string
+>                 : ^^^^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >publicProp : string
+>           : ^^^^^^
 
     rest3.publicProp;
 >rest3.publicProp : any
+>                 : ^^^
 >rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >publicProp : any
+>           : ^^^
 
     rest4.publicProp;
 >rest4.publicProp : any
+>                 : ^^^
 >rest4 : {}
+>      : ^^
 >publicProp : any
+>           : ^^^
 
     rest1.privateProp;
 >rest1.privateProp : any
+>                  : ^^^
 >rest1 : Omit<T, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >privateProp : any
+>            : ^^^
 
     rest2.privateProp;
 >rest2.privateProp : any
+>                  : ^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >privateProp : any
+>            : ^^^
 
     rest3.privateProp;
 >rest3.privateProp : any
+>                  : ^^^
 >rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >privateProp : any
+>            : ^^^
 
     rest4.privateProp;
 >rest4.privateProp : any
+>                  : ^^^
 >rest4 : {}
+>      : ^^
 >privateProp : any
+>            : ^^^
 
     rest1.protectedProp;
 >rest1.protectedProp : any
+>                    : ^^^
 >rest1 : Omit<T, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >protectedProp : any
+>              : ^^^
 
     rest2.protectedProp;
 >rest2.protectedProp : any
+>                    : ^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >protectedProp : any
+>              : ^^^
 
     rest3.protectedProp;
 >rest3.protectedProp : any
+>                    : ^^^
 >rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >protectedProp : any
+>              : ^^^
 
     rest4.protectedProp;
 >rest4.protectedProp : any
+>                    : ^^^
 >rest4 : {}
+>      : ^^
 >protectedProp : any
+>              : ^^^
 
     rest1.getter;
 >rest1.getter : any
+>             : ^^^
 >rest1 : Omit<T, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getter : any
+>       : ^^^
 
     rest2.getter;
 >rest2.getter : any
+>             : ^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >getter : any
+>       : ^^^
 
     rest3.getter;
 >rest3.getter : any
+>             : ^^^
 >rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getter : any
+>       : ^^^
 
     rest4.getter;
 >rest4.getter : any
+>             : ^^^
 >rest4 : {}
+>      : ^^
 >getter : any
+>       : ^^^
 
     rest1.setter;
 >rest1.setter : any
+>             : ^^^
 >rest1 : Omit<T, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >setter : any
+>       : ^^^
 
     rest2.setter;
 >rest2.setter : any
+>             : ^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >setter : any
+>       : ^^^
 
     rest3.setter;
 >rest3.setter : any
+>             : ^^^
 >rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >setter : any
+>       : ^^^
 
     rest4.setter;
 >rest4.setter : any
+>             : ^^^
 >rest4 : {}
+>      : ^^
 >setter : any
+>       : ^^^
 
     rest1.method;
 >rest1.method : any
+>             : ^^^
 >rest1 : Omit<T, "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >method : any
+>       : ^^^
 
     rest2.method;
 >rest2.method : any
+>             : ^^^
 >rest2 : { publicProp: string; }
+>      : ^^^^^^^^^^^^^^      ^^^
 >method : any
+>       : ^^^
 
     rest3.method;
 >rest3.method : any
+>             : ^^^
 >rest3 : Omit<T, "publicProp" | "getter" | "setter" | "method">
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >method : any
+>       : ^^^
 
     rest4.method;
 >rest4.method : any
+>             : ^^^
 >rest4 : {}
+>      : ^^
 >method : any
+>       : ^^^
 }
 

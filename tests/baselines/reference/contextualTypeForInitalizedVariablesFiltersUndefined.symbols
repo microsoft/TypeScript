@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeForInitalizedVariablesFiltersUndefined.ts ===
+//// [tests/cases/compiler/contextualTypeForInitalizedVariablesFiltersUndefined.ts] ////
+
+=== contextualTypeForInitalizedVariablesFiltersUndefined.ts ===
 const fInferred = ({ a = 0 } = {}) => a;
 >fInferred : Symbol(fInferred, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 0, 5))
 >a : Symbol(a, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 0, 20))

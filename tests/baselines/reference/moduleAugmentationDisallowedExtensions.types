@@ -1,104 +1,150 @@
-=== tests/cases/compiler/x0.ts ===
+//// [tests/cases/compiler/moduleAugmentationDisallowedExtensions.ts] ////
+
+=== x0.ts ===
 export let a = 1;
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
-=== tests/cases/compiler/x.ts ===
+=== x.ts ===
 namespace N1 {
 >N1 : typeof N1
+>   : ^^^^^^^^^
 
     export let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 declare module "./observable" {
->"./observable" : typeof import("tests/cases/compiler/observable")
+>"./observable" : typeof import("observable")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var x: number;
 >x : number
+>  : ^^^^^^
 
     let y: number;
 >y : number
+>  : ^^^^^^
 
     const z: number;
 >z : number
+>  : ^^^^^^
 
     let {x1, y1, z0: {n}, z1: {arr: [el1, el2, el3]}}: {x1: number, y1: string, z0: {n: number}, z1: {arr: number[]} }
 >x1 : number
+>   : ^^^^^^
 >y1 : string
+>   : ^^^^^^
 >z0 : any
+>   : ^^^
 >n : number
+>  : ^^^^^^
 >z1 : any
+>   : ^^^
 >arr : any
+>    : ^^^
 >el1 : number
+>    : ^^^^^^
 >el2 : number
+>    : ^^^^^^
 >el3 : number
+>    : ^^^^^^
 >x1 : number
+>   : ^^^^^^
 >y1 : string
+>   : ^^^^^^
 >z0 : { n: number; }
+>   : ^^^^^      ^^^
 >n : number
+>  : ^^^^^^
 >z1 : { arr: number[]; }
+>   : ^^^^^^^        ^^^
 >arr : number[]
+>    : ^^^^^^^^
 
     interface A { x }
 >x : any
+>  : ^^^
 
     namespace N {
 >N : typeof N
+>  : ^^^^^^^^
 
         export class C {}
 >C : C
+>  : ^
     }
     class Cls {}
 >Cls : Cls
+>    : ^^^
 
     function foo(): number;
 >foo : () => number
+>    : ^^^^^^      
 
     type T = number;
 >T : number
+>  : ^^^^^^
 
     import * as all from "./x0";
 >all : any
+>    : ^^^
 
     import {a} from "./x0";
 >a : any
+>  : ^^^
 
     export * from "./x0";
     export {a} from "./x0";
 >a : any
+>  : ^^^
 }
 
 declare module "./test" {
->"./test" : typeof import("tests/cases/compiler/test")
+>"./test" : typeof import("test")
+>         : ^^^^^^^^^^^^^^^^^^^^^
 
     export = N1;
 >N1 : typeof N1
+>   : ^^^^^^^^^
 }
 export {}
 
-=== tests/cases/compiler/observable.ts ===
+=== observable.ts ===
 export declare class Observable<T> {
 >Observable : Observable<T>
+>           : ^^^^^^^^^^^^^
 
     filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>
+>       : ^    ^^                 ^^^^^             
 >pred : (e: T) => boolean
+>     : ^ ^^ ^^^^^       
 >e : T
+>  : ^
 }
 export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 export let b = 1;
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { Observable } from "./observable"
 >Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
 
 import "./x";
 

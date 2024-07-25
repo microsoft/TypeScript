@@ -1,7 +1,7 @@
-tests/cases/compiler/fileWithNextLine3.ts(3,1): error TS1108: A 'return' statement can only be used within a function body.
+fileWithNextLine3.ts(3,1): error TS1108: A 'return' statement can only be used within a function body.
 
 
-==== tests/cases/compiler/fileWithNextLine3.ts (1 errors) ====
+==== fileWithNextLine3.ts (1 errors) ====
     // Note: there is a nextline (0x85) between the return and the 
     // 0.  It should be counted as a space and should not trigger ASI
     return0; 

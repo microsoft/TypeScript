@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/enum/validEnumAssignments.ts] ////
+
 //// [validEnumAssignments.ts]
 enum E {
     A,

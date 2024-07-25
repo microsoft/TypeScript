@@ -1,17 +1,26 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of20.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of20.ts] ////
+
+=== ES5For-of20.ts ===
 for (let v of []) {
 >v : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     let v;
 >v : any
+>  : ^^^
 
     for (let v of [v]) {
 >v : any
+>  : ^^^
 >[v] : any[]
+>    : ^^^^^
 >v : any
+>  : ^^^
 
         const v;
 >v : any
+>  : ^^^
     }
 }

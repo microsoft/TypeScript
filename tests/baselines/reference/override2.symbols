@@ -1,4 +1,6 @@
-=== tests/cases/conformance/override/override2.ts ===
+//// [tests/cases/conformance/override/override2.ts] ////
+
+=== override2.ts ===
 abstract class AB {
 >AB : Symbol(AB, Decl(override2.ts, 0, 0))
 

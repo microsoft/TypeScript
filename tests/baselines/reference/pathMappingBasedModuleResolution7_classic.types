@@ -1,63 +1,93 @@
+//// [tests/cases/compiler/pathMappingBasedModuleResolution7_classic.ts] ////
+
 === c:/root/src/file1.ts ===
 import {x} from "./project/file2";
 >x : number
+>  : ^^^^^^
 
 import {y} from "module3";
 >y : number
+>  : ^^^^^^
 
 declare function use(x: string);
 >use : (x: string) => any
+>    : ^ ^^      ^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 use(x.toFixed());
 >use(x.toFixed()) : any
 >use : (x: string) => any
+>    : ^ ^^      ^^^^^^^^
 >x.toFixed() : string
+>            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 
 use(y.toFixed());
 >use(y.toFixed()) : any
 >use : (x: string) => any
+>    : ^ ^^      ^^^^^^^^
 >y.toFixed() : string
+>            : ^^^^^^
 >y.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >y : number
+>  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
-
-=== c:/root/generated/src/project/file2.ts ===
-import {a} from "module1";
->a : number
-
-import {b} from "templates/module2";
->b : number
-
-import {x as c} from "../file3";
->x : number
->c : number
-
-export let x = a + b + c;
->x : number
->a + b + c : number
->a + b : number
->a : number
->b : number
->c : number
-
-=== c:/shared/module1.d.ts ===
-export let a: number
->a : number
-
-=== c:/root/generated/src/templates/module2.ts ===
-export let b: number;
->b : number
+>        : ^              ^^^      ^^^^^      
 
 === c:/root/src/file3.d.ts ===
 export let x: number;
 >x : number
+>  : ^^^^^^
+
+=== c:/root/generated/src/project/file2.ts ===
+import {a} from "module1";
+>a : number
+>  : ^^^^^^
+
+import {b} from "templates/module2";
+>b : number
+>  : ^^^^^^
+
+import {x as c} from "../file3";
+>x : number
+>  : ^^^^^^
+>c : number
+>  : ^^^^^^
+
+export let x = a + b + c;
+>x : number
+>  : ^^^^^^
+>a + b + c : number
+>          : ^^^^^^
+>a + b : number
+>      : ^^^^^^
+>a : number
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>c : number
+>  : ^^^^^^
+
+=== c:/shared/module1.d.ts ===
+export let a: number
+>a : number
+>  : ^^^^^^
+
+=== c:/root/generated/src/templates/module2.ts ===
+export let b: number;
+>b : number
+>  : ^^^^^^
 
 === c:/module3.d.ts ===
 export let y: number;
 >y : number
+>  : ^^^^^^
 
 

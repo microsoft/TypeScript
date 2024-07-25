@@ -1,151 +1,215 @@
-=== tests/cases/compiler/readonlyInDeclarationFile.ts ===
+//// [tests/cases/compiler/readonlyInDeclarationFile.ts] ////
+
+=== readonlyInDeclarationFile.ts ===
 interface Foo {
     readonly x: number;
 >x : number
+>  : ^^^^^^
 
     readonly [x: string]: Object;
 >x : string
+>  : ^^^^^^
 }
 
 class C {
 >C : C
+>  : ^
 
     readonly [x: string]: Object;
 >x : string
+>  : ^^^^^^
 
     private readonly a1: number;
 >a1 : number
+>   : ^^^^^^
 
     protected readonly a2: number;
 >a2 : number
+>   : ^^^^^^
 
     public readonly a3: number;
 >a3 : number
+>   : ^^^^^^
 
     private get b1() { return 1 }
 >b1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     protected get b2() { return 1 }
 >b2 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     public get b3() { return 1 }
 >b3 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     private get c1() { return 1 }
 >c1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     private set c1(value) { }
 >c1 : number
+>   : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     protected get c2() { return 1 }
 >c2 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     protected set c2(value) { }
 >c2 : number
+>   : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     public get c3() { return 1 }
 >c3 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     public set c3(value) { }
 >c3 : number
+>   : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     private static readonly s1: number;
 >s1 : number
+>   : ^^^^^^
 
     protected static readonly s2: number;
 >s2 : number
+>   : ^^^^^^
 
     public static readonly s3: number;
 >s3 : number
+>   : ^^^^^^
 
     private static get t1() { return 1 }
 >t1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     protected static get t2() { return 1 }
 >t2 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     public static get t3() { return 1 }
 >t3 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     private static get u1() { return 1 }
 >u1 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     private static set u1(value) { }
 >u1 : number
+>   : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     protected static get u2() { return 1 }
 >u2 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     protected static set u2(value) { }
 >u2 : number
+>   : ^^^^^^
 >value : number
+>      : ^^^^^^
 
     public static get u3() { return 1 }
 >u3 : number
+>   : ^^^^^^
 >1 : 1
+>  : ^
 
     public static set u3(value) { }
 >u3 : number
+>   : ^^^^^^
 >value : number
+>      : ^^^^^^
 }
 
 var z: {
 >z : { readonly [x: string]: Object; readonly a: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     readonly a: string;
 >a : string
+>  : ^^^^^^
 
     readonly [x: string]: Object;
 >x : string
+>  : ^^^^^^
 }
 
 function f() {
 >f : () => { readonly x: number; y: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return {
 >{        get x() { return 1; },        get y() { return 1; },        set y(value) { }    } : { readonly x: number; y: number; }
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         get x() { return 1; },
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         get y() { return 1; },
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         set y(value) { }
 >y : number
+>  : ^^^^^^
 >value : number
+>      : ^^^^^^
     }
 }
 
 function g() {
 >g : () => { readonly [x: string]: Object; readonly a: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     var x: {
 >x : { readonly [x: string]: Object; readonly a: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
         readonly a: string;
 >a : string
+>  : ^^^^^^
 
         readonly [x: string]: Object;
 >x : string
+>  : ^^^^^^
     }
     return x;
 >x : { readonly [x: string]: Object; readonly a: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 }

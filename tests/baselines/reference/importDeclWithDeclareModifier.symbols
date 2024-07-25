@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importDeclWithDeclareModifier.ts ===
+//// [tests/cases/compiler/importDeclWithDeclareModifier.ts] ////
+
+=== importDeclWithDeclareModifier.ts ===
 module x {
 >x : Symbol(x, Decl(importDeclWithDeclareModifier.ts, 0, 0))
 

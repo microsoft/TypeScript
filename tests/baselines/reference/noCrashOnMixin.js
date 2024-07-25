@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noCrashOnMixin.ts] ////
+
 //// [noCrashOnMixin.ts]
 class Abstract {
     protected constructor() {

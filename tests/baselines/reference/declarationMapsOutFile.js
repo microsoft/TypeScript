@@ -22,7 +22,7 @@ export { c, Foo };
 //// [bundle.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.Foo = void 0;
     var Foo = /** @class */ (function () {
         function Foo() {
@@ -39,9 +39,9 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("index", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.Foo = exports.c = exports.x = void 0;
-    exports.Foo = a_1.Foo;
+    Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return a_1.Foo; } });
     var c = new a_1.Foo();
     exports.c = c;
     c.doThing({ a: 42 });

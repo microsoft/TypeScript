@@ -1,16 +1,23 @@
-=== tests/cases/compiler/globalIsContextualKeyword.ts ===
+//// [tests/cases/compiler/globalIsContextualKeyword.ts] ////
+
+=== globalIsContextualKeyword.ts ===
 function a() {
 >a : () => void
+>  : ^^^^^^^^^^
 
     let global = 1;
 >global : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 }
 function b() {
 >b : () => void
+>  : ^^^^^^^^^^
 
     class global {}
 >global : global
+>       : ^^^^^^
 }
 
 namespace global {
@@ -18,14 +25,20 @@ namespace global {
 
 function foo(global: number) {
 >foo : (global: number) => void
+>    : ^      ^^      ^^^^^^^^^
 >global : number
+>       : ^^^^^^
 }
 
 let obj = {
 >obj : { global: string; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >{    global: "123"} : { global: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^
 
     global: "123"
 >global : string
+>       : ^^^^^^
 >"123" : "123"
+>      : ^^^^^
 }

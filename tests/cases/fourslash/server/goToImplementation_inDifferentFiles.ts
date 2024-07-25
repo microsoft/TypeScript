@@ -16,4 +16,4 @@
 ////    func();
 ////}
 
-verify.allRangesAppearInImplementationList("");
+verify.baselineGoToImplementation("");

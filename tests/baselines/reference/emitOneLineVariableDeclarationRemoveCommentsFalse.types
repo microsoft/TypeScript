@@ -1,26 +1,38 @@
-=== tests/cases/compiler/emitOneLineVariableDeclarationRemoveCommentsFalse.ts ===
+//// [tests/cases/compiler/emitOneLineVariableDeclarationRemoveCommentsFalse.ts] ////
+
+=== emitOneLineVariableDeclarationRemoveCommentsFalse.ts ===
 let a = /*[[${something}]]*/ {};
 >a : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 let b: any = /*[[${something}]]*/ {};
 >b : any
 >{} : {}
+>   : ^^
 
 let c: { hoge: boolean } = /*[[${something}]]*/ { hoge: true };
 >c : { hoge: boolean; }
+>  : ^^^^^^^^       ^^^
 >hoge : boolean
+>     : ^^^^^^^
 >{ hoge: true } : { hoge: true; }
+>               : ^^^^^^^^^^^^^^^
 >hoge : true
+>     : ^^^^
 >true : true
+>     : ^^^^
 
 let d: any  /*[[${something}]]*/ = {};
 >d : any
 >{} : {}
+>   : ^^
 
 let e/*[[${something}]]*/: any   = {};
 >e : any
 >{} : {}
+>   : ^^
 
 let f = /* comment1 */ d(e);
 >f : any

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDefaultTypeAndClass.ts ===
+//// [tests/cases/compiler/exportDefaultTypeAndClass.ts] ////
+
+=== exportDefaultTypeAndClass.ts ===
 export default class Foo {}
 >Foo : Symbol(Foo, Decl(exportDefaultTypeAndClass.ts, 0, 0))
 

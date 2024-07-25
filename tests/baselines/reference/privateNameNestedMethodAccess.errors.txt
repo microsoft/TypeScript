@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts(11,25): error TS18014: The property '#bar' cannot be accessed on type 'C' within this class because it is shadowed by another private identifier with the same spelling.
-tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts(19,19): error TS2339: Property '#unknown' does not exist on type 'any'.
+privateNameNestedMethodAccess.ts(11,25): error TS18014: The property '#bar' cannot be accessed on type 'C' within this class because it is shadowed by another private identifier with the same spelling.
+privateNameNestedMethodAccess.ts(19,19): error TS2339: Property '#unknown' does not exist on type 'any'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts (2 errors) ====
+==== privateNameNestedMethodAccess.ts (2 errors) ====
     class C {
         #foo = 42;
         #bar() { new C().#baz; }
@@ -16,8 +16,8 @@ tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAcce
                     new C().#bar; // Error
                             ~~~~
 !!! error TS18014: The property '#bar' cannot be accessed on type 'C' within this class because it is shadowed by another private identifier with the same spelling.
-!!! related TS18017 tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts:8:13: The shadowing declaration of '#bar' is defined here
-!!! related TS18018 tests/cases/conformance/classes/members/privateNames/privateNameNestedMethodAccess.ts:3:5: The declaration of '#bar' that you probably intended to use is defined here
+!!! related TS18017 privateNameNestedMethodAccess.ts:8:13: The shadowing declaration of '#bar' is defined here
+!!! related TS18018 privateNameNestedMethodAccess.ts:3:5: The declaration of '#bar' that you probably intended to use is defined here
                     new C().#baz;
                     new D().#bar;
                 }

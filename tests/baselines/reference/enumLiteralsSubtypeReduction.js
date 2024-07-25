@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumLiteralsSubtypeReduction.ts] ////
+
 //// [enumLiteralsSubtypeReduction.ts]
 enum E {
     E0,

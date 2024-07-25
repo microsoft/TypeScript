@@ -1,0 +1,123 @@
+//// [tests/cases/compiler/indirectDiscriminantAndExcessProperty.ts] ////
+
+=== indirectDiscriminantAndExcessProperty.ts ===
+export type Blah =
+>Blah : Blah
+>     : ^^^^
+
+    | { type: "foo", abc: string }
+>type : "foo"
+>     : ^^^^^
+>abc : string
+>    : ^^^^^^
+
+    | { type: "bar", xyz: number, extra: any };
+>type : "bar"
+>     : ^^^^^
+>xyz : number
+>    : ^^^^^^
+>extra : any
+>      : ^^^
+
+declare function thing(blah: Blah): void;
+>thing : (blah: Blah) => void
+>      : ^    ^^    ^^^^^    
+>blah : Blah
+>     : ^^^^
+
+let foo1 = "foo";
+>foo1 : string
+>     : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+thing({
+>thing({    type: foo1,    abc: "hello!"}) : void
+>                                          : ^^^^
+>thing : (blah: Blah) => void
+>      : ^    ^^    ^^^^^    
+>{    type: foo1,    abc: "hello!"} : { type: string; abc: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: foo1,
+>type : string
+>     : ^^^^^^
+>foo1 : string
+>     : ^^^^^^
+
+    abc: "hello!"
+>abc : string
+>    : ^^^^^^
+>"hello!" : "hello!"
+>         : ^^^^^^^^
+
+});
+
+let foo2 = "foo";
+>foo2 : string
+>     : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+thing({
+>thing({    type: foo2,    abc: "hello!",    extra: 123,}) : void
+>                                                          : ^^^^
+>thing : (blah: Blah) => void
+>      : ^    ^^    ^^^^^    
+>{    type: foo2,    abc: "hello!",    extra: 123,} : { type: string; abc: string; extra: number; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: foo2,
+>type : string
+>     : ^^^^^^
+>foo2 : string
+>     : ^^^^^^
+
+    abc: "hello!",
+>abc : string
+>    : ^^^^^^
+>"hello!" : "hello!"
+>         : ^^^^^^^^
+
+    extra: 123,
+>extra : number
+>      : ^^^^^^
+>123 : 123
+>    : ^^^
+
+});
+
+let bar = "bar";
+>bar : string
+>    : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+thing({
+>thing({    type: bar,    xyz: 123,    extra: 123,}) : void
+>                                                    : ^^^^
+>thing : (blah: Blah) => void
+>      : ^    ^^    ^^^^^    
+>{    type: bar,    xyz: 123,    extra: 123,} : { type: string; xyz: number; extra: number; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: bar,
+>type : string
+>     : ^^^^^^
+>bar : string
+>    : ^^^^^^
+
+    xyz: 123,
+>xyz : number
+>    : ^^^^^^
+>123 : 123
+>    : ^^^
+
+    extra: 123,
+>extra : number
+>      : ^^^^^^
+>123 : 123
+>    : ^^^
+
+});
+

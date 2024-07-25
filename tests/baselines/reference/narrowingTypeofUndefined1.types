@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/narrowingTypeofUndefined1.ts] ////
+
+=== narrowingTypeofUndefined1.ts ===
+declare const a: { error: { prop: string }, result: undefined } | { error: undefined, result: { prop: number } }
+>a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
+>  : ^^^^^^^^^                 ^^^^^^^^^^         ^^^^^^^^^^^^^^^         ^^^^^^^^^^                 ^^^
+>error : { prop: string; }
+>      : ^^^^^^^^      ^^^
+>prop : string
+>     : ^^^^^^
+>result : undefined
+>       : ^^^^^^^^^
+>error : undefined
+>      : ^^^^^^^^^
+>result : { prop: number; }
+>       : ^^^^^^^^      ^^^
+>prop : number
+>     : ^^^^^^
+
+if (typeof a.error === 'undefined') {
+>typeof a.error === 'undefined' : boolean
+>                               : ^^^^^^^
+>typeof a.error : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a.error : { prop: string; }
+>        : ^^^^^^^^      ^^^
+>a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
+>  : ^^^^^^^^^                 ^^^^^^^^^^         ^^^^^^^^^^^^^^^         ^^^^^^^^^^                 ^^^
+>error : { prop: string; }
+>      : ^^^^^^^^      ^^^
+>'undefined' : "undefined"
+>            : ^^^^^^^^^^^
+
+    a.result.prop; // number
+>a.result.prop : number
+>              : ^^^^^^
+>a.result : { prop: number; }
+>         : ^^^^^^^^      ^^^
+>a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
+>  : ^^^^^^^^^                 ^^^^^^^^^^         ^^^^^^^^^^^^^^^         ^^^^^^^^^^                 ^^^
+>result : { prop: number; }
+>       : ^^^^^^^^      ^^^
+>prop : number
+>     : ^^^^^^
+}
+else {
+    a.error.prop; // string
+>a.error.prop : string
+>             : ^^^^^^
+>a.error : { prop: string; }
+>        : ^^^^^^^^      ^^^
+>a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
+>  : ^^^^^^^^^                 ^^^^^^^^^^         ^^^^^^^^^^^^^^^         ^^^^^^^^^^                 ^^^
+>error : { prop: string; }
+>      : ^^^^^^^^      ^^^
+>prop : string
+>     : ^^^^^^
+}
+
+if (typeof a.error !== 'undefined') {
+>typeof a.error !== 'undefined' : boolean
+>                               : ^^^^^^^
+>typeof a.error : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a.error : { prop: string; }
+>        : ^^^^^^^^      ^^^
+>a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
+>  : ^^^^^^^^^                 ^^^^^^^^^^         ^^^^^^^^^^^^^^^         ^^^^^^^^^^                 ^^^
+>error : { prop: string; }
+>      : ^^^^^^^^      ^^^
+>'undefined' : "undefined"
+>            : ^^^^^^^^^^^
+
+    a.error.prop; // string
+>a.error.prop : string
+>             : ^^^^^^
+>a.error : { prop: string; }
+>        : ^^^^^^^^      ^^^
+>a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
+>  : ^^^^^^^^^                 ^^^^^^^^^^         ^^^^^^^^^^^^^^^         ^^^^^^^^^^                 ^^^
+>error : { prop: string; }
+>      : ^^^^^^^^      ^^^
+>prop : string
+>     : ^^^^^^
+}
+else {
+    a.result.prop; // number
+>a.result.prop : number
+>              : ^^^^^^
+>a.result : { prop: number; }
+>         : ^^^^^^^^      ^^^
+>a : { error: { prop: string; }; result: undefined; } | { error: undefined; result: { prop: number; }; }
+>  : ^^^^^^^^^                 ^^^^^^^^^^         ^^^^^^^^^^^^^^^         ^^^^^^^^^^                 ^^^
+>result : { prop: number; }
+>       : ^^^^^^^^      ^^^
+>prop : number
+>     : ^^^^^^
+}
+

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts] ////
+
 //// [ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.ts]
 module A {
 

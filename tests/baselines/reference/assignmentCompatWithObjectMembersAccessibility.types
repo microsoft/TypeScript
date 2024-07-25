@@ -1,168 +1,250 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts] ////
+
+=== assignmentCompatWithObjectMembersAccessibility.ts ===
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 
 module TargetIsPublic {
 >TargetIsPublic : typeof TargetIsPublic
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
     // targets
     class Base {
 >Base : Base
+>     : ^^^^
 
         public foo: string;
 >foo : string
+>    : ^^^^^^
     }
 
     interface I {
         foo: string;
 >foo : string
+>    : ^^^^^^
     }
 
     var a: { foo: string; }
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
 
     var b: Base;
 >b : Base
+>  : ^^^^
 
     var i: I;
 >i : I
+>  : ^
 
     // sources
     class D {
 >D : D
+>  : ^
 
         public foo: string;
 >foo : string
+>    : ^^^^^^
     }
 
     class E {
 >E : E
+>  : ^
 
         private foo: string;
 >foo : string
+>    : ^^^^^^
     }
     var d: D;
 >d : D
+>  : ^
 
     var e: E;
 >e : E
+>  : ^
 
     a = b;
 >a = b : Base
+>      : ^^^^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >b : Base
+>  : ^^^^
 
     a = i;
 >a = i : I
+>      : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >i : I
+>  : ^
 
     a = d;
 >a = d : D
+>      : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >d : D
+>  : ^
 
     a = e; // error
 >a = e : E
+>      : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >e : E
+>  : ^
 
     b = a;
 >b = a : { foo: string; }
+>      : ^^^^^^^      ^^^
 >b : Base
+>  : ^^^^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     b = i;
 >b = i : I
+>      : ^
 >b : Base
+>  : ^^^^
 >i : I
+>  : ^
 
     b = d;
 >b = d : D
+>      : ^
 >b : Base
+>  : ^^^^
 >d : D
+>  : ^
 
     b = e; // error
 >b = e : E
+>      : ^
 >b : Base
+>  : ^^^^
 >e : E
+>  : ^
 
     i = a;
 >i = a : { foo: string; }
+>      : ^^^^^^^      ^^^
 >i : I
+>  : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     i = b;
 >i = b : Base
+>      : ^^^^
 >i : I
+>  : ^
 >b : Base
+>  : ^^^^
 
     i = d;
 >i = d : D
+>      : ^
 >i : I
+>  : ^
 >d : D
+>  : ^
 
     i = e; // error
 >i = e : E
+>      : ^
 >i : I
+>  : ^
 >e : E
+>  : ^
 
     d = a;
 >d = a : { foo: string; }
+>      : ^^^^^^^      ^^^
 >d : D
+>  : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     d = b;
 >d = b : Base
+>      : ^^^^
 >d : D
+>  : ^
 >b : Base
+>  : ^^^^
 
     d = i;
 >d = i : I
+>      : ^
 >d : D
+>  : ^
 >i : I
+>  : ^
 
     d = e; // error
 >d = e : E
+>      : ^
 >d : D
+>  : ^
 >e : E
+>  : ^
 
     e = a; // errror
 >e = a : { foo: string; }
+>      : ^^^^^^^      ^^^
 >e : E
+>  : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     e = b; // errror
 >e = b : Base
+>      : ^^^^
 >e : E
+>  : ^
 >b : Base
+>  : ^^^^
 
     e = i; // errror
 >e = i : I
+>      : ^
 >e : E
+>  : ^
 >i : I
+>  : ^
 
     e = d; // errror
 >e = d : D
+>      : ^
 >e : E
+>  : ^
 >d : D
+>  : ^
 
     e = e; 
 >e = e : E
+>      : ^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 }
 
 module TargetIsPublic {
 >TargetIsPublic : typeof TargetIsPublic
+>               : ^^^^^^^^^^^^^^^^^^^^^
 
     // targets
     class Base {
 >Base : Base
+>     : ^^^^
 
         private foo: string;
 >foo : string
+>    : ^^^^^^
     }
 
     interface I extends Base {
@@ -170,148 +252,227 @@ module TargetIsPublic {
 
     var a: { foo: string; }
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >foo : string
+>    : ^^^^^^
 
     var b: Base;
 >b : Base
+>  : ^^^^
 
     var i: I;
 >i : I
+>  : ^
 
     // sources
     class D {
 >D : D
+>  : ^
 
         public foo: string;
 >foo : string
+>    : ^^^^^^
     }
 
     class E {
 >E : E
+>  : ^
 
         private foo: string;
 >foo : string
+>    : ^^^^^^
     }
 
     var d: D;
 >d : D
+>  : ^
 
     var e: E;
 >e : E
+>  : ^
 
     a = b; // error
 >a = b : Base
+>      : ^^^^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >b : Base
+>  : ^^^^
 
     a = i; // error
 >a = i : I
+>      : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >i : I
+>  : ^
 
     a = d;
 >a = d : D
+>      : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >d : D
+>  : ^
 
     a = e; // error
 >a = e : E
+>      : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 >e : E
+>  : ^
 
     b = a; // error
 >b = a : { foo: string; }
+>      : ^^^^^^^      ^^^
 >b : Base
+>  : ^^^^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     b = i;
 >b = i : I
+>      : ^
 >b : Base
+>  : ^^^^
 >i : I
+>  : ^
 
     b = d; // error
 >b = d : D
+>      : ^
 >b : Base
+>  : ^^^^
 >d : D
+>  : ^
 
     b = e; // error
 >b = e : E
+>      : ^
 >b : Base
+>  : ^^^^
 >e : E
+>  : ^
 
     b = b;
 >b = b : Base
+>      : ^^^^
 >b : Base
+>  : ^^^^
 >b : Base
+>  : ^^^^
     
     i = a; // error
 >i = a : { foo: string; }
+>      : ^^^^^^^      ^^^
 >i : I
+>  : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     i = b;
 >i = b : Base
+>      : ^^^^
 >i : I
+>  : ^
 >b : Base
+>  : ^^^^
 
     i = d; // error
 >i = d : D
+>      : ^
 >i : I
+>  : ^
 >d : D
+>  : ^
 
     i = e; // error
 >i = e : E
+>      : ^
 >i : I
+>  : ^
 >e : E
+>  : ^
 
     i = i;
 >i = i : I
+>      : ^
 >i : I
+>  : ^
 >i : I
+>  : ^
 
     d = a;
 >d = a : { foo: string; }
+>      : ^^^^^^^      ^^^
 >d : D
+>  : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     d = b; // error
 >d = b : Base
+>      : ^^^^
 >d : D
+>  : ^
 >b : Base
+>  : ^^^^
 
     d = i; // error
 >d = i : I
+>      : ^
 >d : D
+>  : ^
 >i : I
+>  : ^
 
     d = e; // error
 >d = e : E
+>      : ^
 >d : D
+>  : ^
 >e : E
+>  : ^
 
     e = a; // errror
 >e = a : { foo: string; }
+>      : ^^^^^^^      ^^^
 >e : E
+>  : ^
 >a : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     e = b; // errror
 >e = b : Base
+>      : ^^^^
 >e : E
+>  : ^
 >b : Base
+>  : ^^^^
 
     e = i; // errror
 >e = i : I
+>      : ^
 >e : E
+>  : ^
 >i : I
+>  : ^
 
     e = d; // errror
 >e = d : D
+>      : ^
 >e : E
+>  : ^
 >d : D
+>  : ^
 
     e = e;
 >e = e : E
+>      : ^
 >e : E
+>  : ^
 >e : E
+>  : ^
 
 }

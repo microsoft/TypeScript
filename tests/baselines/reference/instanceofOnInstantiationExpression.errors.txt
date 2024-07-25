@@ -1,0 +1,29 @@
+instanceofOnInstantiationExpression.ts(10,21): error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
+instanceofOnInstantiationExpression.ts(11,22): error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
+instanceofOnInstantiationExpression.ts(12,23): error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
+
+
+==== instanceofOnInstantiationExpression.ts (3 errors) ====
+    declare class Box<T> {
+        value: T;
+    }
+    
+    
+    declare const maybeBox: unknown;
+    
+    maybeBox instanceof Box; // OK
+    
+    maybeBox instanceof Box<number>; // error
+                        ~~~~~~~~~~~
+!!! error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
+    maybeBox instanceof (Box<number>); // error
+                         ~~~~~~~~~~~
+!!! error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
+    maybeBox instanceof ((Box<number>)); // error
+                          ~~~~~~~~~~~
+!!! error TS2848: The right-hand side of an 'instanceof' expression must not be an instantiation expression.
+    
+    Box<number> instanceof Object; // OK
+    (Box<number>) instanceof Object; // OK
+    ((Box<number>)) instanceof Object; // OK
+    

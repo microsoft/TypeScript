@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/emptyAssignmentPatterns01_ES5.ts ===
+//// [tests/cases/conformance/es6/destructuring/emptyAssignmentPatterns01_ES5.ts] ////
+
+=== emptyAssignmentPatterns01_ES5.ts ===
 var a: any;
 >a : any
 
@@ -6,17 +8,23 @@ var a: any;
 >({} = a) : any
 >{} = a : any
 >{} : {}
+>   : ^^
 >a : any
 
 ([] = a);
 >([] = a) : any
 >[] = a : any
 >[] : []
+>   : ^^
 >a : any
 
 var [,] = [1,2];
 > : undefined
+> : ^^^^^^^^^
 >[1,2] : [number, number]
+>      : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileExportAssignmentImportInternalModule.ts ===
+//// [tests/cases/compiler/declFileExportAssignmentImportInternalModule.ts] ////
+
+=== declFileExportAssignmentImportInternalModule.ts ===
 module m3 {
 >m3 : Symbol(m3, Decl(declFileExportAssignmentImportInternalModule.ts, 0, 0))
 

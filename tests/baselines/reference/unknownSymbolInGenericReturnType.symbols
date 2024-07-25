@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unknownSymbolInGenericReturnType.ts ===
+//// [tests/cases/compiler/unknownSymbolInGenericReturnType.ts] ////
+
+=== unknownSymbolInGenericReturnType.ts ===
 class Linq {
 >Linq : Symbol(Linq, Decl(unknownSymbolInGenericReturnType.ts, 0, 0))
 

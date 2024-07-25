@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superAccess2.ts ===
+//// [tests/cases/compiler/superAccess2.ts] ////
+
+=== superAccess2.ts ===
 class P {
 >P : Symbol(P, Decl(superAccess2.ts, 0, 0))
 

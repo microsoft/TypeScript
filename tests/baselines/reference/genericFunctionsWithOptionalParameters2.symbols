@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericFunctionsWithOptionalParameters2.ts ===
+//// [tests/cases/compiler/genericFunctionsWithOptionalParameters2.ts] ////
+
+=== genericFunctionsWithOptionalParameters2.ts ===
 interface Utils {
 >Utils : Symbol(Utils, Decl(genericFunctionsWithOptionalParameters2.ts, 0, 0))
 

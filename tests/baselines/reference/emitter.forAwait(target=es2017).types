@@ -1,6 +1,9 @@
-=== tests/cases/conformance/statements/for-await-ofStatements/file1.ts ===
+//// [tests/cases/conformance/statements/for-await-ofStatements/emitter.forAwait.ts] ////
+
+=== file1.ts ===
 async function f1() {
 >f1 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let y: any;
 >y : any
@@ -10,9 +13,10 @@ async function f1() {
 >y : any
     }
 }
-=== tests/cases/conformance/statements/for-await-ofStatements/file2.ts ===
+=== file2.ts ===
 async function f2() {
 >f2 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let x: any, y: any;
 >x : any
@@ -23,9 +27,10 @@ async function f2() {
 >y : any
     }
 }
-=== tests/cases/conformance/statements/for-await-ofStatements/file3.ts ===
+=== file3.ts ===
 async function* f3() {
 >f3 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let y: any;
 >y : any
@@ -35,9 +40,10 @@ async function* f3() {
 >y : any
     }
 }
-=== tests/cases/conformance/statements/for-await-ofStatements/file4.ts ===
+=== file4.ts ===
 async function* f4() {
 >f4 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let x: any, y: any;
 >x : any
@@ -48,44 +54,51 @@ async function* f4() {
 >y : any
     }
 }
-=== tests/cases/conformance/statements/for-await-ofStatements/file5.ts ===
+=== file5.ts ===
 // https://github.com/Microsoft/TypeScript/issues/21363
 async function f5() {
 >f5 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
     let y: any;
 >y : any
 
     outer: for await (const x of y) {
 >outer : any
+>      : ^^^
 >x : any
 >y : any
 
         continue outer;
 >outer : any
+>      : ^^^
     }
 }
-=== tests/cases/conformance/statements/for-await-ofStatements/file6.ts ===
+=== file6.ts ===
 // https://github.com/Microsoft/TypeScript/issues/21363
 async function* f6() {
 >f6 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let y: any;
 >y : any
 
     outer: for await (const x of y) {
 >outer : any
+>      : ^^^
 >x : any
 >y : any
 
         continue outer;
 >outer : any
+>      : ^^^
     }
 }
-=== tests/cases/conformance/statements/for-await-ofStatements/file7.ts ===
+=== file7.ts ===
 // https://github.com/microsoft/TypeScript/issues/36166
 async function* f7() {
 >f7 : () => AsyncGenerator<never, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let y: any;
 >y : any

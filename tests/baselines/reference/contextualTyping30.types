@@ -1,10 +1,19 @@
-=== tests/cases/compiler/contextualTyping30.ts ===
+//// [tests/cases/compiler/contextualTyping30.ts] ////
+
+=== contextualTyping30.ts ===
 function foo(param:number[]){}; foo([1, "a"]);
 >foo : (param: number[]) => void
+>    : ^     ^^        ^^^^^^^^^
 >param : number[]
+>      : ^^^^^^^^
 >foo([1, "a"]) : void
+>              : ^^^^
 >foo : (param: number[]) => void
+>    : ^     ^^        ^^^^^^^^^
 >[1, "a"] : (string | number)[]
+>         : ^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >"a" : "a"
+>    : ^^^
 

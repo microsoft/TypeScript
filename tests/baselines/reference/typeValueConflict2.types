@@ -1,39 +1,56 @@
-=== tests/cases/compiler/typeValueConflict2.ts ===
+//// [tests/cases/compiler/typeValueConflict2.ts] ////
+
+=== typeValueConflict2.ts ===
 module M1 {
 >M1 : typeof M1
+>   : ^^^^^^^^^
 
     export class A<T> {
 >A : A<T>
+>  : ^^^^
 
         constructor(a: T) {
 >a : T
+>  : ^
         }
     }
 }
 module M2 {
 >M2 : typeof M2
+>   : ^^^^^^^^^
 
     var M1 = 0;
 >M1 : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     // Should error.  M1 should bind to the variable, not to the module.
     class B extends M1.A<string> {
 >B : B
+>  : ^
 >M1.A : any
+>     : ^^^
 >M1 : number
+>   : ^^^^^^
 >A : any
+>  : ^^^
     }
 }
 module M3 {
 >M3 : typeof M3
+>   : ^^^^^^^^^
 
     // Shouldn't error
     class B extends M1.A<string> {
 >B : B
+>  : ^
 >M1.A : M1.A<string>
+>     : ^^^^^^^^^^^^
 >M1 : typeof M1
+>   : ^^^^^^^^^
 >A : typeof M1.A
+>  : ^^^^^^^^^^^
     }
 }
 

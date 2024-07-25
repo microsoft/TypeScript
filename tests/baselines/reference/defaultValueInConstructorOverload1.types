@@ -1,13 +1,20 @@
-=== tests/cases/compiler/defaultValueInConstructorOverload1.ts ===
+//// [tests/cases/compiler/defaultValueInConstructorOverload1.ts] ////
+
+=== defaultValueInConstructorOverload1.ts ===
 class C {
 >C : C
+>  : ^
 
     constructor(x = '');
 >x : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
     constructor(x = '') {
 >x : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
     }
 }

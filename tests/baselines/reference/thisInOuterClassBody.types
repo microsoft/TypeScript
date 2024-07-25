@@ -1,53 +1,83 @@
-=== tests/cases/compiler/thisInOuterClassBody.ts ===
+//// [tests/cases/compiler/thisInOuterClassBody.ts] ////
+
+=== thisInOuterClassBody.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     x = this;
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 
     static y = this;
 >y : typeof Foo
+>  : ^^^^^^^^^^
 >this : typeof Foo
+>     : ^^^^^^^^^^
 
     bar() {
 >bar : () => this
+>    : ^^^^^^^^^^
  
         this.x; // 'this' is type 'Foo'
 >this.x : this
+>       : ^^^^
 >this : this
+>     : ^^^^
 >x : this
+>  : ^^^^
  
         var f = () => this.x; // 'this' should be type 'Foo' as well
 >f : () => this
+>  : ^^^^^^^^^^
 >() => this.x : () => this
+>             : ^^^^^^^^^^
 >this.x : this
+>       : ^^^^
 >this : this
+>     : ^^^^
 >x : this
+>  : ^^^^
 
         var p = this.y;
 >p : any
+>  : ^^^
 >this.y : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 
     static bar2() {
 >bar2 : () => void
+>     : ^^^^^^^^^^
 
         var a = this.y;
 >a : typeof Foo
+>  : ^^^^^^^^^^
 >this.y : typeof Foo
+>       : ^^^^^^^^^^
 >this : typeof Foo
+>     : ^^^^^^^^^^
 >y : typeof Foo
+>  : ^^^^^^^^^^
 
         var b = this.x;
 >b : any
+>  : ^^^
 >this.x : any
+>       : ^^^
 >this : typeof Foo
+>     : ^^^^^^^^^^
 >x : any
+>  : ^^^
     }
 }

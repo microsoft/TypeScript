@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityCheckWithEmptyDefault.ts] ////
+
 //// [reachabilityCheckWithEmptyDefault.ts]
 declare function print(s: string): void;
 function foo(x: any) {

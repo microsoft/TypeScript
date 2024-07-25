@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedModulo.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedModulo.ts] ////
+
+=== templateStringWithEmbeddedModulo.ts ===
 var x = `abc${ 1 % 1 }def`;
 >x : Symbol(x, Decl(templateStringWithEmbeddedModulo.ts, 0, 3))
 

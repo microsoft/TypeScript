@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts] ////
+
 //// [genericAndNonGenericInterfaceWithTheSameName.ts]
 // generic and non-generic interfaces with the same name do not merge
 

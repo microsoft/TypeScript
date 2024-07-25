@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyWrappedInTry.ts ===
+//// [tests/cases/compiler/propertyWrappedInTry.ts] ////
+
+=== propertyWrappedInTry.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(propertyWrappedInTry.ts, 0, 0))
 

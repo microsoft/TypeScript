@@ -1,7 +1,11 @@
-=== tests/cases/compiler/typeAliasDeclarationEmit.ts ===
+//// [tests/cases/compiler/typeAliasDeclarationEmit.ts] ////
+
+=== typeAliasDeclarationEmit.ts ===
 export type callback<T> = () => T;
 >callback : callback<T>
+>         : ^^^^^^^^^^^
 
 export type CallbackArray<T extends callback> = () => T;
 >CallbackArray : CallbackArray<T>
+>              : ^^^^^^^^^^^^^^^^
 

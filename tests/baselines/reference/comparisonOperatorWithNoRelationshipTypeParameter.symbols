@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts] ////
+
+=== comparisonOperatorWithNoRelationshipTypeParameter.ts ===
 enum E { a, b, c }
 >E : Symbol(E, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 0))
 >a : Symbol(E.a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 8))

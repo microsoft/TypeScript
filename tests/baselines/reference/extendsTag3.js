@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/extendsTag3.ts] ////
+
 //// [foo.js]
 /**
  * @constructor

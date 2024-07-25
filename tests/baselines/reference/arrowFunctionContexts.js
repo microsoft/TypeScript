@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts] ////
+
 //// [arrowFunctionContexts.ts]
 // Arrow function used in with statement
 with (window) {

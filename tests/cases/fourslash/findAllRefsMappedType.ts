@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
-////interface T { [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}a|]: number;|] }
+////interface T { /*1*/a: number; }
 ////type U = { readonly [K in keyof T]?: string };
 ////declare const t: T;
-////t.[|a|];
+////t./*2*/a;
 ////declare const u: U;
-////u.[|a|];
+////u./*3*/a;
 
-verify.singleReferenceGroup("(property) T.a: number", "a");
+verify.baselineFindAllReferences('1', '2', '3');

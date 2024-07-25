@@ -1,8 +1,8 @@
-tests/cases/compiler/reachabilityChecks4.ts(6,9): error TS7029: Fallthrough case in switch.
-tests/cases/compiler/reachabilityChecks4.ts(22,9): error TS7029: Fallthrough case in switch.
+reachabilityChecks4.ts(6,9): error TS7029: Fallthrough case in switch.
+reachabilityChecks4.ts(22,9): error TS7029: Fallthrough case in switch.
 
 
-==== tests/cases/compiler/reachabilityChecks4.ts (2 errors) ====
+==== reachabilityChecks4.ts (2 errors) ====
     function foo(x, y) {
         switch (x) {
             case 1:

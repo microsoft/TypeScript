@@ -1,43 +1,64 @@
-=== tests/cases/compiler/noUnusedLocals_destructuringAssignment.ts ===
+//// [tests/cases/compiler/noUnusedLocals_destructuringAssignment.ts] ////
+
+=== noUnusedLocals_destructuringAssignment.ts ===
 class C {
 >C : C
+>  : ^
 
     private x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     m(): number {
 >m : () => number
+>  : ^^^^^^      
 
         let x: number;
 >x : number
+>  : ^^^^^^
 
         ({ x } = this);
 >({ x } = this) : this
+>               : ^^^^
 >{ x } = this : this
+>             : ^^^^
 >{ x } : { x: number; }
+>      : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >this : this
+>     : ^^^^
 
         return x;
 >x : number
+>  : ^^^^^^
     }
 
     private f(): Function {
 >f : () => Function
+>  : ^^^^^^        
 
         let f: Function;
 >f : Function
+>  : ^^^^^^^^
 
         ({ f } = this);
 >({ f } = this) : this
+>               : ^^^^
 >{ f } = this : this
+>             : ^^^^
 >{ f } : { f: Function; }
+>      : ^^^^^^^^^^^^^^^^
 >f : Function
+>  : ^^^^^^^^
 >this : this
+>     : ^^^^
 
         return f;
 >f : Function
+>  : ^^^^^^^^
     }
 }
 

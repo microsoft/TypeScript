@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/asOperator/asOperatorNames.ts] ////
+
 //// [asOperatorNames.ts]
 var a = 20;
 var b = a as string;

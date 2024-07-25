@@ -1,117 +1,173 @@
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_core.ts ===
+//// [tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport.ts] ////
+
+=== privacyTopLevelAmbientExternalModuleImportWithExport_core.ts ===
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts'/>
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts'/>
 // Privacy errors - importing private elements
 export import im_public_mi_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require");
 >im_public_mi_private : typeof im_public_mi_private
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export import im_public_mu_private = require("./privacyTopLevelAmbientExternalModuleImportWithExport_require1");
 >im_public_mu_private : typeof im_public_mu_private
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export import im_public_mi_public = require("m");
 >im_public_mi_public : typeof im_public_mi_public
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export import im_public_mu_public = require("m2");
 >im_public_mu_public : typeof im_public_mu_public
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Usage of privacy error imports
 var privateUse_im_public_mi_private = new im_public_mi_private.c_public();
 >privateUse_im_public_mi_private : im_public_mi_private.c_public
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new im_public_mi_private.c_public() : im_public_mi_private.c_public
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_private.c_public : typeof im_public_mi_private.c_public
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_private : typeof im_public_mi_private
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c_public : typeof im_public_mi_private.c_public
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export var publicUse_im_public_mi_private = new im_public_mi_private.c_public();
 >publicUse_im_public_mi_private : im_public_mi_private.c_public
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new im_public_mi_private.c_public() : im_public_mi_private.c_public
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_private.c_public : typeof im_public_mi_private.c_public
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_private : typeof im_public_mi_private
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c_public : typeof im_public_mi_private.c_public
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var privateUse_im_public_mu_private = new im_public_mu_private.c_public();
 >privateUse_im_public_mu_private : im_public_mu_private.c_public
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new im_public_mu_private.c_public() : im_public_mu_private.c_public
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mu_private.c_public : typeof im_public_mu_private.c_public
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mu_private : typeof im_public_mu_private
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c_public : typeof im_public_mu_private.c_public
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export var publicUse_im_public_mu_private = new im_public_mu_private.c_public();
 >publicUse_im_public_mu_private : im_public_mu_private.c_public
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new im_public_mu_private.c_public() : im_public_mu_private.c_public
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mu_private.c_public : typeof im_public_mu_private.c_public
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mu_private : typeof im_public_mu_private
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c_public : typeof im_public_mu_private.c_public
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var privateUse_im_public_mi_public = new im_public_mi_public.c_private();
 >privateUse_im_public_mi_public : im_public_mi_public.c_private
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new im_public_mi_public.c_private() : im_public_mi_public.c_private
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_public.c_private : typeof im_public_mi_public.c_private
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_public : typeof im_public_mi_public
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c_private : typeof im_public_mi_public.c_private
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export var publicUse_im_public_mi_public = new im_public_mi_public.c_private();
 >publicUse_im_public_mi_public : im_public_mi_public.c_private
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new im_public_mi_public.c_private() : im_public_mi_public.c_private
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_public.c_private : typeof im_public_mi_public.c_private
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_public : typeof im_public_mi_public
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c_private : typeof im_public_mi_public.c_private
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var privateUse_im_public_mi_public = new im_public_mi_public.c_private();
 >privateUse_im_public_mi_public : im_public_mi_public.c_private
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new im_public_mi_public.c_private() : im_public_mi_public.c_private
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_public.c_private : typeof im_public_mi_public.c_private
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_public : typeof im_public_mi_public
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c_private : typeof im_public_mi_public.c_private
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export var publicUse_im_public_mi_public = new im_public_mi_public.c_private();
 >publicUse_im_public_mi_public : im_public_mi_public.c_private
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new im_public_mi_public.c_private() : im_public_mi_public.c_private
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_public.c_private : typeof im_public_mi_public.c_private
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >im_public_mi_public : typeof im_public_mi_public
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c_private : typeof im_public_mi_public.c_private
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithExport_require.ts ===
 // Public elements
 export class c_public {
 >c_public : c_public
+>         : ^^^^^^^^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 }
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithExport_require1.ts ===
 export class c_public {
 >c_public : c_public
+>         : ^^^^^^^^
 
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts ===
 // private elements
 // Export - Error ambient modules allowed only in global
 declare module 'm' {
 >'m' : typeof import("m")
+>    : ^^^^^^^^^^^^^^^^^^
 
     export class c_private {
 >c_private : c_private
+>          : ^^^^^^^^^
 
         baz: string;
 >baz : string
+>    : ^^^^^^
     }
 }
 
 
-=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts ===
+=== privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts ===
 declare module 'm2' {
 >'m2' : typeof import("m2")
+>     : ^^^^^^^^^^^^^^^^^^^
 
     export class c_private {
 >c_private : c_private
+>          : ^^^^^^^^^
 
         bing: string;
 >bing : string
+>     : ^^^^^^
     }
 }
 

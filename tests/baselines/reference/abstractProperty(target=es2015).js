@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/abstractProperty.ts] ////
+
 //// [abstractProperty.ts]
 abstract class A {
     protected abstract x: string;

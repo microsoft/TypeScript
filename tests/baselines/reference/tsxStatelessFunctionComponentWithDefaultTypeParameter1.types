@@ -1,32 +1,49 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentWithDefaultTypeParameter1.tsx] ////
+
+=== file.tsx ===
 import React = require('react')
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface MyComponentProp {
     values: string;
 >values : string
+>       : ^^^^^^
 }
 
 function MyComponent<T = MyComponentProp>(attr: T) {
 >MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
+>            : ^ ^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^
 >attr : T
+>     : ^
 
     return <div>attr.values</div>
 ><div>attr.values</div> : JSX.Element
+>                       : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 }
 
 // OK
 let i = <MyComponent values />;  // We infer type arguments here
 >i : JSX.Element
+>  : ^^^^^^^^^^^
 ><MyComponent values /> : JSX.Element
+>                       : ^^^^^^^^^^^
 >MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
+>            : ^ ^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^
 >values : true
+>       : ^^^^
 
 let i1 = <MyComponent values="Hello"/>;
 >i1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MyComponent values="Hello"/> : JSX.Element
+>                              : ^^^^^^^^^^^
 >MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
+>            : ^ ^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^
 >values : string
+>       : ^^^^^^
 

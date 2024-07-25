@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsdoNotEmitComments.ts] ////
+
 //// [commentsdoNotEmitComments.ts]
 /** Variable comments*/
 var myVariable = 10;
@@ -158,12 +160,12 @@ interface i1 {
     prop: string;
 }
 declare var i1_i: i1;
-declare module m1 {
+declare namespace m1 {
     class b {
         x: number;
         constructor(x: number);
     }
-    module m2 {
+    namespace m2 {
     }
 }
 declare var x: any;

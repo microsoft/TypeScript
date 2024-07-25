@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts] ////
+
 //// [errorsOnUnionsOfOverlappingObjects01.ts]
 interface Foo {
     a: string;
@@ -49,7 +51,7 @@ addToZoo(manBeer);
 
 //// [errorsOnUnionsOfOverlappingObjects01.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 ;
 exports.x = { a: '', b: '' };

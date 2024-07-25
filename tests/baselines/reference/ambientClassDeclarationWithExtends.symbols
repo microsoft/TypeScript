@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientClassDeclarationExtends_singleFile.ts ===
+//// [tests/cases/compiler/ambientClassDeclarationWithExtends.ts] ////
+
+=== ambientClassDeclarationExtends_singleFile.ts ===
 declare class A { }
 >A : Symbol(A, Decl(ambientClassDeclarationExtends_singleFile.ts, 0, 0))
 
@@ -25,7 +27,7 @@ var d: C = new D();
 >C : Symbol(C, Decl(ambientClassDeclarationExtends_singleFile.ts, 1, 29))
 >D : Symbol(D, Decl(ambientClassDeclarationExtends_singleFile.ts, 5, 1), Decl(ambientClassDeclarationExtends_singleFile.ts, 6, 22))
 
-=== tests/cases/compiler/ambientClassDeclarationExtends_file1.ts ===
+=== ambientClassDeclarationExtends_file1.ts ===
 declare class E {
 >E : Symbol(E, Decl(ambientClassDeclarationExtends_file1.ts, 0, 0))
 
@@ -36,7 +38,7 @@ namespace F { var y; }
 >F : Symbol(F, Decl(ambientClassDeclarationExtends_file1.ts, 2, 1), Decl(ambientClassDeclarationExtends_file2.ts, 0, 0))
 >y : Symbol(y, Decl(ambientClassDeclarationExtends_file1.ts, 3, 17))
 
-=== tests/cases/compiler/ambientClassDeclarationExtends_file2.ts ===
+=== ambientClassDeclarationExtends_file2.ts ===
 declare class F extends E { }
 >F : Symbol(F, Decl(ambientClassDeclarationExtends_file1.ts, 2, 1), Decl(ambientClassDeclarationExtends_file2.ts, 0, 0))
 >E : Symbol(E, Decl(ambientClassDeclarationExtends_file1.ts, 0, 0))

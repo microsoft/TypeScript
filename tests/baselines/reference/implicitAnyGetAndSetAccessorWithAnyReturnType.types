@@ -1,51 +1,69 @@
-=== tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts ===
+//// [tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts] ////
+
+=== implicitAnyGetAndSetAccessorWithAnyReturnType.ts ===
 // these should be errors
 class GetAndSet {
 >GetAndSet : GetAndSet
+>          : ^^^^^^^^^
 
     getAndSet = null;             // error at "getAndSet"
 >getAndSet : any
->null : null
+>          : ^^^
 
     public get haveGetAndSet() {  // this should not be an error
 >haveGetAndSet : any
+>              : ^^^
 
         return this.getAndSet;
 >this.getAndSet : any
+>               : ^^^
 >this : this
+>     : ^^^^
 >getAndSet : any
+>          : ^^^
     }
     
     // this shouldn't be an error
     public set haveGetAndSet(value) {  // error at "value"
 >haveGetAndSet : any
+>              : ^^^
 >value : any
+>      : ^^^
 
         this.getAndSet = value;
 >this.getAndSet = value : any
+>                       : ^^^
 >this.getAndSet : any
+>               : ^^^
 >this : this
+>     : ^^^^
 >getAndSet : any
+>          : ^^^
 >value : any
+>      : ^^^
     }
 }
 
 class SetterOnly {
 >SetterOnly : SetterOnly
+>           : ^^^^^^^^^^
 
     public set haveOnlySet(newXValue) {  // error at "haveOnlySet, newXValue"
 >haveOnlySet : any
+>            : ^^^
 >newXValue : any
+>          : ^^^
     }
 }
 
 class GetterOnly {
 >GetterOnly : GetterOnly
+>           : ^^^^^^^^^^
 
     public get haveOnlyGet() {  // error at "haveOnlyGet"
 >haveOnlyGet : any
+>            : ^^^
 
         return null;
->null : null
     }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitSymlinkPaths.ts] ////
+
 === /packages/search/lib/index.d.ts ===
 export declare function test<T> (a: () => T): () => T;
 >test : Symbol(test, Decl(index.d.ts, 0, 0))

@@ -1,10 +1,12 @@
-=== tests/cases/compiler/a.ts ===
-// --out and --outFile error
+//// [tests/cases/compiler/out-flag3.ts] ////
 
+=== a.ts ===
 class A { }
 >A : A
+>  : ^
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 class B { }
 >B : B
+>  : ^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts ===
+//// [tests/cases/compiler/typeArgumentsOnFunctionsWithNoTypeParameters.ts] ////
+
+=== typeArgumentsOnFunctionsWithNoTypeParameters.ts ===
 function foo<T, U>(f: (v: T) => U) {
 >foo : Symbol(foo, Decl(typeArgumentsOnFunctionsWithNoTypeParameters.ts, 0, 0))
 >T : Symbol(T, Decl(typeArgumentsOnFunctionsWithNoTypeParameters.ts, 0, 13))

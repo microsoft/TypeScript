@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx] ////
+
 //// [reactDefaultPropsInferenceSuccess.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 
@@ -89,7 +91,7 @@ var __extends = (this && this.__extends) || (function () {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = __importDefault(require("react"));
 var FieldFeedback = /** @class */ (function (_super) {
     __extends(FieldFeedback, _super);
@@ -97,34 +99,34 @@ var FieldFeedback = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     FieldFeedback.prototype.render = function () {
-        return react_1["default"].createElement("div", null, "Hello");
+        return react_1.default.createElement("div", null, "Hello");
     };
     FieldFeedback.defaultProps = {
         when: function () { return true; }
     };
     return FieldFeedback;
-}(react_1["default"].Component));
+}(react_1.default.Component));
 // OK
-var Test1 = function () { return react_1["default"].createElement(FieldFeedback, { when: function (value) { return !!value; } }); };
+var Test1 = function () { return react_1.default.createElement(FieldFeedback, { when: function (value) { return !!value; } }); };
 // Error: Void not assignable to boolean
-var Test2 = function () { return react_1["default"].createElement(FieldFeedback, { when: function (value) { return console.log(value); } }); };
+var Test2 = function () { return react_1.default.createElement(FieldFeedback, { when: function (value) { return console.log(value); } }); };
 var FieldFeedbackBeta = /** @class */ (function (_super) {
     __extends(FieldFeedbackBeta, _super);
     function FieldFeedbackBeta() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     FieldFeedbackBeta.prototype.render = function () {
-        return react_1["default"].createElement("div", null, "Hello");
+        return react_1.default.createElement("div", null, "Hello");
     };
     FieldFeedbackBeta.defaultProps = {
         when: function () { return true; }
     };
     return FieldFeedbackBeta;
-}(react_1["default"].Component));
+}(react_1.default.Component));
 // OK
-var Test1a = function () { return react_1["default"].createElement(FieldFeedbackBeta, { when: function (value) { return !!value; }, error: true }, "Hah"); };
+var Test1a = function () { return react_1.default.createElement(FieldFeedbackBeta, { when: function (value) { return !!value; }, error: true }, "Hah"); };
 // Error: Void not assignable to boolean
-var Test2a = function () { return react_1["default"].createElement(FieldFeedbackBeta, { when: function (value) { return console.log(value); }, error: true }, "Hah"); };
+var Test2a = function () { return react_1.default.createElement(FieldFeedbackBeta, { when: function (value) { return console.log(value); }, error: true }, "Hah"); };
 var FieldFeedback2 = /** @class */ (function (_super) {
     __extends(FieldFeedback2, _super);
     function FieldFeedback2() {
@@ -132,7 +134,7 @@ var FieldFeedback2 = /** @class */ (function (_super) {
     }
     FieldFeedback2.prototype.render = function () {
         this.props.when("now"); // OK, always defined
-        return react_1["default"].createElement("div", null, "Hello");
+        return react_1.default.createElement("div", null, "Hello");
     };
     FieldFeedback2.defaultProps = {
         when: function () { return true; }
@@ -140,8 +142,8 @@ var FieldFeedback2 = /** @class */ (function (_super) {
     return FieldFeedback2;
 }(FieldFeedback));
 // OK
-var Test3 = function () { return react_1["default"].createElement(FieldFeedback2, { when: function (value) { return !!value; } }); };
+var Test3 = function () { return react_1.default.createElement(FieldFeedback2, { when: function (value) { return !!value; } }); };
 // Error: Void not assignable to boolean
-var Test4 = function () { return react_1["default"].createElement(FieldFeedback2, { when: function (value) { return console.log(value); } }); };
+var Test4 = function () { return react_1.default.createElement(FieldFeedback2, { when: function (value) { return console.log(value); } }); };
 // OK
-var Test5 = function () { return react_1["default"].createElement(FieldFeedback2, null); };
+var Test5 = function () { return react_1.default.createElement(FieldFeedback2, null); };

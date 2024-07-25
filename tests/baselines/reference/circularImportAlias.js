@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/importDeclarations/circularImportAlias.ts] ////
+
 //// [circularImportAlias.ts]
 // expected no error
 

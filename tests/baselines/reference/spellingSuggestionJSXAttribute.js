@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spellingSuggestionJSXAttribute.tsx] ////
+
 //// [spellingSuggestionJSXAttribute.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from "react";
@@ -33,7 +35,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var React = require("react");
 function MyComp2(props) {
@@ -46,11 +48,11 @@ var MyComp = /** @class */ (function (_super) {
     }
     return MyComp;
 }(React.Component));
-React.createElement("a", { "class": "" });
-React.createElement("a", { "for": "" }); // should have no fix
-React.createElement("label", { "for": "" });
-React.createElement("label", { "for": "", "class": "" });
-React.createElement(MyComp, { "class": "" });
-React.createElement(MyComp2, { "class": "" });
-React.createElement(MyComp, { "for": "" });
-React.createElement(MyComp2, { "for": "" });
+React.createElement("a", { class: "" });
+React.createElement("a", { for: "" }); // should have no fix
+React.createElement("label", { for: "" });
+React.createElement("label", { for: "", class: "" });
+React.createElement(MyComp, { class: "" });
+React.createElement(MyComp2, { class: "" });
+React.createElement(MyComp, { for: "" });
+React.createElement(MyComp2, { for: "" });

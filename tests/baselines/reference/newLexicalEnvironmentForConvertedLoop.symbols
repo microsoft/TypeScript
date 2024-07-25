@@ -1,4 +1,6 @@
-=== tests/cases/compiler/newLexicalEnvironmentForConvertedLoop.ts ===
+//// [tests/cases/compiler/newLexicalEnvironmentForConvertedLoop.ts] ////
+
+=== newLexicalEnvironmentForConvertedLoop.ts ===
 function baz(x: any) {
 >baz : Symbol(baz, Decl(newLexicalEnvironmentForConvertedLoop.ts, 0, 0))
 >x : Symbol(x, Decl(newLexicalEnvironmentForConvertedLoop.ts, 0, 13))

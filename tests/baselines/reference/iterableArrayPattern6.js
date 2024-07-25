@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern6.ts] ////
+
 //// [iterableArrayPattern6.ts]
 class Bar { x }
 class Foo extends Bar { y }

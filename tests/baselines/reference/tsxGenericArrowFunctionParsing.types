@@ -1,77 +1,119 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxGenericArrowFunctionParsing.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { isElement; }
 >isElement : any
+>          : ^^^
 }
 
 var T: any, T1: any, T2: any;
 >T : any
+>  : ^^^
 >T1 : any
+>   : ^^^
 >T2 : any
+>   : ^^^
 
 // This is an element
 var x1 = <T>() => {}</T>;
 >x1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><T>() => {}</T> : JSX.Element
+>                : ^^^^^^^^^^^
 >T : any
+>  : ^^^
 >T : any
+>  : ^^^
 
 x1.isElement;
 >x1.isElement : any
+>             : ^^^
 >x1 : JSX.Element
+>   : ^^^^^^^^^^^
 >isElement : any
+>          : ^^^
 
 // This is a generic function
 var x2 = <T extends {}>() => {};
 >x2 : <T extends {}>() => void
+>   : ^ ^^^^^^^^^  ^^^^^^^^^^^
 ><T extends {}>() => {} : <T extends {}>() => void
+>                       : ^ ^^^^^^^^^  ^^^^^^^^^^^
 
 x2();
 >x2() : void
+>     : ^^^^
 >x2 : <T extends {}>() => void
+>   : ^ ^^^^^^^^^  ^^^^^^^^^^^
 
 // This is a generic function
 var x3 = <T, T1>() => {};
 >x3 : <T, T1>() => void
+>   : ^ ^^  ^^^^^^^^^^^
 ><T, T1>() => {} : <T, T1>() => void
+>                : ^ ^^  ^^^^^^^^^^^
 
 x3();
 >x3() : void
+>     : ^^^^
 >x3 : <T, T1>() => void
+>   : ^ ^^  ^^^^^^^^^^^
 
 // This is an element
 var x4 = <T extends={true}>() => {}</T>;
 >x4 : JSX.Element
+>   : ^^^^^^^^^^^
 ><T extends={true}>() => {}</T> : JSX.Element
+>                               : ^^^^^^^^^^^
 >T : any
+>  : ^^^
 >extends : boolean
+>        : ^^^^^^^
 >true : true
+>     : ^^^^
 >T : any
+>  : ^^^
 
 x4.isElement;
 >x4.isElement : any
+>             : ^^^
 >x4 : JSX.Element
+>   : ^^^^^^^^^^^
 >isElement : any
+>          : ^^^
 
 // This is an element
 var x5 = <T extends>() => {}</T>;
 >x5 : JSX.Element
+>   : ^^^^^^^^^^^
 ><T extends>() => {}</T> : JSX.Element
+>                        : ^^^^^^^^^^^
 >T : any
+>  : ^^^
 >extends : true
+>        : ^^^^
 >T : any
+>  : ^^^
 
 x5.isElement;
 >x5.isElement : any
+>             : ^^^
 >x5 : JSX.Element
+>   : ^^^^^^^^^^^
 >isElement : any
+>          : ^^^
 
 // This is a generic function
 var x6 = <T = string,>() => {};
 >x6 : <T = string>() => void
+>   : ^ ^^^^^^^^^^^^^^^^^^^^
 ><T = string,>() => {} : <T = string>() => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^^^
 
 x6();
 >x6() : void
+>     : ^^^^
 >x6 : <T = string>() => void
+>   : ^ ^^^^^^^^^^^^^^^^^^^^
 

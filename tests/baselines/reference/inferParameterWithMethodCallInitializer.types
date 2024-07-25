@@ -1,58 +1,90 @@
-=== tests/cases/compiler/inferParameterWithMethodCallInitializer.ts ===
+//// [tests/cases/compiler/inferParameterWithMethodCallInitializer.ts] ////
+
+=== inferParameterWithMethodCallInitializer.ts ===
 function getNumber(): number {
 >getNumber : () => number
+>          : ^^^^^^      
 
     return 1;
 >1 : 1
+>  : ^
 }
 class Example {
 >Example : Example
+>        : ^^^^^^^
 
     getNumber(): number {
 >getNumber : () => number
+>          : ^^^^^^      
 
         return 1;
 >1 : 1
+>  : ^
     }
     doSomething(a = this.getNumber()): typeof a {
 >doSomething : (a?: number) => typeof a
+>            : ^ ^^^^^^^^^^^^^^        
 >a : number
+>  : ^^^^^^
 >this.getNumber() : number
+>                 : ^^^^^^
 >this.getNumber : () => number
+>               : ^^^^^^      
 >this : this
+>     : ^^^^
 >getNumber : () => number
+>          : ^^^^^^      
 >a : number
+>  : ^^^^^^
 
         return a;
 >a : number
+>  : ^^^^^^
     }
 }
 function weird(this: Example, a = this.getNumber()) {
 >weird : (this: Example, a?: number) => number
+>      : ^    ^^       ^^ ^^^^^^^^^^^^^^^^^^^^
 >this : Example
+>     : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >this.getNumber() : number
+>                 : ^^^^^^
 >this.getNumber : () => number
+>               : ^^^^^^      
 >this : Example
+>     : ^^^^^^^
 >getNumber : () => number
+>          : ^^^^^^      
 
     return a;
 >a : number
+>  : ^^^^^^
 }
 class Weird {
 >Weird : Weird
+>      : ^^^^^
 
     doSomething(this: Example, a = this.getNumber()) {
 >doSomething : (this: Example, a?: number) => number
+>            : ^    ^^       ^^ ^^^^^^^^^^^^^^^^^^^^
 >this : Example
+>     : ^^^^^^^
 >a : number
+>  : ^^^^^^
 >this.getNumber() : number
+>                 : ^^^^^^
 >this.getNumber : () => number
+>               : ^^^^^^      
 >this : Example
+>     : ^^^^^^^
 >getNumber : () => number
+>          : ^^^^^^      
 
         return a;
 >a : number
+>  : ^^^^^^
     }
 }
 

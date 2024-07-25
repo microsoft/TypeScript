@@ -1,52 +1,80 @@
-=== tests/cases/compiler/deleteReadonly.ts ===
+//// [tests/cases/compiler/deleteReadonly.ts] ////
+
+=== deleteReadonly.ts ===
 interface A {
   readonly b
 >b : any
+>  : ^^^
 }
 var a: A = {
 >a : A
+>  : ^
 >{  b: 123} : { b: number; }
+>           : ^^^^^^^^^^^^^^
 
   b: 123
 >b : number
+>  : ^^^^^^
 >123 : 123
+>    : ^^^
 
 };
 
 delete a.b;
 >delete a.b : boolean
+>           : ^^^^^^^
 >a.b : any
+>    : ^^^
 >a : A
+>  : ^
 >b : any
+>  : ^^^
 
 interface B {
   readonly [k: string]: string
 >k : string
+>  : ^^^^^^
 }
 
 var b: B = {
 >b : B
+>  : ^
 >{  'test': 'test'} : { test: string; }
+>                   : ^^^^^^^^^^^^^^^^^
 
   'test': 'test'
 >'test' : string
+>       : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 
 };
 
 delete b['test'];
 >delete b['test'] : boolean
+>                 : ^^^^^^^
 >b['test'] : string
+>          : ^^^^^^
 >b : B
+>  : ^
 >'test' : "test"
+>       : ^^^^^^
 
 delete ((((b['test']))));
 >delete ((((b['test'])))) : boolean
+>                         : ^^^^^^^
 >((((b['test'])))) : string
+>                  : ^^^^^^
 >(((b['test']))) : string
+>                : ^^^^^^
 >((b['test'])) : string
+>              : ^^^^^^
 >(b['test']) : string
+>            : ^^^^^^
 >b['test'] : string
+>          : ^^^^^^
 >b : B
+>  : ^
 >'test' : "test"
+>       : ^^^^^^
 

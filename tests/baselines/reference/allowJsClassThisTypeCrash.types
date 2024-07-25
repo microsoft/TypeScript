@@ -1,20 +1,32 @@
-=== tests/cases/compiler/app.js ===
+//// [tests/cases/compiler/allowJsClassThisTypeCrash.ts] ////
+
+=== app.js ===
 const f = function() {};
 >f : () => void
+>  : ^^^^^^^^^^
 >function() {} : () => void
+>              : ^^^^^^^^^^
 
 var g = f;
 >g : () => void
+>  : ^^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 
 g.prototype.m = function () {
 >g.prototype.m = function () {  this;} : () => void
+>                                      : ^^^^^^^^^^
 >g.prototype.m : any
 >g.prototype : any
+>            : ^^^
 >g : () => void
+>  : ^^^^^^^^^^
 >prototype : any
+>          : ^^^
 >m : any
+>  : ^^^
 >function () {  this;} : () => void
+>                      : ^^^^^^^^^^
 
   this;
 >this : any

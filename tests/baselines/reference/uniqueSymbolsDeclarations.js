@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarations.ts] ////
+
 //// [uniqueSymbolsDeclarations.ts]
 // declarations with call initializer
 const constCall = Symbol();
@@ -470,7 +472,7 @@ declare const i: I;
 declare const constInitToIReadonlyType: symbol;
 declare const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType;
 declare const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"];
-declare type L = {
+type L = {
     readonly readonlyType: unique symbol;
     nested: {
         readonly readonlyNestedType: unique symbol;

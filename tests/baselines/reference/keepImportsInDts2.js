@@ -8,12 +8,12 @@ import "./folder/test"
 //// [test.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [main.js]
 define(["require", "exports", "./folder/test"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 

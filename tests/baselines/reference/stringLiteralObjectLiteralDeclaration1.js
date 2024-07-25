@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/stringLiteralObjectLiteralDeclaration1.ts] ////
+
 //// [stringLiteralObjectLiteralDeclaration1.ts]
 module m1 {
   export var n = { 'foo bar': 4 };
@@ -12,7 +14,7 @@ var m1;
 
 
 //// [stringLiteralObjectLiteralDeclaration1.d.ts]
-declare module m1 {
+declare namespace m1 {
     var n: {
         'foo bar': number;
     };

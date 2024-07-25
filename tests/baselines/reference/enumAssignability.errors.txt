@@ -1,31 +1,33 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(9,1): error TS2322: Type 'F' is not assignable to type 'E'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(10,1): error TS2322: Type 'E' is not assignable to type 'F'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(29,9): error TS2322: Type 'E' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(30,9): error TS2322: Type 'E' is not assignable to type 'boolean'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(31,9): error TS2322: Type 'E' is not assignable to type 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(33,9): error TS2322: Type 'E' is not assignable to type 'void'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(36,9): error TS2322: Type 'E' is not assignable to type '() => {}'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(37,9): error TS2322: Type 'E' is not assignable to type 'Function'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(38,9): error TS2322: Type 'E' is not assignable to type '(x: number) => string'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(39,5): error TS2322: Type 'E' is not assignable to type 'C'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(40,5): error TS2322: Type 'E' is not assignable to type 'I'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(41,9): error TS2322: Type 'E' is not assignable to type 'number[]'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(42,9): error TS2322: Type 'E' is not assignable to type '{ foo: string; }'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(43,9): error TS2322: Type 'E' is not assignable to type '<T>(x: T) => T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(45,9): error TS2322: Type 'E' is not assignable to type 'String'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(48,9): error TS2322: Type 'E' is not assignable to type 'T'.
+enumAssignability.ts(9,1): error TS2322: Type 'F' is not assignable to type 'E'.
+enumAssignability.ts(10,1): error TS2322: Type 'E' is not assignable to type 'F'.
+enumAssignability.ts(11,1): error TS2322: Type '1' is not assignable to type 'E'.
+enumAssignability.ts(12,1): error TS2322: Type '1' is not assignable to type 'F'.
+enumAssignability.ts(29,9): error TS2322: Type 'E' is not assignable to type 'string'.
+enumAssignability.ts(30,9): error TS2322: Type 'E' is not assignable to type 'boolean'.
+enumAssignability.ts(31,9): error TS2322: Type 'E' is not assignable to type 'Date'.
+enumAssignability.ts(33,9): error TS2322: Type 'E' is not assignable to type 'void'.
+enumAssignability.ts(36,9): error TS2322: Type 'E' is not assignable to type '() => {}'.
+enumAssignability.ts(37,9): error TS2322: Type 'E' is not assignable to type 'Function'.
+enumAssignability.ts(38,9): error TS2322: Type 'E' is not assignable to type '(x: number) => string'.
+enumAssignability.ts(39,5): error TS2322: Type 'E' is not assignable to type 'C'.
+enumAssignability.ts(40,5): error TS2322: Type 'E' is not assignable to type 'I'.
+enumAssignability.ts(41,9): error TS2322: Type 'E' is not assignable to type 'number[]'.
+enumAssignability.ts(42,9): error TS2322: Type 'E' is not assignable to type '{ foo: string; }'.
+enumAssignability.ts(43,9): error TS2322: Type 'E' is not assignable to type '<T>(x: T) => T'.
+enumAssignability.ts(45,9): error TS2322: Type 'E' is not assignable to type 'String'.
+enumAssignability.ts(48,9): error TS2322: Type 'E' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'E'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(49,9): error TS2322: Type 'E' is not assignable to type 'U'.
+enumAssignability.ts(49,9): error TS2322: Type 'E' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'E'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(50,9): error TS2322: Type 'E' is not assignable to type 'V'.
+enumAssignability.ts(50,9): error TS2322: Type 'E' is not assignable to type 'V'.
   'V' could be instantiated with an arbitrary type which could be unrelated to 'E'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(51,13): error TS2322: Type 'E' is not assignable to type 'A'.
+enumAssignability.ts(51,13): error TS2322: Type 'E' is not assignable to type 'A'.
   'E' is assignable to the constraint of type 'A', but 'A' could be instantiated with a different subtype of constraint 'Number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(52,13): error TS2322: Type 'E' is not assignable to type 'B'.
+enumAssignability.ts(52,13): error TS2322: Type 'E' is not assignable to type 'B'.
   'E' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'E'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts (20 errors) ====
+==== enumAssignability.ts (22 errors) ====
     // enums assignable to number, any, Object, errors unless otherwise noted
     
     enum E { A }
@@ -41,7 +43,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
     ~
 !!! error TS2322: Type 'E' is not assignable to type 'F'.
     e = 1; // ok
+    ~
+!!! error TS2322: Type '1' is not assignable to type 'E'.
     f = 1; // ok
+    ~
+!!! error TS2322: Type '1' is not assignable to type 'F'.
     var x: number = e; // ok
     x = f; // ok
     

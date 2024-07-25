@@ -1,13 +1,13 @@
-tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(4,6): error TS2456: Type alias 'T0' circularly references itself.
-tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(5,6): error TS2456: Type alias 'T0_1' circularly references itself.
-tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(6,6): error TS2456: Type alias 'T0_2' circularly references itself.
-tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(7,6): error TS2456: Type alias 'T0_3' circularly references itself.
-tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(14,6): error TS2456: Type alias 'T2' circularly references itself.
-tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(25,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts(26,6): error TS2456: Type alias 'T5' circularly references itself.
+directDependenceBetweenTypeAliases.ts(4,6): error TS2456: Type alias 'T0' circularly references itself.
+directDependenceBetweenTypeAliases.ts(5,6): error TS2456: Type alias 'T0_1' circularly references itself.
+directDependenceBetweenTypeAliases.ts(6,6): error TS2456: Type alias 'T0_2' circularly references itself.
+directDependenceBetweenTypeAliases.ts(7,6): error TS2456: Type alias 'T0_3' circularly references itself.
+directDependenceBetweenTypeAliases.ts(14,6): error TS2456: Type alias 'T2' circularly references itself.
+directDependenceBetweenTypeAliases.ts(25,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+directDependenceBetweenTypeAliases.ts(26,6): error TS2456: Type alias 'T5' circularly references itself.
 
 
-==== tests/cases/conformance/types/typeAliases/directDependenceBetweenTypeAliases.ts (7 errors) ====
+==== directDependenceBetweenTypeAliases.ts (7 errors) ====
     // It is an error for the type specified in a type alias to depend on that type alias
     
     // A type alias directly depends on the type it aliases.

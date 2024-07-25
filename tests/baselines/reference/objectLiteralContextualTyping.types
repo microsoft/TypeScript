@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts] ////
+
+=== objectLiteralContextualTyping.ts ===
 // In a contextually typed object literal, each property value expression is contextually typed by
 //      the type of the property with a matching name in the contextual type, if any, or otherwise
 //      for a numerically named property, the numeric index type of the contextual type, if any, or otherwise
@@ -7,78 +9,124 @@
 interface Item {
     name: string;
 >name : string
+>     : ^^^^^^
 
     description?: string;
 >description : string
+>            : ^^^^^^
 }
 
 declare function foo(item: Item): string;
 >foo : { (item: Item): string; (item: any): number; }
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >item : Item
+>     : ^^^^
 
 declare function foo(item: any): number;
 >foo : { (item: Item): string; (item: any): number; }
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >item : any
+>     : ^^^
 
 var x = foo({ name: "Sprocket" });
 >x : string
+>  : ^^^^^^
 >foo({ name: "Sprocket" }) : string
+>                          : ^^^^^^
 >foo : { (item: Item): string; (item: any): number; }
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >{ name: "Sprocket" } : { name: string; }
+>                     : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"Sprocket" : "Sprocket"
+>           : ^^^^^^^^^^
 
 var x: string;
 >x : string
+>  : ^^^^^^
 
 var y = foo({ name: "Sprocket", description: "Bumpy wheel" });
 >y : string
+>  : ^^^^^^
 >foo({ name: "Sprocket", description: "Bumpy wheel" }) : string
+>                                                      : ^^^^^^
 >foo : { (item: Item): string; (item: any): number; }
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >{ name: "Sprocket", description: "Bumpy wheel" } : { name: string; description: string; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"Sprocket" : "Sprocket"
+>           : ^^^^^^^^^^
 >description : string
+>            : ^^^^^^
 >"Bumpy wheel" : "Bumpy wheel"
+>              : ^^^^^^^^^^^^^
 
 var y: string;
 >y : string
+>  : ^^^^^^
 
 var z = foo({ name: "Sprocket", description: false });
 >z : number
+>  : ^^^^^^
 >foo({ name: "Sprocket", description: false }) : number
+>                                              : ^^^^^^
 >foo : { (item: Item): string; (item: any): number; }
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >{ name: "Sprocket", description: false } : { name: string; description: boolean; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"Sprocket" : "Sprocket"
+>           : ^^^^^^^^^^
 >description : boolean
+>            : ^^^^^^^
 >false : false
+>      : ^^^^^
 
 var z: number;
 >z : number
+>  : ^^^^^^
 
 var w = foo({ a: 10 });
 >w : number
+>  : ^^^^^^
 >foo({ a: 10 }) : number
+>               : ^^^^^^
 >foo : { (item: Item): string; (item: any): number; }
+>    : ^^^    ^^    ^^^      ^^^    ^^   ^^^      ^^^
 >{ a: 10 } : { a: number; }
+>          : ^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 var w: number;
 >w : number
+>  : ^^^^^^
 
 declare function bar<T>(param: { x?: T }): T;
->bar : <T>(param: {    x?: T;}) => T
+>bar : <T>(param: { x?: T; }) => T
+>    : ^ ^^     ^^          ^^^^^ 
 >param : { x?: T; }
+>      : ^^^^^^ ^^^
 >x : T
+>  : ^
 
 var b = bar({});
 >b : unknown
+>  : ^^^^^^^
 >bar({}) : unknown
+>        : ^^^^^^^
 >bar : <T>(param: { x?: T; }) => T
+>    : ^ ^^     ^^          ^^^^^ 
 >{} : {}
+>   : ^^
 
 var b: {};
 >b : unknown
+>  : ^^^^^^^
 

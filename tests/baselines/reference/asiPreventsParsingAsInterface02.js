@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface02.ts] ////
+
 //// [asiPreventsParsingAsInterface02.ts]
 function f(interface: number, I: string) {
     interface   // This should be the identifier 'interface'

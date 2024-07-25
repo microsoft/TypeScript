@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInPropertyBoundDeclarations.ts] ////
+
 //// [thisInPropertyBoundDeclarations.ts]
 class Bug {
     private name: string;
@@ -100,11 +102,11 @@ var A = /** @class */ (function () {
             }
         };
         this.prop4 = {
-            a: function () { return this; }
+            a: function () { return this; },
         };
         this.prop5 = function () {
             return {
-                a: function () { return this; }
+                a: function () { return this; },
             };
         };
     }

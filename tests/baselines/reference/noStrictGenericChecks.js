@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noStrictGenericChecks.ts] ////
+
 //// [noStrictGenericChecks.ts]
 type A = <T, U>(x: T, y: U) => [T, U];
 type B = <S>(x: S, y: S) => [S, S];

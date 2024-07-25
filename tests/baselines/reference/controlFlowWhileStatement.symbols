@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowWhileStatement.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowWhileStatement.ts] ////
+
+=== controlFlowWhileStatement.ts ===
 let cond: boolean;
 >cond : Symbol(cond, Decl(controlFlowWhileStatement.ts, 0, 3))
 

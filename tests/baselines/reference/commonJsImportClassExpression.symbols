@@ -1,4 +1,6 @@
-=== tests/cases/compiler/use.ts ===
+//// [tests/cases/compiler/commonJsImportClassExpression.ts] ////
+
+=== use.ts ===
 import Chunk = require('./mod1')
 >Chunk : Symbol(Chunk, Decl(use.ts, 0, 0))
 
@@ -11,7 +13,7 @@ c.chunk;
 >c : Symbol(c, Decl(use.ts, 1, 11))
 >chunk : Symbol(Chunk.chunk, Decl(mod1.ts, 0, 16))
 
-=== tests/cases/compiler/mod1.ts ===
+=== mod1.ts ===
 export = class {
     chunk = 1
 >chunk : Symbol((Anonymous class).chunk, Decl(mod1.ts, 0, 16))

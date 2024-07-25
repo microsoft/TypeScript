@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfPrimitiveSubtype.ts] ////
+
 //// [typeGuardOfFormTypeOfPrimitiveSubtype.ts]
 let a: {};
 let b: {toString(): string};

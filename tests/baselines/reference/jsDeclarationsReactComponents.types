@@ -1,235 +1,347 @@
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents1.jsx ===
-/// <reference path="react16.d.ts" />
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
+
+=== jsDeclarationsReactComponents1.jsx ===
+/// <reference path="react16.d.ts" preserve="true" />
 import React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 import PropTypes from "prop-types"
 >PropTypes : typeof PropTypes
+>          : ^^^^^^^^^^^^^^^^
 
 const TabbedShowLayout = ({
 >TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
+>                 : ^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({}) => {    return (        <div />    );} : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
+>                                            : ^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 }) => {
     return (
 >(        <div />    ) : JSX.Element
+>                      : ^^^^^^^^^^^
 
         <div />
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
     );
 };
 
 TabbedShowLayout.propTypes = {
 >TabbedShowLayout.propTypes = {    version: PropTypes.number,} : { version: PropTypes.Requireable<number>; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TabbedShowLayout.propTypes : { version: PropTypes.Requireable<number>; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
+>                 : ^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >propTypes : { version: PropTypes.Requireable<number>; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    version: PropTypes.number,} : { version: PropTypes.Requireable<number>; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     version: PropTypes.number,
 >version : PropTypes.Requireable<number>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes.number : PropTypes.Requireable<number>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes : typeof PropTypes
+>          : ^^^^^^^^^^^^^^^^
 >number : PropTypes.Requireable<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 TabbedShowLayout.defaultProps = {
 >TabbedShowLayout.defaultProps = {    tabs: undefined} : { tabs: undefined; }
+>                                                      : ^^^^^^^^^^^^^^^^^^^^
 >TabbedShowLayout.defaultProps : { tabs: undefined; }
+>                              : ^^^^^^^^^^^^^^^^^^^^
 >TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
+>                 : ^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultProps : { tabs: undefined; }
+>             : ^^^^^^^^^^^^^^^^^^^^
 >{    tabs: undefined} : { tabs: undefined; }
+>                      : ^^^^^^^^^^^^^^^^^^^^
 
     tabs: undefined
 >tabs : undefined
+>     : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 };
 
 export default TabbedShowLayout;
 >TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
+>                 : ^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents2.jsx ===
+=== jsDeclarationsReactComponents2.jsx ===
 import React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 /**
  * @type {React.SFC}
  */
 const TabbedShowLayout = () => {
 >TabbedShowLayout : React.SFC<{}>
+>                 : ^^^^^^^^^^^^^
 >() => {    return (        <div className="" key="">            ok        </div>    );} : { (): JSX.Element; defaultProps: Partial<{}> | undefined; }
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return (
 >(        <div className="" key="">            ok        </div>    ) : JSX.Element
+>                                                                    : ^^^^^^^^^^^
 
         <div className="" key="">
 ><div className="" key="">            ok        </div> : JSX.Element
+>                                                      : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >className : string
+>          : ^^^^^^
 >key : string
+>    : ^^^^^^
 
             ok
         </div>
 >div : any
+>    : ^^^
 
     );
 };
 
 TabbedShowLayout.defaultProps = {
 >TabbedShowLayout.defaultProps = {    tabs: "default value"} : { tabs: string; }
+>                                                            : ^^^^^^^^^^^^^^^^^
 >TabbedShowLayout.defaultProps : Partial<{}> | undefined
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^
 >TabbedShowLayout : React.SFC<{}>
+>                 : ^^^^^^^^^^^^^
 >defaultProps : Partial<{}> | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >{    tabs: "default value"} : { tabs: string; }
+>                            : ^^^^^^^^^^^^^^^^^
 
     tabs: "default value"
 >tabs : string
+>     : ^^^^^^
 >"default value" : "default value"
+>                : ^^^^^^^^^^^^^^^
 
 };
 
 export default TabbedShowLayout;
 >TabbedShowLayout : React.SFC<{}>
+>                 : ^^^^^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents3.jsx ===
+=== jsDeclarationsReactComponents3.jsx ===
 import React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 /**
  * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
  */
 const TabbedShowLayout = () => {
->TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; } | undefined) => JSX.Element)
+>TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; }) => JSX.Element)
+>                 : ^^^^^^^^^^^^^^^^                 ^^^^^^^^     ^^^                 ^^^^^           ^
 >() => {    return (        <div className="" key="">            ok        </div>    );} : { (): JSX.Element; defaultProps: { tabs: string; }; }
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
 
     return (
 >(        <div className="" key="">            ok        </div>    ) : JSX.Element
+>                                                                    : ^^^^^^^^^^^
 
         <div className="" key="">
 ><div className="" key="">            ok        </div> : JSX.Element
+>                                                      : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >className : string
+>          : ^^^^^^
 >key : string
+>    : ^^^^^^
 
             ok
         </div>
 >div : any
+>    : ^^^
 
     );
 };
 
 TabbedShowLayout.defaultProps = {
 >TabbedShowLayout.defaultProps = {    tabs: "default value"} : { tabs: string; }
+>                                                            : ^^^^^^^^^^^^^^^^^
 >TabbedShowLayout.defaultProps : { tabs: string; }
->TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; } | undefined) => JSX.Element)
+>                              : ^^^^^^^^      ^^^
+>TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; }) => JSX.Element)
+>                 : ^^^^^^^^^^^^^^^^                 ^^^^^^^^     ^^^                 ^^^^^           ^
 >defaultProps : { tabs: string; }
+>             : ^^^^^^^^      ^^^
 >{    tabs: "default value"} : { tabs: string; }
+>                            : ^^^^^^^^^^^^^^^^^
 
     tabs: "default value"
 >tabs : string
+>     : ^^^^^^
 >"default value" : "default value"
+>                : ^^^^^^^^^^^^^^^
 
 };
 
 export default TabbedShowLayout;
->TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; } | undefined) => JSX.Element)
+>TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; }) => JSX.Element)
+>                 : ^^^^^^^^^^^^^^^^                 ^^^^^^^^     ^^^                 ^^^^^           ^
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents4.jsx ===
+=== jsDeclarationsReactComponents4.jsx ===
 import React from "react";
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
->TabbedShowLayout : { (prop: {    className: string;}): JSX.Element; defaultProps: { tabs: string; }; }
->(/** @type {{className: string}}*/prop) => {    return (        <div className={prop.className} key="">            ok        </div>    );} : { (prop: {    className: string;}): JSX.Element; defaultProps: { tabs: string; }; }
+>TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
+>                 : ^^^    ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(/** @type {{className: string}}*/prop) => {    return (        <div className={prop.className} key="">            ok        </div>    );} : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
+>                                                                                                                                           : ^^^    ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : { className: string; }
+>     : ^^^^^^^^^^^^^      ^^^
 
     return (
 >(        <div className={prop.className} key="">            ok        </div>    ) : JSX.Element
+>                                                                                  : ^^^^^^^^^^^
 
         <div className={prop.className} key="">
 ><div className={prop.className} key="">            ok        </div> : JSX.Element
+>                                                                    : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >className : string
+>          : ^^^^^^
 >prop.className : string
+>               : ^^^^^^
 >prop : { className: string; }
+>     : ^^^^^^^^^^^^^      ^^^
 >className : string
+>          : ^^^^^^
 >key : string
+>    : ^^^^^^
 
             ok
         </div>
 >div : any
+>    : ^^^
 
     );
 };
 
 TabbedShowLayout.defaultProps = {
 >TabbedShowLayout.defaultProps = {    tabs: "default value"} : { tabs: string; }
+>                                                            : ^^^^^^^^^^^^^^^^^
 >TabbedShowLayout.defaultProps : { tabs: string; }
+>                              : ^^^^^^^^^^^^^^^^^
 >TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
+>                 : ^^^    ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultProps : { tabs: string; }
+>             : ^^^^^^^^^^^^^^^^^
 >{    tabs: "default value"} : { tabs: string; }
+>                            : ^^^^^^^^^^^^^^^^^
 
     tabs: "default value"
 >tabs : string
+>     : ^^^^^^
 >"default value" : "default value"
+>                : ^^^^^^^^^^^^^^^
 
 };
 
 export default TabbedShowLayout;
 >TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
+>                 : ^^^    ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents5.jsx ===
+=== jsDeclarationsReactComponents5.jsx ===
 import React from 'react';
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 import PropTypes from 'prop-types';
 >PropTypes : typeof PropTypes
+>          : ^^^^^^^^^^^^^^^^
 
 function Tree({ allowDropOnRoot }) {
 >Tree : typeof Tree
+>     : ^^^^^^^^^^^
 >allowDropOnRoot : any
+>                : ^^^
 
   return <div />
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 }
 
 Tree.propTypes = {
 >Tree.propTypes = {    classes: PropTypes.object,} : { classes: PropTypes.Requireable<object>; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tree.propTypes : { classes: PropTypes.Requireable<object>; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tree : typeof Tree
+>     : ^^^^^^^^^^^
 >propTypes : { classes: PropTypes.Requireable<object>; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    classes: PropTypes.object,} : { classes: PropTypes.Requireable<object>; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     classes: PropTypes.object,
 >classes : PropTypes.Requireable<object>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes.object : PropTypes.Requireable<object>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes : typeof PropTypes
+>          : ^^^^^^^^^^^^^^^^
 >object : PropTypes.Requireable<object>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 Tree.defaultProps = {
 >Tree.defaultProps = {    classes: {},    parentSource: 'parent_id',} : { classes: {}; parentSource: string; }
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tree.defaultProps : { classes: {}; parentSource: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tree : typeof Tree
+>     : ^^^^^^^^^^^
 >defaultProps : { classes: {}; parentSource: string; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    classes: {},    parentSource: 'parent_id',} : { classes: {}; parentSource: string; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     classes: {},
 >classes : {}
+>        : ^^
 >{} : {}
+>   : ^^
 
     parentSource: 'parent_id',
 >parentSource : string
+>             : ^^^^^^
 >'parent_id' : "parent_id"
+>            : ^^^^^^^^^^^
 
 };
 
 export default Tree;
 >Tree : typeof Tree
+>     : ^^^^^^^^^^^
 

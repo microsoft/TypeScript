@@ -1,8 +1,10 @@
-=== tests/cases/compiler/es6ImportWithoutFromClauseNonInstantiatedModule_0.ts ===
+//// [tests/cases/compiler/es6ImportWithoutFromClauseNonInstantiatedModule.ts] ////
+
+=== es6ImportWithoutFromClauseNonInstantiatedModule_0.ts ===
 export interface i {
 >i : Symbol(i, Decl(es6ImportWithoutFromClauseNonInstantiatedModule_0.ts, 0, 0))
 }
 
-=== tests/cases/compiler/es6ImportWithoutFromClauseNonInstantiatedModule_1.ts ===
+=== es6ImportWithoutFromClauseNonInstantiatedModule_1.ts ===
+
 import "es6ImportWithoutFromClauseNonInstantiatedModule_0";
-No type information for this code.

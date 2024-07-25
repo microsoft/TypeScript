@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numericIndexerTyping2.ts] ////
+
 //// [numericIndexerTyping2.ts]
 class I {
     [x: string]: Date

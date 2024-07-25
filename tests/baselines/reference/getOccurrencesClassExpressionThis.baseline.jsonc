@@ -1,0 +1,303 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|].x;
+//         [|{| kind: "reference" |}this|].y;
+//         [|{| kind: "reference" |}this|].z;
+//     }
+//     foo() {
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|{| kind: "reference" |}this|].x;
+//     }
+// 
+//     static bar() {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|{| kind: "reference" |}this|];
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|].x;
+//         [|{| kind: "reference" |}this|].y;
+//         [|{| kind: "reference" |}this|].z;
+//     }
+//     foo() {
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|{| kind: "reference" |}this|].x;
+//     }
+// 
+//     static bar() {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|].x;
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|].y;
+//         [|{| kind: "reference" |}this|].z;
+//     }
+//     foo() {
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|{| kind: "reference" |}this|].x;
+//     }
+// 
+//     static bar() {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|].x;
+//         [|{| kind: "reference" |}this|].y;
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|].z;
+//     }
+//     foo() {
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|{| kind: "reference" |}this|].x;
+//     }
+// 
+//     static bar() {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|].x;
+//         [|{| kind: "reference" |}this|].y;
+//         [|{| kind: "reference" |}this|].z;
+//     }
+//     foo() {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|{| kind: "reference" |}this|].x;
+//     }
+// 
+//     static bar() {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|].x;
+//         [|{| kind: "reference" |}this|].y;
+//         [|{| kind: "reference" |}this|].z;
+//     }
+//     foo() {
+//         [|{| kind: "reference" |}this|];
+//         () => /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|{| kind: "reference" |}this|].x;
+//     }
+// 
+//     static bar() {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|].x;
+//         [|{| kind: "reference" |}this|].y;
+//         [|{| kind: "reference" |}this|].z;
+//     }
+//     foo() {
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if (/*HIGHLIGHTS*/[|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|{| kind: "reference" |}this|].x;
+//     }
+// 
+//     static bar() {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|].x;
+//         [|{| kind: "reference" |}this|].y;
+//         [|{| kind: "reference" |}this|].z;
+//     }
+//     foo() {
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return [|{| kind: "reference" |}this|].x;
+//     }
+// 
+//     static bar() {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionThis.ts ===
+// var x = class C {
+//     public x;
+//     public y;
+//     public z;
+//     constructor() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|].x;
+//         [|{| kind: "reference" |}this|].y;
+//         [|{| kind: "reference" |}this|].z;
+//     }
+//     foo() {
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//         }
+//         function inside() {
+//             this;
+//             (function (_) {
+//                 this;
+//             })(this);
+//         }
+//         return /*HIGHLIGHTS*/[|{| kind: "reference" |}this|].x;
+//     }
+// 
+//     static bar() {
+// --- (line: 29) skipped ---

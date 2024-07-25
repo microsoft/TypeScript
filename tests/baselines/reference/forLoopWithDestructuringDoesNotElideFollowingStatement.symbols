@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forLoopWithDestructuringDoesNotElideFollowingStatement.ts ===
+//// [tests/cases/compiler/forLoopWithDestructuringDoesNotElideFollowingStatement.ts] ////
+
+=== forLoopWithDestructuringDoesNotElideFollowingStatement.ts ===
 let array = [{a: 0, b: 1}]
 >array : Symbol(array, Decl(forLoopWithDestructuringDoesNotElideFollowingStatement.ts, 0, 3))
 >a : Symbol(a, Decl(forLoopWithDestructuringDoesNotElideFollowingStatement.ts, 0, 14))

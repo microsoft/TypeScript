@@ -1,28 +1,39 @@
+//// [tests/cases/compiler/argumentsReferenceInMethod3_Js.ts] ////
+
 === /a.js ===
 class A {
 >A : A
+>  : ^
 
 	get arguments() {
 >arguments : { bar: {}; }
+>          : ^^^^^^^^^^^^
 
 		return { bar: {} };
 >{ bar: {} } : { bar: {}; }
+>            : ^^^^^^^^^^^^
 >bar : {}
+>    : ^^
 >{} : {}
+>   : ^^
 	}
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 	/**
 	 * @param {object} [foo={}]
 	 */
 	m(foo = {}) {
 >m : (foo?: object) => void
+>  : ^   ^^^      ^^^^^^^^^
 >foo : any
 >{} : {}
+>   : ^^
 
 		/**
 		 * @type object
@@ -31,7 +42,9 @@ class B extends A {
 >this.x = foo : any
 >this.x : any
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 >foo : any
 
 		/**
@@ -39,14 +52,22 @@ class B extends A {
 		 */
 		this.y = super.arguments.bar;
 >this.y = super.arguments.bar : {}
+>                             : ^^
 >this.y : any
 >this : this
+>     : ^^^^
 >y : any
+>  : ^^^
 >super.arguments.bar : {}
+>                    : ^^
 >super.arguments : { bar: {}; }
+>                : ^^^^^^^^^^^^
 >super : A
+>      : ^
 >arguments : { bar: {}; }
+>          : ^^^^^^^^^^^^
 >bar : {}
+>    : ^^
 	}
 }
 

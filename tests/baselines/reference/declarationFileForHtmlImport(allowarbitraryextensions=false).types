@@ -1,0 +1,89 @@
+//// [tests/cases/conformance/nonjsExtensions/declarationFileForHtmlImport.ts] ////
+
+=== component.d.html.ts ===
+// html modules were proposed at https://github.com/WICG/webcomponents/blob/gh-pages/proposals/html-modules-explainer.md
+
+// per proposal, `default` is user-defined, but if not present, will be the document of the imported module
+declare var doc: Document;
+>doc : Document
+>    : ^^^^^^^^
+
+export default doc;
+>doc : Document
+>    : ^^^^^^^^
+
+// all other exports are just whatever was exported in module script blocks in the html file
+export const blogPost: Element;
+>blogPost : Element
+>         : ^^^^^^^
+
+export class HTML5Element extends HTMLElement {
+>HTML5Element : HTML5Element
+>             : ^^^^^^^^^^^^
+>HTMLElement : HTMLElement
+>            : ^^^^^^^^^^^
+
+    connectedCallback(): void;
+>connectedCallback : () => void
+>                  : ^^^^^^    
+}
+
+=== file.ts ===
+import * as mod from "./component.html";
+>mod : any
+>    : ^^^
+
+window.customElements.define("my-html5-element", mod.HTML5Element);
+>window.customElements.define("my-html5-element", mod.HTML5Element) : void
+>                                                                   : ^^^^
+>window.customElements.define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions) => void
+>                             : ^    ^^      ^^           ^^                        ^^       ^^^                        ^^^^^    
+>window.customElements : CustomElementRegistry
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+>window : Window & typeof globalThis
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>customElements : CustomElementRegistry
+>               : ^^^^^^^^^^^^^^^^^^^^^
+>define : (name: string, constructor: CustomElementConstructor, options?: ElementDefinitionOptions) => void
+>       : ^    ^^      ^^           ^^                        ^^       ^^^                        ^^^^^    
+>"my-html5-element" : "my-html5-element"
+>                   : ^^^^^^^^^^^^^^^^^^
+>mod.HTML5Element : any
+>                 : ^^^
+>mod : any
+>    : ^^^
+>HTML5Element : any
+>             : ^^^
+
+if (document !== mod.default) {
+>document !== mod.default : boolean
+>                         : ^^^^^^^
+>document : Document
+>         : ^^^^^^^^
+>mod.default : any
+>            : ^^^
+>mod : any
+>    : ^^^
+>default : any
+>        : ^^^
+
+    document.body.appendChild(mod.blogPost);
+>document.body.appendChild(mod.blogPost) : any
+>                                        : ^^^
+>document.body.appendChild : <T extends Node>(node: T) => T
+>                          : ^ ^^^^^^^^^    ^^    ^^ ^^^^^ 
+>document.body : HTMLElement
+>              : ^^^^^^^^^^^
+>document : Document
+>         : ^^^^^^^^
+>body : HTMLElement
+>     : ^^^^^^^^^^^
+>appendChild : <T extends Node>(node: T) => T
+>            : ^ ^^^^^^^^^    ^^    ^^ ^^^^^ 
+>mod.blogPost : any
+>             : ^^^
+>mod : any
+>    : ^^^
+>blogPost : any
+>         : ^^^
+}

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks4.ts] ////
+
 //// [reachabilityChecks4.ts]
 function foo(x, y) {
     switch (x) {

@@ -1,9 +1,14 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/letDeclarations-useBeforeDefinition2.ts] ////
+
+=== file1.ts ===
 l;
 >l : 0
+>  : ^
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 const l = 0;
 >l : 0
+>  : ^
 >0 : 0
+>  : ^
 

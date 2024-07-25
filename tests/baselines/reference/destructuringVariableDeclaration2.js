@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts] ////
+
 //// [destructuringVariableDeclaration2.ts]
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      If the declaration includes a type annotation, T is that type.

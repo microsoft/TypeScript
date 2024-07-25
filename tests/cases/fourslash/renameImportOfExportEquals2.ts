@@ -16,5 +16,5 @@
 ////}
 
 verify.noErrors();
-verify.rangesWithSameTextAreRenameLocations("N", "O", "P", "Q");
 verify.baselineFindAllReferences("N", "O", "P", "Q");
+verify.baselineRenameAtRangesWithText(["N", "O", "P", "Q"]);

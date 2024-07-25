@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveInheritance3.ts] ////
+
 //// [recursiveInheritance3.ts]
 class C implements I {
     public foo(x: any) { return x; }

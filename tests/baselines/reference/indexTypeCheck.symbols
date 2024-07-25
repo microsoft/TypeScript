@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexTypeCheck.ts ===
+//// [tests/cases/compiler/indexTypeCheck.ts] ////
+
+=== indexTypeCheck.ts ===
 interface Red {
 >Red : Symbol(Red, Decl(indexTypeCheck.ts, 0, 0))
 

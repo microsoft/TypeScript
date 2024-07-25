@@ -1,49 +1,77 @@
-=== tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts ===
+//// [tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts] ////
+
+=== nonObjectUnionNestedExcessPropertyCheck.ts ===
 interface IProps {
     iconProp?: string;
 >iconProp : string
+>         : ^^^^^^
 
     nestedProp?: {
 >nestedProp : { testBool?: boolean; }
+>           : ^^^^^^^^^^^^^       ^^^
 
         testBool?: boolean;
 >testBool : boolean
+>         : ^^^^^^^
     }
 }
 
 interface INestedProps {
     nestedProps?: IProps;
 >nestedProps : IProps
+>            : ^^^^^^
 }
 
 // These are the types of errors we want:
 const propB1: IProps | number = { INVALID_PROP_NAME: 'share', iconProp: 'test' };
 >propB1 : number | IProps
+>       : ^^^^^^^^^^^^^^^
 >{ INVALID_PROP_NAME: 'share', iconProp: 'test' } : { INVALID_PROP_NAME: string; iconProp: string; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >INVALID_PROP_NAME : string
+>                  : ^^^^^^
 >'share' : "share"
+>        : ^^^^^^^
 >iconProp : string
+>         : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 
 // Nested typing works here and we also get an expected error:
 const propB2: IProps | number = { nestedProp: { asdfasdf: 'test' }, iconProp: 'test' };
 >propB2 : number | IProps
+>       : ^^^^^^^^^^^^^^^
 >{ nestedProp: { asdfasdf: 'test' }, iconProp: 'test' } : { nestedProp: { asdfasdf: string; }; iconProp: string; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nestedProp : { asdfasdf: string; }
+>           : ^^^^^^^^^^^^^^^^^^^^^
 >{ asdfasdf: 'test' } : { asdfasdf: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^
 >asdfasdf : string
+>         : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 >iconProp : string
+>         : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 
 // Want an error generated here but there isn't one.
 const propA1: INestedProps | number = { nestedProps: { INVALID_PROP_NAME: 'share', iconProp: 'test' } };
 >propA1 : number | INestedProps
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >{ nestedProps: { INVALID_PROP_NAME: 'share', iconProp: 'test' } } : { nestedProps: { INVALID_PROP_NAME: string; iconProp: string; }; }
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nestedProps : { INVALID_PROP_NAME: string; iconProp: string; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ INVALID_PROP_NAME: 'share', iconProp: 'test' } : { INVALID_PROP_NAME: string; iconProp: string; }
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >INVALID_PROP_NAME : string
+>                  : ^^^^^^
 >'share' : "share"
+>        : ^^^^^^^
 >iconProp : string
+>         : ^^^^^^
 >'test' : "test"
+>       : ^^^^^^
 

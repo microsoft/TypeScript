@@ -1,49 +1,76 @@
-=== tests/cases/compiler/classSideInheritance1.ts ===
+//// [tests/cases/compiler/classSideInheritance1.ts] ////
+
+=== classSideInheritance1.ts ===
 class A {
 >A : A
+>  : ^
 
   static bar(): string {
 >bar : () => string
+>    : ^^^^^^      
 
      return "";
 >"" : ""
+>   : ^^
     }
     foo(): number { return 1; }
 >foo : () => number
+>    : ^^^^^^      
 >1 : 1
+>  : ^
 }
  
 class C2 extends A {}
 >C2 : C2
+>   : ^^
 >A : A
+>  : ^
 
 var a: A;
 >a : A
+>  : ^
 
 var c: C2;
 >c : C2
+>  : ^^
 
 a.bar(); // static off an instance - should be an error
 >a.bar() : any
+>        : ^^^
 >a.bar : any
+>      : ^^^
 >a : A
+>  : ^
 >bar : any
+>    : ^^^
 
 c.bar(); // static off an instance - should be an error
 >c.bar() : any
+>        : ^^^
 >c.bar : any
+>      : ^^^
 >c : C2
+>  : ^^
 >bar : any
+>    : ^^^
 
 A.bar(); // valid
 >A.bar() : string
+>        : ^^^^^^
 >A.bar : () => string
+>      : ^^^^^^      
 >A : typeof A
+>  : ^^^^^^^^
 >bar : () => string
+>    : ^^^^^^      
 
 C2.bar(); // valid
 >C2.bar() : string
+>         : ^^^^^^
 >C2.bar : () => string
+>       : ^^^^^^      
 >C2 : typeof C2
+>   : ^^^^^^^^^
 >bar : () => string
+>    : ^^^^^^      
 

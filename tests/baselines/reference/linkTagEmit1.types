@@ -1,9 +1,12 @@
-=== tests/cases/conformance/jsdoc/declarations.d.ts ===
+//// [tests/cases/conformance/jsdoc/linkTagEmit1.ts] ////
+
+=== declarations.d.ts ===
 declare namespace NS {
     type R = number
 >R : number
+>  : ^^^^^^
 }
-=== tests/cases/conformance/jsdoc/linkTagEmit1.js ===
+=== linkTagEmit1.js ===
 /** @typedef {number} N */
 /**
  * @typedef {Object} D1
@@ -18,18 +21,25 @@ declare namespace NS {
  */
 function computeCommonSourceDirectoryOfFilenames(integer) {
 >computeCommonSourceDirectoryOfFilenames : (integer: number) => number
+>                                        : ^       ^^      ^^^^^^^^^^^
 >integer : number
+>        : ^^^^^^
 
     return integer + 1 // pls pls pls
 >integer + 1 : number
+>            : ^^^^^^
 >integer : number
+>        : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 /** {@link https://hvad} */
 var see3 = true
 >see3 : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
 /** @typedef {number} Attempt {@link https://wat} {@linkcode I think lingcod is better} {@linkplain or lutefisk}*/
 

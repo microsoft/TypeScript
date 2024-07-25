@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionExpressionWithResolutionOfTypeOfSameName02.ts ===
+//// [tests/cases/compiler/functionExpressionWithResolutionOfTypeOfSameName02.ts] ////
+
+=== functionExpressionWithResolutionOfTypeOfSameName02.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(functionExpressionWithResolutionOfTypeOfSameName02.ts, 0, 0))
 }

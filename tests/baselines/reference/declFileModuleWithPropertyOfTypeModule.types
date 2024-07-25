@@ -1,12 +1,18 @@
-=== tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts ===
+//// [tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts] ////
+
+=== declFileModuleWithPropertyOfTypeModule.ts ===
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     export class c {
 >c : c
+>  : ^
     }
 
     export var a = m;
 >a : typeof m
+>  : ^^^^^^^^
 >m : typeof m
+>  : ^^^^^^^^
 }

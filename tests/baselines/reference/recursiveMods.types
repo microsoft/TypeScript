@@ -1,47 +1,68 @@
-=== tests/cases/compiler/recursiveMods.ts ===
+//// [tests/cases/compiler/recursiveMods.ts] ////
+
+=== recursiveMods.ts ===
 export module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 	export class C {}
 >C : C
+>  : ^
 }
 
 export module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 	function Bar() : C {
 >Bar : () => C
+>    : ^^^^^^ 
 
 		if (true) { return Bar();}
 >true : true
+>     : ^^^^
 >Bar() : C
+>      : ^
 >Bar : () => C
+>    : ^^^^^^ 
 
 		return new C();
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 	}
 
 	function Baz() : C {
 >Baz : () => C
+>    : ^^^^^^ 
 
 		var c = Baz();
 >c : C
+>  : ^
 >Baz() : C
+>      : ^
 >Baz : () => C
+>    : ^^^^^^ 
 
 		return Bar();
 >Bar() : C
+>      : ^
 >Bar : () => C
+>    : ^^^^^^ 
 	}
 
 	function Gar() {
 >Gar : () => void
+>    : ^^^^^^^^^^
 
 		var c : C = Baz();
 >c : C
+>  : ^
 >Baz() : C
+>      : ^
 >Baz : () => C
+>    : ^^^^^^ 
 
 		return;
 	}

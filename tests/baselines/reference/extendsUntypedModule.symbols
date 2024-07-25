@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendsUntypedModule.ts] ////
+
 === /a.ts ===
 import Foo from "foo";
 >Foo : Symbol(Foo, Decl(a.ts, 0, 6))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anyAndUnknownHaveFalsyComponents.ts ===
+//// [tests/cases/compiler/anyAndUnknownHaveFalsyComponents.ts] ////
+
+=== anyAndUnknownHaveFalsyComponents.ts ===
 declare let x1: any;
 >x1 : Symbol(x1, Decl(anyAndUnknownHaveFalsyComponents.ts, 0, 11))
 

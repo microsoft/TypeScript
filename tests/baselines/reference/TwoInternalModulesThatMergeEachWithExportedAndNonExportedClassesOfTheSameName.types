@@ -1,39 +1,59 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts] ////
+
+=== TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export class Point {
 >Point : Point
+>      : ^^^^^
 
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
 }
 
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     class Point {
 >Point : Point
+>      : ^^^^^
 
         fromCarthesian(p: A.Point) {
 >fromCarthesian : (p: A.Point) => { x: number; y: number; }
+>               : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : A.Point
+>  : ^^^^^^^
 >A : any
+>  : ^^^
 
             return { x: p.x, y: p.y };
 >{ x: p.x, y: p.y } : { x: number; y: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >p.x : number
+>    : ^^^^^^
 >p : A.Point
+>  : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >p.y : number
+>    : ^^^^^^
 >p : A.Point
+>  : ^^^^^^^
 >y : number
+>  : ^^^^^^
         }
     }
 }
@@ -41,40 +61,55 @@ module A {
 // ensure merges as expected
 var p: { x: number; y: number; };
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var p: A.Point;
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >A : any
+>  : ^^^
 
 module X.Y.Z {
 >X : typeof X
+>  : ^^^^^^^^
 >Y : typeof Y
+>  : ^^^^^^^^
 >Z : typeof Z
+>  : ^^^^^^^^
 
     export class Line {
 >Line : Line
+>     : ^^^^
 
         length: number;
 >length : number
+>       : ^^^^^^
     }
 }
 
 module X {
 >X : typeof X
+>  : ^^^^^^^^
 
     export module Y {
 >Y : typeof Y
+>  : ^^^^^^^^
 
         export module Z {
 >Z : typeof Z
+>  : ^^^^^^^^
 
             class Line {
 >Line : Line
+>     : ^^^^
 
                 name: string;
 >name : string
+>     : ^^^^^^
             }
         }
     }
@@ -83,12 +118,18 @@ module X {
 // ensure merges as expected
 var l: { length: number; }
 >l : { length: number; }
+>  : ^^^^^^^^^^      ^^^
 >length : number
+>       : ^^^^^^
 
 var l: X.Y.Z.Line;
 >l : { length: number; }
+>  : ^^^^^^^^^^      ^^^
 >X : any
+>  : ^^^
 >Y : any
+>  : ^^^
 >Z : any
+>  : ^^^
 
 

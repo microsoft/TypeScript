@@ -1,18 +1,28 @@
-=== tests/cases/compiler/foo.js ===
+//// [tests/cases/compiler/contextuallyTypeArgumentsKeyword.ts] ////
+
+=== foo.js ===
 // Repro for #16585
 const x = {
 >x : { bar(): void; }
+>  : ^^^^^^^^^^^^^^^^
 >{    bar() {        setTimeout(function() { arguments }, 0);    }} : { bar(): void; }
+>                                                                   : ^^^^^^^^^^^^^^^^
 
     bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
         setTimeout(function() { arguments }, 0);
 >setTimeout(function() { arguments }, 0) : number
+>                                        : ^^^^^^
 >setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
+>           : ^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^      
 >function() { arguments } : (...args: any[]) => void
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 >0 : 0
+>  : ^
     }
 }
 

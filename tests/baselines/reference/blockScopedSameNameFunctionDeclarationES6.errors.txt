@@ -1,12 +1,12 @@
-tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(3,18): error TS2393: Duplicate function implementation.
-tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(5,13): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(8,18): error TS2393: Duplicate function implementation.
-tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(10,13): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(12,9): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
+blockScopedSameNameFunctionDeclarationES6.ts(3,18): error TS2393: Duplicate function implementation.
+blockScopedSameNameFunctionDeclarationES6.ts(5,13): error TS2554: Expected 0 arguments, but got 1.
+blockScopedSameNameFunctionDeclarationES6.ts(8,18): error TS2393: Duplicate function implementation.
+blockScopedSameNameFunctionDeclarationES6.ts(10,13): error TS2554: Expected 0 arguments, but got 1.
+blockScopedSameNameFunctionDeclarationES6.ts(12,9): error TS2554: Expected 0 arguments, but got 1.
+blockScopedSameNameFunctionDeclarationES6.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts (6 errors) ====
+==== blockScopedSameNameFunctionDeclarationES6.ts (6 errors) ====
     function foo(a: number) {
         if (a === 10) {
             function foo() { } // duplicate
@@ -33,6 +33,6 @@ tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts(16,1): error T
     }
     foo(10);
     foo(); // not ok - needs number
-    ~~~~~
+    ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/blockScopedSameNameFunctionDeclarationES6.ts:1:14: An argument for 'a' was not provided.
+!!! related TS6210 blockScopedSameNameFunctionDeclarationES6.ts:1:14: An argument for 'a' was not provided.

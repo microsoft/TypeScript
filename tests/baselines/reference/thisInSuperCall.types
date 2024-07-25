@@ -1,49 +1,71 @@
-=== tests/cases/compiler/thisInSuperCall.ts ===
+//// [tests/cases/compiler/thisInSuperCall.ts] ////
+
+=== thisInSuperCall.ts ===
 class Base { 
 >Base : Base
+>     : ^^^^
 
     constructor(x: any) {}
 >x : any
+>  : ^^^
 }
 
 class Foo extends Base {
 >Foo : Foo
+>    : ^^^
 >Base : Base
+>     : ^^^^
 
     constructor() {
         super(this); // error: "super" has to be called before "this" accessing
 >super(this) : void
+>            : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 class Foo2 extends Base {
 >Foo2 : Foo2
+>     : ^^^^
 >Base : Base
+>     : ^^^^
 
     public p = 0;
 >p : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     constructor() {
         super(this); // error
 >super(this) : void
+>            : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 
 class Foo3 extends Base {
 >Foo3 : Foo3
+>     : ^^^^
 >Base : Base
+>     : ^^^^
 
     constructor(public p) {
 >p : any
+>  : ^^^
 
         super(this); // error
 >super(this) : void
+>            : ^^^^
 >super : typeof Base
+>      : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
     }
 }

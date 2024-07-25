@@ -1,12 +1,12 @@
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(4,1): error TS2628: Cannot assign to 'E' because it is an enum.
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(5,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(9,1): error TS2629: Cannot assign to 'C' because it is a class.
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(14,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(17,1): error TS2631: Cannot assign to 'M' because it is a namespace.
-tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts(21,1): error TS2630: Cannot assign to 'i' because it is a function.
+invalidUndefinedAssignments.ts(4,1): error TS2628: Cannot assign to 'E' because it is an enum.
+invalidUndefinedAssignments.ts(5,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
+invalidUndefinedAssignments.ts(9,1): error TS2629: Cannot assign to 'C' because it is a class.
+invalidUndefinedAssignments.ts(14,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
+invalidUndefinedAssignments.ts(17,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+invalidUndefinedAssignments.ts(21,1): error TS2630: Cannot assign to 'i' because it is a function.
 
 
-==== tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts (6 errors) ====
+==== invalidUndefinedAssignments.ts (6 errors) ====
     var x: typeof undefined;
     
     enum E { A }

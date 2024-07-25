@@ -1,4 +1,6 @@
-=== tests/cases/compiler/db.d.ts ===
+//// [tests/cases/compiler/circularReferenceInImport.ts] ////
+
+=== db.d.ts ===
 declare namespace Db {
 >Db : Symbol(Types, Decl(db.d.ts, 0, 0))
 
@@ -10,7 +12,7 @@ declare namespace Db {
 export = Db;
 >Db : Symbol(Db, Decl(db.d.ts, 0, 0))
 
-=== tests/cases/compiler/app.ts ===
+=== app.ts ===
 import * as Db from "./db"
 >Db : Symbol(Db, Decl(app.ts, 0, 6))
 

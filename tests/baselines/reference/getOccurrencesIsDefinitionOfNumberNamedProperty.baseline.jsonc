@@ -1,0 +1,109 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfNumberNamedProperty.ts ===
+// let o = { /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}1|]: 12|> };
+// let y = o[[|1|]];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfNumberNamedProperty.ts ===
+  // let o = { /*FIND ALL REFS*/<|[|1|]: 12|> };
+  // let y = o[1];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) 1: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/getOccurrencesIsDefinitionOfNumberNamedProperty.ts ===
+// let o = { <|[|{| isWriteAccess: true |}1|]: 12|> };
+// let y = o[/*FIND ALL REFS*/[|1|]];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfNumberNamedProperty.ts ===
+  // let o = { <|[|1|]: 12|> };
+  // let y = o[/*FIND ALL REFS*/1];
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) 1: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

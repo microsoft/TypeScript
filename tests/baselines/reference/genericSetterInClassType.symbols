@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts ===
+//// [tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts] ////
+
+=== genericSetterInClassType.ts ===
 module Generic {
 >Generic : Symbol(Generic, Decl(genericSetterInClassType.ts, 0, 0))
 

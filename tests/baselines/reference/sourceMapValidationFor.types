@@ -1,119 +1,202 @@
-=== tests/cases/compiler/sourceMapValidationFor.ts ===
+//// [tests/cases/compiler/sourceMapValidationFor.ts] ////
+
+=== sourceMapValidationFor.ts ===
 for (var i = 0; i < 10; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 10 : boolean
+>       : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
     WScript.Echo("i: " + i);
 >WScript.Echo("i: " + i) : void
+>                        : ^^^^
 >WScript.Echo : (s: any) => void
+>             : ^ ^^   ^^^^^    
 >WScript : { Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number): number; BuildVersion: number; FullName: string; Interactive: boolean; Name: string; Path: string; ScriptName: string; StdIn: TextStreamReader; Version: string; ConnectObject(objEventSource: any, strPrefix: string): void; CreateObject(strProgID: string, strPrefix?: string): any; DisconnectObject(obj: any): void; GetObject(strPathname: string, strProgID?: string, strPrefix?: string): any; Sleep(intTime: number): void; }
+>        : ^^^^^^^ ^^   ^^^    ^^^^^^^^^^                ^^^^^^^^^^                ^^^^^^^^^^^^^                                            ^^^^^^^^^^^^^^^^^^      ^^^^^^^        ^^^      ^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^       ^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^                ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^              ^^   ^^         ^^      ^^^    ^^^^^^^^^^^^^^^         ^^      ^^         ^^^      ^^^   ^^^^^^^^^^^^^^^^^^^   ^^   ^^^    ^^^^^^^^^^^^           ^^      ^^         ^^^      ^^         ^^^      ^^^   ^^^^^^^^       ^^      ^^^    ^^^
 >Echo : (s: any) => void
+>     : ^ ^^   ^^^^^    
 >"i: " + i : string
+>          : ^^^^^^
 >"i: " : "i: "
+>      : ^^^^^
 >i : number
+>  : ^^^^^^
 }
 for (i = 0; i < 10; i++)
 >i = 0 : 0
+>      : ^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < 10 : boolean
+>       : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 {
     WScript.Echo("i: " + i);
 >WScript.Echo("i: " + i) : void
+>                        : ^^^^
 >WScript.Echo : (s: any) => void
+>             : ^ ^^   ^^^^^    
 >WScript : { Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number): number; BuildVersion: number; FullName: string; Interactive: boolean; Name: string; Path: string; ScriptName: string; StdIn: TextStreamReader; Version: string; ConnectObject(objEventSource: any, strPrefix: string): void; CreateObject(strProgID: string, strPrefix?: string): any; DisconnectObject(obj: any): void; GetObject(strPathname: string, strProgID?: string, strPrefix?: string): any; Sleep(intTime: number): void; }
+>        : ^^^^^^^ ^^   ^^^    ^^^^^^^^^^                ^^^^^^^^^^                ^^^^^^^^^^^^^                                            ^^^^^^^^^^^^^^^^^^      ^^^^^^^        ^^^      ^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^       ^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^      ^^^^^^^^^                ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^              ^^   ^^         ^^      ^^^    ^^^^^^^^^^^^^^^         ^^      ^^         ^^^      ^^^   ^^^^^^^^^^^^^^^^^^^   ^^   ^^^    ^^^^^^^^^^^^           ^^      ^^         ^^^      ^^         ^^^      ^^^   ^^^^^^^^       ^^      ^^^    ^^^
 >Echo : (s: any) => void
+>     : ^ ^^   ^^^^^    
 >"i: " + i : string
+>          : ^^^^^^
 >"i: " : "i: "
+>      : ^^^^^
 >i : number
+>  : ^^^^^^
 }
 for (var j = 0; j < 10; ) {
 >j : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >j < 10 : boolean
+>       : ^^^^^^^
 >j : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     j++;
 >j++ : number
+>    : ^^^^^^
 >j : number
+>  : ^^^^^^
 
     if (j == 1) {
 >j == 1 : boolean
+>       : ^^^^^^^
 >j : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         continue;
     }
 }
 for (j = 0; j < 10;)
 >j = 0 : 0
+>      : ^
 >j : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >j < 10 : boolean
+>       : ^^^^^^^
 >j : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 {
     j++;
 >j++ : number
+>    : ^^^^^^
 >j : number
+>  : ^^^^^^
 }
 for (var k = 0;; k++) {
 >k : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >k++ : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 }
 for (k = 0;; k++)
 >k = 0 : 0
+>      : ^
 >k : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >k++ : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 {
 }
 for (; k < 10; k++) {
 >k < 10 : boolean
+>       : ^^^^^^^
 >k : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >k++ : number
+>    : ^^^^^^
 >k : number
+>  : ^^^^^^
 }
 for (;;) {
     i++;
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 }
 for (;;)
 {
     i++;
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 }
 for (i = 0, j = 20; j < 20, i < 20; j++) {
 >i = 0, j = 20 : 20
+>              : ^^
 >i = 0 : 0
+>      : ^
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >j = 20 : 20
+>       : ^^
 >j : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 >j < 20, i < 20 : boolean
+>               : ^^^^^^^
 >j < 20 : boolean
+>       : ^^^^^^^
 >j : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 >i < 20 : boolean
+>       : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 >j++ : number
+>    : ^^^^^^
 >j : number
+>  : ^^^^^^
 }

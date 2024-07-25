@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts] ////
+
 //// [objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts]
 interface Function {
     data: number;

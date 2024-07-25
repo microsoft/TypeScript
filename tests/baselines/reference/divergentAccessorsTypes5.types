@@ -1,93 +1,140 @@
-=== tests/cases/compiler/divergentAccessorsTypes5.ts ===
+//// [tests/cases/compiler/divergentAccessorsTypes5.ts] ////
+
+=== divergentAccessorsTypes5.ts ===
 // Not really different from divergentAccessorsTypes4.ts,
 // but goes through the deferred type code
 
 class One {
 >One : One
+>    : ^^^
 
   get prop1(): string { return ""; }
 >prop1 : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
   set prop1(s: string | number) { }
 >prop1 : string
+>      : ^^^^^^
 >s : string | number
+>  : ^^^^^^^^^^^^^^^
 
   prop2: number;
 >prop2 : number
+>      : ^^^^^^
 }
 
 class Two {
 >Two : Two
+>    : ^^^
 
   get prop1(): "hello" { return "hello"; }
 >prop1 : "hello"
+>      : ^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
   set prop1(s: "hello" | number) { }
 >prop1 : "hello"
+>      : ^^^^^^^
 >s : number | "hello"
+>  : ^^^^^^^^^^^^^^^^
 
   get prop2(): string { return ""; }
 >prop2 : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
   set prop2(s: string | 42) { }
 >prop2 : string
+>      : ^^^^^^
 >s : string | 42
+>  : ^^^^^^^^^^^
 
 }
 
 class Three {
 >Three : Three
+>      : ^^^^^
 
   get prop1(): "hello" { return "hello"; }
 >prop1 : "hello"
+>      : ^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
   set prop1(s: "hello" | boolean) { }
 >prop1 : "hello"
+>      : ^^^^^^^
 >s : boolean | "hello"
+>  : ^^^^^^^^^^^^^^^^^
 
   get prop2(): string { return ""; }
 >prop2 : string
+>      : ^^^^^^
 >"" : ""
+>   : ^^
 
   set prop2(s: string | number | boolean) { }
 >prop2 : string
+>      : ^^^^^^
 >s : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 declare const i: One & Two & Three;
 >i : One & Two & Three
+>  : ^^^^^^^^^^^^^^^^^
 
 // "hello"
 i.prop1 = 42; // error
 >i.prop1 = 42 : 42
+>             : ^^
 >i.prop1 : "hello"
+>        : ^^^^^^^
 >i : One & Two & Three
+>  : ^^^^^^^^^^^^^^^^^
 >prop1 : "hello"
+>      : ^^^^^^^
 >42 : 42
+>   : ^^
 
 i.prop1 = "hello";
 >i.prop1 = "hello" : "hello"
+>                  : ^^^^^^^
 >i.prop1 : "hello"
+>        : ^^^^^^^
 >i : One & Two & Three
+>  : ^^^^^^^^^^^^^^^^^
 >prop1 : "hello"
+>      : ^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 // 42
 i.prop2 = 42;
 >i.prop2 = 42 : 42
+>             : ^^
 >i.prop2 : 42
+>        : ^^
 >i : One & Two & Three
+>  : ^^^^^^^^^^^^^^^^^
 >prop2 : 42
+>      : ^^
 >42 : 42
+>   : ^^
 
 i.prop2 = "hello"; // error
 >i.prop2 = "hello" : "hello"
+>                  : ^^^^^^^
 >i.prop2 : 42
+>        : ^^
 >i : One & Two & Three
+>  : ^^^^^^^^^^^^^^^^^
 >prop2 : 42
+>      : ^^
 >"hello" : "hello"
+>        : ^^^^^^^
 

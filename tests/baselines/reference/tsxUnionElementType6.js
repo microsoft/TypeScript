@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxUnionElementType6.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 
@@ -25,7 +27,7 @@ let d = <SFC2AndEmptyComp data-prop />;
 
 //// [file.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 function EmptySFC1() {
     return React.createElement("div", null, "Hi");

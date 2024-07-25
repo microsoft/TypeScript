@@ -1,46 +1,71 @@
-=== tests/cases/compiler/functionExpressionShadowedByParams.ts ===
+//// [tests/cases/compiler/functionExpressionShadowedByParams.ts] ////
+
+=== functionExpressionShadowedByParams.ts ===
 function b1(b1: number) {
 >b1 : (b1: number) => void
+>   : ^  ^^      ^^^^^^^^^
 >b1 : number
+>   : ^^^^^^
 
    b1.toPrecision(2); // should not error
 >b1.toPrecision(2) : string
+>                  : ^^^^^^
 >b1.toPrecision : (precision?: number) => string
+>               : ^         ^^^      ^^^^^      
 >b1 : number
+>   : ^^^^^^
 >toPrecision : (precision?: number) => string
+>            : ^         ^^^      ^^^^^      
 >2 : 2
+>  : ^
 
    b1(12); // should error
 >b1(12) : any
+>       : ^^^
 >b1 : number
+>   : ^^^^^^
 >12 : 12
+>   : ^^
 }
 
 
 var x = {
 >x : { b: (b: number) => void; }
+>  : ^^^^^^ ^^      ^^^^^^^^^^^^
 >{   b: function b(b: number) {      b.toPrecision(2); // should not error      b.apply(null, null); // should error   }} : { b: (b: number) => void; }
+>                                                                                                                         : ^^^^^^ ^^      ^^^^^^^^^^^^
 
    b: function b(b: number) {
 >b : (b: number) => void
+>  : ^ ^^      ^^^^^^^^^
 >function b(b: number) {      b.toPrecision(2); // should not error      b.apply(null, null); // should error   } : (b: number) => void
+>                                                                                                                 : ^ ^^      ^^^^^^^^^
 >b : (b: number) => void
+>  : ^ ^^      ^^^^^^^^^
 >b : number
+>  : ^^^^^^
 
       b.toPrecision(2); // should not error
 >b.toPrecision(2) : string
+>                 : ^^^^^^
 >b.toPrecision : (precision?: number) => string
+>              : ^         ^^^      ^^^^^      
 >b : number
+>  : ^^^^^^
 >toPrecision : (precision?: number) => string
+>            : ^         ^^^      ^^^^^      
 >2 : 2
+>  : ^
 
       b.apply(null, null); // should error
 >b.apply(null, null) : any
+>                    : ^^^
 >b.apply : any
+>        : ^^^
 >b : number
+>  : ^^^^^^
 >apply : any
->null : null
->null : null
+>      : ^^^
    }
 };
 

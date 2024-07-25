@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classExpressionAssignment.ts] ////
+
 //// [classExpressionAssignment.ts]
 interface A {
   prop: string;

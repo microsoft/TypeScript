@@ -1,30 +1,46 @@
-=== tests/cases/compiler/capturedLetConstInLoop6_ES6.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop6_ES6.ts] ////
+
+=== capturedLetConstInLoop6_ES6.ts ===
 // ====let
 for (let x of []) {
 >x : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     (function() { return x});
 >(function() { return x}) : () => any
+>                         : ^^^^^^^^^
 >function() { return x} : () => any
+>                       : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     (() => x);
 >(() => x) : () => any
+>          : ^^^^^^^^^
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -32,29 +48,43 @@ for (let x of []) {
 
 for (let x in []) {
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     (function() { return x});
 >(function() { return x}) : () => string
+>                         : ^^^^^^^^^^^^
 >function() { return x} : () => string
+>                       : ^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     (() => x);
 >(() => x) : () => string
+>          : ^^^^^^^^^^^^
 >() => x : () => string
+>        : ^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     if (x == "1") {
 >x == "1" : boolean
+>         : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >"1" : "1"
+>    : ^^^
 
         break;
     }
     if (x == "2") {
 >x == "2" : boolean
+>         : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >"2" : "2"
+>    : ^^^
 
         continue;
     }
@@ -63,34 +93,53 @@ for (let x in []) {
 
 for (let x = 0; x < 1; ++x) {
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >x < 1 : boolean
+>      : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >++x : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     (function() { return x});
 >(function() { return x}) : () => number
+>                         : ^^^^^^^^^^^^
 >function() { return x} : () => number
+>                       : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     (() => x);
 >(() => x) : () => number
+>          : ^^^^^^^^^^^^
 >() => x : () => number
+>        : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -98,33 +147,49 @@ for (let x = 0; x < 1; ++x) {
 
 while (1 === 1) {
 >1 === 1 : boolean
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
     let x;
 >x : any
+>  : ^^^
 
     (function() { return x});
 >(function() { return x}) : () => any
+>                         : ^^^^^^^^^
 >function() { return x} : () => any
+>                       : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     (() => x);
 >(() => x) : () => any
+>          : ^^^^^^^^^
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -133,70 +198,107 @@ while (1 === 1) {
 do {
     let x;
 >x : any
+>  : ^^^
 
     (function() { return x});
 >(function() { return x}) : () => any
+>                         : ^^^^^^^^^
 >function() { return x} : () => any
+>                       : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     (() => x);
 >(() => x) : () => any
+>          : ^^^^^^^^^
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >2 : 2
+>  : ^
 
         continue;
     }
 } while (1 === 1)
 >1 === 1 : boolean
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
 for (let y = 0; y < 1; ++y) {
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y < 1 : boolean
+>      : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >++y : number
+>    : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     (function() { return x});
 >(function() { return x}) : () => number
+>                         : ^^^^^^^^^^^^
 >function() { return x} : () => number
+>                       : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     (() => x);
 >(() => x) : () => number
+>          : ^^^^^^^^^^^^
 >() => x : () => number
+>        : ^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -204,40 +306,65 @@ for (let y = 0; y < 1; ++y) {
 
 for (let x = 0, y = 1; x < 1; ++x) {
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >x < 1 : boolean
+>      : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >++x : number
+>    : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
+>                             : ^^^^^^^^^^^^
 >function() { return x + y} : () => number
+>                           : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     (() => x + y);
 >(() => x + y) : () => number
+>              : ^^^^^^^^^^^^
 >() => x + y : () => number
+>            : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -245,38 +372,59 @@ for (let x = 0, y = 1; x < 1; ++x) {
 
 while (1 === 1) {
 >1 === 1 : boolean
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
     let x, y;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     (function() { return x + y});
 >(function() { return x + y}) : () => any
+>                             : ^^^^^^^^^
 >function() { return x + y} : () => any
+>                           : ^^^^^^^^^
 >x + y : any
+>      : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     (() => x + y);
 >(() => x + y) : () => any
+>              : ^^^^^^^^^
 >() => x + y : () => any
+>            : ^^^^^^^^^
 >x + y : any
+>      : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -285,79 +433,125 @@ while (1 === 1) {
 do {
     let x, y;
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     (function() { return x + y});
 >(function() { return x + y}) : () => any
+>                             : ^^^^^^^^^
 >function() { return x + y} : () => any
+>                           : ^^^^^^^^^
 >x + y : any
+>      : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     (() => x + y);
 >(() => x + y) : () => any
+>              : ^^^^^^^^^
 >() => x + y : () => any
+>            : ^^^^^^^^^
 >x + y : any
+>      : ^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >2 : 2
+>  : ^
 
         continue;
     }
 } while (1 === 1)
 >1 === 1 : boolean
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
 for (let y = 0; y < 1; ++y) {
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y < 1 : boolean
+>      : ^^^^^^^
 >y : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >++y : number
+>    : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
+>                             : ^^^^^^^^^^^^
 >function() { return x + y} : () => number
+>                           : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     (() => x + y);
 >(() => x + y) : () => number
+>              : ^^^^^^^^^^^^
 >() => x + y : () => number
+>            : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -367,29 +561,43 @@ for (let y = 0; y < 1; ++y) {
 
 for (const x of []) {
 >x : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     (function() { return x});
 >(function() { return x}) : () => any
+>                         : ^^^^^^^^^
 >function() { return x} : () => any
+>                       : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     (() => x);
 >(() => x) : () => any
+>          : ^^^^^^^^^
 >() => x : () => any
+>        : ^^^^^^^^^
 >x : any
+>  : ^^^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : any
+>  : ^^^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -397,29 +605,43 @@ for (const x of []) {
 
 for (const x in []) {
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     (function() { return x});
 >(function() { return x}) : () => string
+>                         : ^^^^^^^^^^^^
 >function() { return x} : () => string
+>                       : ^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     (() => x);
 >(() => x) : () => string
+>          : ^^^^^^^^^^^^
 >() => x : () => string
+>        : ^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
     if (x == "1") {
 >x == "1" : boolean
+>         : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >"1" : "1"
+>    : ^^^
 
         break;
     }
     if (x == "2") {
 >x == "2" : boolean
+>         : ^^^^^^^
 >x : string
+>  : ^^^^^^
 >"2" : "2"
+>    : ^^^
 
         continue;
     }
@@ -428,32 +650,49 @@ for (const x in []) {
 
 for (const x = 0; x < 1;) {
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 >x < 1 : boolean
+>      : ^^^^^^^
 >x : 0
+>  : ^
 >1 : 1
+>  : ^
 
     (function() { return x});
 >(function() { return x}) : () => number
+>                         : ^^^^^^^^^^^^
 >function() { return x} : () => number
+>                       : ^^^^^^^^^^^^
 >x : 0
+>  : ^
 
     (() => x);
 >(() => x) : () => number
+>          : ^^^^^^^^^^^^
 >() => x : () => number
+>        : ^^^^^^^^^^^^
 >x : 0
+>  : ^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : 0
+>  : ^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : 0
+>  : ^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -461,34 +700,51 @@ for (const x = 0; x < 1;) {
 
 while (1 === 1) {
 >1 === 1 : boolean
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
     const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
     (function() { return x});
 >(function() { return x}) : () => number
+>                         : ^^^^^^^^^^^^
 >function() { return x} : () => number
+>                       : ^^^^^^^^^^^^
 >x : 1
+>  : ^
 
     (() => x);
 >(() => x) : () => number
+>          : ^^^^^^^^^^^^
 >() => x : () => number
+>        : ^^^^^^^^^^^^
 >x : 1
+>  : ^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : never
+>  : ^^^^^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -497,69 +753,105 @@ while (1 === 1) {
 do {
     const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
     (function() { return x});
 >(function() { return x}) : () => number
+>                         : ^^^^^^^^^^^^
 >function() { return x} : () => number
+>                       : ^^^^^^^^^^^^
 >x : 1
+>  : ^
 
     (() => x);
 >(() => x) : () => number
+>          : ^^^^^^^^^^^^
 >() => x : () => number
+>        : ^^^^^^^^^^^^
 >x : 1
+>  : ^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : never
+>  : ^^^^^
 >2 : 2
+>  : ^
 
         continue;
     }
 } while (1 === 1)
 >1 === 1 : boolean
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
 for (const y = 0; y < 1;) {
 >y : 0
+>  : ^
 >0 : 0
+>  : ^
 >y < 1 : boolean
+>      : ^^^^^^^
 >y : 0
+>  : ^
 >1 : 1
+>  : ^
 
     const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
     (function() { return x});
 >(function() { return x}) : () => number
+>                         : ^^^^^^^^^^^^
 >function() { return x} : () => number
+>                       : ^^^^^^^^^^^^
 >x : 1
+>  : ^
 
     (() => x);
 >(() => x) : () => number
+>          : ^^^^^^^^^^^^
 >() => x : () => number
+>        : ^^^^^^^^^^^^
 >x : 1
+>  : ^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : never
+>  : ^^^^^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -567,38 +859,61 @@ for (const y = 0; y < 1;) {
 
 for (const x = 0, y = 1; x < 1;) {
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 >y : 1
+>  : ^
 >1 : 1
+>  : ^
 >x < 1 : boolean
+>      : ^^^^^^^
 >x : 0
+>  : ^
 >1 : 1
+>  : ^
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
+>                             : ^^^^^^^^^^^^
 >function() { return x + y} : () => number
+>                           : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : 0
+>  : ^
 >y : 1
+>  : ^
 
     (() => x + y);
 >(() => x + y) : () => number
+>              : ^^^^^^^^^^^^
 >() => x + y : () => number
+>            : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : 0
+>  : ^
 >y : 1
+>  : ^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : 0
+>  : ^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : 0
+>  : ^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -606,40 +921,63 @@ for (const x = 0, y = 1; x < 1;) {
 
 while (1 === 1) {
 >1 === 1 : boolean
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
     const x = 1, y = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 >y : 1
+>  : ^
 >1 : 1
+>  : ^
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
+>                             : ^^^^^^^^^^^^
 >function() { return x + y} : () => number
+>                           : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : 1
+>  : ^
 >y : 1
+>  : ^
 
     (() => x + y);
 >(() => x + y) : () => number
+>              : ^^^^^^^^^^^^
 >() => x + y : () => number
+>            : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : 1
+>  : ^
 >y : 1
+>  : ^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : never
+>  : ^^^^^
 >2 : 2
+>  : ^
 
         continue;
     }
@@ -648,79 +986,125 @@ while (1 === 1) {
 do {
     const x = 1, y = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 >y : 1
+>  : ^
 >1 : 1
+>  : ^
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
+>                             : ^^^^^^^^^^^^
 >function() { return x + y} : () => number
+>                           : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : 1
+>  : ^
 >y : 1
+>  : ^
 
     (() => x + y);
 >(() => x + y) : () => number
+>              : ^^^^^^^^^^^^
 >() => x + y : () => number
+>            : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : 1
+>  : ^
 >y : 1
+>  : ^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : never
+>  : ^^^^^
 >2 : 2
+>  : ^
 
         continue;
     }
 } while (1 === 1)
 >1 === 1 : boolean
+>        : ^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 
 for (const y = 0; y < 1;) {
 >y : 0
+>  : ^
 >0 : 0
+>  : ^
 >y < 1 : boolean
+>      : ^^^^^^^
 >y : 0
+>  : ^
 >1 : 1
+>  : ^
 
     const x = 1;
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
+>                             : ^^^^^^^^^^^^
 >function() { return x + y} : () => number
+>                           : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : 1
+>  : ^
 >y : 0
+>  : ^
 
     (() => x + y);
 >(() => x + y) : () => number
+>              : ^^^^^^^^^^^^
 >() => x + y : () => number
+>            : ^^^^^^^^^^^^
 >x + y : number
+>      : ^^^^^^
 >x : 1
+>  : ^
 >y : 0
+>  : ^
 
     if (x == 1) {
 >x == 1 : boolean
+>       : ^^^^^^^
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
+>       : ^^^^^^^
 >x : never
+>  : ^^^^^
 >2 : 2
+>  : ^
 
         continue;
     }

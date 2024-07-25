@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override13.ts] ////
+
 //// [override13.ts]
 class Foo {
     property = 1

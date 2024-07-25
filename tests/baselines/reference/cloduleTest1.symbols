@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cloduleTest1.ts ===
+//// [tests/cases/compiler/cloduleTest1.ts] ////
+
+=== cloduleTest1.ts ===
   declare function $(selector: string): $;  
 >$ : Symbol($, Decl(cloduleTest1.ts, 0, 0), Decl(cloduleTest1.ts, 0, 42), Decl(cloduleTest1.ts, 3, 3))
 >selector : Symbol(selector, Decl(cloduleTest1.ts, 0, 21))

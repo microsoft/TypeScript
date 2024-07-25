@@ -1,4 +1,6 @@
-=== tests/cases/compiler/anyIsAssignableToVoid.ts ===
+//// [tests/cases/compiler/anyIsAssignableToVoid.ts] ////
+
+=== anyIsAssignableToVoid.ts ===
 interface P {
 >P : Symbol(P, Decl(anyIsAssignableToVoid.ts, 0, 0))
 

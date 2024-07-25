@@ -1,51 +1,51 @@
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(8,38): error TS2304: Cannot find name 'TypeChecker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(9,48): error TS2304: Cannot find name 'TypeLink'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(9,67): error TS2304: Cannot find name 'SymbolScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(10,30): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(12,35): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(12,40): error TS1011: An element access expression should take an argument.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(29,36): error TS2304: Cannot find name 'SymbolScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(29,55): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(67,54): error TS2304: Cannot find name 'SignatureGroup'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(67,77): error TS2304: Cannot find name 'SymbolScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(67,104): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(83,38): error TS2304: Cannot find name 'ParameterSymbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(94,32): error TS2304: Cannot find name 'SymbolScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(94,51): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(94,71): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(103,39): error TS2304: Cannot find name 'SymbolTableScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(104,31): error TS2304: Cannot find name 'SymbolAggregateScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(110,52): error TS2304: Cannot find name 'ModuleDeclaration'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(145,34): error TS2304: Cannot find name 'SymbolScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(146,25): error TS2339: Property 'bound' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(148,53): error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(148,80): error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(149,75): error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(151,32): error TS2339: Property 'kind' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(152,26): error TS2304: Cannot find name 'SymbolKind'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(154,36): error TS2339: Property 'flags' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(154,44): error TS2304: Cannot find name 'SymbolFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(158,43): error TS2304: Cannot find name 'TypeSymbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(159,45): error TS2304: Cannot find name 'SymbolFlags'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(166,112): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(167,45): error TS2304: Cannot find name 'Identifier'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(185,26): error TS2304: Cannot find name 'SymbolKind'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(186,63): error TS2304: Cannot find name 'FieldSymbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(189,26): error TS2304: Cannot find name 'SymbolKind'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(191,51): error TS2304: Cannot find name 'ParameterSymbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(197,20): error TS2339: Property 'bound' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(200,28): error TS2304: Cannot find name 'SymbolScope'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(200,48): error TS2304: Cannot find name 'IHashTable'.
+parserRealSource9.ts(4,21): error TS6053: File 'typescript.ts' not found.
+parserRealSource9.ts(8,38): error TS2304: Cannot find name 'TypeChecker'.
+parserRealSource9.ts(9,48): error TS2304: Cannot find name 'TypeLink'.
+parserRealSource9.ts(9,67): error TS2304: Cannot find name 'SymbolScope'.
+parserRealSource9.ts(10,30): error TS2304: Cannot find name 'Type'.
+parserRealSource9.ts(12,35): error TS2304: Cannot find name 'Type'.
+parserRealSource9.ts(12,40): error TS1011: An element access expression should take an argument.
+parserRealSource9.ts(29,36): error TS2304: Cannot find name 'SymbolScope'.
+parserRealSource9.ts(29,55): error TS2304: Cannot find name 'Type'.
+parserRealSource9.ts(67,54): error TS2304: Cannot find name 'SignatureGroup'.
+parserRealSource9.ts(67,77): error TS2304: Cannot find name 'SymbolScope'.
+parserRealSource9.ts(67,104): error TS2304: Cannot find name 'Type'.
+parserRealSource9.ts(83,38): error TS2304: Cannot find name 'ParameterSymbol'.
+parserRealSource9.ts(94,32): error TS2304: Cannot find name 'SymbolScope'.
+parserRealSource9.ts(94,51): error TS2304: Cannot find name 'Type'.
+parserRealSource9.ts(94,71): error TS2304: Cannot find name 'Type'.
+parserRealSource9.ts(103,39): error TS2304: Cannot find name 'SymbolTableScope'.
+parserRealSource9.ts(104,31): error TS2304: Cannot find name 'SymbolAggregateScope'.
+parserRealSource9.ts(110,52): error TS2304: Cannot find name 'ModuleDeclaration'.
+parserRealSource9.ts(145,34): error TS2304: Cannot find name 'SymbolScope'.
+parserRealSource9.ts(146,25): error TS2339: Property 'bound' does not exist on type 'Symbol'.
+parserRealSource9.ts(148,53): error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
+parserRealSource9.ts(148,80): error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
+parserRealSource9.ts(149,75): error TS2339: Property 'unitIndex' does not exist on type 'Symbol'.
+parserRealSource9.ts(151,32): error TS2339: Property 'kind' does not exist on type 'Symbol'.
+parserRealSource9.ts(152,26): error TS2304: Cannot find name 'SymbolKind'.
+parserRealSource9.ts(154,36): error TS2339: Property 'flags' does not exist on type 'Symbol'.
+parserRealSource9.ts(154,44): error TS2304: Cannot find name 'SymbolFlags'.
+parserRealSource9.ts(158,43): error TS2304: Cannot find name 'TypeSymbol'.
+parserRealSource9.ts(159,45): error TS2304: Cannot find name 'SymbolFlags'.
+parserRealSource9.ts(166,112): error TS2304: Cannot find name 'NodeType'.
+parserRealSource9.ts(167,45): error TS2304: Cannot find name 'Identifier'.
+parserRealSource9.ts(185,26): error TS2304: Cannot find name 'SymbolKind'.
+parserRealSource9.ts(186,63): error TS2304: Cannot find name 'FieldSymbol'.
+parserRealSource9.ts(189,26): error TS2304: Cannot find name 'SymbolKind'.
+parserRealSource9.ts(191,51): error TS2304: Cannot find name 'ParameterSymbol'.
+parserRealSource9.ts(197,20): error TS2339: Property 'bound' does not exist on type 'Symbol'.
+parserRealSource9.ts(200,28): error TS2304: Cannot find name 'SymbolScope'.
+parserRealSource9.ts(200,48): error TS2304: Cannot find name 'IHashTable'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts (39 errors) ====
+==== parserRealSource9.ts (39 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
                         ~~~~~~~~~~~~~
-!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+!!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
         export class Binder {

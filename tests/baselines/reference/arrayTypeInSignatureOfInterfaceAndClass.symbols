@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayTypeInSignatureOfInterfaceAndClass.ts ===
+//// [tests/cases/compiler/arrayTypeInSignatureOfInterfaceAndClass.ts] ////
+
+=== arrayTypeInSignatureOfInterfaceAndClass.ts ===
 declare module WinJS {
 >WinJS : Symbol(WinJS, Decl(arrayTypeInSignatureOfInterfaceAndClass.ts, 0, 0))
 

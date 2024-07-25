@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/prefixUnaryOperatorsOnExportedVariables.ts] ////
+
 //// [prefixUnaryOperatorsOnExportedVariables.ts]
 export var x = false;
 export var y = 1;

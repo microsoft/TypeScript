@@ -1,149 +1,233 @@
-=== tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts ===
+//// [tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts] ////
+
+=== instancePropertiesInheritedIntoClassType.ts ===
 module NonGeneric {
 >NonGeneric : typeof NonGeneric
+>           : ^^^^^^^^^^^^^^^^^
 
     class C {
 >C : C
+>  : ^
 
         x: string;
 >x : string
+>  : ^^^^^^
 
         get y() {
 >y : number
+>  : ^^^^^^
 
             return 1;
 >1 : 1
+>  : ^
         }
         set y(v) { }
 >y : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 
         fn() { return this; }
 >fn : () => this
+>   : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         constructor(public a: number, private b: number) { }
 >a : number
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
     }
 
     class D extends C { e: string; }
 >D : D
+>  : ^
 >C : C
+>  : ^
 >e : string
+>  : ^^^^^^
 
     var d = new D(1, 2);
 >d : D
+>  : ^
 >new D(1, 2) : D
+>            : ^
 >D : typeof D
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
     var r = d.fn();
 >r : D
+>  : ^
 >d.fn() : D
+>       : ^
 >d.fn : () => D
+>     : ^^^^^^^
 >d : D
+>  : ^
 >fn : () => D
+>   : ^^^^^^^
 
     var r2 = r.x;
 >r2 : string
+>   : ^^^^^^
 >r.x : string
+>    : ^^^^^^
 >r : D
+>  : ^
 >x : string
+>  : ^^^^^^
 
     var r3 = r.y;
 >r3 : number
+>   : ^^^^^^
 >r.y : number
+>    : ^^^^^^
 >r : D
+>  : ^
 >y : number
+>  : ^^^^^^
 
     r.y = 4;
 >r.y = 4 : 4
+>        : ^
 >r.y : number
+>    : ^^^^^^
 >r : D
+>  : ^
 >y : number
+>  : ^^^^^^
 >4 : 4
+>  : ^
 
     var r6 = d.y(); // error
 >r6 : any
+>   : ^^^
 >d.y() : any
+>      : ^^^
 >d.y : number
+>    : ^^^^^^
 >d : D
+>  : ^
 >y : number
+>  : ^^^^^^
 
 }
 
 module Generic {
 >Generic : typeof Generic
+>        : ^^^^^^^^^^^^^^
 
     class C<T, U> {
 >C : C<T, U>
+>  : ^^^^^^^
 
         x: T;
 >x : T
+>  : ^
 
         get y() {
 >y : U
+>  : ^
 
             return null;
->null : null
         }
         set y(v: U) { }
 >y : U
+>  : ^
 >v : U
+>  : ^
 
         fn() { return this; }
 >fn : () => this
+>   : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 
         constructor(public a: T, private b: U) { }
 >a : T
+>  : ^
 >b : U
+>  : ^
     }
 
     class D<T, U> extends C<T, U> { e: T; }
 >D : D<T, U>
+>  : ^^^^^^^
 >C : C<T, U>
+>  : ^^^^^^^
 >e : T
+>  : ^
 
     var d = new D(1, '');
 >d : D<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >new D(1, '') : D<number, string>
+>             : ^^^^^^^^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >1 : 1
+>  : ^
 >'' : ""
+>   : ^^
 
     var r = d.fn();
 >r : D<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >d.fn() : D<number, string>
+>       : ^^^^^^^^^^^^^^^^^
 >d.fn : () => D<number, string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >d : D<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >fn : () => D<number, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
     var r2 = r.x;
 >r2 : number
+>   : ^^^^^^
 >r.x : number
+>    : ^^^^^^
 >r : D<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     var r3 = r.y;
 >r3 : string
+>   : ^^^^^^
 >r.y : string
+>    : ^^^^^^
 >r : D<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 
     r.y = '';
 >r.y = '' : ""
+>         : ^^
 >r.y : string
+>    : ^^^^^^
 >r : D<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
     var r6 = d.y(); // error
 >r6 : any
+>   : ^^^
 >d.y() : any
+>      : ^^^
 >d.y : string
+>    : ^^^^^^
 >d : D<number, string>
+>  : ^^^^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 }

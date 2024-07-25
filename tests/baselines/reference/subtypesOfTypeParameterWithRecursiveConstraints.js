@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts] ////
+
 //// [subtypesOfTypeParameterWithRecursiveConstraints.ts]
 // checking whether other types are subtypes of type parameters with constraints
 

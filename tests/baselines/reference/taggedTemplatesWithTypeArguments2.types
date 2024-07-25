@@ -1,61 +1,103 @@
-=== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts ===
+//// [tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts] ////
+
+=== taggedTemplatesWithTypeArguments2.ts ===
 export interface SomethingTaggable {
     <T>(t: TemplateStringsArray, ...args: T[]): SomethingNewable;
 >t : TemplateStringsArray
+>  : ^^^^^^^^^^^^^^^^^^^^
 >args : T[]
+>     : ^^^
 }
 
 export interface SomethingNewable {
     new <T>(...args: T[]): any;
 >args : T[]
+>     : ^^^
 }
 
 declare const tag: SomethingTaggable;
 >tag : SomethingTaggable
+>    : ^^^^^^^^^^^^^^^^^
 
 const a = new tag `${100} ${200}`<string>("hello", "world");
 >a : any
+>  : ^^^
 >new tag `${100} ${200}`<string>("hello", "world") : any
+>                                                  : ^^^
 >tag `${100} ${200}` : SomethingNewable
+>                    : ^^^^^^^^^^^^^^^^
 >tag : SomethingTaggable
+>    : ^^^^^^^^^^^^^^^^^
 >`${100} ${200}` : string
+>                : ^^^^^^
 >100 : 100
+>    : ^^^
 >200 : 200
+>    : ^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 
 const b = new tag<number> `${"hello"} ${"world"}`(100, 200);
 >b : any
+>  : ^^^
 >new tag<number> `${"hello"} ${"world"}`(100, 200) : any
+>                                                  : ^^^
 >tag<number> `${"hello"} ${"world"}` : SomethingNewable
+>                                    : ^^^^^^^^^^^^^^^^
 >tag : SomethingTaggable
+>    : ^^^^^^^^^^^^^^^^^
 >`${"hello"} ${"world"}` : string
+>                        : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 >100 : 100
+>    : ^^^
 >200 : 200
+>    : ^^^
 
 const c = new tag<number> `${100} ${200}`<string>("hello", "world");
 >c : any
+>  : ^^^
 >new tag<number> `${100} ${200}`<string>("hello", "world") : any
+>                                                          : ^^^
 >tag<number> `${100} ${200}` : SomethingNewable
+>                            : ^^^^^^^^^^^^^^^^
 >tag : SomethingTaggable
+>    : ^^^^^^^^^^^^^^^^^
 >`${100} ${200}` : string
+>                : ^^^^^^
 >100 : 100
+>    : ^^^
 >200 : 200
+>    : ^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 
 const d = new tag<number> `${"hello"} ${"world"}`<string>(100, 200);
 >d : any
+>  : ^^^
 >new tag<number> `${"hello"} ${"world"}`<string>(100, 200) : any
+>                                                          : ^^^
 >tag<number> `${"hello"} ${"world"}` : SomethingNewable
+>                                    : ^^^^^^^^^^^^^^^^
 >tag : SomethingTaggable
+>    : ^^^^^^^^^^^^^^^^^
 >`${"hello"} ${"world"}` : string
+>                        : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 >100 : 100
+>    : ^^^
 >200 : 200
+>    : ^^^
 
 /**
  * Testing ASI. This should never parse as
@@ -67,32 +109,48 @@ const d = new tag<number> `${"hello"} ${"world"}`<string>(100, 200);
  */
 const e = new tag<number>
 >e : any
+>  : ^^^
 >new tag<number>`hello`() : any
+>                         : ^^^
 >tag<number>`hello` : SomethingNewable
+>                   : ^^^^^^^^^^^^^^^^
 >tag : SomethingTaggable
+>    : ^^^^^^^^^^^^^^^^^
 
 `hello`();
 >`hello` : "hello"
+>        : ^^^^^^^
 
 class SomeBase<A, B, C> {
 >SomeBase : SomeBase<A, B, C>
+>         : ^^^^^^^^^^^^^^^^^
 
     a!: A; b!: B; c!: C;
 >a : A
+>  : ^
 >b : B
+>  : ^
 >c : C
+>  : ^
 }
 
 class SomeDerived<T> extends SomeBase<number, string, T> {
 >SomeDerived : SomeDerived<T>
+>            : ^^^^^^^^^^^^^^
 >SomeBase : SomeBase<number, string, T>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor() {
         super<number, string, T> `hello world`;
 >super<number, string, T> `hello world` : any
+>                                       : ^^^
 >super<number, string, T> : any
+>                         : ^^^
 >super : SomeBase<number, string, T>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > : any
+> : ^^^
 >`hello world` : "hello world"
+>              : ^^^^^^^^^^^^^
     }
 }

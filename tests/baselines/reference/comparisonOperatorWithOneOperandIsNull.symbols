@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts] ////
+
+=== comparisonOperatorWithOneOperandIsNull.ts ===
 enum E { a, b, c }
 >E : Symbol(E, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 0))
 >a : Symbol(E.a, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 8))

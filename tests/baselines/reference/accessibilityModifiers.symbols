@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts] ////
+
+=== accessibilityModifiers.ts ===
 // No errors
 class C {
 >C : Symbol(C, Decl(accessibilityModifiers.ts, 0, 0))

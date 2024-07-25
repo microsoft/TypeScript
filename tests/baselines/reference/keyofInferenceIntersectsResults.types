@@ -1,40 +1,65 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/keyofInferenceIntersectsResults.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/keyofInferenceIntersectsResults.ts] ////
+
+=== keyofInferenceIntersectsResults.ts ===
 interface X {
     a: string;
 >a : string
+>  : ^^^^^^
 
     b: string;
 >b : string
+>  : ^^^^^^
 }
 
 declare function foo<T = X>(x: keyof T, y: keyof T): T;
 >foo : <T = X>(x: keyof T, y: keyof T) => T
+>    : ^ ^^^^^^ ^^       ^^ ^^       ^^^^^ 
 >x : keyof T
+>  : ^^^^^^^
 >y : keyof T
+>  : ^^^^^^^
 
 declare function bar<T>(x: keyof T, y: keyof T): T;
 >bar : <T>(x: keyof T, y: keyof T) => T
+>    : ^ ^^ ^^       ^^ ^^       ^^^^^ 
 >x : keyof T
+>  : ^^^^^^^
 >y : keyof T
+>  : ^^^^^^^
 
 const a = foo<X>('a', 'b'); // compiles cleanly
 >a : X
+>  : ^
 >foo<X>('a', 'b') : X
+>                 : ^
 >foo : <T = X>(x: keyof T, y: keyof T) => T
+>    : ^ ^^^^^^ ^^       ^^ ^^       ^^^^^ 
 >'a' : "a"
+>    : ^^^
 >'b' : "b"
+>    : ^^^
 
 const b = foo('a', 'b');    // also clean
 >b : { a: any; } & { b: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo('a', 'b') : { a: any; } & { b: any; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T = X>(x: keyof T, y: keyof T) => T
+>    : ^ ^^^^^^ ^^       ^^ ^^       ^^^^^ 
 >'a' : "a"
+>    : ^^^
 >'b' : "b"
+>    : ^^^
 
 const c = bar('a', 'b');    // still clean
 >c : { a: any; } & { b: any; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar('a', 'b') : { a: any; } & { b: any; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : <T>(x: keyof T, y: keyof T) => T
+>    : ^ ^^ ^^       ^^ ^^       ^^^^^ 
 >'a' : "a"
+>    : ^^^
 >'b' : "b"
+>    : ^^^
 

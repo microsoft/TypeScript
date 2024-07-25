@@ -1,3 +1,15 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/jsDocSignature-43394.ts ===
+// /**
+//  * @typedef {Object} Foo
+//  * @property {number} ...
+//  * @typedef {number} Bar
+//    ^
+// | ----------------------------------------------------------------------
+// | No signature help at /**/.
+// | ----------------------------------------------------------------------
+//  */
+
 [
   {
     "marker": {

@@ -1,743 +1,1228 @@
-=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts] ////
+
+=== arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts ===
 // If one operand is the undefined or undefined value, it is treated as having the type of the
 // other operand.
 
 var a: boolean;
 >a : boolean
+>  : ^^^^^^^
 
 var b: string;
 >b : string
+>  : ^^^^^^
 
 var c: Object;
 >c : Object
+>  : ^^^^^^
 
 // operator *
 var r1a1 = undefined * a;
 >r1a1 : number
+>     : ^^^^^^
 >undefined * a : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r1a2 = undefined * b;
 >r1a2 : number
+>     : ^^^^^^
 >undefined * b : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r1a3 = undefined * c;
 >r1a3 : number
+>     : ^^^^^^
 >undefined * c : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r1b1 = a * undefined;
 >r1b1 : number
+>     : ^^^^^^
 >a * undefined : number
+>              : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r1b2 = b * undefined;
 >r1b2 : number
+>     : ^^^^^^
 >b * undefined : number
+>              : ^^^^^^
 >b : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r1b3 = c * undefined;
 >r1b3 : number
+>     : ^^^^^^
 >c * undefined : number
+>              : ^^^^^^
 >c : Object
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r1c1 = undefined * true;
 >r1c1 : number
+>     : ^^^^^^
 >undefined * true : number
+>                 : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var r1c2 = undefined * '';
 >r1c2 : number
+>     : ^^^^^^
 >undefined * '' : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r1c3 = undefined * {};
 >r1c3 : number
+>     : ^^^^^^
 >undefined * {} : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var r1d1 = true * undefined;
 >r1d1 : number
+>     : ^^^^^^
 >true * undefined : number
+>                 : ^^^^^^
 >true : true
+>     : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r1d2 = '' * undefined;
 >r1d2 : number
+>     : ^^^^^^
 >'' * undefined : number
+>               : ^^^^^^
 >'' : ""
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r1d3 = {} * undefined;
 >r1d3 : number
+>     : ^^^^^^
 >{} * undefined : number
+>               : ^^^^^^
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator /
 var r2a1 = undefined / a;
 >r2a1 : number
+>     : ^^^^^^
 >undefined / a : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r2a2 = undefined / b;
 >r2a2 : number
+>     : ^^^^^^
 >undefined / b : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r2a3 = undefined / c;
 >r2a3 : number
+>     : ^^^^^^
 >undefined / c : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r2b1 = a / undefined;
 >r2b1 : number
+>     : ^^^^^^
 >a / undefined : number
+>              : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r2b2 = b / undefined;
 >r2b2 : number
+>     : ^^^^^^
 >b / undefined : number
+>              : ^^^^^^
 >b : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r2b3 = c / undefined;
 >r2b3 : number
+>     : ^^^^^^
 >c / undefined : number
+>              : ^^^^^^
 >c : Object
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r2c1 = undefined / true;
 >r2c1 : number
+>     : ^^^^^^
 >undefined / true : number
+>                 : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var r2c2 = undefined / '';
 >r2c2 : number
+>     : ^^^^^^
 >undefined / '' : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r2c3 = undefined / {};
 >r2c3 : number
+>     : ^^^^^^
 >undefined / {} : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var r2d1 = true / undefined;
 >r2d1 : number
+>     : ^^^^^^
 >true / undefined : number
+>                 : ^^^^^^
 >true : true
+>     : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r2d2 = '' / undefined;
 >r2d2 : number
+>     : ^^^^^^
 >'' / undefined : number
+>               : ^^^^^^
 >'' : ""
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r2d3 = {} / undefined;
 >r2d3 : number
+>     : ^^^^^^
 >{} / undefined : number
+>               : ^^^^^^
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator %
 var r3a1 = undefined % a;
 >r3a1 : number
+>     : ^^^^^^
 >undefined % a : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r3a2 = undefined % b;
 >r3a2 : number
+>     : ^^^^^^
 >undefined % b : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r3a3 = undefined % c;
 >r3a3 : number
+>     : ^^^^^^
 >undefined % c : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r3b1 = a % undefined;
 >r3b1 : number
+>     : ^^^^^^
 >a % undefined : number
+>              : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r3b2 = b % undefined;
 >r3b2 : number
+>     : ^^^^^^
 >b % undefined : number
+>              : ^^^^^^
 >b : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r3b3 = c % undefined;
 >r3b3 : number
+>     : ^^^^^^
 >c % undefined : number
+>              : ^^^^^^
 >c : Object
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r3c1 = undefined % true;
 >r3c1 : number
+>     : ^^^^^^
 >undefined % true : number
+>                 : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var r3c2 = undefined % '';
 >r3c2 : number
+>     : ^^^^^^
 >undefined % '' : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r3c3 = undefined % {};
 >r3c3 : number
+>     : ^^^^^^
 >undefined % {} : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var r3d1 = true % undefined;
 >r3d1 : number
+>     : ^^^^^^
 >true % undefined : number
+>                 : ^^^^^^
 >true : true
+>     : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r3d2 = '' % undefined;
 >r3d2 : number
+>     : ^^^^^^
 >'' % undefined : number
+>               : ^^^^^^
 >'' : ""
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r3d3 = {} % undefined;
 >r3d3 : number
+>     : ^^^^^^
 >{} % undefined : number
+>               : ^^^^^^
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator -
 var r4a1 = undefined - a;
 >r4a1 : number
+>     : ^^^^^^
 >undefined - a : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r4a2 = undefined - b;
 >r4a2 : number
+>     : ^^^^^^
 >undefined - b : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r4a3 = undefined - c;
 >r4a3 : number
+>     : ^^^^^^
 >undefined - c : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r4b1 = a - undefined;
 >r4b1 : number
+>     : ^^^^^^
 >a - undefined : number
+>              : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r4b2 = b - undefined;
 >r4b2 : number
+>     : ^^^^^^
 >b - undefined : number
+>              : ^^^^^^
 >b : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r4b3 = c - undefined;
 >r4b3 : number
+>     : ^^^^^^
 >c - undefined : number
+>              : ^^^^^^
 >c : Object
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r4c1 = undefined - true;
 >r4c1 : number
+>     : ^^^^^^
 >undefined - true : number
+>                 : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var r4c2 = undefined - '';
 >r4c2 : number
+>     : ^^^^^^
 >undefined - '' : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r4c3 = undefined - {};
 >r4c3 : number
+>     : ^^^^^^
 >undefined - {} : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var r4d1 = true - undefined;
 >r4d1 : number
+>     : ^^^^^^
 >true - undefined : number
+>                 : ^^^^^^
 >true : true
+>     : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r4d2 = '' - undefined;
 >r4d2 : number
+>     : ^^^^^^
 >'' - undefined : number
+>               : ^^^^^^
 >'' : ""
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r4d3 = {} - undefined;
 >r4d3 : number
+>     : ^^^^^^
 >{} - undefined : number
+>               : ^^^^^^
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator <<
 var r5a1 = undefined << a;
 >r5a1 : number
+>     : ^^^^^^
 >undefined << a : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r5a2 = undefined << b;
 >r5a2 : number
+>     : ^^^^^^
 >undefined << b : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r5a3 = undefined << c;
 >r5a3 : number
+>     : ^^^^^^
 >undefined << c : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r5b1 = a << undefined;
 >r5b1 : number
+>     : ^^^^^^
 >a << undefined : number
+>               : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r5b2 = b << undefined;
 >r5b2 : number
+>     : ^^^^^^
 >b << undefined : number
+>               : ^^^^^^
 >b : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r5b3 = c << undefined;
 >r5b3 : number
+>     : ^^^^^^
 >c << undefined : number
+>               : ^^^^^^
 >c : Object
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r5c1 = undefined << true;
 >r5c1 : number
+>     : ^^^^^^
 >undefined << true : number
+>                  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var r5c2 = undefined << '';
 >r5c2 : number
+>     : ^^^^^^
 >undefined << '' : number
+>                : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r5c3 = undefined << {};
 >r5c3 : number
+>     : ^^^^^^
 >undefined << {} : number
+>                : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var r5d1 = true << undefined;
 >r5d1 : number
+>     : ^^^^^^
 >true << undefined : number
+>                  : ^^^^^^
 >true : true
+>     : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r5d2 = '' << undefined;
 >r5d2 : number
+>     : ^^^^^^
 >'' << undefined : number
+>                : ^^^^^^
 >'' : ""
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r5d3 = {} << undefined;
 >r5d3 : number
+>     : ^^^^^^
 >{} << undefined : number
+>                : ^^^^^^
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator >>
 var r6a1 = undefined >> a;
 >r6a1 : number
+>     : ^^^^^^
 >undefined >> a : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r6a2 = undefined >> b;
 >r6a2 : number
+>     : ^^^^^^
 >undefined >> b : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r6a3 = undefined >> c;
 >r6a3 : number
+>     : ^^^^^^
 >undefined >> c : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r6b1 = a >> undefined;
 >r6b1 : number
+>     : ^^^^^^
 >a >> undefined : number
+>               : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r6b2 = b >> undefined;
 >r6b2 : number
+>     : ^^^^^^
 >b >> undefined : number
+>               : ^^^^^^
 >b : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r6b3 = c >> undefined;
 >r6b3 : number
+>     : ^^^^^^
 >c >> undefined : number
+>               : ^^^^^^
 >c : Object
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r6c1 = undefined >> true;
 >r6c1 : number
+>     : ^^^^^^
 >undefined >> true : number
+>                  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var r6c2 = undefined >> '';
 >r6c2 : number
+>     : ^^^^^^
 >undefined >> '' : number
+>                : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r6c3 = undefined >> {};
 >r6c3 : number
+>     : ^^^^^^
 >undefined >> {} : number
+>                : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var r6d1 = true >> undefined;
 >r6d1 : number
+>     : ^^^^^^
 >true >> undefined : number
+>                  : ^^^^^^
 >true : true
+>     : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r6d2 = '' >> undefined;
 >r6d2 : number
+>     : ^^^^^^
 >'' >> undefined : number
+>                : ^^^^^^
 >'' : ""
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r6d3 = {} >> undefined;
 >r6d3 : number
+>     : ^^^^^^
 >{} >> undefined : number
+>                : ^^^^^^
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator >>>
 var r7a1 = undefined >>> a;
 >r7a1 : number
+>     : ^^^^^^
 >undefined >>> a : number
+>                : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r7a2 = undefined >>> b;
 >r7a2 : number
+>     : ^^^^^^
 >undefined >>> b : number
+>                : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r7a3 = undefined >>> c;
 >r7a3 : number
+>     : ^^^^^^
 >undefined >>> c : number
+>                : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r7b1 = a >>> undefined;
 >r7b1 : number
+>     : ^^^^^^
 >a >>> undefined : number
+>                : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r7b2 = b >>> undefined;
 >r7b2 : number
+>     : ^^^^^^
 >b >>> undefined : number
+>                : ^^^^^^
 >b : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r7b3 = c >>> undefined;
 >r7b3 : number
+>     : ^^^^^^
 >c >>> undefined : number
+>                : ^^^^^^
 >c : Object
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r7c1 = undefined >>> true;
 >r7c1 : number
+>     : ^^^^^^
 >undefined >>> true : number
+>                   : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var r7c2 = undefined >>> '';
 >r7c2 : number
+>     : ^^^^^^
 >undefined >>> '' : number
+>                 : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r7c3 = undefined >>> {};
 >r7c3 : number
+>     : ^^^^^^
 >undefined >>> {} : number
+>                 : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var r7d1 = true >>> undefined;
 >r7d1 : number
+>     : ^^^^^^
 >true >>> undefined : number
+>                   : ^^^^^^
 >true : true
+>     : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r7d2 = '' >>> undefined;
 >r7d2 : number
+>     : ^^^^^^
 >'' >>> undefined : number
+>                 : ^^^^^^
 >'' : ""
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r7d3 = {} >>> undefined;
 >r7d3 : number
+>     : ^^^^^^
 >{} >>> undefined : number
+>                 : ^^^^^^
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator &
 var r8a1 = undefined & a;
 >r8a1 : number
+>     : ^^^^^^
 >undefined & a : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r8a2 = undefined & b;
 >r8a2 : number
+>     : ^^^^^^
 >undefined & b : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r8a3 = undefined & c;
 >r8a3 : number
+>     : ^^^^^^
 >undefined & c : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r8b1 = a & undefined;
 >r8b1 : number
+>     : ^^^^^^
 >a & undefined : number
+>              : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r8b2 = b & undefined;
 >r8b2 : number
+>     : ^^^^^^
 >b & undefined : number
+>              : ^^^^^^
 >b : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r8b3 = c & undefined;
 >r8b3 : number
+>     : ^^^^^^
 >c & undefined : number
+>              : ^^^^^^
 >c : Object
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r8c1 = undefined & true;
 >r8c1 : number
+>     : ^^^^^^
 >undefined & true : number
+>                 : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var r8c2 = undefined & '';
 >r8c2 : number
+>     : ^^^^^^
 >undefined & '' : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r8c3 = undefined & {};
 >r8c3 : number
+>     : ^^^^^^
 >undefined & {} : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var r8d1 = true & undefined;
 >r8d1 : number
+>     : ^^^^^^
 >true & undefined : number
+>                 : ^^^^^^
 >true : true
+>     : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r8d2 = '' & undefined;
 >r8d2 : number
+>     : ^^^^^^
 >'' & undefined : number
+>               : ^^^^^^
 >'' : ""
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r8d3 = {} & undefined;
 >r8d3 : number
+>     : ^^^^^^
 >{} & undefined : number
+>               : ^^^^^^
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator ^
 var r9a1 = undefined ^ a;
 >r9a1 : number
+>     : ^^^^^^
 >undefined ^ a : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r9a2 = undefined ^ b;
 >r9a2 : number
+>     : ^^^^^^
 >undefined ^ b : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r9a3 = undefined ^ c;
 >r9a3 : number
+>     : ^^^^^^
 >undefined ^ c : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r9b1 = a ^ undefined;
 >r9b1 : number
+>     : ^^^^^^
 >a ^ undefined : number
+>              : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r9b2 = b ^ undefined;
 >r9b2 : number
+>     : ^^^^^^
 >b ^ undefined : number
+>              : ^^^^^^
 >b : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r9b3 = c ^ undefined;
 >r9b3 : number
+>     : ^^^^^^
 >c ^ undefined : number
+>              : ^^^^^^
 >c : Object
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r9c1 = undefined ^ true;
 >r9c1 : number
+>     : ^^^^^^
 >undefined ^ true : number
+>                 : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var r9c2 = undefined ^ '';
 >r9c2 : number
+>     : ^^^^^^
 >undefined ^ '' : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r9c3 = undefined ^ {};
 >r9c3 : number
+>     : ^^^^^^
 >undefined ^ {} : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var r9d1 = true ^ undefined;
 >r9d1 : number
+>     : ^^^^^^
 >true ^ undefined : number
+>                 : ^^^^^^
 >true : true
+>     : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r9d2 = '' ^ undefined;
 >r9d2 : number
+>     : ^^^^^^
 >'' ^ undefined : number
+>               : ^^^^^^
 >'' : ""
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r9d3 = {} ^ undefined;
 >r9d3 : number
+>     : ^^^^^^
 >{} ^ undefined : number
+>               : ^^^^^^
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 // operator |
 var r10a1 = undefined | a;
 >r10a1 : number
+>      : ^^^^^^
 >undefined | a : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >a : boolean
+>  : ^^^^^^^
 
 var r10a2 = undefined | b;
 >r10a2 : number
+>      : ^^^^^^
 >undefined | b : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >b : string
+>  : ^^^^^^
 
 var r10a3 = undefined | c;
 >r10a3 : number
+>      : ^^^^^^
 >undefined | c : number
+>              : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >c : Object
+>  : ^^^^^^
 
 var r10b1 = a | undefined;
 >r10b1 : number
+>      : ^^^^^^
 >a | undefined : number
+>              : ^^^^^^
 >a : boolean
+>  : ^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r10b2 = b | undefined;
 >r10b2 : number
+>      : ^^^^^^
 >b | undefined : number
+>              : ^^^^^^
 >b : string
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r10b3 = c | undefined;
 >r10b3 : number
+>      : ^^^^^^
 >c | undefined : number
+>              : ^^^^^^
 >c : Object
+>  : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r10c1 = undefined | true;
 >r10c1 : number
+>      : ^^^^^^
 >undefined | true : number
+>                 : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >true : true
+>     : ^^^^
 
 var r10c2 = undefined | '';
 >r10c2 : number
+>      : ^^^^^^
 >undefined | '' : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >'' : ""
+>   : ^^
 
 var r10c3 = undefined | {};
 >r10c3 : number
+>      : ^^^^^^
 >undefined | {} : number
+>               : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >{} : {}
+>   : ^^
 
 var r10d1 = true | undefined;
 >r10d1 : number
+>      : ^^^^^^
 >true | undefined : number
+>                 : ^^^^^^
 >true : true
+>     : ^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r10d2 = '' | undefined;
 >r10d2 : number
+>      : ^^^^^^
 >'' | undefined : number
+>               : ^^^^^^
 >'' : ""
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var r10d3 = {} | undefined;
 >r10d3 : number
+>      : ^^^^^^
 >{} | undefined : number
+>               : ^^^^^^
 >{} : {}
+>   : ^^
 >undefined : undefined
+>          : ^^^^^^^^^
 

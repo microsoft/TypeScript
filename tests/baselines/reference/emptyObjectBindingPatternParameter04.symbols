@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/emptyObjectBindingPatternParameter04.ts ===
+//// [tests/cases/conformance/es6/destructuring/emptyObjectBindingPatternParameter04.ts] ////
+
+=== emptyObjectBindingPatternParameter04.ts ===
 function f({} = {a: 1, b: "2", c: true}) {
 >f : Symbol(f, Decl(emptyObjectBindingPatternParameter04.ts, 0, 0))
 >a : Symbol(a, Decl(emptyObjectBindingPatternParameter04.ts, 0, 17))

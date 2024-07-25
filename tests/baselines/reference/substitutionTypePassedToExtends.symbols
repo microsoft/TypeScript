@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/substitutionTypePassedToExtends.ts] ////
+
+=== substitutionTypePassedToExtends.ts ===
+type Foo1<A,B> = [A, B] extends unknown[][] ? Bar1<[A, B]> : 'else'
+>Foo1 : Symbol(Foo1, Decl(substitutionTypePassedToExtends.ts, 0, 0))
+>A : Symbol(A, Decl(substitutionTypePassedToExtends.ts, 0, 10))
+>B : Symbol(B, Decl(substitutionTypePassedToExtends.ts, 0, 12))
+>A : Symbol(A, Decl(substitutionTypePassedToExtends.ts, 0, 10))
+>B : Symbol(B, Decl(substitutionTypePassedToExtends.ts, 0, 12))
+>Bar1 : Symbol(Bar1, Decl(substitutionTypePassedToExtends.ts, 0, 67))
+>A : Symbol(A, Decl(substitutionTypePassedToExtends.ts, 0, 10))
+>B : Symbol(B, Decl(substitutionTypePassedToExtends.ts, 0, 12))
+
+type Bar1<T extends unknown[][]> = T
+>Bar1 : Symbol(Bar1, Decl(substitutionTypePassedToExtends.ts, 0, 67))
+>T : Symbol(T, Decl(substitutionTypePassedToExtends.ts, 1, 10))
+>T : Symbol(T, Decl(substitutionTypePassedToExtends.ts, 1, 10))
+
+type Foo2<A> = Set<A> extends Set<unknown[]> ? Bar2<Set<A>> : 'else'
+>Foo2 : Symbol(Foo2, Decl(substitutionTypePassedToExtends.ts, 1, 36))
+>A : Symbol(A, Decl(substitutionTypePassedToExtends.ts, 3, 10))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>A : Symbol(A, Decl(substitutionTypePassedToExtends.ts, 3, 10))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>Bar2 : Symbol(Bar2, Decl(substitutionTypePassedToExtends.ts, 3, 68))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>A : Symbol(A, Decl(substitutionTypePassedToExtends.ts, 3, 10))
+
+type Bar2<T extends Set<unknown[]>> = T
+>Bar2 : Symbol(Bar2, Decl(substitutionTypePassedToExtends.ts, 3, 68))
+>T : Symbol(T, Decl(substitutionTypePassedToExtends.ts, 4, 10))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>T : Symbol(T, Decl(substitutionTypePassedToExtends.ts, 4, 10))
+

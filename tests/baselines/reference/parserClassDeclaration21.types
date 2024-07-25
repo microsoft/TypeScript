@@ -1,10 +1,15 @@
-=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration21.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration21.ts] ////
+
+=== parserClassDeclaration21.ts ===
 class C {
 >C : C
+>  : ^
 
     0();
 >0 : () => any
+>  : ^^^^^^^^^
 
     1() { }
 >1 : () => void
+>  : ^^^^^^^^^^
 }

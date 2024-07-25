@@ -1,40 +1,62 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameNestedClassFieldShadowing.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedClassFieldShadowing.ts] ////
+
+=== privateNameNestedClassFieldShadowing.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     #x;
 >#x : any
+>   : ^^^
 
     constructor() {
         class Derived {
 >Derived : Derived
+>        : ^^^^^^^
 
             #x;
 >#x : any
+>   : ^^^
 
             testBase(x: Base) {
 >testBase : (x: Base) => void
+>         : ^ ^^    ^^^^^^^^^
 >x : Base
+>  : ^^^^
 
                 console.log(x.#x);
 >console.log(x.#x) : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x.#x : any
+>     : ^^^
 >x : Base
+>  : ^^^^
             }
             testDerived(x: Derived) {
 >testDerived : (x: Derived) => void
+>            : ^ ^^^^^^^^^^^^^^^^^^
 >x : Derived
+>  : ^^^^^^^
 
                 console.log(x.#x);
 >console.log(x.#x) : void
+>                  : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >x.#x : any
+>     : ^^^
 >x : Derived
+>  : ^^^^^^^
             }
         }
     }

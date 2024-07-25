@@ -1,30 +1,48 @@
-=== tests/cases/compiler/typeParametersShouldNotBeEqual3.ts ===
+//// [tests/cases/compiler/typeParametersShouldNotBeEqual3.ts] ////
+
+=== typeParametersShouldNotBeEqual3.ts ===
 function ff<T extends Object, U extends Object>(x: T, y: U) {
 >ff : <T extends Object, U extends Object>(x: T, y: U) => void
+>   : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     var z: Object;
 >z : Object
+>  : ^^^^^^
 
     x = x;  // Ok
 >x = x : T
+>      : ^
 >x : T
+>  : ^
 >x : T
+>  : ^
 
     x = y;  // Ok
 >x = y : U
+>      : ^
 >x : T
+>  : ^
 >y : U
+>  : ^
 
     x = z;  // Ok
 >x = z : Object
+>      : ^^^^^^
 >x : T
+>  : ^
 >z : Object
+>  : ^^^^^^
 
     z = x;  // Ok
 >z = x : T
+>      : ^
 >z : Object
+>  : ^^^^^^
 >x : T
+>  : ^
 }
 

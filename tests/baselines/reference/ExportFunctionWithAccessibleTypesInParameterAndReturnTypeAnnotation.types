@@ -1,37 +1,56 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts] ////
+
+=== ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export class Point {
 >Point : Point
+>      : ^^^^^
 
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
 
     export class Line {
 >Line : Line
+>     : ^^^^
 
         constructor(public start: Point, public end: Point) { }
 >start : Point
+>      : ^^^^^
 >end : Point
+>    : ^^^^^
     }
 
     export function fromOrigin(p: Point): Line {
 >fromOrigin : (p: Point) => Line
+>           : ^ ^^     ^^^^^    
 >p : Point
+>  : ^^^^^
 
         return new Line({ x: 0, y: 0 }, p);
 >new Line({ x: 0, y: 0 }, p) : Line
+>                            : ^^^^
 >Line : typeof Line
+>     : ^^^^^^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >p : Point
+>  : ^^^^^
     }
 }

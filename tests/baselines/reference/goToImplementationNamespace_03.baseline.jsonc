@@ -1,0 +1,99 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationNamespace_03.ts ===
+// namespace Foo {
+//     export interface Bar {
+//         hello(): void;
+//     }
+// 
+//     <|class [|{| defId: 0 |}BarImpl|] implements Bar {
+//         hello() {}
+//     }|>
+// }
+// 
+// <|class [|{| defId: 1 |}Baz|] implements Foo.Bar {
+//     hello() {}
+// }|>
+// 
+// var someVar1 : Foo.Bar = [|{| defId: 2 |}{ hello: () => {/**1*/} }|];
+// 
+// var someVar2 = <Foo.Bar> [|{| defId: 3 |}{ hello: () => {/**2*/} }|];
+// 
+// function whatever(x: Foo.Ba/*GOTO IMPL*/r) {
+// 
+// }
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "BarImpl",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   },
+   {
+    "defId": 1,
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Baz",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   },
+   {
+    "defId": 2,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 3,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]

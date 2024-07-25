@@ -1,8 +1,15 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedDivision.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedDivision.ts] ////
+
+=== templateStringWithEmbeddedDivision.ts ===
 var x = `abc${ 1 / 1 }def`;
 >x : string
->`abc${ 1 / 1 }def` : string
+>  : ^^^^^^
+>`abc${ 1 / 1 }def` : "abc1def"
+>                   : ^^^^^^^^^
 >1 / 1 : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 

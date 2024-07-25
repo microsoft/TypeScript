@@ -1,71 +1,122 @@
-=== tests/cases/conformance/controlFlow/controlFlowInstanceOfGuardPrimitives.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowInstanceOfGuardPrimitives.ts] ////
+
+=== controlFlowInstanceOfGuardPrimitives.ts ===
 function distinguish(thing: string | number | Date) {
 >distinguish : (thing: string | number | Date) => void
+>            : ^     ^^                      ^^^^^^^^^
 >thing : string | number | Date
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 
     if (thing instanceof Object) {
 >thing instanceof Object : boolean
+>                        : ^^^^^^^
 >thing : string | number | Date
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
         console.log("Aha!! It's a Date in " + thing.getFullYear());
 >console.log("Aha!! It's a Date in " + thing.getFullYear()) : void
+>                                                           : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"Aha!! It's a Date in " + thing.getFullYear() : string
+>                                              : ^^^^^^
 >"Aha!! It's a Date in " : "Aha!! It's a Date in "
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >thing.getFullYear() : number
+>                    : ^^^^^^
 >thing.getFullYear : () => number
+>                  : ^^^^^^      
 >thing : Date
+>      : ^^^^
 >getFullYear : () => number
+>            : ^^^^^^      
 
     } else if (typeof thing === 'string') {
 >typeof thing === 'string' : boolean
+>                          : ^^^^^^^
 >typeof thing : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >thing : string | number
+>      : ^^^^^^^^^^^^^^^
 >'string' : "string"
+>         : ^^^^^^^^
 
         console.log("Aha!! It's a string of length " + thing.length);
 >console.log("Aha!! It's a string of length " + thing.length) : void
+>                                                             : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"Aha!! It's a string of length " + thing.length : string
+>                                                : ^^^^^^
 >"Aha!! It's a string of length " : "Aha!! It's a string of length "
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >thing.length : number
+>             : ^^^^^^
 >thing : string
+>      : ^^^^^^
 >length : number
+>       : ^^^^^^
 
     } else {
         console.log("Aha!! It's the number " + thing.toPrecision(3));
 >console.log("Aha!! It's the number " + thing.toPrecision(3)) : void
+>                                                             : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >"Aha!! It's the number " + thing.toPrecision(3) : string
+>                                                : ^^^^^^
 >"Aha!! It's the number " : "Aha!! It's the number "
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >thing.toPrecision(3) : string
+>                     : ^^^^^^
 >thing.toPrecision : (precision?: number) => string
+>                  : ^         ^^^      ^^^^^      
 >thing : number
+>      : ^^^^^^
 >toPrecision : (precision?: number) => string
+>            : ^         ^^^      ^^^^^      
 >3 : 3
+>  : ^
     }
 }
 
 distinguish(new Date());
 >distinguish(new Date()) : void
+>                        : ^^^^
 >distinguish : (thing: string | number | Date) => void
+>            : ^     ^^                      ^^^^^^^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 
 distinguish("beef");
 >distinguish("beef") : void
+>                    : ^^^^
 >distinguish : (thing: string | number | Date) => void
+>            : ^     ^^                      ^^^^^^^^^
 >"beef" : "beef"
+>       : ^^^^^^
 
 distinguish(3.14159265);
 >distinguish(3.14159265) : void
+>                        : ^^^^
 >distinguish : (thing: string | number | Date) => void
+>            : ^     ^^                      ^^^^^^^^^
 >3.14159265 : 3.14159265
+>           : ^^^^^^^^^^
 

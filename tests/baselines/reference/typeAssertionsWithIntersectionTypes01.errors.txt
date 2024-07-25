@@ -1,10 +1,10 @@
-tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts(17,9): error TS2352: Conversion of type 'I2' to type 'I1 & I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+typeAssertionsWithIntersectionTypes01.ts(17,9): error TS2352: Conversion of type 'I2' to type 'I1 & I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'p3' is missing in type 'I2' but required in type 'I3'.
-tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts(18,9): error TS2352: Conversion of type 'I2' to type 'I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+typeAssertionsWithIntersectionTypes01.ts(18,9): error TS2352: Conversion of type 'I2' to type 'I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'p3' is missing in type 'I2' but required in type 'I3'.
 
 
-==== tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts (2 errors) ====
+==== typeAssertionsWithIntersectionTypes01.ts (2 errors) ====
     interface I1 {
         p1: number
     }
@@ -25,12 +25,12 @@ tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithInt
             ~~~~~~~~~~
 !!! error TS2352: Conversion of type 'I2' to type 'I1 & I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'p3' is missing in type 'I2' but required in type 'I3'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts:10:5: 'p3' is declared here.
+!!! related TS2728 typeAssertionsWithIntersectionTypes01.ts:10:5: 'p3' is declared here.
     var b = <I3>z;
             ~~~~~
 !!! error TS2352: Conversion of type 'I2' to type 'I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'p3' is missing in type 'I2' but required in type 'I3'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts:10:5: 'p3' is declared here.
+!!! related TS2728 typeAssertionsWithIntersectionTypes01.ts:10:5: 'p3' is declared here.
     var c = <I2>z;
     var d = <I1>y;
     

@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/inKeywordNarrowingWithNoUncheckedIndexedAccess.ts] ////
+
+=== inKeywordNarrowingWithNoUncheckedIndexedAccess.ts ===
+declare function invariant(condition: boolean): asserts condition;
+>invariant : Symbol(invariant, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 0, 0))
+>condition : Symbol(condition, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 0, 27))
+>condition : Symbol(condition, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 0, 27))
+
+function f1(obj: Record<string, string>) {
+>f1 : Symbol(f1, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 0, 66))
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 2, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    invariant("test" in obj);
+>invariant : Symbol(invariant, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 0, 0))
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 2, 12))
+
+    return obj.test;  // string
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 2, 12))
+}
+
+function f2(obj: Record<string, string>) {
+>f2 : Symbol(f2, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 5, 1))
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 7, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    if ("test" in obj) {
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 7, 12))
+
+        return obj.test;  // string
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 7, 12))
+    }
+    return "default";
+}
+
+function f3(obj: Record<string, string>) {
+>f3 : Symbol(f3, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 12, 1))
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 14, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    obj.test;  // string | undefined
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 14, 12))
+
+    if ("test" in obj) {
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 14, 12))
+
+        obj.test;  // string
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 14, 12))
+    }
+    else {
+        obj.test;  // undefined
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 14, 12))
+    }
+}
+
+function f4(obj: Record<string, string>) {
+>f4 : Symbol(f4, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 22, 1))
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 24, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    obj.test;  // string | undefined
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 24, 12))
+
+    if (obj.hasOwnProperty("test")) {
+>obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 24, 12))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
+        obj.test;  // string
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 24, 12))
+    }
+    else {
+        obj.test;  // undefined
+>obj : Symbol(obj, Decl(inKeywordNarrowingWithNoUncheckedIndexedAccess.ts, 24, 12))
+    }
+}
+

@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors4.ts(6,5): error TS2610: 'sound' is defined as an accessor in class 'Animal', but is overridden here in 'Lion' as an instance property.
+propertyOverridesAccessors4.ts(6,5): error TS2610: 'sound' is defined as an accessor in class 'Animal', but is overridden here in 'Lion' as an instance property.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyOverridesAccessors4.ts (1 errors) ====
+==== propertyOverridesAccessors4.ts (1 errors) ====
     declare class Animal {
         get sound(): string
         set sound(val: string)

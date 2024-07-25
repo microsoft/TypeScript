@@ -1,9 +1,14 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/f.ts]
 
 
 //// [/tsconfig.json]
-{"compilerOptions":{"preserveWatchOutput":true}}
+{
+  "compilerOptions": {
+    "preserveWatchOutput": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -22,14 +27,36 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w -p /tsconfig.json
 Output::
 >> Screen clear
-12:00:13 AM - Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
+
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
-12:00:16 AM - Found 0 errors. Watching for file changes.
+
+//// [/f.js]
 
 
-Program root files: ["/f.ts","/a/lib/lib.d.ts"]
-Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/f.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+
+Program root files: [
+  "/f.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "preserveWatchOutput": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /f.ts
@@ -43,25 +70,7 @@ Shape signatures in builder refreshed for::
 /f.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/f.ts:
-  {"fileName":"/f.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
-
-//// [/f.js]
-
-
 
 Change:: Comment added to file f
 
@@ -70,16 +79,35 @@ Input::
 //
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
 Output::
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-12:00:19 AM - File change detected. Starting incremental compilation...
-
-
-12:00:23 AM - Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
-Program root files: ["/f.ts","/a/lib/lib.d.ts"]
-Program options: {"preserveWatchOutput":true,"configFilePath":"/tsconfig.json"}
+
+//// [/f.js]
+//
+
+
+
+
+Program root files: [
+  "/f.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "preserveWatchOutput": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /f.ts
@@ -91,23 +119,4 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /f.ts (computed .d.ts)
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/f.ts:
-  {"fileName":"/f.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
-
-//// [/f.js]
-//
-
-

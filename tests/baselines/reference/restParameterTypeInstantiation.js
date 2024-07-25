@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/restParameterTypeInstantiation.ts] ////
+
 //// [restParameterTypeInstantiation.ts]
 // Repro from #33823
 

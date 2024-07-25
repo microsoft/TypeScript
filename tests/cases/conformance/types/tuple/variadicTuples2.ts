@@ -11,6 +11,11 @@ type V10 = [number, ...string[], ...boolean[]];  // Error
 type V11 = [number, ...string[], boolean?];  // Error
 type V12 = [number, string?, boolean];  // Error
 
+type V15 = [...string[], ...number[]];  // Error
+type V16 = [...string[], ...Array<number>];  // Error
+type V17 = [...Array<string>, ...number[]];  // Error
+type V18 = [...Array<string>, ...Array<number>];  // Error
+
 // Normalization
 
 type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];
@@ -77,6 +82,10 @@ function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [nu
     z = x;  // Error
 }
 
+// repro #50216
+declare let tt3: [number, string, ...any[]]
+let tt4: [number, ...number[]] = tt3  // Error
+
 // Inference
 
 function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
@@ -125,7 +134,7 @@ fn2([1, 'abc', true]);  // [number, boolean]
 // Repro from #39595
 
 declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
-    
+
 const a1 = foo('blah1', 1);
 const b1 = foo('blah1', 'blah2', 1);
 const c1 = foo(1);  // Error

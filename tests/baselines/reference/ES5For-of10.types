@@ -1,30 +1,51 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of10.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of10.ts] ////
+
+=== ES5For-of10.ts ===
 function foo() {
 >foo : () => { x: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^
 
     return { x: 0 };
 >{ x: 0 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 for (foo().x of []) {
 >foo().x : number
+>        : ^^^^^^
 >foo() : { x: number; }
+>      : ^^^^^^^^^^^^^^
 >foo : () => { x: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     for (foo().x of [])
 >foo().x : number
+>        : ^^^^^^
 >foo() : { x: number; }
+>      : ^^^^^^^^^^^^^^
 >foo : () => { x: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         var p = foo().x;
 >p : number
+>  : ^^^^^^
 >foo().x : number
+>        : ^^^^^^
 >foo() : { x: number; }
+>      : ^^^^^^^^^^^^^^
 >foo : () => { x: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 }

@@ -1,21 +1,37 @@
-=== tests/cases/conformance/salsa/axios.js ===
+//// [tests/cases/conformance/salsa/moduleExportPropertyAssignmentDefault.ts] ////
+
+=== axios.js ===
 var axios = {}
 >axios : typeof axios
+>      : ^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 module.exports = axios // both assignments should be ok
 >module.exports = axios : typeof axios
+>                       : ^^^^^^^^^^^^
 >module.exports : typeof axios
+>               : ^^^^^^^^^^^^
 >module : { exports: typeof axios; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof axios
+>        : ^^^^^^^^^^^^
 >axios : typeof axios
+>      : ^^^^^^^^^^^^
 
 module.exports.default = axios
 >module.exports.default = axios : typeof axios
+>                               : ^^^^^^^^^^^^
 >module.exports.default : typeof axios
+>                       : ^^^^^^^^^^^^
 >module.exports : typeof axios
+>               : ^^^^^^^^^^^^
 >module : { exports: typeof axios; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof axios
+>        : ^^^^^^^^^^^^
 >default : typeof axios
+>        : ^^^^^^^^^^^^
 >axios : typeof axios
+>      : ^^^^^^^^^^^^
 

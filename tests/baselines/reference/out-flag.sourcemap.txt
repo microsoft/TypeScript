@@ -5,17 +5,17 @@ sourceRoot:
 sources: out-flag.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/out-flag.js
+emittedFile:out-flag.js
 sourceFile:out-flag.ts
 -------------------------------------------------------------------
->>>//// @out: bin\
+>>>//// @outFile: bin\
 1 >
-2 >^^^^^^^^^^^^^^^
-3 >               ^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^
+3 >                   ^^->
 1 >
-2 >//// @out: bin\
+2 >//// @outFile: bin\
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+2 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
 ---
 >>>// my class comments
 1->

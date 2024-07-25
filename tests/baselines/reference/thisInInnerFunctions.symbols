@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInInnerFunctions.ts ===
+//// [tests/cases/compiler/thisInInnerFunctions.ts] ////
+
+=== thisInInnerFunctions.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(thisInInnerFunctions.ts, 0, 0))
 

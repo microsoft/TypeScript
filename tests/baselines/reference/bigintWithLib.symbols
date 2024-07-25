@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bigintWithLib.ts ===
+//// [tests/cases/compiler/bigintWithLib.ts] ////
+
+=== bigintWithLib.ts ===
 // Test BigInt functions
 let bigintVal: bigint = BigInt(123);
 >bigintVal : Symbol(bigintVal, Decl(bigintWithLib.ts, 1, 3))
@@ -242,14 +244,14 @@ let z = 12n; // should emit type bigint in declaration file
 new Intl.NumberFormat("fr").format(3000n);
 >new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
 >NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 
 new Intl.NumberFormat("fr").format(bigintVal);
 >new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
 >NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >bigintVal : Symbol(bigintVal, Decl(bigintWithLib.ts, 1, 3))

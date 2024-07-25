@@ -1,0 +1,12 @@
+/a.js(5,14): error TS2353: Object literal may only specify known properties, and 'g' does not exist in type '{ f: (x: string) => string; }'.
+
+
+==== /a.js (1 errors) ====
+    /** @satisfies {{ f: (x: string) => string }} */
+    const t1 = { f: s => s.toLowerCase() }; // should work
+    
+    /** @satisfies {{ f: (x: string) => string }} */
+    const t2 = { g: "oops" }; // should error
+                 ~
+!!! error TS2353: Object literal may only specify known properties, and 'g' does not exist in type '{ f: (x: string) => string; }'.
+    

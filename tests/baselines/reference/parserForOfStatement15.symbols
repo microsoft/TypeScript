@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement15.ts ===
+//// [tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement15.ts] ////
+
+=== parserForOfStatement15.ts ===
 for (var [a, b] of X) {
 >a : Symbol(a, Decl(parserForOfStatement15.ts, 0, 10))
 >b : Symbol(b, Decl(parserForOfStatement15.ts, 0, 12))

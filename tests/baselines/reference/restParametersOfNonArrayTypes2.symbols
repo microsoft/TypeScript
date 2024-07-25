@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts ===
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts] ////
+
+=== restParametersOfNonArrayTypes2.ts ===
 // Rest parameters must be an array type if they have a type annotation, 
 // user defined subtypes of array do not count, all of these are errors
 

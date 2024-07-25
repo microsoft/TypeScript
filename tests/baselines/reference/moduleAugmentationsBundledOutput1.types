@@ -1,159 +1,244 @@
-=== tests/cases/compiler/m1.ts ===
+//// [tests/cases/compiler/moduleAugmentationsBundledOutput1.ts] ////
+
+=== m1.ts ===
 export class Cls {
 >Cls : Cls
+>    : ^^^
 }
 
-=== tests/cases/compiler/m2.ts ===
+=== m2.ts ===
 import {Cls} from "./m1";
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 
 (<any>Cls.prototype).foo = function() { return 1; };
 >(<any>Cls.prototype).foo = function() { return 1; } : () => number
+>                                                    : ^^^^^^^^^^^^
 >(<any>Cls.prototype).foo : any
 >(<any>Cls.prototype) : any
+>                     : ^^^
 ><any>Cls.prototype : any
 >Cls.prototype : Cls
+>              : ^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >prototype : Cls
+>          : ^^^
 >foo : any
+>    : ^^^
 >function() { return 1; } : () => number
+>                         : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 
 (<any>Cls.prototype).bar = function() { return "1"; };
 >(<any>Cls.prototype).bar = function() { return "1"; } : () => string
+>                                                      : ^^^^^^^^^^^^
 >(<any>Cls.prototype).bar : any
 >(<any>Cls.prototype) : any
+>                     : ^^^
 ><any>Cls.prototype : any
 >Cls.prototype : Cls
+>              : ^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >prototype : Cls
+>          : ^^^
 >bar : any
+>    : ^^^
 >function() { return "1"; } : () => string
+>                           : ^^^^^^^^^^^^
 >"1" : "1"
+>    : ^^^
 
 declare module "./m1" {
->"./m1" : typeof import("tests/cases/compiler/m1")
+>"./m1" : typeof import("m1")
+>       : ^^^^^^^^^^^^^^^^^^^
 
     interface Cls {
         foo(): number;
 >foo : () => number
+>    : ^^^^^^      
     }
 }
 
 declare module "./m1" {
->"./m1" : typeof import("tests/cases/compiler/m1")
+>"./m1" : typeof import("m1")
+>       : ^^^^^^^^^^^^^^^^^^^
 
     interface Cls {
         bar(): string;
 >bar : () => string
+>    : ^^^^^^      
     }
 }
 
-=== tests/cases/compiler/m3.ts ===
+=== m3.ts ===
 export class C1 { x: number }
 >C1 : C1
+>   : ^^
 >x : number
+>  : ^^^^^^
 
 export class C2 { x: string }
 >C2 : C2
+>   : ^^
 >x : string
+>  : ^^^^^^
 
-=== tests/cases/compiler/m4.ts ===
+=== m4.ts ===
 import {Cls} from "./m1";
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 
 import {C1, C2} from "./m3";
 >C1 : typeof C1
+>   : ^^^^^^^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
 (<any>Cls.prototype).baz1 = function() { return undefined };
 >(<any>Cls.prototype).baz1 = function() { return undefined } : () => any
+>                                                            : ^^^^^^^^^
 >(<any>Cls.prototype).baz1 : any
 >(<any>Cls.prototype) : any
+>                     : ^^^
 ><any>Cls.prototype : any
 >Cls.prototype : Cls
+>              : ^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >prototype : Cls
+>          : ^^^
 >baz1 : any
+>     : ^^^
 >function() { return undefined } : () => any
+>                                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 (<any>Cls.prototype).baz2 = function() { return undefined };
 >(<any>Cls.prototype).baz2 = function() { return undefined } : () => any
+>                                                            : ^^^^^^^^^
 >(<any>Cls.prototype).baz2 : any
 >(<any>Cls.prototype) : any
+>                     : ^^^
 ><any>Cls.prototype : any
 >Cls.prototype : Cls
+>              : ^^^
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 >prototype : Cls
+>          : ^^^
 >baz2 : any
+>     : ^^^
 >function() { return undefined } : () => any
+>                                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 declare module "./m1" {
->"./m1" : typeof import("tests/cases/compiler/m1")
+>"./m1" : typeof import("m1")
+>       : ^^^^^^^^^^^^^^^^^^^
 
     interface Cls {
         baz1(): C1;
 >baz1 : () => C1
+>     : ^^^^^^  
     }
 }
 
 declare module "./m1" {
->"./m1" : typeof import("tests/cases/compiler/m1")
+>"./m1" : typeof import("m1")
+>       : ^^^^^^^^^^^^^^^^^^^
 
     interface Cls {
         baz2(): C2;
 >baz2 : () => C2
+>     : ^^^^^^  
     }
 }
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import { Cls } from "./m1";
 >Cls : typeof Cls
+>    : ^^^^^^^^^^
 
 import "m2";
 import "m4";
 let c: Cls;
 >c : Cls
+>  : ^^^
 
 c.foo().toExponential();
 >c.foo().toExponential() : string
+>                        : ^^^^^^
 >c.foo().toExponential : (fractionDigits?: number) => string
+>                      : ^              ^^^      ^^^^^      
 >c.foo() : number
+>        : ^^^^^^
 >c.foo : () => number
+>      : ^^^^^^      
 >c : Cls
+>  : ^^^
 >foo : () => number
+>    : ^^^^^^      
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 
 c.bar().toLowerCase();
 >c.bar().toLowerCase() : string
+>                      : ^^^^^^
 >c.bar().toLowerCase : () => string
+>                    : ^^^^^^      
 >c.bar() : string
+>        : ^^^^^^
 >c.bar : () => string
+>      : ^^^^^^      
 >c : Cls
+>  : ^^^
 >bar : () => string
+>    : ^^^^^^      
 >toLowerCase : () => string
+>            : ^^^^^^      
 
 c.baz1().x.toExponential();
 >c.baz1().x.toExponential() : string
+>                           : ^^^^^^
 >c.baz1().x.toExponential : (fractionDigits?: number) => string
+>                         : ^              ^^^      ^^^^^      
 >c.baz1().x : number
->c.baz1() : import("tests/cases/compiler/m3").C1
->c.baz1 : () => import("tests/cases/compiler/m3").C1
+>           : ^^^^^^
+>c.baz1() : import("m3").C1
+>         : ^^^^^^^^^^^^^^^
+>c.baz1 : () => import("m3").C1
+>       : ^^^^^^       ^^^^  ^^
 >c : Cls
->baz1 : () => import("tests/cases/compiler/m3").C1
+>  : ^^^
+>baz1 : () => import("m3").C1
+>     : ^^^^^^       ^^^^  ^^
 >x : number
+>  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^      
 
 c.baz2().x.toLowerCase();
 >c.baz2().x.toLowerCase() : string
+>                         : ^^^^^^
 >c.baz2().x.toLowerCase : () => string
+>                       : ^^^^^^      
 >c.baz2().x : string
->c.baz2() : import("tests/cases/compiler/m3").C2
->c.baz2 : () => import("tests/cases/compiler/m3").C2
+>           : ^^^^^^
+>c.baz2() : import("m3").C2
+>         : ^^^^^^^^^^^^^^^
+>c.baz2 : () => import("m3").C2
+>       : ^^^^^^       ^^^^  ^^
 >c : Cls
->baz2 : () => import("tests/cases/compiler/m3").C2
+>  : ^^^
+>baz2 : () => import("m3").C2
+>     : ^^^^^^       ^^^^  ^^
 >x : string
+>  : ^^^^^^
 >toLowerCase : () => string
+>            : ^^^^^^      
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringReassignsRightHandSide.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringReassignsRightHandSide.ts] ////
+
+=== destructuringReassignsRightHandSide.ts ===
 var foo: any = { foo: 1, bar: 2 };
 >foo : Symbol(foo, Decl(destructuringReassignsRightHandSide.ts, 0, 3), Decl(destructuringReassignsRightHandSide.ts, 7, 5))
 >foo : Symbol(foo, Decl(destructuringReassignsRightHandSide.ts, 0, 16))

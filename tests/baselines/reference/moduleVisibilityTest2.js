@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleVisibilityTest2.ts] ////
+
 //// [moduleVisibilityTest2.ts]
 module OuterMod {
 	export function someExportedOuterFunc() { return -1; }

@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/Statements/parserWithStatement1.d.ts(1,1): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/conformance/parser/ecmascript5/Statements/parserWithStatement1.d.ts(1,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
-tests/cases/conformance/parser/ecmascript5/Statements/parserWithStatement1.d.ts(1,7): error TS2304: Cannot find name 'foo'.
+parserWithStatement1.d.ts(1,1): error TS1036: Statements are not allowed in ambient contexts.
+parserWithStatement1.d.ts(1,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+parserWithStatement1.d.ts(1,7): error TS2304: Cannot find name 'foo'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Statements/parserWithStatement1.d.ts (3 errors) ====
+==== parserWithStatement1.d.ts (3 errors) ====
     with (foo) {
     ~~~~
 !!! error TS1036: Statements are not allowed in ambient contexts.

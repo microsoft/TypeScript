@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noCollisionThisExpressionAndVarInGlobal.ts ===
+//// [tests/cases/compiler/noCollisionThisExpressionAndVarInGlobal.ts] ////
+
+=== noCollisionThisExpressionAndVarInGlobal.ts ===
 var _this = 1;
 >_this : Symbol(_this, Decl(noCollisionThisExpressionAndVarInGlobal.ts, 0, 3))
 

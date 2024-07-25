@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classStaticPropertyTypeGuard.ts] ////
+
 //// [classStaticPropertyTypeGuard.ts]
 // Repro from #8923
 

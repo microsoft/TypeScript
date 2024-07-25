@@ -1,23 +1,37 @@
-=== tests/cases/compiler/objectLiteralComputedNameNoDeclarationError.ts ===
+//// [tests/cases/compiler/objectLiteralComputedNameNoDeclarationError.ts] ////
+
+=== objectLiteralComputedNameNoDeclarationError.ts ===
 const Foo = {
 >Foo : { BANANA: "banana"; }
+>    : ^^^^^^^^^^        ^^^
 >{    BANANA: 'banana' as 'banana',} : { BANANA: "banana"; }
+>                                    : ^^^^^^^^^^        ^^^
 
     BANANA: 'banana' as 'banana',
 >BANANA : "banana"
+>       : ^^^^^^^^
 >'banana' as 'banana' : "banana"
+>                     : ^^^^^^^^
 >'banana' : "banana"
+>         : ^^^^^^^^
 }
 
 export const Baa = {
 >Baa : { banana: number; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >{    [Foo.BANANA]: 1} : { banana: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^
 
     [Foo.BANANA]: 1
 >[Foo.BANANA] : number
+>             : ^^^^^^
 >Foo.BANANA : "banana"
+>           : ^^^^^^^^
 >Foo : { BANANA: "banana"; }
+>    : ^^^^^^^^^^        ^^^
 >BANANA : "banana"
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 
 };

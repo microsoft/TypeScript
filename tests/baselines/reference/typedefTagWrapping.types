@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/mod1.js ===
+//// [tests/cases/conformance/jsdoc/typedefTagWrapping.ts] ////
+
+=== mod1.js ===
 /** 
  * @typedef {function(string): boolean}
  * Type1
@@ -13,16 +15,22 @@
  */
 function callIt(func, arg) {
 >callIt : (func: Type1, arg: string) => boolean
+>       : ^    ^^     ^^   ^^      ^^^^^       
 >func : Type1
+>     : ^^^^^
 >arg : string
+>    : ^^^^^^
 
   return func(arg);
 >func(arg) : boolean
+>          : ^^^^^^^
 >func : Type1
+>     : ^^^^^
 >arg : string
+>    : ^^^^^^
 }
 
-=== tests/cases/conformance/jsdoc/mod2.js ===
+=== mod2.js ===
 /** 
  * @typedef {{
  *   num: number,
@@ -38,22 +46,34 @@ function callIt(func, arg) {
  */
 function check(obj) {
 >check : (obj: Type2) => string | number
+>      : ^   ^^     ^^^^^               
 >obj : Type2
+>    : ^^^^^
 
   return obj.boo ? obj.num : obj.str;
 >obj.boo ? obj.num : obj.str : string | number
+>                            : ^^^^^^^^^^^^^^^
 >obj.boo : boolean
+>        : ^^^^^^^
 >obj : Type2
+>    : ^^^^^
 >boo : boolean
+>    : ^^^^^^^
 >obj.num : number
+>        : ^^^^^^
 >obj : Type2
+>    : ^^^^^
 >num : number
+>    : ^^^^^^
 >obj.str : string
+>        : ^^^^^^
 >obj : Type2
+>    : ^^^^^
 >str : string
+>    : ^^^^^^
 }
 
-=== tests/cases/conformance/jsdoc/mod3.js ===
+=== mod3.js ===
 /**
  * A function whose signature is very long.
  *
@@ -71,20 +91,30 @@ function check(obj) {
  */
 function use1(func, bool, str, num) {
 >use1 : (func: StringOrNumber1, bool: boolean, str: string, num: number) => string | number
+>     : ^    ^^               ^^    ^^       ^^   ^^      ^^   ^^      ^^^^^               
 >func : StringOrNumber1
+>     : ^^^^^^^^^^^^^^^
 >bool : boolean
+>     : ^^^^^^^
 >str : string
+>    : ^^^^^^
 >num : number
+>    : ^^^^^^
 
   return func(bool, str, num)
 >func(bool, str, num) : string | number
+>                     : ^^^^^^^^^^^^^^^
 >func : StringOrNumber1
+>     : ^^^^^^^^^^^^^^^
 >bool : boolean
+>     : ^^^^^^^
 >str : string
+>    : ^^^^^^
 >num : number
+>    : ^^^^^^
 }
 
-=== tests/cases/conformance/jsdoc/mod4.js ===
+=== mod4.js ===
 /**
  * A function whose signature is very long.
  *
@@ -103,20 +133,30 @@ function use1(func, bool, str, num) {
  */
 function use2(func, bool, str, num) {
 >use2 : (func: StringOrNumber2, bool: boolean, str: string, num: number) => string | number
+>     : ^    ^^               ^^    ^^       ^^   ^^      ^^   ^^      ^^^^^               
 >func : StringOrNumber2
+>     : ^^^^^^^^^^^^^^^
 >bool : boolean
+>     : ^^^^^^^
 >str : string
+>    : ^^^^^^
 >num : number
+>    : ^^^^^^
 
   return func(bool, str, num)
 >func(bool, str, num) : string | number
+>                     : ^^^^^^^^^^^^^^^
 >func : StringOrNumber2
+>     : ^^^^^^^^^^^^^^^
 >bool : boolean
+>     : ^^^^^^^
 >str : string
+>    : ^^^^^^
 >num : number
+>    : ^^^^^^
 }
 
-=== tests/cases/conformance/jsdoc/mod5.js ===
+=== mod5.js ===
 /** 
  * @typedef {{
  *   num:
@@ -135,22 +175,34 @@ function use2(func, bool, str, num) {
  */
 function check5(obj) {
 >check5 : (obj: Type5) => string | number
+>       : ^   ^^     ^^^^^               
 >obj : Type5
+>    : ^^^^^
 
   return obj.boo ? obj.num : obj.str;
 >obj.boo ? obj.num : obj.str : string | number
+>                            : ^^^^^^^^^^^^^^^
 >obj.boo : boolean
+>        : ^^^^^^^
 >obj : Type5
+>    : ^^^^^
 >boo : boolean
+>    : ^^^^^^^
 >obj.num : number
+>        : ^^^^^^
 >obj : Type5
+>    : ^^^^^
 >num : number
+>    : ^^^^^^
 >obj.str : string
+>        : ^^^^^^
 >obj : Type5
+>    : ^^^^^
 >str : string
+>    : ^^^^^^
 }
 
-=== tests/cases/conformance/jsdoc/mod6.js ===
+=== mod6.js ===
 /** 
  * @typedef {{
  *   foo:
@@ -167,24 +219,29 @@ function check5(obj) {
  */
 function check6(obj) {
 >check6 : (obj: Type6) => any
+>       : ^   ^^     ^^^^^   
 >obj : Type6
+>    : ^^^^^
 
   return obj.foo;
 >obj.foo : any
+>        : ^^^
 >obj : Type6
+>    : ^^^^^
 >foo : any
+>    : ^^^
 }
 
 
-=== tests/cases/conformance/jsdoc/mod7.js ===
+=== mod7.js ===
+
 /** 
-No type information for this code.   Multiline type expressions in comments without leading * are not supported.
-No type information for this code.   @typedef {{
-No type information for this code.     foo:
-No type information for this code.     *,
-No type information for this code.     bar:
-No type information for this code.     *
-No type information for this code.   }} Type7
-No type information for this code. */
-No type information for this code.
-No type information for this code.
+   Multiline type expressions in comments without leading * are not supported.
+   @typedef {{
+     foo:
+     *,
+     bar:
+     *
+   }} Type7
+ */
+

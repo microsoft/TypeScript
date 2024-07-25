@@ -1,27 +1,45 @@
-=== tests/cases/conformance/statements/for-ofStatements/ES5For-of30.ts ===
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of30.ts] ////
+
+=== ES5For-of30.ts ===
 var a: string, b: number;
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var tuple: [number, string] = [2, "3"];
 >tuple : [number, string]
+>      : ^^^^^^^^^^^^^^^^
 >[2, "3"] : [number, string]
+>         : ^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 >"3" : "3"
+>    : ^^^
 
 for ([a = 1, b = ""] of tuple) {
 >[a = 1, b = ""] : [number, string]
+>                : ^^^^^^^^^^^^^^^^
 >a = 1 : 1
+>      : ^
 >a : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b = "" : ""
+>       : ^^
 >b : number
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 >tuple : [number, string]
+>      : ^^^^^^^^^^^^^^^^
 
     a;
 >a : string
+>  : ^^^^^^
 
     b;
 >b : number
+>  : ^^^^^^
 }

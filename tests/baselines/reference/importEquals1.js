@@ -30,7 +30,7 @@ new types.A(); // Error
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
@@ -40,7 +40,7 @@ var A = /** @class */ (function () {
 exports.A = A;
 //// [b.js]
 "use strict";
-module.exports = types;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -70,17 +70,17 @@ var types = __importStar(require("./a"));
 module.exports = types;
 //// [d.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 new types.A(); // Error
 //// [e.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 new types.A(); // Error
 //// [f.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 new types.A(); // Error
 //// [g.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 new types.A(); // Error

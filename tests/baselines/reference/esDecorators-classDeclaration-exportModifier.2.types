@@ -1,0 +1,138 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-exportModifier.2.ts] ////
+
+=== global.ts ===
+/** @type {*} */
+var dec;
+>dec : any
+>    : ^^^
+
+=== file1.ts ===
+// ok
+@dec export class C1 { }
+>dec : any
+>    : ^^^
+>C1 : C1
+>   : ^^
+
+=== file2.ts ===
+// ok
+@dec export default class C2 {}
+>dec : any
+>    : ^^^
+>C2 : C2
+>   : ^^
+
+=== file3.ts ===
+// error
+export @dec default class C3 {}
+>dec : any
+>    : ^^^
+>C3 : C3
+>   : ^^
+
+=== file4.ts ===
+// ok
+export @dec class C4 {}
+>dec : any
+>    : ^^^
+>C4 : C4
+>   : ^^
+
+=== file5.ts ===
+// ok
+export default @dec class C5 {}
+>dec : any
+>    : ^^^
+>C5 : C5
+>   : ^^
+
+=== file6.ts ===
+// error
+@dec export @dec class C6 {}
+>dec : any
+>    : ^^^
+>dec : any
+>    : ^^^
+>C6 : C6
+>   : ^^
+
+=== file7.ts ===
+// error
+@dec export default @dec class C7 {}
+>dec : any
+>    : ^^^
+>dec : any
+>    : ^^^
+>C7 : C7
+>   : ^^
+
+=== file8.ts ===
+// ok
+@dec abstract class C8 {}
+>dec : any
+>    : ^^^
+>C8 : C8
+>   : ^^
+
+=== file9.ts ===
+// ok
+@dec export abstract class C9 {}
+>dec : any
+>    : ^^^
+>C9 : C9
+>   : ^^
+
+=== file10.ts ===
+// ok
+@dec export default abstract class C10 {}
+>dec : any
+>    : ^^^
+>C10 : C10
+>    : ^^^
+
+=== file11.ts ===
+// ok
+export @dec abstract class C11 {}
+>dec : any
+>    : ^^^
+>C11 : C11
+>    : ^^^
+
+=== file12.ts ===
+// ok
+export default @dec abstract class C12 {}
+>dec : any
+>    : ^^^
+>C12 : C12
+>    : ^^^
+
+=== file13.ts ===
+// error
+abstract @dec class C13 {}
+>abstract : any
+>         : ^^^
+>dec : any
+>    : ^^^
+>C13 : C13
+>    : ^^^
+
+=== file14.ts ===
+// error
+export abstract @dec class C14 {}
+>abstract : any
+>         : ^^^
+>dec : any
+>    : ^^^
+>C14 : C14
+>    : ^^^
+
+=== file15.ts ===
+// error
+export default abstract @dec class C15 {}
+>abstract : any
+>         : ^^^
+>dec : any
+>    : ^^^
+>C15 : C15
+>    : ^^^
+

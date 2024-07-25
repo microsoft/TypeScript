@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importAliasWithDottedName.ts] ////
+
 //// [importAliasWithDottedName.ts]
 module M {
     export var x = 1;

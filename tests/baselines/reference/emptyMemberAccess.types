@@ -1,13 +1,21 @@
-=== tests/cases/compiler/emptyMemberAccess.ts ===
+//// [tests/cases/compiler/emptyMemberAccess.ts] ////
+
+=== emptyMemberAccess.ts ===
 function getObj() {
 >getObj : () => void
+>       : ^^^^^^^^^^
 
    ().toString();
 >().toString() : any
+>              : ^^^
 >().toString : any
+>            : ^^^
 >() : any
+>   : ^^^
 > : any
+> : ^^^
 >toString : any
+>         : ^^^
 
 }
  

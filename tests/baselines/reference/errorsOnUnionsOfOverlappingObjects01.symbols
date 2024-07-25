@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts ===
+//// [tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts] ////
+
+=== errorsOnUnionsOfOverlappingObjects01.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 0))
 

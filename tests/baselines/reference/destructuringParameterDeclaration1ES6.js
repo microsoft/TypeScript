@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES6.ts] ////
+
 //// [destructuringParameterDeclaration1ES6.ts]
 // Conformance for emitting ES6
 

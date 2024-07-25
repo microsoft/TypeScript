@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringTypeAssertionsES5_2.ts] ////
+
 //// [destructuringTypeAssertionsES5_2.ts]
 var { x } = (<any>foo());
 

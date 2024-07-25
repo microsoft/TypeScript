@@ -1,12 +1,19 @@
-=== tests/cases/compiler/undefinedArgumentInference.ts ===
+//// [tests/cases/compiler/undefinedArgumentInference.ts] ////
+
+=== undefinedArgumentInference.ts ===
 function foo1<T>(f1: { x: T; y: T }): T {
->foo1 : <T>(f1: {    x: T;    y: T;}) => T
+>foo1 : <T>(f1: { x: T; y: T; }) => T
+>     : ^ ^^  ^^               ^^^^^ 
 >f1 : { x: T; y: T; }
+>   : ^^^^^ ^^^^^ ^^^
 >x : T
+>  : ^
 >y : T
+>  : ^
 
    return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 
 }
 
@@ -14,9 +21,15 @@ var z1 = foo1({ x: undefined, y: undefined });
 >z1 : any
 >foo1({ x: undefined, y: undefined }) : any
 >foo1 : <T>(f1: { x: T; y: T; }) => T
+>     : ^ ^^  ^^               ^^^^^ 
 >{ x: undefined, y: undefined } : { x: undefined; y: undefined; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >y : undefined
+>  : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 

@@ -1,33 +1,33 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(7,8): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(7,29): error TS1005: ',' expected.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(8,4): error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.
+destructuringParameterDeclaration2.ts(7,8): error TS2322: Type 'string' is not assignable to type 'number'.
+destructuringParameterDeclaration2.ts(7,29): error TS1005: ',' expected.
+destructuringParameterDeclaration2.ts(8,4): error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.
   Source has 4 element(s) but target allows only 3.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(16,8): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(16,16): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(23,16): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(30,14): error TS2300: Duplicate identifier 'z'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(30,18): error TS2300: Duplicate identifier 'z'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(34,6): error TS2322: Type 'number' is not assignable to type '{ x: any; y: { j: any; }; }'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(35,4): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ z: number; }'.
+destructuringParameterDeclaration2.ts(16,8): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+destructuringParameterDeclaration2.ts(16,16): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+destructuringParameterDeclaration2.ts(23,16): error TS2322: Type 'string' is not assignable to type 'number'.
+destructuringParameterDeclaration2.ts(30,14): error TS2300: Duplicate identifier 'z'.
+destructuringParameterDeclaration2.ts(30,18): error TS2300: Duplicate identifier 'z'.
+destructuringParameterDeclaration2.ts(34,6): error TS2322: Type 'number' is not assignable to type '{ x: any; y: { j: any; }; }'.
+destructuringParameterDeclaration2.ts(35,4): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ z: number; }'.
   Property 'z' is missing in type '{}' but required in type '{ z: number; }'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(36,6): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(37,6): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(38,6): error TS2322: Type 'boolean' is not assignable to type 'string | number'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(39,11): error TS2322: Type 'boolean' is not assignable to type '[[any]]'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(40,13): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(46,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(47,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(56,8): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(57,5): error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
+destructuringParameterDeclaration2.ts(36,6): error TS2322: Type 'boolean' is not assignable to type 'number'.
+destructuringParameterDeclaration2.ts(37,6): error TS2322: Type 'boolean' is not assignable to type 'number'.
+destructuringParameterDeclaration2.ts(38,6): error TS2322: Type 'boolean' is not assignable to type 'string | number'.
+destructuringParameterDeclaration2.ts(39,11): error TS2322: Type 'boolean' is not assignable to type '[[any]]'.
+destructuringParameterDeclaration2.ts(40,13): error TS2322: Type 'string' is not assignable to type 'number'.
+destructuringParameterDeclaration2.ts(46,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+destructuringParameterDeclaration2.ts(47,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+destructuringParameterDeclaration2.ts(56,8): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+destructuringParameterDeclaration2.ts(57,5): error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
   Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
     Types of parameters '__0' and '__0' are incompatible.
       Property 'c' is missing in type '{ x: any; y: any; z: any; }' but required in type '{ x: any; y: any; c: any; }'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,26): error TS2300: Duplicate identifier 'number'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier 'number'.
+destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
+destructuringParameterDeclaration2.ts(65,26): error TS2300: Duplicate identifier 'number'.
+destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier 'number'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts (22 errors) ====
+==== destructuringParameterDeclaration2.ts (22 errors) ====
     // A parameter declaration may specify either an identifier or a binding pattern.
     // The identifiers specified in parameter declarations and binding patterns
     // in a parameter list must be unique within that parameter list.
@@ -64,7 +64,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     b1("string", { x: "string", y: true });  // Error
                    ~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:19:29: The expected type comes from property 'x' which is declared here on type '{ x: number; y: any; }'
+!!! related TS6500 destructuringParameterDeclaration2.ts:19:29: The expected type comes from property 'x' which is declared here on type '{ x: number; y: any; }'
     
     // If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
     function c0({z: {x, y: {j}}}) { }
@@ -86,18 +86,18 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
        ~~
 !!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ z: number; }'.
 !!! error TS2345:   Property 'z' is missing in type '{}' but required in type '{ z: number; }'.
-!!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:27:21: 'z' is declared here.
+!!! related TS2728 destructuringParameterDeclaration2.ts:27:21: 'z' is declared here.
     c1({ z: true });   // Error, implied type is {z:number}?
          ~
 !!! error TS2322: Type 'boolean' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:27:21: The expected type comes from property 'z' which is declared here on type '{ z: number; }'
+!!! related TS6500 destructuringParameterDeclaration2.ts:27:21: The expected type comes from property 'z' which is declared here on type '{ z: number; }'
     c2({ z: false });  // Error, implied type is {z?: number}
          ~
 !!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     c3({ b: true });   // Error, implied type is { b: number|string }. 
          ~
 !!! error TS2322: Type 'boolean' is not assignable to type 'string | number'.
-!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:29:20: The expected type comes from property 'b' which is declared here on type '{ b: string | number; }'
+!!! related TS6500 destructuringParameterDeclaration2.ts:29:20: The expected type comes from property 'b' which is declared here on type '{ b: string | number; }'
     c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
               ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type '[[any]]'.

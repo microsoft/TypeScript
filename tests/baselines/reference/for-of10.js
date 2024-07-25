@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of10.ts] ////
+
 //// [for-of10.ts]
 var v: string;
 for (v of [0]) { }

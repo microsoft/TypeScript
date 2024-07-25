@@ -1,0 +1,189 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+// /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}x|] = 10;|>
+// var y = `${ [|x|] } ${ [|x|] }`
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+  // /*FIND ALL REFS*/<|var [|x|] = 10;|>
+  // var y = `${ x } ${ x }`
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+// <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|] = 10;|>
+// var y = `${ [|x|] } ${ [|x|] }`
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+  // <|var /*FIND ALL REFS*/[|x|] = 10;|>
+  // var y = `${ x } ${ x }`
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+// <|var [|{| isWriteAccess: true |}x|] = 10;|>
+// var y = `${ /*FIND ALL REFS*/[|x|] } ${ [|x|] }`
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+  // <|var [|x|] = 10;|>
+  // var y = `${ /*FIND ALL REFS*/x } ${ x }`
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+// <|var [|{| isWriteAccess: true |}x|] = 10;|>
+// var y = `${ [|x|] } ${ /*FIND ALL REFS*/[|x|] }`
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideTemplates1.ts ===
+  // <|var [|x|] = 10;|>
+  // var y = `${ x } ${ /*FIND ALL REFS*/x }`
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

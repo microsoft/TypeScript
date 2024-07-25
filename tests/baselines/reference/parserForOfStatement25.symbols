@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement25.ts] ////
+
+=== parserForOfStatement25.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54769
+
+for (let [x = 'a' in {}] of [[]]) console.log(x)
+>x : Symbol(x, Decl(parserForOfStatement25.ts, 2, 10))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(parserForOfStatement25.ts, 2, 10))
+
+for (let {x = 'a' in {}} of [{}]) console.log(x)
+>x : Symbol(x, Decl(parserForOfStatement25.ts, 3, 10))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(parserForOfStatement25.ts, 3, 10))
+

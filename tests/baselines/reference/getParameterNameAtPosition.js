@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/getParameterNameAtPosition.ts] ////
+
 //// [getParameterNameAtPosition.ts]
 // Repro from #30171
 

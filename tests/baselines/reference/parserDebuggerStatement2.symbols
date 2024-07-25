@@ -1,3 +1,5 @@
-=== tests/cases/conformance/parser/ecmascript5/parserDebuggerStatement2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserDebuggerStatement2.ts] ////
+
+=== parserDebuggerStatement2.ts ===
+
 debugger;
-No type information for this code.

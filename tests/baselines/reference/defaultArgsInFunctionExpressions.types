@@ -1,118 +1,196 @@
-=== tests/cases/compiler/defaultArgsInFunctionExpressions.ts ===
+//// [tests/cases/compiler/defaultArgsInFunctionExpressions.ts] ////
+
+=== defaultArgsInFunctionExpressions.ts ===
 var f = function (a = 3) { return a; }; // Type should be (a?: number) => number
 >f : (a?: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^^
 >function (a = 3) { return a; } : (a?: number) => number
+>                               : ^ ^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >a : number
+>  : ^^^^^^
 
 var n: number = f(4);
 >n : number
+>  : ^^^^^^
 >f(4) : number
+>     : ^^^^^^
 >f : (a?: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^^
 >4 : 4
+>  : ^
 
 n = f();
 >n = f() : number
+>        : ^^^^^^
 >n : number
+>  : ^^^^^^
 >f() : number
+>    : ^^^^^^
 >f : (a?: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^^
 
 var s: string = f('');
 >s : string
+>  : ^^^^^^
 >f('') : number
+>      : ^^^^^^
 >f : (a?: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^^
 >'' : ""
+>   : ^^
 
 s = f();
 >s = f() : number
+>        : ^^^^^^
 >s : string
+>  : ^^^^^^
 >f() : number
+>    : ^^^^^^
 >f : (a?: number) => number
+>  : ^ ^^^^^^^^^^^^^^^^^^^^
 
 // Type check the default argument with the type annotation
 var f2 = function (a: string = 3) { return a; }; // Should error, but be of type (a: string) => string;
 >f2 : (a?: string) => string
+>   : ^ ^^^      ^^^^^^^^^^^
 >function (a: string = 3) { return a; } : (a?: string) => string
+>                                       : ^ ^^^      ^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >3 : 3
+>  : ^
 >a : string
+>  : ^^^^^^
 
 s = f2('');
 >s = f2('') : string
+>           : ^^^^^^
 >s : string
+>  : ^^^^^^
 >f2('') : string
+>       : ^^^^^^
 >f2 : (a?: string) => string
+>   : ^ ^^^      ^^^^^^^^^^^
 >'' : ""
+>   : ^^
 
 s = f2();
 >s = f2() : string
+>         : ^^^^^^
 >s : string
+>  : ^^^^^^
 >f2() : string
+>     : ^^^^^^
 >f2 : (a?: string) => string
+>   : ^ ^^^      ^^^^^^^^^^^
 
 n = f2();
 >n = f2() : string
+>         : ^^^^^^
 >n : number
+>  : ^^^^^^
 >f2() : string
+>     : ^^^^^^
 >f2 : (a?: string) => string
+>   : ^ ^^^      ^^^^^^^^^^^
 
 // Contextually type the default arg with the type annotation
 var f3 = function (a: (s: string) => any = (s) => <number>s) { };
 >f3 : (a?: (s: string) => any) => void
+>   : ^ ^^^                  ^^^^^^^^^
 >function (a: (s: string) => any = (s) => <number>s) { } : (a?: (s: string) => any) => void
+>                                                        : ^ ^^^                  ^^^^^^^^^
 >a : (s: string) => any
+>  : ^ ^^      ^^^^^   
 >s : string
+>  : ^^^^^^
 >(s) => <number>s : (s: string) => number
+>                 : ^ ^^^^^^^^^^^^^      
 >s : string
+>  : ^^^^^^
 ><number>s : number
+>          : ^^^^^^
 >s : string
+>  : ^^^^^^
 
 // Type check using the function's contextual type
 var f4: (a: number) => void = function (a = "") { };
 >f4 : (a: number) => void
+>   : ^ ^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 >function (a = "") { } : (a?: number) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 
 // Contextually type the default arg using the function's contextual type
 var f5: (a: (s: string) => any) => void = function (a = s => <number>s) { };
 >f5 : (a: (s: string) => any) => void
+>   : ^ ^^                  ^^^^^    
 >a : (s: string) => any
+>  : ^ ^^      ^^^^^   
 >s : string
+>  : ^^^^^^
 >function (a = s => <number>s) { } : (a?: (s: string) => any) => void
+>                                  : ^ ^^^^ ^^      ^^^^^   ^^^^^^^^^
 >a : (s: string) => any
+>  : ^ ^^      ^^^^^   
 >s => <number>s : (s: string) => number
+>               : ^ ^^^^^^^^^^^^^      
 >s : string
+>  : ^^^^^^
 ><number>s : number
+>          : ^^^^^^
 >s : string
+>  : ^^^^^^
 
 // Instantiated module
 module T { }
 module U {
 >U : typeof U
+>  : ^^^^^^^^
 
     export var x;
 >x : any
+>  : ^^^
 }
 
 var f6 = (t = T) => { };
 >f6 : (t?: any) => void
+>   : ^ ^^^^^^^^^^^^^^^
 >(t = T) => { } : (t?: any) => void
+>               : ^ ^^^^^^^^^^^^^^^
 >t : any
+>  : ^^^
 >T : any
+>  : ^^^
 
 var f7 = (t = U) => { return t; };
 >f7 : (t?: typeof U) => typeof U
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >(t = U) => { return t; } : (t?: typeof U) => typeof U
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >t : typeof U
+>  : ^^^^^^^^
 >U : typeof U
+>  : ^^^^^^^^
 >t : typeof U
+>  : ^^^^^^^^
 
 f7().x;
 >f7().x : any
+>       : ^^^
 >f7() : typeof U
+>     : ^^^^^^^^
 >f7 : (t?: typeof U) => typeof U
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 

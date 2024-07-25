@@ -1,15 +1,21 @@
-=== tests/cases/compiler/mixedExports.ts ===
+//// [tests/cases/compiler/mixedExports.ts] ////
+
+=== mixedExports.ts ===
 declare module M {
 >M : typeof M
+>  : ^^^^^^^^
 
      function foo();
 >foo : { (): any; (): any; (): any; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
      export function foo();
 >foo : { (): any; (): any; (): any; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
      function foo();
 >foo : { (): any; (): any; (): any; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 declare module M1 {

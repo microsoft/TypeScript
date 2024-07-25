@@ -25,26 +25,26 @@
 verify.completions({
     marker: "1",
     includes: [
-      { name: "Foo", kind: "interface", kindModifiers: "deprecated", sortText: completion.SortText.DeprecatedLocationPriority }
+      { name: "Foo", kind: "interface", kindModifiers: "deprecated", sortText: completion.SortText.Deprecated(completion.SortText.LocationPriority) }
     ]
 }, {
     marker: "2",
     includes: [
-      { name: "bar", kind: "method", kindModifiers: "deprecated", sortText: completion.SortText.DeprecatedLocationPriority }
+      { name: "bar", kind: "method", kindModifiers: "deprecated", sortText: completion.SortText.Deprecated(completion.SortText.LocationPriority) }
     ]
 }, {
     marker: "3",
     includes: [
-      { name: "prop", kind: "property", kindModifiers: "deprecated", sortText: completion.SortText.DeprecatedLocationPriority }
+      { name: "prop", kind: "property", kindModifiers: "deprecated", sortText: completion.SortText.Deprecated(completion.SortText.LocationPriority) }
     ]
 }, {
     marker: "4",
     includes: [
-      { name: "foobar", kind: "function", kindModifiers: "export,deprecated", sortText: completion.SortText.DeprecatedLocationPriority }
+      { name: "foobar", kind: "function", kindModifiers: "export,deprecated", sortText: completion.SortText.Deprecated(completion.SortText.LocationPriority) }
     ]
 }, {
     marker: "5",
     includes: [
-      { name: "foobar", kind: "alias", kindModifiers: "export,deprecated", sortText: completion.SortText.DeprecatedLocationPriority }
+      { name: "foobar", kind: "alias", kindModifiers: "export,deprecated", sortText: completion.SortText.Deprecated(completion.SortText.LocationPriority) }
     ]
 });

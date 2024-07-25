@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringInModuleNameES6.ts] ////
+
 //// [templateStringInModuleNameES6.ts]
 declare module `M1` {
 }

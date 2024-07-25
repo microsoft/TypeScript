@@ -9,12 +9,11 @@ exit()
 
 //// [utils.js]
 "use strict";
-exports.__esModule = true;
-exports.exist = void 0;
-function exist() { }
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.exist = exist;
+function exist() { }
 //// [sample.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var utils_js_1 = require("./utils.js");
 (0, utils_js_1.exit)();

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/augmentedTypesModules2.ts ===
+//// [tests/cases/compiler/augmentedTypesModules2.ts] ////
+
+=== augmentedTypesModules2.ts ===
 // module then function
 module m2 { }
 >m2 : Symbol(m2, Decl(augmentedTypesModules2.ts, 1, 13), Decl(augmentedTypesModules2.ts, 0, 0))

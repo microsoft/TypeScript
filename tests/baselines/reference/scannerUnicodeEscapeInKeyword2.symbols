@@ -1,4 +1,6 @@
-=== tests/cases/conformance/scanner/ecmascript5/file1.ts ===
+//// [tests/cases/conformance/scanner/ecmascript5/scannerUnicodeEscapeInKeyword2.ts] ////
+
+=== file1.ts ===
 var \u0061wait = 12; // ok
 >\u0061wait : Symbol(\u0061wait, Decl(file1.ts, 0, 3))
 
@@ -24,7 +26,7 @@ typ\u0065 notok = 0; // not ok
 >notok : Symbol(notok, Decl(file1.ts, 10, 20))
 
 export {};
-=== tests/cases/conformance/scanner/ecmascript5/file2.ts ===
+=== file2.ts ===
 \u{0076}ar x = "hello"; // not ok
 >x : Symbol(x, Decl(file2.ts, 0, 10))
 

@@ -1,109 +1,181 @@
-=== tests/cases/compiler/inferenceOptionalPropertiesToIndexSignatures.ts ===
+//// [tests/cases/compiler/inferenceOptionalPropertiesToIndexSignatures.ts] ////
+
+=== inferenceOptionalPropertiesToIndexSignatures.ts ===
 declare function foo<T>(obj: { [x: string]: T }): T;
 >foo : <T>(obj: { [x: string]: T; }) => T
+>    : ^ ^^   ^^                   ^^^^^ 
 >obj : { [x: string]: T; }
+>    : ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 declare const x1: { a: string, b: number };
 >x1 : { a: string; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 declare const x2: { a: string, b: number | undefined };
 >x2 : { a: string; b: number | undefined; }
+>   : ^^^^^      ^^^^^                  ^^^
 >a : string
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare const x3: { a: string, b?: number };
->x3 : { a: string; b?: number | undefined; }
+>x3 : { a: string; b?: number; }
+>   : ^^^^^      ^^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 declare const x4: { a: string, b?: number | undefined };
 >x4 : { a: string; b?: number | undefined; }
+>   : ^^^^^      ^^^^^^                  ^^^
 >a : string
+>  : ^^^^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 let a1 = foo(x1);  // string | number
 >a1 : string | number
+>   : ^^^^^^^^^^^^^^^
 >foo(x1) : string | number
+>        : ^^^^^^^^^^^^^^^
 >foo : <T>(obj: { [x: string]: T; }) => T
+>    : ^ ^^   ^^                   ^^^^^ 
 >x1 : { a: string; b: number; }
+>   : ^^^^^      ^^^^^      ^^^
 
 let a2 = foo(x2);  // string | number | undefined
 >a2 : string | number | undefined
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(x2) : string | number | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(obj: { [x: string]: T; }) => T
+>    : ^ ^^   ^^                   ^^^^^ 
 >x2 : { a: string; b: number | undefined; }
+>   : ^^^^^      ^^^^^                  ^^^
 
 let a3 = foo(x3);  // string | number
 >a3 : string | number
+>   : ^^^^^^^^^^^^^^^
 >foo(x3) : string | number
+>        : ^^^^^^^^^^^^^^^
 >foo : <T>(obj: { [x: string]: T; }) => T
->x3 : { a: string; b?: number | undefined; }
+>    : ^ ^^   ^^                   ^^^^^ 
+>x3 : { a: string; b?: number; }
+>   : ^^^^^      ^^^^^^      ^^^
 
 let a4 = foo(x4);  // string | number
 >a4 : string | number
+>   : ^^^^^^^^^^^^^^^
 >foo(x4) : string | number
+>        : ^^^^^^^^^^^^^^^
 >foo : <T>(obj: { [x: string]: T; }) => T
+>    : ^ ^^   ^^                   ^^^^^ 
 >x4 : { a: string; b?: number | undefined; }
+>   : ^^^^^      ^^^^^^                  ^^^
 
 // Repro from #43045
 
 const param2 = Math.random() < 0.5 ? 'value2' : null;
 >param2 : "value2" | null
+>       : ^^^^^^^^^^^^^^^
 >Math.random() < 0.5 ? 'value2' : null : "value2" | null
+>                                      : ^^^^^^^^^^^^^^^
 >Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 >0.5 : 0.5
+>    : ^^^
 >'value2' : "value2"
->null : null
+>         : ^^^^^^^^
 
 const obj = {
 >obj : { param2?: string | undefined; param1: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    param1: 'value1',    ...(param2 ? {param2} : {})} : { param2?: string | undefined; param1: string; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     param1: 'value1',
 >param1 : string
+>       : ^^^^^^
 >'value1' : "value1"
+>         : ^^^^^^^^
 
     ...(param2 ? {param2} : {})
 >(param2 ? {param2} : {}) : { param2: string; } | {}
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >param2 ? {param2} : {} : { param2: string; } | {}
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >param2 : "value2" | null
+>       : ^^^^^^^^^^^^^^^
 >{param2} : { param2: string; }
+>         : ^^^^^^^^^^^^^^^^^^^
 >param2 : string
+>       : ^^^^^^
 >{} : {}
+>   : ^^
 
 };
 
 const query = Object.entries(obj).map(
 >query : string
+>      : ^^^^^^
 >Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&') : string
->Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`).join : (separator?: string | undefined) => string
+>                                                                                   : ^^^^^^
+>Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`).join : (separator?: string) => string
+>                                                                              : ^         ^^^      ^^^^^      
 >Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`) : string[]
+>                                                                         : ^^^^^^^^
 >Object.entries(obj).map : <U>(callbackfn: (value: [string, string], index: number, array: [string, string][]) => U, thisArg?: any) => U[]
+>                        : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >Object.entries(obj) : [string, string][]
+>                    : ^^^^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>               : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>        : ^^^ ^^ ^^                                  ^^^             ^^^ ^^  ^^^               ^^^
 >obj : { param2?: string | undefined; param1: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: [string, string], index: number, array: [string, string][]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 
     ([k, v]) => `${k}=${encodeURIComponent(v)}`
 >([k, v]) => `${k}=${encodeURIComponent(v)}` : ([k, v]: [string, string]) => string
+>                                            : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : string
+>  : ^^^^^^
 >v : string
+>  : ^^^^^^
 >`${k}=${encodeURIComponent(v)}` : string
+>                                : ^^^^^^
 >k : string
+>  : ^^^^^^
 >encodeURIComponent(v) : string
+>                      : ^^^^^^
 >encodeURIComponent : (uriComponent: string | number | boolean) => string
+>                   : ^            ^^                         ^^^^^      
 >v : string
+>  : ^^^^^^
 
 ).join('&');
->join : (separator?: string | undefined) => string
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
 >'&' : "&"
+>    : ^^^
 

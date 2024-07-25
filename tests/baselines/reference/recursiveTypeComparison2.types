@@ -1,8 +1,11 @@
-=== tests/cases/compiler/recursiveTypeComparison2.ts ===
+//// [tests/cases/compiler/recursiveTypeComparison2.ts] ////
+
+=== recursiveTypeComparison2.ts ===
 // Before fix this would cause compiler to hang (#1170)
 
 declare module Bacon {
 >Bacon : typeof Bacon
+>      : ^^^^^^^^^^^^
 
     interface Event<T> {
     }
@@ -11,58 +14,91 @@ declare module Bacon {
     interface Observable<T> {
         zip<U, V>(other: EventStream<U>, f: (a: T, b: U) => V): EventStream<V>;
 >zip : <U, V>(other: EventStream<U>, f: (a: T, b: U) => V) => EventStream<V>
+>    : ^ ^^ ^^     ^^              ^^ ^^                 ^^^^^              
 >other : EventStream<U>
+>      : ^^^^^^^^^^^^^^
 >f : (a: T, b: U) => V
+>  : ^ ^^ ^^ ^^ ^^^^^ 
 >a : T
+>  : ^
 >b : U
+>  : ^
 
         slidingWindow(max: number, min?: number): Property<T[]>;
 >slidingWindow : (max: number, min?: number) => Property<T[]>
+>              : ^   ^^      ^^   ^^^      ^^^^^             
 >max : number
+>    : ^^^^^^
 >min : number
+>    : ^^^^^^
 
         log(): Observable<T>;
 >log : () => Observable<T>
+>    : ^^^^^^             
 
         combine<U, V>(other: Observable<U>, f: (a: T, b: U) => V): Property<V>;
 >combine : <U, V>(other: Observable<U>, f: (a: T, b: U) => V) => Property<V>
+>        : ^ ^^ ^^     ^^             ^^ ^^                 ^^^^^           
 >other : Observable<U>
+>      : ^^^^^^^^^^^^^
 >f : (a: T, b: U) => V
+>  : ^ ^^ ^^ ^^ ^^^^^ 
 >a : T
+>  : ^
 >b : U
+>  : ^
 
         withStateMachine<U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>): EventStream<V>;
 >withStateMachine : <U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>) => EventStream<V>
+>                 : ^ ^^ ^^         ^^ ^^ ^^                                               ^^^^^              
 >initState : U
+>          : ^
 >f : (state: U, event: Event<T>) => StateValue<U, V>
+>  : ^     ^^ ^^     ^^        ^^^^^                
 >state : U
+>      : ^
 >event : Event<T>
+>      : ^^^^^^^^
 
         decode(mapping: Object): Property<any>;
 >decode : (mapping: Object) => Property<any>
+>       : ^       ^^      ^^^^^             
 >mapping : Object
+>        : ^^^^^^
 
         awaiting<U>(other: Observable<U>): Property<boolean>;
 >awaiting : <U>(other: Observable<U>) => Property<boolean>
+>         : ^ ^^     ^^             ^^^^^                 
 >other : Observable<U>
+>      : ^^^^^^^^^^^^^
 
         endOnError(f?: (value: T) => boolean): Observable<T>;
 >endOnError : (f?: (value: T) => boolean) => Observable<T>
+>           : ^ ^^^                     ^^^^^             
 >f : (value: T) => boolean
+>  : ^     ^^ ^^^^^       
 >value : T
+>      : ^
 
         withHandler(f: (event: Event<T>) => any): Observable<T>;
 >withHandler : (f: (event: Event<T>) => any) => Observable<T>
+>            : ^ ^^                        ^^^^^             
 >f : (event: Event<T>) => any
+>  : ^     ^^        ^^^^^   
 >event : Event<T>
+>      : ^^^^^^^^
 
         name(name: string): Observable<T>;
 >name : (name: string) => Observable<T>
+>     : ^    ^^      ^^^^^             
 >name : string
+>     : ^^^^^^
 
         withDescription(...args: any[]): Observable<T>;
 >withDescription : (...args: any[]) => Observable<T>
+>                : ^^^^    ^^     ^^^^^             
 >args : any[]
+>     : ^^^^^
     }
     interface Property<T> extends Observable<T> {
     }
@@ -72,13 +108,20 @@ declare module Bacon {
     }
     var Bus: new <T>() => Bus<T>;
 >Bus : new <T>() => Bus<T>
+>    : ^^^^^ ^^^^^^^      
 }
 
 var stuck: Bacon.Bus<number> = new Bacon.Bus();
 >stuck : Bacon.Bus<number>
+>      : ^^^^^^^^^^^^^^^^^
 >Bacon : any
+>      : ^^^
 >new Bacon.Bus() : Bacon.Bus<number>
+>                : ^^^^^^^^^^^^^^^^^
 >Bacon.Bus : new <T>() => Bacon.Bus<T>
+>          : ^^^^^ ^^^^^^^^^^^^^^^^   
 >Bacon : typeof Bacon
+>      : ^^^^^^^^^^^^
 >Bus : new <T>() => Bacon.Bus<T>
+>    : ^^^^^ ^^^^^^^^^^^^^^^^   
 

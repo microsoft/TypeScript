@@ -1,45 +1,61 @@
-=== tests/cases/compiler/collisionExportsRequireAndFunction.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndFunction.ts] ////
+
+=== collisionExportsRequireAndFunction.ts ===
 export function exports() {
 >exports : () => number
+>        : ^^^^^^^^^^^^
 
     return 1;
 >1 : 1
+>  : ^
 }
 export function require() {
 >require : () => string
+>        : ^^^^^^^^^^^^
 
     return "require";
 >"require" : "require"
+>          : ^^^^^^^^^
 }
 module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     function exports() {
 >exports : () => number
+>        : ^^^^^^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     function require() {
 >require : () => string
+>        : ^^^^^^^^^^^^
 
         return "require";
 >"require" : "require"
+>          : ^^^^^^^^^
     }
 }
 module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
     export function exports() {
 >exports : () => number
+>        : ^^^^^^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     export function require() {
 >require : () => string
+>        : ^^^^^^^^^^^^
 
         return "require";
 >"require" : "require"
+>          : ^^^^^^^^^
     }
 }

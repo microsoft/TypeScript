@@ -1,3 +1,138 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJSDocTags.ts ===
+// /**
+//  * This is class Foo.
+//  * @mytag comment1 comment2
+//  */
+// class Foo {
+//     /**
+//      * This is the constructor.
+//      * @myjsdoctag this is a comment
+//      */
+//     constructor(value: number) {}
+//     /**
+//      * method1 documentation
+//      * @mytag comment1 comment2
+//      */
+//     static method1() {}
+//     /**
+//      * @mytag
+//      */
+//     method2() {}
+//     /**
+//      * @mytag comment1 comment2
+//      */
+//     property1: string;
+//     /**
+//      * @mytag1 some comments
+//      * some more comments about mytag1
+//      * @mytag2
+//      * here all the comments are on a new line
+//      * @mytag3
+//      * @mytag
+//      */
+//     property2: number;
+//     /**
+//      * @returns {number} a value
+//      */
+//     method3(): number { return 3; }
+//     /**
+//      * @param {string} foo A value.
+//      * @returns {number} Another value
+//      * @mytag
+//      */
+//     method4(foo: string): number { return 3; }
+//     /** @mytag */
+//     method5() {}
+//     /** method documentation
+//      *  @mytag a JSDoc tag
+//      */
+//     newMethod() {}
+// }
+// var foo = new Foo(4);
+//               ^^^
+// | ----------------------------------------------------------------------
+// | constructor Foo(value: number): Foo
+// | This is the constructor.
+// | @myjsdoctag this is a comment
+// | ----------------------------------------------------------------------
+//                   ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*10*/.
+// | ----------------------------------------------------------------------
+// Foo.method1();
+// ^^^
+// | ----------------------------------------------------------------------
+// | class Foo
+// | This is class Foo.
+// | @mytag comment1 comment2
+// | ----------------------------------------------------------------------
+//     ^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) Foo.method1(): void
+// | method1 documentation
+// | @mytag comment1 comment2
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*11*/.
+// | ----------------------------------------------------------------------
+// foo.method2();
+//     ^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) Foo.method2(): void
+// | @mytag 
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*12*/.
+// | ----------------------------------------------------------------------
+// foo.method3();
+//     ^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) Foo.method3(): number
+// | @returns a value
+// | ----------------------------------------------------------------------
+//             ^
+// | ----------------------------------------------------------------------
+// | No quickinfo at /*13*/.
+// | ----------------------------------------------------------------------
+// foo.method4();
+//     ^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) Foo.method4(foo: string): number
+// | @param foo A value.
+// | @returns Another value
+// | @mytag 
+// | ----------------------------------------------------------------------
+// foo.property1;
+//     ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) Foo.property1: string
+// | @mytag comment1 comment2
+// | ----------------------------------------------------------------------
+// foo.property2;
+//     ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) Foo.property2: number
+// | @mytag1 some comments
+// | some more comments about mytag1
+// | @mytag2 here all the comments are on a new line
+// | @mytag3 
+// | @mytag 
+// | ----------------------------------------------------------------------
+// foo.method5();
+//     ^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) Foo.method5(): void
+// | @mytag 
+// | ----------------------------------------------------------------------
+// foo.newMet
+//     ^^^^^^
+// | ----------------------------------------------------------------------
+// | any
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +140,7 @@
       "position": 977,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "constructor",
       "kindModifiers": "",
       "textSpan": {
@@ -94,7 +229,7 @@
       "position": 985,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -140,7 +275,7 @@
       "position": 989,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "static",
       "textSpan": {
@@ -229,7 +364,7 @@
       "position": 1004,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -307,7 +442,7 @@
       "position": 1019,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -391,7 +526,7 @@
       "position": 1034,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -504,7 +639,7 @@
       "position": 1049,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -573,7 +708,7 @@
       "position": 1064,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "",
       "textSpan": {
@@ -657,7 +792,7 @@
       "position": 1079,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {
@@ -728,7 +863,7 @@
       "position": 1100,
       "name": "14"
     },
-    "quickInfo": {
+    "item": {
       "kind": "",
       "kindModifiers": "",
       "textSpan": {

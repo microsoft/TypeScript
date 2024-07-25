@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayConstructors1.ts ===
+//// [tests/cases/compiler/arrayConstructors1.ts] ////
+
+=== arrayConstructors1.ts ===
 var x: string[];
 >x : Symbol(x, Decl(arrayConstructors1.ts, 0, 3))
 

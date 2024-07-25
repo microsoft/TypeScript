@@ -1,16 +1,16 @@
-tests/cases/conformance/externalModules/foo_1.ts(1,22): error TS2306: File 'tests/cases/conformance/externalModules/foo_0.ts' is not a module.
+foo_1.ts(1,22): error TS2306: File 'foo_0.ts' is not a module.
 
 
-==== tests/cases/conformance/externalModules/foo_1.ts (1 errors) ====
+==== foo_1.ts (1 errors) ====
     import foo = require("./foo_0");
                          ~~~~~~~~~
-!!! error TS2306: File 'tests/cases/conformance/externalModules/foo_0.ts' is not a module.
+!!! error TS2306: File 'foo_0.ts' is not a module.
     // Import should fail.  foo_0 not an external module
     if(foo.answer === 42){
     
     }
     
-==== tests/cases/conformance/externalModules/foo_0.ts (0 errors) ====
+==== foo_0.ts (0 errors) ====
     module foo {
     	export var answer = 42;
     }

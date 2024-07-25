@@ -1,28 +1,47 @@
-=== tests/cases/compiler/argumentsObjectIterator01_ES5.ts ===
+//// [tests/cases/compiler/argumentsObjectIterator01_ES5.ts] ////
+
+=== argumentsObjectIterator01_ES5.ts ===
 function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
 >doubleAndReturnAsArray : (x: number, y: number, z: number) => [number, number, number]
+>                       : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^                        
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 
     let result = [];
 >result : any[]
+>       : ^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     for (let arg of arguments) {
 >arg : any
+>    : ^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 
         result.push(arg + arg);
 >result.push(arg + arg) : number
+>                       : ^^^^^^
 >result.push : (...items: any[]) => number
+>            : ^^^^     ^^^^^^^^^^^^      
 >result : any[]
+>       : ^^^^^
 >push : (...items: any[]) => number
+>     : ^^^^     ^^^^^^^^^^^^      
 >arg + arg : any
+>          : ^^^
 >arg : any
+>    : ^^^
 >arg : any
+>    : ^^^
     }
     return <[any, any, any]>result;
 ><[any, any, any]>result : [any, any, any]
+>                        : ^^^^^^^^^^^^^^^
 >result : any[]
+>       : ^^^^^
 }

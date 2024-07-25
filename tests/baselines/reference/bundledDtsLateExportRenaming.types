@@ -1,37 +1,50 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/bundledDtsLateExportRenaming.ts] ////
+
+=== index.ts ===
+
 export * from "./nested";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/nested/base.ts ===
+
+=== nested/base.ts ===
 import { B } from "./shared";
 >B : typeof B
+>  : ^^^^^^^^
 
 export function f() {
 >f : () => B
+>  : ^^^^^^^
 
     return new B();
 >new B() : B
+>        : ^
 >B : typeof B
+>  : ^^^^^^^^
 }
 
-=== tests/cases/compiler/nested/derived.ts ===
+=== nested/derived.ts ===
 import { f } from "./base";
->f : () => import("tests/cases/compiler/index").B
+>f : () => import("index").B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export function g() {
->g : () => import("tests/cases/compiler/index").B
+>g : () => import("index").B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
     return f();
->f() : import("tests/cases/compiler/index").B
->f : () => import("tests/cases/compiler/index").B
+>f() : import("index").B
+>    : ^^^^^^^^^^^^^^^^^
+>f : () => import("index").B
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 }
 
-=== tests/cases/compiler/nested/index.ts ===
+=== nested/index.ts ===
+
 export * from "./base";
-No type information for this code.
-No type information for this code.export * from "./derived";
-No type information for this code.export * from "./shared";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/nested/shared.ts ===
+
+export * from "./derived";
+export * from "./shared";
+
+=== nested/shared.ts ===
 export class B {}
 >B : B
+>  : ^
 

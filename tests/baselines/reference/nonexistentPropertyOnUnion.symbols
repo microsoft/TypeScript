@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonexistentPropertyOnUnion.ts ===
+//// [tests/cases/compiler/nonexistentPropertyOnUnion.ts] ////
+
+=== nonexistentPropertyOnUnion.ts ===
 function f(x: string | Promise<string>) {
 >f : Symbol(f, Decl(nonexistentPropertyOnUnion.ts, 0, 0))
 >x : Symbol(x, Decl(nonexistentPropertyOnUnion.ts, 0, 11))

@@ -1,0 +1,85 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor10.ts] ////
+
+=== autoAccessor10.ts ===
+class C1 {
+>C1 : C1
+>   : ^^
+
+    accessor a0 = 1;
+>a0 : number
+>   : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+class C2 {
+>C2 : C2
+>   : ^^
+
+    #a1_accessor_storage = 1;
+>#a1_accessor_storage : number
+>                     : ^^^^^^
+>1 : 1
+>  : ^
+
+    accessor a1 = 2;
+>a1 : number
+>   : ^^^^^^
+>2 : 2
+>  : ^
+}
+
+class C3 {
+>C3 : C3
+>   : ^^
+
+    static #a2_accessor_storage = 1;
+>#a2_accessor_storage : number
+>                     : ^^^^^^
+>1 : 1
+>  : ^
+
+    static {
+        class C3_Inner {
+>C3_Inner : C3_Inner
+>         : ^^^^^^^^
+
+            accessor a2 = 2;
+>a2 : number
+>   : ^^^^^^
+>2 : 2
+>  : ^
+
+            static {
+                #a2_accessor_storage in C3;
+>#a2_accessor_storage in C3 : boolean
+>                           : ^^^^^^^
+>#a2_accessor_storage : any
+>C3 : typeof C3
+>   : ^^^^^^^^^
+            }
+        }
+    }
+}
+
+class C4_1 {
+>C4_1 : C4_1
+>     : ^^^^
+
+    static accessor a3 = 1;
+>a3 : number
+>   : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+class C4_2 {
+>C4_2 : C4_2
+>     : ^^^^
+
+    static accessor a3 = 1;
+>a3 : number
+>   : ^^^^^^
+>1 : 1
+>  : ^
+}

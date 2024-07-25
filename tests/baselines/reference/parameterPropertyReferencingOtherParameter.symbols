@@ -1,4 +1,6 @@
-=== tests/cases/compiler/parameterPropertyReferencingOtherParameter.ts ===
+//// [tests/cases/compiler/parameterPropertyReferencingOtherParameter.ts] ////
+
+=== parameterPropertyReferencingOtherParameter.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(parameterPropertyReferencingOtherParameter.ts, 0, 0))
 

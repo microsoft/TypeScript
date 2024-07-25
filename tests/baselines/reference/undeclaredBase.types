@@ -1,9 +1,16 @@
-=== tests/cases/compiler/undeclaredBase.ts ===
+//// [tests/cases/compiler/undeclaredBase.ts] ////
+
+=== undeclaredBase.ts ===
 module M { export class C extends M.I { } }
 >M : typeof M
+>  : ^^^^^^^^
 >C : C
+>  : ^
 >M.I : any
+>    : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 >I : any
+>  : ^^^
 
 

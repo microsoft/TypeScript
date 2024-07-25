@@ -1,0 +1,80 @@
+//// [tests/cases/compiler/declarationEmitBindingPatternWithReservedWord.ts] ////
+
+=== declarationEmitBindingPatternWithReservedWord.ts ===
+type LocaleData = Record<string, never>
+>LocaleData : Symbol(LocaleData, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 0))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type ConvertLocaleConfig<T extends LocaleData = LocaleData> = Record<
+>ConvertLocaleConfig : Symbol(ConvertLocaleConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 39))
+>T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 1, 25))
+>LocaleData : Symbol(LocaleData, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 0))
+>LocaleData : Symbol(LocaleData, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 0))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  string,
+  T
+>T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 1, 25))
+
+>;
+type LocaleConfig<T extends LocaleData = LocaleData> = Record<string, Partial<T>>;
+>LocaleConfig : Symbol(LocaleConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 4, 2))
+>T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 5, 18))
+>LocaleData : Symbol(LocaleData, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 0))
+>LocaleData : Symbol(LocaleData, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 0))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 5, 18))
+
+export interface GetLocalesOptions<T extends LocaleData> {
+>GetLocalesOptions : Symbol(GetLocalesOptions, Decl(declarationEmitBindingPatternWithReservedWord.ts, 5, 82))
+>T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 7, 35))
+>LocaleData : Symbol(LocaleData, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 0))
+
+    app: unknown;
+>app : Symbol(GetLocalesOptions.app, Decl(declarationEmitBindingPatternWithReservedWord.ts, 7, 58))
+
+    default: ConvertLocaleConfig<T>;
+>default : Symbol(GetLocalesOptions.default, Decl(declarationEmitBindingPatternWithReservedWord.ts, 8, 17))
+>ConvertLocaleConfig : Symbol(ConvertLocaleConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 39))
+>T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 7, 35))
+
+    config?: LocaleConfig<T> | undefined;
+>config : Symbol(GetLocalesOptions.config, Decl(declarationEmitBindingPatternWithReservedWord.ts, 9, 36))
+>LocaleConfig : Symbol(LocaleConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 4, 2))
+>T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 7, 35))
+
+    name?: string;
+>name : Symbol(GetLocalesOptions.name, Decl(declarationEmitBindingPatternWithReservedWord.ts, 10, 41))
+}
+
+export const getLocales = <T extends LocaleData>({
+>getLocales : Symbol(getLocales, Decl(declarationEmitBindingPatternWithReservedWord.ts, 14, 12))
+>T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 14, 27))
+>LocaleData : Symbol(LocaleData, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 0))
+
+    app,
+>app : Symbol(app, Decl(declarationEmitBindingPatternWithReservedWord.ts, 14, 50))
+
+    name,
+>name : Symbol(name, Decl(declarationEmitBindingPatternWithReservedWord.ts, 15, 8))
+
+    default: defaultLocalesConfig,
+>default : Symbol(GetLocalesOptions.default, Decl(declarationEmitBindingPatternWithReservedWord.ts, 8, 17))
+>defaultLocalesConfig : Symbol(defaultLocalesConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 16, 9))
+
+    config: userLocalesConfig = {},
+>config : Symbol(GetLocalesOptions.config, Decl(declarationEmitBindingPatternWithReservedWord.ts, 9, 36))
+>userLocalesConfig : Symbol(userLocalesConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 17, 34))
+
+}: GetLocalesOptions<T>): ConvertLocaleConfig<T> => {
+>GetLocalesOptions : Symbol(GetLocalesOptions, Decl(declarationEmitBindingPatternWithReservedWord.ts, 5, 82))
+>T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 14, 27))
+>ConvertLocaleConfig : Symbol(ConvertLocaleConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 0, 39))
+>T : Symbol(T, Decl(declarationEmitBindingPatternWithReservedWord.ts, 14, 27))
+
+    return defaultLocalesConfig;
+>defaultLocalesConfig : Symbol(defaultLocalesConfig, Decl(declarationEmitBindingPatternWithReservedWord.ts, 16, 9))
+
+};
+

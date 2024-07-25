@@ -1,39 +1,50 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/mergedDeclarations6.ts] ////
+
+=== a.ts ===
 export class A {
 >A : A
+>  : ^
 
     protected protected: any;
 >protected : any
 
     protected setProtected(val: any) {
 >setProtected : (val: any) => void
+>             : ^   ^^   ^^^^^^^^^
 >val : any
 
         this.protected = val;
 >this.protected = val : any
 >this.protected : any
 >this : this
+>     : ^^^^
 >protected : any
+>          : ^^^
 >val : any
     }
 }
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import {A} from './a';
 >A : typeof A
+>  : ^^^^^^^^
 
 declare module "./a" {
->"./a" : typeof import("tests/cases/compiler/a")
+>"./a" : typeof import("a")
+>      : ^^^^^^^^^^^^^^^^^^
 
     interface A { }
 }
 
 export class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     protected setProtected() {
 >setProtected : () => void
+>             : ^^^^^^^^^^
 
     }
 }

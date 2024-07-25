@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts] ////
+
+=== genericCallWithTupleType.ts ===
 interface I<T, U> {
 >I : Symbol(I, Decl(genericCallWithTupleType.ts, 0, 0))
 >T : Symbol(T, Decl(genericCallWithTupleType.ts, 0, 12))

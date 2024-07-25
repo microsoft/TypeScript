@@ -1,10 +1,10 @@
-tests/cases/compiler/interfacePropertiesWithSameName3.ts(3,11): error TS2320: Interface 'F' cannot simultaneously extend types 'E' and 'D'.
+interfacePropertiesWithSameName3.ts(3,11): error TS2320: Interface 'F' cannot simultaneously extend types 'E' and 'D'.
   Named property 'a' of types 'E' and 'D' are not identical.
-tests/cases/compiler/interfacePropertiesWithSameName3.ts(7,11): error TS2320: Interface 'F2' cannot simultaneously extend types 'E2' and 'D2'.
+interfacePropertiesWithSameName3.ts(7,11): error TS2320: Interface 'F2' cannot simultaneously extend types 'E2' and 'D2'.
   Named property 'a' of types 'E2' and 'D2' are not identical.
 
 
-==== tests/cases/compiler/interfacePropertiesWithSameName3.ts (2 errors) ====
+==== interfacePropertiesWithSameName3.ts (2 errors) ====
     interface D { a: number; }
     interface E { a: string; }
     interface F extends E, D { } // error

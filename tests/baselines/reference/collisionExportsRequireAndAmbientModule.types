@@ -1,149 +1,185 @@
-=== tests/cases/compiler/collisionExportsRequireAndAmbientModule_externalmodule.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndAmbientModule.ts] ////
+
+=== collisionExportsRequireAndAmbientModule_externalmodule.ts ===
 export declare module require {
 >require : typeof require
+>        : ^^^^^^^^^^^^^^
 
     export interface I {
     }
     export class C {
 >C : C
+>  : ^
     }
 }
 export function foo(): require.I {
 >foo : () => require.I
+>    : ^^^^^^         
 >require : any
+>        : ^^^
 
     return null;
->null : null
 }
 export declare module exports {
 >exports : typeof exports
+>        : ^^^^^^^^^^^^^^
 
     export interface I {
     }
     export class C {
 >C : C
+>  : ^
     }
 }
 export function foo2(): exports.I {
 >foo2 : () => exports.I
+>     : ^^^^^^         
 >exports : any
+>        : ^^^
 
     return null;
->null : null
 }
 declare module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     module require {
 >require : typeof require
+>        : ^^^^^^^^^^^^^^
 
         export interface I {
         }
         export class C {
 >C : C
+>  : ^
         }
     }
     module exports {
 >exports : typeof exports
+>        : ^^^^^^^^^^^^^^
 
         export interface I {
         }
         export class C {
 >C : C
+>  : ^
         }
     }
 }
 module m2 {
 >m2 : typeof m2
+>   : ^^^^^^^^^
 
     export declare module require {
 >require : typeof require
+>        : ^^^^^^^^^^^^^^
 
         export interface I {
         }
         export class C {
 >C : C
+>  : ^
         }
     }
     export declare module exports {
 >exports : typeof exports
+>        : ^^^^^^^^^^^^^^
 
         export interface I {
         }
         export class C {
 >C : C
+>  : ^
         }
     }
     var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 
-=== tests/cases/compiler/collisionExportsRequireAndAmbientModule_globalFile.ts ===
+=== collisionExportsRequireAndAmbientModule_globalFile.ts ===
 declare module require {
 >require : typeof require
+>        : ^^^^^^^^^^^^^^
 
     export interface I {
     }
     export class C {
 >C : C
+>  : ^
     }
 }
 declare module exports {
 >exports : typeof exports
+>        : ^^^^^^^^^^^^^^
 
     export interface I {
     }
     export class C {
 >C : C
+>  : ^
     }
 }
 declare module m3 {
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
     module require {
 >require : typeof require
+>        : ^^^^^^^^^^^^^^
 
         export interface I {
         }
         export class C {
 >C : C
+>  : ^
         }
     }
     module exports {
 >exports : typeof exports
+>        : ^^^^^^^^^^^^^^
 
         export interface I {
         }
         export class C {
 >C : C
+>  : ^
         }
     }
 }
 module m4 {
 >m4 : typeof m4
+>   : ^^^^^^^^^
 
     export declare module require {
 >require : typeof require
+>        : ^^^^^^^^^^^^^^
 
         export interface I {
         }
         export class C {
 >C : C
+>  : ^
         }
     }
     export declare module exports {
 >exports : typeof exports
+>        : ^^^^^^^^^^^^^^
 
         export interface I {
         }
         export class C {
 >C : C
+>  : ^
         }
     }
 
     var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 

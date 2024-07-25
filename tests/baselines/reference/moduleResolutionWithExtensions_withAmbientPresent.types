@@ -1,14 +1,20 @@
+//// [tests/cases/compiler/moduleResolutionWithExtensions_withAmbientPresent.ts] ////
+
 === /a.ts ===
 /// <reference path="declarations.d.ts" />
 import { x } from "js";
 >x : 0
+>  : ^
 
 === /declarations.d.ts ===
 declare module "js" {
 >"js" : typeof import("js")
+>     : ^^^^^^^^^^^^^^^^^^^
 
     export const x = 0;
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 }
 

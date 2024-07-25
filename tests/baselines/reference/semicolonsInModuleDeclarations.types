@@ -1,6 +1,9 @@
-=== tests/cases/compiler/semicolonsInModuleDeclarations.ts ===
+//// [tests/cases/compiler/semicolonsInModuleDeclarations.ts] ////
+
+=== semicolonsInModuleDeclarations.ts ===
 declare module ambiModule {
 >ambiModule : typeof ambiModule
+>           : ^^^^^^^^^^^^^^^^^
 
    export interface i1 { };
    export interface i2 { }
@@ -8,9 +11,13 @@ declare module ambiModule {
 
 var n1: ambiModule.i1;
 >n1 : ambiModule.i1
+>   : ^^^^^^^^^^^^^
 >ambiModule : any
+>           : ^^^
 
 var n2: ambiModule.i2;
 >n2 : ambiModule.i2
+>   : ^^^^^^^^^^^^^
 >ambiModule : any
+>           : ^^^
 

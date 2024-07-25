@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/lateBoundClassMemberAssignmentJS.js ===
+//// [tests/cases/conformance/salsa/lateBoundClassMemberAssignmentJS3.ts] ////
+
+=== lateBoundClassMemberAssignmentJS.js ===
 const _sym = Symbol("_sym");
 >_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS.js, 0, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

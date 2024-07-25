@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorTypesAsTypeArguments.ts ===
+//// [tests/cases/compiler/errorTypesAsTypeArguments.ts] ////
+
+=== errorTypesAsTypeArguments.ts ===
 interface Foo<A> {
 >Foo : Symbol(Foo, Decl(errorTypesAsTypeArguments.ts, 0, 0))
 >A : Symbol(A, Decl(errorTypesAsTypeArguments.ts, 0, 14))

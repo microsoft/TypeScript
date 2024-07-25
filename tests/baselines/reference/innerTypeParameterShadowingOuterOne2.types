@@ -1,64 +1,92 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/innerTypeParameterShadowingOuterOne2.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/innerTypeParameterShadowingOuterOne2.ts] ////
+
+=== innerTypeParameterShadowingOuterOne2.ts ===
 // inner type parameters shadow outer ones of the same name
 // no errors expected
 
 class C<T extends Date> {
 >C : C<T>
+>  : ^^^^
 
     g<T extends Number>() {
 >g : <T extends Number>() => void
+>  : ^ ^^^^^^^^^      ^^^^^^^^^^^
 
         var x: T;
 >x : T
+>  : ^
 
         x.toFixed();
 >x.toFixed() : string
+>            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >x : T
+>  : ^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
     }
 
     h() {
 >h : () => void
+>  : ^^^^^^^^^^
 
         var x: T;
 >x : T
+>  : ^
 
         x.getDate();
 >x.getDate() : number
+>            : ^^^^^^
 >x.getDate : () => number
+>          : ^^^^^^      
 >x : T
+>  : ^
 >getDate : () => number
+>        : ^^^^^^      
     }
 }
 
 class C2<T extends Date, U extends Date> {
 >C2 : C2<T, U>
+>   : ^^^^^^^^
 
     g<T extends Number, U extends Number>() {
 >g : <T extends Number, U extends Number>() => void
+>  : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^^^^^^^^^^
 
         var x: U;
 >x : U
+>  : ^
 
         x.toFixed();
 >x.toFixed() : string
+>            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
 >x : U
+>  : ^
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
     }
 
     h() {
 >h : () => void
+>  : ^^^^^^^^^^
 
         var x: U;
 >x : U
+>  : ^
 
         x.getDate();
 >x.getDate() : number
+>            : ^^^^^^
 >x.getDate : () => number
+>          : ^^^^^^      
 >x : U
+>  : ^
 >getDate : () => number
+>        : ^^^^^^      
     }
 }
 //class C2<T extends Date, U extends T> {

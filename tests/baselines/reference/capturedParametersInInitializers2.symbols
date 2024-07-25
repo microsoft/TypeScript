@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedParametersInInitializers2.ts ===
+//// [tests/cases/compiler/capturedParametersInInitializers2.ts] ////
+
+=== capturedParametersInInitializers2.ts ===
 function foo(
 >foo : Symbol(foo, Decl(capturedParametersInInitializers2.ts, 0, 0))
 

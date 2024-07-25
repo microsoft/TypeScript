@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInheritedMembersSatisfyAbstractBase.ts] ////
+
 //// [mergedInheritedMembersSatisfyAbstractBase.ts]
 abstract class BaseClass {
   abstract bar: number;

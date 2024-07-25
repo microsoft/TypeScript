@@ -1,18 +1,25 @@
-=== tests/cases/compiler/continueTarget5.ts ===
+//// [tests/cases/compiler/continueTarget5.ts] ////
+
+=== continueTarget5.ts ===
 target:
 >target : any
+>       : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 
   function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
       continue target;
 >target : any
+>       : ^^^
     }
   }
 }

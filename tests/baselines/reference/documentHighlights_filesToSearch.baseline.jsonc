@@ -1,0 +1,9 @@
+// === documentHighlights ===
+// === /a.ts ===
+// <|export const /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}x|] = 0;|>
+
+
+
+// === documentHighlights ===
+// === /b.ts ===
+// <|import { /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}x|] } from "./a";|>

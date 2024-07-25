@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationPublicParameterModifier.ts] ////
+
+=== a.js ===
 class C { constructor(public x) { }}
 >C : Symbol(C, Decl(a.js, 0, 0))
 >x : Symbol(C.x, Decl(a.js, 0, 22))

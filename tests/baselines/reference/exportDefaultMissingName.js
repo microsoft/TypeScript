@@ -1,7 +1,9 @@
+//// [tests/cases/compiler/exportDefaultMissingName.ts] ////
+
 //// [exportDefaultMissingName.ts]
 export default xyzzy;
 
 //// [exportDefaultMissingName.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = xyzzy;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = xyzzy;

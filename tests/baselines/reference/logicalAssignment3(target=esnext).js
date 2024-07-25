@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment3.ts] ////
+
 //// [logicalAssignment3.ts]
 interface A {
     baz: 0 | 1 | 42 | undefined | ''

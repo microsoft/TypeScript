@@ -24,7 +24,7 @@ let y = x.getA().x;
 
 //// [f.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="array.d.ts"/>
 require("array");
 var x = [1];
@@ -32,5 +32,4 @@ var y = x.getA().x;
 
 
 //// [f.d.ts]
-/// <reference path="array.d.ts" />
 import "array";

@@ -16,18 +16,18 @@ export {d};
 //// [bundle.js]
 define("a/b/c", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("a/inner", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = void 0;
     var c = { x: 12 };
     exports.c = c;
 });
 define("index", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.d = void 0;
     var d = { x: 12 };
     exports.d = d;

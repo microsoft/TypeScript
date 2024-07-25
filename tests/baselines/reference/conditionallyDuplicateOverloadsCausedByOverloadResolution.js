@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionallyDuplicateOverloadsCausedByOverloadResolution.ts] ////
+
 //// [conditionallyDuplicateOverloadsCausedByOverloadResolution.ts]
 declare function foo(func: (x: string, y: string) => any): boolean;
 declare function foo(func: (x: string, y: number) => any): string;

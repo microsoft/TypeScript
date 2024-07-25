@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts] ////
+
 //// [typeArgumentDefaultUsesConstraintOnCircularDefault.ts]
 type Test<T extends string = T> = { value: T };  // Error
 

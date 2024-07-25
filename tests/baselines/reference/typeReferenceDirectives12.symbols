@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeReferenceDirectives12.ts] ////
+
 === /mod2.ts ===
 import { Cls } from "./main";
 >Cls : Symbol(Cls, Decl(mod2.ts, 0, 8))

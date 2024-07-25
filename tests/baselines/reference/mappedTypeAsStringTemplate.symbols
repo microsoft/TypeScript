@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeAsStringTemplate.ts ===
+//// [tests/cases/compiler/mappedTypeAsStringTemplate.ts] ////
+
+=== mappedTypeAsStringTemplate.ts ===
 // Repro from #44220
 
 function foo<T extends { [K in keyof T as `${Extract<K, string>}y`]: number }>(foox: T) { }

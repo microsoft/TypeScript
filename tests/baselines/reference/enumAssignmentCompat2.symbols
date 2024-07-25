@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumAssignmentCompat2.ts ===
+//// [tests/cases/compiler/enumAssignmentCompat2.ts] ////
+
+=== enumAssignmentCompat2.ts ===
 enum W {
 >W : Symbol(W, Decl(enumAssignmentCompat2.ts, 0, 0), Decl(enumAssignmentCompat2.ts, 4, 1))
 

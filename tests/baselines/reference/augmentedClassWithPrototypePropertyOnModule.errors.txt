@@ -1,7 +1,7 @@
-tests/cases/compiler/augmentedClassWithPrototypePropertyOnModule.ts(3,9): error TS2300: Duplicate identifier 'prototype'.
+augmentedClassWithPrototypePropertyOnModule.ts(3,9): error TS2300: Duplicate identifier 'prototype'.
 
 
-==== tests/cases/compiler/augmentedClassWithPrototypePropertyOnModule.ts (1 errors) ====
+==== augmentedClassWithPrototypePropertyOnModule.ts (1 errors) ====
     declare module m {
         var f;
         var prototype; // This should be error since prototype would be static property on class m

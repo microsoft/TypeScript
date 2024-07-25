@@ -1,80 +1,113 @@
-=== tests/cases/conformance/types/typeRelationships/widenedTypes/initializersWidened.ts ===
+//// [tests/cases/conformance/types/typeRelationships/widenedTypes/initializersWidened.ts] ////
+
+=== initializersWidened.ts ===
 // these are widened to any at the point of assignment
 
 var x1 = null;
 >x1 : any
->null : null
+>   : ^^^
 
 var y1 = undefined;
 >y1 : any
+>   : ^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var z1 = void 0;
 >z1 : any
+>   : ^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 // these are not widened
 
 var x2: null;
 >x2 : null
->null : null
+>   : ^^^^
 
 var y2: undefined;
 >y2 : undefined
+>   : ^^^^^^^^^
 
 var x3: null = null;
 >x3 : null
->null : null
->null : null
+>   : ^^^^
 
 var y3: undefined = undefined;
 >y3 : undefined
+>   : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var z3: undefined = void 0;
 >z3 : undefined
+>   : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 // widen only when all constituents of union are widening
 
 var x4 = null || null;
 >x4 : any
+>   : ^^^
 >null || null : null
->null : null
->null : null
+>             : ^^^^
 
 var y4 = undefined || undefined;
 >y4 : any
+>   : ^^^
 >undefined || undefined : undefined
+>                       : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
 var z4 = void 0 || void 0;
 >z4 : any
+>   : ^^^
 >void 0 || void 0 : undefined
+>                 : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 
 var x5 = null || x2;
 >x5 : null
+>   : ^^^^
 >null || x2 : null
->null : null
+>           : ^^^^
 >x2 : null
+>   : ^^^^
 
 var y5 = undefined || y2;
 >y5 : undefined
+>   : ^^^^^^^^^
 >undefined || y2 : undefined
+>                : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >y2 : undefined
+>   : ^^^^^^^^^
 
 var z5 = void 0 || y2;
 >z5 : undefined
+>   : ^^^^^^^^^
 >void 0 || y2 : undefined
+>             : ^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 >y2 : undefined
+>   : ^^^^^^^^^
 

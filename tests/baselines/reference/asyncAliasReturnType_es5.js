@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/asyncAliasReturnType_es5.ts] ////
+
 //// [asyncAliasReturnType_es5.ts]
 type PromiseAlias<T> = Promise<T>;
 

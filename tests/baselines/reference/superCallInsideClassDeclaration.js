@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superCallInsideClassDeclaration.ts] ////
+
 //// [superCallInsideClassDeclaration.ts]
 class A {
 }

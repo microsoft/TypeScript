@@ -1,178 +1,287 @@
-=== tests/cases/conformance/types/spread/spreadMethods.ts ===
+//// [tests/cases/conformance/types/spread/spreadMethods.ts] ////
+
+=== spreadMethods.ts ===
 class K {
 >K : K
+>  : ^
 
     p = 12;
 >p : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 
     m() { }
 >m : () => void
+>  : ^^^^^^^^^^
 
     get g() { return 0; }
 >g : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 interface I {
     p: number;
 >p : number
+>  : ^^^^^^
 
     m(): void;
 >m : () => void
+>  : ^^^^^^    
 
     readonly g: number;
 >g : number
+>  : ^^^^^^
 }
 
 let k = new K()
 >k : K
+>  : ^
 >new K() : K
+>        : ^
 >K : typeof K
+>  : ^^^^^^^^
 
 let sk = { ...k };
 >sk : { p: number; }
+>   : ^^^^^^^^^^^^^^
 >{ ...k } : { p: number; }
+>         : ^^^^^^^^^^^^^^
 >k : K
+>  : ^
 
 let ssk = { ...k, ...k };
 >ssk : { p: number; }
+>    : ^^^^^^^^^^^^^^
 >{ ...k, ...k } : { p: number; }
+>               : ^^^^^^^^^^^^^^
 >k : K
+>  : ^
 >k : K
+>  : ^
 
 sk.p;
 >sk.p : number
+>     : ^^^^^^
 >sk : { p: number; }
+>   : ^^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 
 sk.m(); // error
 >sk.m() : any
+>       : ^^^
 >sk.m : any
+>     : ^^^
 >sk : { p: number; }
+>   : ^^^^^^^^^^^^^^
 >m : any
+>  : ^^^
 
 sk.g; // error
 >sk.g : any
+>     : ^^^
 >sk : { p: number; }
+>   : ^^^^^^^^^^^^^^
 >g : any
+>  : ^^^
 
 ssk.p;
 >ssk.p : number
+>      : ^^^^^^
 >ssk : { p: number; }
+>    : ^^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 
 ssk.m(); // error
 >ssk.m() : any
+>        : ^^^
 >ssk.m : any
+>      : ^^^
 >ssk : { p: number; }
+>    : ^^^^^^^^^^^^^^
 >m : any
+>  : ^^^
 
 ssk.g; // error
 >ssk.g : any
+>      : ^^^
 >ssk : { p: number; }
+>    : ^^^^^^^^^^^^^^
 >g : any
+>  : ^^^
 
 let i: I = { p: 12, m() { }, get g() { return 0; } };
 >i : I
+>  : ^
 >{ p: 12, m() { }, get g() { return 0; } } : { p: number; m(): void; readonly g: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 >m : () => void
+>  : ^^^^^^^^^^
 >g : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 let si = { ...i };
 >si : { p: number; m(): void; g: number; }
+>   : ^^^^^      ^^^^^^^    ^^^^^      ^^^
 >{ ...i } : { p: number; m(): void; g: number; }
+>         : ^^^^^      ^^^^^^^    ^^^^^      ^^^
 >i : I
+>  : ^
 
 let ssi = { ...i, ...i };
 >ssi : { p: number; m(): void; g: number; }
+>    : ^^^^^      ^^^^^^^    ^^^^^      ^^^
 >{ ...i, ...i } : { p: number; m(): void; g: number; }
+>               : ^^^^^      ^^^^^^^    ^^^^^      ^^^
 >i : I
+>  : ^
 >i : I
+>  : ^
 
 si.p;
 >si.p : number
+>     : ^^^^^^
 >si : { p: number; m(): void; g: number; }
+>   : ^^^^^      ^^^^^^^    ^^^^^      ^^^
 >p : number
+>  : ^^^^^^
 
 si.m(); // ok
 >si.m() : void
+>       : ^^^^
 >si.m : () => void
+>     : ^^^^^^    
 >si : { p: number; m(): void; g: number; }
+>   : ^^^^^      ^^^^^^^    ^^^^^      ^^^
 >m : () => void
+>  : ^^^^^^    
 
 si.g; // ok
 >si.g : number
+>     : ^^^^^^
 >si : { p: number; m(): void; g: number; }
+>   : ^^^^^      ^^^^^^^    ^^^^^      ^^^
 >g : number
+>  : ^^^^^^
 
 ssi.p;
 >ssi.p : number
+>      : ^^^^^^
 >ssi : { p: number; m(): void; g: number; }
+>    : ^^^^^      ^^^^^^^    ^^^^^      ^^^
 >p : number
+>  : ^^^^^^
 
 ssi.m(); // ok
 >ssi.m() : void
+>        : ^^^^
 >ssi.m : () => void
+>      : ^^^^^^    
 >ssi : { p: number; m(): void; g: number; }
+>    : ^^^^^      ^^^^^^^    ^^^^^      ^^^
 >m : () => void
+>  : ^^^^^^    
 
 ssi.g; // ok
 >ssi.g : number
+>      : ^^^^^^
 >ssi : { p: number; m(): void; g: number; }
+>    : ^^^^^      ^^^^^^^    ^^^^^      ^^^
 >g : number
+>  : ^^^^^^
 
 let o = { p: 12, m() { }, get g() { return 0; } };
 >o : { p: number; m(): void; readonly g: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ p: 12, m() { }, get g() { return 0; } } : { p: number; m(): void; readonly g: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 >12 : 12
+>   : ^^
 >m : () => void
+>  : ^^^^^^^^^^
 >g : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 let so = { ...o };
 >so : { p: number; m(): void; g: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...o } : { p: number; m(): void; g: number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { p: number; m(): void; readonly g: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let sso = { ...o, ...o };
 >sso : { p: number; m(): void; g: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...o, ...o } : { p: number; m(): void; g: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { p: number; m(): void; readonly g: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : { p: number; m(): void; readonly g: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 so.p;
 >so.p : number
+>     : ^^^^^^
 >so : { p: number; m(): void; g: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 
 so.m(); // ok
 >so.m() : void
+>       : ^^^^
 >so.m : () => void
+>     : ^^^^^^^^^^
 >so : { p: number; m(): void; g: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : () => void
+>  : ^^^^^^^^^^
 
 so.g; // ok
 >so.g : number
+>     : ^^^^^^
 >so : { p: number; m(): void; g: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : number
+>  : ^^^^^^
 
 sso.p;
 >sso.p : number
+>      : ^^^^^^
 >sso : { p: number; m(): void; g: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : number
+>  : ^^^^^^
 
 sso.m(); // ok
 >sso.m() : void
+>        : ^^^^
 >sso.m : () => void
+>      : ^^^^^^^^^^
 >sso : { p: number; m(): void; g: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : () => void
+>  : ^^^^^^^^^^
 
 sso.g; // ok
 >sso.g : number
+>      : ^^^^^^
 >sso : { p: number; m(): void; g: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : number
+>  : ^^^^^^
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember.ts] ////
+
 //// [typeOfThisInInstanceMember.ts]
 class C {
     x = this;

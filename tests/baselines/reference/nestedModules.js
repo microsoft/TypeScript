@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleDeclarations/nestedModules.ts] ////
+
 //// [nestedModules.ts]
 module A.B.C {
     export interface Point {

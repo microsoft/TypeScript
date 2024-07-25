@@ -1,25 +1,25 @@
-tests/cases/compiler/potentiallyUncalledDecorators.ts(4,5): error TS1329: 'Input' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@Input()'?
-tests/cases/compiler/potentiallyUncalledDecorators.ts(35,1): error TS1329: 'noArgs' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@noArgs()'?
-tests/cases/compiler/potentiallyUncalledDecorators.ts(37,5): error TS1329: 'noArgs' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@noArgs()'?
-tests/cases/compiler/potentiallyUncalledDecorators.ts(38,5): error TS1329: 'noArgs' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@noArgs()'?
-tests/cases/compiler/potentiallyUncalledDecorators.ts(41,1): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof B'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(43,5): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(44,5): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(47,1): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof C'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(49,5): error TS1329: 'oneOptional' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@oneOptional()'?
-tests/cases/compiler/potentiallyUncalledDecorators.ts(50,5): error TS1329: 'oneOptional' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@oneOptional()'?
-tests/cases/compiler/potentiallyUncalledDecorators.ts(53,1): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof D'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(55,5): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(56,5): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(59,1): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof E'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(61,5): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(62,5): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(65,1): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof F'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(67,5): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
-tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
+potentiallyUncalledDecorators.ts(4,5): error TS1329: 'Input' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@Input()'?
+potentiallyUncalledDecorators.ts(35,1): error TS1329: 'noArgs' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@noArgs()'?
+potentiallyUncalledDecorators.ts(37,5): error TS1329: 'noArgs' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@noArgs()'?
+potentiallyUncalledDecorators.ts(38,5): error TS1329: 'noArgs' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@noArgs()'?
+potentiallyUncalledDecorators.ts(41,2): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof B'.
+potentiallyUncalledDecorators.ts(43,6): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
+potentiallyUncalledDecorators.ts(44,6): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
+potentiallyUncalledDecorators.ts(47,2): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof C'.
+potentiallyUncalledDecorators.ts(49,5): error TS1329: 'oneOptional' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@oneOptional()'?
+potentiallyUncalledDecorators.ts(50,5): error TS1329: 'oneOptional' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@oneOptional()'?
+potentiallyUncalledDecorators.ts(53,2): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof D'.
+potentiallyUncalledDecorators.ts(55,6): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
+potentiallyUncalledDecorators.ts(56,6): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
+potentiallyUncalledDecorators.ts(59,2): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof E'.
+potentiallyUncalledDecorators.ts(61,6): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
+potentiallyUncalledDecorators.ts(62,6): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
+potentiallyUncalledDecorators.ts(65,2): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof F'.
+potentiallyUncalledDecorators.ts(67,6): error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
+potentiallyUncalledDecorators.ts(68,6): error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
 
 
-==== tests/cases/compiler/potentiallyUncalledDecorators.ts (19 errors) ====
+==== potentiallyUncalledDecorators.ts (19 errors) ====
     // Angular-style Input/Output API:
     declare function Input(bindingPropertyName?: string): any;
     class FooComponent {
@@ -69,19 +69,19 @@ tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1270: Decor
     }
     
     @allRest
-    ~~~~~~~~
+     ~~~~~~~
 !!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof B'.
     class B {
         @allRest foo: any;
-        ~~~~~~~~
+         ~~~~~~~
 !!! error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
         @allRest bar() { }
-        ~~~~~~~~
+         ~~~~~~~
 !!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
     }
     
     @oneOptional
-    ~~~~~~~~~~~~
+     ~~~~~~~~~~~
 !!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof C'.
     class C {
         @oneOptional foo: any;
@@ -93,38 +93,38 @@ tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1270: Decor
     }
     
     @twoOptional
-    ~~~~~~~~~~~~
+     ~~~~~~~~~~~
 !!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof D'.
     class D {
         @twoOptional foo: any;
-        ~~~~~~~~~~~~
+         ~~~~~~~~~~~
 !!! error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
         @twoOptional bar() { }
-        ~~~~~~~~~~~~
+         ~~~~~~~~~~~
 !!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
     }
     
     @threeOptional
-    ~~~~~~~~~~~~~~
+     ~~~~~~~~~~~~~
 !!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof E'.
     class E {
         @threeOptional foo: any;
-        ~~~~~~~~~~~~~~
+         ~~~~~~~~~~~~~
 !!! error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
         @threeOptional bar() { }
-        ~~~~~~~~~~~~~~
+         ~~~~~~~~~~~~~
 !!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
     }
     
     @oneOptionalWithRest
-    ~~~~~~~~~~~~~~~~~~~~
+     ~~~~~~~~~~~~~~~~~~~
 !!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | typeof F'.
     class F {
         @oneOptionalWithRest foo: any;
-        ~~~~~~~~~~~~~~~~~~~~
+         ~~~~~~~~~~~~~~~~~~~
 !!! error TS1271: Decorator function return type is 'OmniDecorator' but is expected to be 'void' or 'any'.
         @oneOptionalWithRest bar() { }
-        ~~~~~~~~~~~~~~~~~~~~
+         ~~~~~~~~~~~~~~~~~~~
 !!! error TS1270: Decorator function return type 'OmniDecorator' is not assignable to type 'void | TypedPropertyDescriptor<() => void>'.
     }
     

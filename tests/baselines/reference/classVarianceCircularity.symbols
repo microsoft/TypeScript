@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/classVarianceCircularity.ts] ////
+
+=== classVarianceCircularity.ts ===
+// Issue #52813
+
+function f() {
+>f : Symbol(f, Decl(classVarianceCircularity.ts, 0, 0))
+
+    const b = new Bar();
+>b : Symbol(b, Decl(classVarianceCircularity.ts, 3, 9))
+>Bar : Symbol(Bar, Decl(classVarianceCircularity.ts, 6, 1))
+
+    // Uncomment to create error
+    console.log(b.Value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>b.Value : Symbol(Bar.Value, Decl(classVarianceCircularity.ts, 11, 43))
+>b : Symbol(b, Decl(classVarianceCircularity.ts, 3, 9))
+>Value : Symbol(Bar.Value, Decl(classVarianceCircularity.ts, 11, 43))
+}
+
+class Bar<T> {
+>Bar : Symbol(Bar, Decl(classVarianceCircularity.ts, 6, 1))
+>T : Symbol(T, Decl(classVarianceCircularity.ts, 8, 10))
+
+    num!: number;
+>num : Symbol(Bar.num, Decl(classVarianceCircularity.ts, 8, 14))
+
+    // Or swap these two lines
+    Field: number = (this as Bar<any>).num;
+>Field : Symbol(Bar.Field, Decl(classVarianceCircularity.ts, 9, 17))
+>(this as Bar<any>).num : Symbol(Bar.num, Decl(classVarianceCircularity.ts, 8, 14))
+>this : Symbol(Bar, Decl(classVarianceCircularity.ts, 6, 1))
+>Bar : Symbol(Bar, Decl(classVarianceCircularity.ts, 6, 1))
+>num : Symbol(Bar.num, Decl(classVarianceCircularity.ts, 8, 14))
+
+    Value = (this as Bar<any>).num;
+>Value : Symbol(Bar.Value, Decl(classVarianceCircularity.ts, 11, 43))
+>(this as Bar<any>).num : Symbol(Bar.num, Decl(classVarianceCircularity.ts, 8, 14))
+>this : Symbol(Bar, Decl(classVarianceCircularity.ts, 6, 1))
+>Bar : Symbol(Bar, Decl(classVarianceCircularity.ts, 6, 1))
+>num : Symbol(Bar.num, Decl(classVarianceCircularity.ts, 8, 14))
+}

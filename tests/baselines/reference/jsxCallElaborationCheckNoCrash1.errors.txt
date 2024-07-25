@@ -1,7 +1,7 @@
-tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx(10,29): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<Tag, DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>>'.
+jsxCallElaborationCheckNoCrash1.tsx(10,29): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<Tag, DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>>'.
 
 
-==== tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx (1 errors) ====
+==== jsxCallElaborationCheckNoCrash1.tsx (1 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     import * as React from "react";

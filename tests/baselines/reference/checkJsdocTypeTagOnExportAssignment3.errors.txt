@@ -1,9 +1,9 @@
-tests/cases/compiler/a.js(10,16): error TS2739: Type '{ c: number; }' is missing the following properties from type 'Foo': a, b
+a.js(10,16): error TS2739: Type '{ c: number; }' is missing the following properties from type 'Foo': a, b
 
 
-==== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment3.js (0 errors) ====
+==== checkJsdocTypeTagOnExportAssignment3.js (0 errors) ====
     
-==== tests/cases/compiler/a.js (1 errors) ====
+==== a.js (1 errors) ====
     /**
      * @typedef {Object} Foo
      * @property {boolean} a
@@ -17,7 +17,7 @@ tests/cases/compiler/a.js(10,16): error TS2739: Type '{ c: number; }' is missing
                    ~~~
 !!! error TS2739: Type '{ c: number; }' is missing the following properties from type 'Foo': a, b
     
-==== tests/cases/compiler/b.js (0 errors) ====
+==== b.js (0 errors) ====
     import a from "./a";
     a;
     

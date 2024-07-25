@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/narrowingTypeofUndefined2.ts] ////
+
+=== narrowingTypeofUndefined2.ts ===
+declare function takeArray(arr: Array<unknown>): void;
+>takeArray : Symbol(takeArray, Decl(narrowingTypeofUndefined2.ts, 0, 0))
+>arr : Symbol(arr, Decl(narrowingTypeofUndefined2.ts, 0, 27))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function fn<T extends Array<unknown> | undefined>(arg: T) {
+>fn : Symbol(fn, Decl(narrowingTypeofUndefined2.ts, 0, 54))
+>T : Symbol(T, Decl(narrowingTypeofUndefined2.ts, 2, 12))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(narrowingTypeofUndefined2.ts, 2, 50))
+>T : Symbol(T, Decl(narrowingTypeofUndefined2.ts, 2, 12))
+
+    if (typeof arg !== "undefined") {
+>arg : Symbol(arg, Decl(narrowingTypeofUndefined2.ts, 2, 50))
+
+        takeArray(arg);
+>takeArray : Symbol(takeArray, Decl(narrowingTypeofUndefined2.ts, 0, 0))
+>arg : Symbol(arg, Decl(narrowingTypeofUndefined2.ts, 2, 50))
+
+        const n: Array<unknown> = arg;
+>n : Symbol(n, Decl(narrowingTypeofUndefined2.ts, 5, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(narrowingTypeofUndefined2.ts, 2, 50))
+
+        for (const p of arg) {  }
+>p : Symbol(p, Decl(narrowingTypeofUndefined2.ts, 7, 18))
+>arg : Symbol(arg, Decl(narrowingTypeofUndefined2.ts, 2, 50))
+
+        const m = [...arg];
+>m : Symbol(m, Decl(narrowingTypeofUndefined2.ts, 8, 13))
+>arg : Symbol(arg, Decl(narrowingTypeofUndefined2.ts, 2, 50))
+    }
+}
+

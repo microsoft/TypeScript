@@ -1,37 +1,59 @@
-=== tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts ===
+//// [tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts] ////
+
+=== functionTypeArgumentAssignmentCompat.ts ===
 var f : {
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 
  <T>(x:T): T;
 >x : T
+>  : ^
 }
 
 var g : {
 >g : <S>() => S[]
+>  : ^ ^^^^^^^   
 
  <S>() : S[];
 } = () => [];
 >() => [] : () => any[]
+>         : ^^^^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 f = g;
 >f = g : <S>() => S[]
+>      : ^ ^^^^^^^   
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >g : <S>() => S[]
+>  : ^ ^^^^^^^   
 
 var s = f("str").toUpperCase();
 >s : string
+>  : ^^^^^^
 >f("str").toUpperCase() : string
+>                       : ^^^^^^
 >f("str").toUpperCase : () => string
+>                     : ^^^^^^      
 >f("str") : "str"
+>         : ^^^^^
 >f : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 >"str" : "str"
+>      : ^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
 
 console.log(s);
 >console.log(s) : void
+>               : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >s : string
+>  : ^^^^^^
 

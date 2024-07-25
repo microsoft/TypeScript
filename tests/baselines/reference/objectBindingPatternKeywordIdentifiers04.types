@@ -1,9 +1,17 @@
-=== tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers04.ts ===
+//// [tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers04.ts] ////
+
+=== objectBindingPatternKeywordIdentifiers04.ts ===
 var { "while": while } = { while: 1 }
 > : number
+> : ^^^^^^
 >while : any
+>      : ^^^
 > : number
+> : ^^^^^^
 >{ while: 1 } : { while: number; }
+>             : ^^^^^^^^^^^^^^^^^^
 >while : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 

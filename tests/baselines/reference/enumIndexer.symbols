@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumIndexer.ts ===
+//// [tests/cases/compiler/enumIndexer.ts] ////
+
+=== enumIndexer.ts ===
 enum MyEnumType {
 >MyEnumType : Symbol(MyEnumType, Decl(enumIndexer.ts, 0, 0))
 

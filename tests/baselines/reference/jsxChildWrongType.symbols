@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/jsxChildWrongType.tsx] ////
+
+=== index.tsx ===
+/// <reference path="react18/react18.d.ts" />
+/// <reference path="react18/global.d.ts" />
+
+const a = (
+>a : Symbol(a, Decl(index.tsx, 3, 5))
+
+  <main>
+>main : Symbol(JSX.IntrinsicElements.main, Decl(react18.d.ts, 3206, 102))
+
+    {(<div />) as unknown}
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react18.d.ts, 3174, 110))
+
+    <span />
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react18.d.ts, 3238, 110))
+
+  </main>
+>main : Symbol(JSX.IntrinsicElements.main, Decl(react18.d.ts, 3206, 102))
+
+);
+

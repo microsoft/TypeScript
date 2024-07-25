@@ -1,157 +1,242 @@
-=== tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts ===
+//// [tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts] ////
+
+=== everyTypeWithAnnotationAndInvalidInitializer.ts ===
 interface I {
     id: number;
 >id : number
+>   : ^^^^^^
 }
 
 class C implements I {
 >C : C
+>  : ^
 
     id: number;
 >id : number
+>   : ^^^^^^
 }
 
 class D<T>{
 >D : D<T>
+>  : ^^^^
 
     source: T;
 >source : T
+>       : ^
 
     recurse: D<T>;
 >recurse : D<T>
+>        : ^^^^
 
     wrapped: D<D<T>>
 >wrapped : D<D<T>>
+>        : ^^^^^^^
 }
 
 function F(x: string): number { return 42; }
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 function F2(x: number): boolean { return x < 42; }
 >F2 : (x: number) => boolean
+>   : ^ ^^      ^^^^^       
 >x : number
+>  : ^^^^^^
 >x < 42 : boolean
+>       : ^^^^^^^
 >x : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class A {
 >A : A
+>  : ^
 
         name: string;
 >name : string
+>     : ^^^^^^
     }
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : (x: number) => string
+>   : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 }
 
 module N {
 >N : typeof N
+>  : ^^^^^^^^
 
     export class A {
 >A : A
+>  : ^
 
         id: number;
 >id : number
+>   : ^^^^^^
     }
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : (x: number) => string
+>   : ^ ^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >x.toString() : string
+>             : ^^^^^^
 >x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^      
 >x : number
+>  : ^^^^^^
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 }
 
 var aNumber: number = 'this is a string';
 >aNumber : number
+>        : ^^^^^^
 >'this is a string' : "this is a string"
+>                   : ^^^^^^^^^^^^^^^^^^
 
 var aString: string = 9.9;
 >aString : string
+>        : ^^^^^^
 >9.9 : 9.9
+>    : ^^^
 
 var aDate: Date = 9.9;
 >aDate : Date
+>      : ^^^^
 >9.9 : 9.9
+>    : ^^^
 
 var aVoid: void = 9.9;
 >aVoid : void
+>      : ^^^^
 >9.9 : 9.9
+>    : ^^^
 
 var anInterface: I = new D();
 >anInterface : I
+>            : ^
 >new D() : D<unknown>
+>        : ^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var aClass: C = new D();
 >aClass : C
+>       : ^
 >new D() : D<unknown>
+>        : ^^^^^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 
 var aGenericClass: D<string> = new C();
 >aGenericClass : D<string>
+>              : ^^^^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var anObjectLiteral: I = { id: 'a string' };
 >anObjectLiteral : I
+>                : ^
 >{ id: 'a string' } : { id: string; }
+>                   : ^^^^^^^^^^^^^^^
 >id : string
+>   : ^^^^^^
 >'a string' : "a string"
+>           : ^^^^^^^^^^
 
 var anOtherObjectLiteral: { id: string } = new C();
 >anOtherObjectLiteral : { id: string; }
+>                     : ^^^^^^      ^^^
 >id : string
+>   : ^^^^^^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 var aFunction: typeof F = F2;
 >aFunction : (x: string) => number
+>          : ^ ^^      ^^^^^      
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >F2 : (x: number) => boolean
+>   : ^ ^^      ^^^^^       
 
 var anOtherFunction: (x: string) => number = F2;
 >anOtherFunction : (x: string) => number
+>                : ^ ^^      ^^^^^      
 >x : string
+>  : ^^^^^^
 >F2 : (x: number) => boolean
+>   : ^ ^^      ^^^^^       
 
 var aLambda: typeof F = (x) => 'a string';
 >aLambda : (x: string) => number
+>        : ^ ^^      ^^^^^      
 >F : (x: string) => number
+>  : ^ ^^      ^^^^^      
 >(x) => 'a string' : (x: string) => string
+>                  : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >'a string' : "a string"
+>           : ^^^^^^^^^^
 
 var aModule: typeof M = N;
 >aModule : typeof M
+>        : ^^^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 
 var aClassInModule: M.A = new N.A();
 >aClassInModule : M.A
+>               : ^^^
 >M : any
+>  : ^^^
 >new N.A() : N.A
+>          : ^^^
 >N.A : typeof N.A
+>    : ^^^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 >A : typeof N.A
+>  : ^^^^^^^^^^
 
 var aFunctionInModule: typeof M.F2 = F2;
 >aFunctionInModule : (x: number) => string
+>                  : ^ ^^      ^^^^^      
 >M.F2 : (x: number) => string
+>     : ^ ^^      ^^^^^      
 >M : typeof M
+>  : ^^^^^^^^
 >F2 : (x: number) => string
+>   : ^ ^^      ^^^^^      
 >F2 : (x: number) => boolean
+>   : ^ ^^      ^^^^^       
 
 

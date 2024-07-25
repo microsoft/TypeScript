@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicatePackage_globalMerge.ts] ////
+
 === /src/bug25410.ts ===
 import { x } from './index'
 >x : Symbol(x, Decl(bug25410.ts, 0, 8))

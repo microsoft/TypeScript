@@ -1,23 +1,39 @@
-=== tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts ===
+//// [tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts] ////
+
+=== modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts ===
 // Error missing basic JavaScript objects
 function f(x: number, y: number, z: number) {
 >f : (x: number, y: number, z: number) => any
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 
     return Array.from(arguments);
 >Array.from(arguments) : any
+>                      : ^^^
 >Array.from : any
+>           : ^^^
 >Array : any
+>      : ^^^
 >from : any
+>     : ^^^
 >arguments : {}
+>          : ^^
 }
 
 f(1, 2, 3);
 >f(1, 2, 3) : any
+>           : ^^^
 >f : (x: number, y: number, z: number) => any
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 

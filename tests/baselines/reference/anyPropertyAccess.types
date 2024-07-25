@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/any/anyPropertyAccess.ts ===
+//// [tests/cases/conformance/types/any/anyPropertyAccess.ts] ////
+
+=== anyPropertyAccess.ts ===
 var x: any;
 >x : any
 
@@ -6,13 +8,16 @@ var a = x.foo;
 >a : any
 >x.foo : any
 >x : any
+>  : ^^^
 >foo : any
+>    : ^^^
 
 var b = x['foo'];
 >b : any
 >x['foo'] : any
 >x : any
 >'foo' : "foo"
+>      : ^^^^^
 
 var c = x['fn']();
 >c : any
@@ -20,28 +25,39 @@ var c = x['fn']();
 >x['fn'] : any
 >x : any
 >'fn' : "fn"
+>     : ^^^^
 
 var d = x.bar.baz;
 >d : any
 >x.bar.baz : any
 >x.bar : any
+>      : ^^^
 >x : any
+>  : ^^^
 >bar : any
+>    : ^^^
 >baz : any
+>    : ^^^
 
 var e = x[0].foo;
 >e : any
 >x[0].foo : any
 >x[0] : any
+>     : ^^^
 >x : any
 >0 : 0
+>  : ^
 >foo : any
+>    : ^^^
 
 var f = x['0'].bar;
 >f : any
 >x['0'].bar : any
 >x['0'] : any
+>       : ^^^
 >x : any
 >'0' : "0"
+>    : ^^^
 >bar : any
+>    : ^^^
 

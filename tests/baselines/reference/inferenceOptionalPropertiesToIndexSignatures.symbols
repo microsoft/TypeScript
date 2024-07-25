@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferenceOptionalPropertiesToIndexSignatures.ts ===
+//// [tests/cases/compiler/inferenceOptionalPropertiesToIndexSignatures.ts] ////
+
+=== inferenceOptionalPropertiesToIndexSignatures.ts ===
 declare function foo<T>(obj: { [x: string]: T }): T;
 >foo : Symbol(foo, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 0))
 >T : Symbol(T, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 21))

@@ -2,23 +2,20 @@
 
 // Global variable reference.
 
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}topLevelVar|] = 2;|]
-////var topLevelVar2 = [|topLevelVar|];
+/////*1*/var /*2*/topLevelVar = 2;
+////var topLevelVar2 = /*3*/topLevelVar;
 ////
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}topLevelClass|] { }|]
-////var c = new [|topLevelClass|]();
+/////*4*/class /*5*/topLevelClass { }
+////var c = new /*6*/topLevelClass();
 ////
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}topLevelInterface|] { }|]
-////var i: [|topLevelInterface|];
+/////*7*/interface /*8*/topLevelInterface { }
+////var i: /*9*/topLevelInterface;
 ////
-////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 9 |}topLevelModule|] {
+/////*10*/module /*11*/topLevelModule {
 ////    export var x;
-////}|]
-////var x = [|topLevelModule|].x;
+////}
+////var x = /*12*/topLevelModule.x;
 ////
 ////export = x;
 
-verify.singleReferenceGroup("var topLevelVar: number", "topLevelVar");
-verify.singleReferenceGroup("class topLevelClass", "topLevelClass");
-verify.singleReferenceGroup("interface topLevelInterface", "topLevelInterface");
-verify.singleReferenceGroup("namespace topLevelModule", "topLevelModule");
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12');

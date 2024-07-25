@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs2.ts] ////
+
 //// [genericCallWithObjectTypeArgs2.ts]
 class Base {
     x: string;

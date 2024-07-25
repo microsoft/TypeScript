@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexerAssignability.ts] ////
+
 //// [indexerAssignability.ts]
 var a: { [s: string]: string; };
 var b: { [n: number]: string; };

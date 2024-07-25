@@ -1,0 +1,45 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionYield1.ts ===
+// <|function* [|gen|]() {
+//     /*GOTO DEF*/yield 0;
+// }|>
+// 
+// const genFunction = function*() {
+//     yield 0;
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "gen",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionYield1.ts ===
+// function* gen() {
+//     yield 0;
+// }
+// 
+// const [|{| contextId: 0 |}genFunction|] = <|function*() {
+//     /*GOTO DEF*/yield 0;
+// }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "local function",
+    "name": "genFunction",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

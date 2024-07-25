@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadIntersection.ts ===
+//// [tests/cases/compiler/spreadIntersection.ts] ////
+
+=== spreadIntersection.ts ===
 var intersection: { a: number } & { b: string };
 >intersection : Symbol(intersection, Decl(spreadIntersection.ts, 0, 3))
 >a : Symbol(a, Decl(spreadIntersection.ts, 0, 19))

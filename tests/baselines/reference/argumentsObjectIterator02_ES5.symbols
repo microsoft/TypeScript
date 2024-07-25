@@ -1,4 +1,6 @@
-=== tests/cases/compiler/argumentsObjectIterator02_ES5.ts ===
+//// [tests/cases/compiler/argumentsObjectIterator02_ES5.ts] ////
+
+=== argumentsObjectIterator02_ES5.ts ===
 function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
 >doubleAndReturnAsArray : Symbol(doubleAndReturnAsArray, Decl(argumentsObjectIterator02_ES5.ts, 0, 0))
 >x : Symbol(x, Decl(argumentsObjectIterator02_ES5.ts, 0, 32))

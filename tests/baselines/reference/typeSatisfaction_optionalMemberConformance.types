@@ -1,0 +1,58 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_optionalMemberConformance.ts] ////
+
+=== typeSatisfaction_optionalMemberConformance.ts ===
+type Point2d = { x: number, y: number };
+>Point2d : Point2d
+>        : ^^^^^^^
+>x : number
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
+
+// Undesirable behavior today with type annotation
+const a = { x: 10 } satisfies Partial<Point2d>;
+>a : { x: number; }
+>  : ^^^^^^^^^^^^^^
+>{ x: 10 } satisfies Partial<Point2d> : { x: number; }
+>                                     : ^^^^^^^^^^^^^^
+>{ x: 10 } : { x: number; }
+>          : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+
+// Should OK
+console.log(a.x.toFixed());
+>console.log(a.x.toFixed()) : void
+>                           : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>a.x.toFixed() : string
+>              : ^^^^^^
+>a.x.toFixed : (fractionDigits?: number) => string
+>            : ^              ^^^      ^^^^^      
+>a.x : number
+>    : ^^^^^^
+>a : { x: number; }
+>  : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
+
+// Should error
+let p = a.y;
+>p : any
+>  : ^^^
+>a.y : any
+>    : ^^^
+>a : { x: number; }
+>  : ^^^^^^^^^^^^^^
+>y : any
+>  : ^^^
+

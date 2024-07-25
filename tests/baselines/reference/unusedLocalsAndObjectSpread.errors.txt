@@ -1,8 +1,8 @@
-tests/cases/compiler/unusedLocalsAndObjectSpread.ts(20,18): error TS6133: 'bar' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsAndObjectSpread.ts(27,21): error TS6133: 'bar' is declared but its value is never read.
+unusedLocalsAndObjectSpread.ts(20,18): error TS6133: 'bar' is declared but its value is never read.
+unusedLocalsAndObjectSpread.ts(27,21): error TS6133: 'bar' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedLocalsAndObjectSpread.ts (2 errors) ====
+==== unusedLocalsAndObjectSpread.ts (2 errors) ====
     declare var console: { log(a: any): void };
     
     function one() {

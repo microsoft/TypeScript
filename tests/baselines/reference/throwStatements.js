@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/throwStatements/throwStatements.ts] ////
+
 //// [throwStatements.ts]
 // all legal
 

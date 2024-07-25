@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx ===
+//// [tests/cases/compiler/errorSpanForUnclosedJsxTag.tsx] ////
+
+=== errorSpanForUnclosedJsxTag.tsx ===
 declare const React: any
 >React : Symbol(React, Decl(errorSpanForUnclosedJsxTag.tsx, 0, 13))
 

@@ -1,10 +1,17 @@
-=== tests/cases/conformance/es6/classExpressions/classExpressionES62.ts ===
+//// [tests/cases/conformance/es6/classExpressions/classExpressionES62.ts] ////
+
+=== classExpressionES62.ts ===
 class D { }
 >D : D
+>  : ^
 
 var v = class C extends D {};
 >v : typeof C
+>  : ^^^^^^^^
 >class C extends D {} : typeof C
+>                     : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >D : D
+>  : ^
 

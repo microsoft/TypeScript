@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts ===
+//// [tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts] ////
+
+=== inferredFunctionReturnTypeIsEmptyType.ts ===
 function foo() {
 >foo : Symbol(foo, Decl(inferredFunctionReturnTypeIsEmptyType.ts, 0, 0))
 

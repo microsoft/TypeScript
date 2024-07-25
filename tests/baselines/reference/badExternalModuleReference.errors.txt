@@ -1,10 +1,10 @@
-tests/cases/compiler/badExternalModuleReference.ts(1,21): error TS2792: Cannot find module 'garbage'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+badExternalModuleReference.ts(1,21): error TS2792: Cannot find module 'garbage'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/compiler/badExternalModuleReference.ts (1 errors) ====
+==== badExternalModuleReference.ts (1 errors) ====
     import a1 = require("garbage");
                         ~~~~~~~~~
-!!! error TS2792: Cannot find module 'garbage'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'garbage'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     export declare var a: {
         test1: a1.connectModule;
         (): a1.connectExport;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationFunctions.ts] ////
+
 //// [sourceMapValidationFunctions.ts]
 var greetings = 0;
 function greet(greeting: string): number {

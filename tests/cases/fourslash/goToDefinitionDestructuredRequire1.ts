@@ -10,4 +10,4 @@
 //// const { Util } = require('./util');
 //// new [|Util/*1*/|]()
 
-verify.goToDefinition("1", "2");
+verify.baselineGoToDefinition("1");

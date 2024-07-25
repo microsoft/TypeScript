@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importDeclTypes.ts] ////
+
 === /node_modules/@types/foo-bar/index.d.ts ===
 export interface Foo {
 >Foo : Symbol(Foo, Decl(index.d.ts, 0, 0))

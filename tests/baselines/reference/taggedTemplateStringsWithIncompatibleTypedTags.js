@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts] ////
+
 //// [taggedTemplateStringsWithIncompatibleTypedTags.ts]
 interface I {
     (stringParts: TemplateStringsArray, ...rest: boolean[]): I;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportImportAndClodule.ts] ////
+
 //// [exportImportAndClodule.ts]
 module K {
     export class L {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts] ////
+
 //// [derivedClassOverridesPrivates.ts]
 class Base {
     private x: { foo: string };

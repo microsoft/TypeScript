@@ -1,24 +1,38 @@
-=== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration2.ts] ////
+
+=== parserVariableDeclaration2.ts ===
 (function() {
 >(function() {        var check = function () {        }        var checkNot = function () {        }        MUnit.test(a);})() : void
+>                                                                                                                               : ^^^^
 >(function() {        var check = function () {        }        var checkNot = function () {        }        MUnit.test(a);}) : () => void
+>                                                                                                                             : ^^^^^^^^^^
 >function() {        var check = function () {        }        var checkNot = function () {        }        MUnit.test(a);} : () => void
+>                                                                                                                           : ^^^^^^^^^^
 
         var check = function () {
 >check : () => void
+>      : ^^^^^^^^^^
 >function () {        } : () => void
+>                       : ^^^^^^^^^^
         }
 
         var checkNot = function () {
 >checkNot : () => void
+>         : ^^^^^^^^^^
 >function () {        } : () => void
+>                       : ^^^^^^^^^^
         }
 
         MUnit.test(a);
 >MUnit.test(a) : any
+>              : ^^^
 >MUnit.test : any
+>           : ^^^
 >MUnit : any
+>      : ^^^
 >test : any
+>     : ^^^
 >a : any
+>  : ^^^
 
 })();

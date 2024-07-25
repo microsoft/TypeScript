@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentOnExportEnumDeclaration.ts ===
+//// [tests/cases/compiler/commentOnExportEnumDeclaration.ts] ////
+
+=== commentOnExportEnumDeclaration.ts ===
 /**
  * comment
  */

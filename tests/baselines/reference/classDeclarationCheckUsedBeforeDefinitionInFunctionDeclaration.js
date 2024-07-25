@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classDeclarationCheckUsedBeforeDefinitionInFunctionDeclaration.ts] ////
+
 //// [classDeclarationCheckUsedBeforeDefinitionInFunctionDeclaration.ts]
 function f() {
     new C2(); // OK

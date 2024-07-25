@@ -1,26 +1,44 @@
-=== tests/cases/compiler/enumUsedBeforeDeclaration.ts ===
+//// [tests/cases/compiler/enumUsedBeforeDeclaration.ts] ////
+
+=== enumUsedBeforeDeclaration.ts ===
 const v: Color = Color.Green;
 >v : Color
+>  : ^^^^^
 >Color.Green : Color.Green
+>            : ^^^^^^^^^^^
 >Color : typeof Color
+>      : ^^^^^^^^^^^^
 >Green : Color.Green
+>      : ^^^^^^^^^^^
 
 const v2: ConstColor = ConstColor.Green;
 >v2 : ConstColor
+>   : ^^^^^^^^^^
 >ConstColor.Green : ConstColor.Green
+>                 : ^^^^^^^^^^^^^^^^
 >ConstColor : typeof ConstColor
+>           : ^^^^^^^^^^^^^^^^^
 >Green : ConstColor.Green
+>      : ^^^^^^^^^^^^^^^^
 
 enum Color { Red, Green, Blue }
 >Color : Color
+>      : ^^^^^
 >Red : Color.Red
+>    : ^^^^^^^^^
 >Green : Color.Green
+>      : ^^^^^^^^^^^
 >Blue : Color.Blue
+>     : ^^^^^^^^^^
 
 const enum ConstColor { Red, Green, Blue }
 >ConstColor : ConstColor
+>           : ^^^^^^^^^^
 >Red : ConstColor.Red
+>    : ^^^^^^^^^^^^^^
 >Green : ConstColor.Green
+>      : ^^^^^^^^^^^^^^^^
 >Blue : ConstColor.Blue
+>     : ^^^^^^^^^^^^^^^
 
 

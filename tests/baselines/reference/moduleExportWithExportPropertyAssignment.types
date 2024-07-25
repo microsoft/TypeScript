@@ -1,47 +1,76 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/moduleExportWithExportPropertyAssignment.ts] ////
+
+=== a.js ===
 /// <reference path='./requires.d.ts' />
 var mod1 = require('./mod1')
 >mod1 : { (): void; f: (a: number) => void; }
+>     : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >require('./mod1') : { (): void; f: (a: number) => void; }
+>                  : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >require : (name: string) => any
+>        : ^    ^^      ^^^^^   
 >'./mod1' : "./mod1"
+>         : ^^^^^^^^
 
 mod1()
 >mod1() : void
+>       : ^^^^
 >mod1 : { (): void; f: (a: number) => void; }
+>     : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 
 mod1.f() // error, not enough arguments
 >mod1.f() : void
+>         : ^^^^
 >mod1.f : (a: number) => void
+>       : ^ ^^      ^^^^^^^^^
 >mod1 : { (): void; f: (a: number) => void; }
+>     : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >f : (a: number) => void
+>  : ^ ^^      ^^^^^^^^^
 
-=== tests/cases/conformance/salsa/requires.d.ts ===
+=== requires.d.ts ===
 declare var module: { exports: any };
 >module : { exports: any; }
+>       : ^^^^^^^^^^^   ^^^
 >exports : any
+>        : ^^^
 
 declare function require(name: string): any;
 >require : (name: string) => any
+>        : ^    ^^      ^^^^^   
 >name : string
+>     : ^^^^^^
 
-=== tests/cases/conformance/salsa/mod1.js ===
+=== mod1.js ===
 /// <reference path='./requires.d.ts' />
 module.exports = function () { }
 >module.exports = function () { } : { (): void; f: (a: number) => void; }
+>                                 : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >module.exports : { (): void; f: (a: number) => void; }
+>               : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >module : { exports: { (): void; f: (a: number) => void; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^
 >exports : { (): void; f: (a: number) => void; }
+>        : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
 /** @param {number} a */
 module.exports.f = function (a) { }
 >module.exports.f = function (a) { } : (a: number) => void
+>                                    : ^ ^^      ^^^^^^^^^
 >module.exports.f : (a: number) => void
+>                 : ^ ^^      ^^^^^^^^^
 >module.exports : { (): void; f: (a: number) => void; }
+>               : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >module : { exports: { (): void; f: (a: number) => void; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^
 >exports : { (): void; f: (a: number) => void; }
+>        : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >f : (a: number) => void
+>  : ^ ^^      ^^^^^^^^^
 >function (a) { } : (a: number) => void
+>                 : ^ ^^      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 

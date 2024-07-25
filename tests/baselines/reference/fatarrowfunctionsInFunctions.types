@@ -1,21 +1,31 @@
-=== tests/cases/compiler/fatarrowfunctionsInFunctions.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsInFunctions.ts] ////
+
+=== fatarrowfunctionsInFunctions.ts ===
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
 >setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
+>           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^      ^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^      ^^^
 >expression : any
 >msec : number
+>     : ^^^^^^
 >language : any
 
 var messenger = {
 >messenger : { message: string; start: () => void; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    message: "Hello World",    start: function() {        var _self = this;        setTimeout(function() {            _self.message.toString();         }, 3000);     }} : { message: string; start: () => void; }
+>                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     message: "Hello World",
 >message : string
+>        : ^^^^^^
 >"Hello World" : "Hello World"
+>              : ^^^^^^^^^^^^^
 
     start: function() {
 >start : () => void
+>      : ^^^^^^^^^^
 >function() {        var _self = this;        setTimeout(function() {            _self.message.toString();         }, 3000);     } : () => void
+>                                                                                                                                  : ^^^^^^^^^^
 
         var _self = this;
 >_self : any
@@ -23,24 +33,36 @@ var messenger = {
 
         setTimeout(function() {
 >setTimeout(function() {            _self.message.toString();         }, 3000) : number
+>                                                                              : ^^^^^^
 >setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
+>           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^      ^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^      ^^^
 >function() {            _self.message.toString();         } : () => void
+>                                                            : ^^^^^^^^^^
 
             _self.message.toString(); 
 >_self.message.toString() : any
 >_self.message.toString : any
 >_self.message : any
+>              : ^^^
 >_self : any
+>      : ^^^
 >message : any
+>        : ^^^
 >toString : any
+>         : ^^^
 
         }, 3000); 
 >3000 : 3000
+>     : ^^^^
     }
 }; 
 messenger.start(); 
 >messenger.start() : void
+>                  : ^^^^
 >messenger.start : () => void
+>                : ^^^^^^^^^^
 >messenger : { message: string; start: () => void; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >start : () => void
+>      : ^^^^^^^^^^
 

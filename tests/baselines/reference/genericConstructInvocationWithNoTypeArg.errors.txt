@@ -1,7 +1,7 @@
-tests/cases/compiler/genericConstructInvocationWithNoTypeArg.ts(4,27): error TS2693: 'Foo' only refers to a type, but is being used as a value here.
+genericConstructInvocationWithNoTypeArg.ts(4,27): error TS2693: 'Foo' only refers to a type, but is being used as a value here.
 
 
-==== tests/cases/compiler/genericConstructInvocationWithNoTypeArg.ts (1 errors) ====
+==== genericConstructInvocationWithNoTypeArg.ts (1 errors) ====
     interface Foo<T> {
        new (x: number): Foo<T>;
     }

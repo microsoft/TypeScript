@@ -1,36 +1,59 @@
-=== tests/cases/compiler/deduplicateImportsInSystem.ts ===
+//// [tests/cases/compiler/deduplicateImportsInSystem.ts] ////
+
+=== deduplicateImportsInSystem.ts ===
 import {A} from "f1";
 >A : any
+>  : ^^^
 
 import {B} from "f2";
 >B : any
+>  : ^^^
 
 import {C} from "f3";
 >C : any
+>  : ^^^
 
 import {D} from 'f2';
 >D : any
+>  : ^^^
 
 import {E} from "f2";
 >E : any
+>  : ^^^
 
 import {F} from 'f1';
 >F : any
+>  : ^^^
 
 console.log(A + B + C + D + E + F)
 >console.log(A + B + C + D + E + F) : void
+>                                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >A + B + C + D + E + F : any
+>                      : ^^^
 >A + B + C + D + E : any
+>                  : ^^^
 >A + B + C + D : any
+>              : ^^^
 >A + B + C : any
+>          : ^^^
 >A + B : any
+>      : ^^^
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 >C : any
+>  : ^^^
 >D : any
+>  : ^^^
 >E : any
+>  : ^^^
 >F : any
+>  : ^^^
 

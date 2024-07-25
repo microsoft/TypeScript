@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithStaticPropertyAssignmentInES6.ts] ////
+
 //// [emitClassDeclarationWithStaticPropertyAssignmentInES6.ts]
 class C {
     static z: string = "Foo";

@@ -1,0 +1,131 @@
+//// [tests/cases/compiler/contextualTypeCaching.ts] ////
+
+=== contextualTypeCaching.ts ===
+// Repro from #52575
+
+export interface Event<T> {
+>Event : Symbol(Event, Decl(contextualTypeCaching.ts, 0, 0))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 2, 23))
+
+    callback: (response: T) => void;
+>callback : Symbol(Event.callback, Decl(contextualTypeCaching.ts, 2, 27))
+>response : Symbol(response, Decl(contextualTypeCaching.ts, 3, 15))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 2, 23))
+
+    nested: {
+>nested : Symbol(Event.nested, Decl(contextualTypeCaching.ts, 3, 36))
+
+        nestedCallback: (response: T) => void;
+>nestedCallback : Symbol(nestedCallback, Decl(contextualTypeCaching.ts, 4, 13))
+>response : Symbol(response, Decl(contextualTypeCaching.ts, 5, 25))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 2, 23))
+    }
+}
+
+export type CustomEvents = {
+>CustomEvents : Symbol(CustomEvents, Decl(contextualTypeCaching.ts, 7, 1))
+
+    a: Event<string>
+>a : Symbol(a, Decl(contextualTypeCaching.ts, 9, 28))
+>Event : Symbol(Event, Decl(contextualTypeCaching.ts, 0, 0))
+
+    b: Event<number>
+>b : Symbol(b, Decl(contextualTypeCaching.ts, 10, 20))
+>Event : Symbol(Event, Decl(contextualTypeCaching.ts, 0, 0))
+
+};
+
+declare function emit<T extends keyof CustomEvents>(type: T, data: CustomEvents[T]): void
+>emit : Symbol(emit, Decl(contextualTypeCaching.ts, 12, 2))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 14, 22))
+>CustomEvents : Symbol(CustomEvents, Decl(contextualTypeCaching.ts, 7, 1))
+>type : Symbol(type, Decl(contextualTypeCaching.ts, 14, 52))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 14, 22))
+>data : Symbol(data, Decl(contextualTypeCaching.ts, 14, 60))
+>CustomEvents : Symbol(CustomEvents, Decl(contextualTypeCaching.ts, 7, 1))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 14, 22))
+
+emit('a', {
+>emit : Symbol(emit, Decl(contextualTypeCaching.ts, 12, 2))
+
+    callback: (r) => {},
+>callback : Symbol(callback, Decl(contextualTypeCaching.ts, 16, 11))
+>r : Symbol(r, Decl(contextualTypeCaching.ts, 17, 15))
+
+    nested: {
+>nested : Symbol(nested, Decl(contextualTypeCaching.ts, 17, 24))
+
+        nestedCallback: (r) => {},
+>nestedCallback : Symbol(nestedCallback, Decl(contextualTypeCaching.ts, 18, 13))
+>r : Symbol(r, Decl(contextualTypeCaching.ts, 19, 25))
+
+    },
+});
+
+// simplified repro from 52589#issuecomment-1416180638
+declare class MyCompiler {
+>MyCompiler : Symbol(MyCompiler, Decl(contextualTypeCaching.ts, 21, 3))
+
+  compile(): void;
+>compile : Symbol(MyCompiler.compile, Decl(contextualTypeCaching.ts, 24, 26))
+}
+interface WebpackPluginInstance {
+>WebpackPluginInstance : Symbol(WebpackPluginInstance, Decl(contextualTypeCaching.ts, 26, 1))
+
+  apply: (compiler: MyCompiler) => void;
+>apply : Symbol(WebpackPluginInstance.apply, Decl(contextualTypeCaching.ts, 27, 33))
+>compiler : Symbol(compiler, Decl(contextualTypeCaching.ts, 28, 10))
+>MyCompiler : Symbol(MyCompiler, Decl(contextualTypeCaching.ts, 21, 3))
+}
+type WebpackPluginFunction = (this: MyCompiler, compiler: MyCompiler) => void;
+>WebpackPluginFunction : Symbol(WebpackPluginFunction, Decl(contextualTypeCaching.ts, 29, 1))
+>this : Symbol(this, Decl(contextualTypeCaching.ts, 30, 30))
+>MyCompiler : Symbol(MyCompiler, Decl(contextualTypeCaching.ts, 21, 3))
+>compiler : Symbol(compiler, Decl(contextualTypeCaching.ts, 30, 47))
+>MyCompiler : Symbol(MyCompiler, Decl(contextualTypeCaching.ts, 21, 3))
+
+interface Optimization {
+>Optimization : Symbol(Optimization, Decl(contextualTypeCaching.ts, 30, 78))
+
+  minimizer?: (WebpackPluginInstance | WebpackPluginFunction)[];
+>minimizer : Symbol(Optimization.minimizer, Decl(contextualTypeCaching.ts, 31, 24))
+>WebpackPluginInstance : Symbol(WebpackPluginInstance, Decl(contextualTypeCaching.ts, 26, 1))
+>WebpackPluginFunction : Symbol(WebpackPluginFunction, Decl(contextualTypeCaching.ts, 29, 1))
+}
+declare const A: <T, P extends keyof T>(
+>A : Symbol(A, Decl(contextualTypeCaching.ts, 34, 13))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 34, 18))
+>P : Symbol(P, Decl(contextualTypeCaching.ts, 34, 20))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 34, 18))
+
+  obj: T,
+>obj : Symbol(obj, Decl(contextualTypeCaching.ts, 34, 40))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 34, 18))
+
+  prop: P,
+>prop : Symbol(prop, Decl(contextualTypeCaching.ts, 35, 9))
+>P : Symbol(P, Decl(contextualTypeCaching.ts, 34, 20))
+
+  factory: () => T[P]
+>factory : Symbol(factory, Decl(contextualTypeCaching.ts, 36, 10))
+>T : Symbol(T, Decl(contextualTypeCaching.ts, 34, 18))
+>P : Symbol(P, Decl(contextualTypeCaching.ts, 34, 20))
+
+) => void;
+export const applyOptimizationDefaults = (optimization: Optimization) => {
+>applyOptimizationDefaults : Symbol(applyOptimizationDefaults, Decl(contextualTypeCaching.ts, 39, 12))
+>optimization : Symbol(optimization, Decl(contextualTypeCaching.ts, 39, 42))
+>Optimization : Symbol(Optimization, Decl(contextualTypeCaching.ts, 30, 78))
+
+  A(optimization, "minimizer", () => [
+>A : Symbol(A, Decl(contextualTypeCaching.ts, 34, 13))
+>optimization : Symbol(optimization, Decl(contextualTypeCaching.ts, 39, 42))
+    {
+      apply: (compiler) => {},
+>apply : Symbol(apply, Decl(contextualTypeCaching.ts, 41, 5))
+>compiler : Symbol(compiler, Decl(contextualTypeCaching.ts, 42, 14))
+
+    },
+  ]);
+};
+

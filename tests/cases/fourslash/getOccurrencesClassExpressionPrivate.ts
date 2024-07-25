@@ -17,4 +17,4 @@
 ////    public test2() {}
 ////}
 
-verify.rangesAreOccurrences(false);
+verify.baselineDocumentHighlights();

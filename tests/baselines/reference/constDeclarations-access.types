@@ -1,10 +1,16 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/constDeclarations-access.ts] ////
+
+=== file1.ts ===
 const x = 0
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 x++;
 >x++ : number
+>    : ^^^^^^
 >x : any
+>  : ^^^
 

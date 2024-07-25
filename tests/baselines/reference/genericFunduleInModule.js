@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericFunduleInModule.ts] ////
+
 //// [genericFunduleInModule.ts]
 module A {
     export function B<T>(x: T) { return x; }

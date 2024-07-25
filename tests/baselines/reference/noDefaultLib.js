@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noDefaultLib.ts] ////
+
 //// [noDefaultLib.ts]
 /// <reference no-default-lib="true"/>
 var x;

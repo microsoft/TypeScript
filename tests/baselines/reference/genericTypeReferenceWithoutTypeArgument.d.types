@@ -1,61 +1,90 @@
-=== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.d.ts] ////
+
+=== genericTypeReferenceWithoutTypeArgument.d.ts ===
 // it is an error to use a generic type without type arguments
 // all of these are errors 
 
 declare class C<T> {
 >C : C<T>
+>  : ^^^^
 
     foo: T;
 >foo : T
+>    : ^
 }
 
 declare var c: C;
 >c : any
+>  : ^^^
 
 declare var a: { x: C };
->a : { x: any; }
+>a : { x: C; }
+>  : ^^^^^ ^^^
 >x : any
+>  : ^^^
 
 declare var b: { (x: C): C };
->b : (x: any) => any
+>b : (x: C) => C
+>  : ^ ^^ ^^^^^ 
 >x : any
+>  : ^^^
 
 declare var d: { [x: C]: C };
 >d : {}
+>  : ^^
 >x : any
+>  : ^^^
 
 declare function f(x: C): C;
->f : (x: any) => any
+>f : (x: C) => C
+>  : ^ ^^ ^^^^^ 
 >x : any
+>  : ^^^
 
 declare class D extends C {}
 >D : D
+>  : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 declare module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export class E<T> { foo: T }
 >E : E<T>
+>  : ^^^^
 >foo : T
+>    : ^
 }
 
 declare class D2 extends M.C { }
 >D2 : D2
+>   : ^^
 >M.C : any
+>    : ^^^
 >M : typeof M
+>  : ^^^^^^^^
 >C : any
+>  : ^^^
 
 declare class D3<T extends M.E> { }
 >D3 : D3<T>
+>   : ^^^^^
 >M : any
+>  : ^^^
 
 declare function h<T extends C>(x: T);
->h : <T extends any>(x: T) => any
+>h : <T extends C>(x: T) => any
+>  : ^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^
 >x : T
+>  : ^
 
 declare function i<T extends M.E>(x: T);
->i : <T extends any>(x: T) => any
+>i : <T extends M.E>(x: T) => any
+>  : ^ ^^^^^^^^^   ^^ ^^ ^^^^^^^^
 >M : any
+>  : ^^^
 >x : T
+>  : ^
 

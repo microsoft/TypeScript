@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardConstructorDerivedClass.ts] ////
+
 //// [typeGuardConstructorDerivedClass.ts]
 // Derived class with different structures
 class C1 {

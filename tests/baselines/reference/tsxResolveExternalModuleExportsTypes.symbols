@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxResolveExternalModuleExportsTypes.ts] ////
+
 === /node_modules/@types/a/index.d.ts ===
 declare var a: a.Foo;
 >a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
@@ -31,7 +33,7 @@ declare module 'a' {
     }
 }
 
-=== tests/cases/compiler/foo.tsx ===
+=== foo.tsx ===
 import { Test } from 'a';
 >Test : Symbol(Test, Decl(foo.tsx, 0, 8))
 

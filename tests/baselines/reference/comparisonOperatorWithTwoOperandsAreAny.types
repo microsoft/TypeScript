@@ -1,52 +1,70 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTwoOperandsAreAny.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithTwoOperandsAreAny.ts] ////
+
+=== comparisonOperatorWithTwoOperandsAreAny.ts ===
 var a: any;
 >a : any
 
 var r1 = a < a;
 >r1 : boolean
+>   : ^^^^^^^
 >a < a : boolean
+>      : ^^^^^^^
 >a : any
 >a : any
 
 var r2 = a > a;
 >r2 : boolean
+>   : ^^^^^^^
 >a > a : boolean
+>      : ^^^^^^^
 >a : any
 >a : any
 
 var r3 = a <= a;
 >r3 : boolean
+>   : ^^^^^^^
 >a <= a : boolean
+>       : ^^^^^^^
 >a : any
 >a : any
 
 var r4 = a >= a;
 >r4 : boolean
+>   : ^^^^^^^
 >a >= a : boolean
+>       : ^^^^^^^
 >a : any
 >a : any
 
 var r5 = a == a;
 >r5 : boolean
+>   : ^^^^^^^
 >a == a : boolean
+>       : ^^^^^^^
 >a : any
 >a : any
 
 var r6 = a != a;
 >r6 : boolean
+>   : ^^^^^^^
 >a != a : boolean
+>       : ^^^^^^^
 >a : any
 >a : any
 
 var r7 = a === a;
 >r7 : boolean
+>   : ^^^^^^^
 >a === a : boolean
+>        : ^^^^^^^
 >a : any
 >a : any
 
 var r8 = a !== a;
 >r8 : boolean
+>   : ^^^^^^^
 >a !== a : boolean
+>        : ^^^^^^^
 >a : any
 >a : any
 

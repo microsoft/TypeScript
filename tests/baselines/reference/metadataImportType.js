@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/metadataImportType.ts] ////
+
 //// [metadataImportType.ts]
 export class A {
     @test
@@ -15,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
@@ -23,7 +25,7 @@ var A = /** @class */ (function () {
     __decorate([
         test,
         __metadata("design:type", Object)
-    ], A.prototype, "b");
+    ], A.prototype, "b", void 0);
     return A;
 }());
 exports.A = A;

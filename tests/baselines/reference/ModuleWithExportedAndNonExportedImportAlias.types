@@ -1,108 +1,170 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedImportAlias.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedImportAlias.ts] ////
+
+=== ModuleWithExportedAndNonExportedImportAlias.ts ===
 module A {
     export interface Point {
         x: number;
 >x : number
+>  : ^^^^^^
 
         y: number;
 >y : number
+>  : ^^^^^^
     }
 
     interface Point3d extends Point {
         z: number;
 >z : number
+>  : ^^^^^^
     }
 }
 
 module B {
 >B : typeof B
+>  : ^^^^^^^^
 
     export class Line {
 >Line : Line
+>     : ^^^^
 
         constructor(public start: A.Point, public end: A.Point) { }
 >start : A.Point
+>      : ^^^^^^^
 >A : any
+>  : ^^^
 >end : A.Point
+>    : ^^^^^^^
 >A : any
+>  : ^^^
     }
 }
 
 module Geometry {
 >Geometry : typeof Geometry
+>         : ^^^^^^^^^^^^^^^
 
     export import Points = A;
 >Points : any
+>       : ^^^
 >A : any
+>  : ^^^
 
     import Lines = B;
 >Lines : typeof Lines
+>      : ^^^^^^^^^^^^
 >B : typeof Lines
+>  : ^^^^^^^^^^^^
 
     export var Origin: Points.Point = { x: 0, y: 0 };
 >Origin : Points.Point
+>       : ^^^^^^^^^^^^
 >Points : any
+>       : ^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
     // this is valid since B.Line _is_ visible outside Geometry
     export var Unit: Lines.Line = new Lines.Line(Origin, { x: 1, y: 0 });
 >Unit : Lines.Line
+>     : ^^^^^^^^^^
 >Lines : any
+>      : ^^^
 >new Lines.Line(Origin, { x: 1, y: 0 }) : Lines.Line
+>                                       : ^^^^^^^^^^
 >Lines.Line : typeof Lines.Line
+>           : ^^^^^^^^^^^^^^^^^
 >Lines : typeof Lines
+>      : ^^^^^^^^^^^^
 >Line : typeof Lines.Line
+>     : ^^^^^^^^^^^^^^^^^
 >Origin : Points.Point
+>       : ^^^^^^^^^^^^
 >{ x: 1, y: 0 } : { x: number; y: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 // expected to work since all are exported
 var p: { x: number; y: number };
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var p: Geometry.Points.Point;
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >Geometry : any
+>         : ^^^
 >Points : any
+>       : ^^^
 
 var p = Geometry.Origin;
 >p : { x: number; y: number; }
+>  : ^^^^^      ^^^^^      ^^^
 >Geometry.Origin : A.Point
+>                : ^^^^^^^
 >Geometry : typeof Geometry
+>         : ^^^^^^^^^^^^^^^
 >Origin : A.Point
+>       : ^^^^^^^
 
 var line: { start: { x: number; y: number }; end: { x: number; y: number; } };
->line : { start: {    x: number;    y: number;}; end: {    x: number;    y: number;}; }
+>line : { start: { x: number; y: number; }; end: { x: number; y: number; }; }
+>     : ^^^^^^^^^                         ^^^^^^^                         ^^^
 >start : { x: number; y: number; }
+>      : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >end : { x: number; y: number; }
+>    : ^^^^^      ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 
 var line = Geometry.Unit;
 >line : { start: { x: number; y: number; }; end: { x: number; y: number; }; }
+>     : ^^^^^^^^^                         ^^^^^^^                         ^^^
 >Geometry.Unit : B.Line
+>              : ^^^^^^
 >Geometry : typeof Geometry
+>         : ^^^^^^^^^^^^^^^
 >Unit : B.Line
+>     : ^^^^^^
 
 // not expected to work since non are exported
 var line = Geometry.Lines.Line;
 >line : { start: { x: number; y: number; }; end: { x: number; y: number; }; }
+>     : ^^^^^^^^^                         ^^^^^^^                         ^^^
 >Geometry.Lines.Line : any
+>                    : ^^^
 >Geometry.Lines : any
+>               : ^^^
 >Geometry : typeof Geometry
+>         : ^^^^^^^^^^^^^^^
 >Lines : any
+>      : ^^^
 >Line : any
+>     : ^^^
 
 

@@ -1,7 +1,7 @@
-tests/cases/compiler/targetTypeTest1.ts(19,18): error TS2384: Overload signatures must all be ambient or non-ambient.
+targetTypeTest1.ts(19,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 
 
-==== tests/cases/compiler/targetTypeTest1.ts (1 errors) ====
+==== targetTypeTest1.ts (1 errors) ====
     declare class Point
     {
           constructor(x: number, y: number);

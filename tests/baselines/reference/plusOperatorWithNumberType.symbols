@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithNumberType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithNumberType.ts] ////
+
+=== plusOperatorWithNumberType.ts ===
 // + operator on number type
 var NUMBER: number;
 >NUMBER : Symbol(NUMBER, Decl(plusOperatorWithNumberType.ts, 1, 3))

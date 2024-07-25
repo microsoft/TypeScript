@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionReductionMutualSubtypes.ts ===
+//// [tests/cases/compiler/unionReductionMutualSubtypes.ts] ////
+
+=== unionReductionMutualSubtypes.ts ===
 // Repro from #35414
 
 interface ReturnVal {

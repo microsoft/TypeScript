@@ -1,106 +1,182 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/jsxSpreadOverwritesAttributeStrict.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface Props {
     a: number;
 >a : number
+>  : ^^^^^^
 
     b: number;
 >b : number
+>  : ^^^^^^
 
     c?: number;
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     d?: number;
 >d : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 
 const props: Props = { a: 1, b: 1 };
 >props : Props
+>      : ^^^^^
 >{ a: 1, b: 1 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 const Foo = (props: Props) => <div>{ props.a }</div>;
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 >(props: Props) => <div>{ props.a }</div> : (props: Props) => JSX.Element
+>                                         : ^     ^^     ^^^^^^^^^^^^^^^^
 >props : Props
+>      : ^^^^^
 ><div>{ props.a }</div> : JSX.Element
+>                       : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >props.a : number
+>        : ^^^^^^
 >props : Props
+>      : ^^^^^
 >a : number
+>  : ^^^^^^
 >div : any
+>    : ^^^
 
 // ok
 const a1 = <Foo {...props}></Foo>;
 >a1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Foo {...props}></Foo> : JSX.Element
+>                       : ^^^^^^^^^^^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 >props : Props
+>      : ^^^^^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 
 const a2 = <Foo d={1} {...props}></Foo>;
 >a2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Foo d={1} {...props}></Foo> : JSX.Element
+>                             : ^^^^^^^^^^^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >props : Props
+>      : ^^^^^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 
 // error
 const b1 = <Foo a={1} {...props}></Foo>;
 >b1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Foo a={1} {...props}></Foo> : JSX.Element
+>                             : ^^^^^^^^^^^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >props : Props
+>      : ^^^^^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 
 const b2 = <Foo a={1} b={2} {...props}></Foo>;
 >b2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Foo a={1} b={2} {...props}></Foo> : JSX.Element
+>                                   : ^^^^^^^^^^^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 >props : Props
+>      : ^^^^^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 
 const b3 = <Foo a={1} d={1} {...props} {...{ d: 1 }}></Foo>;
 >b3 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Foo a={1} d={1} {...props} {...{ d: 1 }}></Foo> : JSX.Element
+>                                                 : ^^^^^^^^^^^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >d : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >props : Props
+>      : ^^^^^
 >{ d: 1 } : { d: number; }
+>         : ^^^^^^^^^^^^^^
 >d : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 
 const b4 = <Foo a={1} d={1} {...props} {...{ a: 1, d: 1 }}></Foo>;
 >b4 : JSX.Element
+>   : ^^^^^^^^^^^
 ><Foo a={1} d={1} {...props} {...{ a: 1, d: 1 }}></Foo> : JSX.Element
+>                                                       : ^^^^^^^^^^^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >d : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >props : Props
+>      : ^^^^^
 >{ a: 1, d: 1 } : { a: number; d: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >d : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >Foo : (props: Props) => JSX.Element
+>    : ^     ^^     ^^^^^^^^^^^^^^^^
 

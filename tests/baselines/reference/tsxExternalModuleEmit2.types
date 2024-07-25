@@ -1,17 +1,22 @@
-=== tests/cases/conformance/jsx/modules.d.ts ===
+//// [tests/cases/conformance/jsx/tsxExternalModuleEmit2.tsx] ////
+
+=== modules.d.ts ===
 declare module 'mod' {
 >'mod' : typeof import("mod")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
   var y: any;
 >y : any
 
   export default y;
 >y : any
+>  : ^^^
 }
 
-=== tests/cases/conformance/jsx/app.tsx ===
+=== app.tsx ===
 import Main from 'mod';
 >Main : any
+>     : ^^^
 
 declare var Foo, React;
 >Foo : any

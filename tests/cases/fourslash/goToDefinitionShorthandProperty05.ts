@@ -8,4 +8,4 @@
 ////    [|f/*1*/oo|]
 ////}
 
-verify.goToDefinition("1", ["2", "3"]);
+verify.baselineGoToDefinition("1");

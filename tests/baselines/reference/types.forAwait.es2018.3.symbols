@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/forAwait/types.forAwait.es2018.3.ts ===
+//// [tests/cases/conformance/types/forAwait/types.forAwait.es2018.3.ts] ////
+
+=== types.forAwait.es2018.3.ts ===
 async function f1() {
 >f1 : Symbol(f1, Decl(types.forAwait.es2018.3.ts, 0, 0))
 

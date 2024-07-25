@@ -1,27 +1,43 @@
-=== tests/cases/compiler/restParamsWithNonRestParams.ts ===
+//// [tests/cases/compiler/restParamsWithNonRestParams.ts] ////
+
+=== restParamsWithNonRestParams.ts ===
 function foo(...b:number[]){}
 >foo : (...b: number[]) => void
+>    : ^^^^ ^^        ^^^^^^^^^
 >b : number[]
+>  : ^^^^^^^^
 
 foo(); // ok
 >foo() : void
+>      : ^^^^
 >foo : (...b: number[]) => void
+>    : ^^^^ ^^        ^^^^^^^^^
 
 function foo2(a:string, ...b:number[]){}
 >foo2 : (a: string, ...b: number[]) => void
+>     : ^ ^^      ^^^^^ ^^        ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number[]
+>  : ^^^^^^^^
 
 foo2(); // should be an error
 >foo2() : void
+>       : ^^^^
 >foo2 : (a: string, ...b: number[]) => void
+>     : ^ ^^      ^^^^^ ^^        ^^^^^^^^^
 
 function foo3(a?:string, ...b:number[]){}
 >foo3 : (a?: string, ...b: number[]) => void
+>     : ^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : number[]
+>  : ^^^^^^^^
 
 foo3(); // error but shouldn't be
 >foo3() : void
+>       : ^^^^
 >foo3 : (a?: string, ...b: number[]) => void
+>     : ^ ^^^      ^^^^^ ^^        ^^^^^^^^^
 

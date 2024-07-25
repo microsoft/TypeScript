@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/typeOfThisInMemberFunctions.ts] ////
+
 //// [typeOfThisInMemberFunctions.ts]
 class C {
     foo() {

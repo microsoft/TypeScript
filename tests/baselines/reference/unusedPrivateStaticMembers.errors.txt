@@ -1,10 +1,10 @@
-tests/cases/compiler/unusedPrivateStaticMembers.ts(16,20): error TS6133: 'p1' is declared but its value is never read.
-tests/cases/compiler/unusedPrivateStaticMembers.ts(17,20): error TS6133: 'm1' is declared but its value is never read.
-tests/cases/compiler/unusedPrivateStaticMembers.ts(21,20): error TS6133: 'm1' is declared but its value is never read.
-tests/cases/compiler/unusedPrivateStaticMembers.ts(25,20): error TS6133: 'm2' is declared but its value is never read.
+unusedPrivateStaticMembers.ts(16,20): error TS6133: 'p1' is declared but its value is never read.
+unusedPrivateStaticMembers.ts(17,20): error TS6133: 'm1' is declared but its value is never read.
+unusedPrivateStaticMembers.ts(21,20): error TS6133: 'm1' is declared but its value is never read.
+unusedPrivateStaticMembers.ts(25,20): error TS6133: 'm2' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedPrivateStaticMembers.ts (4 errors) ====
+==== unusedPrivateStaticMembers.ts (4 errors) ====
     class Test1 {
         private static m1() {}
         public static test() {

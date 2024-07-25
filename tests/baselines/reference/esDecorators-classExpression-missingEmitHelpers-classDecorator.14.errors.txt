@@ -1,0 +1,25 @@
+main.ts(6,9): error TS2343: This syntax requires an imported helper named '__esDecorate' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(6,9): error TS2343: This syntax requires an imported helper named '__propKey' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(6,9): error TS2343: This syntax requires an imported helper named '__runInitializers' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+main.ts(6,9): error TS2343: This syntax requires an imported helper named '__setFunctionName' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+
+
+==== main.ts (4 errors) ====
+    export {};
+    declare var dec: any;
+    declare var x: any;
+    
+    // uses __esDecorate, __runInitializers, __setFunctionName, __propKey
+    ({ [x]: @dec class {} });
+            ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__esDecorate' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+            ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__propKey' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+            ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__runInitializers' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+            ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__setFunctionName' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+    
+==== tslib.d.ts (0 errors) ====
+    export {}
+    

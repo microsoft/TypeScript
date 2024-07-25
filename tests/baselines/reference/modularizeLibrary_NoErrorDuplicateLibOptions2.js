@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modularizeLibrary_NoErrorDuplicateLibOptions2.ts] ////
+
 //// [modularizeLibrary_NoErrorDuplicateLibOptions2.ts]
 // Using Es6 array
 function f(x: number, y: number, z: number) {

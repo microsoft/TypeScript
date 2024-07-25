@@ -1,11 +1,19 @@
-=== tests/cases/conformance/es6/templates/templateStringInPropertyAssignmentES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInPropertyAssignmentES6.ts] ////
+
+=== templateStringInPropertyAssignmentES6.ts ===
 var x = {
 >x : { a: string; }
+>  : ^^^^^^^^^^^^^^
 >{    a: `abc${ 123 }def${ 456 }ghi`} : { a: string; }
+>                                     : ^^^^^^^^^^^^^^
 
     a: `abc${ 123 }def${ 456 }ghi`
 >a : string
->`abc${ 123 }def${ 456 }ghi` : string
+>  : ^^^^^^
+>`abc${ 123 }def${ 456 }ghi` : "abc123def456ghi"
+>                            : ^^^^^^^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 >456 : 456
+>    : ^^^
 }

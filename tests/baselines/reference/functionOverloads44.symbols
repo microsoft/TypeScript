@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads44.ts ===
+//// [tests/cases/compiler/functionOverloads44.ts] ////
+
+=== functionOverloads44.ts ===
 interface Animal { animal }
 >Animal : Symbol(Animal, Decl(functionOverloads44.ts, 0, 0))
 >animal : Symbol(Animal.animal, Decl(functionOverloads44.ts, 0, 18))

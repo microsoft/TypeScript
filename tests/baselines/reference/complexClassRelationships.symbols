@@ -1,4 +1,6 @@
-=== tests/cases/compiler/complexClassRelationships.ts ===
+//// [tests/cases/compiler/complexClassRelationships.ts] ////
+
+=== complexClassRelationships.ts ===
 // There should be no errors in this file
 class Derived extends Base {
 >Derived : Symbol(Derived, Decl(complexClassRelationships.ts, 0, 0))

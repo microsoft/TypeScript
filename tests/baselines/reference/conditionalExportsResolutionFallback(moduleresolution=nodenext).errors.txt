@@ -1,0 +1,29 @@
+error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+
+!!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+==== /node_modules/dep/package.json (0 errors) ====
+    {
+      "name": "dep",
+      "version": "1.0.0",
+      "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js",
+            "types": "./dist/index.d.ts",
+        }
+      }
+    }
+    
+==== /node_modules/dep/dist/index.d.ts (0 errors) ====
+    export {};
+    
+==== /node_modules/dep/dist/index.mjs (0 errors) ====
+    export {};
+    
+==== /index.mts (0 errors) ====
+    import {} from "dep";
+    // Should be an untyped resolution to dep/dist/index.mjs,
+    // but the first search is only for TS files, and when
+    // there's no dist/index.d.mts, it continues looking for
+    // matching conditions and resolves via `types`.

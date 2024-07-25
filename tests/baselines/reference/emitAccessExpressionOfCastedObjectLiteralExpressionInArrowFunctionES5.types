@@ -1,29 +1,52 @@
-=== tests/cases/compiler/emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts ===
+//// [tests/cases/compiler/emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts] ////
+
+=== emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts ===
 (x) => ({ "1": "one", "2": "two" } as { [key: string]: string })[x];
 >(x) => ({ "1": "one", "2": "two" } as { [key: string]: string })[x] : (x: any) => string
+>                                                                    : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >({ "1": "one", "2": "two" } as { [key: string]: string })[x] : string
+>                                                             : ^^^^^^
 >({ "1": "one", "2": "two" } as { [key: string]: string }) : { [key: string]: string; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ "1": "one", "2": "two" } as { [key: string]: string } : { [key: string]: string; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ "1": "one", "2": "two" } : { "1": string; "2": string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"1" : string
+>    : ^^^^^^
 >"one" : "one"
+>      : ^^^^^
 >"2" : string
+>    : ^^^^^^
 >"two" : "two"
+>      : ^^^^^
 >key : string
+>    : ^^^^^^
 >x : any
 
 (x) => ({ "1": "one", "2": "two" } as { [key: string]: string }).x;
 >(x) => ({ "1": "one", "2": "two" } as { [key: string]: string }).x : (x: any) => string
+>                                                                   : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >({ "1": "one", "2": "two" } as { [key: string]: string }).x : string
+>                                                            : ^^^^^^
 >({ "1": "one", "2": "two" } as { [key: string]: string }) : { [key: string]: string; }
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ "1": "one", "2": "two" } as { [key: string]: string } : { [key: string]: string; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ "1": "one", "2": "two" } : { "1": string; "2": string; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"1" : string
+>    : ^^^^^^
 >"one" : "one"
+>      : ^^^^^
 >"2" : string
+>    : ^^^^^^
 >"two" : "two"
+>      : ^^^^^
 >key : string
+>    : ^^^^^^
 >x : string
+>  : ^^^^^^
 

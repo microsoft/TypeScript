@@ -1,11 +1,13 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/namespaceMergedWithFunctionWithOverloadsUsage.ts] ////
+
+=== index.ts ===
 import X = require("./file");
 >X : Symbol(X, Decl(index.ts, 0, 0))
 
 X(0); // shouldn't cause a crash
 >X : Symbol(X, Decl(index.ts, 0, 0))
 
-=== tests/cases/compiler/file.d.ts ===
+=== file.d.ts ===
 declare namespace Foo {
 >Foo : Symbol(Foo, Decl(file.d.ts, 4, 1), Decl(file.d.ts, 6, 48), Decl(file.d.ts, 0, 0))
 

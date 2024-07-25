@@ -1,20 +1,20 @@
-tests/cases/conformance/ambient/ambientErrors.ts(2,17): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(17,22): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
-tests/cases/conformance/ambient/ambientErrors.ts(20,24): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(29,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
-tests/cases/conformance/ambient/ambientErrors.ts(34,13): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(35,19): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(37,20): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(38,13): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(39,23): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(40,14): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(41,22): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/conformance/ambient/ambientErrors.ts(47,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
-tests/cases/conformance/ambient/ambientErrors.ts(51,16): error TS2436: Ambient module declaration cannot specify relative module name.
-tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export assignment cannot be used in a module with other exported elements.
+ambientErrors.ts(2,17): error TS1039: Initializers are not allowed in ambient contexts.
+ambientErrors.ts(17,22): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+ambientErrors.ts(20,24): error TS1183: An implementation cannot be declared in ambient contexts.
+ambientErrors.ts(29,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
+ambientErrors.ts(34,13): error TS1039: Initializers are not allowed in ambient contexts.
+ambientErrors.ts(35,19): error TS1183: An implementation cannot be declared in ambient contexts.
+ambientErrors.ts(37,20): error TS1039: Initializers are not allowed in ambient contexts.
+ambientErrors.ts(38,13): error TS1039: Initializers are not allowed in ambient contexts.
+ambientErrors.ts(39,23): error TS1183: An implementation cannot be declared in ambient contexts.
+ambientErrors.ts(40,14): error TS1183: An implementation cannot be declared in ambient contexts.
+ambientErrors.ts(41,22): error TS1183: An implementation cannot be declared in ambient contexts.
+ambientErrors.ts(47,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+ambientErrors.ts(51,16): error TS2436: Ambient module declaration cannot specify relative module name.
+ambientErrors.ts(57,5): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 
-==== tests/cases/conformance/ambient/ambientErrors.ts (14 errors) ====
+==== ambientErrors.ts (14 errors) ====
     // Ambient variable with an initializer 
     declare var x = 4;
                     ~

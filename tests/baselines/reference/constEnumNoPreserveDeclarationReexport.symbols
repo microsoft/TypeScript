@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ConstEnum.d.ts ===
+//// [tests/cases/compiler/constEnumNoPreserveDeclarationReexport.ts] ////
+
+=== ConstEnum.d.ts ===
 export const enum MyConstEnum {
 >MyConstEnum : Symbol(MyConstEnum, Decl(ConstEnum.d.ts, 0, 0))
 
@@ -8,19 +10,19 @@ export const enum MyConstEnum {
     Bar
 >Bar : Symbol(MyConstEnum.Bar, Decl(ConstEnum.d.ts, 1, 8))
 }
-=== tests/cases/compiler/ImportExport.d.ts ===
+=== ImportExport.d.ts ===
 import { MyConstEnum } from './ConstEnum';
 >MyConstEnum : Symbol(MyConstEnum, Decl(ImportExport.d.ts, 0, 8))
 
 export default MyConstEnum;
 >MyConstEnum : Symbol(MyConstEnum, Decl(ImportExport.d.ts, 0, 8))
 
-=== tests/cases/compiler/ReExport.d.ts ===
+=== ReExport.d.ts ===
 export { MyConstEnum as default } from './ConstEnum';
 >MyConstEnum : Symbol(MyConstEnum, Decl(ConstEnum.d.ts, 0, 0))
 >default : Symbol(default, Decl(ReExport.d.ts, 0, 8))
 
-=== tests/cases/compiler/usages.ts ===
+=== usages.ts ===
 import {MyConstEnum} from "./ConstEnum";
 >MyConstEnum : Symbol(MyConstEnum, Decl(usages.ts, 0, 8))
 

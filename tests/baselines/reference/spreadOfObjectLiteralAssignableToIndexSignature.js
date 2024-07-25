@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spreadOfObjectLiteralAssignableToIndexSignature.ts] ////
+
 //// [spreadOfObjectLiteralAssignableToIndexSignature.ts]
 const foo: Record<never, never> = {} // OK
 

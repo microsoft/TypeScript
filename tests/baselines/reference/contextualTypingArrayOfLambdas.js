@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTypingArrayOfLambdas.ts] ////
+
 //// [contextualTypingArrayOfLambdas.ts]
 class A {
     foo: string;

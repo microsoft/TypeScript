@@ -1,12 +1,15 @@
-=== tests/cases/conformance/dynamicImport/foo.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionNestedAMD.ts] ////
+
+=== foo.ts ===
+
 export default "./foo";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/dynamicImport/index.ts ===
+
+=== index.ts ===
 async function foo() {
 >foo : Symbol(foo, Decl(index.ts, 0, 0))
 
     return await import((await import("./foo")).default);
 >(await import("./foo")).default : Symbol(default, Decl(foo.ts, 0, 0))
->"./foo" : Symbol("tests/cases/conformance/dynamicImport/foo", Decl(foo.ts, 0, 0))
+>"./foo" : Symbol("foo", Decl(foo.ts, 0, 0))
 >default : Symbol(default, Decl(foo.ts, 0, 0))
 }

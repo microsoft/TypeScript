@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxAttributeResolution5.tsx] ////
+
 //// [file.tsx]
 declare module JSX {
 	interface Element { }

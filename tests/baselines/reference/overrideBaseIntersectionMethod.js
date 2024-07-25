@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overrideBaseIntersectionMethod.ts] ////
+
 //// [overrideBaseIntersectionMethod.ts]
 // Repro from #14615
 

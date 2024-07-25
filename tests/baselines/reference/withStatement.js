@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/withStatement.ts] ////
+
 //// [withStatement.ts]
 declare var ooo:any;
 

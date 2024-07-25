@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationImport.ts ===
+//// [tests/cases/compiler/sourceMapValidationImport.ts] ////
+
+=== sourceMapValidationImport.ts ===
 export module m {
 >m : Symbol(m, Decl(sourceMapValidationImport.ts, 0, 0))
 

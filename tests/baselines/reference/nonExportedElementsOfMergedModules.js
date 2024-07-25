@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonExportedElementsOfMergedModules.ts] ////
+
 //// [nonExportedElementsOfMergedModules.ts]
 module One {
     enum A { X }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleElementsInWrongContext2.ts] ////
+
 //// [moduleElementsInWrongContext2.ts]
 function blah () {
     module M { }

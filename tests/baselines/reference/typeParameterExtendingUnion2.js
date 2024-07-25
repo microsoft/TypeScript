@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterExtendingUnion2.ts] ////
+
 //// [typeParameterExtendingUnion2.ts]
 class Animal { run() { } }
 class Cat extends Animal { meow }

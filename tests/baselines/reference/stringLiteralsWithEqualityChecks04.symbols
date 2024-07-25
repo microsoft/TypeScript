@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks04.ts ===
+//// [tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks04.ts] ////
+
+=== stringLiteralsWithEqualityChecks04.ts ===
 interface Runnable {
 >Runnable : Symbol(Runnable, Decl(stringLiteralsWithEqualityChecks04.ts, 0, 0))
 

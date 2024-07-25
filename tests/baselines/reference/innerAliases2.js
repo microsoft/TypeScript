@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/innerAliases2.ts] ////
+
 //// [innerAliases2.ts]
 module _provider {
                 export class UsefulClass {

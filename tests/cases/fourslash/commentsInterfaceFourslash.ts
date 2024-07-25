@@ -81,15 +81,14 @@ verify.quickInfos({
 verify.quickInfoAt("8", "(property) i2.x: number", "this is x");
 verify.completions({
     marker: "8",
-    exact: [
+    exact: completion.functionMembersWithPrototypePlus([
         { name: "x", text: "(property) i2.x: number", documentation: "this is x" },
         { name: "foo", text: "(property) i2.foo: (b: number) => string", documentation: "this is foo" },
         { name: "nc_x", text: "(property) i2.nc_x: number" },
         { name: "nc_foo", text: "(property) i2.nc_foo: (b: number) => string" },
         { name: "fnfoo", text: "(method) i2.fnfoo(b: number): string", documentation: "this is fnfoo" },
         { name: "nc_fnfoo", text: "(method) i2.nc_fnfoo(b: number): string" },
-        ...completion.functionMembersWithPrototype,
-    ],
+    ]),
     isNewIdentifierLocation: true,
 });
 
@@ -199,12 +198,12 @@ verify.quickInfoIs("(method) i3.f(a: number): string", "Function i3 f");
 verify.completions({
     marker: "41",
     exact: [
-        { name: "x", text: "(property) i3.x: number", documentation: "Comment i3 x" },
         { name: "f", text: "(method) i3.f(a: number): string", documentation: "Function i3 f" },
         { name: "l", text: "(property) i3.l: (b: number) => string", documentation: "i3 l" },
-        { name: "nc_x", text: "(property) i3.nc_x: number" },
         { name: "nc_f", text: "(method) i3.nc_f(a: number): string" },
         { name: "nc_l", text: "(property) i3.nc_l: (b: number) => string" },
+        { name: "nc_x", text: "(property) i3.nc_x: number" },
+        { name: "x", text: "(property) i3.x: number", documentation: "Comment i3 x" },
     ],
 });
 

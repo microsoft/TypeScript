@@ -1,21 +1,20 @@
-tests/cases/compiler/BaseB.js(2,24): error TS8004: Type parameter declarations can only be used in TypeScript files.
-tests/cases/compiler/BaseB.js(2,25): error TS1005: ',' expected.
-tests/cases/compiler/BaseB.js(3,14): error TS2304: Cannot find name 'Class'.
-tests/cases/compiler/BaseB.js(3,14): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/compiler/BaseB.js(4,25): error TS2304: Cannot find name 'Class'.
-tests/cases/compiler/BaseB.js(4,25): error TS8010: Type annotations can only be used in TypeScript files.
-tests/cases/compiler/SubB.js(3,41): error TS8011: Type arguments can only be used in TypeScript files.
+BaseB.js(2,24): error TS8004: Type parameter declarations can only be used in TypeScript files.
+BaseB.js(2,25): error TS1005: ',' expected.
+BaseB.js(3,14): error TS2304: Cannot find name 'Class'.
+BaseB.js(3,14): error TS8010: Type annotations can only be used in TypeScript files.
+BaseB.js(4,25): error TS2304: Cannot find name 'Class'.
+BaseB.js(4,25): error TS8010: Type annotations can only be used in TypeScript files.
+SubB.js(3,41): error TS8011: Type arguments can only be used in TypeScript files.
 
 
-==== tests/cases/compiler/BaseA.js (0 errors) ====
-    // regression test for #18254
+==== BaseA.js (0 errors) ====
     export default class BaseA {
     }
-==== tests/cases/compiler/SubA.js (0 errors) ====
+==== SubA.js (0 errors) ====
     import BaseA from './BaseA';
     export default class SubA extends BaseA {
     }
-==== tests/cases/compiler/BaseB.js (6 errors) ====
+==== BaseB.js (6 errors) ====
     import BaseA from './BaseA';
     export default class B<T: BaseA> {
                            ~~~~~~~~
@@ -35,7 +34,7 @@ tests/cases/compiler/SubB.js(3,41): error TS8011: Type arguments can only be use
             this._AClass = AClass;
         }
     }
-==== tests/cases/compiler/SubB.js (1 errors) ====
+==== SubB.js (1 errors) ====
     import SubA from './SubA';
     import BaseB from './BaseB';
     export default class SubB extends BaseB<SubA> {

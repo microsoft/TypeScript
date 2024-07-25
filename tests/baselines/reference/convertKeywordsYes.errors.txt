@@ -1,16 +1,16 @@
-tests/cases/compiler/convertKeywordsYes.ts(175,12): error TS18006: Classes may not have a field named 'constructor'.
-tests/cases/compiler/convertKeywordsYes.ts(292,11): error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(293,11): error TS1213: Identifier expected. 'interface' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(294,11): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(296,11): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(297,11): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(298,11): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(299,11): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(301,11): error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/convertKeywordsYes.ts(303,11): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+convertKeywordsYes.ts(175,12): error TS18006: Classes may not have a field named 'constructor'.
+convertKeywordsYes.ts(292,11): error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+convertKeywordsYes.ts(293,11): error TS1213: Identifier expected. 'interface' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+convertKeywordsYes.ts(294,11): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+convertKeywordsYes.ts(296,11): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+convertKeywordsYes.ts(297,11): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+convertKeywordsYes.ts(298,11): error TS1213: Identifier expected. 'protected' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+convertKeywordsYes.ts(299,11): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+convertKeywordsYes.ts(301,11): error TS1213: Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+convertKeywordsYes.ts(303,11): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 
 
-==== tests/cases/compiler/convertKeywordsYes.ts (10 errors) ====
+==== convertKeywordsYes.ts (10 errors) ====
     // reserved ES5 future in strict mode
     
     var constructor = 0;

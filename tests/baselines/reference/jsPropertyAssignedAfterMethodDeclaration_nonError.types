@@ -1,18 +1,28 @@
+//// [tests/cases/compiler/jsPropertyAssignedAfterMethodDeclaration_nonError.ts] ////
+
 === /a.js ===
 const o = {
 >o : { a(): void; }
+>  : ^^^^^^^^^^^^^^
 >{    a() {        // Should not be treated as a declaration.        this.a = () => {};    }} : { a(): void; }
+>                                                                                             : ^^^^^^^^^^^^^^
 
     a() {
 >a : () => void
+>  : ^^^^^^^^^^
 
         // Should not be treated as a declaration.
         this.a = () => {};
 >this.a = () => {} : () => void
+>                  : ^^^^^^^^^^
 >this.a : () => void
+>       : ^^^^^^^^^^
 >this : { a(): void; }
+>     : ^^^^^^^^^^^^^^
 >a : () => void
+>  : ^^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
     }
 };
 

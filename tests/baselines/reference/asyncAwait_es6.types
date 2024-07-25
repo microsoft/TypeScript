@@ -1,125 +1,178 @@
-=== tests/cases/conformance/async/es6/asyncAwait_es6.ts ===
+//// [tests/cases/conformance/async/es6/asyncAwait_es6.ts] ////
+
+=== asyncAwait_es6.ts ===
 type MyPromise<T> = Promise<T>;
 >MyPromise : MyPromise<T>
+>          : ^^^^^^^^^^^^
 
 declare var MyPromise: typeof Promise;
 >MyPromise : PromiseConstructor
+>          : ^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 
 declare var p: Promise<number>;
 >p : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
 declare var mp: MyPromise<number>;
 >mp : MyPromise<number>
+>   : ^^^^^^^^^^^^^^^^^
 
 async function f0() { }
 >f0 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
 async function f1(): Promise<void> { }
 >f1 : () => Promise<void>
+>   : ^^^^^^             
 
 async function f3(): MyPromise<void> { }
 >f3 : () => MyPromise<void>
+>   : ^^^^^^               
 
 let f4 = async function() { }
 >f4 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 >async function() { } : () => Promise<void>
+>                     : ^^^^^^^^^^^^^^^^^^^
 
 let f5 = async function(): Promise<void> { }
 >f5 : () => Promise<void>
+>   : ^^^^^^             
 >async function(): Promise<void> { } : () => Promise<void>
+>                                    : ^^^^^^             
 
 let f6 = async function(): MyPromise<void> { }
 >f6 : () => MyPromise<void>
+>   : ^^^^^^               
 >async function(): MyPromise<void> { } : () => MyPromise<void>
+>                                      : ^^^^^^               
 
 let f7 = async () => { };
 >f7 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 >async () => { } : () => Promise<void>
+>                : ^^^^^^^^^^^^^^^^^^^
 
 let f8 = async (): Promise<void> => { };
 >f8 : () => Promise<void>
+>   : ^^^^^^             
 >async (): Promise<void> => { } : () => Promise<void>
+>                               : ^^^^^^             
 
 let f9 = async (): MyPromise<void> => { };
 >f9 : () => MyPromise<void>
+>   : ^^^^^^               
 >async (): MyPromise<void> => { } : () => MyPromise<void>
+>                                 : ^^^^^^               
 
 let f10 = async () => p;
 >f10 : () => Promise<number>
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >async () => p : () => Promise<number>
+>              : ^^^^^^^^^^^^^^^^^^^^^
 >p : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
 let f11 = async () => mp;
 >f11 : () => Promise<number>
+>    : ^^^^^^^^^^^^^^^^^^^^^
 >async () => mp : () => Promise<number>
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >mp : MyPromise<number>
+>   : ^^^^^^^^^^^^^^^^^
 
 let f12 = async (): Promise<number> => mp;
 >f12 : () => Promise<number>
+>    : ^^^^^^               
 >async (): Promise<number> => mp : () => Promise<number>
+>                                : ^^^^^^               
 >mp : MyPromise<number>
+>   : ^^^^^^^^^^^^^^^^^
 
 let f13 = async (): MyPromise<number> => p;
 >f13 : () => MyPromise<number>
+>    : ^^^^^^                 
 >async (): MyPromise<number> => p : () => MyPromise<number>
+>                                 : ^^^^^^                 
 >p : Promise<number>
+>  : ^^^^^^^^^^^^^^^
 
 let o = {
 >o : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^               ^^^
 >{	async m1() { },	async m2(): Promise<void> { },	async m3(): MyPromise<void> { }} : { m1(): Promise<void>; m2(): Promise<void>; m3(): MyPromise<void>; }
+>                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^               ^^^
 
 	async m1() { },
 >m1 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
 	async m2(): Promise<void> { },
 >m2 : () => Promise<void>
+>   : ^^^^^^             
 
 	async m3(): MyPromise<void> { }
 >m3 : () => MyPromise<void>
+>   : ^^^^^^               
 
 };
 
 class C {
 >C : C
+>  : ^
 
 	async m1() { }
 >m1 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
 	async m2(): Promise<void> { }
 >m2 : () => Promise<void>
+>   : ^^^^^^             
 
 	async m3(): MyPromise<void> { }
 >m3 : () => MyPromise<void>
+>   : ^^^^^^               
 
 	static async m4() { }
 >m4 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 
 	static async m5(): Promise<void> { }
 >m5 : () => Promise<void>
+>   : ^^^^^^             
 
 	static async m6(): MyPromise<void> { }
 >m6 : () => MyPromise<void>
+>   : ^^^^^^               
 }
 
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
 	export async function f1() { }
 >f1 : () => Promise<void>
+>   : ^^^^^^^^^^^^^^^^^^^
 }
 
 async function f14() {
 >f14 : () => Promise<void>
+>    : ^^^^^^^^^^^^^^^^^^^
 
     block: {
 >block : any
+>      : ^^^
 
         await 1;
 >await 1 : 1
+>        : ^
 >1 : 1
+>  : ^
 
         break block;
 >block : any
+>      : ^^^
     }
 }

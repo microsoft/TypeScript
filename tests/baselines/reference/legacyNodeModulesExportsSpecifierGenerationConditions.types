@@ -1,26 +1,40 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/legacyNodeModulesExportsSpecifierGenerationConditions.ts] ////
+
+=== index.ts ===
 export const a = async () => (await import("inner")).x();
->a : () => Promise<import("tests/cases/conformance/node/node_modules/inner/private").Thing>
->async () => (await import("inner")).x() : () => Promise<import("tests/cases/conformance/node/node_modules/inner/private").Thing>
->(await import("inner")).x() : import("tests/cases/conformance/node/node_modules/inner/private").Thing
->(await import("inner")).x : () => import("tests/cases/conformance/node/node_modules/inner/private").Thing
->(await import("inner")) : typeof import("tests/cases/conformance/node/node_modules/inner/index")
->await import("inner") : typeof import("tests/cases/conformance/node/node_modules/inner/index")
->import("inner") : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index")>
+>a : () => Promise<import("node_modules/inner/private").Thing>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async () => (await import("inner")).x() : () => Promise<import("node_modules/inner/private").Thing>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(await import("inner")).x() : import("node_modules/inner/private").Thing
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(await import("inner")).x : () => import("node_modules/inner/private").Thing
+>                          : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
+>(await import("inner")) : typeof import("node_modules/inner/index")
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await import("inner") : typeof import("node_modules/inner/index")
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("inner") : Promise<typeof import("node_modules/inner/index")>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"inner" : "inner"
->x : () => import("tests/cases/conformance/node/node_modules/inner/private").Thing
+>        : ^^^^^^^
+>x : () => import("node_modules/inner/private").Thing
+>  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+=== node_modules/inner/index.d.ts ===
 export { x } from "./other.js";
->x : () => import("tests/cases/conformance/node/node_modules/inner/private").Thing
+>x : () => import("node_modules/inner/private").Thing
+>  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^
 
-=== tests/cases/conformance/node/node_modules/inner/other.d.ts ===
+=== node_modules/inner/other.d.ts ===
 import { Thing } from "./private.js"
 >Thing : any
+>      : ^^^
 
 export const x: () => Thing;
 >x : () => Thing
+>  : ^^^^^^     
 
-=== tests/cases/conformance/node/node_modules/inner/private.d.ts ===
+=== node_modules/inner/private.d.ts ===
+
 export interface Thing {} // not exported in export map, inaccessible under new module modes
-No type information for this code.

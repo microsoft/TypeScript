@@ -1,0 +1,216 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/declaration.ts ===
+// enum Test { /*FIND ALL REFS*/<|"[|{| isWriteAccess: true, isDefinition: true |}42|]" = 1|> };
+
+// === /tests/cases/fourslash/expression.ts ===
+// (Test[[|42|]]);
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/declaration.ts ===
+  // enum Test { /*FIND ALL REFS*/<|"[|42|]" = 1|> };
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) Test[\"42\"] = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"42\"",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/declaration.ts ===
+// enum Test { <|"/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}42|]" = 1|> };
+
+// === /tests/cases/fourslash/expression.ts ===
+// (Test[[|42|]]);
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/declaration.ts ===
+  // enum Test { <|"/*FIND ALL REFS*/[|42|]" = 1|> };
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) Test[\"42\"] = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"42\"",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/declaration.ts ===
+// enum Test { <|"[|{| isWriteAccess: true |}42|]" = 1|> };
+
+// === /tests/cases/fourslash/expression.ts ===
+// (Test[/*FIND ALL REFS*/[|42|]]);
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/declaration.ts ===
+  // enum Test { <|"[|42|]" = 1|> };
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum member",
+    "name": "(enum member) Test[\"42\"] = 1",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "enum member",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "enumName"
+     },
+     {
+      "text": "[",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"42\"",
+      "kind": "enumMemberName"
+     },
+     {
+      "text": "]",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "numericLiteral"
+     }
+    ]
+   }
+  ]

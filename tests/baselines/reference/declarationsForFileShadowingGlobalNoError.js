@@ -18,10 +18,10 @@ export const mixin = (Base: Constructor) => {
 
 //// [dom.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [custom.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [index.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -39,7 +39,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.mixin = void 0;
 var mixin = function (Base) {
     return /** @class */ (function (_super) {
@@ -55,12 +55,12 @@ exports.mixin = mixin;
 
 
 //// [dom.d.ts]
-export declare type DOMNode = Node;
+export type DOMNode = Node;
 //// [custom.d.ts]
-export declare type Node = {};
+export type Node = {};
 //// [index.d.ts]
 import { DOMNode } from './dom';
-declare type Constructor = new (...args: any[]) => any;
+type Constructor = new (...args: any[]) => any;
 export declare const mixin: (Base: Constructor) => {
     new (...args: any[]): {
         [x: string]: any;

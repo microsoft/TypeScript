@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractFactoryFunction.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractFactoryFunction.ts] ////
+
+=== classAbstractFactoryFunction.ts ===
 class A {}
 >A : Symbol(A, Decl(classAbstractFactoryFunction.ts, 0, 0))
 

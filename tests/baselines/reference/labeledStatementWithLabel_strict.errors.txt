@@ -1,20 +1,20 @@
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(2,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(3,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(4,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(5,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(6,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(7,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(8,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(9,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(10,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(12,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(12,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(13,1): error TS1344: 'A label is not allowed here.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(13,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
-tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts(14,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(2,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(3,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(4,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(5,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(6,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(7,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(8,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(9,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(10,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(12,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(12,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+labeledStatementWithLabel_strict.ts(13,1): error TS1344: 'A label is not allowed here.
+labeledStatementWithLabel_strict.ts(13,8): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+labeledStatementWithLabel_strict.ts(14,1): error TS1344: 'A label is not allowed here.
 
 
-==== tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_strict.ts (14 errors) ====
+==== labeledStatementWithLabel_strict.ts (14 errors) ====
     "use strict"
     label: function fn() { }
     ~~~~~

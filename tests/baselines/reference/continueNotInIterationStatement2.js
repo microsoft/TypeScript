@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/continueNotInIterationStatement2.ts] ////
+
 //// [continueNotInIterationStatement2.ts]
 while (true) {
   function f() {

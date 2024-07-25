@@ -1,16 +1,22 @@
-=== tests/cases/compiler/slightlyIndirectedDeepObjectLiteralElaborations.ts ===
+//// [tests/cases/compiler/slightlyIndirectedDeepObjectLiteralElaborations.ts] ////
+
+=== slightlyIndirectedDeepObjectLiteralElaborations.ts ===
 interface Foo {
     a: {
->a : { b: {    c: {        d: string;    };}; }
+>a : { b: { c: { d: string; }; }; }
+>  : ^^^^^                      ^^^
 
         b: {
->b : { c: {    d: string;}; }
+>b : { c: { d: string; }; }
+>  : ^^^^^              ^^^
 
             c: {
 >c : { d: string; }
+>  : ^^^^^      ^^^
 
                 d: string
 >d : string
+>  : ^^^^^^
             }
         }
     }
@@ -18,33 +24,51 @@ interface Foo {
 
 let q: Foo["a"] | undefined;
 >q : { b: { c: { d: string; }; }; }
+>  : ^^^^^                      ^^^
 
 const x: Foo = (void 0, {
 >x : Foo
+>  : ^^^
 >(void 0, {    a: q = {        b: ({            c: {                d: 42            }        })    }}) : { a: { b: { c: { d: number; }; }; }; }
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >void 0, {    a: q = {        b: ({            c: {                d: 42            }        })    }} : { a: { b: { c: { d: number; }; }; }; }
+>                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 >{    a: q = {        b: ({            c: {                d: 42            }        })    }} : { a: { b: { c: { d: number; }; }; }; }
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a: q = {
 >a : { b: { c: { d: number; }; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >q = {        b: ({            c: {                d: 42            }        })    } : { b: { c: { d: number; }; }; }
+>                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >q : { b: { c: { d: string; }; }; }
+>  : ^^^^^                      ^^^
 >{        b: ({            c: {                d: 42            }        })    } : { b: { c: { d: number; }; }; }
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         b: ({
 >b : { c: { d: number; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >({            c: {                d: 42            }        }) : { c: { d: number; }; }
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^
 >{            c: {                d: 42            }        } : { c: { d: number; }; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^
 
             c: {
 >c : { d: number; }
+>  : ^^^^^^^^^^^^^^
 >{                d: 42            } : { d: number; }
+>                                    : ^^^^^^^^^^^^^^
 
                 d: 42
 >d : number
+>  : ^^^^^^
 >42 : 42
+>   : ^^
             }
         })
     }

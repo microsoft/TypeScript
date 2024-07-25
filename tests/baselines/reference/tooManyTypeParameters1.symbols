@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tooManyTypeParameters1.ts ===
+//// [tests/cases/compiler/tooManyTypeParameters1.ts] ////
+
+=== tooManyTypeParameters1.ts ===
 function f<T>() { }
 >f : Symbol(f, Decl(tooManyTypeParameters1.ts, 0, 0))
 >T : Symbol(T, Decl(tooManyTypeParameters1.ts, 0, 11))

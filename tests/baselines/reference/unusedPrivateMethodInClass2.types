@@ -1,28 +1,29 @@
-=== tests/cases/compiler/unusedPrivateMethodInClass2.ts ===
+//// [tests/cases/compiler/unusedPrivateMethodInClass2.ts] ////
+
+=== unusedPrivateMethodInClass2.ts ===
 class greeter {
 >greeter : greeter
+>        : ^^^^^^^
 
     private function1() {
 >function1 : () => void
+>          : ^^^^^^^^^^
 
         var y = 10;
 >y : number
+>  : ^^^^^^
 >10 : 10
-
-        y++;
->y++ : number
->y : number
+>   : ^^
     }
 
     private function2() {
 >function2 : () => void
+>          : ^^^^^^^^^^
 
         var y = 10;
 >y : number
+>  : ^^^^^^
 >10 : 10
-
-        y++;
->y++ : number
->y : number
+>   : ^^
     }
 }

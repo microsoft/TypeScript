@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileNonRelative.ts] ////
+
 === /src/projects/file1.ts ===
 import b1 = require('b.json');
 >b1 : Symbol(b1, Decl(file1.ts, 0, 0))
@@ -45,3 +47,4 @@ if (x) {
     "b": "hello"
 >"b" : Symbol("b", Decl(c.json, 1, 14))
 }
+

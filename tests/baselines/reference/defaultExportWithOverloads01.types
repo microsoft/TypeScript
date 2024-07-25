@@ -1,12 +1,19 @@
-=== tests/cases/conformance/es6/modules/defaultExportWithOverloads01.ts ===
+//// [tests/cases/conformance/es6/modules/defaultExportWithOverloads01.ts] ////
+
+=== defaultExportWithOverloads01.ts ===
 export default function f();
 >f : { (): any; (x: string): any; }
+>  : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
 export default function f(x: string);
 >f : { (): any; (x: string): any; }
+>  : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >x : string
+>  : ^^^^^^
 
 export default function f(...args: any[]) {
 >f : { (): any; (x: string): any; }
+>  : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 }

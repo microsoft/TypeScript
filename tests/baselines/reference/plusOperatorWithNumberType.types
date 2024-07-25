@@ -1,158 +1,257 @@
-=== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithNumberType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithNumberType.ts] ////
+
+=== plusOperatorWithNumberType.ts ===
 // + operator on number type
 var NUMBER: number;
 >NUMBER : number
+>       : ^^^^^^
 
 var NUMBER1: number[] = [1, 2];
 >NUMBER1 : number[]
+>        : ^^^^^^^^
 >[1, 2] : number[]
+>       : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 function foo(): number { return 1; }
 >foo : () => number
+>    : ^^^^^^      
 >1 : 1
+>  : ^
 
 class A {
 >A : A
+>  : ^
 
     public a: number;
 >a : number
+>  : ^^^^^^
 
     static foo() { return 1; }
 >foo : () => number
+>    : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export var n: number;
 >n : number
+>  : ^^^^^^
 }
 
 var objA = new A();
 >objA : A
+>     : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 // number type var
 var ResultIsNumber1 = +NUMBER;
 >ResultIsNumber1 : number
+>                : ^^^^^^
 >+NUMBER : number
+>        : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 var ResultIsNumber2 = +NUMBER1;
 >ResultIsNumber2 : number
+>                : ^^^^^^
 >+NUMBER1 : number
+>         : ^^^^^^
 >NUMBER1 : number[]
+>        : ^^^^^^^^
 
 // number type literal
 var ResultIsNumber3 = +1;
 >ResultIsNumber3 : number
+>                : ^^^^^^
 >+1 : 1
+>   : ^
 >1 : 1
+>  : ^
 
 var ResultIsNumber4 = +{ x: 1, y: 2};
 >ResultIsNumber4 : number
+>                : ^^^^^^
 >+{ x: 1, y: 2} : number
+>               : ^^^^^^
 >{ x: 1, y: 2} : { x: number; y: number; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 var ResultIsNumber5 = +{ x: 1, y: (n: number) => { return n; } };
 >ResultIsNumber5 : number
+>                : ^^^^^^
 >+{ x: 1, y: (n: number) => { return n; } } : number
+>                                           : ^^^^^^
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
+>                                          : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >y : (n: number) => number
+>  : ^ ^^      ^^^^^^^^^^^
 >(n: number) => { return n; } : (n: number) => number
+>                             : ^ ^^      ^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 
 // number type expressions
 var ResultIsNumber6 = +objA.a;
 >ResultIsNumber6 : number
+>                : ^^^^^^
 >+objA.a : number
+>        : ^^^^^^
 >objA.a : number
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : number
+>  : ^^^^^^
 
 var ResultIsNumber7 = +M.n;
 >ResultIsNumber7 : number
+>                : ^^^^^^
 >+M.n : number
+>     : ^^^^^^
 >M.n : number
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 var ResultIsNumber8 = +NUMBER1[0];
 >ResultIsNumber8 : number
+>                : ^^^^^^
 >+NUMBER1[0] : number
+>            : ^^^^^^
 >NUMBER1[0] : number
+>           : ^^^^^^
 >NUMBER1 : number[]
+>        : ^^^^^^^^
 >0 : 0
+>  : ^
 
 var ResultIsNumber9 = +foo();
 >ResultIsNumber9 : number
+>                : ^^^^^^
 >+foo() : number
+>       : ^^^^^^
 >foo() : number
+>      : ^^^^^^
 >foo : () => number
+>    : ^^^^^^      
 
 var ResultIsNumber10 = +A.foo();
 >ResultIsNumber10 : number
+>                 : ^^^^^^
 >+A.foo() : number
+>         : ^^^^^^
 >A.foo() : number
+>        : ^^^^^^
 >A.foo : () => number
+>      : ^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >foo : () => number
+>    : ^^^^^^^^^^^^
 
 var ResultIsNumber11 = +(NUMBER + NUMBER);
 >ResultIsNumber11 : number
+>                 : ^^^^^^
 >+(NUMBER + NUMBER) : number
+>                   : ^^^^^^
 >(NUMBER + NUMBER) : number
+>                  : ^^^^^^
 >NUMBER + NUMBER : number
+>                : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 // miss assignment operators
 +1;
 >+1 : 1
+>   : ^
 >1 : 1
+>  : ^
 
 +NUMBER;
 >+NUMBER : number
+>        : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 +NUMBER1;
 >+NUMBER1 : number
+>         : ^^^^^^
 >NUMBER1 : number[]
+>        : ^^^^^^^^
 
 +foo();
 >+foo() : number
+>       : ^^^^^^
 >foo() : number
+>      : ^^^^^^
 >foo : () => number
+>    : ^^^^^^      
 
 +objA.a;
 >+objA.a : number
+>        : ^^^^^^
 >objA.a : number
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : number
+>  : ^^^^^^
 
 +M.n;
 >+M.n : number
+>     : ^^^^^^
 >M.n : number
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : number
+>  : ^^^^^^
 
 +objA.a, M.n;
 >+objA.a, M.n : number
+>             : ^^^^^^
 >+objA.a : number
+>        : ^^^^^^
 >objA.a : number
+>       : ^^^^^^
 >objA : A
+>     : ^
 >a : number
+>  : ^^^^^^
 >M.n : number
+>    : ^^^^^^
 >M : typeof M
+>  : ^^^^^^^^
 >n : number
+>  : ^^^^^^
 

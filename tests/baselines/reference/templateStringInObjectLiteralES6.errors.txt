@@ -1,12 +1,12 @@
-tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(1,9): error TS2349: This expression is not callable.
+templateStringInObjectLiteralES6.ts(1,9): error TS2349: This expression is not callable.
   Type '{ a: string; }' has no call signatures.
-tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(3,5): error TS1136: Property assignment expected.
-tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(3,8): error TS1005: ',' expected.
-tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(3,10): error TS1134: Variable declaration expected.
-tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts(4,1): error TS1128: Declaration or statement expected.
+templateStringInObjectLiteralES6.ts(3,5): error TS1136: Property assignment expected.
+templateStringInObjectLiteralES6.ts(3,8): error TS1005: ',' expected.
+templateStringInObjectLiteralES6.ts(3,10): error TS1134: Variable declaration expected.
+templateStringInObjectLiteralES6.ts(4,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts (5 errors) ====
+==== templateStringInObjectLiteralES6.ts (5 errors) ====
     var x = {
             ~
         a: `abc${ 123 }def`,

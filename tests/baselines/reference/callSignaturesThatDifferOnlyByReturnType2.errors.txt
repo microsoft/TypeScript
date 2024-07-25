@@ -1,9 +1,9 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesThatDifferOnlyByReturnType2.ts(8,11): error TS2320: Interface 'A' cannot simultaneously extend types 'I<number>' and 'I<string>'.
+callSignaturesThatDifferOnlyByReturnType2.ts(8,11): error TS2320: Interface 'A' cannot simultaneously extend types 'I<number>' and 'I<string>'.
   Named property 'foo' of types 'I<number>' and 'I<string>' are not identical.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesThatDifferOnlyByReturnType2.ts(13,16): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+callSignaturesThatDifferOnlyByReturnType2.ts(13,16): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesThatDifferOnlyByReturnType2.ts (2 errors) ====
+==== callSignaturesThatDifferOnlyByReturnType2.ts (2 errors) ====
     // Normally it is an error to have multiple overloads which differ only by return type in a single type declaration.
     // Here the multiple overloads come from multiple bases.
     

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/undefinedTypeArgument2.ts] ////
+
 //// [undefinedTypeArgument2.ts]
 // once caused stack overflow
 interface Query<T> {

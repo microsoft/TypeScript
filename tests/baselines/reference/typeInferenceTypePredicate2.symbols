@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceTypePredicate2.ts ===
+//// [tests/cases/compiler/typeInferenceTypePredicate2.ts] ////
+
+=== typeInferenceTypePredicate2.ts ===
 [true, true, false, null]
 >[true, true, false, null]    .filter((thing): thing is boolean => thing !== null)    .map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >[true, true, false, null]    .filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

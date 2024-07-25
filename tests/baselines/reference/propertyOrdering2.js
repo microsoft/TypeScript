@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyOrdering2.ts] ////
+
 //// [propertyOrdering2.ts]
 class Foo {
     constructor(public x, y) { }

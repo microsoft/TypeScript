@@ -1,74 +1,96 @@
-=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts ===
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts] ////
+
+=== subtypingWithNumericIndexer5.ts ===
 // Derived type indexer must be subtype of base type indexer
 
 interface Base { foo: string; }
 >foo : string
+>    : ^^^^^^
 
 interface Derived extends Base { bar: string; }
 >bar : string
+>    : ^^^^^^
 
 interface Derived2 extends Derived { baz: string; }
 >baz : string
+>    : ^^^^^^
 
 interface A {
     [x: number]: Derived;
 >x : number
+>  : ^^^^^^
 }
 
 class B implements A {
 >B : B
+>  : ^
 
     [x: string]: Base; // error
 >x : string
+>  : ^^^^^^
 }
 
 class B2 implements A {
 >B2 : B2
+>   : ^^
 
     [x: string]: Derived2; // ok
 >x : string
+>  : ^^^^^^
 }
 
 module Generics {
 >Generics : typeof Generics
+>         : ^^^^^^^^^^^^^^^
 
     interface A<T extends Base> {
         [x: number]: T;
 >x : number
+>  : ^^^^^^
     }
 
     class B implements A<Base> {
 >B : B
+>  : ^
 
         [x: string]: Derived; // ok
 >x : string
+>  : ^^^^^^
     }
 
     class B2 implements A<Derived> {
 >B2 : B2
+>   : ^^
 
         [x: string]: Derived2; // ok
 >x : string
+>  : ^^^^^^
     }
 
     class B3<T extends Derived> implements A<T> {
 >B3 : B3<T>
+>   : ^^^^^
 
         [x: string]: Base; // error
 >x : string
+>  : ^^^^^^
     }
 
     class B4<T extends Derived> implements A<T> {
 >B4 : B4<T>
+>   : ^^^^^
 
         [x: string]: Derived; // error
 >x : string
+>  : ^^^^^^
     }
 
     class B5<T extends Derived2> implements A<T> {
 >B5 : B5<T>
+>   : ^^^^^
 
         [x: string]: Derived2; // error
 >x : string
+>  : ^^^^^^
     }
 }

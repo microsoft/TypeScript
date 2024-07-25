@@ -1,20 +1,29 @@
-=== tests/cases/compiler/ambientClassMergesOverloadsWithInterface.ts ===
+//// [tests/cases/compiler/ambientClassMergesOverloadsWithInterface.ts] ////
+
+=== ambientClassMergesOverloadsWithInterface.ts ===
 declare class C {
 >C : C
+>  : ^
 
     baz(): any;
 >baz : () => any
+>    : ^^^^^^   
 
     foo(n: number): any;
 >foo : { (n: number): any; (n: number): any; }
+>    : ^^^ ^^      ^^^   ^^^ ^^      ^^^   ^^^
 >n : number
+>  : ^^^^^^
 }
 interface C {
     foo(n: number): any;
 >foo : { (n: number): any; (n: number): any; }
+>    : ^^^ ^^      ^^^   ^^^ ^^      ^^^   ^^^
 >n : number
+>  : ^^^^^^
 
     bar(): any;
 >bar : () => any
+>    : ^^^^^^   
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate.ts] ////
+
 //// [errorOnUnionVsObjectShouldDeeplyDisambiguate.ts]
 interface Stuff {
     a?: () => Promise<number[]>;

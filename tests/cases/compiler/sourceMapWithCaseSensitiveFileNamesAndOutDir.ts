@@ -1,4 +1,4 @@
-// @outDir: tests/cases/compiler/testfiles
+// @outDir: testfiles
 // @sourcemap: true
 // @useCaseSensitiveFileNames: true
 // @Filename: testFiles/app.ts

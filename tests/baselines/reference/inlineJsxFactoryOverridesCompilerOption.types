@@ -1,37 +1,50 @@
-=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryOverridesCompilerOption.tsx] ////
+
+=== renderer.d.ts ===
 declare global {
 >global : any
+>       : ^^^
 
     namespace JSX {
         interface IntrinsicElements {
             [e: string]: any;
 >e : string
+>  : ^^^^^^
         }
     }
 }
 export function dom(): void;
 >dom : () => void
+>    : ^^^^^^    
 
 export { dom as p };
 >dom : () => void
+>    : ^^^^^^    
 >p : () => void
+>  : ^^^^^^    
 
-=== tests/cases/conformance/jsx/inline/reacty.tsx ===
+=== reacty.tsx ===
 /** @jsx dom */
 import {dom} from "./renderer";
 >dom : () => void
+>    : ^^^^^^    
 
 <h></h>
 ><h></h> : error
 >h : any
+>  : ^^^
 >h : any
+>  : ^^^
 
-=== tests/cases/conformance/jsx/inline/index.tsx ===
+=== index.tsx ===
 import { p } from "./renderer";
 >p : () => void
+>  : ^^^^^^    
 
 <h></h>
 ><h></h> : error
 >h : any
+>  : ^^^
 >h : any
+>  : ^^^
 

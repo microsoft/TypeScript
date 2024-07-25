@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeValueConflict1.ts] ////
+
 //// [typeValueConflict1.ts]
 module M1 {
  export class A {

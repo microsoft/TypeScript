@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures2.ts] ////
+
 //// [unionTypeCallSignatures2.ts]
 interface A {
     (x: number): number;

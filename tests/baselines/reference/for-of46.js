@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of46.ts] ////
+
 //// [for-of46.ts]
 var k: string, v: boolean;
 var map = new Map([["", true]]);

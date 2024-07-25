@@ -1,4 +1,6 @@
-//// [file1.ts]
+//// [tests/cases/compiler/doNotEmitPinnedCommentOnNotEmittedNode.ts] ////
+
+//// [doNotEmitPinnedCommentOnNotEmittedNode.ts]
 class C {
     /*! remove pinned comment anywhere else */
     public foo(x: string, y: any)
@@ -10,7 +12,7 @@ var x = 10;
 /*! remove pinned comment anywhere else */
 declare var OData: any;
 
-//// [file1.js]
+//// [doNotEmitPinnedCommentOnNotEmittedNode.js]
 var C = (function () {
     function C() {
     }

@@ -1,35 +1,37 @@
-=== tests/cases/compiler/global.d.ts ===
+//// [tests/cases/compiler/umdNamespaceMergedWithGlobalAugmentationIsNotCircular.ts] ////
+
+=== global.d.ts ===
 declare global {
 >global : Symbol(global, Decl(global.d.ts, 0, 0))
 
     const React: typeof import("./module");
->React : Symbol(React, Decl(module.d.ts, 1, 26), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(global.d.ts, 1, 9))
 }
 
 export { };
 
-=== tests/cases/compiler/module.d.ts ===
+=== module.d.ts ===
 export = React;
->React : Symbol(React, Decl(module.d.ts, 1, 26), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(module.d.ts, 1, 26))
 
 export as namespace React;
 >React : Symbol(React, Decl(module.d.ts, 0, 15))
 
 declare namespace React {
->React : Symbol(React, Decl(module.d.ts, 1, 26), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(module.d.ts, 1, 26))
 
     function createRef(): any;
 >createRef : Symbol(createRef, Decl(module.d.ts, 3, 25))
 }
 
-=== tests/cases/compiler/some_module.ts ===
+=== some_module.ts ===
 export { };
 React.createRef;
 >React.createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
->React : Symbol(React, Decl(module.d.ts, 1, 26), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(global.d.ts, 1, 9))
 >createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
 
-=== tests/cases/compiler/emits.ts ===
+=== emits.ts ===
 console.log("hello");
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
@@ -37,6 +39,6 @@ console.log("hello");
 
 React.createRef;
 >React.createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
->React : Symbol(React, Decl(module.d.ts, 1, 26), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(global.d.ts, 1, 9))
 >createRef : Symbol(React.createRef, Decl(module.d.ts, 3, 25))
 

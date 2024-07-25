@@ -1,0 +1,53 @@
+//// [tests/cases/conformance/jsdoc/inferThis.ts] ////
+
+=== /a.js ===
+export class C {
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+    /**
+     * @template T
+     * @this {T}
+     * @return {T}
+     */
+    static a() {
+>a : Symbol(C.a, Decl(a.js, 0, 16))
+
+        return this;
+>this : Symbol(this)
+    }
+
+    /**
+     * @template T
+     * @this {T}
+     * @return {T}
+     */
+    b() {
+>b : Symbol(C.b, Decl(a.js, 8, 5))
+
+        return this;
+>this : Symbol(this)
+    }
+}
+
+const a = C.a();
+>a : Symbol(a, Decl(a.js, 20, 5))
+>C.a : Symbol(C.a, Decl(a.js, 0, 16))
+>C : Symbol(C, Decl(a.js, 0, 0))
+>a : Symbol(C.a, Decl(a.js, 0, 16))
+
+a; // typeof C
+>a : Symbol(a, Decl(a.js, 20, 5))
+
+const c = new C();
+>c : Symbol(c, Decl(a.js, 23, 5))
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+const b = c.b();
+>b : Symbol(b, Decl(a.js, 24, 5))
+>c.b : Symbol(C.b, Decl(a.js, 8, 5))
+>c : Symbol(c, Decl(a.js, 23, 5))
+>b : Symbol(C.b, Decl(a.js, 8, 5))
+
+b; // C
+>b : Symbol(b, Decl(a.js, 24, 5))
+

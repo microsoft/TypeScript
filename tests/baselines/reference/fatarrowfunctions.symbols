@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fatarrowfunctions.ts ===
+//// [tests/cases/compiler/fatarrowfunctions.ts] ////
+
+=== fatarrowfunctions.ts ===
 function foo(x:any) {
 >foo : Symbol(foo, Decl(fatarrowfunctions.ts, 0, 0))
 >x : Symbol(x, Decl(fatarrowfunctions.ts, 0, 13))

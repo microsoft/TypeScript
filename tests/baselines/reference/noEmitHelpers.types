@@ -1,8 +1,13 @@
-=== tests/cases/compiler/noEmitHelpers.ts ===
+//// [tests/cases/compiler/noEmitHelpers.ts] ////
+
+=== noEmitHelpers.ts ===
 class A { }
 >A : A
+>  : ^
 
 class B extends A { }
 >B : B
+>  : ^
 >A : A
+>  : ^
 

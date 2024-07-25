@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList2.ts(2,4): error TS2304: Cannot find name 'bar'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList2.ts(2,8): error TS1005: ')' expected.
+parserErrorRecovery_ArgumentList2.ts(2,4): error TS2304: Cannot find name 'bar'.
+parserErrorRecovery_ArgumentList2.ts(2,8): error TS1005: ')' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList2.ts (2 errors) ====
+==== parserErrorRecovery_ArgumentList2.ts (2 errors) ====
     function foo() {
        bar(;
        ~~~

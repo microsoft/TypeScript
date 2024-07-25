@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeofStripsFreshness.ts] ////
+
 //// [typeofStripsFreshness.ts]
 interface Collection<T> {
     elems: T[];

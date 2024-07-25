@@ -1,11 +1,13 @@
-=== tests/cases/compiler/es6ImportDefaultBindingAmd_0.ts ===
+//// [tests/cases/compiler/es6ImportDefaultBindingAmd.ts] ////
+
+=== es6ImportDefaultBindingAmd_0.ts ===
 var a = 10;
 >a : Symbol(a, Decl(es6ImportDefaultBindingAmd_0.ts, 0, 3))
 
 export default a;
 >a : Symbol(a, Decl(es6ImportDefaultBindingAmd_0.ts, 0, 3))
 
-=== tests/cases/compiler/es6ImportDefaultBindingAmd_1.ts ===
+=== es6ImportDefaultBindingAmd_1.ts ===
 import defaultBinding from "es6ImportDefaultBindingAmd_0";
 >defaultBinding : Symbol(defaultBinding, Decl(es6ImportDefaultBindingAmd_1.ts, 0, 6))
 

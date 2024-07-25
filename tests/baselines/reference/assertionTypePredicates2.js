@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/assertionTypePredicates2.ts] ////
+
 //// [assertionTypePredicates2.js]
 /**
  * @typedef {{ x: number }} A
@@ -28,7 +30,7 @@ export const main = () => {
 /**
  * @typedef {{ x: number }} A
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.main = void 0;
 /**
  * @typedef { A & { y: number } } B

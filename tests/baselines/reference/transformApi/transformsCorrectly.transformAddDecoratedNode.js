@@ -11,6 +11,5 @@ var Foo = /** @class */ (function () {
     __decorate([
         Bar
     ], Foo.prototype, "baz", null);
-    Foo = __decorate([], Foo);
     return Foo;
 }());

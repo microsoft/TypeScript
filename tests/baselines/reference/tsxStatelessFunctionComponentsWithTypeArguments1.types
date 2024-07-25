@@ -1,100 +1,165 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentsWithTypeArguments1.tsx] ////
+
+=== file.tsx ===
 import React = require('react')
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
->ComponentWithTwoAttributes : <K, V>(l: {    key1: K;    value: V;}) => JSX.Element
+>ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
+>                           : ^ ^^ ^^ ^^                      ^^^^^           
 >l : { key1: K; value: V; }
+>  : ^^^^^^^^ ^^^^^^^^^ ^^^
 >key1 : K
+>     : ^
 >value : V
+>      : ^
 >JSX : any
+>    : ^^^
 
 // OK
 function Baz<T,U>(key1: T, value: U) {
 >Baz : <T, U>(key1: T, value: U) => void
+>    : ^ ^^ ^^    ^^ ^^     ^^ ^^^^^^^^^
 >key1 : T
+>     : ^
 >value : U
+>      : ^
 
     let a0 = <ComponentWithTwoAttributes key1={key1} value={value} />
 >a0 : JSX.Element
+>   : ^^^^^^^^^^^
 ><ComponentWithTwoAttributes key1={key1} value={value} /> : JSX.Element
+>                                                         : ^^^^^^^^^^^
 >ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
+>                           : ^ ^^ ^^ ^^                      ^^^^^           
 >key1 : T
+>     : ^
 >key1 : T
+>     : ^
 >value : U
+>      : ^
 >value : U
+>      : ^
 
     let a1 = <ComponentWithTwoAttributes {...{key1, value: value}} key="Component" />
 >a1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><ComponentWithTwoAttributes {...{key1, value: value}} key="Component" /> : JSX.Element
+>                                                                         : ^^^^^^^^^^^
 >ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
+>                           : ^ ^^ ^^ ^^                      ^^^^^           
 >{key1, value: value} : { key1: T; value: U; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^
 >key1 : T
+>     : ^
 >value : U
+>      : ^
 >value : U
+>      : ^
 >key : string
+>    : ^^^^^^
 }
 
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
+>     : ^ ^^ ^^                           ^^^^^           
 >l : { func: (arg: U) => void; }
+>  : ^^^^^^^^                ^^^
 >func : (arg: U) => void
+>     : ^   ^^ ^^^^^    
 >arg : U
+>    : ^
 >JSX : any
+>    : ^^^
 
 // OK
 function createLink(func: (a: number)=>void) {
 >createLink : (func: (a: number) => void) => void
+>           : ^    ^^                   ^^^^^^^^^
 >func : (a: number) => void
+>     : ^ ^^      ^^^^^    
 >a : number
+>  : ^^^^^^
 
     let o = <Link func={func} />
 >o : JSX.Element
+>  : ^^^^^^^^^^^
 ><Link func={func} /> : JSX.Element
+>                     : ^^^^^^^^^^^
 >Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
+>     : ^ ^^ ^^                           ^^^^^           
 >func : (a: number) => void
+>     : ^ ^^      ^^^^^    
 >func : (a: number) => void
+>     : ^ ^^      ^^^^^    
 }
 
 function createLink1(func: (a: number)=>boolean) {
 >createLink1 : (func: (a: number) => boolean) => void
+>            : ^    ^^                      ^^^^^^^^^
 >func : (a: number) => boolean
+>     : ^ ^^      ^^^^^       
 >a : number
+>  : ^^^^^^
 
     let o = <Link func={func} />
 >o : JSX.Element
+>  : ^^^^^^^^^^^
 ><Link func={func} /> : JSX.Element
+>                     : ^^^^^^^^^^^
 >Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
+>     : ^ ^^ ^^                           ^^^^^           
 >func : (a: number) => boolean
+>     : ^ ^^      ^^^^^       
 >func : (a: number) => boolean
+>     : ^ ^^      ^^^^^       
 }
 
 interface InferParamProp<T> {
     values: Array<T>;
 >values : T[]
+>       : ^^^
 
     selectHandler: (selectedVal: T) => void;
 >selectHandler : (selectedVal: T) => void
+>              : ^           ^^ ^^^^^    
 >selectedVal : T
+>            : ^
 }
 
 declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 >InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
+>                    : ^ ^^    ^^                 ^^^^^           
 >attr : InferParamProp<T>
+>     : ^^^^^^^^^^^^^^^^^
 >JSX : any
+>    : ^^^
 
 // OK
 let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} />;
 >i : JSX.Element
+>  : ^^^^^^^^^^^
 ><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} /> : JSX.Element
+>                                                                           : ^^^^^^^^^^^
 >InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
+>                    : ^ ^^    ^^                 ^^^^^           
 >values : number[]
+>       : ^^^^^^^^
 >[1, 2, 3, 4] : number[]
+>             : ^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 >3 : 3
+>  : ^
 >4 : 4
+>  : ^
 >selectHandler : (val: number) => void
+>              : ^   ^^^^^^^^^^^^^^^^^
 >(val) => { } : (val: number) => void
+>             : ^   ^^^^^^^^^^^^^^^^^
 >val : number
+>    : ^^^^^^
 

@@ -1,38 +1,55 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportWithTypesAndValues.ts] ////
+
+=== server.ts ===
 export interface I {
     prop: string;
 >prop : string
+>     : ^^^^^^
 }
 export interface I2 {
     prop2: string;
 >prop2 : string
+>      : ^^^^^^
 }
 export class C implements I {
 >C : C
+>  : ^
 
     prop = "hello";
 >prop : string
+>     : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 export class C2 implements I2 {
 >C2 : C2
+>   : ^^
 
     prop2 = "world";
 >prop2 : string
+>      : ^^^^^^
 >"world" : "world"
+>        : ^^^^^^^
 }
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 import { C, I, C2 } from "./server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
 >C : typeof C
+>  : ^^^^^^^^
 >I : any
+>  : ^^^
 >C2 : typeof C2
+>   : ^^^^^^^^^
 
 export type cValInterface = I;
 >cValInterface : I
+>              : ^
 
 export var cVal = new C();
 >cVal : C
+>     : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 

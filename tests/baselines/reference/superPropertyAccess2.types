@@ -1,72 +1,107 @@
-=== tests/cases/compiler/superPropertyAccess2.ts ===
+//// [tests/cases/compiler/superPropertyAccess2.ts] ////
+
+=== superPropertyAccess2.ts ===
 class C {
 >C : C
+>  : ^
 
     public static foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     public get x() {
 >x : number
+>  : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 
     public static bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     public static foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         super.bar(); // OK
 >super.bar() : void
+>            : ^^^^
 >super.bar : () => void
+>          : ^^^^^^^^^^
 >super : typeof C
+>      : ^^^^^^^^
 >bar : () => void
+>    : ^^^^^^^^^^
 
         super.x;  // error
 >super.x : any
+>        : ^^^
 >super : typeof C
+>      : ^^^^^^^^
 >x : any
+>  : ^^^
     }
 
     constructor() {
         super();
 >super() : void
+>        : ^^^^
 >super : typeof C
+>      : ^^^^^^^^
 
         super.bar(); // error
 >super.bar() : any
+>            : ^^^
 >super.bar : any
+>          : ^^^
 >super : C
+>      : ^
 >bar : any
+>    : ^^^
 
         super.x;  // error
 >super.x : number
+>        : ^^^^^^
 >super : C
+>      : ^
 >x : number
+>  : ^^^^^^
     }
 
     public static get y() {
 >y : number
+>  : ^^^^^^
 
         super.bar(); // OK
 >super.bar() : void
+>            : ^^^^
 >super.bar : () => void
+>          : ^^^^^^^^^^
 >super : typeof C
+>      : ^^^^^^^^
 >bar : () => void
+>    : ^^^^^^^^^^
 
         super.x; // error
 >super.x : any
+>        : ^^^
 >super : typeof C
+>      : ^^^^^^^^
 >x : any
+>  : ^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
 }

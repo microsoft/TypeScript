@@ -1,0 +1,39 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow3.ts ===
+// function f(a: number) {
+//     try {
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] "Hello";
+// 
+//         try {
+//             throw 10;
+//         }
+//         catch (x) {
+//             return 100;
+//         }
+//         finally {
+//             [|{| kind: "none" |}throw|] 10;
+//         }
+//     }
+//     catch (x) {
+// --- (line: 16) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow3.ts ===
+// function f(a: number) {
+//     try {
+//         [|{| kind: "none" |}throw|] "Hello";
+// 
+//         try {
+//             throw 10;
+//         }
+//         catch (x) {
+//             return 100;
+//         }
+//         finally {
+//             /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 10;
+//         }
+//     }
+//     catch (x) {
+// --- (line: 16) skipped ---

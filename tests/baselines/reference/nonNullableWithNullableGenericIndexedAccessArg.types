@@ -1,0 +1,61 @@
+//// [tests/cases/compiler/nonNullableWithNullableGenericIndexedAccessArg.ts] ////
+
+=== nonNullableWithNullableGenericIndexedAccessArg.ts ===
+// repro from #50539
+
+interface StateSchema {
+  states?: {
+>states : { [key: string]: StateSchema; } | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [key: string]: StateSchema;
+>key : string
+>    : ^^^^^^
+
+  };
+}
+
+declare class StateNode<TStateSchema extends StateSchema> {
+>StateNode : StateNode<TStateSchema>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^
+
+  schema: TStateSchema;
+>schema : TStateSchema
+>       : ^^^^^^^^^^^^
+}
+
+type StateNodesConfig<TStateSchema extends StateSchema> = {
+>StateNodesConfig : StateNodesConfig<TStateSchema>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [K in keyof TStateSchema["states"]]: StateNode<NonNullable<TStateSchema["states"]>[K]>;
+};
+
+// repro from #50539#issuecomment-1234067835
+
+type Ordering<TOrderBy extends string> = {
+>Ordering : Ordering<TOrderBy>
+>         : ^^^^^^^^^^^^^^^^^^
+
+    orderBy: TOrderBy
+>orderBy : TOrderBy
+>        : ^^^^^^^^
+}
+
+type Query<TOrderBy extends string> = {
+>Query : Query<TOrderBy>
+>      : ^^^^^^^^^^^^^^^
+
+    order?: Ordering<TOrderBy>
+>order : Ordering<TOrderBy> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type QueryHandler<
+>QueryHandler : QueryHandler<TQuery, TOrderBy>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    TQuery extends Query<TOrderBy>,
+    TOrderBy extends string = NonNullable<TQuery["order"]>["orderBy"]
+> = {}
+

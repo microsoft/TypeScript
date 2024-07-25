@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx ===
+//// [tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx] ////
+
+=== jsxEsprimaFbTestSuite.tsx ===
 declare var React: any;
 >React : Symbol(React, Decl(jsxEsprimaFbTestSuite.tsx, 0, 11))
 
@@ -77,6 +79,7 @@ baz
 <LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
 >LeftRight : Symbol(LeftRight, Decl(jsxEsprimaFbTestSuite.tsx, 3, 11))
 >left : Symbol(left, Decl(jsxEsprimaFbTestSuite.tsx, 39, 10))
+>right : Symbol(right, Decl(jsxEsprimaFbTestSuite.tsx, 39, 21))
 
 <a.b></a.b>;
 >a : Symbol(a, Decl(jsxEsprimaFbTestSuite.tsx, 5, 11))

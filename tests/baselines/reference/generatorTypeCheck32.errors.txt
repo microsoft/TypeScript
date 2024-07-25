@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck32.ts(2,29): error TS1163: A 'yield' expression is only allowed in a generator body.
+generatorTypeCheck32.ts(2,29): error TS1163: A 'yield' expression is only allowed in a generator body.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck32.ts (1 errors) ====
+==== generatorTypeCheck32.ts (1 errors) ====
     var s: string;
     var f: () => number = () => yield s;
                                 ~~~~~

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuring2.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuring2.ts] ////
+
+=== declarationEmitDestructuring2.ts ===
 function f({x = 10, y: [a, b, c, d] = [1, 2, 3, 4]} = { x: 10, y: [2, 4, 6, 8] }) { }
 >f : Symbol(f, Decl(declarationEmitDestructuring2.ts, 0, 0))
 >x : Symbol(x, Decl(declarationEmitDestructuring2.ts, 0, 12))

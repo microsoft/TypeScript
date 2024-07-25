@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-asyncFunctionArrayLiterals.ts ===
+//// [tests/cases/compiler/es5-asyncFunctionArrayLiterals.ts] ////
+
+=== es5-asyncFunctionArrayLiterals.ts ===
 declare var x, y, z, a;
 >x : Symbol(x, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 11))
 >y : Symbol(y, Decl(es5-asyncFunctionArrayLiterals.ts, 0, 14))

@@ -1,31 +1,43 @@
-=== tests/cases/compiler/cloduleAcrossModuleDefinitions.ts ===
+//// [tests/cases/compiler/cloduleAcrossModuleDefinitions.ts] ////
+
+=== cloduleAcrossModuleDefinitions.ts ===
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export class B {
 >B : B
+>  : ^
 
         foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
         static bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
     }
 }
 
 module A {
 >A : typeof A
+>  : ^^^^^^^^
 
     export module B {
 >B : typeof B
+>  : ^^^^^^^^
 
         export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 var b: A.B; // ok
 >b : A.B
+>  : ^^^
 >A : any
+>  : ^^^
 

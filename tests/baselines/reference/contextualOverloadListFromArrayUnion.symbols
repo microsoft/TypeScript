@@ -1,4 +1,6 @@
-=== tests/cases/compiler/one.ts ===
+//// [tests/cases/compiler/contextualOverloadListFromArrayUnion.ts] ////
+
+=== one.ts ===
 declare const y: never[] | string[];
 >y : Symbol(y, Decl(one.ts, 0, 13))
 
@@ -12,7 +14,7 @@ export const yThen = y.map(item => item.length);
 >item : Symbol(item, Decl(one.ts, 1, 27))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
-=== tests/cases/compiler/two.ts ===
+=== two.ts ===
 declare const y: number[][] | string[];
 >y : Symbol(y, Decl(two.ts, 0, 13))
 
@@ -26,7 +28,7 @@ export const yThen = y.map(item => item.length);
 >item : Symbol(item, Decl(two.ts, 1, 27))
 >length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
-=== tests/cases/compiler/three.ts ===
+=== three.ts ===
 // #42504
 interface ResizeObserverCallback {
 >ResizeObserverCallback : Symbol(ResizeObserverCallback, Decl(three.ts, 0, 0), Decl(three.ts, 3, 1))

@@ -1,11 +1,19 @@
-=== tests/cases/compiler/redeclarationOfVarWithGenericType.ts ===
+//// [tests/cases/compiler/redeclarationOfVarWithGenericType.ts] ////
+
+=== redeclarationOfVarWithGenericType.ts ===
 var a1: { fn<T>(x: T): T };
 >a1 : { fn<T>(x: T): T; }
+>   : ^^^^^ ^^ ^^ ^^^ ^^^
 >fn : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
 var a1: { fn<T>(x: T): T };
 >a1 : { fn<T>(x: T): T; }
+>   : ^^^^^ ^^ ^^ ^^^ ^^^
 >fn : <T>(x: T) => T
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 

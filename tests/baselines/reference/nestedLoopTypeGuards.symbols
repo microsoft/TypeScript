@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nestedLoopTypeGuards.ts ===
+//// [tests/cases/compiler/nestedLoopTypeGuards.ts] ////
+
+=== nestedLoopTypeGuards.ts ===
 // Repros from #10378
 
 function f1() {

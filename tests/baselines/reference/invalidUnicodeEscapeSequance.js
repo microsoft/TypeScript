@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidUnicodeEscapeSequance.ts] ////
+
 //// [invalidUnicodeEscapeSequance.ts]
 var arg\u003
 

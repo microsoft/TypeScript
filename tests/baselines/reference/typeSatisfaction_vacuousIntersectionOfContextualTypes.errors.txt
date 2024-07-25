@@ -1,0 +1,16 @@
+typeSatisfaction_vacuousIntersectionOfContextualTypes.ts(1,7): error TS2322: Type '"foo"' is not assignable to type '"baz"'.
+typeSatisfaction_vacuousIntersectionOfContextualTypes.ts(2,7): error TS2322: Type '{ xyz: "foo"; }' is not assignable to type '{ xyz: "baz"; }'.
+  Types of property 'xyz' are incompatible.
+    Type '"foo"' is not assignable to type '"baz"'.
+
+
+==== typeSatisfaction_vacuousIntersectionOfContextualTypes.ts (2 errors) ====
+    const a: "baz" = "foo" satisfies "foo" | "bar";
+          ~
+!!! error TS2322: Type '"foo"' is not assignable to type '"baz"'.
+    const b: { xyz: "baz" } = { xyz: "foo" } satisfies { xyz: "foo" | "bar" };
+          ~
+!!! error TS2322: Type '{ xyz: "foo"; }' is not assignable to type '{ xyz: "baz"; }'.
+!!! error TS2322:   Types of property 'xyz' are incompatible.
+!!! error TS2322:     Type '"foo"' is not assignable to type '"baz"'.
+    

@@ -1,10 +1,16 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/letDeclarations-scopes-duplicates7.ts] ////
+
+=== file1.ts ===
 let var1 = 0;
 >var1 : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 var var1 = 0;
 >var1 : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 

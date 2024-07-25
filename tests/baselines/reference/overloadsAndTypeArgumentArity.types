@@ -1,27 +1,42 @@
-=== tests/cases/compiler/overloadsAndTypeArgumentArity.ts ===
+//// [tests/cases/compiler/overloadsAndTypeArgumentArity.ts] ////
+
+=== overloadsAndTypeArgumentArity.ts ===
 declare function Callbacks(flags?: string): void;
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
+>          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^  ^^  ^^  ^^     ^^^      ^^^    ^^^
 >flags : string
+>      : ^^^^^^
 
 declare function Callbacks<T>(flags?: string): void;
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
+>          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^  ^^  ^^  ^^     ^^^      ^^^    ^^^
 >flags : string
+>      : ^^^^^^
 
 declare function Callbacks<T1, T2>(flags?: string): void;
->Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
+>Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1_1, T2_1, T3>(flags?: string): void; }
+>          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^^^^^^^^^^^^^  ^^     ^^^      ^^^    ^^^
 >flags : string
+>      : ^^^^^^
 
 declare function Callbacks<T1, T2, T3>(flags?: string): void;
->Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
+>Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1_1, T2_1>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
+>          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^^^^^^^^^^^^^     ^^^      ^^^    ^^^  ^^  ^^  ^^     ^^^      ^^^    ^^^
 >flags : string
+>      : ^^^^^^
 
 Callbacks<number, string, boolean>('s'); // no error
 >Callbacks<number, string, boolean>('s') : void
+>                                        : ^^^^
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
+>          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^  ^^  ^^  ^^     ^^^      ^^^    ^^^
 >'s' : "s"
+>    : ^^^
 
 new Callbacks<number, string, boolean>('s'); // no error
 >new Callbacks<number, string, boolean>('s') : any
 >Callbacks : { (flags?: string): void; <T>(flags?: string): void; <T1, T2>(flags?: string): void; <T1, T2, T3>(flags?: string): void; }
+>          : ^^^     ^^^      ^^^    ^^^ ^^     ^^^      ^^^    ^^^  ^^  ^^     ^^^      ^^^    ^^^  ^^  ^^  ^^     ^^^      ^^^    ^^^
 >'s' : "s"
+>    : ^^^
 

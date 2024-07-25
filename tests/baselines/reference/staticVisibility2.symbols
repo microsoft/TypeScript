@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticVisibility2.ts ===
+//// [tests/cases/compiler/staticVisibility2.ts] ////
+
+=== staticVisibility2.ts ===
 class Square {
 >Square : Symbol(Square, Decl(staticVisibility2.ts, 0, 0))
 

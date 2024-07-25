@@ -1,15 +1,15 @@
-tests/cases/conformance/jsx/file.tsx(8,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(9,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(10,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(11,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(14,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(15,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(16,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(17,10): error TS2304: Cannot find name 'React'.
-tests/cases/conformance/jsx/file.tsx(18,10): error TS2304: Cannot find name 'React'.
+file.tsx(8,10): error TS2304: Cannot find name 'React'.
+file.tsx(9,10): error TS2304: Cannot find name 'React'.
+file.tsx(10,10): error TS2304: Cannot find name 'React'.
+file.tsx(11,10): error TS2304: Cannot find name 'React'.
+file.tsx(14,10): error TS2304: Cannot find name 'React'.
+file.tsx(15,10): error TS2304: Cannot find name 'React'.
+file.tsx(16,10): error TS2304: Cannot find name 'React'.
+file.tsx(17,10): error TS2304: Cannot find name 'React'.
+file.tsx(18,10): error TS2304: Cannot find name 'React'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (9 errors) ====
+==== file.tsx (9 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

@@ -1,18 +1,25 @@
-=== tests/cases/compiler/conditionalTypeSimplification.ts ===
+//// [tests/cases/compiler/conditionalTypeSimplification.ts] ////
+
+=== conditionalTypeSimplification.ts ===
 // Repro from #30794
 
 interface AbstractSchema<S, V> {
   m1<T> (v: T): SchemaType<S, Exclude<V, T>>;
 >m1 : <T>(v: T) => SchemaType<S, Exclude<V, T>>
+>   : ^ ^^ ^^ ^^^^^                            
 >v : T
+>  : ^
 
   m2<T> (v: T): SchemaType<S, T>;
 >m2 : <T>(v: T) => SchemaType<S, T>
+>   : ^ ^^ ^^ ^^^^^                
 >v : T
+>  : ^
 }
 
 type SchemaType<S, V> = S extends object ? AnySchema<V> : never;
 >SchemaType : SchemaType<S, V>
+>           : ^^^^^^^^^^^^^^^^
 
 interface AnySchema<V> extends AnySchemaType<AnySchema<undefined>, V> { }
 interface AnySchemaType<S extends AbstractSchema<any, any>, V> extends AbstractSchema<S, V> { }

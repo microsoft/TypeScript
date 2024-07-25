@@ -1,14 +1,21 @@
-=== tests/cases/compiler/accessorWithLineTerminator.ts ===
+//// [tests/cases/compiler/accessorWithLineTerminator.ts] ////
+
+=== accessorWithLineTerminator.ts ===
 class C {
 >C : C
+>  : ^
 
     get
     x() { return 1 }
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     set
     x(v) {  }
 >x : number
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 }

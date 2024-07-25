@@ -1,39 +1,59 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/abstractProperty.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/abstractProperty.ts] ////
+
+=== abstractProperty.ts ===
 abstract class A {
 >A : A
+>  : ^
 
     protected abstract x: string;
 >x : string
+>  : ^^^^^^
 
     public foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         console.log(this.x);
 >console.log(this.x) : void
+>                    : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this.x : string
+>       : ^^^^^^
 >this : this
+>     : ^^^^
 >x : string
+>  : ^^^^^^
     }
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     protected x = 'B.x';
 >x : string
+>  : ^^^^^^
 >'B.x' : "B.x"
+>      : ^^^^^
 }
 
 class C extends A {
 >C : C
+>  : ^
 >A : A
+>  : ^
 
     protected get x() { return 'C.x' };
 >x : string
+>  : ^^^^^^
 >'C.x' : "C.x"
+>      : ^^^^^
 }
 

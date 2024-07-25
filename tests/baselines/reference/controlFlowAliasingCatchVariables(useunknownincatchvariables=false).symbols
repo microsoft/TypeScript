@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowAliasingCatchVariables.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowAliasingCatchVariables.ts] ////
+
+=== controlFlowAliasingCatchVariables.ts ===
 try {}
 catch (e) {
 >e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 1, 7))

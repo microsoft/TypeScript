@@ -1,126 +1,185 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts] ////
+
+=== classAbstractInstantiations2.ts ===
 class A {
 >A : A
+>  : ^
 
     // ...
 }
 
 abstract class B {
 >B : B
+>  : ^
 
     foo(): number { return this.bar(); }
 >foo : () => number
+>    : ^^^^^^      
 >this.bar() : number
+>           : ^^^^^^
 >this.bar : () => number
+>         : ^^^^^^      
 >this : this
+>     : ^^^^
 >bar : () => number
+>    : ^^^^^^      
 
     abstract bar() : number;
 >bar : () => number
+>    : ^^^^^^      
 }
 
 new B; // error
 >new B : any
+>      : ^^^
 >B : typeof B
+>  : ^^^^^^^^
 
 var BB: typeof B = B;
 >BB : typeof B
+>   : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
 var AA: typeof A = BB; // error, AA is not of abstract type.
 >AA : typeof A
+>   : ^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >BB : typeof B
+>   : ^^^^^^^^
 
 new AA;
 >new AA : A
+>       : ^
 >AA : typeof A
+>   : ^^^^^^^^
 
 function constructB(Factory : typeof B) {
 >constructB : (Factory: typeof B) => void
+>           : ^       ^^        ^^^^^^^^^
 >Factory : typeof B
+>        : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
     new Factory; // error -- Factory is of type typeof B.
 >new Factory : any
+>            : ^^^
 >Factory : typeof B
+>        : ^^^^^^^^
 }
 
 var BB = B;
 >BB : typeof B
+>   : ^^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 
 new BB; // error -- BB is of type typeof B.
 >new BB : any
+>       : ^^^
 >BB : typeof B
+>   : ^^^^^^^^
 
 var x : any = C;
 >x : any
+>  : ^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 new x; // okay -- undefined behavior at runtime
 >new x : any
+>      : ^^^
 >x : any
+>  : ^^^
 
 class C extends B { } // error -- not declared abstract
 >C : C
+>  : ^
 >B : B
+>  : ^
 
 abstract class D extends B { } // okay
 >D : D
+>  : ^
 >B : B
+>  : ^
 
 class E extends B { // okay -- implements abstract method
 >E : E
+>  : ^
 >B : B
+>  : ^
 
     bar() { return 1; }
 >bar : () => number
+>    : ^^^^^^^^^^^^
 >1 : 1
+>  : ^
 }
 
 abstract class F extends B {
 >F : F
+>  : ^
 >B : B
+>  : ^
 
     abstract foo() : number;
 >foo : () => number
+>    : ^^^^^^      
 
     bar() { return 2; }
 >bar : () => number
+>    : ^^^^^^^^^^^^
 >2 : 2
+>  : ^
 }
 
 abstract class G {
 >G : G
+>  : ^
 
     abstract qux(x : number) : string;
 >qux : { (x: number): string; (): number; }
+>    : ^^^ ^^      ^^^      ^^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 
     abstract qux() : number;
 >qux : { (x: number): string; (): number; }
+>    : ^^^ ^^      ^^^      ^^^^^^      ^^^
 
     y : number;
 >y : number
+>  : ^^^^^^
 
     abstract quz(x : number, y : string) : boolean; // error -- declarations must be adjacent
 >quz : (x: number, y: string) => boolean
+>    : ^ ^^      ^^ ^^      ^^^^^       
 >x : number
+>  : ^^^^^^
 >y : string
+>  : ^^^^^^
 
     abstract nom(): boolean;
 >nom : { (): boolean; (x: number): boolean; }
+>    : ^^^^^^       ^^^ ^^      ^^^       ^^^
 
     nom(x : number): boolean; // error -- use of modifier abstract must match on all overloads.
 >nom : { (): boolean; (x: number): boolean; }
+>    : ^^^^^^       ^^^ ^^      ^^^       ^^^
 >x : number
+>  : ^^^^^^
 }
 
 class H { // error -- not declared abstract
 >H : H
+>  : ^
 
     abstract baz() : number;
 >baz : () => number
+>    : ^^^^^^      
 }

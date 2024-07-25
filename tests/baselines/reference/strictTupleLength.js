@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/strictTupleLength.ts] ////
+
 //// [strictTupleLength.ts]
 var t0: [];
 var t1: [number];

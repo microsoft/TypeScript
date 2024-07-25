@@ -1,51 +1,77 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload2.tsx] ////
+
+=== file.tsx ===
 import React = require('react')
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 declare function OneThing(): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >JSX : any
+>    : ^^^
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
->OneThing : { (): JSX.Element; (l: {    yy: number;    yy1: string;}): JSX.Element; }
+>OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >l : { yy: number; yy1: string; }
+>  : ^^^^^^      ^^^^^^^      ^^^
 >yy : number
+>   : ^^^^^^
 >yy1 : string
+>    : ^^^^^^
 >JSX : any
+>    : ^^^
 
 let obj = {
 >obj : { yy: number; yy1: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    yy: 10,    yy1: "hello"} : { yy: number; yy1: string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yy: 10,
 >yy : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
 
     yy1: "hello"
 >yy1 : string
+>    : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 let obj1 = {
 >obj1 : { yy: boolean; }
+>     : ^^^^^^^^^^^^^^^^
 >{    yy: true} : { yy: boolean; }
+>               : ^^^^^^^^^^^^^^^^
 
     yy: true
 >yy : boolean
+>   : ^^^^^^^
 >true : true
+>     : ^^^^
 }
 
 let obj2 = {
 >obj2 : { yy: number; "ignore-prop": string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    yy: 500,    "ignore-prop": "hello"} : { yy: number; "ignore-prop": string; }
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yy: 500,
 >yy : number
+>   : ^^^^^^
 >500 : 500
+>    : ^^^
 
     "ignore-prop": "hello"
 >"ignore-prop" : string
+>              : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 }
 
 let defaultObj: any;
@@ -54,77 +80,132 @@ let defaultObj: any;
 // OK
 const c1 = <OneThing />
 >c1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><OneThing /> : JSX.Element
+>             : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 
 const c2 = <OneThing {...obj}/>
 >c2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><OneThing {...obj}/> : JSX.Element
+>                     : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >obj : { yy: number; yy1: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const c3 = <OneThing {...{}} />
 >c3 : JSX.Element
+>   : ^^^^^^^^^^^
 ><OneThing {...{}} /> : JSX.Element
+>                     : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >{} : {}
+>   : ^^
 
 const c4 = <OneThing {...obj1} {...obj} />
 >c4 : JSX.Element
+>   : ^^^^^^^^^^^
 ><OneThing {...obj1} {...obj} /> : JSX.Element
+>                                : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >obj1 : { yy: boolean; }
+>     : ^^^^^^^^^^^^^^^^
 >obj : { yy: number; yy1: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const c5 = <OneThing {...obj1} yy={42} {...{yy1: "hi"}}/>
 >c5 : JSX.Element
+>   : ^^^^^^^^^^^
 ><OneThing {...obj1} yy={42} {...{yy1: "hi"}}/> : JSX.Element
+>                                               : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >obj1 : { yy: boolean; }
+>     : ^^^^^^^^^^^^^^^^
 >yy : number
+>   : ^^^^^^
 >42 : 42
+>   : ^^
 >{yy1: "hi"} : { yy1: string; }
+>            : ^^^^^^^^^^^^^^^^
 >yy1 : string
+>    : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
 const c6 = <OneThing {...obj1} {...{yy: 10000, yy1: "true"}} />
 >c6 : JSX.Element
+>   : ^^^^^^^^^^^
 ><OneThing {...obj1} {...{yy: 10000, yy1: "true"}} /> : JSX.Element
+>                                                     : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >obj1 : { yy: boolean; }
+>     : ^^^^^^^^^^^^^^^^
 >{yy: 10000, yy1: "true"} : { yy: number; yy1: string; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yy : number
+>   : ^^^^^^
 >10000 : 10000
+>      : ^^^^^
 >yy1 : string
+>    : ^^^^^^
 >"true" : "true"
+>       : ^^^^^^
 
 const c7 = <OneThing {...defaultObj} yy {...obj} />;  // No error. should pick second overload
 >c7 : JSX.Element
+>   : ^^^^^^^^^^^
 ><OneThing {...defaultObj} yy {...obj} /> : JSX.Element
+>                                         : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >defaultObj : any
 >yy : true
+>   : ^^^^
 >obj : { yy: number; yy1: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const c8 = <OneThing ignore-prop={100} />
 >c8 : JSX.Element
+>   : ^^^^^^^^^^^
 ><OneThing ignore-prop={100} /> : JSX.Element
+>                               : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >ignore-prop : number
+>            : ^^^^^^
 >100 : 100
+>    : ^^^
 
 const c9 = <OneThing {...{ "ignore-prop":200 }} />;
 >c9 : JSX.Element
+>   : ^^^^^^^^^^^
 ><OneThing {...{ "ignore-prop":200 }} /> : JSX.Element
+>                                        : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >{ "ignore-prop":200 } : { "ignore-prop": number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"ignore-prop" : number
+>              : ^^^^^^
 >200 : 200
+>    : ^^^
 
 const c10 = <OneThing {...obj2} yy1="boo" />;
 >c10 : JSX.Element
+>    : ^^^^^^^^^^^
 ><OneThing {...obj2} yy1="boo" /> : JSX.Element
+>                                 : ^^^^^^^^^^^
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>         : ^^^^^^           ^^^ ^^                            ^^^           ^^^
 >obj2 : { yy: number; "ignore-prop": string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yy1 : string
+>    : ^^^^^^
 

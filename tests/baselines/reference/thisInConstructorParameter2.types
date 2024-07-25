@@ -1,48 +1,82 @@
-=== tests/cases/compiler/thisInConstructorParameter2.ts ===
+//// [tests/cases/compiler/thisInConstructorParameter2.ts] ////
+
+=== thisInConstructorParameter2.ts ===
 class P {
 >P : P
+>  : ^
 
     x = this;
 >x : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 
     static y = this;
 >y : typeof P
+>  : ^^^^^^^^
 >this : typeof P
+>     : ^^^^^^^^
 
     constructor(public z = this, zz = this, zzz = (p = this) => this) {
 >z : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 >zz : this
+>   : ^^^^
 >this : this
+>     : ^^^^
 >zzz : (p?: this) => this
+>    : ^ ^^^^^^^^^^^^^^^^
 >(p = this) => this : (p?: this) => this
+>                   : ^ ^^^^^^^^^^^^^^^^
 >p : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 >this : this
+>     : ^^^^
 
         zzz = (p = this) => this;
 >zzz = (p = this) => this : (p?: this) => this
+>                         : ^ ^^^^^^^^^^^^^^^^
 >zzz : (p?: this) => this
+>    : ^ ^^^^^^^^^^^^^^^^
 >(p = this) => this : (p?: this) => this
+>                   : ^ ^^^^^^^^^^^^^^^^
 >p : this
+>  : ^^^^
 >this : this
+>     : ^^^^
 >this : this
+>     : ^^^^
     }
 
     foo(zz = this) { zz.x; }
 >foo : (zz?: this) => void
+>    : ^  ^^^^^^^^^^^^^^^^
 >zz : this
+>   : ^^^^
 >this : this
+>     : ^^^^
 >zz.x : this
+>     : ^^^^
 >zz : this
+>   : ^^^^
 >x : this
+>  : ^^^^
 
     static bar(zz = this) { zz.y; }
 >bar : (zz?: typeof P) => void
+>    : ^  ^^^^^^^^^^^^^^^^^^^^
 >zz : typeof P
+>   : ^^^^^^^^
 >this : typeof P
+>     : ^^^^^^^^
 >zz.y : typeof P
+>     : ^^^^^^^^
 >zz : typeof P
+>   : ^^^^^^^^
 >y : typeof P
+>  : ^^^^^^^^
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualExpressionTypecheckingDoesntBlowStack.ts] ////
+
 //// [contextualExpressionTypecheckingDoesntBlowStack.ts]
 // repro for: https://github.com/Microsoft/TypeScript/issues/23661
 export interface IValidationError {

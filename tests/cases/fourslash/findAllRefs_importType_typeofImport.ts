@@ -4,7 +4,7 @@
 ////export const x = 0;
 
 // @Filename: /b.ts
-////[|const x: typeof import("[|{| "contextRangeIndex": 0 |}./a|]") = { x: 0 };|]
-////[|const y: typeof import("[|{| "contextRangeIndex": 2 |}./a|]") = { x: 0 };|]
+/////*1*/const x: typeof import("/*2*/./a") = { x: 0 };
+/////*3*/const y: typeof import("/*4*/./a") = { x: 0 };
 
-verify.singleReferenceGroup('module "/a"', "./a");
+verify.baselineFindAllReferences('1', '2', '3', '4');

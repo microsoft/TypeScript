@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/binopAssignmentShouldHaveType.ts] ////
+
 //// [binopAssignmentShouldHaveType.ts]
 declare var console;
 "use strict";

@@ -1,21 +1,34 @@
-=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments18_ES6.ts ===
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments18_ES6.ts] ////
+
+=== emitArrowFunctionWhenUsingArguments18_ES6.ts ===
 function f() {
 >f : () => () => IArguments
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 
     var { arguments: args } = { arguments };
 >arguments : any
+>          : ^^^
 >args : IArguments
+>     : ^^^^^^^^^^
 >{ arguments } : { arguments: IArguments; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 
     if (Math.random()) {
 >Math.random() : number
+>              : ^^^^^^
 >Math.random : () => number
+>            : ^^^^^^      
 >Math : Math
+>     : ^^^^
 >random : () => number
+>       : ^^^^^^      
 
         return () => arguments;
 >() => arguments : () => IArguments
+>                : ^^^^^^^^^^^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
     }
 }

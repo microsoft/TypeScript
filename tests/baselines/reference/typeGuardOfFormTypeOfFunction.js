@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfFunction.ts] ////
+
 //// [typeGuardOfFormTypeOfFunction.ts]
 function f1(x: any) {
     if (typeof x === "function") {
@@ -72,6 +74,19 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
     }
 }
 
+// Repro from #49316
+
+function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
+    let rootReducer: () => void;
+    if (typeof reducer === 'function') {
+        rootReducer = reducer;
+    }
+}
+
+function f101(x: string | Record<string, any>) {
+    return typeof x === "object" && x.anything;
+}
+
 
 //// [typeGuardOfFormTypeOfFunction.js]
 function f1(x) {
@@ -136,4 +151,14 @@ function f100(obj, keys) {
         if (typeof item == 'function')
             item.call(obj);
     }
+}
+// Repro from #49316
+function configureStore(reducer) {
+    var rootReducer;
+    if (typeof reducer === 'function') {
+        rootReducer = reducer;
+    }
+}
+function f101(x) {
+    return typeof x === "object" && x.anything;
 }

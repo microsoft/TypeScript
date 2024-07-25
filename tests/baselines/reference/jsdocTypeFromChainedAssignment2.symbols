@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/use.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeFromChainedAssignment2.ts] ////
+
+=== use.js ===
 var mod = require('./mod');
 >mod : Symbol(mod, Decl(use.js, 0, 3))
 >require : Symbol(require)
@@ -24,7 +26,7 @@ mod.i(1)
 >mod : Symbol(mod, Decl(use.js, 0, 3))
 >i : Symbol(mod.i, Decl(mod.js, 5, 18))
 
-=== tests/cases/conformance/jsdoc/mod.js ===
+=== mod.js ===
 /** @param {number} n */
 exports.f = exports.g = function fg(n) {
 >exports.f : Symbol(f, Decl(mod.js, 0, 0))

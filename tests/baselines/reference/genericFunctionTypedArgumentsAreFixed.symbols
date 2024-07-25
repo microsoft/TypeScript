@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericFunctionTypedArgumentsAreFixed.ts ===
+//// [tests/cases/compiler/genericFunctionTypedArgumentsAreFixed.ts] ////
+
+=== genericFunctionTypedArgumentsAreFixed.ts ===
 declare function map<T, U>(f: (x: T) => U, xs: T[]): U[];
 >map : Symbol(map, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 0))
 >T : Symbol(T, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 21))

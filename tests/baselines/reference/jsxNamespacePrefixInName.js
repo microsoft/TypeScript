@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxNamespacePrefixInName.tsx] ////
+
 //// [jsxNamespacePrefixInName.tsx]
 var justElement1 = <a:element />;
 var justElement2 = <a:element></a:element>;
@@ -50,9 +52,9 @@ var justAttribute3 = <element a:attr={"value"}>{"text"}</element>;
 var both1 = <a:element a:attr={"value"}/>;
 var both2 = <a:element k:attr={"value"}></a:element>;
 var both3 = <a:element a:attr={"value"}>{"text"}</a:element>;
-var endOfIdent1 = <a attr={"value"}/>;
-var endOfIdent2 = <a attr {..."value"}/>;
+var endOfIdent1 = <a:attr {..."value"}/>;
+var endOfIdent2 = <a attr:={"value"}/>;
 var beginOfIdent1 =  < , a, attr = { "value":  } /  > ;
-var beginOfIdent2 = <a attr={"value"}/>;
+var beginOfIdent2 = <a:attr {..."value"}/>;
 var upcaseComponent1 = <ns:Upcase />; // Parsed as intrinsic
 var upcaseComponent2 = <Upcase:element />; // Parsed as instrinsic

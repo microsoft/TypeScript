@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseInvalidNames.ts] ////
+
 //// [parseInvalidNames.ts]
 namespace 100 {}
 interface 100 {}

@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/declarationEmit/libReferenceNoLibBundle.ts] ////
 
 //// [fakelib.ts]
-// Test that passing noLib disables <reference lib> resolution.
-
 interface Object { }
 interface Array<T> { }
 interface String { }
@@ -20,11 +18,11 @@ export const elem: HTMLElement = { field: 'a' };
 
 
 //// [bundle.js]
-// Test that passing noLib disables <reference lib> resolution.
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.elem = void 0;
+    /// <reference lib="dom" />
     exports.elem = { field: 'a' };
 });
 

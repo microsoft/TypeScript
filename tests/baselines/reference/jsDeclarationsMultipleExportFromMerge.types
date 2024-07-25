@@ -1,47 +1,70 @@
-=== tests/cases/conformance/jsdoc/declarations/items.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsMultipleExportFromMerge.ts] ////
+
+=== items.js ===
 export const a = 1;
 >a : 1
+>  : ^
 >1 : 1
+>  : ^
 
 export const b = 2;
 >b : 2
+>  : ^
 >2 : 2
+>  : ^
 
 export const c = 3;
 >c : 3
+>  : ^
 >3 : 3
+>  : ^
 
-=== tests/cases/conformance/jsdoc/declarations/justone.js ===
+=== justone.js ===
 export { a, b, c } from "./items";
 >a : 1
+>  : ^
 >b : 2
+>  : ^
 >c : 3
+>  : ^
 
-=== tests/cases/conformance/jsdoc/declarations/two.js ===
+=== two.js ===
 export { a } from "./items";
 >a : 1
+>  : ^
 
 export { b, c } from "./items";
 >b : 2
+>  : ^
 >c : 3
+>  : ^
 
-=== tests/cases/conformance/jsdoc/declarations/multiple.js ===
+=== multiple.js ===
 export {a, b} from "./items";
 >a : 1
+>  : ^
 >b : 2
+>  : ^
 
 export {a as aa} from "./two";
 >a : 1
+>  : ^
 >aa : 1
+>   : ^
 
 export {b as bb} from "./two";
 >b : 2
+>  : ^
 >bb : 2
+>   : ^
 
 export {c} from "./two"
 >c : 3
+>  : ^
 
 export {c as cc} from "./items";
 >c : 3
+>  : ^
 >cc : 3
+>   : ^
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames39_ES5.ts(8,9): error TS2411: Property '[1 << 6]' of type 'Foo' is not assignable to 'number' index type 'Foo2'.
+computedPropertyNames39_ES5.ts(8,9): error TS2411: Property '[1 << 6]' of type 'Foo' is not assignable to 'number' index type 'Foo2'.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames39_ES5.ts (1 errors) ====
+==== computedPropertyNames39_ES5.ts (1 errors) ====
     class Foo { x }
     class Foo2 { x; y }
     

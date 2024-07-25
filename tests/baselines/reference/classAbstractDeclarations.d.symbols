@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractDeclarations.d.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractDeclarations.d.ts] ////
+
+=== classAbstractDeclarations.d.ts ===
 declare abstract class A {
 >A : Symbol(A, Decl(classAbstractDeclarations.d.ts, 0, 0))
 

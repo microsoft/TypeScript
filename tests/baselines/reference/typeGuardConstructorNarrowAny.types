@@ -1,66 +1,98 @@
-=== tests/cases/compiler/typeGuardConstructorNarrowAny.ts ===
+//// [tests/cases/compiler/typeGuardConstructorNarrowAny.ts] ////
+
+=== typeGuardConstructorNarrowAny.ts ===
 // Narrowing any to primitives
 let var1: any;
 >var1 : any
 
 if (var1.constructor === String) {
 >var1.constructor === String : boolean
+>                            : ^^^^^^^
 >var1.constructor : any
 >var1 : any
+>     : ^^^
 >constructor : any
+>            : ^^^
 >String : StringConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     var1; // String
 >var1 : String
+>     : ^^^^^^
 }
 if (var1.constructor === Number) {
 >var1.constructor === Number : boolean
+>                            : ^^^^^^^
 >var1.constructor : any
 >var1 : any
+>     : ^^^
 >constructor : any
+>            : ^^^
 >Number : NumberConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     var1; // Number
 >var1 : Number
+>     : ^^^^^^
 }
 if (var1.constructor === Boolean) {
 >var1.constructor === Boolean : boolean
+>                             : ^^^^^^^
 >var1.constructor : any
 >var1 : any
+>     : ^^^
 >constructor : any
+>            : ^^^
 >Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
 
     var1; // Boolean
 >var1 : Boolean
+>     : ^^^^^^^
 }
 if (var1.constructor === Array) {
 >var1.constructor === Array : boolean
+>                           : ^^^^^^^
 >var1.constructor : any
 >var1 : any
+>     : ^^^
 >constructor : any
+>            : ^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 
     var1; // any[]
 >var1 : any[]
+>     : ^^^^^
 }
 if (var1.constructor === Symbol) {
 >var1.constructor === Symbol : boolean
+>                            : ^^^^^^^
 >var1.constructor : any
 >var1 : any
+>     : ^^^
 >constructor : any
+>            : ^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     var1; // Symbol
 >var1 : Symbol
+>     : ^^^^^^
 }
 if (var1.constructor === BigInt) {
 >var1.constructor === BigInt : boolean
+>                            : ^^^^^^^
 >var1.constructor : any
 >var1 : any
+>     : ^^^
 >constructor : any
+>            : ^^^
 >BigInt : BigIntConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
     var1; // BigInt
 >var1 : BigInt
+>     : ^^^^^^
 }
 

@@ -1,38 +1,54 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/umd8.ts] ////
+
+=== a.ts ===
 /// <reference path="foo.d.ts" />
 import * as ff from './foo';
 >ff : typeof ff
+>   : ^^^^^^^^^
 
 let y: Foo; // OK in type position
 >y : ff
+>  : ^^
 
 y.foo();
 >y.foo() : number
+>        : ^^^^^^
 >y.foo : () => number
+>      : ^^^^^^      
 >y : ff
+>  : ^^
 >foo : () => number
+>    : ^^^^^^      
 
 let z: Foo.SubThing; // OK in ns position
 >z : ff.SubThing
+>  : ^^^^^^^^^^^
 >Foo : any
+>    : ^^^
 
 let x: any = Foo; // Not OK in value position
 >x : any
+>  : ^^^
 >Foo : typeof ff
+>    : ^^^^^^^^^
 
-=== tests/cases/conformance/externalModules/foo.d.ts ===
+=== foo.d.ts ===
 declare class Thing {
 >Thing : Thing
+>      : ^^^^^
 
 	foo(): number;
 >foo : () => number
+>    : ^^^^^^      
 }
 declare namespace Thing {
 	interface SubThing { }
 }
 export = Thing;
 >Thing : Thing
+>      : ^^^^^
 
 export as namespace Foo;
 >Foo : typeof Thing
+>    : ^^^^^^^^^^^^
 

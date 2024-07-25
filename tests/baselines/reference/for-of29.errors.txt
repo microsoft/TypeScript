@@ -1,12 +1,12 @@
-tests/cases/conformance/es6/for-ofStatements/for-of29.ts(5,15): error TS2488: Type '{ [Symbol.iterator]?(): Iterator<string, any, undefined>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+for-of29.ts(5,15): error TS2488: Type '{ [Symbol.iterator]?(): Iterator<string, any, any>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
-==== tests/cases/conformance/es6/for-ofStatements/for-of29.ts (1 errors) ====
+==== for-of29.ts (1 errors) ====
     var iterableWithOptionalIterator: {
         [Symbol.iterator]?(): Iterator<string>
     };
     
     for (var v of iterableWithOptionalIterator) { }
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type '{ [Symbol.iterator]?(): Iterator<string, any, undefined>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+!!! error TS2488: Type '{ [Symbol.iterator]?(): Iterator<string, any, any>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
     

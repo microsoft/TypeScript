@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget3.ts] ////
+
 //// [parser_breakTarget3.ts]
 target1:
 target2:

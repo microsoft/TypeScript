@@ -1,22 +1,32 @@
-=== tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts ===
+//// [tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts] ////
+
+=== declarationEmitImportInExportAssignmentModule.ts ===
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     export module c {
 >c : typeof m.c
+>  : ^^^^^^^^^^
 
         export class c {
 >c : c
+>  : ^
         }
     }
     import x = c;
 >x : typeof c
+>  : ^^^^^^^^
 >c : typeof c
+>  : ^^^^^^^^
 
     export var a: typeof x;
 >a : typeof c
+>  : ^^^^^^^^
 >x : typeof c
+>  : ^^^^^^^^
 }
 export = m;
 >m : typeof m
+>  : ^^^^^^^^
 

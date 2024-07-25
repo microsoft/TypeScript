@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature7.ts] ////
+
 //// [staticIndexSignature7.ts]
 class X {
     static [index: string]: string;

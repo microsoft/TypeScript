@@ -1,24 +1,35 @@
-=== tests/cases/compiler/convertClassExpressionToFunctionFromObjectProperty1.ts ===
+//// [tests/cases/compiler/convertClassExpressionToFunctionFromObjectProperty1.ts] ////
+
+=== convertClassExpressionToFunctionFromObjectProperty1.ts ===
 const foo: any = {};
 >foo : any
 >{} : {}
+>   : ^^
 
 // properties
 foo.x = class {
 >foo.x = class {    constructor () {}} : typeof x
+>                                      : ^^^^^^^^
 >foo.x : any
 >foo : any
+>    : ^^^
 >x : any
+>  : ^^^
 >class {    constructor () {}} : typeof x
+>                              : ^^^^^^^^
 
     constructor () {}
 }
 foo.y = class {
 >foo.y = class {    constructor () {}} : typeof y
+>                                      : ^^^^^^^^
 >foo.y : any
 >foo : any
+>    : ^^^
 >y : any
+>  : ^^^
 >class {    constructor () {}} : typeof y
+>                              : ^^^^^^^^
 
     constructor () {}
 }
@@ -26,685 +37,989 @@ foo.y = class {
 // keywords
 foo.break = class {
 >foo.break = class {    constructor () {}} : typeof break
+>                                          : ^^^^^^^^^^^^
 >foo.break : any
 >foo : any
+>    : ^^^
 >break : any
+>      : ^^^
 >class {    constructor () {}} : typeof break
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.case = class {
 >foo.case = class {    constructor () {}} : typeof case
+>                                         : ^^^^^^^^^^^
 >foo.case : any
 >foo : any
+>    : ^^^
 >case : any
+>     : ^^^
 >class {    constructor () {}} : typeof case
+>                              : ^^^^^^^^^^^
 
     constructor () {}
 }
 foo.catch = class {
 >foo.catch = class {    constructor () {}} : typeof catch
+>                                          : ^^^^^^^^^^^^
 >foo.catch : any
 >foo : any
+>    : ^^^
 >catch : any
+>      : ^^^
 >class {    constructor () {}} : typeof catch
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.class = class {
 >foo.class = class {    constructor () {}} : typeof class
+>                                          : ^^^^^^^^^^^^
 >foo.class : any
 >foo : any
+>    : ^^^
 >class : any
+>      : ^^^
 >class {    constructor () {}} : typeof class
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.const = class {
 >foo.const = class {    constructor () {}} : typeof const
+>                                          : ^^^^^^^^^^^^
 >foo.const : any
 >foo : any
+>    : ^^^
 >const : any
+>      : ^^^
 >class {    constructor () {}} : typeof const
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.continue = class {
 >foo.continue = class {    constructor () {}} : typeof continue
+>                                             : ^^^^^^^^^^^^^^^
 >foo.continue : any
 >foo : any
+>    : ^^^
 >continue : any
+>         : ^^^
 >class {    constructor () {}} : typeof continue
+>                              : ^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.debugger = class {
 >foo.debugger = class {    constructor () {}} : typeof debugger
+>                                             : ^^^^^^^^^^^^^^^
 >foo.debugger : any
 >foo : any
+>    : ^^^
 >debugger : any
+>         : ^^^
 >class {    constructor () {}} : typeof debugger
+>                              : ^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.default = class {
 >foo.default = class {    constructor () {}} : typeof default
+>                                            : ^^^^^^^^^^^^^^
 >foo.default : any
 >foo : any
+>    : ^^^
 >default : any
+>        : ^^^
 >class {    constructor () {}} : typeof default
+>                              : ^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.delete = class {
 >foo.delete = class {    constructor () {}} : typeof delete
+>                                           : ^^^^^^^^^^^^^
 >foo.delete : any
 >foo : any
+>    : ^^^
 >delete : any
+>       : ^^^
 >class {    constructor () {}} : typeof delete
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.do = class {
 >foo.do = class {    constructor () {}} : typeof do
+>                                       : ^^^^^^^^^
 >foo.do : any
 >foo : any
+>    : ^^^
 >do : any
+>   : ^^^
 >class {    constructor () {}} : typeof do
+>                              : ^^^^^^^^^
 
     constructor () {}
 }
 foo.else = class {
 >foo.else = class {    constructor () {}} : typeof else
+>                                         : ^^^^^^^^^^^
 >foo.else : any
 >foo : any
+>    : ^^^
 >else : any
+>     : ^^^
 >class {    constructor () {}} : typeof else
+>                              : ^^^^^^^^^^^
 
     constructor () {}
 }
 foo.enum = class {
 >foo.enum = class {    constructor () {}} : typeof enum
+>                                         : ^^^^^^^^^^^
 >foo.enum : any
 >foo : any
+>    : ^^^
 >enum : any
+>     : ^^^
 >class {    constructor () {}} : typeof enum
+>                              : ^^^^^^^^^^^
 
     constructor () {}
 }
 foo.export = class {
 >foo.export = class {    constructor () {}} : typeof export
+>                                           : ^^^^^^^^^^^^^
 >foo.export : any
 >foo : any
+>    : ^^^
 >export : any
+>       : ^^^
 >class {    constructor () {}} : typeof export
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.extends = class {
 >foo.extends = class {    constructor () {}} : typeof extends
+>                                            : ^^^^^^^^^^^^^^
 >foo.extends : any
 >foo : any
+>    : ^^^
 >extends : any
+>        : ^^^
 >class {    constructor () {}} : typeof extends
+>                              : ^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.false = class {
 >foo.false = class {    constructor () {}} : typeof false
+>                                          : ^^^^^^^^^^^^
 >foo.false : any
 >foo : any
+>    : ^^^
 >false : any
+>      : ^^^
 >class {    constructor () {}} : typeof false
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.finally = class {
 >foo.finally = class {    constructor () {}} : typeof finally
+>                                            : ^^^^^^^^^^^^^^
 >foo.finally : any
 >foo : any
+>    : ^^^
 >finally : any
+>        : ^^^
 >class {    constructor () {}} : typeof finally
+>                              : ^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.for = class {
 >foo.for = class {    constructor () {}} : typeof for
+>                                        : ^^^^^^^^^^
 >foo.for : any
 >foo : any
+>    : ^^^
 >for : any
+>    : ^^^
 >class {    constructor () {}} : typeof for
+>                              : ^^^^^^^^^^
 
     constructor () {}
 }
 foo.function = class {
 >foo.function = class {    constructor () {}} : typeof function
+>                                             : ^^^^^^^^^^^^^^^
 >foo.function : any
 >foo : any
+>    : ^^^
 >function : any
+>         : ^^^
 >class {    constructor () {}} : typeof function
+>                              : ^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.if = class {
 >foo.if = class {    constructor () {}} : typeof if
+>                                       : ^^^^^^^^^
 >foo.if : any
 >foo : any
+>    : ^^^
 >if : any
+>   : ^^^
 >class {    constructor () {}} : typeof if
+>                              : ^^^^^^^^^
 
     constructor () {}
 }
 foo.import = class {
 >foo.import = class {    constructor () {}} : typeof import
+>                                           : ^^^^^^^^^^^^^
 >foo.import : any
 >foo : any
+>    : ^^^
 >import : any
+>       : ^^^
 >class {    constructor () {}} : typeof import
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.in = class {
 >foo.in = class {    constructor () {}} : typeof in
+>                                       : ^^^^^^^^^
 >foo.in : any
 >foo : any
+>    : ^^^
 >in : any
+>   : ^^^
 >class {    constructor () {}} : typeof in
+>                              : ^^^^^^^^^
 
     constructor () {}
 }
 foo.instanceof = class {
 >foo.instanceof = class {    constructor () {}} : typeof instanceof
+>                                               : ^^^^^^^^^^^^^^^^^
 >foo.instanceof : any
 >foo : any
+>    : ^^^
 >instanceof : any
+>           : ^^^
 >class {    constructor () {}} : typeof instanceof
+>                              : ^^^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.new = class {
 >foo.new = class {    constructor () {}} : typeof new
+>                                        : ^^^^^^^^^^
 >foo.new : any
 >foo : any
+>    : ^^^
 >new : any
+>    : ^^^
 >class {    constructor () {}} : typeof new
+>                              : ^^^^^^^^^^
 
     constructor () {}
 }
 foo.null = class {
 >foo.null = class {    constructor () {}} : typeof null
+>                                         : ^^^^^^^^^^^
 >foo.null : any
 >foo : any
+>    : ^^^
 >null : any
+>     : ^^^
 >class {    constructor () {}} : typeof null
+>                              : ^^^^^^^^^^^
 
     constructor () {}
 }
 foo.return = class {
 >foo.return = class {    constructor () {}} : typeof return
+>                                           : ^^^^^^^^^^^^^
 >foo.return : any
 >foo : any
+>    : ^^^
 >return : any
+>       : ^^^
 >class {    constructor () {}} : typeof return
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.super = class {
 >foo.super = class {    constructor () {}} : typeof super
+>                                          : ^^^^^^^^^^^^
 >foo.super : any
 >foo : any
+>    : ^^^
 >super : any
+>      : ^^^
 >class {    constructor () {}} : typeof super
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.switch = class {
 >foo.switch = class {    constructor () {}} : typeof switch
+>                                           : ^^^^^^^^^^^^^
 >foo.switch : any
 >foo : any
+>    : ^^^
 >switch : any
+>       : ^^^
 >class {    constructor () {}} : typeof switch
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.this = class {
 >foo.this = class {    constructor () {}} : typeof this
+>                                         : ^^^^^^^^^^^
 >foo.this : any
 >foo : any
+>    : ^^^
 >this : any
+>     : ^^^
 >class {    constructor () {}} : typeof this
+>                              : ^^^^^^^^^^^
 
     constructor () {}
 }
 foo.throw = class {
 >foo.throw = class {    constructor () {}} : typeof throw
+>                                          : ^^^^^^^^^^^^
 >foo.throw : any
 >foo : any
+>    : ^^^
 >throw : any
+>      : ^^^
 >class {    constructor () {}} : typeof throw
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.true = class {
 >foo.true = class {    constructor () {}} : typeof true
+>                                         : ^^^^^^^^^^^
 >foo.true : any
 >foo : any
+>    : ^^^
 >true : any
+>     : ^^^
 >class {    constructor () {}} : typeof true
+>                              : ^^^^^^^^^^^
 
     constructor () {}
 }
 foo.try = class {
 >foo.try = class {    constructor () {}} : typeof try
+>                                        : ^^^^^^^^^^
 >foo.try : any
 >foo : any
+>    : ^^^
 >try : any
+>    : ^^^
 >class {    constructor () {}} : typeof try
+>                              : ^^^^^^^^^^
 
     constructor () {}
 }
 foo.typeof = class {
 >foo.typeof = class {    constructor () {}} : typeof typeof
+>                                           : ^^^^^^^^^^^^^
 >foo.typeof : any
 >foo : any
+>    : ^^^
 >typeof : any
+>       : ^^^
 >class {    constructor () {}} : typeof typeof
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.var = class {
 >foo.var = class {    constructor () {}} : typeof var
+>                                        : ^^^^^^^^^^
 >foo.var : any
 >foo : any
+>    : ^^^
 >var : any
+>    : ^^^
 >class {    constructor () {}} : typeof var
+>                              : ^^^^^^^^^^
 
     constructor () {}
 }
 foo.void = class {
 >foo.void = class {    constructor () {}} : typeof void
+>                                         : ^^^^^^^^^^^
 >foo.void : any
 >foo : any
+>    : ^^^
 >void : any
+>     : ^^^
 >class {    constructor () {}} : typeof void
+>                              : ^^^^^^^^^^^
 
     constructor () {}
 }
 foo.while = class {
 >foo.while = class {    constructor () {}} : typeof while
+>                                          : ^^^^^^^^^^^^
 >foo.while : any
 >foo : any
+>    : ^^^
 >while : any
+>      : ^^^
 >class {    constructor () {}} : typeof while
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.with = class {
 >foo.with = class {    constructor () {}} : typeof with
+>                                         : ^^^^^^^^^^^
 >foo.with : any
 >foo : any
+>    : ^^^
 >with : any
+>     : ^^^
 >class {    constructor () {}} : typeof with
+>                              : ^^^^^^^^^^^
 
     constructor () {}
 }
 foo.implements = class {
 >foo.implements = class {    constructor () {}} : typeof implements
+>                                               : ^^^^^^^^^^^^^^^^^
 >foo.implements : any
 >foo : any
+>    : ^^^
 >implements : any
+>           : ^^^
 >class {    constructor () {}} : typeof implements
+>                              : ^^^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.interface = class {
 >foo.interface = class {    constructor () {}} : typeof interface
+>                                              : ^^^^^^^^^^^^^^^^
 >foo.interface : any
 >foo : any
+>    : ^^^
 >interface : any
+>          : ^^^
 >class {    constructor () {}} : typeof interface
+>                              : ^^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.let = class {
 >foo.let = class {    constructor () {}} : typeof let
+>                                        : ^^^^^^^^^^
 >foo.let : any
 >foo : any
+>    : ^^^
 >let : any
+>    : ^^^
 >class {    constructor () {}} : typeof let
+>                              : ^^^^^^^^^^
 
     constructor () {}
 }
 foo.package = class {
 >foo.package = class {    constructor () {}} : typeof package
+>                                            : ^^^^^^^^^^^^^^
 >foo.package : any
 >foo : any
+>    : ^^^
 >package : any
+>        : ^^^
 >class {    constructor () {}} : typeof package
+>                              : ^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.private = class {
 >foo.private = class {    constructor () {}} : typeof private
+>                                            : ^^^^^^^^^^^^^^
 >foo.private : any
 >foo : any
+>    : ^^^
 >private : any
+>        : ^^^
 >class {    constructor () {}} : typeof private
+>                              : ^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.protected = class {
 >foo.protected = class {    constructor () {}} : typeof protected
+>                                              : ^^^^^^^^^^^^^^^^
 >foo.protected : any
 >foo : any
+>    : ^^^
 >protected : any
+>          : ^^^
 >class {    constructor () {}} : typeof protected
+>                              : ^^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.public = class {
 >foo.public = class {    constructor () {}} : typeof public
+>                                           : ^^^^^^^^^^^^^
 >foo.public : any
 >foo : any
+>    : ^^^
 >public : any
+>       : ^^^
 >class {    constructor () {}} : typeof public
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.static = class {
 >foo.static = class {    constructor () {}} : typeof static
+>                                           : ^^^^^^^^^^^^^
 >foo.static : any
 >foo : any
+>    : ^^^
 >static : any
+>       : ^^^
 >class {    constructor () {}} : typeof static
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.yield = class {
 >foo.yield = class {    constructor () {}} : typeof yield
+>                                          : ^^^^^^^^^^^^
 >foo.yield : any
 >foo : any
+>    : ^^^
 >yield : any
+>      : ^^^
 >class {    constructor () {}} : typeof yield
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.abstract = class {
 >foo.abstract = class {    constructor () {}} : typeof abstract
+>                                             : ^^^^^^^^^^^^^^^
 >foo.abstract : any
 >foo : any
+>    : ^^^
 >abstract : any
+>         : ^^^
 >class {    constructor () {}} : typeof abstract
+>                              : ^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.as = class {
 >foo.as = class {    constructor () {}} : typeof as
+>                                       : ^^^^^^^^^
 >foo.as : any
 >foo : any
+>    : ^^^
 >as : any
+>   : ^^^
 >class {    constructor () {}} : typeof as
+>                              : ^^^^^^^^^
 
     constructor () {}
 }
 foo.asserts = class {
 >foo.asserts = class {    constructor () {}} : typeof asserts
+>                                            : ^^^^^^^^^^^^^^
 >foo.asserts : any
 >foo : any
+>    : ^^^
 >asserts : any
+>        : ^^^
 >class {    constructor () {}} : typeof asserts
+>                              : ^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.any = class {
 >foo.any = class {    constructor () {}} : typeof any
+>                                        : ^^^^^^^^^^
 >foo.any : any
 >foo : any
+>    : ^^^
 >any : any
+>    : ^^^
 >class {    constructor () {}} : typeof any
+>                              : ^^^^^^^^^^
 
     constructor () {}
 }
 foo.async = class {
 >foo.async = class {    constructor () {}} : typeof async
+>                                          : ^^^^^^^^^^^^
 >foo.async : any
 >foo : any
+>    : ^^^
 >async : any
+>      : ^^^
 >class {    constructor () {}} : typeof async
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.await = class {
 >foo.await = class {    constructor () {}} : typeof await
+>                                          : ^^^^^^^^^^^^
 >foo.await : any
 >foo : any
+>    : ^^^
 >await : any
+>      : ^^^
 >class {    constructor () {}} : typeof await
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.boolean = class {
 >foo.boolean = class {    constructor () {}} : typeof boolean
+>                                            : ^^^^^^^^^^^^^^
 >foo.boolean : any
 >foo : any
+>    : ^^^
 >boolean : any
+>        : ^^^
 >class {    constructor () {}} : typeof boolean
+>                              : ^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.constructor = class {
 >foo.constructor = class {    constructor () {}} : typeof constructor
+>                                                : ^^^^^^^^^^^^^^^^^^
 >foo.constructor : any
 >foo : any
+>    : ^^^
 >constructor : any
+>            : ^^^
 >class {    constructor () {}} : typeof constructor
+>                              : ^^^^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.declare = class {
 >foo.declare = class {    constructor () {}} : typeof declare
+>                                            : ^^^^^^^^^^^^^^
 >foo.declare : any
 >foo : any
+>    : ^^^
 >declare : any
+>        : ^^^
 >class {    constructor () {}} : typeof declare
+>                              : ^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.get = class {
 >foo.get = class {    constructor () {}} : typeof get
+>                                        : ^^^^^^^^^^
 >foo.get : any
 >foo : any
+>    : ^^^
 >get : any
+>    : ^^^
 >class {    constructor () {}} : typeof get
+>                              : ^^^^^^^^^^
 
     constructor () {}
 }
 foo.infer = class {
 >foo.infer = class {    constructor () {}} : typeof infer
+>                                          : ^^^^^^^^^^^^
 >foo.infer : any
 >foo : any
+>    : ^^^
 >infer : any
+>      : ^^^
 >class {    constructor () {}} : typeof infer
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.is = class {
 >foo.is = class {    constructor () {}} : typeof is
+>                                       : ^^^^^^^^^
 >foo.is : any
 >foo : any
+>    : ^^^
 >is : any
+>   : ^^^
 >class {    constructor () {}} : typeof is
+>                              : ^^^^^^^^^
 
     constructor () {}
 }
 foo.keyof = class {
 >foo.keyof = class {    constructor () {}} : typeof keyof
+>                                          : ^^^^^^^^^^^^
 >foo.keyof : any
 >foo : any
+>    : ^^^
 >keyof : any
+>      : ^^^
 >class {    constructor () {}} : typeof keyof
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.module = class {
 >foo.module = class {    constructor () {}} : typeof module
+>                                           : ^^^^^^^^^^^^^
 >foo.module : any
 >foo : any
+>    : ^^^
 >module : any
+>       : ^^^
 >class {    constructor () {}} : typeof module
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.namespace = class {
 >foo.namespace = class {    constructor () {}} : typeof namespace
+>                                              : ^^^^^^^^^^^^^^^^
 >foo.namespace : any
 >foo : any
+>    : ^^^
 >namespace : any
+>          : ^^^
 >class {    constructor () {}} : typeof namespace
+>                              : ^^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.never = class {
 >foo.never = class {    constructor () {}} : typeof never
+>                                          : ^^^^^^^^^^^^
 >foo.never : any
 >foo : any
+>    : ^^^
 >never : any
+>      : ^^^
 >class {    constructor () {}} : typeof never
+>                              : ^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.readonly = class {
 >foo.readonly = class {    constructor () {}} : typeof readonly
+>                                             : ^^^^^^^^^^^^^^^
 >foo.readonly : any
 >foo : any
+>    : ^^^
 >readonly : any
+>         : ^^^
 >class {    constructor () {}} : typeof readonly
+>                              : ^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.require = class {
 >foo.require = class {    constructor () {}} : typeof require
+>                                            : ^^^^^^^^^^^^^^
 >foo.require : any
 >foo : any
+>    : ^^^
 >require : any
+>        : ^^^
 >class {    constructor () {}} : typeof require
+>                              : ^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.number = class {
 >foo.number = class {    constructor () {}} : typeof number
+>                                           : ^^^^^^^^^^^^^
 >foo.number : any
 >foo : any
+>    : ^^^
 >number : any
+>       : ^^^
 >class {    constructor () {}} : typeof number
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.object = class {
 >foo.object = class {    constructor () {}} : typeof object
+>                                           : ^^^^^^^^^^^^^
 >foo.object : any
 >foo : any
+>    : ^^^
 >object : any
+>       : ^^^
 >class {    constructor () {}} : typeof object
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.set = class {
 >foo.set = class {    constructor () {}} : typeof set
+>                                        : ^^^^^^^^^^
 >foo.set : any
 >foo : any
+>    : ^^^
 >set : any
+>    : ^^^
 >class {    constructor () {}} : typeof set
+>                              : ^^^^^^^^^^
 
     constructor () {}
 }
 foo.string = class {
 >foo.string = class {    constructor () {}} : typeof string
+>                                           : ^^^^^^^^^^^^^
 >foo.string : any
 >foo : any
+>    : ^^^
 >string : any
+>       : ^^^
 >class {    constructor () {}} : typeof string
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.symbol = class {
 >foo.symbol = class {    constructor () {}} : typeof symbol
+>                                           : ^^^^^^^^^^^^^
 >foo.symbol : any
 >foo : any
+>    : ^^^
 >symbol : any
+>       : ^^^
 >class {    constructor () {}} : typeof symbol
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.type = class {
 >foo.type = class {    constructor () {}} : typeof type
+>                                         : ^^^^^^^^^^^
 >foo.type : any
 >foo : any
+>    : ^^^
 >type : any
+>     : ^^^
 >class {    constructor () {}} : typeof type
+>                              : ^^^^^^^^^^^
 
     constructor () {}
 }
 foo.undefined = class {
 >foo.undefined = class {    constructor () {}} : typeof undefined
+>                                              : ^^^^^^^^^^^^^^^^
 >foo.undefined : any
 >foo : any
+>    : ^^^
 >undefined : any
+>          : ^^^
 >class {    constructor () {}} : typeof undefined
+>                              : ^^^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.unique = class {
 >foo.unique = class {    constructor () {}} : typeof unique
+>                                           : ^^^^^^^^^^^^^
 >foo.unique : any
 >foo : any
+>    : ^^^
 >unique : any
+>       : ^^^
 >class {    constructor () {}} : typeof unique
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.unknown = class {
 >foo.unknown = class {    constructor () {}} : typeof unknown
+>                                            : ^^^^^^^^^^^^^^
 >foo.unknown : any
 >foo : any
+>    : ^^^
 >unknown : any
+>        : ^^^
 >class {    constructor () {}} : typeof unknown
+>                              : ^^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.from = class {
 >foo.from = class {    constructor () {}} : typeof from
+>                                         : ^^^^^^^^^^^
 >foo.from : any
 >foo : any
+>    : ^^^
 >from : any
+>     : ^^^
 >class {    constructor () {}} : typeof from
+>                              : ^^^^^^^^^^^
 
     constructor () {}
 }
 foo.global = class {
 >foo.global = class {    constructor () {}} : typeof global
+>                                           : ^^^^^^^^^^^^^
 >foo.global : any
 >foo : any
+>    : ^^^
 >global : any
+>       : ^^^
 >class {    constructor () {}} : typeof global
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.bigint = class {
 >foo.bigint = class {    constructor () {}} : typeof bigint
+>                                           : ^^^^^^^^^^^^^
 >foo.bigint : any
 >foo : any
+>    : ^^^
 >bigint : any
+>       : ^^^
 >class {    constructor () {}} : typeof bigint
+>                              : ^^^^^^^^^^^^^
 
     constructor () {}
 }
 foo.of = class {
 >foo.of = class {    constructor () {}} : typeof of
+>                                       : ^^^^^^^^^
 >foo.of : any
 >foo : any
+>    : ^^^
 >of : any
+>   : ^^^
 >class {    constructor () {}} : typeof of
+>                              : ^^^^^^^^^
 
     constructor () {}
 }

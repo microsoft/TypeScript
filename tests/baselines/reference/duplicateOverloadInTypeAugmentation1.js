@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateOverloadInTypeAugmentation1.ts] ////
+
 //// [duplicateOverloadInTypeAugmentation1.ts]
 interface Array<T> {
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,

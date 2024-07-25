@@ -1,12 +1,14 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameMethodAsync.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodAsync.ts] ////
+
+=== privateNameMethodAsync.ts ===
 const C = class {
 >C : Symbol(C, Decl(privateNameMethodAsync.ts, 0, 5))
 
     async #bar() { return await Promise.resolve(42); }
 >#bar : Symbol(C.#bar, Decl(privateNameMethodAsync.ts, 0, 17))
->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
     async foo() {
 >foo : Symbol(C.foo, Decl(privateNameMethodAsync.ts, 1, 54))
@@ -38,9 +40,9 @@ const C = class {
 >#qux : Symbol(C.#qux, Decl(privateNameMethodAsync.ts, 6, 25))
 
         yield (await Promise.resolve(42));
->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
     }
 }
 

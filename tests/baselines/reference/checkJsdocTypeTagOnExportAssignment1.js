@@ -25,11 +25,11 @@ a;
  * @property {boolean} a
  * @property {boolean} b
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @type {Foo} */
-exports["default"] = { c: false };
+exports.default = { c: false };
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
-a_1["default"];
+a_1.default;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitParameterProperty.ts ===
+//// [tests/cases/compiler/declarationEmitParameterProperty.ts] ////
+
+=== declarationEmitParameterProperty.ts ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(declarationEmitParameterProperty.ts, 0, 0))
 

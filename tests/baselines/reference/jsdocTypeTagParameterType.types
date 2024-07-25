@@ -1,24 +1,37 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeTagParameterType.ts] ////
+
+=== a.js ===
 /** @type {function(string): void} */
 const f = (value) => {
 >f : (arg0: string) => void
+>  : ^^^^^^^      ^^^^^    
 >(value) => {    value = 1 // should error} : (value: string) => void
+>                                           : ^     ^^^^^^^^^^^^^    
 >value : string
+>      : ^^^^^^
 
     value = 1 // should error
 >value = 1 : 1
+>          : ^
 >value : string
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 };
 /** @type {(s: string) => void} */
 function g(s) {
 >g : (s: string) => void
+>  : ^ ^^      ^^^^^    
 >s : string
+>  : ^^^^^^
 
     s = 1 // Should error
 >s = 1 : 1
+>      : ^
 >s : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 

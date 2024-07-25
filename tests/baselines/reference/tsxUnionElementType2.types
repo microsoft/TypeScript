@@ -1,39 +1,62 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxUnionElementType2.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 function SFC1(prop: { x: number }) {
->SFC1 : (prop: {    x: number;}) => JSX.Element
+>SFC1 : (prop: { x: number; }) => JSX.Element
+>     : ^    ^^              ^^^^^^^^^^^^^^^^
 >prop : { x: number; }
+>     : ^^^^^      ^^^
 >x : number
+>  : ^^^^^^
 
     return <div>hello</div>;
 ><div>hello</div> : JSX.Element
+>                 : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 };
 
 function SFC2(prop: { x: boolean }) {
->SFC2 : (prop: {    x: boolean;}) => JSX.Element
+>SFC2 : (prop: { x: boolean; }) => JSX.Element
+>     : ^    ^^               ^^^^^^^^^^^^^^^^
 >prop : { x: boolean; }
+>     : ^^^^^       ^^^
 >x : boolean
+>  : ^^^^^^^
 
     return <h1>World </h1>;
 ><h1>World </h1> : JSX.Element
+>                : ^^^^^^^^^^^
 >h1 : any
+>   : ^^^
 >h1 : any
+>   : ^^^
 }
 
 var SFCComp = SFC1 || SFC2;
 >SFCComp : ((prop: { x: number; }) => JSX.Element) | ((prop: { x: boolean; }) => JSX.Element)
+>        : ^^    ^^              ^^^^^^^^^^^^^^^^^^^^^^    ^^               ^^^^^^^^^^^^^^^^^
 >SFC1 || SFC2 : ((prop: { x: number; }) => JSX.Element) | ((prop: { x: boolean; }) => JSX.Element)
+>             : ^^    ^^              ^^^^^^^^^^^^^^^^^^^^^^    ^^               ^^^^^^^^^^^^^^^^^
 >SFC1 : (prop: { x: number; }) => JSX.Element
+>     : ^    ^^              ^^^^^^^^^^^^^^^^
 >SFC2 : (prop: { x: boolean; }) => JSX.Element
+>     : ^    ^^               ^^^^^^^^^^^^^^^^
 
 <SFCComp x={"hi"}/>
 ><SFCComp x={"hi"}/> : JSX.Element
+>                    : ^^^^^^^^^^^
 >SFCComp : ((prop: { x: number; }) => JSX.Element) | ((prop: { x: boolean; }) => JSX.Element)
+>        : ^^    ^^              ^^^^^^^^^^^^^^^^^^^^^^    ^^               ^^^^^^^^^^^^^^^^^
 >x : string
+>  : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 

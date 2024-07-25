@@ -1,58 +1,90 @@
-=== tests/cases/compiler/thisBinding.ts ===
+//// [tests/cases/compiler/thisBinding.ts] ////
+
+=== thisBinding.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     export interface I {
 	z;
 >z : any
+>  : ^^^
     }
 
     export class C {
 >C : C
+>  : ^
 
 	public x=0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 	f(x:I) {
 >f : (x: I) => void
+>  : ^ ^^ ^^^^^^^^^
 >x : I
+>  : ^
 
 	    x.e;  // e not found
 >x.e : any
+>    : ^^^
 >x : I
+>  : ^
 >e : any
+>  : ^^^
 
 	    x.z;  // ok 
 >x.z : any
+>    : ^^^
 >x : I
+>  : ^
 >z : any
+>  : ^^^
 	}
     constructor() {
 	({z:10,f:this.f}).f(<I>({}));
 >({z:10,f:this.f}).f(<I>({})) : void
+>                             : ^^^^
 >({z:10,f:this.f}).f : (x: I) => void
+>                    : ^ ^^ ^^^^^^^^^
 >({z:10,f:this.f}) : { z: number; f: (x: I) => void; }
+>                  : ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^
 >{z:10,f:this.f} : { z: number; f: (x: I) => void; }
+>                : ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^
 >z : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >f : (x: I) => void
+>  : ^ ^^ ^^^^^^^^^
 >this.f : (x: I) => void
+>       : ^ ^^ ^^^^^^^^^
 >this : this
+>     : ^^^^
 >f : (x: I) => void
+>  : ^ ^^ ^^^^^^^^^
 >f : (x: I) => void
+>  : ^ ^^ ^^^^^^^^^
 ><I>({}) : I
+>        : ^
 >({}) : {}
+>     : ^^
 >{} : {}
+>   : ^^
     }
     }
 }
 
 class C {
 >C : C
+>  : ^
 
     f(x: number) {
 >f : (x: number) => void
+>  : ^ ^^      ^^^^^^^^^
 >x : number
+>  : ^^^^^^
     }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generics4.ts] ////
+
 //// [generics4.ts]
 class C<T> { private x: T; }
 interface X { f(): string; }

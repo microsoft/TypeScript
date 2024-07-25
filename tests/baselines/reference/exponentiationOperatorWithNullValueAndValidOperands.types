@@ -1,73 +1,100 @@
-=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNullValueAndValidOperands.ts] ////
+
+=== exponentiationOperatorWithNullValueAndValidOperands.ts ===
 // If one operand is the null or undefined value, it is treated as having the type of the
 // other operand.
 
 enum E {
 >E : E
+>  : ^
 
     a,
 >a : E.a
+>  : ^^^
 
     b
 >b : E.b
+>  : ^^^
 }
 
 var a: any;
 >a : any
+>  : ^^^
 
 var b: number;
 >b : number
+>  : ^^^^^^
 
 // operator **
 var r1 = null ** a;
 >r1 : number
+>   : ^^^^^^
 >null ** a : number
->null : null
+>          : ^^^^^^
 >a : any
+>  : ^^^
 
 var r2 = null ** b;
 >r2 : number
+>   : ^^^^^^
 >null ** b : number
->null : null
+>          : ^^^^^^
 >b : number
+>  : ^^^^^^
 
 var r3 = null ** 1;
 >r3 : number
+>   : ^^^^^^
 >null ** 1 : number
->null : null
+>          : ^^^^^^
 >1 : 1
+>  : ^
 
 var r4 = null ** E.a;
 >r4 : number
+>   : ^^^^^^
 >null ** E.a : number
->null : null
+>            : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var r5 = a ** null;
 >r5 : number
+>   : ^^^^^^
 >a ** null : number
+>          : ^^^^^^
 >a : any
->null : null
+>  : ^^^
 
 var r6 = b ** null;
 >r6 : number
+>   : ^^^^^^
 >b ** null : number
+>          : ^^^^^^
 >b : number
->null : null
+>  : ^^^^^^
 
 var r7 = 0 ** null;
 >r7 : number
+>   : ^^^^^^
 >0 ** null : number
+>          : ^^^^^^
 >0 : 0
->null : null
+>  : ^
 
 var r8 = E.b ** null;
 >r8 : number
+>   : ^^^^^^
 >E.b ** null : number
+>            : ^^^^^^
 >E.b : E.b
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >b : E.b
->null : null
+>  : ^^^
 

@@ -1,53 +1,86 @@
-=== tests/cases/compiler/objectAssignLikeNonUnionResult.ts ===
+//// [tests/cases/compiler/objectAssignLikeNonUnionResult.ts] ////
+
+=== objectAssignLikeNonUnionResult.ts ===
 interface Interface {
     field: number;
 >field : number
+>      : ^^^^^^
 }
 const defaultValue: Interface = { field: 1 };
 >defaultValue : Interface
+>             : ^^^^^^^^^
 >{ field: 1 } : { field: number; }
+>             : ^^^^^^^^^^^^^^^^^^
 >field : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 declare function assign<T, U>(target: T, source: U): T & U;
 >assign : <T, U>(target: T, source: U) => T & U
+>       : ^ ^^ ^^      ^^ ^^      ^^ ^^^^^     
 >target : T
+>       : ^
 >source : U
+>       : ^
 
 // Displayed type: Interface & { field: number }
 // Underlying type: Something else...
 const data1 = assign(defaultValue, Date.now() > 3 ? { field: 2 } : {});
 >data1 : Interface & { field: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assign(defaultValue, Date.now() > 3 ? { field: 2 } : {}) : Interface & { field: number; }
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assign : <T, U>(target: T, source: U) => T & U
+>       : ^ ^^ ^^      ^^ ^^      ^^ ^^^^^     
 >defaultValue : Interface
+>             : ^^^^^^^^^
 >Date.now() > 3 ? { field: 2 } : {} : { field: number; } | {}
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^
 >Date.now() > 3 : boolean
+>               : ^^^^^^^
 >Date.now() : number
+>           : ^^^^^^
 >Date.now : () => number
+>         : ^^^^^^      
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 >now : () => number
+>    : ^^^^^^      
 >3 : 3
+>  : ^
 >{ field: 2 } : { field: number; }
+>             : ^^^^^^^^^^^^^^^^^^
 >field : number
+>      : ^^^^^^
 >2 : 2
+>  : ^
 >{} : {}
+>   : ^^
 
 type ExtractRawComponent<T> = T extends { __raw: infer C } ? [L1: T, L2: C] : [R1: T];
 >ExtractRawComponent : ExtractRawComponent<T>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 >__raw : C
+>      : ^
 
 type t1 = ExtractRawComponent<typeof data1>;
 >t1 : [R1: Interface & { field: number; }]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data1 : Interface & { field: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // ???
 type Explode<T> = T extends { x: infer A } ? [A] : 'X';
 >Explode : Explode<T>
+>        : ^^^^^^^^^^
 >x : A
+>  : ^
 
 // 'X' | [unknown] -- why?
 type e1 = Explode<typeof data1>;
 >e1 : "X"
+>   : ^^^
 >data1 : Interface & { field: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/genericCallOnMemberReturningClosedOverObject.ts] ////
+
+=== genericCallOnMemberReturningClosedOverObject.ts ===
+// https://github.com/microsoft/TypeScript/issues/11584
+
+function example<T1>() {
+>example : <T1>() => { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>        : ^  ^^^^^^^^^^^^^^^  ^^  ^^  ^^^^^^^^^^^^^^^^  ^^  ^^^^^^^^^^^
+
+  let x = {
+>x : { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>  : ^^^^^^^^  ^^  ^^  ^^^^^^^^^^^^^^^^  ^^  ^^^^^^^^^^^
+>{    foo: <T2>(t2: T2) => x,    bar: (t1: T1) => x,  } : { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>                                                       : ^^^^^^^^  ^^  ^^  ^^^^^^^^^^^^^^^^  ^^  ^^^^^^^^^^^
+
+    foo: <T2>(t2: T2) => x,
+>foo : <T2>(t2: T2) => { foo: any; bar: (t1: T1) => any; }
+>    : ^  ^^  ^^  ^^^^^^^^^^^^^^^^^^^^^^^  ^^  ^^^^^^^^^^^
+><T2>(t2: T2) => x : <T2>(t2: T2) => { foo: any; bar: (t1: T1) => any; }
+>                  : ^  ^^  ^^  ^^^^^^^^^^^^^^^^^^^^^^^  ^^  ^^^^^^^^^^^
+>t2 : T2
+>   : ^^
+>x : { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>  : ^^^^^^^^  ^^  ^^  ^^^^^^^^^^^^^^^^  ^^  ^^^^^^^^^^^
+
+    bar: (t1: T1) => x,
+>bar : (t1: T1) => { foo: <T2>(t2: T2) => any; bar: any; }
+>    : ^  ^^  ^^^^^^^^^^^^^  ^^  ^^  ^^^^^^^^^^^^^^^^^^^^^
+>(t1: T1) => x : (t1: T1) => { foo: <T2>(t2: T2) => any; bar: any; }
+>              : ^  ^^  ^^^^^^^^^^^^^  ^^  ^^  ^^^^^^^^^^^^^^^^^^^^^
+>t1 : T1
+>   : ^^
+>x : { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>  : ^^^^^^^^  ^^  ^^  ^^^^^^^^^^^^^^^^  ^^  ^^^^^^^^^^^
+
+  };
+  return x;
+>x : { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>  : ^^^^^^^^  ^^  ^^  ^^^^^^^^^^^^^^^^  ^^  ^^^^^^^^^^^
+}
+
+example<number>().foo("hello").bar(1);
+>example<number>().foo("hello").bar(1) : { foo: <T2>(t2: T2) => any; bar: (t1: number) => any; }
+>                                      : ^^^^^^^^  ^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+>example<number>().foo("hello").bar : (t1: number) => { foo: <T2>(t2: T2) => any; bar: any; }
+>                                   : ^  ^^^^^^^^^^^^^^^^^^^^^  ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>example<number>().foo("hello") : { foo: <T2>(t2: T2) => any; bar: (t1: number) => any; }
+>                               : ^^^^^^^^  ^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+>example<number>().foo : <T2>(t2: T2) => { foo: any; bar: (t1: number) => any; }
+>                      : ^  ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+>example<number>() : { foo: <T2>(t2: T2) => any; bar: (t1: number) => any; }
+>                  : ^^^^^^^^  ^^  ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+>example : <T1>() => { foo: <T2>(t2: T2) => any; bar: (t1: T1) => any; }
+>        : ^  ^^^^^^^^^^^^^^^  ^^  ^^  ^^^^^^^^^^^^^^^^  ^^  ^^^^^^^^^^^
+>foo : <T2>(t2: T2) => { foo: any; bar: (t1: number) => any; }
+>    : ^  ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+>"hello" : "hello"
+>        : ^^^^^^^
+>bar : (t1: number) => { foo: <T2>(t2: T2) => any; bar: any; }
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^  ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+

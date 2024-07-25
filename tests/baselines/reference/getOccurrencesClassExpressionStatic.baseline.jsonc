@@ -1,0 +1,69 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionStatic.ts ===
+// let A = class Foo {
+//     public /*HIGHLIGHTS*/[|{| kind: "none" |}static|] foo;
+//     [|{| kind: "none" |}static|] a;
+//     constructor(public y: string, private x: string) {
+//     }
+//     public method() { }
+//     private method2() {}
+//     public [|{| kind: "none" |}static|] static() { }
+//     private [|{| kind: "none" |}static|] static2() { }
+// }
+// 
+// let B = class D {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionStatic.ts ===
+// let A = class Foo {
+//     public [|{| kind: "none" |}static|] foo;
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}static|] a;
+//     constructor(public y: string, private x: string) {
+//     }
+//     public method() { }
+//     private method2() {}
+//     public [|{| kind: "none" |}static|] static() { }
+//     private [|{| kind: "none" |}static|] static2() { }
+// }
+// 
+// let B = class D {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionStatic.ts ===
+// let A = class Foo {
+//     public [|{| kind: "none" |}static|] foo;
+//     [|{| kind: "none" |}static|] a;
+//     constructor(public y: string, private x: string) {
+//     }
+//     public method() { }
+//     private method2() {}
+//     public /*HIGHLIGHTS*/[|{| kind: "none" |}static|] static() { }
+//     private [|{| kind: "none" |}static|] static2() { }
+// }
+// 
+// let B = class D {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesClassExpressionStatic.ts ===
+// let A = class Foo {
+//     public [|{| kind: "none" |}static|] foo;
+//     [|{| kind: "none" |}static|] a;
+//     constructor(public y: string, private x: string) {
+//     }
+//     public method() { }
+//     private method2() {}
+//     public [|{| kind: "none" |}static|] static() { }
+//     private /*HIGHLIGHTS*/[|{| kind: "none" |}static|] static2() { }
+// }
+// 
+// let B = class D {
+// --- (line: 13) skipped ---

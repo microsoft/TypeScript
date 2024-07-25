@@ -1,15 +1,21 @@
+//// [tests/cases/conformance/references/library-reference-6.ts] ////
+
 === /src/foo.ts ===
 /// <reference types="alpha" />
 var x: string = alpha.a;
 >x : string
+>  : ^^^^^^
 >alpha.a : string
+>        : ^^^^^^
 >alpha : { a: string; }
+>      : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 
 === /node_modules/@types/alpha/index.d.ts ===
-// The primary lookup folder is relative to tsconfig.json, if present
-
 declare var alpha: { a: string };
 >alpha : { a: string; }
+>      : ^^^^^      ^^^
 >a : string
+>  : ^^^^^^
 

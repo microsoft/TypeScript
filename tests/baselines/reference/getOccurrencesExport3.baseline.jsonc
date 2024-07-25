@@ -1,0 +1,57 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesExport3.ts ===
+// 
+// declare var x;
+// /*HIGHLIGHTS*/[|{| kind: "none" |}export|] declare var y, z;
+// 
+// module m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// declare [|{| kind: "none" |}export|] var v1, v2;
+// declare module dm { }
+// [|{| kind: "none" |}export|] class EC { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesExport3.ts ===
+// 
+// declare var x;
+// [|{| kind: "none" |}export|] declare var y, z;
+// 
+// module m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// declare /*HIGHLIGHTS*/[|{| kind: "none" |}export|] var v1, v2;
+// declare module dm { }
+// [|{| kind: "none" |}export|] class EC { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesExport3.ts ===
+// 
+// declare var x;
+// [|{| kind: "none" |}export|] declare var y, z;
+// 
+// module m {
+//     export class C1 {
+// --- (line: 7) skipped ---
+
+// --- (line: 54) skipped ---
+//     declare function foo(): string;
+// }
+// 
+// declare [|{| kind: "none" |}export|] var v1, v2;
+// declare module dm { }
+// /*HIGHLIGHTS*/[|{| kind: "none" |}export|] class EC { }

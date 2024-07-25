@@ -1,31 +1,45 @@
-=== tests/cases/compiler/assignmentCompatForEnums.ts ===
+//// [tests/cases/compiler/assignmentCompatForEnums.ts] ////
+
+=== assignmentCompatForEnums.ts ===
 enum TokenType { One, Two };
 >TokenType : TokenType
+>          : ^^^^^^^^^
 >One : TokenType.One
+>    : ^^^^^^^^^^^^^
 >Two : TokenType.Two
+>    : ^^^^^^^^^^^^^
 
 var list = {};
 >list : {}
+>     : ^^
 >{} : {}
+>   : ^^
 
 
 function returnType(): TokenType { return null; }
 >returnType : () => TokenType
->null : null
+>           : ^^^^^^         
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     var x = returnType();
 >x : TokenType
+>  : ^^^^^^^^^
 >returnType() : TokenType
+>             : ^^^^^^^^^
 >returnType : () => TokenType
+>           : ^^^^^^         
 
     var x: TokenType = list['one'];
 >x : TokenType
+>  : ^^^^^^^^^
 >list['one'] : error
 >list : {}
+>     : ^^
 >'one' : "one"
+>      : ^^^^^
 }
 
 

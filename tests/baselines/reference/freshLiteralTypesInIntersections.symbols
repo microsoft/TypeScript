@@ -1,4 +1,6 @@
-=== tests/cases/compiler/freshLiteralTypesInIntersections.ts ===
+//// [tests/cases/compiler/freshLiteralTypesInIntersections.ts] ////
+
+=== freshLiteralTypesInIntersections.ts ===
 // Repro from #19657
 
 declare function func<A extends string, B extends A>(a: A, b: B[]): (ab: A & B) => void;

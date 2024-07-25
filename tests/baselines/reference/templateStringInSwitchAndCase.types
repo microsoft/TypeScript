@@ -1,19 +1,29 @@
-=== tests/cases/conformance/es6/templates/templateStringInSwitchAndCase.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInSwitchAndCase.ts] ////
+
+=== templateStringInSwitchAndCase.ts ===
 switch (`abc${0}abc`) {
->`abc${0}abc` : string
+>`abc${0}abc` : "abc0abc"
+>             : ^^^^^^^^^
 >0 : 0
+>  : ^
 
     case `abc`:
 >`abc` : "abc"
+>      : ^^^^^
 
     case `123`:
 >`123` : "123"
+>      : ^^^^^
 
     case `abc${0}abc`:
->`abc${0}abc` : string
+>`abc${0}abc` : "abc0abc"
+>             : ^^^^^^^^^
 >0 : 0
+>  : ^
 
         `def${1}def`;
->`def${1}def` : string
+>`def${1}def` : "def1def"
+>             : ^^^^^^^^^
 >1 : 1
+>  : ^
 }

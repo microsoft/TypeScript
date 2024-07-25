@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 import {B} from './b';
@@ -38,14 +39,54 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var b_1 = require("./b");
+var b = new b_1.B();
+console.log(b.c.d);
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.d.ts: *new*
+  {}
+/user/username/projects/myproject/c.d.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -65,38 +106,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/user/username/projects/myproject/c.d.ts:
-  {"fileName":"/user/username/projects/myproject/c.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-exports.__esModule = true;
-var b_1 = require("./b");
-var b = new b_1.B();
-console.log(b.c.d);
-
-
 
 Change:: Rename property d to d2 of class C to initialize signatures
 
@@ -108,21 +118,38 @@ export class C
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
 
 [7m4[0m console.log(b.c.d);
 [7m [0m [91m                ~[0m
 
-[[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -140,30 +167,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/user/username/projects/myproject/c.d.ts:
-  {"fileName":"/user/username/projects/myproject/c.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: Rename property d2 to d of class C to revert back to original text
 
@@ -175,16 +179,33 @@ export class C
 }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -202,30 +223,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/user/username/projects/myproject/c.d.ts:
-  {"fileName":"/user/username/projects/myproject/c.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: Rename property d to d2 of class C
 
@@ -237,21 +235,38 @@ export class C
 }
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m4[0m:[93m17[0m - [91merror[0m[90m TS2339: [0mProperty 'd' does not exist on type 'C'.
 
 [7m4[0m console.log(b.c.d);
 [7m [0m [91m                ~[0m
 
-[[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -269,27 +284,4 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.d.ts:
-  {"fileName":"/user/username/projects/myproject/b.d.ts","pollingInterval":250}
-/user/username/projects/myproject/c.d.ts:
-  {"fileName":"/user/username/projects/myproject/c.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
-

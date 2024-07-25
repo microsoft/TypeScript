@@ -1,8 +1,8 @@
-tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts(6,1): error TS7053: Element implicitly has an 'any' type because expression of type '101' can't be used to index type '{ b: number; a: number; }'.
+objectSpreadIndexSignature.ts(6,1): error TS7053: Element implicitly has an 'any' type because expression of type '101' can't be used to index type '{ b: number; a: number; }'.
   Property '101' does not exist on type '{ b: number; a: number; }'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts (1 errors) ====
+==== objectSpreadIndexSignature.ts (1 errors) ====
     declare let indexed1: { [n: string]: number; a: number; };
     declare let indexed2: { [n: string]: boolean; c: boolean; };
     declare let indexed3: { [n: string]: number };

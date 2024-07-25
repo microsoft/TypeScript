@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionOfEnumInference.ts ===
+//// [tests/cases/compiler/unionOfEnumInference.ts] ////
+
+=== unionOfEnumInference.ts ===
 // Repro from #42932
 
 enum Enum { A, B, C }

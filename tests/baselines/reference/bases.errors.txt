@@ -1,18 +1,18 @@
-tests/cases/compiler/bases.ts(7,14): error TS2339: Property 'y' does not exist on type 'B'.
-tests/cases/compiler/bases.ts(7,15): error TS1005: ';' expected.
-tests/cases/compiler/bases.ts(7,17): error TS2693: 'any' only refers to a type, but is being used as a value here.
-tests/cases/compiler/bases.ts(11,7): error TS2420: Class 'C' incorrectly implements interface 'I'.
+bases.ts(7,14): error TS2339: Property 'y' does not exist on type 'B'.
+bases.ts(7,15): error TS1005: ';' expected.
+bases.ts(7,17): error TS2693: 'any' only refers to a type, but is being used as a value here.
+bases.ts(11,7): error TS2420: Class 'C' incorrectly implements interface 'I'.
   Property 'x' is missing in type 'C' but required in type 'I'.
-tests/cases/compiler/bases.ts(12,5): error TS2377: Constructors for derived classes must contain a 'super' call.
-tests/cases/compiler/bases.ts(13,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/compiler/bases.ts(13,14): error TS2339: Property 'x' does not exist on type 'C'.
-tests/cases/compiler/bases.ts(13,15): error TS1005: ';' expected.
-tests/cases/compiler/bases.ts(13,17): error TS2693: 'any' only refers to a type, but is being used as a value here.
-tests/cases/compiler/bases.ts(17,9): error TS2339: Property 'x' does not exist on type 'C'.
-tests/cases/compiler/bases.ts(18,9): error TS2339: Property 'y' does not exist on type 'C'.
+bases.ts(12,5): error TS2377: Constructors for derived classes must contain a 'super' call.
+bases.ts(13,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+bases.ts(13,14): error TS2339: Property 'x' does not exist on type 'C'.
+bases.ts(13,15): error TS1005: ';' expected.
+bases.ts(13,17): error TS2693: 'any' only refers to a type, but is being used as a value here.
+bases.ts(17,9): error TS2339: Property 'x' does not exist on type 'C'.
+bases.ts(18,9): error TS2339: Property 'y' does not exist on type 'C'.
 
 
-==== tests/cases/compiler/bases.ts (11 errors) ====
+==== bases.ts (11 errors) ====
     interface I {
         x;
     }
@@ -33,11 +33,11 @@ tests/cases/compiler/bases.ts(18,9): error TS2339: Property 'y' does not exist o
           ~
 !!! error TS2420: Class 'C' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'x' is missing in type 'C' but required in type 'I'.
-!!! related TS2728 tests/cases/compiler/bases.ts:2:5: 'x' is declared here.
+!!! related TS2728 bases.ts:2:5: 'x' is declared here.
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
             this.x: any;
-    ~~~~~~~~~~~~~~~~~~~~
             ~~~~
 !!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
                  ~
@@ -47,8 +47,6 @@ tests/cases/compiler/bases.ts(18,9): error TS2339: Property 'y' does not exist o
                     ~~~
 !!! error TS2693: 'any' only refers to a type, but is being used as a value here.
         }
-    ~~~~~
-!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }
     
     new C().x;

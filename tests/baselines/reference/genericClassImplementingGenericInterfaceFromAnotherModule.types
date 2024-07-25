@@ -1,12 +1,17 @@
-=== tests/cases/compiler/genericClassImplementingGenericInterfaceFromAnotherModule.ts ===
+//// [tests/cases/compiler/genericClassImplementingGenericInterfaceFromAnotherModule.ts] ////
+
+=== genericClassImplementingGenericInterfaceFromAnotherModule.ts ===
 module foo {
     export interface IFoo<T> { }
 }
 module bar {
 >bar : typeof bar
+>    : ^^^^^^^^^^
 
     export class Foo<T> implements foo.IFoo<T> { }
 >Foo : Foo<T>
+>    : ^^^^^^
 >foo : any
+>    : ^^^
 }
 

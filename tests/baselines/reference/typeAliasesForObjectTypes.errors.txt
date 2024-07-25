@@ -1,8 +1,8 @@
-tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(10,6): error TS2300: Duplicate identifier 'T2'.
-tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(11,6): error TS2300: Duplicate identifier 'T2'.
+typeAliasesForObjectTypes.ts(10,6): error TS2300: Duplicate identifier 'T2'.
+typeAliasesForObjectTypes.ts(11,6): error TS2300: Duplicate identifier 'T2'.
 
 
-==== tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts (2 errors) ====
+==== typeAliasesForObjectTypes.ts (2 errors) ====
     type T1 = { x: string }
     
     // An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.

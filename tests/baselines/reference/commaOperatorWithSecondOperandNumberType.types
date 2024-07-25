@@ -1,173 +1,281 @@
-=== tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandNumberType.ts ===
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandNumberType.ts] ////
+
+=== commaOperatorWithSecondOperandNumberType.ts ===
 var ANY: any;
 >ANY : any
 
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var NUMBER: number;
 >NUMBER : number
+>       : ^^^^^^
 
 var STRING: string;
 >STRING : string
+>       : ^^^^^^
 
 var OBJECT: Object;
 >OBJECT : Object
+>       : ^^^^^^
 
 //The second operand type is number
 ANY, NUMBER;
 >ANY, NUMBER : number
+>            : ^^^^^^
 >ANY : any
 >NUMBER : number
+>       : ^^^^^^
 
 BOOLEAN, NUMBER;
 >BOOLEAN, NUMBER : number
+>                : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 NUMBER, NUMBER;
 >NUMBER, NUMBER : number
+>               : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 STRING, NUMBER;
 >STRING, NUMBER : number
+>               : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 OBJECT, NUMBER;
 >OBJECT, NUMBER : number
+>               : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 //Return type is number
 var resultIsNumber1 = (ANY, NUMBER);
 >resultIsNumber1 : number
+>                : ^^^^^^
 >(ANY, NUMBER) : number
+>              : ^^^^^^
 >ANY, NUMBER : number
+>            : ^^^^^^
 >ANY : any
 >NUMBER : number
+>       : ^^^^^^
 
 var resultIsNumber2 = (BOOLEAN, NUMBER);
 >resultIsNumber2 : number
+>                : ^^^^^^
 >(BOOLEAN, NUMBER) : number
+>                  : ^^^^^^
 >BOOLEAN, NUMBER : number
+>                : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 var resultIsNumber3 = (NUMBER, NUMBER);
 >resultIsNumber3 : number
+>                : ^^^^^^
 >(NUMBER, NUMBER) : number
+>                 : ^^^^^^
 >NUMBER, NUMBER : number
+>               : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 var resultIsNumber4 = (STRING, NUMBER);
 >resultIsNumber4 : number
+>                : ^^^^^^
 >(STRING, NUMBER) : number
+>                 : ^^^^^^
 >STRING, NUMBER : number
+>               : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 var resultIsNumber5 = (OBJECT, NUMBER);
 >resultIsNumber5 : number
+>                : ^^^^^^
 >(OBJECT, NUMBER) : number
+>                 : ^^^^^^
 >OBJECT, NUMBER : number
+>               : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 //Literal and expression
 null, NUMBER;
 >null, NUMBER : number
->null : null
+>             : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 ANY = undefined, NUMBER;
 >ANY = undefined, NUMBER : number
+>                        : ^^^^^^
 >ANY = undefined : undefined
+>                : ^^^^^^^^^
 >ANY : any
 >undefined : undefined
+>          : ^^^^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 true, 1;
 >true, 1 : 1
+>        : ^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 
 BOOLEAN = false, 1;
 >BOOLEAN = false, 1 : 1
+>                   : ^
 >BOOLEAN = false : false
+>                : ^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >false : false
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 "", NUMBER = 1;
 >"", NUMBER = 1 : 1
+>               : ^
 >"" : ""
+>   : ^^
 >NUMBER = 1 : 1
+>           : ^
 >NUMBER : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 STRING.trim(), NUMBER = 1;
 >STRING.trim(), NUMBER = 1 : 1
+>                          : ^
 >STRING.trim() : string
+>              : ^^^^^^
 >STRING.trim : () => string
+>            : ^^^^^^      
 >STRING : string
+>       : ^^^^^^
 >trim : () => string
+>     : ^^^^^^      
 >NUMBER = 1 : 1
+>           : ^
 >NUMBER : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 var resultIsNumber6 = (null, NUMBER);
 >resultIsNumber6 : number
+>                : ^^^^^^
 >(null, NUMBER) : number
+>               : ^^^^^^
 >null, NUMBER : number
->null : null
+>             : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 var resultIsNumber7 = (ANY = undefined, NUMBER);
 >resultIsNumber7 : number
+>                : ^^^^^^
 >(ANY = undefined, NUMBER) : number
+>                          : ^^^^^^
 >ANY = undefined, NUMBER : number
+>                        : ^^^^^^
 >ANY = undefined : undefined
+>                : ^^^^^^^^^
 >ANY : any
 >undefined : undefined
+>          : ^^^^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 var resultIsNumber8 = (true, 1);
 >resultIsNumber8 : number
+>                : ^^^^^^
 >(true, 1) : 1
+>          : ^
 >true, 1 : 1
+>        : ^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 
 var resultIsNumber9 = (BOOLEAN = false, 1);
 >resultIsNumber9 : number
+>                : ^^^^^^
 >(BOOLEAN = false, 1) : 1
+>                     : ^
 >BOOLEAN = false, 1 : 1
+>                   : ^
 >BOOLEAN = false : false
+>                : ^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >false : false
+>      : ^^^^^
 >1 : 1
+>  : ^
 
 var resultIsNumber10 = ("", NUMBER = 1);
 >resultIsNumber10 : number
+>                 : ^^^^^^
 >("", NUMBER = 1) : 1
+>                 : ^
 >"", NUMBER = 1 : 1
+>               : ^
 >"" : ""
+>   : ^^
 >NUMBER = 1 : 1
+>           : ^
 >NUMBER : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 
 var resultIsNumber11 = (STRING.trim(), NUMBER = 1);
 >resultIsNumber11 : number
+>                 : ^^^^^^
 >(STRING.trim(), NUMBER = 1) : 1
+>                            : ^
 >STRING.trim(), NUMBER = 1 : 1
+>                          : ^
 >STRING.trim() : string
+>              : ^^^^^^
 >STRING.trim : () => string
+>            : ^^^^^^      
 >STRING : string
+>       : ^^^^^^
 >trim : () => string
+>     : ^^^^^^      
 >NUMBER = 1 : 1
+>           : ^
 >NUMBER : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 

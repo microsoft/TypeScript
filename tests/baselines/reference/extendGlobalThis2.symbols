@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendGlobalThis2.ts ===
+//// [tests/cases/compiler/extendGlobalThis2.ts] ////
+
+=== extendGlobalThis2.ts ===
 namespace globalThis {
 >globalThis : Symbol(globalThis, Decl(extendGlobalThis2.ts, 0, 0))
 

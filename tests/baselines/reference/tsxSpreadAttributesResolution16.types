@@ -1,27 +1,38 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution16.tsx] ////
+
+=== file.tsx ===
 import React = require('react');
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 interface ComponentProps {
     property1: string;
 >property1 : string
+>          : ^^^^^^
 
     property2: number;
 >property2 : number
+>          : ^^^^^^
 }
 
 export default function Component(props: ComponentProps) {
 >Component : (props: ComponentProps) => JSX.Element
+>          : ^     ^^              ^^^^^^^^^^^^^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 
     return (
 >(        // Error: missing property        <AnotherComponent {...props} />    ) : JSX.Element
+>                                                                                : ^^^^^^^^^^^
 
         // Error: missing property
         <AnotherComponent {...props} />
 ><AnotherComponent {...props} /> : JSX.Element
+>                                : ^^^^^^^^^^^
 >AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
+>                 : ^             ^^                     ^^^^^^^^^^^^^^^^
 >props : ComponentProps
+>      : ^^^^^^^^^^^^^^
 
     );
 }
@@ -29,26 +40,36 @@ export default function Component(props: ComponentProps) {
 interface AnotherComponentProps {
     property1: string;
 >property1 : string
+>          : ^^^^^^
 
     AnotherProperty1: string;
 >AnotherProperty1 : string
+>                 : ^^^^^^
 
     property2: boolean;
 >property2 : boolean
+>          : ^^^^^^^
 }
 
 function AnotherComponent({ property1 }: AnotherComponentProps) {
 >AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
+>                 : ^             ^^                     ^^^^^^^^^^^^^^^^
 >property1 : string
+>          : ^^^^^^
 
     return (
 >(        <span>{property1}</span>    ) : JSX.Element
+>                                       : ^^^^^^^^^^^
 
         <span>{property1}</span>
 ><span>{property1}</span> : JSX.Element
+>                         : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 >property1 : string
+>          : ^^^^^^
 >span : any
+>     : ^^^
 
     );
 }

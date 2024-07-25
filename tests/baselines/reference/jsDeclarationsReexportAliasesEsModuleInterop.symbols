@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReexportAliasesEsModuleInterop.ts] ////
+
+=== cls.js ===
 class Foo {}
 >Foo : Symbol(Foo, Decl(cls.js, 0, 0))
 
@@ -8,7 +10,7 @@ module.exports = Foo;
 >exports : Symbol(export=, Decl(cls.js, 0, 12))
 >Foo : Symbol(Foo, Decl(cls.js, 0, 0))
 
-=== tests/cases/conformance/jsdoc/declarations/usage.js ===
+=== usage.js ===
 import {default as Fooa} from "./cls";
 >default : Symbol(export=, Decl(cls.js, 0, 12))
 >Fooa : Symbol(Fooa, Decl(usage.js, 0, 8))

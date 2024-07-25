@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedLocalsAndParametersDeferred.ts ===
+//// [tests/cases/compiler/unusedLocalsAndParametersDeferred.ts] ////
+
+=== unusedLocalsAndParametersDeferred.ts ===
 export { };
 
 function defered<T>(a: () => T): T {

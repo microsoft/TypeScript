@@ -1,28 +1,45 @@
-=== tests/cases/compiler/incrementOnTypeParameter.ts ===
+//// [tests/cases/compiler/incrementOnTypeParameter.ts] ////
+
+=== incrementOnTypeParameter.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     a: T;
 >a : T
+>  : ^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         this.a++; 
 >this.a++ : number
+>         : ^^^^^^
 >this.a : T
+>       : ^
 >this : this
+>     : ^^^^
 >a : T
+>  : ^
 
         for (var i: T, j = 0; j < 10; i++) { 
 >i : T
+>  : ^
 >j : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >j < 10 : boolean
+>       : ^^^^^^^
 >j : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >i++ : number
+>    : ^^^^^^
 >i : T
+>  : ^
         }
     }
 }

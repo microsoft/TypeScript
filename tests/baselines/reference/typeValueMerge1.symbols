@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/externalModules/typeValueMerge1.ts] ////
+
+=== other.ts ===
+export type A = string;
+>A : Symbol(A, Decl(other.ts, 0, 0), Decl(other.ts, 2, 8))
+
+function A() {}
+>A : Symbol(A, Decl(other.ts, 0, 23), Decl(other.ts, 0, 0))
+
+export { A };
+>A : Symbol(A, Decl(other.ts, 0, 0), Decl(other.ts, 2, 8))
+
+export type B = string;
+>B : Symbol(B, Decl(other.ts, 2, 13), Decl(other.ts, 6, 8))
+
+var B = 10;
+>B : Symbol(B, Decl(other.ts, 2, 13), Decl(other.ts, 5, 3))
+
+export { B };
+>B : Symbol(B, Decl(other.ts, 2, 13), Decl(other.ts, 6, 8))
+
+=== main.ts ===
+import { A, B } from "./other";
+>A : Symbol(A, Decl(main.ts, 0, 8))
+>B : Symbol(B, Decl(main.ts, 0, 11))
+
+A();
+>A : Symbol(A, Decl(main.ts, 0, 8))
+
+export const C = B;
+>C : Symbol(C, Decl(main.ts, 4, 12))
+>B : Symbol(B, Decl(main.ts, 0, 11))
+

@@ -1,0 +1,331 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param /*FIND ALL REFS*/[|foo|] I pity the foo
+//  */
+// function f(<|[|{| isWriteAccess: true |}foo|]: I|>) {
+//     return [|foo|];
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/jsDocServices.ts ===
+  // interface I {}
+  // 
+  // /**
+  //  * @param /*FIND ALL REFS*/foo I pity the foo
+  //  */
+  // function f(<|[|foo|]: I|>) {
+  //     return foo;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) foo: I",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|foo|] I pity the foo
+//  */
+// function f(/*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}foo|]: I|>) {
+//     return [|foo|];
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/jsDocServices.ts ===
+  // interface I {}
+  // 
+  // /**
+  //  * @param foo I pity the foo
+  //  */
+  // function f(/*FIND ALL REFS*/<|[|foo|]: I|>) {
+  //     return foo;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) foo: I",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|foo|] I pity the foo
+//  */
+// function f(<|[|{| isWriteAccess: true |}foo|]: I|>) {
+//     return /*FIND ALL REFS*/[|foo|];
+// }
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/jsDocServices.ts ===
+  // interface I {}
+  // 
+  // /**
+  //  * @param foo I pity the foo
+  //  */
+  // function f(<|[|foo|]: I|>) {
+  //     return /*FIND ALL REFS*/foo;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "parameter",
+    "name": "(parameter) foo: I",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "parameter",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "parameterName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param /*RENAME*/[|fooRENAME|] I pity the foo
+//  */
+// function f(<|[|fooRENAME|]: I|>) {
+//     return [|fooRENAME|];
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|fooRENAME|] I pity the foo
+//  */
+// function f(/*RENAME*/<|[|fooRENAME|]: I|>) {
+//     return [|fooRENAME|];
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|fooRENAME|] I pity the foo
+//  */
+// function f(<|[|fooRENAME|]: I|>) {
+//     return /*RENAME*/[|fooRENAME|];
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param /*HIGHLIGHTS*/[|{| kind: "reference" |}foo|] I pity the foo
+//  */
+// function f(<|[|{| kind: "writtenReference" |}foo|]: I|>) {
+//     return [|{| kind: "reference" |}foo|];
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|{| kind: "reference" |}foo|] I pity the foo
+//  */
+// function f(/*HIGHLIGHTS*/<|[|{| kind: "writtenReference" |}foo|]: I|>) {
+//     return [|{| kind: "reference" |}foo|];
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param [|{| kind: "reference" |}foo|] I pity the foo
+//  */
+// function f(<|[|{| kind: "writtenReference" |}foo|]: I|>) {
+//     return /*HIGHLIGHTS*/[|{| kind: "reference" |}foo|];
+// }
+
+
+
+// === goToType ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// <|interface [|I|] {}|>
+// 
+// /**
+//  * @param /*GOTO TYPE*/foo I pity the foo
+//  */
+// function f(foo: I) {
+//     return foo;
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "I",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/jsDocServices.ts ===
+// interface I {}
+// 
+// /**
+//  * @param /*GOTO DEF POS*/foo I pity the foo
+//  */
+// function f(<|[|foo|]: I|>) {
+//     return foo;
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "parameter",
+    "name": "foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

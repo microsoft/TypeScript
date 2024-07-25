@@ -1,12 +1,19 @@
-=== tests/cases/compiler/promiseDefinitionTest.ts ===
+//// [tests/cases/compiler/promiseDefinitionTest.ts] ////
+
+=== promiseDefinitionTest.ts ===
 class Promise<T> {}
 >Promise : Promise<T>
+>        : ^^^^^^^^^^
 
 async function foo() {}
 >foo : () => Promise<void>
+>    : ^^^^^^^^^^^^^^^^^^^
 
 const x = foo();
 >x : Promise<void>
+>  : ^^^^^^^^^^^^^
 >foo() : Promise<void>
+>      : ^^^^^^^^^^^^^
 >foo : () => Promise<void>
+>    : ^^^^^^^^^^^^^^^^^^^
 

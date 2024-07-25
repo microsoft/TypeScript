@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleMemberWithoutTypeAnnotation1.ts ===
+//// [tests/cases/compiler/moduleMemberWithoutTypeAnnotation1.ts] ////
+
+=== moduleMemberWithoutTypeAnnotation1.ts ===
 module TypeScript.Parser {
 >TypeScript : Symbol(TypeScript, Decl(moduleMemberWithoutTypeAnnotation1.ts, 0, 0), Decl(moduleMemberWithoutTypeAnnotation1.ts, 6, 1), Decl(moduleMemberWithoutTypeAnnotation1.ts, 22, 1), Decl(moduleMemberWithoutTypeAnnotation1.ts, 34, 1))
 >Parser : Symbol(Parser, Decl(moduleMemberWithoutTypeAnnotation1.ts, 0, 18))

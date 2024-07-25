@@ -1,7 +1,7 @@
-tests/cases/compiler/typeCheckObjectLiteralMethodBody.ts(1,13): error TS7010: 'bar', which lacks return-type annotation, implicitly has an 'any' return type.
+typeCheckObjectLiteralMethodBody.ts(1,13): error TS7010: 'bar', which lacks return-type annotation, implicitly has an 'any' return type.
 
 
-==== tests/cases/compiler/typeCheckObjectLiteralMethodBody.ts (1 errors) ====
+==== typeCheckObjectLiteralMethodBody.ts (1 errors) ====
     var foo = { bar() { return undefined } };
                 ~~~
 !!! error TS7010: 'bar', which lacks return-type annotation, implicitly has an 'any' return type.

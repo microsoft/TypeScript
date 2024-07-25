@@ -1,0 +1,39 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/jsdocThrowsTag_findAllReferences.ts ===
+// <|class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}E|] extends Error {}|>
+// /**
+//  * @throws {[|E|]}
+//  */
+// function f() {}
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/jsdocThrowsTag_findAllReferences.ts ===
+  // <|class /*FIND ALL REFS*/[|E|] extends Error {}|>
+  // /**
+  //  * @throws {E}
+  //  */
+  // function f() {}
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class E",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "className"
+     }
+    ]
+   }
+  ]

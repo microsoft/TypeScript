@@ -1,13 +1,13 @@
-tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(2,5): error TS2502: 'c' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(4,5): error TS2502: 'd' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(6,5): error TS2502: 'e' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(10,5): error TS2502: 'f' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(12,5): error TS2502: 'f2' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(14,5): error TS2502: 'f3' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts(51,5): error TS2502: 'hy3' is referenced directly or indirectly in its own type annotation.
+recursiveTypesWithTypeof.ts(2,5): error TS2502: 'c' is referenced directly or indirectly in its own type annotation.
+recursiveTypesWithTypeof.ts(4,5): error TS2502: 'd' is referenced directly or indirectly in its own type annotation.
+recursiveTypesWithTypeof.ts(6,5): error TS2502: 'e' is referenced directly or indirectly in its own type annotation.
+recursiveTypesWithTypeof.ts(10,5): error TS2502: 'f' is referenced directly or indirectly in its own type annotation.
+recursiveTypesWithTypeof.ts(12,5): error TS2502: 'f2' is referenced directly or indirectly in its own type annotation.
+recursiveTypesWithTypeof.ts(14,5): error TS2502: 'f3' is referenced directly or indirectly in its own type annotation.
+recursiveTypesWithTypeof.ts(51,5): error TS2502: 'hy3' is referenced directly or indirectly in its own type annotation.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts (7 errors) ====
+==== recursiveTypesWithTypeof.ts (7 errors) ====
     // The following are errors because of circular references
     var c: typeof c;
         ~

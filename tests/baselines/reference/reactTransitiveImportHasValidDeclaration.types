@@ -1,15 +1,18 @@
-=== tests/cases/compiler/node_modules/react/index.d.ts ===
+//// [tests/cases/compiler/reactTransitiveImportHasValidDeclaration.ts] ////
+
+=== node_modules/react/index.d.ts ===
 declare namespace React {
     export interface DetailedHTMLProps<T, U> {}
     export interface HTMLAttributes<T> {}
 }
 export = React;
 >React : any
+>      : ^^^
 
 export as namespace React;
 >React : error
 
-=== tests/cases/compiler/node_modules/create-emotion-styled/types/react/index.d.ts ===
+=== node_modules/create-emotion-styled/types/react/index.d.ts ===
 /// <reference types="react" />
 declare module 'react' { // augment
 >'react' : error
@@ -17,43 +20,63 @@ declare module 'react' { // augment
     interface HTMLAttributes<T> {
         css?: unknown;
 >css : unknown
+>    : ^^^^^^^
     }
 }
 export interface StyledOtherComponentList {
     "div": React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
->"div" : import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+>"div" : import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 >React : any
+>      : ^^^
 }
 export interface StyledOtherComponent<A, B, C> {}
 
-=== tests/cases/compiler/node_modules/create-emotion-styled/index.d.ts ===
+=== node_modules/create-emotion-styled/index.d.ts ===
+
 export * from "./types/react";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/node_modules/react-emotion/index.d.ts ===
+
+=== node_modules/react-emotion/index.d.ts ===
 import {StyledOtherComponent, StyledOtherComponentList} from "create-emotion-styled";
 >StyledOtherComponent : any
+>                     : ^^^
 >StyledOtherComponentList : any
+>                         : ^^^
 
 export default function styled(tag: string): (o: object) => StyledOtherComponent<{}, StyledOtherComponentList["div"], any>;
 >styled : (tag: string) => (o: object) => StyledOtherComponent<{}, StyledOtherComponentList["div"], any>
+>       : ^   ^^      ^^^^^                                                                             
 >tag : string
+>    : ^^^^^^
 >o : object
+>  : ^^^^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import styled from "react-emotion"
->styled : (tag: string) => (o: object) => import("tests/cases/compiler/node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>styled : (tag: string) => (o: object) => import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/create-emotion-styled/index").StyledOtherComponentList["div"], any>
+>       : ^   ^^      ^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^             
 
 const Form = styled('div')({ color: "red" })
->Form : import("tests/cases/compiler/node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
->styled('div')({ color: "red" }) : import("tests/cases/compiler/node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
->styled('div') : (o: object) => import("tests/cases/compiler/node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
->styled : (tag: string) => (o: object) => import("tests/cases/compiler/node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>Form : import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>styled('div')({ color: "red" }) : import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>styled('div') : (o: object) => import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/create-emotion-styled/index").StyledOtherComponentList["div"], any>
+>              : ^ ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^             
+>styled : (tag: string) => (o: object) => import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/create-emotion-styled/index").StyledOtherComponentList["div"], any>
+>       : ^   ^^      ^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^             
 >'div' : "div"
+>      : ^^^^^
 >{ color: "red" } : { color: string; }
+>                 : ^^^^^^^^^^^^^^^^^^
 >color : string
+>      : ^^^^^^
 >"red" : "red"
+>      : ^^^^^
 
 export default Form
->Form : import("tests/cases/compiler/node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>Form : import("node_modules/create-emotion-styled/index").StyledOtherComponent<{}, import("node_modules/react/index").DetailedHTMLProps<import("node_modules/react/index").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

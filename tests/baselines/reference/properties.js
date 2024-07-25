@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/properties.ts] ////
+
 //// [properties.ts]
 class MyClass
 {

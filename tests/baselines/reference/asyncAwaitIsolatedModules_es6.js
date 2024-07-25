@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncAwaitIsolatedModules_es6.ts] ////
+
 //// [asyncAwaitIsolatedModules_es6.ts]
 import { MyPromise } from "missing";
 

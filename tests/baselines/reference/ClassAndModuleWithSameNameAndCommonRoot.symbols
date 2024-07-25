@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/class.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleWithSameNameAndCommonRoot.ts] ////
+
+=== class.ts ===
 module X.Y {
 >X : Symbol(X, Decl(class.ts, 0, 0), Decl(module.ts, 0, 0))
 >Y : Symbol(Y, Decl(class.ts, 0, 9), Decl(module.ts, 0, 9))
@@ -30,7 +32,7 @@ module X.Y {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/module.ts ===
+=== module.ts ===
 module X.Y {
 >X : Symbol(X, Decl(class.ts, 0, 0), Decl(module.ts, 0, 0))
 >Y : Symbol(Y, Decl(class.ts, 0, 9), Decl(module.ts, 0, 9))
@@ -44,7 +46,7 @@ module X.Y {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
+=== test.ts ===
 //var cl: { x: number; y: number; }
 var cl = new X.Y.Point(1,1);
 >cl : Symbol(cl, Decl(test.ts, 1, 3), Decl(test.ts, 2, 3))
@@ -65,7 +67,7 @@ var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
 >Origin : Symbol(X.Y.Point.Origin, Decl(module.ts, 2, 18))
 
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts ===
+=== simple.ts ===
 class A {
 >A : Symbol(A, Decl(simple.ts, 0, 0), Decl(simple.ts, 2, 1))
 

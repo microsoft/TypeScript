@@ -1,53 +1,85 @@
-=== tests/cases/conformance/constEnums/constEnum1.ts ===
+//// [tests/cases/conformance/constEnums/constEnum1.ts] ////
+
+=== constEnum1.ts ===
 // An enum declaration that specifies a const modifier is a constant enum declaration.
 // In a constant enum declaration, all members must have constant values and
 // it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
 
 const enum E {
 >E : E
+>  : ^
 
     a = 10,
->a : E
+>a : E.a
+>  : ^^^
 >10 : 10
+>   : ^^
 
     b = a,
->b : E
->a : E
+>b : E.a
+>  : ^^^
+>a : E.a
+>  : ^^^
 
     c = (a+1),
->c : E
+>c : E.c
+>  : ^^^
 >(a+1) : number
+>      : ^^^^^^
 >a+1 : number
->a : E
+>    : ^^^^^^
+>a : E.a
+>  : ^^^
 >1 : 1
+>  : ^
 
     e,
->e : E
+>e : E.e
+>  : ^^^
 
     d = ~e,
->d : E
+>d : E.d
+>  : ^^^
 >~e : number
->e : E
+>   : ^^^^^^
+>e : E.e
+>  : ^^^
 
     f = a << 2 >> 1,
->f : E
+>f : E.f
+>  : ^^^
 >a << 2 >> 1 : number
+>            : ^^^^^^
 >a << 2 : number
->a : E
+>       : ^^^^^^
+>a : E.a
+>  : ^^^
 >2 : 2
+>  : ^
 >1 : 1
+>  : ^
 
     g = a << 2 >>> 1,
->g : E
+>g : E.f
+>  : ^^^
 >a << 2 >>> 1 : number
+>             : ^^^^^^
 >a << 2 : number
->a : E
+>       : ^^^^^^
+>a : E.a
+>  : ^^^
 >2 : 2
+>  : ^
 >1 : 1
+>  : ^
 
     h = a | b
->h : E
+>h : E.a
+>  : ^^^
 >a | b : number
->a : E
->b : E
+>      : ^^^^^^
+>a : E.a
+>  : ^^^
+>b : E.a
+>  : ^^^
 }

@@ -1,27 +1,41 @@
-=== tests/cases/compiler/errorsOnImportedSymbol_1.ts ===
+//// [tests/cases/compiler/errorsOnImportedSymbol.ts] ////
+
+=== errorsOnImportedSymbol_1.ts ===
 import Sammy = require("./errorsOnImportedSymbol_0");
 >Sammy : any
+>      : ^^^
 
 var x = new Sammy.Sammy();
 >x : any
+>  : ^^^
 >new Sammy.Sammy() : any
+>                  : ^^^
 >Sammy.Sammy : any
+>            : ^^^
 >Sammy : any
+>      : ^^^
 >Sammy : any
+>      : ^^^
 
 var y = Sammy.Sammy(); 
 >y : any
+>  : ^^^
 >Sammy.Sammy() : any
+>              : ^^^
 >Sammy.Sammy : any
+>            : ^^^
 >Sammy : any
+>      : ^^^
 >Sammy : any
+>      : ^^^
 
 
-=== tests/cases/compiler/errorsOnImportedSymbol_0.ts ===
+=== errorsOnImportedSymbol_0.ts ===
 interface Sammy {
     new (): any;
     (): number;
 }
 export = Sammy;
 >Sammy : Sammy
+>      : ^^^^^
 

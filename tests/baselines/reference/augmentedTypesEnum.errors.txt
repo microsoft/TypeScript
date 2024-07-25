@@ -1,18 +1,18 @@
-tests/cases/compiler/augmentedTypesEnum.ts(2,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/augmentedTypesEnum.ts(3,5): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/augmentedTypesEnum.ts(6,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/augmentedTypesEnum.ts(7,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/augmentedTypesEnum.ts(9,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/augmentedTypesEnum.ts(10,5): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/augmentedTypesEnum.ts(13,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/augmentedTypesEnum.ts(14,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/augmentedTypesEnum.ts(18,11): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
-tests/cases/compiler/augmentedTypesEnum.ts(20,12): error TS2300: Duplicate identifier 'One'.
-tests/cases/compiler/augmentedTypesEnum.ts(21,12): error TS2300: Duplicate identifier 'One'.
-tests/cases/compiler/augmentedTypesEnum.ts(21,12): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+augmentedTypesEnum.ts(2,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesEnum.ts(3,5): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesEnum.ts(6,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesEnum.ts(7,10): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesEnum.ts(9,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesEnum.ts(10,5): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesEnum.ts(13,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesEnum.ts(14,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesEnum.ts(18,11): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+augmentedTypesEnum.ts(20,12): error TS2300: Duplicate identifier 'One'.
+augmentedTypesEnum.ts(21,12): error TS2300: Duplicate identifier 'One'.
+augmentedTypesEnum.ts(21,12): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
 
 
-==== tests/cases/compiler/augmentedTypesEnum.ts (12 errors) ====
+==== augmentedTypesEnum.ts (12 errors) ====
     // enum then var
     enum e1111 { One } // error
          ~~~~~

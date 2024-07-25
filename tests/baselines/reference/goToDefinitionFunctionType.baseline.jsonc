@@ -1,0 +1,74 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionFunctionType.ts ===
+// <|const [|c|]: () => void;|>
+// /*GOTO DEF POS*/c();
+// function test(cb: () => void) {
+//     cb();
+// }
+// --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "c",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionFunctionType.ts ===
+// const c: () => void;
+// c();
+// function test(<|[|cb|]: () => void|>) {
+//     /*GOTO DEF POS*/cb();
+// }
+// class C {
+//     prop: () => void;
+// --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "parameter",
+    "name": "cb",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/goToDefinitionFunctionType.ts ===
+// --- (line: 3) skipped ---
+//     cb();
+// }
+// class C {
+//     <|[|prop|]: () => void;|>
+//     m() {
+//         this./*GOTO DEF POS*/prop();
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "prop",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

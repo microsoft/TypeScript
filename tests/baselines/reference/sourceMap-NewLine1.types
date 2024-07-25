@@ -1,3 +1,4 @@
-=== tests/cases/compiler/sourceMap-NewLine1.ts ===
+//// [tests/cases/compiler/sourceMap-NewLine1.ts] ////
 
-No type information for this code.
+=== sourceMap-NewLine1.ts ===
+

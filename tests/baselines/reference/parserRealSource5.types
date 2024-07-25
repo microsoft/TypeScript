@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts] ////
+
+=== parserRealSource5.ts ===
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 
@@ -6,225 +8,365 @@
 
 module TypeScript {
 >TypeScript : typeof TypeScript
+>           : ^^^^^^^^^^^^^^^^^
 
     // TODO: refactor indent logic for use in emit
     export class PrintContext {
 >PrintContext : PrintContext
+>             : ^^^^^^^^^^^^
 
         public builder = "";
 >builder : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 
         public indent1 = "  ";
 >indent1 : string
+>        : ^^^^^^
 >"  " : "  "
+>     : ^^^^
 
         public indentStrings: string[] = [];
 >indentStrings : string[]
+>              : ^^^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
         public indentAmt = 0;
 >indentAmt : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
         constructor (public outfile: ITextWriter, public parser: Parser) {
 >outfile : ITextWriter
+>        : ^^^^^^^^^^^
 >parser : Parser
+>       : ^^^^^^
         }
 
         public increaseIndent() {
 >increaseIndent : () => void
+>               : ^^^^^^^^^^
 
             this.indentAmt++;
 >this.indentAmt++ : number
+>                 : ^^^^^^
 >this.indentAmt : number
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >indentAmt : number
+>          : ^^^^^^
         }
 
         public decreaseIndent() {
 >decreaseIndent : () => void
+>               : ^^^^^^^^^^
 
             this.indentAmt--;
 >this.indentAmt-- : number
+>                 : ^^^^^^
 >this.indentAmt : number
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >indentAmt : number
+>          : ^^^^^^
         }
 
         public startLine() {
 >startLine : () => void
+>          : ^^^^^^^^^^
 
             if (this.builder.length > 0) {
 >this.builder.length > 0 : boolean
+>                        : ^^^^^^^
 >this.builder.length : number
+>                    : ^^^^^^
 >this.builder : string
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >builder : string
+>        : ^^^^^^
 >length : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
                 CompilerDiagnostics.Alert(this.builder);
 >CompilerDiagnostics.Alert(this.builder) : any
+>                                        : ^^^
 >CompilerDiagnostics.Alert : any
+>                          : ^^^
 >CompilerDiagnostics : any
+>                    : ^^^
 >Alert : any
+>      : ^^^
 >this.builder : string
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >builder : string
+>        : ^^^^^^
             }
             var indentString = this.indentStrings[this.indentAmt];
 >indentString : string
+>             : ^^^^^^
 >this.indentStrings[this.indentAmt] : string
+>                                   : ^^^^^^
 >this.indentStrings : string[]
+>                   : ^^^^^^^^
 >this : this
+>     : ^^^^
 >indentStrings : string[]
+>              : ^^^^^^^^
 >this.indentAmt : number
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >indentAmt : number
+>          : ^^^^^^
 
             if (indentString === undefined) {
 >indentString === undefined : boolean
+>                           : ^^^^^^^
 >indentString : string
+>             : ^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
                 indentString = "";
 >indentString = "" : ""
+>                  : ^^
 >indentString : string
+>             : ^^^^^^
 >"" : ""
+>   : ^^
 
                 for (var i = 0; i < this.indentAmt; i++) {
 >i : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >i < this.indentAmt : boolean
+>                   : ^^^^^^^
 >i : number
+>  : ^^^^^^
 >this.indentAmt : number
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >indentAmt : number
+>          : ^^^^^^
 >i++ : number
+>    : ^^^^^^
 >i : number
+>  : ^^^^^^
 
                     indentString += this.indent1;
 >indentString += this.indent1 : string
+>                             : ^^^^^^
 >indentString : string
+>             : ^^^^^^
 >this.indent1 : string
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >indent1 : string
+>        : ^^^^^^
                 }
                 this.indentStrings[this.indentAmt] = indentString;
 >this.indentStrings[this.indentAmt] = indentString : string
+>                                                  : ^^^^^^
 >this.indentStrings[this.indentAmt] : string
+>                                   : ^^^^^^
 >this.indentStrings : string[]
+>                   : ^^^^^^^^
 >this : this
+>     : ^^^^
 >indentStrings : string[]
+>              : ^^^^^^^^
 >this.indentAmt : number
+>               : ^^^^^^
 >this : this
+>     : ^^^^
 >indentAmt : number
+>          : ^^^^^^
 >indentString : string
+>             : ^^^^^^
             }
             this.builder += indentString;
 >this.builder += indentString : string
+>                             : ^^^^^^
 >this.builder : string
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >builder : string
+>        : ^^^^^^
 >indentString : string
+>             : ^^^^^^
         }
 
         public write(s) {
 >write : (s: any) => void
+>      : ^ ^^^^^^^^^^^^^^
 >s : any
+>  : ^^^
 
             this.builder += s;
 >this.builder += s : string
+>                  : ^^^^^^
 >this.builder : string
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >builder : string
+>        : ^^^^^^
 >s : any
+>  : ^^^
         }
 
         public writeLine(s) {
 >writeLine : (s: any) => void
+>          : ^ ^^^^^^^^^^^^^^
 >s : any
+>  : ^^^
 
             this.builder += s;
 >this.builder += s : string
+>                  : ^^^^^^
 >this.builder : string
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >builder : string
+>        : ^^^^^^
 >s : any
+>  : ^^^
 
             this.outfile.WriteLine(this.builder);
 >this.outfile.WriteLine(this.builder) : void
+>                                     : ^^^^
 >this.outfile.WriteLine : (s: string) => void
+>                       : ^ ^^      ^^^^^    
 >this.outfile : ITextWriter
+>             : ^^^^^^^^^^^
 >this : this
+>     : ^^^^
 >outfile : ITextWriter
+>        : ^^^^^^^^^^^
 >WriteLine : (s: string) => void
+>          : ^ ^^      ^^^^^    
 >this.builder : string
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >builder : string
+>        : ^^^^^^
 
             this.builder = "";
 >this.builder = "" : ""
+>                  : ^^
 >this.builder : string
+>             : ^^^^^^
 >this : this
+>     : ^^^^
 >builder : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
         }
 
     }
 
     export function prePrintAST(ast: AST, parent: AST, walker: IAstWalker) {
 >prePrintAST : (ast: AST, parent: AST, walker: IAstWalker) => AST
+>            : ^   ^^   ^^      ^^   ^^      ^^          ^^^^^^^^
 >ast : AST
+>    : ^^^
 >parent : AST
+>       : ^^^
 >walker : IAstWalker
+>       : ^^^^^^^^^^
 
         var pc: PrintContext = <PrintContext>walker.state;
 >pc : PrintContext
+>   : ^^^^^^^^^^^^
 ><PrintContext>walker.state : PrintContext
+>                           : ^^^^^^^^^^^^
 >walker.state : any
+>             : ^^^
 >walker : IAstWalker
+>       : ^^^^^^^^^^
 >state : any
+>      : ^^^
 
         ast.print(pc);
 >ast.print(pc) : any
+>              : ^^^
 >ast.print : any
+>          : ^^^
 >ast : AST
+>    : ^^^
 >print : any
+>      : ^^^
 >pc : PrintContext
+>   : ^^^^^^^^^^^^
 
         pc.increaseIndent();
 >pc.increaseIndent() : void
+>                    : ^^^^
 >pc.increaseIndent : () => void
+>                  : ^^^^^^^^^^
 >pc : PrintContext
+>   : ^^^^^^^^^^^^
 >increaseIndent : () => void
+>               : ^^^^^^^^^^
 
         return ast;
 >ast : AST
+>    : ^^^
     }
 
 
     export function postPrintAST(ast: AST, parent: AST, walker: IAstWalker) {
 >postPrintAST : (ast: AST, parent: AST, walker: IAstWalker) => AST
+>             : ^   ^^   ^^      ^^   ^^      ^^          ^^^^^^^^
 >ast : AST
+>    : ^^^
 >parent : AST
+>       : ^^^
 >walker : IAstWalker
+>       : ^^^^^^^^^^
 
         var pc: PrintContext = <PrintContext>walker.state;
 >pc : PrintContext
+>   : ^^^^^^^^^^^^
 ><PrintContext>walker.state : PrintContext
+>                           : ^^^^^^^^^^^^
 >walker.state : any
+>             : ^^^
 >walker : IAstWalker
+>       : ^^^^^^^^^^
 >state : any
+>      : ^^^
 
         pc.decreaseIndent();
 >pc.decreaseIndent() : void
+>                    : ^^^^
 >pc.decreaseIndent : () => void
+>                  : ^^^^^^^^^^
 >pc : PrintContext
+>   : ^^^^^^^^^^^^
 >decreaseIndent : () => void
+>               : ^^^^^^^^^^
 
         return ast;
 >ast : AST
+>    : ^^^
     }
 }

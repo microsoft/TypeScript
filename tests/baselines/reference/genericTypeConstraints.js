@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeConstraints.ts] ////
+
 //// [genericTypeConstraints.ts]
 class Foo {
     fooMethod() {}

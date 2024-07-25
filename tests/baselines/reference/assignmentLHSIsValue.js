@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts] ////
+
 //// [assignmentLHSIsValue.ts]
 // expected error for all the LHS of assignments
 var value: any;

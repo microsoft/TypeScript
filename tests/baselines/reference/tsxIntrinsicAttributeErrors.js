@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx] ////
+
 //// [tsxIntrinsicAttributeErrors.tsx]
 declare namespace JSX {
     interface Element { }

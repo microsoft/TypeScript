@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexSignatureWithTrailingComma.ts ===
+//// [tests/cases/compiler/indexSignatureWithTrailingComma.ts] ////
+
+=== indexSignatureWithTrailingComma.ts ===
 type A = {
 >A : Symbol(A, Decl(indexSignatureWithTrailingComma.ts, 0, 0))
 

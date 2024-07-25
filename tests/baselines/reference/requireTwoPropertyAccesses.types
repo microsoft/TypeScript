@@ -1,36 +1,56 @@
-=== tests/cases/conformance/salsa/requireTwoPropertyAccesses.js ===
+//// [tests/cases/conformance/salsa/requireTwoPropertyAccesses.ts] ////
+
+=== requireTwoPropertyAccesses.js ===
 const value = require("./mod").x.y
 >value : error
 >require("./mod").x.y : string
+>                     : ^^^^^^
 >require("./mod").x : { y: string; }
+>                   : ^^^^^^^^^^^^^^
 >require("./mod") : { x: { y: string; }; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >"./mod" : "./mod"
+>        : ^^^^^^^
 >x : { y: string; }
+>  : ^^^^^^^^^^^^^^
 >y : string
+>  : ^^^^^^
 
 console.log(value)
 >console.log(value) : void
+>                   : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >value : error
 
-=== tests/cases/conformance/salsa/mod.js ===
-// @declaration
+=== mod.js ===
 module.exports = {
 >module.exports = {    x: {        y: "value"    }} : { x: { y: string; }; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : { x: { y: string; }; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { x: { y: string; }; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { x: { y: string; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >{    x: {        y: "value"    }} : { x: { y: string; }; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^
 
     x: {
 >x : { y: string; }
+>  : ^^^^^^^^^^^^^^
 >{        y: "value"    } : { y: string; }
+>                         : ^^^^^^^^^^^^^^
 
         y: "value"
 >y : string
+>  : ^^^^^^
 >"value" : "value"
+>        : ^^^^^^^
     }
 }

@@ -8,9 +8,9 @@
 //// * @param {string} o.x - a thing, its ok
 //// * @param {number} o.y - another thing
 //// * @param {Object} o.nested - very nested
-//// * @param {boolean} o.nested.[|{| "isDefinition": true |}great|] - much greatness
+//// * @param {boolean} o.nested./*1*/great - much greatness
 //// * @param {number} o.nested.times - twice? probably!??
 //// */
-//// function f(o) { return o.nested.[|great|]; }
+//// function f(o) { return o.nested./*2*/great; }
 
-verify.singleReferenceGroup("(property) great: boolean");
+verify.baselineFindAllReferences('1', '2');

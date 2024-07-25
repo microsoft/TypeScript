@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypeAppliedToVarArgs.ts ===
+//// [tests/cases/compiler/contextualTypeAppliedToVarArgs.ts] ////
+
+=== contextualTypeAppliedToVarArgs.ts ===
 function delegate(instance: any, method: (...args: any[]) => any, data?: any): (...args: any[]) => any {
 >delegate : Symbol(delegate, Decl(contextualTypeAppliedToVarArgs.ts, 0, 0))
 >instance : Symbol(instance, Decl(contextualTypeAppliedToVarArgs.ts, 0, 18))

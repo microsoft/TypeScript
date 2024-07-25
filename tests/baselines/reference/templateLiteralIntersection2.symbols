@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/templateLiteralIntersection2.ts] ////
+
+=== templateLiteralIntersection2.ts ===
+type Path = string & { _pathBrand: any };
+>Path : Symbol(Path, Decl(templateLiteralIntersection2.ts, 0, 0))
+>_pathBrand : Symbol(_pathBrand, Decl(templateLiteralIntersection2.ts, 0, 22))
+
+type JoinedPath = `${Path}/${Path}`;
+>JoinedPath : Symbol(JoinedPath, Decl(templateLiteralIntersection2.ts, 0, 41))
+>Path : Symbol(Path, Decl(templateLiteralIntersection2.ts, 0, 0))
+>Path : Symbol(Path, Decl(templateLiteralIntersection2.ts, 0, 0))
+
+declare function joinedPath(p: JoinedPath): void;
+>joinedPath : Symbol(joinedPath, Decl(templateLiteralIntersection2.ts, 2, 36))
+>p : Symbol(p, Decl(templateLiteralIntersection2.ts, 4, 28))
+>JoinedPath : Symbol(JoinedPath, Decl(templateLiteralIntersection2.ts, 0, 41))
+
+joinedPath("foo/bar");
+>joinedPath : Symbol(joinedPath, Decl(templateLiteralIntersection2.ts, 2, 36))
+
+declare const somePath: Path;
+>somePath : Symbol(somePath, Decl(templateLiteralIntersection2.ts, 8, 13))
+>Path : Symbol(Path, Decl(templateLiteralIntersection2.ts, 0, 0))
+
+joinedPath(`${somePath}/${somePath}`);
+>joinedPath : Symbol(joinedPath, Decl(templateLiteralIntersection2.ts, 2, 36))
+>somePath : Symbol(somePath, Decl(templateLiteralIntersection2.ts, 8, 13))
+>somePath : Symbol(somePath, Decl(templateLiteralIntersection2.ts, 8, 13))
+
+
+type StartsWithA = `a${string}`;
+>StartsWithA : Symbol(StartsWithA, Decl(templateLiteralIntersection2.ts, 10, 38))
+
+type EndsWithA = `${string}a`;
+>EndsWithA : Symbol(EndsWithA, Decl(templateLiteralIntersection2.ts, 13, 32))
+
+
+declare function withinAs(p: StartsWithA & EndsWithA): void;
+>withinAs : Symbol(withinAs, Decl(templateLiteralIntersection2.ts, 14, 30))
+>p : Symbol(p, Decl(templateLiteralIntersection2.ts, 17, 26))
+>StartsWithA : Symbol(StartsWithA, Decl(templateLiteralIntersection2.ts, 10, 38))
+>EndsWithA : Symbol(EndsWithA, Decl(templateLiteralIntersection2.ts, 13, 32))
+
+withinAs("");
+>withinAs : Symbol(withinAs, Decl(templateLiteralIntersection2.ts, 14, 30))
+
+withinAs("a");
+>withinAs : Symbol(withinAs, Decl(templateLiteralIntersection2.ts, 14, 30))
+
+withinAs("ab");
+>withinAs : Symbol(withinAs, Decl(templateLiteralIntersection2.ts, 14, 30))
+
+withinAs("aba");
+>withinAs : Symbol(withinAs, Decl(templateLiteralIntersection2.ts, 14, 30))
+
+withinAs("abavvvva");
+>withinAs : Symbol(withinAs, Decl(templateLiteralIntersection2.ts, 14, 30))
+

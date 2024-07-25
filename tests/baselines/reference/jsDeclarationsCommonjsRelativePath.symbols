@@ -1,10 +1,12 @@
-=== tests/cases/conformance/jsdoc/declarations/reexport.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsCommonjsRelativePath.ts] ////
+
+=== reexport.js ===
 'use strict';
 const Thing = require('./thing').Thing
 >Thing : Symbol(Thing, Decl(reexport.js, 1, 5))
 >require('./thing').Thing : Symbol(Thing, Decl(thing.js, 2, 18))
 >require : Symbol(require)
->'./thing' : Symbol("tests/cases/conformance/jsdoc/declarations/thing", Decl(thing.js, 0, 0))
+>'./thing' : Symbol("thing", Decl(thing.js, 0, 0))
 >Thing : Symbol(Thing, Decl(thing.js, 2, 18))
 
 module.exports = { Thing }
@@ -13,7 +15,7 @@ module.exports = { Thing }
 >exports : Symbol(module.exports, Decl(reexport.js, 0, 0))
 >Thing : Symbol(Thing, Decl(reexport.js, 2, 18))
 
-=== tests/cases/conformance/jsdoc/declarations/thing.js ===
+=== thing.js ===
 'use strict';
 class Thing {}
 >Thing : Symbol(Thing, Decl(thing.js, 0, 13))

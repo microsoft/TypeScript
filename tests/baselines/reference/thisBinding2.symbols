@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisBinding2.ts ===
+//// [tests/cases/compiler/thisBinding2.ts] ////
+
+=== thisBinding2.ts ===
 class C {
 >C : Symbol(C, Decl(thisBinding2.ts, 0, 0))
 

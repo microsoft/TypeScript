@@ -1,52 +1,72 @@
-=== tests/cases/conformance/jsx/react.d.ts ===
+//// [tests/cases/conformance/jsx/tsxExternalModuleEmit1.tsx] ////
+
+=== react.d.ts ===
 declare module 'react' {
 >'react' : typeof import("react")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
 	class Component<T, U> { }
 >Component : Component<T, U>
+>          : ^^^^^^^^^^^^^^^
 }
 
-=== tests/cases/conformance/jsx/app.tsx ===
+=== app.tsx ===
 import * as React from 'react';
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 // Should see var button_1 = require('./button') here
 import { Button } from './button';
 >Button : typeof Button
+>       : ^^^^^^^^^^^^^
 
 export class App extends React.Component<any, any> {
 >App : App
+>    : ^^^
 >React.Component : React.Component<any, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => any
+>       : ^^^^^^^^^
 
         return <Button />;
 ><Button /> : error
 >Button : typeof Button
+>       : ^^^^^^^^^^^^^
     }
 
 }
 
-=== tests/cases/conformance/jsx/button.tsx ===
+=== button.tsx ===
 import * as React from 'react';
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 export class Button extends React.Component<any, any> {
 >Button : Button
+>       : ^^^^^^
 >React.Component : React.Component<any, any>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => any
+>       : ^^^^^^^^^
 
         return <button>Some button</button>;
 ><button>Some button</button> : error
 >button : any
+>       : ^^^
 >button : any
+>       : ^^^
     }
 
 }

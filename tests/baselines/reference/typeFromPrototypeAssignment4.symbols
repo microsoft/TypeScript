@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPrototypeAssignment4.ts] ////
+
+=== a.js ===
 function Multimap4() {
 >Multimap4 : Symbol(Multimap4, Decl(a.js, 0, 0), Decl(a.js, 2, 2))
 

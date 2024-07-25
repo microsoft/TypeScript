@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tryCatchFinally.ts] ////
+
 //// [tryCatchFinally.ts]
 try { } catch(e) { } finally { } 
 

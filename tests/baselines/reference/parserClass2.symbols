@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClass2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClass2.ts] ////
+
+=== parserClass2.ts ===
     export class LoggerAdapter implements ILogger {
 >LoggerAdapter : Symbol(LoggerAdapter, Decl(parserClass2.ts, 0, 0))
 

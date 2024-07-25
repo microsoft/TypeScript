@@ -1,4 +1,11 @@
-=== tests/cases/compiler/libCompileChecks.ts ===
+//// [tests/cases/compiler/libCompileChecks.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 5,000
+Type Count: 10,000
+Instantiation count: 5,000
+
+=== libCompileChecks.ts ===
+
 // This test is effectively the 'lib check' for all our .d.ts files because we use skipLibCheck
-No type information for this code.// as false everywhere.
-No type information for this code.
+// as false everywhere.

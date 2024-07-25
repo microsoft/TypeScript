@@ -35,12 +35,12 @@ export { v, f, C, I, E, D, M, N, T, a };
 
 //// [t1.js]
 "use strict";
-exports.__esModule = true;
-exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = exports.M = exports.E = exports.C = exports.v = void 0;
+exports.f = f;
 var v = 1;
 exports.v = v;
 function f() { }
-exports.f = f;
 var C = /** @class */ (function () {
     function C() {
     }
@@ -52,44 +52,31 @@ var E;
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
-})(E || (E = {}));
-exports.E = E;
+})(E || (exports.E = E = {}));
 var M;
 (function (M) {
-})(M || (M = {}));
-exports.M = M;
+})(M || (exports.M = M = {}));
 var a = M.x;
 exports.a = a;
 //// [t2.js]
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
 var t1_1 = require("./t1");
-__createBinding(exports, t1_1, "v");
-__createBinding(exports, t1_1, "f");
-__createBinding(exports, t1_1, "C");
-__createBinding(exports, t1_1, "E");
-__createBinding(exports, t1_1, "M");
-__createBinding(exports, t1_1, "a");
+Object.defineProperty(exports, "v", { enumerable: true, get: function () { return t1_1.v; } });
+Object.defineProperty(exports, "f", { enumerable: true, get: function () { return t1_1.f; } });
+Object.defineProperty(exports, "C", { enumerable: true, get: function () { return t1_1.C; } });
+Object.defineProperty(exports, "E", { enumerable: true, get: function () { return t1_1.E; } });
+Object.defineProperty(exports, "M", { enumerable: true, get: function () { return t1_1.M; } });
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.a; } });
 //// [t3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
 var t1_1 = require("./t1");
-exports.v = t1_1.v;
-exports.f = t1_1.f;
-exports.C = t1_1.C;
-exports.E = t1_1.E;
-exports.M = t1_1.M;
-exports.a = t1_1.a;
+Object.defineProperty(exports, "v", { enumerable: true, get: function () { return t1_1.v; } });
+Object.defineProperty(exports, "f", { enumerable: true, get: function () { return t1_1.f; } });
+Object.defineProperty(exports, "C", { enumerable: true, get: function () { return t1_1.C; } });
+Object.defineProperty(exports, "E", { enumerable: true, get: function () { return t1_1.E; } });
+Object.defineProperty(exports, "M", { enumerable: true, get: function () { return t1_1.M; } });
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.a; } });

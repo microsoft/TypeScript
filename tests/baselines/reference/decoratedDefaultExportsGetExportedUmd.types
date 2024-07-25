@@ -1,19 +1,26 @@
-=== tests/cases/conformance/es6/moduleExportsUmd/a.ts ===
+//// [tests/cases/conformance/es6/moduleExportsUmd/decoratedDefaultExportsGetExportedUmd.ts] ////
+
+=== a.ts ===
 var decorator: ClassDecorator;
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 @decorator
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 export default class Foo {}
 >Foo : Foo
+>    : ^^^
 
-=== tests/cases/conformance/es6/moduleExportsUmd/b.ts ===
+=== b.ts ===
 var decorator: ClassDecorator;
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 @decorator
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 export default class {}
 

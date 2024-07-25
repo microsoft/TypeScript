@@ -1,11 +1,16 @@
-=== tests/cases/compiler/functionsWithModifiersInBlocks1.ts ===
+//// [tests/cases/compiler/functionsWithModifiersInBlocks1.ts] ////
+
+=== functionsWithModifiersInBlocks1.ts ===
 {
    declare function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 
    export function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 
    declare export function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 }

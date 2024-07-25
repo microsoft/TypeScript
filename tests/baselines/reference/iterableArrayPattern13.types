@@ -1,53 +1,80 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern13.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern13.ts] ////
+
+=== iterableArrayPattern13.ts ===
 class Bar { x }
 >Bar : Bar
+>    : ^^^
 >x : any
+>  : ^^^
 
 class Foo extends Bar { y }
 >Foo : Foo
+>    : ^^^
 >Bar : Bar
+>    : ^^^
 >y : any
+>  : ^^^
 
 class FooIterator {
 >FooIterator : FooIterator
+>            : ^^^^^^^^^^^
 
     next() {
 >next : () => { value: Foo; done: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
 >{            value: new Foo,            done: false        } : { value: Foo; done: boolean; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             value: new Foo,
 >value : Foo
+>      : ^^^
 >new Foo : Foo
+>        : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
             done: false
 >done : boolean
+>     : ^^^^^^^
 >false : false
+>      : ^^^^^
 
         };
     }
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 function fun([a, ...b]) { }
 >fun : ([a, ...b]: [any, ...any[]]) => void
+>    : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : any[]
+>  : ^^^^^
 
 fun(new FooIterator);
 >fun(new FooIterator) : void
+>                     : ^^^^
 >fun : ([a, ...b]: [any, ...any[]]) => void
+>    : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new FooIterator : FooIterator
+>                : ^^^^^^^^^^^
 >FooIterator : typeof FooIterator
+>            : ^^^^^^^^^^^^^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalAccessorsInInterface1.ts ===
+//// [tests/cases/compiler/optionalAccessorsInInterface1.ts] ////
+
+=== optionalAccessorsInInterface1.ts ===
 interface MyPropertyDescriptor {
 >MyPropertyDescriptor : Symbol(MyPropertyDescriptor, Decl(optionalAccessorsInInterface1.ts, 0, 0))
 

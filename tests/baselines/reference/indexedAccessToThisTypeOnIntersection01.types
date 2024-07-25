@@ -1,13 +1,19 @@
-=== tests/cases/compiler/indexedAccessToThisTypeOnIntersection01.ts ===
+//// [tests/cases/compiler/indexedAccessToThisTypeOnIntersection01.ts] ////
+
+=== indexedAccessToThisTypeOnIntersection01.ts ===
 interface A {
   a: string;
 >a : string
+>  : ^^^^^^
 
   getA: this['a'];
 >getA : this["a"]
+>     : ^^^^^^^^^
 }
 
 type T = (A & { a: number })['getA'];
 >T : never
+>  : ^^^^^
 >a : number
+>  : ^^^^^^
 

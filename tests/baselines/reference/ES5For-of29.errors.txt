@@ -1,8 +1,8 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-of29.ts(1,13): error TS2339: Property 'x' does not exist on type 'Number'.
-tests/cases/conformance/statements/for-ofStatements/ES5For-of29.ts(1,23): error TS2339: Property 'y' does not exist on type 'Number'.
+ES5For-of29.ts(1,13): error TS2339: Property 'x' does not exist on type 'Number'.
+ES5For-of29.ts(1,23): error TS2339: Property 'y' does not exist on type 'Number'.
 
 
-==== tests/cases/conformance/statements/for-ofStatements/ES5For-of29.ts (2 errors) ====
+==== ES5For-of29.ts (2 errors) ====
     for (const {x: a = 0, y: b = 1} of [2, 3]) {
                 ~
 !!! error TS2339: Property 'x' does not exist on type 'Number'.

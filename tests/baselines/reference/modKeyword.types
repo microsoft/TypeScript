@@ -1,4 +1,6 @@
-=== tests/cases/compiler/modKeyword.ts ===
+//// [tests/cases/compiler/modKeyword.ts] ////
+
+=== modKeyword.ts ===
 var module:any;
 >module : any
 
@@ -10,6 +12,8 @@ var _ = module.exports = foo
 >module.exports = foo : any
 >module.exports : any
 >module : any
+>       : ^^^
 >exports : any
+>        : ^^^
 >foo : any
 

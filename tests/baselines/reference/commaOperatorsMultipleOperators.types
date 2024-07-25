@@ -1,54 +1,80 @@
-=== tests/cases/conformance/expressions/commaOperator/commaOperatorsMultipleOperators.ts ===
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorsMultipleOperators.ts] ////
+
+=== commaOperatorsMultipleOperators.ts ===
 var ANY: any;
 >ANY : any
 
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var NUMBER: number;
 >NUMBER : number
+>       : ^^^^^^
 
 var STRING: string;
 >STRING : string
+>       : ^^^^^^
 
 var OBJECT: Object;
 >OBJECT : Object
+>       : ^^^^^^
 
 //Expected: work well
 ANY, BOOLEAN, NUMBER;
 >ANY, BOOLEAN, NUMBER : number
+>                     : ^^^^^^
 >ANY, BOOLEAN : boolean
+>             : ^^^^^^^
 >ANY : any
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 BOOLEAN, NUMBER, STRING;
 >BOOLEAN, NUMBER, STRING : string
+>                        : ^^^^^^
 >BOOLEAN, NUMBER : number
+>                : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 NUMBER, STRING, OBJECT;
 >NUMBER, STRING, OBJECT : Object
+>                       : ^^^^^^
 >NUMBER, STRING : string
+>               : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 STRING, OBJECT, ANY;
 >STRING, OBJECT, ANY : any
 >STRING, OBJECT : Object
+>               : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 >ANY : any
 
 OBJECT, ANY, BOOLEAN;
 >OBJECT, ANY, BOOLEAN : boolean
+>                     : ^^^^^^^
 >OBJECT, ANY : any
 >OBJECT : Object
+>       : ^^^^^^
 >ANY : any
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 //Results should have the same type as the third operand
 var resultIsAny1 = (STRING, OBJECT, ANY);
@@ -56,88 +82,148 @@ var resultIsAny1 = (STRING, OBJECT, ANY);
 >(STRING, OBJECT, ANY) : any
 >STRING, OBJECT, ANY : any
 >STRING, OBJECT : Object
+>               : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 >ANY : any
 
 var resultIsBoolean1 = (OBJECT, ANY, BOOLEAN);
 >resultIsBoolean1 : boolean
+>                 : ^^^^^^^
 >(OBJECT, ANY, BOOLEAN) : boolean
+>                       : ^^^^^^^
 >OBJECT, ANY, BOOLEAN : boolean
+>                     : ^^^^^^^
 >OBJECT, ANY : any
 >OBJECT : Object
+>       : ^^^^^^
 >ANY : any
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var resultIsNumber1 = (ANY, BOOLEAN, NUMBER);
 >resultIsNumber1 : number
+>                : ^^^^^^
 >(ANY, BOOLEAN, NUMBER) : number
+>                       : ^^^^^^
 >ANY, BOOLEAN, NUMBER : number
+>                     : ^^^^^^
 >ANY, BOOLEAN : boolean
+>             : ^^^^^^^
 >ANY : any
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 
 var resultIsString1 = (BOOLEAN, NUMBER, STRING);
 >resultIsString1 : string
+>                : ^^^^^^
 >(BOOLEAN, NUMBER, STRING) : string
+>                          : ^^^^^^
 >BOOLEAN, NUMBER, STRING : string
+>                        : ^^^^^^
 >BOOLEAN, NUMBER : number
+>                : ^^^^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 
 var resultIsObject1 = (NUMBER, STRING, OBJECT);
 >resultIsObject1 : Object
+>                : ^^^^^^
 >(NUMBER, STRING, OBJECT) : Object
+>                         : ^^^^^^
 >NUMBER, STRING, OBJECT : Object
+>                       : ^^^^^^
 >NUMBER, STRING : string
+>               : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >STRING : string
+>       : ^^^^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 //Literal and expression
 null, true, 1;
 >null, true, 1 : 1
+>              : ^
 >null, true : true
->null : null
+>           : ^^^^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 
 ++NUMBER, STRING.charAt(0), new Object();
 >++NUMBER, STRING.charAt(0), new Object() : Object
+>                                         : ^^^^^^
 >++NUMBER, STRING.charAt(0) : string
+>                           : ^^^^^^
 >++NUMBER : number
+>         : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >STRING.charAt(0) : string
+>                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
+>              : ^   ^^      ^^^^^      
 >STRING : string
+>       : ^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >0 : 0
+>  : ^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 
 var resultIsNumber2 = (null, true, 1);
 >resultIsNumber2 : number
+>                : ^^^^^^
 >(null, true, 1) : 1
+>                : ^
 >null, true, 1 : 1
+>              : ^
 >null, true : true
->null : null
+>           : ^^^^
 >true : true
+>     : ^^^^
 >1 : 1
+>  : ^
 
 var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
 >resultIsObject2 : Object
+>                : ^^^^^^
 >(++NUMBER, STRING.charAt(0), new Object()) : Object
+>                                           : ^^^^^^
 >++NUMBER, STRING.charAt(0), new Object() : Object
+>                                         : ^^^^^^
 >++NUMBER, STRING.charAt(0) : string
+>                           : ^^^^^^
 >++NUMBER : number
+>         : ^^^^^^
 >NUMBER : number
+>       : ^^^^^^
 >STRING.charAt(0) : string
+>                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
+>              : ^   ^^      ^^^^^      
 >STRING : string
+>       : ^^^^^^
 >charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
 >0 : 0
+>  : ^
 >new Object() : Object
+>             : ^^^^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 

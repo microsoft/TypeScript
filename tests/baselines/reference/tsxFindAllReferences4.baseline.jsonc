@@ -1,0 +1,231 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 3) skipped ---
+//     }
+//     interface ElementAttributesProperty { props }
+// }
+// /*FIND ALL REFS*/<|class [|{| isWriteAccess: true, isDefinition: true |}MyClass|] {
+//   props: {
+//     name?: string;
+//     size?: number;
+// }|>
+// 
+// 
+// var x = <|<|<[|{| contextId: 1 |}MyClass|] name='hello'></[|{| contextId: 2 |}MyClass|]>|>|>;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 3) skipped ---
+  //     }
+  //     interface ElementAttributesProperty { props }
+  // }
+  // /*FIND ALL REFS*/<|class [|MyClass|] {
+  //   props: {
+  //     name?: string;
+  //     size?: number;
+  // }|>
+  // 
+  // 
+  // var x = <MyClass name='hello'></MyClass>;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class MyClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MyClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 3) skipped ---
+//     }
+//     interface ElementAttributesProperty { props }
+// }
+// <|class /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}MyClass|] {
+//   props: {
+//     name?: string;
+//     size?: number;
+// }|>
+// 
+// 
+// var x = <|<|<[|{| contextId: 1 |}MyClass|] name='hello'></[|{| contextId: 2 |}MyClass|]>|>|>;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 3) skipped ---
+  //     }
+  //     interface ElementAttributesProperty { props }
+  // }
+  // <|class /*FIND ALL REFS*/[|MyClass|] {
+  //   props: {
+  //     name?: string;
+  //     size?: number;
+  // }|>
+  // 
+  // 
+  // var x = <MyClass name='hello'></MyClass>;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class MyClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MyClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 10) skipped ---
+// }
+// 
+// 
+// var x = /*FIND ALL REFS*/<MyClass name='hello'></MyClass>;
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 3) skipped ---
+//     }
+//     interface ElementAttributesProperty { props }
+// }
+// <|class [|{| isWriteAccess: true |}MyClass|] {
+//   props: {
+//     name?: string;
+//     size?: number;
+// }|>
+// 
+// 
+// var x = <|<|</*FIND ALL REFS*/[|{| contextId: 1 |}MyClass|] name='hello'></[|{| contextId: 2 |}MyClass|]>|>|>;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 3) skipped ---
+  //     }
+  //     interface ElementAttributesProperty { props }
+  // }
+  // <|class [|MyClass|] {
+  //   props: {
+  //     name?: string;
+  //     size?: number;
+  // }|>
+  // 
+  // 
+  // var x = </*FIND ALL REFS*/MyClass name='hello'></MyClass>;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class MyClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MyClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 3) skipped ---
+//     }
+//     interface ElementAttributesProperty { props }
+// }
+// <|class [|{| isWriteAccess: true |}MyClass|] {
+//   props: {
+//     name?: string;
+//     size?: number;
+// }|>
+// 
+// 
+// var x = <|<|<[|{| contextId: 1 |}MyClass|] name='hello'><//*FIND ALL REFS*/[|{| contextId: 2 |}MyClass|]>|>|>;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 3) skipped ---
+  //     }
+  //     interface ElementAttributesProperty { props }
+  // }
+  // <|class [|MyClass|] {
+  //   props: {
+  //     name?: string;
+  //     size?: number;
+  // }|>
+  // 
+  // 
+  // var x = <MyClass name='hello'><//*FIND ALL REFS*/MyClass>;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class MyClass",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MyClass",
+      "kind": "className"
+     }
+    ]
+   }
+  ]

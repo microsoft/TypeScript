@@ -29,7 +29,7 @@ foo.ns.b;
     }
 })(function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = exports.a = void 0;
     exports.a = 1;
     exports.b = 2;
@@ -68,7 +68,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     }
 })(function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.ns = void 0;
     exports.ns = __importStar(require("./0"));
     ns.a;
@@ -111,7 +111,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     }
 })(function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var foo = __importStar(require("./1"));
     foo.ns.a;
     foo.ns.b;

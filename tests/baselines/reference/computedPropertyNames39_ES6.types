@@ -1,32 +1,52 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames39_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames39_ES6.ts] ////
+
+=== computedPropertyNames39_ES6.ts ===
 class Foo { x }
 >Foo : Foo
+>    : ^^^
 >x : any
+>  : ^^^
 
 class Foo2 { x; y }
 >Foo2 : Foo2
+>     : ^^^^
 >x : any
+>  : ^^^
 >y : any
+>  : ^^^
 
 class C {
 >C : C
+>  : ^
 
     [s: number]: Foo2;
 >s : number
+>  : ^^^^^^
 
     // Computed properties
     get [1 << 6]() { return new Foo }
 >[1 << 6] : Foo
+>         : ^^^
 >1 << 6 : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 >6 : 6
+>  : ^
 >new Foo : Foo
+>        : ^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     set [1 << 6](p: Foo2) { }
 >[1 << 6] : Foo2
+>         : ^^^^
 >1 << 6 : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 >6 : 6
+>  : ^
 >p : Foo2
+>  : ^^^^
 }

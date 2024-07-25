@@ -1,0 +1,18 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/foo.js ===
+// const Foo = module.[|{| contextId: 0 |}exports|] = <|function () {}|>
+// Foo.prototype.bar = function() {}
+// new Foo/*GOTO DEF*/();
+
+  // === Details ===
+  [
+   {
+    "kind": "local function",
+    "name": "exports",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_consumer.ts ===
+//// [tests/cases/compiler/privacyCannotNameAccessorDeclFile.ts] ////
+
+=== privacyCannotNameAccessorDeclFile_consumer.ts ===
 import exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
 >exporter : Symbol(exporter, Decl(privacyCannotNameAccessorDeclFile_consumer.ts, 0, 0))
 
@@ -213,7 +215,7 @@ class privateClassWithPrivateModuleGetAccessorTypes {
 >createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 11, 1))
     }
 }
-=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_GlobalWidgets.ts ===
+=== privacyCannotNameAccessorDeclFile_GlobalWidgets.ts ===
 declare module "GlobalWidgets" {
 >"GlobalWidgets" : Symbol("GlobalWidgets", Decl(privacyCannotNameAccessorDeclFile_GlobalWidgets.ts, 0, 0))
 
@@ -242,7 +244,7 @@ declare module "GlobalWidgets" {
     }
 }
 
-=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_Widgets.ts ===
+=== privacyCannotNameAccessorDeclFile_Widgets.ts ===
 export class Widget1 {
 >Widget1 : Symbol(Widget1, Decl(privacyCannotNameAccessorDeclFile_Widgets.ts, 0, 0))
 
@@ -273,7 +275,7 @@ export module SpecializedWidget {
     }
 }
 
-=== tests/cases/compiler/privacyCannotNameAccessorDeclFile_exporter.ts ===
+=== privacyCannotNameAccessorDeclFile_exporter.ts ===
 ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
 import Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 >Widgets : Symbol(Widgets, Decl(privacyCannotNameAccessorDeclFile_exporter.ts, 0, 0))

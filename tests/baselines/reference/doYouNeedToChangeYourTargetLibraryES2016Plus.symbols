@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts ===
+//// [tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2016Plus.ts] ////
+
+=== doYouNeedToChangeYourTargetLibraryES2016Plus.ts ===
 // es2016
 const testIncludes = ["hello"].includes("world");
 >testIncludes : Symbol(testIncludes, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 1, 5))
@@ -30,7 +32,7 @@ const testIntlFormatToParts = new Intl.DateTimeFormat("en-US").formatToParts();
 
 const testAtomics = Atomics.add(new Uint8Array(0), 0, 0);
 >testAtomics : Symbol(testAtomics, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 10, 5))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const testSharedArrayBuffer = new SharedArrayBuffer(5);
 >testSharedArrayBuffer : Symbol(testSharedArrayBuffer, Decl(doYouNeedToChangeYourTargetLibraryES2016Plus.ts, 11, 5))

@@ -1,221 +1,353 @@
-=== tests/cases/conformance/types/namedTypes/optionalMethods.ts ===
+//// [tests/cases/conformance/types/namedTypes/optionalMethods.ts] ////
+
+=== optionalMethods.ts ===
 interface Foo {
     a: number;
 >a : number
+>  : ^^^^^^
 
     b?: number;
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     f(): number;
 >f : () => number
+>  : ^^^^^^      
 
     g?(): number;
 >g : (() => number) | undefined
+>  : ^^^^^^^      ^^^^^^^^^^^^^
 }
 
 function test1(x: Foo) {
 >test1 : (x: Foo) => void
+>      : ^ ^^   ^^^^^^^^^
 >x : Foo
+>  : ^^^
 
     x.a;
 >x.a : number
+>    : ^^^^^^
 >x : Foo
+>  : ^^^
 >a : number
+>  : ^^^^^^
 
     x.b;
 >x.b : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >x : Foo
+>  : ^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     x.f;
 >x.f : () => number
+>    : ^^^^^^      
 >x : Foo
+>  : ^^^
 >f : () => number
+>  : ^^^^^^      
 
     x.g;
 >x.g : (() => number) | undefined
+>    : ^^^^^^^      ^^^^^^^^^^^^^
 >x : Foo
+>  : ^^^
 >g : (() => number) | undefined
+>  : ^^^^^^^      ^^^^^^^^^^^^^
 
     let f1 = x.f();
 >f1 : number
+>   : ^^^^^^
 >x.f() : number
+>      : ^^^^^^
 >x.f : () => number
+>    : ^^^^^^      
 >x : Foo
+>  : ^^^
 >f : () => number
+>  : ^^^^^^      
 
     let g1 = x.g && x.g();
 >g1 : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >x.g && x.g() : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >x.g : (() => number) | undefined
+>    : ^^^^^^^      ^^^^^^^^^^^^^
 >x : Foo
+>  : ^^^
 >g : (() => number) | undefined
+>  : ^^^^^^^      ^^^^^^^^^^^^^
 >x.g() : number
+>      : ^^^^^^
 >x.g : () => number
+>    : ^^^^^^      
 >x : Foo
+>  : ^^^
 >g : () => number
+>  : ^^^^^^      
 
     let g2 = x.g ? x.g() : 0;
 >g2 : number
+>   : ^^^^^^
 >x.g ? x.g() : 0 : number
+>                : ^^^^^^
 >x.g : (() => number) | undefined
+>    : ^^^^^^^      ^^^^^^^^^^^^^
 >x : Foo
+>  : ^^^
 >g : (() => number) | undefined
+>  : ^^^^^^^      ^^^^^^^^^^^^^
 >x.g() : number
+>      : ^^^^^^
 >x.g : () => number
+>    : ^^^^^^      
 >x : Foo
+>  : ^^^
 >g : () => number
+>  : ^^^^^^      
 >0 : 0
+>  : ^
 }
 
 class Bar {
 >Bar : Bar
+>    : ^^^
 
     a: number;
 >a : number
+>  : ^^^^^^
 
     b?: number;
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     c? = 2;
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
     constructor(public d?: number, public e = 10) {}
 >d : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >e : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     f() {
 >f : () => number
+>  : ^^^^^^^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     g?(): number;  // Body of optional method can be omitted
 >g : (() => number) | undefined
+>  : ^^^^^^^      ^^^^^^^^^^^^^
 
     h?() {
 >h : (() => number) | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return 2;
 >2 : 2
+>  : ^
     }
 }
 
 function test2(x: Bar) {
 >test2 : (x: Bar) => void
+>      : ^ ^^   ^^^^^^^^^
 >x : Bar
+>  : ^^^
 
     x.a;
 >x.a : number
+>    : ^^^^^^
 >x : Bar
+>  : ^^^
 >a : number
+>  : ^^^^^^
 
     x.b;
 >x.b : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     x.c;
 >x.c : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     x.d;
 >x.d : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >d : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     x.e;
 >x.e : number
+>    : ^^^^^^
 >x : Bar
+>  : ^^^
 >e : number
+>  : ^^^^^^
 
     x.f;
 >x.f : () => number
+>    : ^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >f : () => number
+>  : ^^^^^^^^^^^^
 
     x.g;
 >x.g : (() => number) | undefined
+>    : ^^^^^^^      ^^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >g : (() => number) | undefined
+>  : ^^^^^^^      ^^^^^^^^^^^^^
 
     let f1 = x.f();
 >f1 : number
+>   : ^^^^^^
 >x.f() : number
+>      : ^^^^^^
 >x.f : () => number
+>    : ^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >f : () => number
+>  : ^^^^^^^^^^^^
 
     let g1 = x.g && x.g();
 >g1 : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >x.g && x.g() : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >x.g : (() => number) | undefined
+>    : ^^^^^^^      ^^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >g : (() => number) | undefined
+>  : ^^^^^^^      ^^^^^^^^^^^^^
 >x.g() : number
+>      : ^^^^^^
 >x.g : () => number
+>    : ^^^^^^      
 >x : Bar
+>  : ^^^
 >g : () => number
+>  : ^^^^^^      
 
     let g2 = x.g ? x.g() : 0;
 >g2 : number
+>   : ^^^^^^
 >x.g ? x.g() : 0 : number
+>                : ^^^^^^
 >x.g : (() => number) | undefined
+>    : ^^^^^^^      ^^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >g : (() => number) | undefined
+>  : ^^^^^^^      ^^^^^^^^^^^^^
 >x.g() : number
+>      : ^^^^^^
 >x.g : () => number
+>    : ^^^^^^      
 >x : Bar
+>  : ^^^
 >g : () => number
+>  : ^^^^^^      
 >0 : 0
+>  : ^
 
     let h1 = x.h && x.h();
 >h1 : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >x.h && x.h() : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >x.h : (() => number) | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >h : (() => number) | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.h() : number
+>      : ^^^^^^
 >x.h : () => number
+>    : ^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >h : () => number
+>  : ^^^^^^^^^^^^
 
     let h2 = x.h ? x.h() : 0;
 >h2 : number
+>   : ^^^^^^
 >x.h ? x.h() : 0 : number
+>                : ^^^^^^
 >x.h : (() => number) | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >h : (() => number) | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.h() : number
+>      : ^^^^^^
 >x.h : () => number
+>    : ^^^^^^^^^^^^
 >x : Bar
+>  : ^^^
 >h : () => number
+>  : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 }
 
 class Base {
 >Base : Base
+>     : ^^^^
 
     a?: number;
 >a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     f?(): number;
 >f : (() => number) | undefined
+>  : ^^^^^^^      ^^^^^^^^^^^^^
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     a = 1;
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     f(): number { return 1; }
 >f : () => number
+>  : ^^^^^^      
 >1 : 1
+>  : ^
 }
 

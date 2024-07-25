@@ -6,4 +6,4 @@
 ////    [|propName|]: string;
 //// }
 
-verify.rangesWithSameTextAreDocumentHighlights();
+verify.baselineDocumentHighlights();

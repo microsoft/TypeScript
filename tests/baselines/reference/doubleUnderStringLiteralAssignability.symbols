@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doubleUnderStringLiteralAssignability.ts ===
+//// [tests/cases/compiler/doubleUnderStringLiteralAssignability.ts] ////
+
+=== doubleUnderStringLiteralAssignability.ts ===
 var shouldBeOk: '__dunder' = '__dunder';
 >shouldBeOk : Symbol(shouldBeOk, Decl(doubleUnderStringLiteralAssignability.ts, 0, 3))
 

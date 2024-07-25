@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx] ////
+
 //// [jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx]
 declare var h: any;
 

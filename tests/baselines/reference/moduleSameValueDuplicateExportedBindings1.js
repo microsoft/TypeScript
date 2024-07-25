@@ -12,7 +12,7 @@ export var foo = 42;
 
 //// [c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 exports.foo = 42;
 //// [b.js]
@@ -31,7 +31,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./c"), exports);
 //// [a.js]
 "use strict";
@@ -49,6 +49,6 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./b"), exports);
 __exportStar(require("./c"), exports);

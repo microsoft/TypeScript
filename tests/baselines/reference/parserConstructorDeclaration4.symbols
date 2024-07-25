@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts] ////
+
+=== parserConstructorDeclaration4.ts ===
 class C {
 >C : Symbol(C, Decl(parserConstructorDeclaration4.ts, 0, 0))
 

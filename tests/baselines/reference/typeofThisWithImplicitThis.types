@@ -1,12 +1,18 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThisWithImplicitThis.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThisWithImplicitThis.ts] ////
+
+=== typeofThisWithImplicitThis.ts ===
 function Test1() {
 >Test1 : () => void
+>      : ^^^^^^^^^^
 
     let x: typeof this.no = 1
 >x : any
 >this.no : any
 >this : any
+>     : ^^^
 >no : any
+>   : ^^^
 >1 : 1
+>  : ^
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inOperatorWithGeneric.ts] ////
+
 //// [inOperatorWithGeneric.ts]
 class C<T> {
     foo(x:T) {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/elidingImportNames_test.ts ===
+//// [tests/cases/compiler/elidingImportNames.ts] ////
+
+=== elidingImportNames_test.ts ===
 import a = require('./elidingImportNames_main'); // alias used in typeof
 >a : Symbol(a, Decl(elidingImportNames_test.ts, 0, 0))
 
@@ -18,11 +20,11 @@ var b2 = a2;
 >a2 : Symbol(a2, Decl(elidingImportNames_test.ts, 2, 16))
 
 
-=== tests/cases/compiler/elidingImportNames_main.ts ===
+=== elidingImportNames_main.ts ===
 export var main = 10;
 >main : Symbol(main, Decl(elidingImportNames_main.ts, 0, 10))
 
-=== tests/cases/compiler/elidingImportNames_main1.ts ===
+=== elidingImportNames_main1.ts ===
 export var main = 10;
 >main : Symbol(main, Decl(elidingImportNames_main1.ts, 0, 10))
 

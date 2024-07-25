@@ -1,18 +1,28 @@
-=== tests/cases/compiler/letAsIdentifier.ts ===
+//// [tests/cases/compiler/letAsIdentifier.ts] ////
+
+=== letAsIdentifier.ts ===
 var let = 10;
 >let : number
+>    : ^^^^^^
 >10 : 10
+>   : ^^
 
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 let = 30;
 >let = 30 : 30
+>         : ^^
 >let : number
+>    : ^^^^^^
 >30 : 30
+>   : ^^
 
 let
 a;
 >a : any
+>  : ^^^
 

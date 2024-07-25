@@ -1,16 +1,16 @@
-tests/cases/compiler/exportAlreadySeen.ts(2,12): error TS1030: 'export' modifier already seen.
-tests/cases/compiler/exportAlreadySeen.ts(3,12): error TS1030: 'export' modifier already seen.
-tests/cases/compiler/exportAlreadySeen.ts(5,12): error TS1030: 'export' modifier already seen.
-tests/cases/compiler/exportAlreadySeen.ts(6,16): error TS1030: 'export' modifier already seen.
-tests/cases/compiler/exportAlreadySeen.ts(7,16): error TS1030: 'export' modifier already seen.
-tests/cases/compiler/exportAlreadySeen.ts(12,12): error TS1030: 'export' modifier already seen.
-tests/cases/compiler/exportAlreadySeen.ts(13,12): error TS1030: 'export' modifier already seen.
-tests/cases/compiler/exportAlreadySeen.ts(15,12): error TS1030: 'export' modifier already seen.
-tests/cases/compiler/exportAlreadySeen.ts(16,16): error TS1030: 'export' modifier already seen.
-tests/cases/compiler/exportAlreadySeen.ts(17,16): error TS1030: 'export' modifier already seen.
+exportAlreadySeen.ts(2,12): error TS1030: 'export' modifier already seen.
+exportAlreadySeen.ts(3,12): error TS1030: 'export' modifier already seen.
+exportAlreadySeen.ts(5,12): error TS1030: 'export' modifier already seen.
+exportAlreadySeen.ts(6,16): error TS1030: 'export' modifier already seen.
+exportAlreadySeen.ts(7,16): error TS1030: 'export' modifier already seen.
+exportAlreadySeen.ts(12,12): error TS1030: 'export' modifier already seen.
+exportAlreadySeen.ts(13,12): error TS1030: 'export' modifier already seen.
+exportAlreadySeen.ts(15,12): error TS1030: 'export' modifier already seen.
+exportAlreadySeen.ts(16,16): error TS1030: 'export' modifier already seen.
+exportAlreadySeen.ts(17,16): error TS1030: 'export' modifier already seen.
 
 
-==== tests/cases/compiler/exportAlreadySeen.ts (10 errors) ====
+==== exportAlreadySeen.ts (10 errors) ====
     module M {
         export export var x = 1;
                ~~~~~~

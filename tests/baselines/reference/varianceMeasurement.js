@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varianceMeasurement.ts] ////
+
 //// [varianceMeasurement.ts]
 // The type below should be invariant in T but is measured as covariant because
 // we don't analyze recursive references.

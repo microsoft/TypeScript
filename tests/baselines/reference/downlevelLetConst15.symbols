@@ -1,4 +1,6 @@
-=== tests/cases/compiler/downlevelLetConst15.ts ===
+//// [tests/cases/compiler/downlevelLetConst15.ts] ////
+
+=== downlevelLetConst15.ts ===
 'use strict'
 declare function use(a: any);
 >use : Symbol(use, Decl(downlevelLetConst15.ts, 0, 12))

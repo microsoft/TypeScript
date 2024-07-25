@@ -1,204 +1,322 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload6.tsx] ////
+
+=== file.tsx ===
 import React = require('react')
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
 export interface ClickableProps {
     children?: string;
 >children : string
+>         : ^^^^^^
 
     className?: string;
 >className : string
+>          : ^^^^^^
 }
 
 export interface ButtonProps extends ClickableProps {
     onClick: React.MouseEventHandler<any>;
 >onClick : React.MouseEventHandler<any>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >React : any
+>      : ^^^
 }
 
 export interface LinkProps extends ClickableProps {
     to: string;
 >to : string
+>   : ^^^^^^
 }
 
 export interface HyphenProps extends ClickableProps {
     "data-format": string;
 >"data-format" : string
+>              : ^^^^^^
 }
 
 let obj = {
 >obj : { children: string; to: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    children: "hi",    to: "boo"} : { children: string; to: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     children: "hi",
 >children : string
+>         : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 
     to: "boo"
 >to : string
+>   : ^^^^^^
 >"boo" : "boo"
+>      : ^^^^^
 }
 let obj1: any;
 >obj1 : any
 
 let obj2 = {
 >obj2 : { onClick: () => void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    onClick: () => {}} : { onClick: () => void; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     onClick: () => {}
 >onClick : () => void
+>        : ^^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
 }
 
 export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >buttonProps : ButtonProps
+>            : ^^^^^^^^^^^
 >JSX : any
+>    : ^^^
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >linkProps : LinkProps
+>          : ^^^^^^^^^
 >JSX : any
+>    : ^^^
 
 export function MainButton(hyphenProps: HyphenProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >hyphenProps : HyphenProps
+>            : ^^^^^^^^^^^
 >JSX : any
+>    : ^^^
 
 export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >props : ButtonProps | LinkProps | HyphenProps
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
+>    : ^^^
 
     const linkProps = props as LinkProps;
 >linkProps : LinkProps
+>          : ^^^^^^^^^
 >props as LinkProps : LinkProps
+>                   : ^^^^^^^^^
 >props : ButtonProps | LinkProps | HyphenProps
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if(linkProps.to) {
 >linkProps.to : string
+>             : ^^^^^^
 >linkProps : LinkProps
+>          : ^^^^^^^^^
 >to : string
+>   : ^^^^^^
 
         return this._buildMainLink(props);
 >this._buildMainLink(props) : any
 >this._buildMainLink : any
 >this : any
+>     : ^^^
 >_buildMainLink : any
+>               : ^^^
 >props : ButtonProps | LinkProps | HyphenProps
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 
     return this._buildMainButton(props);
 >this._buildMainButton(props) : any
 >this._buildMainButton : any
 >this : any
+>     : ^^^
 >_buildMainButton : any
+>                 : ^^^
 >props : ButtonProps | LinkProps | HyphenProps
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // OK
 const b0 = <MainButton to='/some/path'>GO</MainButton>;
 >b0 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MainButton to='/some/path'>GO</MainButton> : JSX.Element
+>                                            : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >to : string
+>   : ^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 
 const b1 = <MainButton onClick={(e) => {}}>Hello world</MainButton>;
 >b1 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MainButton onClick={(e) => {}}>Hello world</MainButton> : JSX.Element
+>                                                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >onClick : (e: React.MouseEvent<any>) => void
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(e) => {} : (e: React.MouseEvent<any>) => void
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : React.MouseEvent<any>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 
 const b2 = <MainButton {...obj} />;
 >b2 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MainButton {...obj} /> : JSX.Element
+>                        : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >obj : { children: string; to: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const b3 = <MainButton {...{to: 10000}} {...obj} />;
 >b3 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MainButton {...{to: 10000}} {...obj} /> : JSX.Element
+>                                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >{to: 10000} : { to: number; }
+>            : ^^^^^^^^^^^^^^^
 >to : number
+>   : ^^^^^^
 >10000 : 10000
+>      : ^^^^^
 >obj : { children: string; to: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const b4 = <MainButton {...obj1} />;  // any; just pick the first overload
 >b4 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MainButton {...obj1} /> : JSX.Element
+>                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >obj1 : any
 
 const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the second overload
 >b5 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MainButton {...obj1} to="/to/somewhere" /> : JSX.Element
+>                                            : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >obj1 : any
 >to : string
+>   : ^^^^^^
 
 const b6 = <MainButton {...obj2} />;
 >b6 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MainButton {...obj2} /> : JSX.Element
+>                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >obj2 : { onClick: () => void; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
 >b7 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MainButton {...{onClick: () => { console.log("hi") }}} /> : JSX.Element
+>                                                           : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >{onClick: () => { console.log("hi") }} : { onClick: () => void; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >onClick : () => void
+>        : ^^^^^^^^^^
 >() => { console.log("hi") } : () => void
+>                            : ^^^^^^^^^^
 >console.log("hi") : void
+>                  : ^^^^
 >console.log : (message?: any, ...optionalParams: any[]) => void
+>            : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (message?: any, ...optionalParams: any[]) => void
+>    : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >"hi" : "hi"
+>     : ^^^^
 
 const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get retained (See GitHub #13365)
 >b8 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MainButton {...{onClick() {}}} /> : JSX.Element
+>                                   : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >{onClick() {}} : { onClick(): void; }
+>               : ^^^^^^^^^^^^^^^^^^^^
 >onClick : () => void
+>        : ^^^^^^^^^^
 
 const b9 = <MainButton to='/some/path' extra-prop>GO</MainButton>;
 >b9 : JSX.Element
+>   : ^^^^^^^^^^^
 ><MainButton to='/some/path' extra-prop>GO</MainButton> : JSX.Element
+>                                                       : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >to : string
+>   : ^^^^^^
 >extra-prop : true
+>           : ^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 
 const b10 = <MainButton to='/some/path' children="hi" ></MainButton>;
 >b10 : JSX.Element
+>    : ^^^^^^^^^^^
 ><MainButton to='/some/path' children="hi" ></MainButton> : JSX.Element
+>                                                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >to : string
+>   : ^^^^^^
 >children : string
+>         : ^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 
 const b11 = <MainButton onClick={(e) => {}} className="hello" data-format>Hello world</MainButton>;
 >b11 : JSX.Element
+>    : ^^^^^^^^^^^
 ><MainButton onClick={(e) => {}} className="hello" data-format>Hello world</MainButton> : JSX.Element
+>                                                                                       : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >onClick : (e: React.MouseEvent<any>) => void
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(e) => {} : (e: React.MouseEvent<any>) => void
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : React.MouseEvent<any>
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >className : string
+>          : ^^^^^^
 >data-format : true
+>            : ^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 
 const b12 = <MainButton data-format="Hello world" />
 >b12 : JSX.Element
+>    : ^^^^^^^^^^^
 ><MainButton data-format="Hello world" /> : JSX.Element
+>                                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
 >data-format : string
+>            : ^^^^^^
 
 
 

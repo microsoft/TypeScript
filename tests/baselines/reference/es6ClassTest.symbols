@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ClassTest.ts ===
+//// [tests/cases/compiler/es6ClassTest.ts] ////
+
+=== es6ClassTest.ts ===
 class Bar {
 >Bar : Symbol(Bar, Decl(es6ClassTest.ts, 0, 0))
 

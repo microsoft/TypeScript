@@ -1,17 +1,26 @@
-=== tests/cases/compiler/enumCodeGenNewLines1.ts ===
+//// [tests/cases/compiler/enumCodeGenNewLines1.ts] ////
+
+=== enumCodeGenNewLines1.ts ===
 enum foo {
 >foo : foo
+>    : ^^^
 
   b = 1,
 >b : foo.b
+>  : ^^^^^
 >1 : 1
+>  : ^
 
   c = 2,
 >c : foo.c
+>  : ^^^^^
 >2 : 2
+>  : ^
 
   d = 3
 >d : foo.d
+>  : ^^^^^
 >3 : 3
+>  : ^
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/withStatementNestedScope.ts ===
+//// [tests/cases/compiler/withStatementNestedScope.ts] ////
+
+=== withStatementNestedScope.ts ===
 var x = 1;
 >x : Symbol(x, Decl(withStatementNestedScope.ts, 0, 3))
 

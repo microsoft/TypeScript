@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing3.ts] ////
+
 //// [superCallBeforeThisAccessing3.ts]
 class Base {
     constructor(c) { }
@@ -41,8 +43,7 @@ var D = /** @class */ (function (_super) {
         var x = function () { _this._t; };
         x(); // no error; we only check super is called before this when the container is a constructor
         _this._t; // error
-        _this = _super.call(this, undefined) || this;
-        return _this;
+        return _this = _super.call(this, undefined) || this;
     }
     return D;
 }(Base));

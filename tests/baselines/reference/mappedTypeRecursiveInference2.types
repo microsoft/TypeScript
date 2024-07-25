@@ -1,0 +1,110 @@
+//// [tests/cases/compiler/mappedTypeRecursiveInference2.ts] ////
+
+=== mappedTypeRecursiveInference2.ts ===
+type MorphTuple = [string, "|>", any]
+>MorphTuple : MorphTuple
+>           : ^^^^^^^^^^
+
+type validateMorph<def extends MorphTuple> = def[1] extends "|>"
+>validateMorph : validateMorph<def>
+>              : ^^^^^^^^^^^^^^^^^^
+
+    ? [validateDefinition<def[0]>, "|>", (In: def[0]) => unknown]
+>In : def[0]
+>   : ^^^^^^
+
+    : def
+
+type validateDefinition<def> = def extends MorphTuple
+>validateDefinition : validateDefinition<def>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    ? validateMorph<def>
+    : {
+          [k in keyof def]: validateDefinition<def[k]>
+      }
+
+declare function type<def>(def: validateDefinition<def>): def
+>type : <def>(def: validateDefinition<def>) => def
+>     : ^   ^^   ^^                       ^^^^^   
+>def : validateDefinition<def>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+
+const shallow = type(["ark", "|>", (x) => x.length])
+>shallow : ["ark", "|>", (x: "ark") => number]
+>        : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>type(["ark", "|>", (x) => x.length]) : ["ark", "|>", (x: "ark") => number]
+>                                     : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>type : <def>(def: validateDefinition<def>) => def
+>     : ^   ^^   ^^                       ^^^^^   
+>["ark", "|>", (x) => x.length] : ["ark", "|>", (x: "ark") => number]
+>                               : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>"ark" : "ark"
+>      : ^^^^^
+>"|>" : "|>"
+>     : ^^^^
+>(x) => x.length : (x: "ark") => number
+>                : ^ ^^^^^^^^^^^^^^^^^^
+>x : "ark"
+>  : ^^^^^
+>x.length : number
+>         : ^^^^^^
+>x : "ark"
+>  : ^^^^^
+>length : number
+>       : ^^^^^^
+
+const objectLiteral = type({ a: ["ark", "|>", (x) => x.length] })
+>objectLiteral : { a: ["ark", "|>", (x: "ark") => number]; }
+>              : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>type({ a: ["ark", "|>", (x) => x.length] }) : { a: ["ark", "|>", (x: "ark") => number]; }
+>                                            : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>type : <def>(def: validateDefinition<def>) => def
+>     : ^   ^^   ^^                       ^^^^^   
+>{ a: ["ark", "|>", (x) => x.length] } : { a: ["ark", "|>", (x: "ark") => number]; }
+>                                      : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>a : ["ark", "|>", (x: "ark") => number]
+>  : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>["ark", "|>", (x) => x.length] : ["ark", "|>", (x: "ark") => number]
+>                               : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>"ark" : "ark"
+>      : ^^^^^
+>"|>" : "|>"
+>     : ^^^^
+>(x) => x.length : (x: "ark") => number
+>                : ^ ^^^^^^^^^^^^^^^^^^
+>x : "ark"
+>  : ^^^^^
+>x.length : number
+>         : ^^^^^^
+>x : "ark"
+>  : ^^^^^
+>length : number
+>       : ^^^^^^
+
+const nestedTuple = type([["ark", "|>", (x) => x.length]])
+>nestedTuple : [["ark", "|>", (x: "ark") => number]]
+>            : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>type([["ark", "|>", (x) => x.length]]) : [["ark", "|>", (x: "ark") => number]]
+>                                       : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>type : <def>(def: validateDefinition<def>) => def
+>     : ^   ^^   ^^                       ^^^^^   
+>[["ark", "|>", (x) => x.length]] : [["ark", "|>", (x: "ark") => number]]
+>                                 : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>["ark", "|>", (x) => x.length] : ["ark", "|>", (x: "ark") => number]
+>                               : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>"ark" : "ark"
+>      : ^^^^^
+>"|>" : "|>"
+>     : ^^^^
+>(x) => x.length : (x: "ark") => number
+>                : ^ ^^^^^^^^^^^^^^^^^^
+>x : "ark"
+>  : ^^^^^
+>x.length : number
+>         : ^^^^^^
+>x : "ark"
+>  : ^^^^^
+>length : number
+>       : ^^^^^^
+

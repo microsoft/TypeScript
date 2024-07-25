@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayEvery.ts ===
+//// [tests/cases/compiler/arrayEvery.ts] ////
+
+=== arrayEvery.ts ===
 const foo: (number | string)[] = ['aaa'];
 >foo : Symbol(foo, Decl(arrayEvery.ts, 0, 5))
 

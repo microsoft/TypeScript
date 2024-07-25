@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeSyntacticContext.ts] ////
+
 //// [thisTypeSyntacticContext.ts]
 function f(this: { n: number }) {
 }

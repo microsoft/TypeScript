@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collectionPatternNoError.ts ===
+//// [tests/cases/compiler/collectionPatternNoError.ts] ////
+
+=== collectionPatternNoError.ts ===
 interface MsgConstructor<T extends Message> {
 >MsgConstructor : Symbol(MsgConstructor, Decl(collectionPatternNoError.ts, 0, 0))
 >T : Symbol(T, Decl(collectionPatternNoError.ts, 0, 25))

@@ -1,119 +1,175 @@
-=== tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts ===
+//// [tests/cases/conformance/functions/functionWithUseStrictAndSimpleParameterList_es2016.ts] ////
+
+=== functionWithUseStrictAndSimpleParameterList_es2016.ts ===
 function a(a = 10) {
 >a : (a?: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
     "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 }
 
 export var foo = 10;
 >foo : number
+>    : ^^^^^^
 >10 : 10
+>   : ^^
 
 function b(a = 10) {
 >b : (a?: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 
 function container() {
 >container : () => void
+>          : ^^^^^^^^^^
 
     "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
     function f(a = 10) {
 >f : (a?: number) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
     }
 }
 
 function rest(...args: any[]) {
 >rest : (...args: any[]) => void
+>     : ^^^^    ^^     ^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
     'use strict';
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 }
 
 function rest1(a = 1, ...args) {
 >rest1 : (a?: number, ...args: any[]) => void
+>      : ^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >args : any[]
+>     : ^^^^^
 
     'use strict';
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 }
 
 function paramDefault(param = 1) {
 >paramDefault : (param?: number) => void
+>             : ^     ^^^^^^^^^^^^^^^^^^
 >param : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
     'use strict';
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 }
 
 function objectBindingPattern({foo}: any) {
 >objectBindingPattern : ({ foo }: any) => void
+>                     : ^       ^^   ^^^^^^^^^
 >foo : any
+>    : ^^^
 
     'use strict';
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 }
 
 function arrayBindingPattern([foo]: any[]) {
 >arrayBindingPattern : ([foo]: any[]) => void
+>                    : ^     ^^     ^^^^^^^^^
 >foo : any
+>    : ^^^
 
     'use strict';
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 }
 
 function manyParameter(a = 10, b = 20) {
 >manyParameter : (a?: number, b?: number) => void
+>              : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >b : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 }
 
 function manyPrologue(a = 10, b = 20) {
 >manyPrologue : (a?: number, b?: number) => void
+>             : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >b : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     "foo";
 >"foo" : "foo"
+>      : ^^^^^
 
     "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 }
 
 function invalidPrologue(a = 10, b = 20) {
 >invalidPrologue : (a?: number, b?: number) => void
+>                : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 >b : number
+>  : ^^^^^^
 >20 : 20
+>   : ^^
 
     "foo";
 >"foo" : "foo"
+>      : ^^^^^
 
     const c = 1;
 >c : 1
+>  : ^
 >1 : 1
+>  : ^
 
     "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 }
 

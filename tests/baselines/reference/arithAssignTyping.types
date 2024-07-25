@@ -1,64 +1,103 @@
-=== tests/cases/compiler/arithAssignTyping.ts ===
+//// [tests/cases/compiler/arithAssignTyping.ts] ////
+
+=== arithAssignTyping.ts ===
 class f { }
 >f : f
+>  : ^
 
 f += ''; // error
 >f += '' : string
+>        : ^^^^^^
 >f : any
+>  : ^^^
 >'' : ""
+>   : ^^
 
 f += 1; // error
 >f += 1 : any
+>       : ^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 f -= 1; // error
 >f -= 1 : number
+>       : ^^^^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 f *= 1; // error
 >f *= 1 : number
+>       : ^^^^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 f /= 1; // error
 >f /= 1 : number
+>       : ^^^^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 f %= 1; // error
 >f %= 1 : number
+>       : ^^^^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 f &= 1; // error
 >f &= 1 : number
+>       : ^^^^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 f |= 1; // error
 >f |= 1 : number
+>       : ^^^^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 f <<= 1; // error
 >f <<= 1 : number
+>        : ^^^^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 f >>= 1; // error
 >f >>= 1 : number
+>        : ^^^^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 f >>>= 1; // error
 >f >>>= 1 : number
+>         : ^^^^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 
 f ^= 1; // error
 >f ^= 1 : number
+>       : ^^^^^^
 >f : any
+>  : ^^^
 >1 : 1
+>  : ^
 

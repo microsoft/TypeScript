@@ -1,24 +1,33 @@
-=== tests/cases/compiler/indexedAccessPrivateMemberOfGenericConstraint.ts ===
+//// [tests/cases/compiler/indexedAccessPrivateMemberOfGenericConstraint.ts] ////
+
+=== indexedAccessPrivateMemberOfGenericConstraint.ts ===
 class A {
 >A : A
+>  : ^
 
   private a: number;
 >a : number
+>  : ^^^^^^
 }
 
 class B {
 >B : B
+>  : ^
 
   private a: string;
 >a : string
+>  : ^^^^^^
 }
 
 type X<T extends A> = [T["a"], (T | B)["a"]];
 >X : X<T>
+>  : ^^^^
 
 type Y<T extends A | B> = T["a"];
 >Y : Y<T>
+>  : ^^^^
 
 type Z<T extends A & B> = T["a"];
 >Z : Z<T>
+>  : ^^^^
 

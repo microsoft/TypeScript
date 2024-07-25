@@ -1,159 +1,254 @@
-=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithStringAndEveryType.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithStringAndEveryType.ts] ////
+
+=== additionOperatorWithStringAndEveryType.ts ===
 enum E { a, b, c }
 >E : E
+>  : ^
 >a : E.a
+>  : ^^^
 >b : E.b
+>  : ^^^
 >c : E.c
+>  : ^^^
 
 var a: any;
 >a : any
 
 var b: boolean;
 >b : boolean
+>  : ^^^^^^^
 
 var c: number;
 >c : number
+>  : ^^^^^^
 
 var d: string;
 >d : string
+>  : ^^^^^^
 
 var e: Object;
 >e : Object
+>  : ^^^^^^
 
 var f: void;
 >f : void
+>  : ^^^^
 
 var g: E;
 >g : E
+>  : ^
 
 var x: string;
 >x : string
+>  : ^^^^^^
 
 // string could plus every type, and the result is always string
 // string as left operand
 var r1 = x + a;
 >r1 : string
+>   : ^^^^^^
 >x + a : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >a : any
 
 var r2 = x + b;
 >r2 : string
+>   : ^^^^^^
 >x + b : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 
 var r3 = x + c;
 >r3 : string
+>   : ^^^^^^
 >x + c : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >c : number
+>  : ^^^^^^
 
 var r4 = x + d;
 >r4 : string
+>   : ^^^^^^
 >x + d : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >d : string
+>  : ^^^^^^
 
 var r5 = x + e;
 >r5 : string
+>   : ^^^^^^
 >x + e : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >e : Object
+>  : ^^^^^^
 
 var r6 = x + f;
 >r6 : string
+>   : ^^^^^^
 >x + f : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >f : void
+>  : ^^^^
 
 var r7 = x + g;
 >r7 : string
+>   : ^^^^^^
 >x + g : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >g : E
+>  : ^
 
 // string as right operand
 var r8 = a + x;
 >r8 : string
+>   : ^^^^^^
 >a + x : string
+>      : ^^^^^^
 >a : any
 >x : string
+>  : ^^^^^^
 
 var r9 = b + x;
 >r9 : string
+>   : ^^^^^^
 >b + x : string
+>      : ^^^^^^
 >b : boolean
+>  : ^^^^^^^
 >x : string
+>  : ^^^^^^
 
 var r10 = c + x;
 >r10 : string
+>    : ^^^^^^
 >c + x : string
+>      : ^^^^^^
 >c : number
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 var r11 = d + x;
 >r11 : string
+>    : ^^^^^^
 >d + x : string
+>      : ^^^^^^
 >d : string
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 var r12 = e + x;
 >r12 : string
+>    : ^^^^^^
 >e + x : string
+>      : ^^^^^^
 >e : Object
+>  : ^^^^^^
 >x : string
+>  : ^^^^^^
 
 var r13 = f + x;
 >r13 : string
+>    : ^^^^^^
 >f + x : string
+>      : ^^^^^^
 >f : void
+>  : ^^^^
 >x : string
+>  : ^^^^^^
 
 var r14 = g + x;
 >r14 : string
+>    : ^^^^^^
 >g + x : string
+>      : ^^^^^^
 >g : E
+>  : ^
 >x : string
+>  : ^^^^^^
 
 // other cases
 var r15 = x + E;
 >r15 : string
+>    : ^^^^^^
 >x + E : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >E : typeof E
+>  : ^^^^^^^^
 
 var r16 = x + E.a;
 >r16 : string
+>    : ^^^^^^
 >x + E.a : string
+>        : ^^^^^^
 >x : string
+>  : ^^^^^^
 >E.a : E.a
+>    : ^^^
 >E : typeof E
+>  : ^^^^^^^^
 >a : E.a
+>  : ^^^
 
 var r17 = x + '';
 >r17 : string
+>    : ^^^^^^
 >x + '' : string
+>       : ^^^^^^
 >x : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r18 = x + 0;
 >r18 : string
+>    : ^^^^^^
 >x + 0 : string
+>      : ^^^^^^
 >x : string
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var r19 = x + { a: '' };
 >r19 : string
+>    : ^^^^^^
 >x + { a: '' } : string
+>              : ^^^^^^
 >x : string
+>  : ^^^^^^
 >{ a: '' } : { a: string; }
+>          : ^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 var r20 = x + [];
 >r20 : string
+>    : ^^^^^^
 >x + [] : string
+>       : ^^^^^^
 >x : string
+>  : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/castOfYield.ts ===
+//// [tests/cases/compiler/castOfYield.ts] ////
+
+=== castOfYield.ts ===
 function* f() {
 >f : Symbol(f, Decl(castOfYield.ts, 0, 0))
 

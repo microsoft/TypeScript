@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedDeclarations1.ts] ////
+
 //// [mergedDeclarations1.ts]
 interface Point {
     x: number;

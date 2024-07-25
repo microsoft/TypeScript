@@ -1,19 +1,28 @@
-=== tests/cases/compiler/voidAsOperator.ts ===
+//// [tests/cases/compiler/voidAsOperator.ts] ////
+
+=== voidAsOperator.ts ===
 if (!void 0 !== true) {
 >!void 0 !== true : boolean
+>                 : ^^^^^^^
 >!void 0 : true
+>        : ^^^^
 >void 0 : undefined
+>       : ^^^^^^^^^
 >0 : 0
+>  : ^
 >true : true
+>     : ^^^^
  
 }
 
 //CHECK#2
 if (!null !== true) {
 >!null !== true : boolean
+>               : ^^^^^^^
 >!null : true
->null : null
+>      : ^^^^
 >true : true
+>     : ^^^^
  
 }
 

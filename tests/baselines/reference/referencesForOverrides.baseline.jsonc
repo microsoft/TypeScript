@@ -1,47 +1,551 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForOverrides.ts ===
 // module FindRef3 {
 // 	module SimpleClassTest {
 // 		export class Foo {
-// 			public /*FIND ALL REFS*/[|foo|](): void {
-// 			}
+// 			<|public /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}foo|](): void {
+// 			}|>
 // 		}
 // 		export class Bar extends Foo {
-// 			public [|foo|](): void {
-// 			}
+// 			<|public [|{| defId: 1, isWriteAccess: true |}foo|](): void {
+// 			}|>
 // 		}
 // 	}
+// 
+// --- (line: 13) skipped ---
+
+// --- (line: 58) skipped ---
+// 
+// 	function test() {
+// 		var x = new SimpleClassTest.Bar();
+// 		x.[|{| defId: 1 |}foo|]();
+// 
+// 		var y: SimpleInterfaceTest.IBar = null;
+// 		y.ifoo();
+// --- (line: 66) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForOverrides.ts ===
+  // module FindRef3 {
+  // 	module SimpleClassTest {
+  // 		export class Foo {
+  // 			<|public /*FIND ALL REFS*/[|{| defId: 0 |}foo|](): void {
+  // 			}|>
+  // 		}
+  // 		export class Bar extends Foo {
+  // 			<|public [|{| defId: 1 |}foo|](): void {
+  // 			}|>
+  // 		}
+  // 	}
+  // 
+  // --- (line: 13) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) SimpleClassTest.Foo.foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SimpleClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) SimpleClassTest.Bar.foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SimpleClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForOverrides.ts ===
+// --- (line: 11) skipped ---
 // 
 // 	module SimpleInterfaceTest {
 // 		export interface IFoo {
-// 			ifoo(): void;
+// 			/*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}ifoo|](): void;|>
 // 		}
 // 		export interface IBar extends IFoo {
-// 			ifoo(): void;
+// 			<|[|{| defId: 1 |}ifoo|](): void;|>
 // 		}
 // 	}
+// 
+// --- (line: 22) skipped ---
+
+// --- (line: 61) skipped ---
+// 		x.foo();
+// 
+// 		var y: SimpleInterfaceTest.IBar = null;
+// 		y.[|{| defId: 1 |}ifoo|]();
+// 
+//         var w: SimpleClassInterfaceTest.Bar = null;
+//         w.icfoo();
+// --- (line: 69) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForOverrides.ts ===
+  // --- (line: 11) skipped ---
+  // 
+  // 	module SimpleInterfaceTest {
+  // 		export interface IFoo {
+  // 			/*FIND ALL REFS*/<|[|{| defId: 0 |}ifoo|](): void;|>
+  // 		}
+  // 		export interface IBar extends IFoo {
+  // 			<|[|{| defId: 1 |}ifoo|](): void;|>
+  // 		}
+  // 	}
+  // 
+  // --- (line: 22) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) SimpleInterfaceTest.IFoo.ifoo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SimpleInterfaceTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IFoo",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "ifoo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) SimpleInterfaceTest.IBar.ifoo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SimpleInterfaceTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IBar",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "ifoo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForOverrides.ts ===
+// --- (line: 20) skipped ---
 // 
 // 	module SimpleClassInterfaceTest {
 // 		export interface IFoo {
-// 			icfoo(): void;
+// 			/*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}icfoo|](): void;|>
 // 		}
 // 		export class Bar implements IFoo {
-// 			public icfoo(): void {
-// 			}
+// 			<|public [|{| defId: 1, isWriteAccess: true |}icfoo|](): void {
+// 			}|>
 // 		}
 // 	}
 // 
+// --- (line: 32) skipped ---
+
+// --- (line: 64) skipped ---
+// 		y.ifoo();
+// 
+//         var w: SimpleClassInterfaceTest.Bar = null;
+//         w.[|{| defId: 1 |}icfoo|]();
+// 
+// 		var z = new Test.BarBlah();
+// 		z.field = "";
+// --- (line: 72) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForOverrides.ts ===
+  // --- (line: 20) skipped ---
+  // 
+  // 	module SimpleClassInterfaceTest {
+  // 		export interface IFoo {
+  // 			/*FIND ALL REFS*/<|[|{| defId: 0 |}icfoo|](): void;|>
+  // 		}
+  // 		export class Bar implements IFoo {
+  // 			<|public [|{| defId: 1 |}icfoo|](): void {
+  // 			}|>
+  // 		}
+  // 	}
+  // 
+  // --- (line: 32) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) SimpleClassInterfaceTest.IFoo.icfoo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SimpleClassInterfaceTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IFoo",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "icfoo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) SimpleClassInterfaceTest.Bar.icfoo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SimpleClassInterfaceTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "icfoo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForOverrides.ts ===
+// --- (line: 30) skipped ---
+// 
 // 	module Test {
 // 		export interface IBase {
-// 			field: string;
+// 			/*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}field|]: string;|>
 // 			method(): void;
 // 		}
 // 
 // 		export interface IBlah extends IBase {
-// 			field: string;
+// 			<|[|{| defId: 1 |}field|]: string;|>
 // 		}
 // 
 // 		export interface IBlah2 extends IBlah {
-// 			field: string;
+// 			<|[|{| defId: 2 |}field|]: string;|>
 // 		}
 // 
 // 		export interface IDerived extends IBlah2 {
@@ -49,1611 +553,608 @@
 // 		}
 // 
 // 		export class Bar implements IDerived {
-// 			public field: string;
+// 			<|public [|{| defId: 3 |}field|]: string;|>
 // 			public method(): void { }
 // 		}
 // 
 // 		export class BarBlah extends Bar {
-// 			public field: string;
+// 			<|public [|{| defId: 4 |}field|]: string;|>
 // 		}
 // 	}
 // 
-// 	function test() {
-// 		var x = new SimpleClassTest.Bar();
-// 		x.[|foo|]();
-// 
-// 		var y: SimpleInterfaceTest.IBar = null;
-// 		y.ifoo();
-// 
-//         var w: SimpleClassInterfaceTest.Bar = null;
+// --- (line: 60) skipped ---
+
+// --- (line: 67) skipped ---
 //         w.icfoo();
 // 
 // 		var z = new Test.BarBlah();
-// 		z.field = "";
+// 		z.[|{| defId: 4, isWriteAccess: true |}field|] = "";
 //         z.method();
 // 	}
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "method",
-      "name": "(method) SimpleClassTest.Foo.foo(): void",
-      "textSpan": {
-        "start": 75,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SimpleClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 68,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 75,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 68,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "method",
-      "name": "(method) SimpleClassTest.Bar.foo(): void",
-      "textSpan": {
-        "start": 141,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SimpleClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Bar",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 134,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 141,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 134,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 980,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForOverrides.ts ===
+  // --- (line: 30) skipped ---
+  // 
+  // 	module Test {
+  // 		export interface IBase {
+  // 			/*FIND ALL REFS*/<|[|{| defId: 0 |}field|]: string;|>
+  // 			method(): void;
+  // 		}
+  // 
+  // 		export interface IBlah extends IBase {
+  // 			<|[|{| defId: 1 |}field|]: string;|>
+  // 		}
+  // 
+  // 		export interface IBlah2 extends IBlah {
+  // 			<|[|{| defId: 2 |}field|]: string;|>
+  // 		}
+  // 
+  // 		export interface IDerived extends IBlah2 {
+  // 			method(): void;
+  // 		}
+  // 
+  // 		export class Bar implements IDerived {
+  // 			<|public [|{| defId: 3 |}field|]: string;|>
+  // 			public method(): void { }
+  // 		}
+  // 
+  // 		export class BarBlah extends Bar {
+  // 			<|public [|{| defId: 4 |}field|]: string;|>
+  // 		}
+  // 	}
+  // 
+  // --- (line: 60) skipped ---
 
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Test.IBase.field: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IBase",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "field",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Test.IBlah.field: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IBlah",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "field",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Test.IBlah2.field: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IBlah2",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "field",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 3,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Test.Bar.field: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "field",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 4,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) Test.BarBlah.field: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "BarBlah",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "field",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForOverrides.ts ===
-// module FindRef3 {
-// 	module SimpleClassTest {
-// 		export class Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 		export class Bar extends Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module SimpleInterfaceTest {
-// 		export interface IFoo {
-// 			/*FIND ALL REFS*/[|ifoo|](): void;
-// 		}
-// 		export interface IBar extends IFoo {
-// 			[|ifoo|](): void;
-// 		}
-// 	}
-// 
-// 	module SimpleClassInterfaceTest {
-// 		export interface IFoo {
-// 			icfoo(): void;
-// 		}
-// 		export class Bar implements IFoo {
-// 			public icfoo(): void {
-// 			}
-// 		}
-// 	}
-// 
+// --- (line: 31) skipped ---
 // 	module Test {
 // 		export interface IBase {
 // 			field: string;
-// 			method(): void;
+// 			/*FIND ALL REFS*/<|[|{| defId: 0, isDefinition: true |}method|](): void;|>
 // 		}
 // 
 // 		export interface IBlah extends IBase {
-// 			field: string;
-// 		}
-// 
-// 		export interface IBlah2 extends IBlah {
-// 			field: string;
+// --- (line: 39) skipped ---
+
+// --- (line: 43) skipped ---
 // 		}
 // 
 // 		export interface IDerived extends IBlah2 {
-// 			method(): void;
+// 			<|[|{| defId: 1 |}method|](): void;|>
 // 		}
 // 
 // 		export class Bar implements IDerived {
 // 			public field: string;
-// 			public method(): void { }
+// 			<|public [|{| defId: 2, isWriteAccess: true |}method|](): void { }|>
 // 		}
 // 
 // 		export class BarBlah extends Bar {
-// 			public field: string;
-// 		}
-// 	}
-// 
-// 	function test() {
-// 		var x = new SimpleClassTest.Bar();
-// 		x.foo();
-// 
-// 		var y: SimpleInterfaceTest.IBar = null;
-// 		y.[|ifoo|]();
-// 
-//         var w: SimpleClassInterfaceTest.Bar = null;
-//         w.icfoo();
+// --- (line: 56) skipped ---
+
+// --- (line: 68) skipped ---
 // 
 // 		var z = new Test.BarBlah();
 // 		z.field = "";
-//         z.method();
+//         z.[|{| defId: 2 |}method|]();
 // 	}
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "method",
-      "name": "(method) SimpleInterfaceTest.IFoo.ifoo(): void",
-      "textSpan": {
-        "start": 227,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SimpleInterfaceTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IFoo",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "ifoo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 227,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 227,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 227,
-          "length": 13
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "method",
-      "name": "(method) SimpleInterfaceTest.IBar.ifoo(): void",
-      "textSpan": {
-        "start": 287,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SimpleInterfaceTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IBar",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "ifoo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 287,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 287,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 287,
-          "length": 13
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 1034,
-          "length": 4
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForOverrides.ts ===
+  // --- (line: 31) skipped ---
+  // 	module Test {
+  // 		export interface IBase {
+  // 			field: string;
+  // 			/*FIND ALL REFS*/<|[|{| defId: 0 |}method|](): void;|>
+  // 		}
+  // 
+  // 		export interface IBlah extends IBase {
+  // --- (line: 39) skipped ---
 
-// === /tests/cases/fourslash/referencesForOverrides.ts ===
-// module FindRef3 {
-// 	module SimpleClassTest {
-// 		export class Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 		export class Bar extends Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module SimpleInterfaceTest {
-// 		export interface IFoo {
-// 			ifoo(): void;
-// 		}
-// 		export interface IBar extends IFoo {
-// 			ifoo(): void;
-// 		}
-// 	}
-// 
-// 	module SimpleClassInterfaceTest {
-// 		export interface IFoo {
-// 			/*FIND ALL REFS*/[|icfoo|](): void;
-// 		}
-// 		export class Bar implements IFoo {
-// 			public [|icfoo|](): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module Test {
-// 		export interface IBase {
-// 			field: string;
-// 			method(): void;
-// 		}
-// 
-// 		export interface IBlah extends IBase {
-// 			field: string;
-// 		}
-// 
-// 		export interface IBlah2 extends IBlah {
-// 			field: string;
-// 		}
-// 
-// 		export interface IDerived extends IBlah2 {
-// 			method(): void;
-// 		}
-// 
-// 		export class Bar implements IDerived {
-// 			public field: string;
-// 			public method(): void { }
-// 		}
-// 
-// 		export class BarBlah extends Bar {
-// 			public field: string;
-// 		}
-// 	}
-// 
-// 	function test() {
-// 		var x = new SimpleClassTest.Bar();
-// 		x.foo();
-// 
-// 		var y: SimpleInterfaceTest.IBar = null;
-// 		y.ifoo();
-// 
-//         var w: SimpleClassInterfaceTest.Bar = null;
-//         w.[|icfoo|]();
-// 
-// 		var z = new Test.BarBlah();
-// 		z.field = "";
-//         z.method();
-// 	}
-// }
+  // --- (line: 43) skipped ---
+  // 		}
+  // 
+  // 		export interface IDerived extends IBlah2 {
+  // 			<|[|{| defId: 1 |}method|](): void;|>
+  // 		}
+  // 
+  // 		export class Bar implements IDerived {
+  // 			public field: string;
+  // 			<|public [|{| defId: 2 |}method|](): void { }|>
+  // 		}
+  // 
+  // 		export class BarBlah extends Bar {
+  // --- (line: 56) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "method",
-      "name": "(method) SimpleClassInterfaceTest.IFoo.icfoo(): void",
-      "textSpan": {
-        "start": 373,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SimpleClassInterfaceTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IFoo",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "icfoo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 373,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 373,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 373,
-          "length": 14
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Test.IBase.method(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IBase",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "method",
-      "name": "(method) SimpleClassInterfaceTest.Bar.icfoo(): void",
-      "textSpan": {
-        "start": 439,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "SimpleClassInterfaceTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Bar",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "icfoo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 432,
-        "length": 27
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 439,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 432,
-          "length": 27
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 1105,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Test.IDerived.method(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IDerived",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
-
-// === /tests/cases/fourslash/referencesForOverrides.ts ===
-// module FindRef3 {
-// 	module SimpleClassTest {
-// 		export class Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 		export class Bar extends Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module SimpleInterfaceTest {
-// 		export interface IFoo {
-// 			ifoo(): void;
-// 		}
-// 		export interface IBar extends IFoo {
-// 			ifoo(): void;
-// 		}
-// 	}
-// 
-// 	module SimpleClassInterfaceTest {
-// 		export interface IFoo {
-// 			icfoo(): void;
-// 		}
-// 		export class Bar implements IFoo {
-// 			public icfoo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module Test {
-// 		export interface IBase {
-// 			/*FIND ALL REFS*/[|field|]: string;
-// 			method(): void;
-// 		}
-// 
-// 		export interface IBlah extends IBase {
-// 			[|field|]: string;
-// 		}
-// 
-// 		export interface IBlah2 extends IBlah {
-// 			[|field|]: string;
-// 		}
-// 
-// 		export interface IDerived extends IBlah2 {
-// 			method(): void;
-// 		}
-// 
-// 		export class Bar implements IDerived {
-// 			public [|field|]: string;
-// 			public method(): void { }
-// 		}
-// 
-// 		export class BarBlah extends Bar {
-// 			public [|field|]: string;
-// 		}
-// 	}
-// 
-// 	function test() {
-// 		var x = new SimpleClassTest.Bar();
-// 		x.foo();
-// 
-// 		var y: SimpleInterfaceTest.IBar = null;
-// 		y.ifoo();
-// 
-//         var w: SimpleClassInterfaceTest.Bar = null;
-//         w.icfoo();
-// 
-// 		var z = new Test.BarBlah();
-// 		z.[|field|] = "";
-//         z.method();
-// 	}
-// }
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "property",
-      "name": "(property) Test.IBase.field: string",
-      "textSpan": {
-        "start": 513,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IBase",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "field",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 513,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 513,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 513,
-          "length": 14
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Test.Bar.method(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "property",
-      "name": "(property) Test.IBlah.field: string",
-      "textSpan": {
-        "start": 596,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IBlah",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "field",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 596,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 596,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 596,
-          "length": 14
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "property",
-      "name": "(property) Test.IBlah2.field: string",
-      "textSpan": {
-        "start": 661,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IBlah2",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "field",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 661,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 661,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 661,
-          "length": 14
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "property",
-      "name": "(property) Test.Bar.field: string",
-      "textSpan": {
-        "start": 801,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Bar",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "field",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 794,
-        "length": 21
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 801,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 794,
-          "length": 21
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "property",
-      "name": "(property) Test.BarBlah.field: string",
-      "textSpan": {
-        "start": 897,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "BarBlah",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "field",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 890,
-        "length": 21
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 897,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 890,
-          "length": 21
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 1149,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
-
-// === /tests/cases/fourslash/referencesForOverrides.ts ===
-// module FindRef3 {
-// 	module SimpleClassTest {
-// 		export class Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 		export class Bar extends Foo {
-// 			public foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module SimpleInterfaceTest {
-// 		export interface IFoo {
-// 			ifoo(): void;
-// 		}
-// 		export interface IBar extends IFoo {
-// 			ifoo(): void;
-// 		}
-// 	}
-// 
-// 	module SimpleClassInterfaceTest {
-// 		export interface IFoo {
-// 			icfoo(): void;
-// 		}
-// 		export class Bar implements IFoo {
-// 			public icfoo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	module Test {
-// 		export interface IBase {
-// 			field: string;
-// 			/*FIND ALL REFS*/[|method|](): void;
-// 		}
-// 
-// 		export interface IBlah extends IBase {
-// 			field: string;
-// 		}
-// 
-// 		export interface IBlah2 extends IBlah {
-// 			field: string;
-// 		}
-// 
-// 		export interface IDerived extends IBlah2 {
-// 			[|method|](): void;
-// 		}
-// 
-// 		export class Bar implements IDerived {
-// 			public field: string;
-// 			public [|method|](): void { }
-// 		}
-// 
-// 		export class BarBlah extends Bar {
-// 			public field: string;
-// 		}
-// 	}
-// 
-// 	function test() {
-// 		var x = new SimpleClassTest.Bar();
-// 		x.foo();
-// 
-// 		var y: SimpleInterfaceTest.IBar = null;
-// 		y.ifoo();
-// 
-//         var w: SimpleClassInterfaceTest.Bar = null;
-//         w.icfoo();
-// 
-// 		var z = new Test.BarBlah();
-// 		z.field = "";
-//         z.[|method|]();
-// 	}
-// }
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "method",
-      "name": "(method) Test.IBase.method(): void",
-      "textSpan": {
-        "start": 531,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IBase",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 531,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 531,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 531,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "method",
-      "name": "(method) Test.IDerived.method(): void",
-      "textSpan": {
-        "start": 729,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IDerived",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 729,
-        "length": 15
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 729,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 729,
-          "length": 15
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-      "kind": "method",
-      "name": "(method) Test.Bar.method(): void",
-      "textSpan": {
-        "start": 826,
-        "length": 6
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Bar",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 819,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 826,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "contextSpan": {
-          "start": 819,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 1171,
-          "length": 6
-        },
-        "fileName": "/tests/cases/fourslash/referencesForOverrides.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+   }
+  ]

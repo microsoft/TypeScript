@@ -1,0 +1,50 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples3.ts] ////
+
+=== variadicTuples3.ts ===
+// https://github.com/microsoft/TypeScript/issues/58697
+
+function test1<T extends any[], P extends any[]>(): [...T, ...P] {
+>test1 : <T extends any[], P extends any[]>() => [...T, ...P]
+>      : ^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^^^^^^            
+
+  let x: any[] = [];
+>x : any[]
+>  : ^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+  return x;
+>x : any[]
+>  : ^^^^^
+}
+
+function test2<T extends any[], P extends any[]>(): [...T, ...P] {
+>test2 : <T extends any[], P extends any[]>() => [...T, ...P]
+>      : ^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^^^^^^            
+
+  let x: [any, any] = [null, null];
+>x : [any, any]
+>  : ^^^^^^^^^^
+>[null, null] : [null, null]
+>             : ^^^^^^^^^^^^
+
+  return x;
+>x : [any, any]
+>  : ^^^^^^^^^^
+}
+
+function test3<T extends any[], P extends any[]>(): [...T, ...P] {
+>test3 : <T extends any[], P extends any[]>() => [...T, ...P]
+>      : ^ ^^^^^^^^^     ^^ ^^^^^^^^^     ^^^^^^^            
+
+  let x: [any, any, any] = [null, null, null];
+>x : [any, any, any]
+>  : ^^^^^^^^^^^^^^^
+>[null, null, null] : [null, null, null]
+>                   : ^^^^^^^^^^^^^^^^^^
+
+  return x;
+>x : [any, any, any]
+>  : ^^^^^^^^^^^^^^^
+}
+

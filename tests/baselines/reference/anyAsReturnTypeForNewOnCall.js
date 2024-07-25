@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anyAsReturnTypeForNewOnCall.ts] ////
+
 //// [anyAsReturnTypeForNewOnCall.ts]
 function Point(x, y) {
 

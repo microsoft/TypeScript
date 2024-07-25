@@ -1,7 +1,7 @@
-tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts(14,5): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
+thisTypeInFunctions2.ts(14,5): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts (1 errors) ====
+==== thisTypeInFunctions2.ts (1 errors) ====
     interface IndexedWithThis {
         // this is a workaround for React
         init?: (this: this) => void;

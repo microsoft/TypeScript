@@ -1,0 +1,149 @@
+//// [tests/cases/compiler/inKeywordNarrowingWithNoUncheckedIndexedAccess.ts] ////
+
+=== inKeywordNarrowingWithNoUncheckedIndexedAccess.ts ===
+declare function invariant(condition: boolean): asserts condition;
+>invariant : (condition: boolean) => asserts condition
+>          : ^         ^^       ^^^^^                 
+>condition : boolean
+>          : ^^^^^^^
+
+function f1(obj: Record<string, string>) {
+>f1 : (obj: Record<string, string>) => string
+>   : ^   ^^                      ^^^^^^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+    invariant("test" in obj);
+>invariant("test" in obj) : void
+>                         : ^^^^
+>invariant : (condition: boolean) => asserts condition
+>          : ^         ^^       ^^^^^                 
+>"test" in obj : boolean
+>              : ^^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+    return obj.test;  // string
+>obj.test : string
+>         : ^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>test : string
+>     : ^^^^^^
+}
+
+function f2(obj: Record<string, string>) {
+>f2 : (obj: Record<string, string>) => string
+>   : ^   ^^                      ^^^^^^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+    if ("test" in obj) {
+>"test" in obj : boolean
+>              : ^^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+        return obj.test;  // string
+>obj.test : string
+>         : ^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>test : string
+>     : ^^^^^^
+    }
+    return "default";
+>"default" : "default"
+>          : ^^^^^^^^^
+}
+
+function f3(obj: Record<string, string>) {
+>f3 : (obj: Record<string, string>) => void
+>   : ^   ^^                      ^^^^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+    obj.test;  // string | undefined
+>obj.test : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>test : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+    if ("test" in obj) {
+>"test" in obj : boolean
+>              : ^^^^^^^
+>"test" : "test"
+>       : ^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+        obj.test;  // string
+>obj.test : string
+>         : ^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>test : string
+>     : ^^^^^^
+    }
+    else {
+        obj.test;  // undefined
+>obj.test : undefined
+>         : ^^^^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>test : undefined
+>     : ^^^^^^^^^
+    }
+}
+
+function f4(obj: Record<string, string>) {
+>f4 : (obj: Record<string, string>) => void
+>   : ^   ^^                      ^^^^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+    obj.test;  // string | undefined
+>obj.test : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>test : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+    if (obj.hasOwnProperty("test")) {
+>obj.hasOwnProperty("test") : boolean
+>                           : ^^^^^^^
+>obj.hasOwnProperty : (v: PropertyKey) => boolean
+>                   : ^ ^^           ^^^^^       
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>hasOwnProperty : (v: PropertyKey) => boolean
+>               : ^ ^^           ^^^^^       
+>"test" : "test"
+>       : ^^^^^^
+
+        obj.test;  // string
+>obj.test : string
+>         : ^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>test : string
+>     : ^^^^^^
+    }
+    else {
+        obj.test;  // undefined
+>obj.test : undefined
+>         : ^^^^^^^^^
+>obj : Record<string, string>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+>test : undefined
+>     : ^^^^^^^^^
+    }
+}
+

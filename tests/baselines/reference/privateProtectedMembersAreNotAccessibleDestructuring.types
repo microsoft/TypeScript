@@ -1,82 +1,127 @@
-=== tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts] ////
+
+=== privateProtectedMembersAreNotAccessibleDestructuring.ts ===
 class K {
 >K : K
+>  : ^
 
     private priv;
 >priv : any
+>     : ^^^
 
     protected prot;
 >prot : any
+>     : ^^^
 
     private privateMethod() { }
 >privateMethod : () => void
+>              : ^^^^^^^^^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         let { priv: a, prot: b } = this; // ok
 >priv : any
+>     : ^^^
 >a : any
+>  : ^^^
 >prot : any
+>     : ^^^
 >b : any
+>  : ^^^
 >this : this
+>     : ^^^^
 
         let { priv, prot } = new K(); // ok
 >priv : any
+>     : ^^^
 >prot : any
+>     : ^^^
 >new K() : K
+>        : ^
 >K : typeof K
+>  : ^^^^^^^^
     }
 }
 class C extends K {
 >C : C
+>  : ^
 >K : K
+>  : ^
 
     m2() {
 >m2 : () => void
+>   : ^^^^^^^^^^
 
         let { priv: a } = this; // error
 >priv : any
+>     : ^^^
 >a : any
+>  : ^^^
 >this : this
+>     : ^^^^
 
         let { prot: b } = this; // ok
 >prot : any
+>     : ^^^
 >b : any
+>  : ^^^
 >this : this
+>     : ^^^^
     }
 }
 let k = new K();
 >k : K
+>  : ^
 >new K() : K
+>        : ^
 >K : typeof K
+>  : ^^^^^^^^
 
 let { priv } = k; // error
 >priv : any
+>     : ^^^
 >k : K
+>  : ^
 
 let { prot } = k; // error
 >prot : any
+>     : ^^^
 >k : K
+>  : ^
 
 let { privateMethod } = k; // error
 >privateMethod : () => void
+>              : ^^^^^^^^^^
 >k : K
+>  : ^
 
 let { priv: a, prot: b, privateMethod: pm } = k; // error
 >priv : any
+>     : ^^^
 >a : any
+>  : ^^^
 >prot : any
+>     : ^^^
 >b : any
+>  : ^^^
 >privateMethod : any
+>              : ^^^
 >pm : () => void
+>   : ^^^^^^^^^^
 >k : K
+>  : ^
 
 function f({ priv, prot, privateMethod }: K) {
 >f : ({ priv, prot, privateMethod }: K) => void
+>  : ^                             ^^ ^^^^^^^^^
 >priv : any
+>     : ^^^
 >prot : any
+>     : ^^^
 >privateMethod : () => void
+>              : ^^^^^^^^^^
 
 }
 

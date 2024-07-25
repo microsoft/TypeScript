@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionArgumentsFunction.ts ===
+//// [tests/cases/compiler/collisionArgumentsFunction.ts] ////
+
+=== collisionArgumentsFunction.ts ===
 // Functions
 function f1(arguments: number, ...restParameters) { //arguments is error
 >f1 : Symbol(f1, Decl(collisionArgumentsFunction.ts, 0, 0))

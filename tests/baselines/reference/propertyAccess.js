@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts] ////
+
 //// [propertyAccess.ts]
 class A {
     a: number;

@@ -1,31 +1,46 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/namespaceMergedWithFunctionWithOverloadsUsage.ts] ////
+
+=== index.ts ===
 import X = require("./file");
 >X : { (opts?: X.Whatever): void; (cb: Function, opts?: X.Whatever): void; }
+>  : ^^^    ^^^^^^^^^^^^^^^^    ^^^  ^^        ^^    ^^^^^^^^^^^^^^^^    ^^^
 
 X(0); // shouldn't cause a crash
 >X(0) : void
+>     : ^^^^
 >X : { (opts?: X.Whatever): void; (cb: Function, opts?: X.Whatever): void; }
+>  : ^^^    ^^^^^^^^^^^^^^^^    ^^^  ^^        ^^    ^^^^^^^^^^^^^^^^    ^^^
 >0 : 0
+>  : ^
 
-=== tests/cases/compiler/file.d.ts ===
+=== file.d.ts ===
 declare namespace Foo {
     interface Whatever {
         prop: any;
 >prop : any
+>     : ^^^
     }
 }
 
 declare function Foo(opts?: Foo.Whatever): void;
 >Foo : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
+>    : ^^^    ^^^            ^^^    ^^^  ^^        ^^    ^^^            ^^^    ^^^
 >opts : Foo.Whatever
+>     : ^^^^^^^^^^^^
 >Foo : any
+>    : ^^^
 
 declare function Foo(cb: Function, opts?: Foo.Whatever): void;
 >Foo : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
+>    : ^^^    ^^^            ^^^    ^^^  ^^        ^^    ^^^            ^^^    ^^^
 >cb : Function
+>   : ^^^^^^^^
 >opts : Foo.Whatever
+>     : ^^^^^^^^^^^^
 >Foo : any
+>    : ^^^
 
 export = Foo;
 >Foo : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
+>    : ^^^    ^^^            ^^^    ^^^  ^^        ^^    ^^^            ^^^    ^^^
 

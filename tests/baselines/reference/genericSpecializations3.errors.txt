@@ -1,20 +1,20 @@
-tests/cases/compiler/genericSpecializations3.ts(9,5): error TS2416: Property 'foo' in type 'IntFooBad' is not assignable to the same property in base type 'IFoo<number>'.
+genericSpecializations3.ts(9,5): error TS2416: Property 'foo' in type 'IntFooBad' is not assignable to the same property in base type 'IFoo<number>'.
   Type '(x: string) => string' is not assignable to type '(x: number) => number'.
     Types of parameters 'x' and 'x' are incompatible.
       Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/genericSpecializations3.ts(28,1): error TS2322: Type 'StringFoo2' is not assignable to type 'IntFoo'.
+genericSpecializations3.ts(28,1): error TS2322: Type 'StringFoo2' is not assignable to type 'IntFoo'.
   Types of property 'foo' are incompatible.
     Type '(x: string) => string' is not assignable to type '(x: number) => number'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/genericSpecializations3.ts(29,1): error TS2322: Type 'IntFoo' is not assignable to type 'StringFoo2'.
+genericSpecializations3.ts(29,1): error TS2322: Type 'IntFoo' is not assignable to type 'StringFoo2'.
   Types of property 'foo' are incompatible.
     Type '(x: number) => number' is not assignable to type '(x: string) => string'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/genericSpecializations3.ts (3 errors) ====
+==== genericSpecializations3.ts (3 errors) ====
     interface IFoo<T> {
         foo(x: T): T;
     }

@@ -1,8 +1,13 @@
-=== tests/cases/compiler/es6ExportAssignment.ts ===
+//// [tests/cases/compiler/es6ExportAssignment.ts] ////
+
+=== es6ExportAssignment.ts ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 export = a;
 >a : number
+>  : ^^^^^^
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/moduleDeclarations/nonInstantiatedModule.ts ===
+//// [tests/cases/conformance/internalModules/moduleDeclarations/nonInstantiatedModule.ts] ////
+
+=== nonInstantiatedModule.ts ===
 module M {
 >M : Symbol(M, Decl(nonInstantiatedModule.ts, 0, 0))
 

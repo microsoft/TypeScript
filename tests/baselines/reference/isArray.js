@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isArray.ts] ////
+
 //// [isArray.ts]
 /// @errors: 2322 4104
 

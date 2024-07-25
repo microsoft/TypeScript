@@ -1,7 +1,7 @@
-tests/cases/compiler/constructorOverloads3.ts(12,5): error TS2377: Constructors for derived classes must contain a 'super' call.
+constructorOverloads3.ts(12,5): error TS2377: Constructors for derived classes must contain a 'super' call.
 
 
-==== tests/cases/compiler/constructorOverloads3.ts (1 errors) ====
+==== constructorOverloads3.ts (1 errors) ====
     declare class FooBase {
         constructor(s: string);
         constructor(n: number);
@@ -14,7 +14,7 @@ tests/cases/compiler/constructorOverloads3.ts(12,5): error TS2377: Constructors 
         constructor(n: number);
         constructor(a: any);
         constructor(x: any, y?: any) { }
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2377: Constructors for derived classes must contain a 'super' call.
         bar1() { /*WScript.Echo("Yo");*/}
     }

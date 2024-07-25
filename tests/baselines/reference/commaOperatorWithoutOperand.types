@@ -1,86 +1,137 @@
-=== tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts ===
+//// [tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts] ////
+
+=== commaOperatorWithoutOperand.ts ===
 var ANY: any;
 >ANY : any
+>    : ^^^
 
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 var NUMBER: number;
 >NUMBER : number
+>       : ^^^^^^
 
 var STRING: string;
 >STRING : string
+>       : ^^^^^^
 
 var OBJECT: Object;
 >OBJECT : Object
+>       : ^^^^^^
 
 // Expect to have compiler errors
 // Missing the second operand
 (ANY, );
 >(ANY, ) : any
+>        : ^^^
 >ANY, : any
+>     : ^^^
 >ANY : any
+>    : ^^^
 > : any
+> : ^^^
 
 (BOOLEAN, );
 >(BOOLEAN, ) : any
+>            : ^^^
 >BOOLEAN, : any
+>         : ^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 > : any
+> : ^^^
 
 (NUMBER, );
 >(NUMBER, ) : any
+>           : ^^^
 >NUMBER, : any
+>        : ^^^
 >NUMBER : number
+>       : ^^^^^^
 > : any
+> : ^^^
 
 (STRING, );
 >(STRING, ) : any
+>           : ^^^
 >STRING, : any
+>        : ^^^
 >STRING : string
+>       : ^^^^^^
 > : any
+> : ^^^
 
 (OBJECT, );
 >(OBJECT, ) : any
+>           : ^^^
 >OBJECT, : any
+>        : ^^^
 >OBJECT : Object
+>       : ^^^^^^
 > : any
+> : ^^^
 
 // Missing the first operand
 (, ANY);
 >(, ANY) : any
+>        : ^^^
 >, ANY : any
+>      : ^^^
 > : any
+> : ^^^
 >ANY : any
+>    : ^^^
 
 (, BOOLEAN);
 >(, BOOLEAN) : boolean
+>            : ^^^^^^^
 >, BOOLEAN : boolean
+>          : ^^^^^^^
 > : any
+> : ^^^
 >BOOLEAN : boolean
+>        : ^^^^^^^
 
 (, NUMBER);
 >(, NUMBER) : number
+>           : ^^^^^^
 >, NUMBER : number
+>         : ^^^^^^
 > : any
+> : ^^^
 >NUMBER : number
+>       : ^^^^^^
 
 (, STRING);
 >(, STRING) : string
+>           : ^^^^^^
 >, STRING : string
+>         : ^^^^^^
 > : any
+> : ^^^
 >STRING : string
+>       : ^^^^^^
 
 (, OBJECT);
 >(, OBJECT) : Object
+>           : ^^^^^^
 >, OBJECT : Object
+>         : ^^^^^^
 > : any
+> : ^^^
 >OBJECT : Object
+>       : ^^^^^^
 
 // Missing all operands
 ( , );
 >( , ) : any
+>      : ^^^
 >, : any
+>  : ^^^
 > : any
+> : ^^^
 > : any
+> : ^^^
 

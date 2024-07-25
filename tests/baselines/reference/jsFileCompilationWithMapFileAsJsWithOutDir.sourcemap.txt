@@ -2,11 +2,11 @@
 JsFile: a.js
 mapUrl: a.js.map
 sourceRoot: 
-sources: ../tests/cases/compiler/a.ts
+sources: ../a.ts
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:out/a.js
-sourceFile:../tests/cases/compiler/a.ts
+sourceFile:../a.ts
 -------------------------------------------------------------------
 >>>var c = /** @class */ (function () {
 1 >
@@ -54,4 +54,35 @@ sourceFile:../tests/cases/compiler/a.ts
 3 >Emitted(5, 2) Source(1, 1) + SourceIndex(0)
 4 >Emitted(5, 6) Source(2, 2) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=a.js.map
+>>>//# sourceMappingURL=a.js.map===================================================================
+JsFile: b.js
+mapUrl: b.js.map
+sourceRoot: 
+sources: ../b.js
+===================================================================
+-------------------------------------------------------------------
+emittedFile:out/b.js
+sourceFile:../b.js
+-------------------------------------------------------------------
+>>>function bar() {
+1 >
+2 >^^^^^^^^^
+3 >         ^^^
+1 >
+2 >function 
+3 >         bar
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+3 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >() {
+  >
+2 >}
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=b.js.map

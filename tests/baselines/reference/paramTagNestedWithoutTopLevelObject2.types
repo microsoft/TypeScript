@@ -1,16 +1,25 @@
-=== tests/cases/conformance/jsdoc/paramTagNestedWithoutTopLevelObject2.js ===
+//// [tests/cases/conformance/jsdoc/paramTagNestedWithoutTopLevelObject2.ts] ////
+
+=== paramTagNestedWithoutTopLevelObject2.js ===
 /**
  * @param {object} xyz.bar
  * @param {number} xyz.bar.p
  */
 function g(xyz) {
 >g : (xyz: any) => any
+>  : ^   ^^^^^^^^^^^^^
 >xyz : any
+>    : ^^^
 
     return xyz.bar.p;
 >xyz.bar.p : any
+>          : ^^^
 >xyz.bar : any
+>        : ^^^
 >xyz : any
+>    : ^^^
 >bar : any
+>    : ^^^
 >p : any
+>  : ^^^
 }

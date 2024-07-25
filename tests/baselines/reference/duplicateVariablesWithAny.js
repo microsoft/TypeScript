@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateVariablesWithAny.ts] ////
+
 //// [duplicateVariablesWithAny.ts]
 // They should have to be the same even when one of the types is 'any'
 var x: any;

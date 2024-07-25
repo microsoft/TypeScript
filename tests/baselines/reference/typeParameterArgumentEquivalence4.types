@@ -1,23 +1,36 @@
-=== tests/cases/compiler/typeParameterArgumentEquivalence4.ts ===
+//// [tests/cases/compiler/typeParameterArgumentEquivalence4.ts] ////
+
+=== typeParameterArgumentEquivalence4.ts ===
 function foo<T,U>() {
 >foo : <T, U>() => void
+>    : ^ ^^ ^^^^^^^^^^^
 
     var x: (item) => U;
 >x : (item: any) => U
+>  : ^    ^^^^^^^^^^ 
 >item : any
+>     : ^^^
 
     var y: (item) => T;
 >y : (item: any) => T
+>  : ^    ^^^^^^^^^^ 
 >item : any
+>     : ^^^
 
     x = y;  // Should be an error
 >x = y : (item: any) => T
+>      : ^    ^^^^^^^^^^ 
 >x : (item: any) => U
+>  : ^    ^^^^^^^^^^ 
 >y : (item: any) => T
+>  : ^    ^^^^^^^^^^ 
 
     y = x;  // Shound be an error
 >y = x : (item: any) => U
+>      : ^    ^^^^^^^^^^ 
 >y : (item: any) => T
+>  : ^    ^^^^^^^^^^ 
 >x : (item: any) => U
+>  : ^    ^^^^^^^^^^ 
 }
 

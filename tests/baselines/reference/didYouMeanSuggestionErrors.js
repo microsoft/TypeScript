@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/didYouMeanSuggestionErrors.ts] ////
+
 //// [didYouMeanSuggestionErrors.ts]
 describe("my test suite", () => {
     it("should run", () => {

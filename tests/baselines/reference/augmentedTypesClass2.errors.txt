@@ -1,8 +1,8 @@
-tests/cases/compiler/augmentedTypesClass2.ts(16,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-tests/cases/compiler/augmentedTypesClass2.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesClass2.ts(16,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+augmentedTypesClass2.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 
 
-==== tests/cases/compiler/augmentedTypesClass2.ts (2 errors) ====
+==== augmentedTypesClass2.ts (2 errors) ====
     // Checking class with other things in type space not value space
     
     // class then interface

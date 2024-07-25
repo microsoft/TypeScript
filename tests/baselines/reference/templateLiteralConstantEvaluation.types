@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/templateLiteralConstantEvaluation.ts] ////
+
+=== templateLiteralConstantEvaluation.ts ===
+// https://github.com/microsoft/TypeScript/issues/58494
+
+function fn<T>(arg: T): T {
+>fn : <T>(arg: T) => T
+>   : ^ ^^   ^^ ^^^^^ 
+>arg : T
+>    : ^
+
+    return arg;
+>arg : T
+>    : ^
+}
+
+const a = '1';
+>a : "1"
+>  : ^^^
+>'1' : "1"
+>    : ^^^
+
+const b = a + ' 2';
+>b : string
+>  : ^^^^^^
+>a + ' 2' : string
+>         : ^^^^^^
+>a : "1"
+>  : ^^^
+>' 2' : " 2"
+>     : ^^^^
+
+const c = `${b} 3`;
+>c : "1 2 3"
+>  : ^^^^^^^
+>`${b} 3` : "1 2 3"
+>         : ^^^^^^^
+>b : string
+>  : ^^^^^^
+
+const d = `${b} 3` as const;
+>d : "1 2 3"
+>  : ^^^^^^^
+>`${b} 3` as const : "1 2 3"
+>                  : ^^^^^^^
+>`${b} 3` : "1 2 3"
+>         : ^^^^^^^
+>b : string
+>  : ^^^^^^
+
+fn(`${b} 3`);
+>fn(`${b} 3`) : "1 2 3"
+>             : ^^^^^^^
+>fn : <T>(arg: T) => T
+>   : ^ ^^   ^^ ^^^^^ 
+>`${b} 3` : "1 2 3"
+>         : ^^^^^^^
+>b : string
+>  : ^^^^^^
+

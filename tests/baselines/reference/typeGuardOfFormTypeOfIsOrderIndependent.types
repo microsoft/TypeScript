@@ -1,94 +1,144 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfIsOrderIndependent.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfIsOrderIndependent.ts] ////
+
+=== typeGuardOfFormTypeOfIsOrderIndependent.ts ===
 var strOrNum: string | number;
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 
 var strOrBool: string | boolean;
 >strOrBool : string | boolean
+>          : ^^^^^^^^^^^^^^^^
 
 var strOrFunc: string | (() => void);
 >strOrFunc : string | (() => void)
+>          : ^^^^^^^^^^^^^^^^    ^
 
 var numOrBool: number | boolean
 >numOrBool : number | boolean
+>          : ^^^^^^^^^^^^^^^^
 
 var str: string;
 >str : string
+>    : ^^^^^^
 
 var num: number;
 >num : number
+>    : ^^^^^^
 
 var bool: boolean;
 >bool : boolean
+>     : ^^^^^^^
 
 var func: () => void;
 >func : () => void
+>     : ^^^^^^    
 
 if ("string" === typeof strOrNum) {
 >"string" === typeof strOrNum : boolean
+>                             : ^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 >typeof strOrNum : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 
     str = strOrNum;
 >str = strOrNum : string
+>               : ^^^^^^
 >str : string
+>    : ^^^^^^
 >strOrNum : string
+>         : ^^^^^^
 }
 else {
     num = strOrNum;
 >num = strOrNum : number
+>               : ^^^^^^
 >num : number
+>    : ^^^^^^
 >strOrNum : number
+>         : ^^^^^^
 }
 if ("function" === typeof strOrFunc) {
 >"function" === typeof strOrFunc : boolean
+>                                : ^^^^^^^
 >"function" : "function"
+>           : ^^^^^^^^^^
 >typeof strOrFunc : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrFunc : string | (() => void)
+>          : ^^^^^^^^^^^^^^^^    ^
 
     func = strOrFunc;
 >func = strOrFunc : () => void
+>                 : ^^^^^^    
 >func : () => void
+>     : ^^^^^^    
 >strOrFunc : () => void
+>          : ^^^^^^    
 }
 else {
     str = strOrFunc;
 >str = strOrFunc : string
+>                : ^^^^^^
 >str : string
+>    : ^^^^^^
 >strOrFunc : string
+>          : ^^^^^^
 }
 if ("number" === typeof numOrBool) {
 >"number" === typeof numOrBool : boolean
+>                              : ^^^^^^^
 >"number" : "number"
+>         : ^^^^^^^^
 >typeof numOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numOrBool : number | boolean
+>          : ^^^^^^^^^^^^^^^^
 
     num = numOrBool;
 >num = numOrBool : number
+>                : ^^^^^^
 >num : number
+>    : ^^^^^^
 >numOrBool : number
+>          : ^^^^^^
 }
 else {
     bool = numOrBool;
 >bool = numOrBool : boolean
+>                 : ^^^^^^^
 >bool : boolean
+>     : ^^^^^^^
 >numOrBool : boolean
+>          : ^^^^^^^
 }
 if ("boolean" === typeof strOrBool) {
 >"boolean" === typeof strOrBool : boolean
+>                               : ^^^^^^^
 >"boolean" : "boolean"
+>          : ^^^^^^^^^
 >typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >strOrBool : string | boolean
+>          : ^^^^^^^^^^^^^^^^
 
     bool = strOrBool;
 >bool = strOrBool : boolean
+>                 : ^^^^^^^
 >bool : boolean
+>     : ^^^^^^^
 >strOrBool : boolean
+>          : ^^^^^^^
 }
 else {
     str = strOrBool;
 >str = strOrBool : string
+>                : ^^^^^^
 >str : string
+>    : ^^^^^^
 >strOrBool : string
+>          : ^^^^^^
 }
 

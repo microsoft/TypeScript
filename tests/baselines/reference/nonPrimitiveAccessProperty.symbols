@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveAccessProperty.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAccessProperty.ts] ////
+
+=== nonPrimitiveAccessProperty.ts ===
 var a: object;
 >a : Symbol(a, Decl(nonPrimitiveAccessProperty.ts, 0, 3))
 

@@ -12,8 +12,8 @@
 ////
 ////abstract class Abc extends Ab {
 ////    /*a*/
-////    [|abstract|] /*b*/
-////    [|abstract m|]/*c*/
+////    abstract /*b*/
+////    abstract m/*c*/
 ////}
 
 
@@ -30,11 +30,13 @@ verify.completions({
             name: "met",
             sortText: completion.SortText.LocationPriority,
             insertText: "met(n: string): void {\n}",
+            filterText: "met"
         },
         {
             name: "met2",
             sortText: completion.SortText.LocationPriority,
             insertText: "met2(n: number): void {\n}",
+            filterText: "met2"
         }
     ],
 });
@@ -51,14 +53,18 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: test.ranges()[0],
             insertText: "abstract met(n: string): void;",
+            filterText: "met",
+            hasAction: true,
+            source: completion.CompletionSource.ClassMemberSnippet,
         },
         {
             name: "met2",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: test.ranges()[0],
             insertText: "abstract met2(n: number): void;",
+            filterText: "met2",
+            hasAction: true,
+            source: completion.CompletionSource.ClassMemberSnippet,
         }
     ],
 });
@@ -75,14 +81,18 @@ verify.completions({
         {
             name: "met",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: test.ranges()[1],
             insertText: "abstract met(n: string): void;",
+            filterText: "met",
+            hasAction: true,
+            source: completion.CompletionSource.ClassMemberSnippet,
         },
         {
             name: "met2",
             sortText: completion.SortText.LocationPriority,
-            replacementSpan: test.ranges()[1],
             insertText: "abstract met2(n: number): void;",
+            filterText: "met2",
+            hasAction: true,
+            source: completion.CompletionSource.ClassMemberSnippet,
         }
     ],
 });

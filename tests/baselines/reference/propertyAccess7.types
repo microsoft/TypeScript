@@ -1,10 +1,17 @@
-=== tests/cases/compiler/propertyAccess7.ts ===
+//// [tests/cases/compiler/propertyAccess7.ts] ////
+
+=== propertyAccess7.ts ===
 var foo: string;
 >foo : string
+>    : ^^^^^^
 
 foo.toUpperCase();
 >foo.toUpperCase() : string
+>                  : ^^^^^^
 >foo.toUpperCase : () => string
+>                : ^^^^^^      
 >foo : string
+>    : ^^^^^^
 >toUpperCase : () => string
+>            : ^^^^^^      
 

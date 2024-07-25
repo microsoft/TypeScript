@@ -1,19 +1,30 @@
-=== tests/cases/compiler/sub.ts ===
+//// [tests/cases/compiler/declarationEmitDoesNotUseReexportedNamespaceAsLocal.ts] ////
+
+=== sub.ts ===
 export function a() {}
 >a : () => void
+>  : ^^^^^^^^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 export const x = add(import("./sub"));
->x : typeof import("tests/cases/compiler/sub")
->add(import("./sub")) : typeof import("tests/cases/compiler/sub")
+>x : typeof import("sub")
+>  : ^^^^^^^^^^^^^^^^^^^^
+>add(import("./sub")) : typeof import("sub")
+>                     : ^^^^^^^^^^^^^^^^^^^^
 >add : <T>(x: Promise<T>) => T
->import("./sub") : Promise<typeof import("tests/cases/compiler/sub")>
+>    : ^ ^^ ^^          ^^^^^ 
+>import("./sub") : Promise<typeof import("sub")>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./sub" : "./sub"
+>        : ^^^^^^^
 
 export * as Q from "./sub";
->Q : typeof import("tests/cases/compiler/sub")
+>Q : typeof import("sub")
+>  : ^^^^^^^^^^^^^^^^^^^^
 
 declare function add<T>(x: Promise<T>): T;
 >add : <T>(x: Promise<T>) => T
+>    : ^ ^^ ^^          ^^^^^ 
 >x : Promise<T>
+>  : ^^^^^^^^^^
 

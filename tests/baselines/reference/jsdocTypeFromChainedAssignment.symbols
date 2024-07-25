@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTypeFromChainedAssignment.ts] ////
+
+=== a.js ===
 function A () {
 >A : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1), Decl(a.js, 10, 5))
 

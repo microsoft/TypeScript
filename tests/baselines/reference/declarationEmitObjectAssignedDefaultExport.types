@@ -1,94 +1,137 @@
-=== tests/cases/compiler/node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts ===
+//// [tests/cases/compiler/declarationEmitObjectAssignedDefaultExport.ts] ////
+
+=== node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts ===
 interface Statics {
     "$$whatever": string;
 >"$$whatever" : string
+>             : ^^^^^^
 }
 declare namespace hoistNonReactStatics {
     type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statics>]: T[X]}
 >NonReactStatics : NonReactStatics<T>
+>                : ^^^^^^^^^^^^^^^^^^
 }
 export = hoistNonReactStatics;
 >hoistNonReactStatics : any
+>                     : ^^^
 
-=== tests/cases/compiler/node_modules/styled-components/index.d.ts ===
+=== node_modules/styled-components/index.d.ts ===
 import * as hoistNonReactStatics from "hoist-non-react-statics";
 >hoistNonReactStatics : any
+>                     : ^^^
 
 export interface DefaultTheme {}
 export type StyledComponent<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> =
 >StyledComponent : StyledComponent<TTag, TTheme, TStyle, TWhatever>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     string
     & StyledComponentBase<TTag, TTheme, TStyle, TWhatever>
     & hoistNonReactStatics.NonReactStatics<TTag>;
 >hoistNonReactStatics : any
+>                     : ^^^
 
 export interface StyledComponentBase<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> {
     tag: TTag;
 >tag : TTag
+>    : ^^^^
 
     theme: TTheme;
 >theme : TTheme
+>      : ^^^^^^
 
     style: TStyle;
 >style : TStyle
+>      : ^^^^^^
 
     whatever: TWhatever;
 >whatever : TWhatever
+>         : ^^^^^^^^^
 }
 export interface StyledInterface {
     div: (a: TemplateStringsArray) => StyledComponent<"div">;
 >div : (a: TemplateStringsArray) => StyledComponent<"div">
+>    : ^ ^^                    ^^^^^                      
 >a : TemplateStringsArray
+>  : ^^^^^^^^^^^^^^^^^^^^
 }
 
 declare const styled: StyledInterface;
 >styled : StyledInterface
+>       : ^^^^^^^^^^^^^^^
 
 export default styled;
 >styled : StyledInterface
+>       : ^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import styled from "styled-components";
->styled : import("tests/cases/compiler/node_modules/styled-components/index").StyledInterface
+>styled : import("node_modules/styled-components/index").StyledInterface
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const A = styled.div``;
->A : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled.div`` : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled.div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled : import("tests/cases/compiler/node_modules/styled-components/index").StyledInterface
->div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
+>A : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>styled.div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
+>           : ^ ^^                    ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^       
+>styled : import("node_modules/styled-components/index").StyledInterface
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
+>    : ^ ^^                    ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^       
 >`` : ""
+>   : ^^
 
 const B = styled.div``;
->B : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled.div`` : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled.div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled : import("tests/cases/compiler/node_modules/styled-components/index").StyledInterface
->div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
+>B : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>styled.div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
+>           : ^ ^^                    ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^       
+>styled : import("node_modules/styled-components/index").StyledInterface
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
+>    : ^ ^^                    ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^       
 >`` : ""
+>   : ^^
 
 export const C = styled.div``;
->C : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled.div`` : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled.div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled : import("tests/cases/compiler/node_modules/styled-components/index").StyledInterface
->div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
+>C : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>styled.div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
+>           : ^ ^^                    ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^       
+>styled : import("node_modules/styled-components/index").StyledInterface
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>div : (a: TemplateStringsArray) => import("node_modules/styled-components/index").StyledComponent<"div">
+>    : ^ ^^                    ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^       
 >`` : ""
+>   : ^^
 
 export default Object.assign(A, {
->Object.assign(A, {    B,    C}) : string & import("tests/cases/compiler/node_modules/styled-components/index").StyledComponentBase<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never> & import("tests/cases/compiler/node_modules/styled-components/node_modules/hoist-non-react-statics/index").NonReactStatics<"div"> & { B: import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>; C: import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>; }
+>Object.assign(A, {    B,    C}) : string & import("node_modules/styled-components/index").StyledComponentBase<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never> & import("node_modules/styled-components/node_modules/hoist-non-react-statics/index").NonReactStatics<"div"> & { B: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; C: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>              : ^^^ ^^^^^^^^^  ^^ ^^      ^^ ^^      ^^ ^^^     ^^^ ^^^^^^^^^  ^^ ^^ ^^      ^^ ^^       ^^ ^^       ^^ ^^^         ^^^ ^^^^^^^^^  ^^ ^^ ^^ ^^      ^^ ^^       ^^ ^^       ^^ ^^       ^^ ^^^             ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
 >Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
->A : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->{    B,    C} : { B: import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>; C: import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>; }
+>       : ^^^ ^^^^^^^^^  ^^ ^^      ^^ ^^      ^^ ^^^     ^^^ ^^^^^^^^^  ^^ ^^ ^^      ^^ ^^       ^^ ^^       ^^ ^^^         ^^^ ^^^^^^^^^  ^^ ^^ ^^ ^^      ^^ ^^       ^^ ^^       ^^ ^^       ^^ ^^^             ^^^      ^^      ^^^^^       ^^     ^^^   ^^^
+>A : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    B,    C} : { B: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; C: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     B,
->B : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
+>B : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     C
->C : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
+>C : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 });
 

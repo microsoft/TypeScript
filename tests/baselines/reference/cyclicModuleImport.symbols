@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cyclicModuleImport.ts ===
+//// [tests/cases/compiler/cyclicModuleImport.ts] ////
+
+=== cyclicModuleImport.ts ===
 declare module "SubModule" {
 >"SubModule" : Symbol("SubModule", Decl(cyclicModuleImport.ts, 0, 0))
 

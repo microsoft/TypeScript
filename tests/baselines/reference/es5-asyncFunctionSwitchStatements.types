@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-asyncFunctionSwitchStatements.ts ===
+//// [tests/cases/compiler/es5-asyncFunctionSwitchStatements.ts] ////
+
+=== es5-asyncFunctionSwitchStatements.ts ===
 declare var x, y, z, a, b, c;
 >x : any
 >y : any
@@ -9,6 +11,7 @@ declare var x, y, z, a, b, c;
 
 async function switchStatement0() {
 >switchStatement0 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     switch (x) {
 >x : any
@@ -24,6 +27,7 @@ async function switchStatement0() {
 
 async function switchStatement1() {
 >switchStatement1 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     switch (await x) {
 >await x : any
@@ -40,6 +44,7 @@ async function switchStatement1() {
 
 async function switchStatement2() {
 >switchStatement2 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     switch (x) {
 >x : any
@@ -56,6 +61,7 @@ async function switchStatement2() {
 
 async function switchStatement3() {
 >switchStatement3 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     switch (x) {
 >x : any
@@ -72,6 +78,7 @@ async function switchStatement3() {
 
 async function switchStatement4() {
 >switchStatement4 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     switch (x) {
 >x : any
@@ -88,6 +95,7 @@ async function switchStatement4() {
 
 async function switchStatement5() {
 >switchStatement5 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     switch (x) {
 >x : any
@@ -105,6 +113,7 @@ async function switchStatement5() {
 
 async function switchStatement6() {
 >switchStatement6 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     switch (x) {
 >x : any
@@ -125,6 +134,7 @@ async function switchStatement6() {
 
 async function switchStatement7() {
 >switchStatement7 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     switch (x) {
 >x : any
@@ -145,6 +155,7 @@ async function switchStatement7() {
 
 async function switchStatement8() {
 >switchStatement8 : () => Promise<void>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
     switch (x) {
 >x : any

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicateStructuralMatch.ts] ////
+
 //// [typePredicateStructuralMatch.ts]
 // Repro from #12235
 

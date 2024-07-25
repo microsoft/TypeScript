@@ -1,12 +1,19 @@
-=== tests/cases/conformance/salsa/plainJSReservedStrict.js ===
+//// [tests/cases/conformance/salsa/plainJSReservedStrict.ts] ////
+
+=== plainJSReservedStrict.js ===
 "use strict"
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 const eval = 1
 >eval : 1
+>     : ^
 >1 : 1
+>  : ^
 
 const arguments = 2
 >arguments : 2
+>          : ^
 >2 : 2
+>  : ^
 

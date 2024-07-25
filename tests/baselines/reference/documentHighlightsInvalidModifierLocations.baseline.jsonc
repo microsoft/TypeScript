@@ -1,0 +1,44 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightsInvalidModifierLocations.ts ===
+// class C {
+//     m(/*HIGHLIGHTS*/[|{| kind: "none" |}readonly|] p) {}
+// }
+// function f(readonly p) {}
+// 
+// --- (line: 6) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightsInvalidModifierLocations.ts ===
+// class C {
+//     m(readonly p) {}
+// }
+// function f(/*HIGHLIGHTS*/[|{| kind: "none" |}readonly|] p) {}
+// 
+// class D {
+//     m(public p) {}
+// }
+// function g(public p) {}
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightsInvalidModifierLocations.ts ===
+// --- (line: 3) skipped ---
+// function f(readonly p) {}
+// 
+// class D {
+//     m(/*HIGHLIGHTS*/[|{| kind: "none" |}public|] p) {}
+// }
+// function g(public p) {}
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightsInvalidModifierLocations.ts ===
+// --- (line: 5) skipped ---
+// class D {
+//     m(public p) {}
+// }
+// function g(/*HIGHLIGHTS*/[|{| kind: "none" |}public|] p) {}

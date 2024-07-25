@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classImplementingInterfaceIndexer.ts] ////
+
 //// [classImplementingInterfaceIndexer.ts]
 interface I {
     [index: string]: { prop }

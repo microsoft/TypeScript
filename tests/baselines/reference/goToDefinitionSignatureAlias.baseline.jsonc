@@ -1,0 +1,478 @@
+// === goToDefinition ===
+// === /a.tsx ===
+// <|function [|f|]() {}|>
+// const g = f;
+// const h = g;
+// /*GOTO DEF*/f();
+// g();
+// h();
+// const i = () => 0;
+// --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "f",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// <|function [|{| defId: 1 |}f|]() {}|>
+// <|const [|{| defId: 0 |}g|] = f;|>
+// const h = g;
+// f();
+// /*GOTO DEF*/g();
+// h();
+// const i = () => 0;
+// const iFn = function () { return 0; };
+// --- (line: 9) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "const",
+    "name": "g",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "function",
+    "name": "f",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// <|function [|{| defId: 1 |}f|]() {}|>
+// const g = f;
+// <|const [|{| defId: 0 |}h|] = g;|>
+// f();
+// g();
+// /*GOTO DEF*/h();
+// const i = () => 0;
+// const iFn = function () { return 0; };
+// const j = i;
+// --- (line: 10) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "const",
+    "name": "h",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "function",
+    "name": "f",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// --- (line: 3) skipped ---
+// f();
+// g();
+// h();
+// const [|{| contextId: 0 |}i|] = <|() => 0|>;
+// const iFn = function () { return 0; };
+// const j = i;
+// /*GOTO DEF*/i();
+// iFn();
+// j();
+// const o = { m: () => 0 };
+// --- (line: 14) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "i",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// --- (line: 4) skipped ---
+// g();
+// h();
+// const i = () => 0;
+// const [|{| contextId: 0 |}iFn|] = <|function () { return 0; }|>;
+// const j = i;
+// i();
+// /*GOTO DEF*/iFn();
+// j();
+// const o = { m: () => 0 };
+// o.m();
+// --- (line: 15) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "local function",
+    "name": "iFn",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// --- (line: 3) skipped ---
+// f();
+// g();
+// h();
+// const [|{| contextId: 0, defId: 1 |}i|] = <|() => 0|>;
+// const iFn = function () { return 0; };
+// <|const [|{| defId: 0 |}j|] = i;|>
+// i();
+// iFn();
+// /*GOTO DEF*/j();
+// const o = { m: () => 0 };
+// o.m();
+// const oFn = { mFn: function () { return 0; } };
+// --- (line: 16) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "const",
+    "name": "j",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "function",
+    "name": "i",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// --- (line: 9) skipped ---
+// i();
+// iFn();
+// j();
+// const o = { [|{| contextId: 0 |}m|]: <|() => 0|> };
+// o./*GOTO DEF*/m();
+// const oFn = { mFn: function () { return 0; } };
+// oFn.mFn();
+// class Component { constructor(props: {}) {} }
+// --- (line: 18) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "m",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// --- (line: 11) skipped ---
+// j();
+// const o = { m: () => 0 };
+// o.m();
+// const oFn = { [|{| contextId: 0 |}mFn|]: <|function () { return 0; }|> };
+// oFn./*GOTO DEF*/mFn();
+// class Component { constructor(props: {}) {} }
+// type ComponentClass = new () => Component;
+// interface ComponentClass2 { new(): Component; }
+// --- (line: 20) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "local function",
+    "name": "mFn",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// --- (line: 17) skipped ---
+// type ComponentClass = new () => Component;
+// interface ComponentClass2 { new(): Component; }
+// 
+// <|class [|MyComponent|] extends Component {}|>
+// </*GOTO DEF*/MyComponent />;
+// new MyComponent({});
+// 
+// declare const MyComponent2: ComponentClass;
+// --- (line: 26) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "MyComponent",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// --- (line: 13) skipped ---
+// o.m();
+// const oFn = { mFn: function () { return 0; } };
+// oFn.mFn();
+// class Component { [|{| defId: 1 |}constructor(props: {}) {}|] }
+// type ComponentClass = new () => Component;
+// interface ComponentClass2 { new(): Component; }
+// 
+// <|class [|{| defId: 0 |}MyComponent|] extends Component {}|>
+// <MyComponent />;
+// new /*GOTO DEF*/MyComponent({});
+// 
+// declare const MyComponent2: ComponentClass;
+// <MyComponent2 />;
+// --- (line: 27) skipped ---
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "class",
+    "name": "MyComponent",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "Component",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// --- (line: 21) skipped ---
+// <MyComponent />;
+// new MyComponent({});
+// 
+// <|declare const [|MyComponent2|]: ComponentClass;|>
+// </*GOTO DEF*/MyComponent2 />;
+// new MyComponent2();
+// 
+// declare const MyComponent3: ComponentClass2;
+// <MyComponent3 />;
+// new MyComponent3();
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "MyComponent2",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// --- (line: 14) skipped ---
+// const oFn = { mFn: function () { return 0; } };
+// oFn.mFn();
+// class Component { constructor(props: {}) {} }
+// type ComponentClass = [|{| defId: 1 |}new () => Component|];
+// interface ComponentClass2 { new(): Component; }
+// 
+// class MyComponent extends Component {}
+// <MyComponent />;
+// new MyComponent({});
+// 
+// <|declare const [|{| defId: 0 |}MyComponent2|]: ComponentClass;|>
+// <MyComponent2 />;
+// new /*GOTO DEF*/MyComponent2();
+// 
+// declare const MyComponent3: ComponentClass2;
+// <MyComponent3 />;
+// new MyComponent3();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "const",
+    "name": "MyComponent2",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "",
+    "name": "__type",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// --- (line: 25) skipped ---
+// <MyComponent2 />;
+// new MyComponent2();
+// 
+// <|declare const [|MyComponent3|]: ComponentClass2;|>
+// </*GOTO DEF*/MyComponent3 />;
+// new MyComponent3();
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "MyComponent3",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /a.tsx ===
+// --- (line: 15) skipped ---
+// oFn.mFn();
+// class Component { constructor(props: {}) {} }
+// type ComponentClass = new () => Component;
+// interface ComponentClass2 { [|{| defId: 1 |}new(): Component;|] }
+// 
+// class MyComponent extends Component {}
+// <MyComponent />;
+// new MyComponent({});
+// 
+// declare const MyComponent2: ComponentClass;
+// <MyComponent2 />;
+// new MyComponent2();
+// 
+// <|declare const [|{| defId: 0 |}MyComponent3|]: ComponentClass2;|>
+// <MyComponent3 />;
+// new /*GOTO DEF*/MyComponent3();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "const",
+    "name": "MyComponent3",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "index",
+    "name": "__new",
+    "containerName": "ComponentClass2",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

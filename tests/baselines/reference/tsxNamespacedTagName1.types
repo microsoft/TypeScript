@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/jsx/tsxNamespacedTagName1.tsx] ////
+
+=== a.tsx ===
+const a = <svg:path></svg:path>;
+>a : error
+><svg:path></svg:path> : error
+>svg : error
+>path : error
+>svg : error
+>path : error
+
+const b = <svg : path></svg : path>;
+>b : error
+><svg : path></svg : path> : error
+>svg : error
+>path : error
+>svg : error
+>path : error
+
+const c = <A:foo></A:foo>;
+>c : error
+><A:foo></A:foo> : error
+>A : error
+>foo : error
+>A : error
+>foo : error
+
+const d = <a:foo></a:foo>;
+>d : error
+><a:foo></a:foo> : error
+>a : error
+>foo : error
+>a : error
+>foo : error
+

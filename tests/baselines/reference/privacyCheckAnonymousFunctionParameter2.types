@@ -1,33 +1,46 @@
-=== tests/cases/compiler/privacyCheckAnonymousFunctionParameter2.ts ===
+//// [tests/cases/compiler/privacyCheckAnonymousFunctionParameter2.ts] ////
+
+=== privacyCheckAnonymousFunctionParameter2.ts ===
 export var x = 1;  // Makes this an external module 
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 interface Iterator<T> { x: T }
 >x : T
+>  : ^
 
 module Q {
 >Q : typeof Q
+>  : ^^^^^^^^
 
     export function foo<T>(x: (a: Iterator<T>) => number) {
 >foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
+>    : ^ ^^ ^^                          ^^^^^^ ^^           ^^^^^      
 >x : (a: Iterator<T>) => number
+>  : ^ ^^           ^^^^^      
 >a : Iterator<T>
+>  : ^^^^^^^^^^^
 
         return x;
 >x : (a: Iterator<T>) => number
+>  : ^ ^^           ^^^^^      
     }
 }
 
 module Q {
 >Q : typeof Q
+>  : ^^^^^^^^
 
     function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 
         foo(null);
 >foo(null) : (a: Iterator<unknown>) => number
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^      
 >foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
->null : null
+>    : ^ ^^ ^^                          ^^^^^^ ^^           ^^^^^      
     }
 }

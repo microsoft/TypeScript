@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a.ts]
 export class C {}
@@ -6,7 +7,11 @@ export class C {}
 import {C} from './a'; import * as A from './A';
 
 //// [/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": false
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -25,14 +30,54 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:15 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:20 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"watch":true,"configFilePath":"/tsconfig.json"}
+//// [/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = void 0;
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+exports.C = C;
+
+
+//// [/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/b.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+
+Program root files: [
+  "/a.ts",
+  "/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": false,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a.ts
@@ -49,56 +94,34 @@ Shape signatures in builder refreshed for::
 /b.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/b.ts:
-  {"fileName":"/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a.js]
-"use strict";
-exports.__esModule = true;
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.C = C;
-
-
-//// [/b.js]
-"use strict";
-exports.__esModule = true;
-
-
 
 Change:: Enable forceConsistentCasingInFileNames
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mb.ts[0m:[93m1[0m:[93m43[0m - [91merror[0m[90m TS1149: [0mFile name '/A.ts' differs from already included file name '/a.ts' only in casing.
   The file is in the program because:
-    Matched by include pattern '**/*' in '/tsconfig.json'
+    Matched by default include pattern '**/*'
     Imported via './a' from file '/b.ts'
     Imported via './A' from file '/b.ts'
 
@@ -110,12 +133,22 @@ Output::
     [7m [0m [96m                ~~~~~[0m
     File is included via import here.
 
-[[90m12:00:25 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"configFilePath":"/tsconfig.json"}
+
+
+Program root files: [
+  "/a.ts",
+  "/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a.ts
@@ -126,21 +159,4 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/tsconfig.json:
-  {"fileName":"/tsconfig.json","pollingInterval":250}
-/a.ts:
-  {"fileName":"/a.ts","pollingInterval":250}
-/b.ts:
-  {"fileName":"/b.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
 exitCode:: ExitStatus.undefined
-

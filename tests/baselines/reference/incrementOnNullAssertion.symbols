@@ -1,4 +1,6 @@
-=== tests/cases/compiler/incrementOnNullAssertion.ts ===
+//// [tests/cases/compiler/incrementOnNullAssertion.ts] ////
+
+=== incrementOnNullAssertion.ts ===
 interface Dictionary<T> {
 >Dictionary : Symbol(Dictionary, Decl(incrementOnNullAssertion.ts, 0, 0))
 >T : Symbol(T, Decl(incrementOnNullAssertion.ts, 0, 21))

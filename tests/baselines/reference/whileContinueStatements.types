@@ -1,15 +1,20 @@
-=== tests/cases/conformance/statements/continueStatements/whileContinueStatements.ts ===
+//// [tests/cases/conformance/statements/continueStatements/whileContinueStatements.ts] ////
+
+=== whileContinueStatements.ts ===
 while(true) {
 >true : true
+>     : ^^^^
 
     continue;
 } 
 
 while (true) {
 >true : true
+>     : ^^^^
 
     if (true) {
 >true : true
+>     : ^^^^
 
         continue;
     }
@@ -17,94 +22,124 @@ while (true) {
 
 ONE:
 >ONE : any
+>    : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 
     continue ONE;
 >ONE : any
+>    : ^^^
 }
 
 TWO:
 >TWO : any
+>    : ^^^
 
 THREE:
 >THREE : any
+>      : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 
     continue THREE;
 >THREE : any
+>      : ^^^
 }
 
 FOUR:
 >FOUR : any
+>     : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 
     FIVE:
 >FIVE : any
+>     : ^^^
 
     while (true) {
 >true : true
+>     : ^^^^
 
         continue FOUR;
 >FOUR : any
+>     : ^^^
     }
 }
 
 while (true) {
 >true : true
+>     : ^^^^
 
     SIX:
 >SIX : any
+>    : ^^^
 
     while (true)
 >true : true
+>     : ^^^^
 
         continue SIX;
 >SIX : any
+>    : ^^^
 }
 
 SEVEN:
 >SEVEN : any
+>      : ^^^
 
 while (true)
 >true : true
+>     : ^^^^
 
     while (true)
 >true : true
+>     : ^^^^
 
         while (true)
 >true : true
+>     : ^^^^
 
             continue SEVEN;
 >SEVEN : any
+>      : ^^^
 
 EIGHT:
 >EIGHT : any
+>      : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 
     var fn = function () { }
 >fn : () => void
+>   : ^^^^^^^^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 
     continue EIGHT;
 >EIGHT : any
+>      : ^^^
 }
 
 NINE:
 >NINE : any
+>     : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 
     if (true) { continue NINE; }
 >true : true
+>     : ^^^^
 >NINE : any
+>     : ^^^
 }
 

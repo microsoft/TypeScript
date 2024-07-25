@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/ambient/ambientErrors.ts] ////
+
 //// [ambientErrors.ts]
 // Ambient variable with an initializer 
 declare var x = 4;

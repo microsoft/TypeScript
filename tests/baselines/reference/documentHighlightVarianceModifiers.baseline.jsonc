@@ -1,0 +1,11 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightVarianceModifiers.ts ===
+// type TFoo<Value> = { value: Value };
+// type TBar</*HIGHLIGHTS*/in out Value> = TFoo<Value>;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightVarianceModifiers.ts ===
+// type TFoo<Value> = { value: Value };
+// type TBar<in /*HIGHLIGHTS*/out Value> = TFoo<Value>;

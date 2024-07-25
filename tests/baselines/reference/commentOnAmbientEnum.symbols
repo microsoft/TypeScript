@@ -1,9 +1,11 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/commentOnAmbientEnum.ts] ////
+
+=== b.ts ===
 ///<reference path="a.ts"/>
 declare enum E {
 >E : Symbol(E, Decl(b.ts, 0, 0))
 }
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 /*!=========
     Keep this pinned comment
    =========

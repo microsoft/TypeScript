@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMap-FileWithComments.ts ===
+//// [tests/cases/compiler/sourceMap-FileWithComments.ts] ////
+
+=== sourceMap-FileWithComments.ts ===
 // Interface
 interface IPoint {
 >IPoint : Symbol(IPoint, Decl(sourceMap-FileWithComments.ts, 0, 0))

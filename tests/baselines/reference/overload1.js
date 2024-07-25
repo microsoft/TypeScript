@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overload1.ts] ////
+
 //// [overload1.ts]
 module O {
     export class A {

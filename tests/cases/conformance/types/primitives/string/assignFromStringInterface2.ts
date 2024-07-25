@@ -11,8 +11,8 @@ interface NotString {
     indexOf(searchString: string, position?: number): number;
     lastIndexOf(searchString: string, position?: number): number;
     localeCompare(that: string): number;
-    match(regexp: string): string[];
-    match(regexp: RegExp): string[];
+    match(regexp: string): RegExpMatchArray;
+    match(regexp: RegExp): RegExpMatchArray;
     replace(searchValue: string, replaceValue: string): string;
     replace(searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string;
     replace(searchValue: RegExp, replaceValue: string): string;
@@ -38,11 +38,11 @@ var x = '';
 var a: String;
 var b: NotString;
 
-a = x; 
-a = b; 
+a = x;
+a = b;
 
-b = a; 
-b = x; 
+b = a;
+b = x;
 
 x = a; // expected error
 x = b; // expected error

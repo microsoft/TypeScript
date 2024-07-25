@@ -5,4 +5,4 @@
 //// he/*function_call*/llo();
 //// function [|hello|]() {}
 
-verify.allRangesAppearInImplementationList("function_call");
+verify.baselineGoToImplementation("function_call");

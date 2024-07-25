@@ -1,0 +1,21 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.js ===
+// <|class [|Class|] {
+//     private f;
+// }|>
+//  export { Class };
+
+// === /tests/cases/fourslash/b.js ===
+// import { /*GOTO DEF*/[|Class|] } from "./a";
+
+  // === Details ===
+  [
+   {
+    "kind": "class",
+    "name": "Class",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

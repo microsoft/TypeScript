@@ -1,3 +1,101 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoCommentsFunctionExpression.ts ===
+// /** lambdaFoo var comment*/
+// var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;
+//     ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var lambdaFoo: (a: number, b: number) => number
+// | this is lambda comment
+// | lambdaFoo var comment
+// | ----------------------------------------------------------------------
+// var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
+//     ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var lambddaNoVarComment: (a: number, b: number) => number
+// | this is lambda multiplication
+// | ----------------------------------------------------------------------
+// lambdaFoo(10, 20);
+// function anotherFunc(a: number) {
+//          ^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function anotherFunc(a: number): string
+// | ----------------------------------------------------------------------
+//     /** documentation
+//         @param b {string} inner parameter */
+//     var lambdaVar = /** inner docs */(b: string) => {
+//         ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local var) lambdaVar: (b: string) => string
+// | inner docs
+// | documentation
+// | @param b inner parameter
+// | ----------------------------------------------------------------------
+//                                       ^
+// | ----------------------------------------------------------------------
+// | (parameter) b: string
+// | inner parameter
+// | @param b inner parameter
+// | ----------------------------------------------------------------------
+//         var localVar = "Hello ";
+//             ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local var) localVar: string
+// | ----------------------------------------------------------------------
+//         return localVar + b;
+//                ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local var) localVar: string
+// | ----------------------------------------------------------------------
+//                           ^
+// | ----------------------------------------------------------------------
+// | (parameter) b: string
+// | inner parameter
+// | @param b inner parameter
+// | ----------------------------------------------------------------------
+//     }
+//     return lambdaVar("World") + a;
+//            ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (local var) lambdaVar: (b: string) => string
+// | inner docs
+// | documentation
+// | @param b inner parameter
+// | ----------------------------------------------------------------------
+// }
+// /**
+//  * On variable
+//  * @param s the first parameter!
+//  * @returns the parameter's length
+//  */
+// var assigned = /**
+//     ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var assigned: (s: string) => number
+// | Summary on expression
+// | On variable
+// | @param s param on expression
+// | @returns return on expression
+// | @param s the first parameter!
+// | @returns the parameter's length
+// | ----------------------------------------------------------------------
+//                 * Summary on expression
+//                 * @param s param on expression
+//                 * @returns return on expression
+//                 */function(/** On parameter */s: string) {
+//   return s.length;
+// }
+// assigned("hey");
+// ^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var assigned: (s: string) => number
+// | Summary on expression
+// | On variable
+// | @param s param on expression
+// | @returns return on expression
+// | @param s the first parameter!
+// | @returns the parameter's length
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +103,7 @@
       "position": 36,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -120,7 +218,7 @@
       "position": 142,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -227,7 +325,7 @@
       "position": 277,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
@@ -293,7 +391,7 @@
       "position": 377,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local var",
       "kindModifiers": "",
       "textSpan": {
@@ -411,7 +509,7 @@
       "position": 407,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -485,7 +583,7 @@
       "position": 435,
       "name": "10"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local var",
       "kindModifiers": "",
       "textSpan": {
@@ -535,7 +633,7 @@
       "position": 471,
       "name": "11"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local var",
       "kindModifiers": "",
       "textSpan": {
@@ -585,7 +683,7 @@
       "position": 482,
       "name": "12"
     },
-    "quickInfo": {
+    "item": {
       "kind": "parameter",
       "kindModifiers": "",
       "textSpan": {
@@ -659,7 +757,7 @@
       "position": 506,
       "name": "13"
     },
-    "quickInfo": {
+    "item": {
       "kind": "local var",
       "kindModifiers": "",
       "textSpan": {
@@ -777,7 +875,7 @@
       "position": 627,
       "name": "14"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -922,7 +1020,7 @@
       "position": 858,
       "name": "16"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {

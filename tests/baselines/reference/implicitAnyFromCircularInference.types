@@ -1,102 +1,146 @@
-=== tests/cases/compiler/implicitAnyFromCircularInference.ts ===
+//// [tests/cases/compiler/implicitAnyFromCircularInference.ts] ////
+
+=== implicitAnyFromCircularInference.ts ===
 // Error expected
 var a: typeof a;
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 // Error expected on b or c
 var b: typeof c;
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 
 var c: typeof b;
 >c : any
+>  : ^^^
 >b : any
+>  : ^^^
 
 // Error expected
 var d: Array<typeof d>;
 >d : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 function f() { return f; }
 >f : () => typeof f
+>  : ^^^^^^^^^^^^^^
 >f : () => typeof f
+>  : ^^^^^^^^^^^^^^
 
 // Error expected
 function g() { return g(); }
->g : () => any
->g() : any
->g : () => any
+>g : () => never
+>  : ^^^^^^^^^^^
+>g() : never
+>    : ^^^^^
+>g : () => never
+>  : ^^^^^^^^^^^
 
 // Error expected
 var f1 = function () {
 >f1 : () => any
+>   : ^^^^^^^^^
 >function () {    return f1();} : () => any
+>                               : ^^^^^^^^^
 
     return f1();
 >f1() : any
+>     : ^^^
 >f1 : () => any
+>   : ^^^^^^^^^
 
 };
 
 // Error expected
 var f2 = () => f2();
 >f2 : () => any
+>   : ^^^^^^^^^
 >() => f2() : () => any
+>           : ^^^^^^^^^
 >f2() : any
+>     : ^^^
 >f2 : () => any
+>   : ^^^^^^^^^
 
 // Error expected
 function h() {
 >h : () => any
+>  : ^^^^^^^^^
 
     return foo();
 >foo() : any
+>      : ^^^
 >foo : () => any
+>    : ^^^^^^^^^
 
     function foo() {
 >foo : () => any
+>    : ^^^^^^^^^
 
         return h() || "hello";
 >h() || "hello" : any
+>               : ^^^
 >h() : any
+>    : ^^^
 >h : () => any
+>  : ^^^^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
     }
 }
 
 interface A {
     s: string;
 >s : string
+>  : ^^^^^^
 }
 
 function foo(x: A): string { return "abc"; }
 >foo : (x: A) => string
+>    : ^ ^^ ^^^^^      
 >x : A
+>  : ^
 >"abc" : "abc"
+>      : ^^^^^
 
 class C {
 >C : C
+>  : ^
 
-    // Error expected
     s = foo(this);
 >s : string
+>  : ^^^^^^
 >foo(this) : string
+>          : ^^^^^^
 >foo : (x: A) => string
+>    : ^ ^^ ^^^^^      
 >this : this
+>     : ^^^^
 }
 
 class D {
 >D : D
+>  : ^
 
     // Error expected
     get x() {
 >x : any
+>  : ^^^
 
         return this.x;
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
     }
 }
 

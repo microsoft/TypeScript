@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexerAsOptional.ts] ////
+
 //// [indexerAsOptional.ts]
 interface indexSig {
     //Index signatures can't be optional

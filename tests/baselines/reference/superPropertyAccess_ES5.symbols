@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superPropertyAccess_ES5.ts ===
+//// [tests/cases/compiler/superPropertyAccess_ES5.ts] ////
+
+=== superPropertyAccess_ES5.ts ===
 class MyBase {
 >MyBase : Symbol(MyBase, Decl(superPropertyAccess_ES5.ts, 0, 0))
 

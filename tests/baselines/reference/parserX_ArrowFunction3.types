@@ -1,7 +1,12 @@
-=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/parserX_ArrowFunction3.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/parserX_ArrowFunction3.ts] ////
+
+=== parserX_ArrowFunction3.ts ===
 var v = (a): => {
 >v : any
+>  : ^^^
 >(a) : any
+>    : ^^^
 >a : any
+>  : ^^^
    
 };

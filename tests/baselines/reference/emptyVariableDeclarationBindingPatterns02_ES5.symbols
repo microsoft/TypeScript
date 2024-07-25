@@ -1,11 +1,13 @@
-=== tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns02_ES5.ts ===
+//// [tests/cases/conformance/es6/destructuring/emptyVariableDeclarationBindingPatterns02_ES5.ts] ////
+
+=== emptyVariableDeclarationBindingPatterns02_ES5.ts ===
+
 (function () {
-No type information for this code.    var {};
-No type information for this code.    let {};
-No type information for this code.    const {};
-No type information for this code.
-No type information for this code.    var [];
-No type information for this code.    let [];
-No type information for this code.    const [];
-No type information for this code.})();
-No type information for this code.
+    var {};
+    let {};
+    const {};
+
+    var [];
+    let [];
+    const [];
+})();

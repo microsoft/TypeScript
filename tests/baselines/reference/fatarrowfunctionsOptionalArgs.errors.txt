@@ -1,8 +1,9 @@
-tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(88,23): error TS1005: ';' expected.
-tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(88,38): error TS1005: ';' expected.
+fatarrowfunctionsOptionalArgs.ts(85,1): error TS2872: This kind of expression is always truthy.
+fatarrowfunctionsOptionalArgs.ts(88,23): error TS1005: ';' expected.
+fatarrowfunctionsOptionalArgs.ts(88,38): error TS1005: ';' expected.
 
 
-==== tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts (2 errors) ====
+==== fatarrowfunctionsOptionalArgs.ts (3 errors) ====
     // valid
     
     // no params
@@ -88,6 +89,8 @@ tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(88,38): error TS1005: ';' 
     
     // nested ternary expressions
     ((a?) => { return a; }) ? (b? ) => { return b; } : (c? ) => { return c; };
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2872: This kind of expression is always truthy.
     
     //multiple levels
     (a?) => { return a; } ? (b)=>(c)=>81 : (c)=>(d)=>82;

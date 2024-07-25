@@ -1,0 +1,143 @@
+//// [tests/cases/compiler/noUncheckedIndexAccess.ts] ////
+
+=== noUncheckedIndexAccess.ts ===
+enum Meat {
+>Meat : Meat
+>     : ^^^^
+
+    Sausage,
+>Sausage : Meat.Sausage
+>        : ^^^^^^^^^^^^
+
+    Bacon
+>Bacon : Meat.Bacon
+>      : ^^^^^^^^^^
+  }
+  const sausage = Meat.Sausage
+>sausage : Meat.Sausage
+>        : ^^^^^^^^^^^^
+>Meat.Sausage : Meat.Sausage
+>             : ^^^^^^^^^^^^
+>Meat : typeof Meat
+>     : ^^^^^^^^^^^
+>Sausage : Meat.Sausage
+>        : ^^^^^^^^^^^^
+
+  const valueSausage = Meat[sausage]
+>valueSausage : string
+>             : ^^^^^^
+>Meat[sausage] : string
+>              : ^^^^^^
+>Meat : typeof Meat
+>     : ^^^^^^^^^^^
+>sausage : Meat.Sausage
+>        : ^^^^^^^^^^^^
+
+  const bacon = Meat.Bacon
+>bacon : Meat.Bacon
+>      : ^^^^^^^^^^
+>Meat.Bacon : Meat.Bacon
+>           : ^^^^^^^^^^
+>Meat : typeof Meat
+>     : ^^^^^^^^^^^
+>Bacon : Meat.Bacon
+>      : ^^^^^^^^^^
+
+  const valueBacon = Meat[bacon]
+>valueBacon : string
+>           : ^^^^^^
+>Meat[bacon] : string
+>            : ^^^^^^
+>Meat : typeof Meat
+>     : ^^^^^^^^^^^
+>bacon : Meat.Bacon
+>      : ^^^^^^^^^^
+
+  const union: Meat.Bacon | Meat.Sausage = Meat.Bacon
+>union : Meat
+>      : ^^^^
+>Meat : any
+>     : ^^^
+>Meat : any
+>     : ^^^
+>Meat.Bacon : Meat.Bacon
+>           : ^^^^^^^^^^
+>Meat : typeof Meat
+>     : ^^^^^^^^^^^
+>Bacon : Meat.Bacon
+>      : ^^^^^^^^^^
+
+  const valueUnion = Meat[union]
+>valueUnion : string
+>           : ^^^^^^
+>Meat[union] : string
+>            : ^^^^^^
+>Meat : typeof Meat
+>     : ^^^^^^^^^^^
+>union : Meat.Bacon
+>      : ^^^^^^^^^^
+
+  //Avoiding a false positive
+  const value = Meat[0]
+>value : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>Meat[0] : string | undefined
+>        : ^^^^^^^^^^^^^^^^^^
+>Meat : typeof Meat
+>     : ^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+  const valueUndefined = "testing"
+>valueUndefined : "testing"
+>               : ^^^^^^^^^
+>"testing" : "testing"
+>          : ^^^^^^^^^
+
+  const value2 = Meat[valueUndefined]
+>value2 : error
+>Meat[valueUndefined] : error
+>Meat : typeof Meat
+>     : ^^^^^^^^^^^
+>valueUndefined : "testing"
+>               : ^^^^^^^^^
+
+  enum A {
+>A : A
+>  : ^
+
+    a, b, c
+>a : A.a
+>  : ^^^
+>b : A.b
+>  : ^^^
+>c : A.c
+>  : ^^^
+  }
+  enum B {
+>B : B
+>  : ^
+
+    x, y, z
+>x : B.x
+>  : ^^^
+>y : B.y
+>  : ^^^
+>z : B.z
+>  : ^^^
+  }
+  
+  const value3 = A[B.x];
+>value3 : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>A[B.x] : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>A : typeof A
+>  : ^^^^^^^^
+>B.x : B.x
+>    : ^^^
+>B : typeof B
+>  : ^^^^^^^^
+>x : B.x
+>  : ^^^
+

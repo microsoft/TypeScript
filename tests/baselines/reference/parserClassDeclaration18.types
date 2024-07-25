@@ -1,16 +1,23 @@
-=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration18.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration18.ts] ////
+
+=== parserClassDeclaration18.ts ===
 declare class FooBase {
 >FooBase : FooBase
+>        : ^^^^^^^
 
     constructor(s: string);
 >s : string
+>  : ^^^^^^
 
     constructor(n: number);
 >n : number
+>  : ^^^^^^
 
     constructor(x: any) {
 >x : any
+>  : ^^^
     }
     bar1():void;
 >bar1 : () => void
+>     : ^^^^^^    
 }

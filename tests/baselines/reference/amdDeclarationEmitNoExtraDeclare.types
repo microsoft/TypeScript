@@ -1,39 +1,57 @@
-=== tests/cases/compiler/Class.ts ===
+//// [tests/cases/compiler/amdDeclarationEmitNoExtraDeclare.ts] ////
+
+=== Class.ts ===
 import { Configurable } from "./Configurable"
->Configurable : <T extends import("tests/cases/compiler/Configurable").Constructor<{}>>(base: T) => T
+>Configurable : <T extends import("Configurable").Constructor<{}>>(base: T) => T
+>             : ^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^    ^^    ^^ ^^^^^ 
 
 export class HiddenClass {}
 >HiddenClass : HiddenClass
+>            : ^^^^^^^^^^^
 
 export class ActualClass extends Configurable(HiddenClass) {}
 >ActualClass : ActualClass
+>            : ^^^^^^^^^^^
 >Configurable(HiddenClass) : HiddenClass
->Configurable : <T extends import("tests/cases/compiler/Configurable").Constructor<{}>>(base: T) => T
+>                          : ^^^^^^^^^^^
+>Configurable : <T extends import("Configurable").Constructor<{}>>(base: T) => T
+>             : ^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^    ^^    ^^ ^^^^^ 
 >HiddenClass : typeof HiddenClass
+>            : ^^^^^^^^^^^^^^^^^^
 
-=== tests/cases/compiler/Configurable.ts ===
+=== Configurable.ts ===
 export type Constructor<T> = {
 >Constructor : Constructor<T>
+>            : ^^^^^^^^^^^^^^
 
     new(...args: any[]): T;
 >args : any[]
+>     : ^^^^^
 }
 export function Configurable<T extends Constructor<{}>>(base: T): T {
 >Configurable : <T extends Constructor<{}>>(base: T) => T
+>             : ^ ^^^^^^^^^               ^^    ^^ ^^^^^ 
 >base : T
+>     : ^
 
     return class extends base {
 >class extends base {        constructor(...args: any[]) {            super(...args);        }    } : { new (...args: any[]): (Anonymous class); prototype: Configurable<any>.(Anonymous class); } & T
+>                                                                                                   : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >base : {}
+>     : ^^
 
         constructor(...args: any[]) {
 >args : any[]
+>     : ^^^^^
 
             super(...args);
 >super(...args) : void
+>               : ^^^^
 >super : T
+>      : ^
 >...args : any
 >args : any[]
+>     : ^^^^^
         }
 
     };

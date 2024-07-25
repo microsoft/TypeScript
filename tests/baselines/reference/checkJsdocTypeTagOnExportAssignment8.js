@@ -24,9 +24,9 @@ export default {
  * @property {string} a
  * @property {'b'} b
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @type {Foo} */
-exports["default"] = {
+exports.default = {
     a: 'a',
     b: 'b'
 };

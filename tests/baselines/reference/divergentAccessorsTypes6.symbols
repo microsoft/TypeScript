@@ -1,0 +1,93 @@
+//// [tests/cases/compiler/divergentAccessorsTypes6.ts] ////
+
+=== divergentAccessorsTypes6.ts ===
+export {};
+
+interface Element {
+>Element : Symbol(Element, Decl(divergentAccessorsTypes6.ts, 0, 10))
+
+    get style(): CSSStyleDeclaration;
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>CSSStyleDeclaration : Symbol(CSSStyleDeclaration, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    set style(cssText: string);
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>cssText : Symbol(cssText, Decl(divergentAccessorsTypes6.ts, 4, 14))
+}
+
+declare const element: Element;
+>element : Symbol(element, Decl(divergentAccessorsTypes6.ts, 7, 13))
+>Element : Symbol(Element, Decl(divergentAccessorsTypes6.ts, 0, 10))
+
+element.style = "color: red";
+>element.style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>element : Symbol(element, Decl(divergentAccessorsTypes6.ts, 7, 13))
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+
+element.style.animationTimingFunction;
+>element.style.animationTimingFunction : Symbol(CSSStyleDeclaration.animationTimingFunction, Decl(lib.dom.d.ts, --, --))
+>element.style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>element : Symbol(element, Decl(divergentAccessorsTypes6.ts, 7, 13))
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>animationTimingFunction : Symbol(CSSStyleDeclaration.animationTimingFunction, Decl(lib.dom.d.ts, --, --))
+
+element.style = element.style; // error
+>element.style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>element : Symbol(element, Decl(divergentAccessorsTypes6.ts, 7, 13))
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>element.style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+>element : Symbol(element, Decl(divergentAccessorsTypes6.ts, 7, 13))
+>style : Symbol(Element.style, Decl(divergentAccessorsTypes6.ts, 2, 19), Decl(divergentAccessorsTypes6.ts, 3, 37))
+
+// Now that we don't check for getter/setter assignability, we should
+// ensure the setter annotation is actually checked even if it's never observed.
+
+type Fail<T extends never> = T;
+>Fail : Symbol(Fail, Decl(divergentAccessorsTypes6.ts, 10, 30))
+>T : Symbol(T, Decl(divergentAccessorsTypes6.ts, 15, 10))
+>T : Symbol(T, Decl(divergentAccessorsTypes6.ts, 15, 10))
+
+interface I1 {
+>I1 : Symbol(I1, Decl(divergentAccessorsTypes6.ts, 15, 31))
+
+    get x(): number;
+>x : Symbol(I1.x, Decl(divergentAccessorsTypes6.ts, 16, 14), Decl(divergentAccessorsTypes6.ts, 17, 20))
+
+    set x(value: Fail<string>);
+>x : Symbol(I1.x, Decl(divergentAccessorsTypes6.ts, 16, 14), Decl(divergentAccessorsTypes6.ts, 17, 20))
+>value : Symbol(value, Decl(divergentAccessorsTypes6.ts, 18, 10))
+>Fail : Symbol(Fail, Decl(divergentAccessorsTypes6.ts, 10, 30))
+}
+const o1 = {
+>o1 : Symbol(o1, Decl(divergentAccessorsTypes6.ts, 20, 5))
+
+    get x(): number { return 0; },
+>x : Symbol(x, Decl(divergentAccessorsTypes6.ts, 20, 12), Decl(divergentAccessorsTypes6.ts, 21, 34))
+
+    set x(value: Fail<string>) {}
+>x : Symbol(x, Decl(divergentAccessorsTypes6.ts, 20, 12), Decl(divergentAccessorsTypes6.ts, 21, 34))
+>value : Symbol(value, Decl(divergentAccessorsTypes6.ts, 22, 10))
+>Fail : Symbol(Fail, Decl(divergentAccessorsTypes6.ts, 10, 30))
+}
+
+// A setter annotation still implies the getter return type.
+
+const o2 = {
+>o2 : Symbol(o2, Decl(divergentAccessorsTypes6.ts, 27, 5))
+
+    get p1() { return 0; }, // error - no annotation means type is implied from the setter annotation
+>p1 : Symbol(p1, Decl(divergentAccessorsTypes6.ts, 27, 12), Decl(divergentAccessorsTypes6.ts, 28, 27))
+
+    set p1(value: string) {},
+>p1 : Symbol(p1, Decl(divergentAccessorsTypes6.ts, 27, 12), Decl(divergentAccessorsTypes6.ts, 28, 27))
+>value : Symbol(value, Decl(divergentAccessorsTypes6.ts, 29, 11))
+
+    get p2(): number { return 0; }, // ok - explicit annotation
+>p2 : Symbol(p2, Decl(divergentAccessorsTypes6.ts, 29, 29), Decl(divergentAccessorsTypes6.ts, 31, 35))
+
+    set p2(value: string) {},
+>p2 : Symbol(p2, Decl(divergentAccessorsTypes6.ts, 29, 29), Decl(divergentAccessorsTypes6.ts, 31, 35))
+>value : Symbol(value, Decl(divergentAccessorsTypes6.ts, 32, 11))
+
+};
+

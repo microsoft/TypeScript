@@ -30,6 +30,7 @@ verify.completions({
     insertText: "method(p: I): void {\n}",
     hasAction: true,
     source: completion.CompletionSource.ClassMemberSnippet,
+    filterText: "method",
   }],
 });
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts ===
+//// [tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts] ////
+
+=== blockScopedVariablesUseBeforeDef.ts ===
 function foo0() {
 >foo0 : Symbol(foo0, Decl(blockScopedVariablesUseBeforeDef.ts, 0, 0))
 
@@ -254,5 +256,59 @@ function foo16() {
     let [a] = (() => a)();
 >a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 121, 9))
 >a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 121, 9))
+}
+
+function foo17() {
+>foo17 : Symbol(foo17, Decl(blockScopedVariablesUseBeforeDef.ts, 122, 1))
+
+    const promise = (async () => {
+>promise : Symbol(promise, Decl(blockScopedVariablesUseBeforeDef.ts, 125, 9))
+
+        promise
+>promise : Symbol(promise, Decl(blockScopedVariablesUseBeforeDef.ts, 125, 9))
+
+        foo
+>foo : Symbol(foo, Decl(blockScopedVariablesUseBeforeDef.ts, 133, 9))
+
+        await null
+        promise
+>promise : Symbol(promise, Decl(blockScopedVariablesUseBeforeDef.ts, 125, 9))
+
+        foo
+>foo : Symbol(foo, Decl(blockScopedVariablesUseBeforeDef.ts, 133, 9))
+
+    })()
+
+    const foo = 1;
+>foo : Symbol(foo, Decl(blockScopedVariablesUseBeforeDef.ts, 133, 9))
+}
+
+// #30907
+function wrapI1() {
+>wrapI1 : Symbol(wrapI1, Decl(blockScopedVariablesUseBeforeDef.ts, 134, 1))
+
+    const iter = (function* foo() {
+>iter : Symbol(iter, Decl(blockScopedVariablesUseBeforeDef.ts, 138, 9))
+>foo : Symbol(foo, Decl(blockScopedVariablesUseBeforeDef.ts, 138, 18))
+
+        iter;
+>iter : Symbol(iter, Decl(blockScopedVariablesUseBeforeDef.ts, 138, 9))
+
+        yield 1;
+    })();
+}
+
+function wrapI2() {
+>wrapI2 : Symbol(wrapI2, Decl(blockScopedVariablesUseBeforeDef.ts, 142, 1))
+
+    const iter = (async function* foo() {
+>iter : Symbol(iter, Decl(blockScopedVariablesUseBeforeDef.ts, 145, 9))
+>foo : Symbol(foo, Decl(blockScopedVariablesUseBeforeDef.ts, 145, 18))
+
+        iter;
+>iter : Symbol(iter, Decl(blockScopedVariablesUseBeforeDef.ts, 145, 9))
+
+        yield 1;
+    })();
 }
 

@@ -1,31 +1,43 @@
-=== tests/cases/compiler/unusedFunctionsinNamespaces6.ts ===
+//// [tests/cases/compiler/unusedFunctionsinNamespaces6.ts] ////
+
+=== unusedFunctionsinNamespaces6.ts ===
 namespace Validation {
 >Validation : typeof Validation
+>           : ^^^^^^^^^^^^^^^^^
 
     var function1 = function() {
 >function1 : () => void
+>          : ^^^^^^^^^^
 >function() {    } : () => void
+>                  : ^^^^^^^^^^
     }
 
     export function function2() {
 >function2 : () => void
+>          : ^^^^^^^^^^
 
     }
 
     function function3() {
 >function3 : () => void
+>          : ^^^^^^^^^^
 
         function1();
 >function1() : void
+>            : ^^^^
 >function1 : () => void
+>          : ^^^^^^^^^^
     }
 
     function function4() {
 >function4 : () => void
+>          : ^^^^^^^^^^
 
     }
 
     export let a = function3;
 >a : () => void
+>  : ^^^^^^^^^^
 >function3 : () => void
+>          : ^^^^^^^^^^
 }

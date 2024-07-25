@@ -1,12 +1,12 @@
-tests/cases/conformance/externalModules/foo_1.ts(1,22): error TS2307: Cannot find module './test/foo' or its corresponding type declarations.
+foo_1.ts(1,22): error TS2307: Cannot find module './test/foo' or its corresponding type declarations.
 
 
-==== tests/cases/conformance/externalModules/foo_1.ts (1 errors) ====
+==== foo_1.ts (1 errors) ====
     import foo = require('./test/foo');
                          ~~~~~~~~~~~~
 !!! error TS2307: Cannot find module './test/foo' or its corresponding type declarations.
     var z = foo.x + 10;
     
-==== tests/cases/conformance/externalModules/foo_0.ts (0 errors) ====
+==== foo_0.ts (0 errors) ====
     export var x = 42;
     

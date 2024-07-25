@@ -1,0 +1,37 @@
+argumentsSpreadRestIterables.tsx(1,22): error TS2304: Cannot find name 'Iterable'.
+argumentsSpreadRestIterables.tsx(8,21): error TS2461: Type '"hello"' is not an array type.
+argumentsSpreadRestIterables.tsx(10,27): error TS2461: Type '"hello"' is not an array type.
+argumentsSpreadRestIterables.tsx(15,19): error TS2461: Type '"hello"' is not an array type.
+argumentsSpreadRestIterables.tsx(17,25): error TS2461: Type '"hello"' is not an array type.
+
+
+==== argumentsSpreadRestIterables.tsx (5 errors) ====
+    declare const itNum: Iterable<number>
+                         ~~~~~~~~
+!!! error TS2304: Cannot find name 'Iterable'.
+    
+    ;(function(...rest) {})(...itNum)
+    ;(function(a, ...rest) {})('', ...itNum)
+    ;(function(a, ...rest) {})('', true, ...itNum)
+    
+    declare function fn1<const T extends readonly unknown[]>(...args: T): T;
+    const res1 = fn1(..."hello");
+                        ~~~~~~~
+!!! error TS2461: Type '"hello"' is not an array type.
+    const res2 = fn1(...itNum);
+    const res3 = fn1(true, ..."hello");
+                              ~~~~~~~
+!!! error TS2461: Type '"hello"' is not an array type.
+    const res4 = fn1(true, ...itNum);
+    
+    // repro from #52781
+    declare function foo<T extends unknown[]>(...args: T): T;
+    const p1 = foo(..."hello");
+                      ~~~~~~~
+!!! error TS2461: Type '"hello"' is not an array type.
+    const p2 = foo(...itNum);
+    const p3 = foo(true, ..."hello");
+                            ~~~~~~~
+!!! error TS2461: Type '"hello"' is not an array type.
+    const p4 = foo(true, ...itNum);
+    

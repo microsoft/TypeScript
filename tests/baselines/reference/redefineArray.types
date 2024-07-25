@@ -1,9 +1,17 @@
-=== tests/cases/compiler/redefineArray.ts ===
+//// [tests/cases/compiler/redefineArray.ts] ////
+
+=== redefineArray.ts ===
 Array = function (n:number, s:string) {return n;};
 >Array = function (n:number, s:string) {return n;} : <T>(n: number, s: string) => number
+>                                                  : ^ ^^ ^^      ^^ ^^      ^^^^^^^^^^^
 >Array : ArrayConstructor
+>      : ^^^^^^^^^^^^^^^^
 >function (n:number, s:string) {return n;} : <T>(n: number, s: string) => number
+>                                          : ^ ^^ ^^      ^^ ^^      ^^^^^^^^^^^
 >n : number
+>  : ^^^^^^
 >s : string
+>  : ^^^^^^
 >n : number
+>  : ^^^^^^
 

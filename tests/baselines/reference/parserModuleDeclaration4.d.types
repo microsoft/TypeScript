@@ -1,6 +1,8 @@
-=== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration4.d.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration4.d.ts] ////
+
+=== parserModuleDeclaration4.d.ts ===
+
 module M {
-No type information for this code.  declare module M1 {
-No type information for this code.  }
-No type information for this code.}
-No type information for this code.
+  declare module M1 {
+  }
+}

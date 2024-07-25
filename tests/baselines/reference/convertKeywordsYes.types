@@ -1,80 +1,119 @@
-=== tests/cases/compiler/convertKeywordsYes.ts ===
+//// [tests/cases/compiler/convertKeywordsYes.ts] ////
+
+=== convertKeywordsYes.ts ===
 // reserved ES5 future in strict mode
 
 var constructor = 0;
 >constructor : number
+>            : ^^^^^^
 >0 : 0
+>  : ^
 
 var any = 0;
 >any : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var boolean = 0;
 >boolean : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
 var implements = 0;
 >implements : number
+>           : ^^^^^^
 >0 : 0
+>  : ^
 
 var interface = 0;
 >interface : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 var let = 0;
 >let : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var module = 0;
 >module : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
 var number = 0;
 >number : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
 var package = 0;
 >package : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
 var private = 0;
 >private : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
 var protected = 0;
 >protected : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 var public = 0;
 >public : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
 var set = 0;
 >set : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var static = 0;
 >static : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
 var string = 0;
 >string : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
 var get = 0;
 >get : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
 var yield = 0;
 >yield : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
 var declare = 0;
 >declare : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
 function bigGeneric<
 >bigGeneric : <constructor, implements, interface, let, module, package, private, protected, public, set, static, get, yield, declare>(c: constructor, a: any, b2: boolean, i: implements, i2: interface, l: let, m: module, n: number, p: package, p2: private, p3: protected, p4: public, s: set, s2: static, s3: string, g: get, y: yield, d: declare) => void
+>           : ^           ^^          ^^         ^^   ^^      ^^       ^^       ^^         ^^      ^^   ^^      ^^   ^^     ^^       ^^ ^^           ^^ ^^   ^^  ^^       ^^ ^^          ^^  ^^         ^^ ^^   ^^ ^^      ^^ ^^      ^^ ^^       ^^  ^^       ^^  ^^         ^^  ^^      ^^ ^^   ^^  ^^      ^^  ^^      ^^ ^^   ^^ ^^     ^^ ^^       ^^^^^^^^^
 
     constructor,
     implements ,
@@ -92,872 +131,1233 @@ function bigGeneric<
     declare
     >(c: constructor,
 >c : constructor
+>  : ^^^^^^^^^^^
 
     a: any,
 >a : any
+>  : ^^^
 
     b2: boolean,
 >b2 : boolean
+>   : ^^^^^^^
 
     i: implements ,
 >i : implements
+>  : ^^^^^^^^^^
 
     i2: interface ,
 >i2 : interface
+>   : ^^^^^^^^^
 
     l: let,
 >l : let
+>  : ^^^
 
     m: module ,
 >m : module
+>  : ^^^^^^
 
     n: number,
 >n : number
+>  : ^^^^^^
 
     p: package,
 >p : package
+>  : ^^^^^^^
 
     p2: private ,
 >p2 : private
+>   : ^^^^^^^
 
     p3: protected,
 >p3 : protected
+>   : ^^^^^^^^^
 
     p4: public ,
 >p4 : public
+>   : ^^^^^^
 
     s: set ,
 >s : set
+>  : ^^^
 
     s2: static ,
 >s2 : static
+>   : ^^^^^^
 
     s3: string,
 >s3 : string
+>   : ^^^^^^
 
     g: get ,
 >g : get
+>  : ^^^
 
     y: yield,
 >y : yield
+>  : ^^^^^
 
     d: declare ) { }
 >d : declare
+>  : ^^^^^^^
 
 var bigObject = {
 >bigObject : { constructor: number; any: number; boolean: number; implements: number; interface: number; let: number; module: number; number: number; package: number; private: number; protected: number; public: number; set: number; static: number; string: number; get: number; yield: number; break: number; case: number; catch: number; class: number; continue: number; const: number; debugger: number; declare: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    constructor: 0,    any: 0,    boolean: 0,    implements: 0,    interface: 0,    let: 0,    module: 0,    number: 0,    package: 0,    private: 0,    protected: 0,    public: 0,    set: 0,    static: 0,    string: 0,    get: 0,    yield: 0,    break: 0,    case: 0,    catch: 0,    class: 0,    continue: 0,    const: 0,    debugger: 0,    declare: 0,    default: 0,    delete: 0,    do: 0,    else: 0,    enum: 0,    export: 0,    extends: 0,    false: 0,    finally: 0,    for: 0,    function: 0,    if: 0,    import: 0,    in: 0,    instanceof: 0,    new: 0,    null: 0,    return: 0,    super: 0,    switch: 0,    this: 0,    throw: 0,    true: 0,    try: 0,    typeof: 0,    var: 0,    void: 0,    while: 0,    with: 0,} : { constructor: number; any: number; boolean: number; implements: number; interface: number; let: number; module: number; number: number; package: number; private: number; protected: number; public: number; set: number; static: number; string: number; get: number; yield: number; break: number; case: number; catch: number; class: number; continue: number; const: number; debugger: number; declare: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     constructor: 0,
 >constructor : number
+>            : ^^^^^^
 >0 : 0
+>  : ^
 
     any: 0,
 >any : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     boolean: 0,
 >boolean : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     implements: 0,
 >implements : number
+>           : ^^^^^^
 >0 : 0
+>  : ^
 
     interface: 0,
 >interface : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
     let: 0,
 >let : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     module: 0,
 >module : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     number: 0,
 >number : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     package: 0,
 >package : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     private: 0,
 >private : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     protected: 0,
 >protected : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
     public: 0,
 >public : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     set: 0,
 >set : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     static: 0,
 >static : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     string: 0,
 >string : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     get: 0,
 >get : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     yield: 0,
 >yield : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     break: 0,
 >break : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     case: 0,
 >case : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     catch: 0,
 >catch : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     class: 0,
 >class : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     continue: 0,
 >continue : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
     const: 0,
 >const : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     debugger: 0,
 >debugger : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
     declare: 0,
 >declare : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     default: 0,
 >default : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     delete: 0,
 >delete : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     do: 0,
 >do : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     else: 0,
 >else : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     enum: 0,
 >enum : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     export: 0,
 >export : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     extends: 0,
 >extends : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     false: 0,
 >false : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     finally: 0,
 >finally : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     for: 0,
 >for : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     function: 0,
 >function : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
     if: 0,
 >if : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     import: 0,
 >import : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     in: 0,
 >in : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     instanceof: 0,
 >instanceof : number
+>           : ^^^^^^
 >0 : 0
+>  : ^
 
     new: 0,
 >new : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     null: 0,
 >null : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     return: 0,
 >return : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     super: 0,
 >super : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     switch: 0,
 >switch : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     this: 0,
 >this : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     throw: 0,
 >throw : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     true: 0,
 >true : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     try: 0,
 >try : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     typeof: 0,
 >typeof : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     var: 0,
 >var : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     void: 0,
 >void : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     while: 0,
 >while : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     with: 0,
 >with : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
 };
 
 interface bigInterface {
     constructor;
 >constructor : any
+>            : ^^^
 
     any;
 >any : any
+>    : ^^^
 
     boolean;
 >boolean : any
+>        : ^^^
 
     implements;
 >implements : any
+>           : ^^^
 
     interface;
 >interface : any
+>          : ^^^
 
     let;
 >let : any
+>    : ^^^
 
     module;
 >module : any
+>       : ^^^
 
     number;
 >number : any
+>       : ^^^
 
     package;
 >package : any
+>        : ^^^
 
     private;
 >private : any
+>        : ^^^
 
     protected;
 >protected : any
+>          : ^^^
 
     public;
 >public : any
+>       : ^^^
 
     set;
 >set : any
+>    : ^^^
 
     static;
 >static : any
+>       : ^^^
 
     string;
 >string : any
+>       : ^^^
 
     get;
 >get : any
+>    : ^^^
 
     yield;
 >yield : any
+>      : ^^^
 
     break;
 >break : any
+>      : ^^^
 
     case;
 >case : any
+>     : ^^^
 
     catch;
 >catch : any
+>      : ^^^
 
     class;
 >class : any
+>      : ^^^
 
     continue;
 >continue : any
+>         : ^^^
 
     const;
 >const : any
+>      : ^^^
 
     debugger;
 >debugger : any
+>         : ^^^
 
     declare;
 >declare : any
+>        : ^^^
 
     default;
 >default : any
+>        : ^^^
 
     delete;
 >delete : any
+>       : ^^^
 
     do;
 >do : any
+>   : ^^^
 
     else;
 >else : any
+>     : ^^^
 
     enum;
 >enum : any
+>     : ^^^
 
     export;
 >export : any
+>       : ^^^
 
     extends;
 >extends : any
+>        : ^^^
 
     false;
 >false : any
+>      : ^^^
 
     finally;
 >finally : any
+>        : ^^^
 
     for;
 >for : any
+>    : ^^^
 
     function;
 >function : any
+>         : ^^^
 
     if;
 >if : any
+>   : ^^^
 
     import;
 >import : any
+>       : ^^^
 
     in;
 >in : any
+>   : ^^^
 
     instanceof;
 >instanceof : any
+>           : ^^^
 
     new;
 >new : any
+>    : ^^^
 
     null;
 >null : any
+>     : ^^^
 
     return;
 >return : any
+>       : ^^^
 
     super;
 >super : any
+>      : ^^^
 
     switch;
 >switch : any
+>       : ^^^
 
     this;
 >this : any
+>     : ^^^
 
     throw;
 >throw : any
+>      : ^^^
 
     true;
 >true : any
+>     : ^^^
 
     try;
 >try : any
+>    : ^^^
 
     typeof;
 >typeof : any
+>       : ^^^
 
     var;
 >var : any
+>    : ^^^
 
     void;
 >void : any
+>     : ^^^
 
     while;
 >while : any
+>      : ^^^
 
     with;
 >with : any
+>     : ^^^
 }
 
 class bigClass {
 >bigClass : bigClass
+>         : ^^^^^^^^
 
     public "constructor" = 0;
 >"constructor" : number
+>              : ^^^^^^
 >0 : 0
+>  : ^
 
     public any = 0;
 >any : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     public boolean = 0;
 >boolean : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     public implements = 0;
 >implements : number
+>           : ^^^^^^
 >0 : 0
+>  : ^
 
     public interface = 0;
 >interface : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
     public let = 0;
 >let : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     public module = 0;
 >module : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     public number = 0;
 >number : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     public package = 0;
 >package : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     public private = 0;
 >private : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     public protected = 0;
 >protected : number
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
     public public = 0;
 >public : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     public set = 0;
 >set : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     public static = 0;
 >static : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     public string = 0;
 >string : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     public get = 0;
 >get : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     public yield = 0;
 >yield : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     public break = 0;
 >break : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     public case = 0;
 >case : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     public catch = 0;
 >catch : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     public class = 0;
 >class : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     public continue = 0;
 >continue : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
     public const = 0;
 >const : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     public debugger = 0;
 >debugger : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
     public declare = 0;
 >declare : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     public default = 0;
 >default : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     public delete = 0;
 >delete : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     public do = 0;
 >do : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     public else = 0;
 >else : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     public enum = 0;
 >enum : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     public export = 0;
 >export : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     public extends = 0;
 >extends : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     public false = 0;
 >false : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     public finally = 0;
 >finally : number
+>        : ^^^^^^
 >0 : 0
+>  : ^
 
     public for = 0;
 >for : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     public function = 0;
 >function : number
+>         : ^^^^^^
 >0 : 0
+>  : ^
 
     public if = 0;
 >if : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     public import = 0;
 >import : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     public in = 0;
 >in : number
+>   : ^^^^^^
 >0 : 0
+>  : ^
 
     public instanceof = 0;
 >instanceof : number
+>           : ^^^^^^
 >0 : 0
+>  : ^
 
     public new = 0;
 >new : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     public null = 0;
 >null : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     public return = 0;
 >return : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     public super = 0;
 >super : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     public switch = 0;
 >switch : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     public this = 0;
 >this : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     public throw = 0;
 >throw : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     public true = 0;
 >true : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     public try = 0;
 >try : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     public typeof = 0;
 >typeof : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     public var = 0;
 >var : number
+>    : ^^^^^^
 >0 : 0
+>  : ^
 
     public void = 0;
 >void : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 
     public while = 0;
 >while : number
+>      : ^^^^^^
 >0 : 0
+>  : ^
 
     public with = 0;
 >with : number
+>     : ^^^^^^
 >0 : 0
+>  : ^
 }
 
 enum bigEnum {
 >bigEnum : bigEnum
+>        : ^^^^^^^
 
     constructor,
 >constructor : bigEnum.constructor
+>            : ^^^^^^^^^^^^^^^^^^^
 
     any,
 >any : bigEnum.any
+>    : ^^^^^^^^^^^
 
     boolean,
 >boolean : bigEnum.boolean
+>        : ^^^^^^^^^^^^^^^
 
     implements,
 >implements : bigEnum.implements
+>           : ^^^^^^^^^^^^^^^^^^
 
     interface,
 >interface : bigEnum.interface
+>          : ^^^^^^^^^^^^^^^^^
 
     let,
 >let : bigEnum.let
+>    : ^^^^^^^^^^^
 
     module,
 >module : bigEnum.module
+>       : ^^^^^^^^^^^^^^
 
     number,
 >number : bigEnum.number
+>       : ^^^^^^^^^^^^^^
 
     package,
 >package : bigEnum.package
+>        : ^^^^^^^^^^^^^^^
 
     private,
 >private : bigEnum.private
+>        : ^^^^^^^^^^^^^^^
 
     protected,
 >protected : bigEnum.protected
+>          : ^^^^^^^^^^^^^^^^^
 
     public,
 >public : bigEnum.public
+>       : ^^^^^^^^^^^^^^
 
     set,
 >set : bigEnum.set
+>    : ^^^^^^^^^^^
 
     static,
 >static : bigEnum.static
+>       : ^^^^^^^^^^^^^^
 
     string,
 >string : bigEnum.string
+>       : ^^^^^^^^^^^^^^
 
     get,
 >get : bigEnum.get
+>    : ^^^^^^^^^^^
 
     yield,
 >yield : bigEnum.yield
+>      : ^^^^^^^^^^^^^
 
     break,
 >break : bigEnum.break
+>      : ^^^^^^^^^^^^^
 
     case,
 >case : bigEnum.case
+>     : ^^^^^^^^^^^^
 
     catch,
 >catch : bigEnum.catch
+>      : ^^^^^^^^^^^^^
 
     class,
 >class : bigEnum.class
+>      : ^^^^^^^^^^^^^
 
     continue,
 >continue : bigEnum.continue
+>         : ^^^^^^^^^^^^^^^^
 
     const,
 >const : bigEnum.const
+>      : ^^^^^^^^^^^^^
 
     debugger,
 >debugger : bigEnum.debugger
+>         : ^^^^^^^^^^^^^^^^
 
     declare,
 >declare : bigEnum.declare
+>        : ^^^^^^^^^^^^^^^
 
     default,
 >default : bigEnum.default
+>        : ^^^^^^^^^^^^^^^
 
     delete,
 >delete : bigEnum.delete
+>       : ^^^^^^^^^^^^^^
 
     do,
 >do : bigEnum.do
+>   : ^^^^^^^^^^
 
     else,
 >else : bigEnum.else
+>     : ^^^^^^^^^^^^
 
     enum,
 >enum : bigEnum.enum
+>     : ^^^^^^^^^^^^
 
     export,
 >export : bigEnum.export
+>       : ^^^^^^^^^^^^^^
 
     extends,
 >extends : bigEnum.extends
+>        : ^^^^^^^^^^^^^^^
 
     false,
 >false : bigEnum.false
+>      : ^^^^^^^^^^^^^
 
     finally,
 >finally : bigEnum.finally
+>        : ^^^^^^^^^^^^^^^
 
     for,
 >for : bigEnum.for
+>    : ^^^^^^^^^^^
 
     function,
 >function : bigEnum.function
+>         : ^^^^^^^^^^^^^^^^
 
     if,
 >if : bigEnum.if
+>   : ^^^^^^^^^^
 
     import,
 >import : bigEnum.import
+>       : ^^^^^^^^^^^^^^
 
     in,
 >in : bigEnum.in
+>   : ^^^^^^^^^^
 
     instanceof,
 >instanceof : bigEnum.instanceof
+>           : ^^^^^^^^^^^^^^^^^^
 
     new,
 >new : bigEnum.new
+>    : ^^^^^^^^^^^
 
     null,
 >null : bigEnum.null
+>     : ^^^^^^^^^^^^
 
     return,
 >return : bigEnum.return
+>       : ^^^^^^^^^^^^^^
 
     super,
 >super : bigEnum.super
+>      : ^^^^^^^^^^^^^
 
     switch,
 >switch : bigEnum.switch
+>       : ^^^^^^^^^^^^^^
 
     this,
 >this : bigEnum.this
+>     : ^^^^^^^^^^^^
 
     throw,
 >throw : bigEnum.throw
+>      : ^^^^^^^^^^^^^
 
     true,
 >true : bigEnum.true
+>     : ^^^^^^^^^^^^
 
     try,
 >try : bigEnum.try
+>    : ^^^^^^^^^^^
 
     typeof,
 >typeof : bigEnum.typeof
+>       : ^^^^^^^^^^^^^^
 
     var,
 >var : bigEnum.var
+>    : ^^^^^^^^^^^
 
     void,
 >void : bigEnum.void
+>     : ^^^^^^^^^^^^
 
     while,
 >while : bigEnum.while
+>      : ^^^^^^^^^^^^^
 
     with,
 >with : bigEnum.with
+>     : ^^^^^^^^^^^^
 }
 
 module bigModule {
 >bigModule : typeof bigModule
+>          : ^^^^^^^^^^^^^^^^
 
     class constructor { }
 >constructor : constructor
+>            : ^^^^^^^^^^^
 
     class implements { }
 >implements : implements
+>           : ^^^^^^^^^^
 
     class interface { }
 >interface : interface
+>          : ^^^^^^^^^
 
     class let { }
 >let : let
+>    : ^^^
 
     class module { }
 >module : module
+>       : ^^^^^^
 
     class package { }
 >package : package
+>        : ^^^^^^^
 
     class private { }
 >private : private
+>        : ^^^^^^^
 
     class protected { }
 >protected : protected
+>          : ^^^^^^^^^
 
     class public { }
 >public : public
+>       : ^^^^^^
 
     class set { }
 >set : set
+>    : ^^^
 
     class static { }
 >static : static
+>       : ^^^^^^
 
     class get { }
 >get : get
+>    : ^^^
 
     class yield { }
 >yield : yield
+>      : ^^^^^
 
     class declare { }
 >declare : declare
+>        : ^^^^^^^
 }

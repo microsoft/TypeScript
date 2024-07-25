@@ -1,0 +1,109 @@
+// === Completions ===
+=== /tests/cases/fourslash/./bar.ts ===
+// import f
+//        ^
+// | ----------------------------------------------------------------------
+// | function foo(): void
+// | type
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/./bar.ts",
+      "position": 8,
+      "name": ""
+    },
+    "item": {
+      "flags": 11,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": true,
+      "optionalReplacementSpan": {
+        "start": 7,
+        "length": 1
+      },
+      "entries": [
+        {
+          "name": "foo",
+          "kind": "function",
+          "kindModifiers": "export",
+          "sortText": "11",
+          "source": [
+            {
+              "text": "./$foo",
+              "kind": "text"
+            }
+          ],
+          "insertText": "import { foo$1 } from \"./\\$foo\";",
+          "replacementSpan": {
+            "start": 0,
+            "length": 8
+          },
+          "sourceDisplay": [
+            {
+              "text": "./$foo",
+              "kind": "text"
+            }
+          ],
+          "isSnippet": true,
+          "isImportStatementCompletion": true,
+          "data": {
+            "exportName": "foo",
+            "exportMapKey": "3 * foo ",
+            "moduleSpecifier": "./$foo",
+            "fileName": "/tests/cases/fourslash/$foo.ts"
+          },
+          "displayParts": [
+            {
+              "text": "function",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "foo",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        }
+      ],
+      "defaultCommitCharacters": []
+    }
+  }
+]

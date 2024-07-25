@@ -1,81 +1,127 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts] ////
+
+=== typeParameterAssignability3.ts ===
 // type parameters are not assignable to one another unless directly or indirectly constrained to one another
 
 class Foo { foo: string; }
 >Foo : Foo
+>    : ^^^
 >foo : string
+>    : ^^^^^^
 
 function foo<T extends Foo, U extends Foo>(t: T, u: U) {
 >foo : <T extends Foo, U extends Foo>(t: T, u: U) => void
+>    : ^ ^^^^^^^^^   ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     var a: T;
 >a : T
+>  : ^
 
     var b: U;
 >b : U
+>  : ^
 
     t = a; // ok
 >t = a : T
+>      : ^
 >t : T
+>  : ^
 >a : T
+>  : ^
 
     a = t; // ok
 >a = t : T
+>      : ^
 >a : T
+>  : ^
 >t : T
+>  : ^
 
     b = u; // ok
 >b = u : U
+>      : ^
 >b : U
+>  : ^
 >u : U
+>  : ^
 
     u = b; // ok
 >u = b : U
+>      : ^
 >u : U
+>  : ^
 >b : U
+>  : ^
 
     t = u; // error
 >t = u : U
+>      : ^
 >t : T
+>  : ^
 >u : U
+>  : ^
 
     u = t; // error
 >u = t : T
+>      : ^
 >u : U
+>  : ^
 >t : T
+>  : ^
 }
 
 class C<T extends Foo, U extends Foo> {
 >C : C<T, U>
+>  : ^^^^^^^
 
     t: T;
 >t : T
+>  : ^
 
     u: U;
 >u : U
+>  : ^
 
     r = () => {
 >r : () => void
+>  : ^^^^^^^^^^
 >() => {        this.t = this.u; // error        this.u = this.t; // error    } : () => void
+>                                                                               : ^^^^^^^^^^
 
         this.t = this.u; // error
 >this.t = this.u : U
+>                : ^
 >this.t : T
+>       : ^
 >this : this
+>     : ^^^^
 >t : T
+>  : ^
 >this.u : U
+>       : ^
 >this : this
+>     : ^^^^
 >u : U
+>  : ^
 
         this.u = this.t; // error
 >this.u = this.t : T
+>                : ^
 >this.u : U
+>       : ^
 >this : this
+>     : ^^^^
 >u : U
+>  : ^
 >this.t : T
+>       : ^
 >this : this
+>     : ^^^^
 >t : T
+>  : ^
     }
 }

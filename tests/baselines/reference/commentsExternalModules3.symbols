@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsExternalModules_1.ts ===
+//// [tests/cases/compiler/commentsExternalModules3.ts] ////
+
+=== commentsExternalModules_1.ts ===
 /**This is on import declaration*/
 import extMod = require("./commentsExternalModules2_0"); // trailing comment 1
 >extMod : Symbol(extMod, Decl(commentsExternalModules_1.ts, 0, 0))
@@ -37,7 +39,7 @@ export var newVar2 = new extMod.m4.m2.c();
 >m2 : Symbol(extMod.m4.m2, Decl(commentsExternalModules2_0.ts, 32, 5))
 >c : Symbol(extMod.m4.m2.c, Decl(commentsExternalModules2_0.ts, 35, 22))
 
-=== tests/cases/compiler/commentsExternalModules2_0.ts ===
+=== commentsExternalModules2_0.ts ===
 /** Module comment*/
 export module m1 {
 >m1 : Symbol(m1, Decl(commentsExternalModules2_0.ts, 0, 0))

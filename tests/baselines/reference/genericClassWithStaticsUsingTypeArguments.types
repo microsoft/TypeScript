@@ -1,48 +1,74 @@
-=== tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts ===
+//// [tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts] ////
+
+=== genericClassWithStaticsUsingTypeArguments.ts ===
 // Should be error to use 'T' in all declarations within Foo.
 class Foo<T> {
 >Foo : Foo<T>
+>    : ^^^^^^
 
     static a = (n: T) => { };
 >a : (n: T) => void
+>  : ^ ^^ ^^^^^^^^^
 >(n: T) => { } : (n: T) => void
+>              : ^ ^^ ^^^^^^^^^
 >n : T
+>  : ^
 
     static b: T;
 >b : T
+>  : ^
 
     static c: T[] = [];
 >c : T[]
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     static d = false || ((x: T) => x || undefined)(null)
 >d : any
+>  : ^^^
 >false || ((x: T) => x || undefined)(null) : any
+>                                          : ^^^
 >false : false
+>      : ^^^^^
 >((x: T) => x || undefined)(null) : any
+>                                 : ^^^
 >((x: T) => x || undefined) : (x: T) => any
+>                           : ^ ^^ ^^^^^^^^
 >(x: T) => x || undefined : (x: T) => any
+>                         : ^ ^^ ^^^^^^^^
 >x : T
+>  : ^
 >x || undefined : any
+>               : ^^^
 >x : T
+>  : ^
 >undefined : undefined
->null : null
+>          : ^^^^^^^^^
 
     static e = function (x: T) { return null; }
 >e : (x: T) => any
+>  : ^ ^^ ^^^^^^^^
 >function (x: T) { return null; } : (x: T) => any
+>                                 : ^ ^^ ^^^^^^^^
 >x : T
->null : null
+>  : ^
 
     static f(xs: T[]): T[] {
 >f : (xs: T[]) => T[]
+>  : ^  ^^   ^^^^^   
 >xs : T[]
+>   : ^^^
 
         return xs.reverse();
 >xs.reverse() : T[]
+>             : ^^^
 >xs.reverse : () => T[]
+>           : ^^^^^^^^^
 >xs : T[]
+>   : ^^^
 >reverse : () => T[]
+>        : ^^^^^^^^^
     }
 }
 

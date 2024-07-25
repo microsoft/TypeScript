@@ -1,5 +1,5 @@
 // @declaration: true
-// @out: out.js
+// @outFile: out.js
 
 // @Filename: declFile.d.ts
 declare module M {
@@ -12,5 +12,5 @@ declare module M {
 }
 
 // @Filename: client.ts
-///<reference path="declFile.d.ts"/>
+///<reference path="declFile.d.ts" preserve="true"/>
 var x = new M.C(); // Declaration file wont get emitted because there are errors in declaration file

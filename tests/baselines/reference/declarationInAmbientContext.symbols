@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/declarationInAmbientContext.ts ===
+//// [tests/cases/conformance/es6/destructuring/declarationInAmbientContext.ts] ////
+
+=== declarationInAmbientContext.ts ===
 declare var [a, b];  // Error, destructuring declaration not allowed in ambient context
 >a : Symbol(a, Decl(declarationInAmbientContext.ts, 0, 13))
 >b : Symbol(b, Decl(declarationInAmbientContext.ts, 0, 15))

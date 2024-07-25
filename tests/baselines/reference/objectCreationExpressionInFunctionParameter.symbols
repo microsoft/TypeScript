@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts ===
+//// [tests/cases/compiler/objectCreationExpressionInFunctionParameter.ts] ////
+
+=== objectCreationExpressionInFunctionParameter.ts ===
 class A {
 >A : Symbol(A, Decl(objectCreationExpressionInFunctionParameter.ts, 0, 0))
 

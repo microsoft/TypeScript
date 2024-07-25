@@ -1,8 +1,8 @@
-tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts(5,15): error TS2339: Property 'ClassA' does not exist on type 'typeof M'.
-tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts(5,22): error TS1011: An element access expression should take an argument.
+cannotInvokeNewOnErrorExpression.ts(5,15): error TS2339: Property 'ClassA' does not exist on type 'typeof M'.
+cannotInvokeNewOnErrorExpression.ts(5,22): error TS1011: An element access expression should take an argument.
 
 
-==== tests/cases/compiler/cannotInvokeNewOnErrorExpression.ts (2 errors) ====
+==== cannotInvokeNewOnErrorExpression.ts (2 errors) ====
     module M
     {
         class ClassA {}

@@ -15,7 +15,7 @@ verify.completions({
         kind: "property",
         kindModifiers: "deprecated",
         insertText: "this.p",
-        sortText: completion.SortText.DeprecatedSuggestedClassMembers,
+        sortText: completion.SortText.Deprecated(completion.SortText.SuggestedClassMembers),
         source: completion.CompletionSource.ThisProperty
     }],
     preferences: {

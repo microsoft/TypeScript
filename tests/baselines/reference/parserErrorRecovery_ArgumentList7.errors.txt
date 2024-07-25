@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList7.ts(1,1): error TS2304: Cannot find name 'Foo'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList7.ts(1,5): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList7.ts(1,7): error TS1135: Argument expression expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList7.ts(1,8): error TS1005: ')' expected.
+parserErrorRecovery_ArgumentList7.ts(1,1): error TS2304: Cannot find name 'Foo'.
+parserErrorRecovery_ArgumentList7.ts(1,5): error TS2304: Cannot find name 'a'.
+parserErrorRecovery_ArgumentList7.ts(1,7): error TS1135: Argument expression expected.
+parserErrorRecovery_ArgumentList7.ts(1,8): error TS1005: ')' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList7.ts (4 errors) ====
+==== parserErrorRecovery_ArgumentList7.ts (4 errors) ====
     Foo(a,,
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.

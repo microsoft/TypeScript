@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralIndexers.ts] ////
+
 //// [objectLiteralIndexers.ts]
 interface A {
     x: number;

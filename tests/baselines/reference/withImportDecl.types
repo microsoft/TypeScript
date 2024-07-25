@@ -1,4 +1,6 @@
-=== tests/cases/compiler/withImportDecl_1.ts ===
+//// [tests/cases/compiler/withImportDecl.ts] ////
+
+=== withImportDecl_1.ts ===
 ///<reference path='withImportDecl_0.ts'/>
 var simpleVar;
 >simpleVar : any
@@ -8,23 +10,35 @@ var anotherVar: any;
 
 var varWithSimpleType: number;
 >varWithSimpleType : number
+>                  : ^^^^^^
 
 var varWithArrayType: number[];
 >varWithArrayType : number[]
+>                 : ^^^^^^^^
 
 var varWithInitialValue = 30;
 >varWithInitialValue : number
+>                    : ^^^^^^
 >30 : 30
+>   : ^^
 
 var withComplicatedValue = { x: 30, y: 70, desc: "position" };
 >withComplicatedValue : { x: number; y: number; desc: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 30, y: 70, desc: "position" } : { x: number; y: number; desc: string; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 >30 : 30
+>   : ^^
 >y : number
+>  : ^^^^^^
 >70 : 70
+>   : ^^
 >desc : string
+>     : ^^^^^^
 >"position" : "position"
+>           : ^^^^^^^^^^
 
 declare var declaredVar;
 >declaredVar : any
@@ -37,63 +51,90 @@ declare var declaredVar;
 
 declare var deckareVarWithType: number;
 >deckareVarWithType : number
+>                   : ^^^^^^
 
 var arrayVar: string[] = ['a', 'b'];
 >arrayVar : string[]
+>         : ^^^^^^^^
 >['a', 'b'] : string[]
+>           : ^^^^^^^^
 >'a' : "a"
+>    : ^^^
 >'b' : "b"
+>    : ^^^
 
 
 function simpleFunction() {
 >simpleFunction : () => { x: string; y: string; n: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return {
 >{        x: "Hello",        y: "word",        n: 2    } : { x: string; y: string; n: number; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x: "Hello",
 >x : string
+>  : ^^^^^^
 >"Hello" : "Hello"
+>        : ^^^^^^^
 
         y: "word",
 >y : string
+>  : ^^^^^^
 >"word" : "word"
+>       : ^^^^^^
 
         n: 2
 >n : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
     };
 }
 
 module m1 {
 >m1 : typeof m1
+>   : ^^^^^^^^^
 
     export function foo() {
 >foo : () => string
+>    : ^^^^^^^^^^^^
 
         return "Hello";
 >"Hello" : "Hello"
+>        : ^^^^^^^
     }
 }
 
 import m3 = require("withImportDecl_0");
 >m3 : typeof m3
+>   : ^^^^^^^^^
 
 var b = new m3.A();
 >b : m3.A
+>  : ^^^^
 >new m3.A() : m3.A
+>           : ^^^^
 >m3.A : typeof m3.A
+>     : ^^^^^^^^^^^
 >m3 : typeof m3
+>   : ^^^^^^^^^
 >A : typeof m3.A
+>  : ^^^^^^^^^^^
 
 b.foo;
 >b.foo : string
+>      : ^^^^^^
 >b : m3.A
+>  : ^^^^
 >foo : string
+>    : ^^^^^^
 
-=== tests/cases/compiler/withImportDecl_0.ts ===
+=== withImportDecl_0.ts ===
 export class A { foo: string; }
 >A : A
+>  : ^
 >foo : string
+>    : ^^^^^^
 

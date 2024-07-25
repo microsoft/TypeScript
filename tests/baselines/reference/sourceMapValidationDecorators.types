@@ -1,174 +1,265 @@
-=== tests/cases/compiler/sourceMapValidationDecorators.ts ===
+//// [tests/cases/compiler/sourceMapValidationDecorators.ts] ////
+
+=== sourceMapValidationDecorators.ts ===
 declare function ClassDecorator1(target: Function): void;
 >ClassDecorator1 : (target: Function) => void
+>                : ^      ^^        ^^^^^    
 >target : Function
+>       : ^^^^^^^^
 
 declare function ClassDecorator2(x: number): (target: Function) => void;
 >ClassDecorator2 : (x: number) => (target: Function) => void
+>                : ^ ^^      ^^^^^                          
 >x : number
+>  : ^^^^^^
 >target : Function
+>       : ^^^^^^^^
 
 declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
 >PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 >target : Object
+>       : ^^^^^^
 >key : string | symbol
+>    : ^^^^^^^^^^^^^^^
 >descriptor : PropertyDescriptor
+>           : ^^^^^^^^^^^^^^^^^^
 
 declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                   : ^ ^^      ^^^^^                                                                               
 >x : number
+>  : ^^^^^^
 >target : Object
+>       : ^^^^^^
 >key : string | symbol
+>    : ^^^^^^^^^^^^^^^
 >descriptor : PropertyDescriptor
+>           : ^^^^^^^^^^^^^^^^^^
 
 declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
+>                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 >target : Object
+>       : ^^^^^^
 >key : string | symbol
+>    : ^^^^^^^^^^^^^^^
 >paramIndex : number
+>           : ^^^^^^
 
 declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
 >ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
+>                    : ^ ^^      ^^^^^                                                                  
 >x : number
+>  : ^^^^^^
 >target : Object
+>       : ^^^^^^
 >key : string | symbol
+>    : ^^^^^^^^^^^^^^^
 >paramIndex : number
+>           : ^^^^^^
 
 @ClassDecorator1
 >ClassDecorator1 : (target: Function) => void
+>                : ^      ^^        ^^^^^    
 
 @ClassDecorator2(10)
 >ClassDecorator2(10) : (target: Function) => void
+>                    : ^      ^^        ^^^^^    
 >ClassDecorator2 : (x: number) => (target: Function) => void
+>                : ^ ^^      ^^^^^                          
 >10 : 10
+>   : ^^
 
 class Greeter {
 >Greeter : Greeter
+>        : ^^^^^^^
 
     constructor(
       @ParameterDecorator1 
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
+>                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 
       @ParameterDecorator2(20) 
 >ParameterDecorator2(20) : (target: Object, key: string | symbol, paramIndex: number) => void
+>                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 >ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
+>                    : ^ ^^      ^^^^^                                                                  
 >20 : 20
+>   : ^^
 
       public greeting: string, 
 >greeting : string
+>         : ^^^^^^
       
       @ParameterDecorator1 
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
+>                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 
       @ParameterDecorator2(30) 
 >ParameterDecorator2(30) : (target: Object, key: string | symbol, paramIndex: number) => void
+>                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 >ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
+>                    : ^ ^^      ^^^^^                                                                  
 >30 : 30
+>   : ^^
 
       ...b: string[]) {
 >b : string[]
+>  : ^^^^^^^^
     }
     
     @PropertyDecorator1
 >PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 
     @PropertyDecorator2(40)
 >PropertyDecorator2(40) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                   : ^ ^^      ^^^^^                                                                               
 >40 : 40
+>   : ^^
 
     greet() {
 >greet : () => string
+>      : ^^^^^^^^^^^^
 
         return "<h1>" + this.greeting + "</h1>";
 >"<h1>" + this.greeting + "</h1>" : string
+>                                 : ^^^^^^
 >"<h1>" + this.greeting : string
+>                       : ^^^^^^
 >"<h1>" : "<h1>"
+>       : ^^^^^^
 >this.greeting : string
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >greeting : string
+>         : ^^^^^^
 >"</h1>" : "</h1>"
+>        : ^^^^^^^
     }
 
     @PropertyDecorator1
 >PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 
     @PropertyDecorator2(50)
 >PropertyDecorator2(50) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                   : ^ ^^      ^^^^^                                                                               
 >50 : 50
+>   : ^^
 
     private x: string;
 >x : string
+>  : ^^^^^^
 
     @PropertyDecorator1
 >PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 
     @PropertyDecorator2(60)
 >PropertyDecorator2(60) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                   : ^ ^^      ^^^^^                                                                               
 >60 : 60
+>   : ^^
 
     private static x1: number = 10;
 >x1 : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
     
     private fn(
 >fn : (x: number) => string
+>   : ^ ^^      ^^^^^^^^^^^
 
       @ParameterDecorator1 
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
+>                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 
       @ParameterDecorator2(70) 
 >ParameterDecorator2(70) : (target: Object, key: string | symbol, paramIndex: number) => void
+>                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 >ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
+>                    : ^ ^^      ^^^^^                                                                  
 >70 : 70
+>   : ^^
 
       x: number) {
 >x : number
+>  : ^^^^^^
 
         return this.greeting;
 >this.greeting : string
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >greeting : string
+>         : ^^^^^^
     }
 
     @PropertyDecorator1
 >PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                   : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 
     @PropertyDecorator2(80)
 >PropertyDecorator2(80) : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                       : ^      ^^      ^^   ^^               ^^          ^^^                  ^^^^^    
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
+>                   : ^ ^^      ^^^^^                                                                               
 >80 : 80
+>   : ^^
 
     get greetings() {
 >greetings : string
+>          : ^^^^^^
 
         return this.greeting;
 >this.greeting : string
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >greeting : string
+>         : ^^^^^^
     }
 
     set greetings(
 >greetings : string
+>          : ^^^^^^
 
       @ParameterDecorator1 
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
+>                    : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 
       @ParameterDecorator2(90) 
 >ParameterDecorator2(90) : (target: Object, key: string | symbol, paramIndex: number) => void
+>                        : ^      ^^      ^^   ^^               ^^          ^^      ^^^^^    
 >ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
+>                    : ^ ^^      ^^^^^                                                                  
 >90 : 90
+>   : ^^
 
       greetings: string) {
 >greetings : string
+>          : ^^^^^^
 
         this.greeting = greetings;
 >this.greeting = greetings : string
+>                          : ^^^^^^
 >this.greeting : string
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >greeting : string
+>         : ^^^^^^
 >greetings : string
+>          : ^^^^^^
     }    
 }

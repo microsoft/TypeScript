@@ -1,87 +1,131 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInAMD4.ts] ////
+
+=== 0.ts ===
 export class B {
 >B : B
+>  : ^
 
     print() { return "I am B"}
 >print : () => string
+>      : ^^^^^^^^^^^^
 >"I am B" : "I am B"
+>         : ^^^^^^^^
 }
 
 export function foo() { return "foo" }
 >foo : () => string
+>    : ^^^^^^^^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 export function backup() { return "backup"; }
 >backup : () => string
+>       : ^^^^^^^^^^^^
 >"backup" : "backup"
+>         : ^^^^^^^^
 
-=== tests/cases/conformance/dynamicImport/2.ts ===
+=== 2.ts ===
 declare var console: any;
 >console : any
 
 class C {
 >C : C
+>  : ^
 
     private myModule = import("./0");
->myModule : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
->import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>myModule : Promise<typeof import("0")>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("./0") : Promise<typeof import("0")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./0" : "./0"
+>      : ^^^^^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         const loadAsync = import("./0");
->loadAsync : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
->import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>loadAsync : Promise<typeof import("0")>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("./0") : Promise<typeof import("0")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./0" : "./0"
+>      : ^^^^^
 
         this.myModule.then(Zero => {
 >this.myModule.then(Zero => {            console.log(Zero.foo());        }, async err => {            console.log(err);            let one = await import("./1");            console.log(one.backup());        }) : Promise<void>
->this.myModule.then : <TResult1 = typeof import("tests/cases/conformance/dynamicImport/0"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->this.myModule : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>                                                                                                                                                                                                                 : ^^^^^^^^^^^^^
+>this.myModule.then : <TResult1 = typeof import("0"), TResult2 = never>(onfulfilled?: (value: typeof import("0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                   : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.myModule : Promise<typeof import("0")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
->myModule : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
->then : <TResult1 = typeof import("tests/cases/conformance/dynamicImport/0"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->Zero => {            console.log(Zero.foo());        } : (Zero: typeof import("tests/cases/conformance/dynamicImport/0")) => void
->Zero : typeof import("tests/cases/conformance/dynamicImport/0")
+>     : ^^^^
+>myModule : Promise<typeof import("0")>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>then : <TResult1 = typeof import("0"), TResult2 = never>(onfulfilled?: (value: typeof import("0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Zero => {            console.log(Zero.foo());        } : (Zero: typeof import("0")) => void
+>                                                       : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Zero : typeof import("0")
+>     : ^^^^^^^^^^^^^^^^^^
 
             console.log(Zero.foo());
 >console.log(Zero.foo()) : any
 >console.log : any
 >console : any
+>        : ^^^
 >log : any
+>    : ^^^
 >Zero.foo() : string
+>           : ^^^^^^
 >Zero.foo : () => string
->Zero : typeof import("tests/cases/conformance/dynamicImport/0")
+>         : ^^^^^^^^^^^^
+>Zero : typeof import("0")
+>     : ^^^^^^^^^^^^^^^^^^
 >foo : () => string
+>    : ^^^^^^^^^^^^
 
         }, async err => {
 >async err => {            console.log(err);            let one = await import("./1");            console.log(one.backup());        } : (err: any) => Promise<void>
+>                                                                                                                                     : ^   ^^^^^^^^^^^^^^^^^^^^^^^
 >err : any
 
             console.log(err);
 >console.log(err) : any
 >console.log : any
 >console : any
+>        : ^^^
 >log : any
+>    : ^^^
 >err : any
 
             let one = await import("./1");
->one : typeof import("tests/cases/conformance/dynamicImport/1")
->await import("./1") : typeof import("tests/cases/conformance/dynamicImport/1")
->import("./1") : Promise<typeof import("tests/cases/conformance/dynamicImport/1")>
+>one : typeof import("1")
+>    : ^^^^^^^^^^^^^^^^^^
+>await import("./1") : typeof import("1")
+>                    : ^^^^^^^^^^^^^^^^^^
+>import("./1") : Promise<typeof import("1")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./1" : "./1"
+>      : ^^^^^
 
             console.log(one.backup());
 >console.log(one.backup()) : any
 >console.log : any
 >console : any
+>        : ^^^
 >log : any
+>    : ^^^
 >one.backup() : string
+>             : ^^^^^^
 >one.backup : () => string
->one : typeof import("tests/cases/conformance/dynamicImport/1")
+>           : ^^^^^^^^^^^^
+>one : typeof import("1")
+>    : ^^^^^^^^^^^^^^^^^^
 >backup : () => string
+>       : ^^^^^^^^^^^^
 
         });
     }
@@ -89,66 +133,101 @@ class C {
 
 export class D {
 >D : D
+>  : ^
 
     private myModule = import("./0");
->myModule : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
->import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>myModule : Promise<typeof import("0")>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("./0") : Promise<typeof import("0")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./0" : "./0"
+>      : ^^^^^
 
     method() {
 >method : () => void
+>       : ^^^^^^^^^^
 
         const loadAsync = import("./0");
->loadAsync : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
->import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>loadAsync : Promise<typeof import("0")>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("./0") : Promise<typeof import("0")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./0" : "./0"
+>      : ^^^^^
 
         this.myModule.then(Zero => {
 >this.myModule.then(Zero => {            console.log(Zero.foo());        }, async err => {            console.log(err);            let one = await import("./1");            console.log(one.backup());        }) : Promise<void>
->this.myModule.then : <TResult1 = typeof import("tests/cases/conformance/dynamicImport/0"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->this.myModule : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>                                                                                                                                                                                                                 : ^^^^^^^^^^^^^
+>this.myModule.then : <TResult1 = typeof import("0"), TResult2 = never>(onfulfilled?: (value: typeof import("0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>                   : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.myModule : Promise<typeof import("0")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
->myModule : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
->then : <TResult1 = typeof import("tests/cases/conformance/dynamicImport/0"), TResult2 = never>(onfulfilled?: (value: typeof import("tests/cases/conformance/dynamicImport/0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->Zero => {            console.log(Zero.foo());        } : (Zero: typeof import("tests/cases/conformance/dynamicImport/0")) => void
->Zero : typeof import("tests/cases/conformance/dynamicImport/0")
+>     : ^^^^
+>myModule : Promise<typeof import("0")>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>then : <TResult1 = typeof import("0"), TResult2 = never>(onfulfilled?: (value: typeof import("0")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Zero => {            console.log(Zero.foo());        } : (Zero: typeof import("0")) => void
+>                                                       : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Zero : typeof import("0")
+>     : ^^^^^^^^^^^^^^^^^^
 
             console.log(Zero.foo());
 >console.log(Zero.foo()) : any
 >console.log : any
 >console : any
+>        : ^^^
 >log : any
+>    : ^^^
 >Zero.foo() : string
+>           : ^^^^^^
 >Zero.foo : () => string
->Zero : typeof import("tests/cases/conformance/dynamicImport/0")
+>         : ^^^^^^^^^^^^
+>Zero : typeof import("0")
+>     : ^^^^^^^^^^^^^^^^^^
 >foo : () => string
+>    : ^^^^^^^^^^^^
 
         }, async err => {
 >async err => {            console.log(err);            let one = await import("./1");            console.log(one.backup());        } : (err: any) => Promise<void>
+>                                                                                                                                     : ^   ^^^^^^^^^^^^^^^^^^^^^^^
 >err : any
 
             console.log(err);
 >console.log(err) : any
 >console.log : any
 >console : any
+>        : ^^^
 >log : any
+>    : ^^^
 >err : any
 
             let one = await import("./1");
->one : typeof import("tests/cases/conformance/dynamicImport/1")
->await import("./1") : typeof import("tests/cases/conformance/dynamicImport/1")
->import("./1") : Promise<typeof import("tests/cases/conformance/dynamicImport/1")>
+>one : typeof import("1")
+>    : ^^^^^^^^^^^^^^^^^^
+>await import("./1") : typeof import("1")
+>                    : ^^^^^^^^^^^^^^^^^^
+>import("./1") : Promise<typeof import("1")>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./1" : "./1"
+>      : ^^^^^
 
             console.log(one.backup());
 >console.log(one.backup()) : any
 >console.log : any
 >console : any
+>        : ^^^
 >log : any
+>    : ^^^
 >one.backup() : string
+>             : ^^^^^^
 >one.backup : () => string
->one : typeof import("tests/cases/conformance/dynamicImport/1")
+>           : ^^^^^^^^^^^^
+>one : typeof import("1")
+>    : ^^^^^^^^^^^^^^^^^^
 >backup : () => string
+>       : ^^^^^^^^^^^^
 
         });
     }

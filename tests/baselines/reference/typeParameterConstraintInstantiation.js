@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterConstraintInstantiation.ts] ////
+
 //// [typeParameterConstraintInstantiation.ts]
 // Check that type parameter constraints are properly instantiated
 

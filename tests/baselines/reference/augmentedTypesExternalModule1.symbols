@@ -1,4 +1,6 @@
-=== tests/cases/compiler/augmentedTypesExternalModule1.ts ===
+//// [tests/cases/compiler/augmentedTypesExternalModule1.ts] ////
+
+=== augmentedTypesExternalModule1.ts ===
 export var a = 1;
 >a : Symbol(a, Decl(augmentedTypesExternalModule1.ts, 0, 10))
 

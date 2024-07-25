@@ -1,16 +1,24 @@
-=== tests/cases/compiler/file.js ===
+//// [tests/cases/compiler/checkJsObjectLiteralHasCheckedKeyof.ts] ////
+
+=== file.js ===
 // @ts-check
 const obj = {
 >obj : { x: number; y: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    x: 1,    y: 2} : { x: number; y: number; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 1,
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     y: 2
 >y : number
+>  : ^^^^^^
 >2 : 2
+>  : ^
 
 };
 
@@ -19,10 +27,15 @@ const obj = {
  */
 let selected = "x";
 >selected : "x" | "y"
+>         : ^^^^^^^^^
 >"x" : "x"
+>    : ^^^
 
 selected = "z"; // should fail
 >selected = "z" : "z"
+>               : ^^^
 >selected : "x" | "y"
+>         : ^^^^^^^^^
 >"z" : "z"
+>    : ^^^
 

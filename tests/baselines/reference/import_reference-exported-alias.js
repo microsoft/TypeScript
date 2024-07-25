@@ -45,7 +45,7 @@ define(["require", "exports"], function (require, exports) {
 //// [file2.js]
 define(["require", "exports", "file1"], function (require, exports, appJs) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var Services = appJs.Services;
     var UserServices = Services.UserServices;
     var x = new UserServices().getUserName();

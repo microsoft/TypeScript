@@ -5,7 +5,7 @@ sourceRoot:
 sources: contextualTyping.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/contextualTyping.js
+emittedFile:contextualTyping.js
 sourceFile:contextualTyping.ts
 -------------------------------------------------------------------
 >>>// CONTEXT: Class property declaration

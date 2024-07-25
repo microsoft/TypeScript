@@ -1,26 +1,36 @@
-=== tests/cases/conformance/es6/modules/m1.ts ===
+//// [tests/cases/conformance/es6/modules/multipleDefaultExports01.ts] ////
+
+=== m1.ts ===
 export default class foo {
 >foo : bar
+>    : ^^^
 
 }
 
 export default function bar() {
 >bar : typeof bar
+>    : ^^^^^^^^^^
 
 }
 
 var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 export default x;
 >x : number
+>  : ^^^^^^
 
-=== tests/cases/conformance/es6/modules/m2.ts ===
+=== m2.ts ===
 import Entity from "./m1"
 >Entity : typeof Entity
+>       : ^^^^^^^^^^^^^
 
 Entity();
 >Entity() : void
+>         : ^^^^
 >Entity : typeof Entity
+>       : ^^^^^^^^^^^^^
 

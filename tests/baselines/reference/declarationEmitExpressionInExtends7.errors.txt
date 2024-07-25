@@ -1,11 +1,8 @@
-tests/cases/compiler/declarationEmitExpressionInExtends7.ts(1,30): error TS2304: Cannot find name 'SomeUndefinedFunction'.
-tests/cases/compiler/declarationEmitExpressionInExtends7.ts(1,30): error TS4021: 'extends' clause of exported class has or is using private name 'SomeUndefinedFunction'.
+declarationEmitExpressionInExtends7.ts(1,30): error TS2304: Cannot find name 'SomeUndefinedFunction'.
 
 
-==== tests/cases/compiler/declarationEmitExpressionInExtends7.ts (2 errors) ====
+==== declarationEmitExpressionInExtends7.ts (1 errors) ====
     export default class extends SomeUndefinedFunction {}
                                  ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SomeUndefinedFunction'.
-                                 ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4021: 'extends' clause of exported class has or is using private name 'SomeUndefinedFunction'.
     

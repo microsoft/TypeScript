@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments8.ts] ////
+
 //// [inferringClassMembersFromAssignments8.ts]
 // no inference in TS files, even for `this` aliases:
 

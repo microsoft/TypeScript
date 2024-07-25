@@ -1,4 +1,6 @@
-=== tests/cases/compiler/promiseDefinitionTest.ts ===
+//// [tests/cases/compiler/promiseDefinitionTest.ts] ////
+
+=== promiseDefinitionTest.ts ===
 class Promise<T> {}
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseDefinitionTest.ts, 0, 0))
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promiseDefinitionTest.ts, 0, 14))

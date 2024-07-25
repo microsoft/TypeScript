@@ -1,11 +1,16 @@
-=== tests/cases/compiler/staticMustPrecedePublic.ts ===
+//// [tests/cases/compiler/staticMustPrecedePublic.ts] ////
+
+=== staticMustPrecedePublic.ts ===
 class Outer {
 >Outer : Outer
+>      : ^^^^^
 
     static public intI: number;
 >intI : number
+>     : ^^^^^^
 
     static private stringF: string;
 >stringF : string
+>        : ^^^^^^
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeCircularReferenceInAccessor.ts ===
+//// [tests/cases/compiler/mappedTypeCircularReferenceInAccessor.ts] ////
+
+=== mappedTypeCircularReferenceInAccessor.ts ===
 interface User {
 >User : Symbol(User, Decl(mappedTypeCircularReferenceInAccessor.ts, 0, 0))
 

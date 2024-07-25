@@ -44,7 +44,7 @@ a(c); // Error, these are from different versions of the library.
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("a");
 var b_1 = require("b");
 var c_1 = require("c");

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationUnionType.ts] ////
+
 //// [declFileTypeAnnotationUnionType.ts]
 class c {
     private p: string;
@@ -58,7 +60,7 @@ var y = new g() || new m.g() || (function () { return new c(); });
 declare class c {
     private p;
 }
-declare module m {
+declare namespace m {
     class c {
         private q;
     }
@@ -73,3 +75,19 @@ declare var k: c | m.c;
 declare var l: c | m.c;
 declare var x: g<string> | m.g<number> | (() => c);
 declare var y: g<string> | m.g<number> | (() => c);
+
+
+!!!! File declFileTypeAnnotationUnionType.d.ts differs from original emit in noCheck emit
+//// [declFileTypeAnnotationUnionType.d.ts]
+===================================================================
+--- Expected	The full check baseline
++++ Actual	with noCheck set
+@@ -12,7 +12,7 @@
+ declare class g<T> {
+     private s;
+ }
+ declare var k: c | m.c;
+-declare var l: c | m.c;
++declare var l: m.c | c;
+ declare var x: g<string> | m.g<number> | (() => c);
+ declare var y: g<string> | m.g<number> | (() => c);

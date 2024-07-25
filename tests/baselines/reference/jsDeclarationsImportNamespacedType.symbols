@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/file.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsImportNamespacedType.ts] ////
+
+=== file.js ===
 import { dummy } from './mod1'
 >dummy : Symbol(dummy, Decl(file.js, 0, 8))
 
@@ -6,7 +8,7 @@ import { dummy } from './mod1'
 var dot2
 >dot2 : Symbol(dot2, Decl(file.js, 2, 3))
 
-=== tests/cases/conformance/jsdoc/declarations/mod1.js ===
+=== mod1.js ===
 /** @typedef {number} Dotted.Name */
 export var dummy = 1
 >dummy : Symbol(dummy, Decl(mod1.js, 1, 10))

@@ -1,8 +1,11 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationSyntaxError.ts] ////
+
+=== a.js ===
 /**
   * @type {number}
   * @type {string}
   */
 var v;
 >v : number
+>  : ^^^^^^
 

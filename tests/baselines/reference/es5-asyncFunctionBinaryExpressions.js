@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-asyncFunctionBinaryExpressions.ts] ////
+
 //// [es5-asyncFunctionBinaryExpressions.ts]
 declare var x, y, z, a, b, c;
 

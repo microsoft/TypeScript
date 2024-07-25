@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsInheritance.ts] ////
+
 //// [commentsInheritance.ts]
 /** i1 is interface with properties*/
 interface i1 {

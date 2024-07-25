@@ -1,29 +1,46 @@
-=== tests/cases/compiler/cloduleTest1.ts ===
+//// [tests/cases/compiler/cloduleTest1.ts] ////
+
+=== cloduleTest1.ts ===
   declare function $(selector: string): $;  
 >$ : typeof $
+>  : ^^^^^^^^
 >selector : string
+>         : ^^^^^^
 
   interface $ {
       addClass(className: string): $;
 >addClass : (className: string) => $
+>         : ^         ^^      ^^^^^ 
 >className : string
+>          : ^^^^^^
   }
   module $ {
 >$ : typeof $
+>  : ^^^^^^^^
 
     export interface AjaxSettings {
     }
     export function ajax(options: AjaxSettings) { }
 >ajax : (options: AjaxSettings) => void
+>     : ^       ^^            ^^^^^^^^^
 >options : AjaxSettings
+>        : ^^^^^^^^^^^^
   }
   var it: $ = $('.foo').addClass('bar');
 >it : $
+>   : ^
 >$('.foo').addClass('bar') : $
+>                          : ^
 >$('.foo').addClass : (className: string) => $
+>                   : ^         ^^      ^^^^^ 
 >$('.foo') : $
+>          : ^
 >$ : typeof $
+>  : ^^^^^^^^
 >'.foo' : ".foo"
+>       : ^^^^^^
 >addClass : (className: string) => $
+>         : ^         ^^      ^^^^^ 
 >'bar' : "bar"
+>      : ^^^^^
 

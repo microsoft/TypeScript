@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intrinsics.ts] ////
+
 //// [intrinsics.ts]
 var hasOwnProperty: hasOwnProperty; // Error
 
@@ -32,3 +34,13 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 var foo;
+
+
+//// [intrinsics.d.ts]
+declare var hasOwnProperty: hasOwnProperty;
+declare namespace m1 {
+    var __proto__: any;
+}
+declare class Foo<__proto__> {
+}
+declare var foo: (__proto__: number) => void;

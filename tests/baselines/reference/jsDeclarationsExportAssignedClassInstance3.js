@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedClassInstance3.ts] ////
+
 //// [index.js]
 class Foo {
     static stat = 10;
@@ -21,5 +23,5 @@ module.exports.additional = 20;
 
 
 //// [index.d.ts]
-export const member: number;
-export const additional: 20;
+export let member: number;
+export let additional: 20;

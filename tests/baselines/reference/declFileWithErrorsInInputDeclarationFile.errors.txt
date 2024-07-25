@@ -1,14 +1,14 @@
-tests/cases/compiler/declFile.d.ts(2,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/declFile.d.ts(3,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/declFile.d.ts(5,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/declFile.d.ts(7,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+declFile.d.ts(2,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+declFile.d.ts(3,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+declFile.d.ts(5,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
+declFile.d.ts(7,5): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 
 
-==== tests/cases/compiler/client.ts (0 errors) ====
-    ///<reference path="declFile.d.ts"/>
+==== client.ts (0 errors) ====
+    ///<reference path="declFile.d.ts" preserve="true"/>
     var x = new M.C(); // Declaration file wont get emitted because there are errors in declaration file
     
-==== tests/cases/compiler/declFile.d.ts (4 errors) ====
+==== declFile.d.ts (4 errors) ====
     declare module M {
         declare var x;
         ~~~~~~~

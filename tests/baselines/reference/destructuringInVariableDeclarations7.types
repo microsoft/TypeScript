@@ -1,10 +1,16 @@
-=== tests/cases/compiler/destructuringInVariableDeclarations7.ts ===
+//// [tests/cases/compiler/destructuringInVariableDeclarations7.ts] ////
+
+=== destructuringInVariableDeclarations7.ts ===
 export let { toString } = 1;
 >toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
 >1 : 1
+>  : ^
 {
     let { toFixed } = 1;
 >toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
 >1 : 1
+>  : ^
 }
 

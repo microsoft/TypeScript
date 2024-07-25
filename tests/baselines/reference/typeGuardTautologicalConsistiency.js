@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardTautologicalConsistiency.ts] ////
+
 //// [typeGuardTautologicalConsistiency.ts]
 let stringOrNumber: string | number;
 

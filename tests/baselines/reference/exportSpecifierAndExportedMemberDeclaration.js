@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportSpecifierAndExportedMemberDeclaration.ts] ////
+
 //// [exportSpecifierAndExportedMemberDeclaration.ts]
 declare module "m2" {
     export module X {

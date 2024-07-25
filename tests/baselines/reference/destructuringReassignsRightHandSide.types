@@ -1,11 +1,18 @@
-=== tests/cases/conformance/es6/destructuring/destructuringReassignsRightHandSide.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringReassignsRightHandSide.ts] ////
+
+=== destructuringReassignsRightHandSide.ts ===
 var foo: any = { foo: 1, bar: 2 };
 >foo : any
 >{ foo: 1, bar: 2 } : { foo: number; bar: number; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 >bar : number
+>    : ^^^^^^
 >2 : 2
+>  : ^
 
 var bar: any;
 >bar : any
@@ -15,6 +22,7 @@ var bar: any;
 >({ foo, bar } = foo) : any
 >{ foo, bar } = foo : any
 >{ foo, bar } : { foo: any; bar: any; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
 >bar : any
 >foo : any
@@ -22,6 +30,8 @@ var bar: any;
 // reassignment in subsequent var
 var { foo, baz } = foo;
 >foo : any
+>    : ^^^
 >baz : any
+>    : ^^^
 >foo : any
 

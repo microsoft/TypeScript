@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithAnyAndEveryType.ts] ////
+
 //// [additionOperatorWithAnyAndEveryType.ts]
 function foo() { }
 class C {

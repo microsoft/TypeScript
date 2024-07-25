@@ -1,33 +1,47 @@
-=== tests/cases/compiler/namespacesDeclaration2.ts ===
+//// [tests/cases/compiler/namespacesDeclaration2.ts] ////
+
+=== namespacesDeclaration2.ts ===
 namespace N {
 >N : typeof N
+>  : ^^^^^^^^
 
     function S() {}
 >S : () => void
+>  : ^^^^^^^^^^
 }
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     function F() {}
 >F : () => void
+>  : ^^^^^^^^^^
 }
 
 declare namespace ns {
 >ns : typeof ns
+>   : ^^^^^^^^^
 
     let f: number;
 >f : number
+>  : ^^^^^^
 }
 
 var foge: N.S;
 >foge : N.S
+>     : ^^^
 >N : any
+>  : ^^^
 
 var foo: M.F;
 >foo : M.F
+>    : ^^^
 >M : any
+>  : ^^^
 
 let x: ns.A;
 >x : ns.A
+>  : ^^^^
 >ns : any
+>   : ^^^
 

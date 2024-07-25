@@ -1,56 +1,88 @@
-=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock17.ts ===
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock17.ts] ////
+
+=== classStaticBlock17.ts ===
 let friendA: { getX(o: A): number, setX(o: A, v: number): void };
 >friendA : { getX(o: A): number; setX(o: A, v: number): void; }
+>        : ^^^^^^^ ^^ ^^^      ^^^^^^^ ^^ ^^ ^^      ^^^    ^^^
 >getX : (o: A) => number
+>     : ^ ^^ ^^^^^      
 >o : A
+>  : ^
 >setX : (o: A, v: number) => void
+>     : ^ ^^ ^^ ^^      ^^^^^    
 >o : A
+>  : ^
 >v : number
+>  : ^^^^^^
 
 class A {
 >A : A
+>  : ^
 
   #x: number;
 >#x : number
+>   : ^^^^^^
 
   constructor (v: number) {
 >v : number
+>  : ^^^^^^
 
     this.#x = v;
 >this.#x = v : number
+>            : ^^^^^^
 >this.#x : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >v : number
+>  : ^^^^^^
   }
 
   getX () {
 >getX : () => number
+>     : ^^^^^^^^^^^^
 
     return this.#x;
 >this.#x : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
   }
 
   static {
     friendA = {
 >friendA = {      getX(obj) { return obj.#x },      setX(obj, value) { obj.#x = value }    } : { getX(obj: A): number; setX(obj: A, value: number): void; }
+>                                                                                            : ^^^^^^^   ^^^^^^^^^^^^^^^^^^^   ^^^^^     ^^^^^^^^^^^^^^^^^^
 >friendA : { getX(o: A): number; setX(o: A, v: number): void; }
+>        : ^^^^^^^ ^^ ^^^      ^^^^^^^ ^^ ^^ ^^      ^^^    ^^^
 >{      getX(obj) { return obj.#x },      setX(obj, value) { obj.#x = value }    } : { getX(obj: A): number; setX(obj: A, value: number): void; }
+>                                                                                  : ^^^^^^^   ^^^^^^^^^^^^^^^^^^^   ^^^^^     ^^^^^^^^^^^^^^^^^^
 
       getX(obj) { return obj.#x },
 >getX : (obj: A) => number
+>     : ^   ^^^^^^^^^^^^^^
 >obj : A
+>    : ^
 >obj.#x : number
+>       : ^^^^^^
 >obj : A
+>    : ^
 
       setX(obj, value) { obj.#x = value }
 >setX : (obj: A, value: number) => void
+>     : ^   ^^^^^     ^^^^^^^^^^^^^^^^^
 >obj : A
+>    : ^
 >value : number
+>      : ^^^^^^
 >obj.#x = value : number
+>               : ^^^^^^
 >obj.#x : number
+>       : ^^^^^^
 >obj : A
+>    : ^
 >value : number
+>      : ^^^^^^
 
     };
   }
@@ -58,45 +90,73 @@ class A {
 
 class B {
 >B : B
+>  : ^
 
   constructor(a: A) {
 >a : A
+>  : ^
 
     const x = friendA.getX(a); // ok
 >x : number
+>  : ^^^^^^
 >friendA.getX(a) : number
+>                : ^^^^^^
 >friendA.getX : (o: A) => number
+>             : ^ ^^ ^^^^^      
 >friendA : { getX(o: A): number; setX(o: A, v: number): void; }
+>        : ^^^^^^^ ^^ ^^^      ^^^^^^^ ^^ ^^ ^^      ^^^    ^^^
 >getX : (o: A) => number
+>     : ^ ^^ ^^^^^      
 >a : A
+>  : ^
 
     friendA.setX(a, x + 1); // ok
 >friendA.setX(a, x + 1) : void
+>                       : ^^^^
 >friendA.setX : (o: A, v: number) => void
+>             : ^ ^^ ^^ ^^      ^^^^^    
 >friendA : { getX(o: A): number; setX(o: A, v: number): void; }
+>        : ^^^^^^^ ^^ ^^^      ^^^^^^^ ^^ ^^ ^^      ^^^    ^^^
 >setX : (o: A, v: number) => void
+>     : ^ ^^ ^^ ^^      ^^^^^    
 >a : A
+>  : ^
 >x + 1 : number
+>      : ^^^^^^
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
   }
 };
 
 const a = new A(41);
 >a : A
+>  : ^
 >new A(41) : A
+>          : ^
 >A : typeof A
+>  : ^^^^^^^^
 >41 : 41
+>   : ^^
 
 const b = new B(a);
 >b : B
+>  : ^
 >new B(a) : B
+>         : ^
 >B : typeof B
+>  : ^^^^^^^^
 >a : A
+>  : ^
 
 a.getX();
 >a.getX() : number
+>         : ^^^^^^
 >a.getX : () => number
+>       : ^^^^^^^^^^^^
 >a : A
+>  : ^
 >getX : () => number
+>     : ^^^^^^^^^^^^
 

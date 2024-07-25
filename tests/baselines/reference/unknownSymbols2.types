@@ -1,39 +1,55 @@
-=== tests/cases/compiler/unknownSymbols2.ts ===
+//// [tests/cases/compiler/unknownSymbols2.ts] ////
+
+=== unknownSymbols2.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
     var x: asdf;
 >x : asdf
+>  : ^^^^
 
     var y = x + asdf;
 >y : any
+>  : ^^^
 >x + asdf : any
+>         : ^^^
 >x : asdf
+>  : ^^^^
 >asdf : any
+>     : ^^^
 
     var z = <asdf>x; // should be an error
 >z : asdf
+>  : ^^^^
 ><asdf>x : asdf
+>        : ^^^^
 >x : asdf
+>  : ^^^^
 
     if (asdf) {
 >asdf : any
+>     : ^^^
     }
     else if (qwerty) {
 >qwerty : any
+>       : ^^^
     }
 
     try {
     }
     catch (asdf) { // no error
 >asdf : any
+>     : ^^^
     }
 
     switch (asdf) {
 >asdf : any
+>     : ^^^
 
         case qwerty:
 >qwerty : any
+>       : ^^^
 
             break;
         default:
@@ -42,27 +58,41 @@ module M {
 
     var a = () => asdf;
 >a : () => any
+>  : ^^^^^^^^^
 >() => asdf : () => any
+>           : ^^^^^^^^^
 >asdf : any
+>     : ^^^
 
     var b = (asdf) => { return qwerty };
 >b : (asdf: any) => any
+>  : ^    ^^^^^^^^^^^^^
 >(asdf) => { return qwerty } : (asdf: any) => any
+>                            : ^    ^^^^^^^^^^^^^
 >asdf : any
+>     : ^^^
 >qwerty : any
+>       : ^^^
 
     module N {
 >N : typeof N
+>  : ^^^^^^^^
 
         var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
     import c = N;
 >c : typeof N
+>  : ^^^^^^^^
 >N : typeof N
+>  : ^^^^^^^^
 
     import d = asdf;
 >d : any
+>  : ^^^
 >asdf : any
+>     : ^^^
 }

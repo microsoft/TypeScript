@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeMultiInference.ts ===
+//// [tests/cases/compiler/mappedTypeMultiInference.ts] ////
+
+=== mappedTypeMultiInference.ts ===
 interface Style {
     flashy: any;
 >flashy : any
@@ -6,9 +8,11 @@ interface Style {
 
 declare function mergeStyleSets<K extends string>(
 >mergeStyleSets : <K extends string>(...cssSets: { [P in K]?: Style; }[]) => { [P in K]: Style; }
+>               : ^ ^^^^^^^^^      ^^^^^       ^^                       ^^^^^                    
 
     ...cssSets: { [P in K]?: Style }[]): { [P in K]: Style };
 >cssSets : { [P in K]?: Style; }[]
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^
 
 // Expected:
 //   let x: {
@@ -17,29 +21,43 @@ declare function mergeStyleSets<K extends string>(
 //   }
 let x = mergeStyleSets(
 >x : { a: Style; b: Style; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >mergeStyleSets(    {},    {        a: { flashy: true },    },    {        b: { flashy: true },    },) : { a: Style; b: Style; }
+>                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^
 >mergeStyleSets : <K extends string>(...cssSets: { [P in K]?: Style; }[]) => { [P in K]: Style; }
+>               : ^ ^^^^^^^^^      ^^^^^       ^^                       ^^^^^                    
 
     {},
 >{} : {}
+>   : ^^
     {
 >{        a: { flashy: true },    } : { a: { flashy: boolean; }; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         a: { flashy: true },
 >a : { flashy: boolean; }
+>  : ^^^^^^^^^^^^^^^^^^^^
 >{ flashy: true } : { flashy: boolean; }
+>                 : ^^^^^^^^^^^^^^^^^^^^
 >flashy : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 
     },
     {
 >{        b: { flashy: true },    } : { b: { flashy: boolean; }; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         b: { flashy: true },
 >b : { flashy: boolean; }
+>  : ^^^^^^^^^^^^^^^^^^^^
 >{ flashy: true } : { flashy: boolean; }
+>                 : ^^^^^^^^^^^^^^^^^^^^
 >flashy : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 
     },
 )

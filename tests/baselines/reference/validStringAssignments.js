@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/string/validStringAssignments.ts] ////
+
 //// [validStringAssignments.ts]
 var x = '';
 

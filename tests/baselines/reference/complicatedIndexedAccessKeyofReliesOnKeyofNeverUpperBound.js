@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts] ////
+
 //// [complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts]
 interface TextChannel {
     id: string;
@@ -45,13 +47,12 @@ newTextChannel2.phoneNumber = '613-555-1234';
 
 //// [complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.js]
 "use strict";
-exports.__esModule = true;
-exports.makeNewChannel = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.makeNewChannel = makeNewChannel;
 function makeNewChannel(type) {
     var localChannelId = "blahblahblah";
     return { type: type, localChannelId: localChannelId };
 }
-exports.makeNewChannel = makeNewChannel;
 var newTextChannel = makeNewChannel('text');
 // This should work
 newTextChannel.phoneNumber = '613-555-1234';

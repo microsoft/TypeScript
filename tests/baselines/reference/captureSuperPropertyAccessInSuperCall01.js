@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/captureSuperPropertyAccessInSuperCall01.ts] ////
+
 //// [captureSuperPropertyAccessInSuperCall01.ts]
 class A {
 	constructor(f: () => string) {

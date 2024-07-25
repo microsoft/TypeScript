@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPrototypeAssignment4.ts] ////
+
 //// [a.js]
 function Multimap4() {
   this._map = {};

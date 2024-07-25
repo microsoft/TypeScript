@@ -1,19 +1,30 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameFieldAccess.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldAccess.ts] ////
+
+=== privateNameFieldAccess.ts ===
 class A {
 >A : A
+>  : ^
 
     #myField = "hello world";
 >#myField : string
+>         : ^^^^^^
 >"hello world" : "hello world"
+>              : ^^^^^^^^^^^^^
 
     constructor() {
         console.log(this.#myField);
 >console.log(this.#myField) : void
+>                           : ^^^^
 >console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
+>        : ^^^^^^^
 >log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
 >this.#myField : string
+>              : ^^^^^^
 >this : this
+>     : ^^^^
     }
 }
 

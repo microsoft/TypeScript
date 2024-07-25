@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/everyTypeAssignableToAny.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/everyTypeAssignableToAny.ts] ////
+
+=== everyTypeAssignableToAny.ts ===
 var a: any;
 >a : Symbol(a, Decl(everyTypeAssignableToAny.ts, 0, 3))
 

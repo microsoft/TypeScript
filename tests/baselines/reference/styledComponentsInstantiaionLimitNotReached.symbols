@@ -1,4 +1,6 @@
-=== tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts ===
+//// [tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts] ////
+
+=== styledComponentsInstantiaionLimitNotReached.ts ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))

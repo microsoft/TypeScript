@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reservedNameOnModuleImportWithInterface.ts ===
+//// [tests/cases/compiler/reservedNameOnModuleImportWithInterface.ts] ////
+
+=== reservedNameOnModuleImportWithInterface.ts ===
 declare module test {
     interface mi_string { }
     module mi_string { }
@@ -6,6 +8,8 @@ declare module test {
     // Should error; imports both a type and a module, which means it conflicts with the 'string' type.
     import string = mi_string;
 >string : any
+>       : ^^^
 >mi_string : mi_string
+>          : ^^^^^^^^^
 }
 

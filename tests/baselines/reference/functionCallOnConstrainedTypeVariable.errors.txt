@@ -1,10 +1,10 @@
-tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(11,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
-tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(15,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
-tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(18,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
-tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts(19,9): error TS2554: Expected 1 arguments, but got 4.
+functionCallOnConstrainedTypeVariable.ts(11,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+functionCallOnConstrainedTypeVariable.ts(15,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+functionCallOnConstrainedTypeVariable.ts(18,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+functionCallOnConstrainedTypeVariable.ts(19,9): error TS2554: Expected 1 arguments, but got 4.
 
 
-==== tests/cases/compiler/functionCallOnConstrainedTypeVariable.ts (4 errors) ====
+==== functionCallOnConstrainedTypeVariable.ts (4 errors) ====
     // Repro from #20196
     
     type A = {

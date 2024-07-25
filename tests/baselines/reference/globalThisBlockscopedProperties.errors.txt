@@ -1,12 +1,12 @@
-tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(5,12): error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
-tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(6,12): error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
-tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(8,1): error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
-tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(9,1): error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
-tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(14,40): error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
-tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(15,40): error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
+globalThisBlockscopedProperties.ts(5,12): error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
+globalThisBlockscopedProperties.ts(6,12): error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
+globalThisBlockscopedProperties.ts(8,1): error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
+globalThisBlockscopedProperties.ts(9,1): error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
+globalThisBlockscopedProperties.ts(14,40): error TS2339: Property 'y' does not exist on type 'typeof globalThis'.
+globalThisBlockscopedProperties.ts(15,40): error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
 
 
-==== tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts (6 errors) ====
+==== globalThisBlockscopedProperties.ts (6 errors) ====
     var x = 1
     const y = 2
     let z = 3

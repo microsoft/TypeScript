@@ -1,26 +1,41 @@
-=== tests/cases/compiler/declFileObjectLiteralWithOnlyGetter.ts ===
+//// [tests/cases/compiler/declFileObjectLiteralWithOnlyGetter.ts] ////
+
+=== declFileObjectLiteralWithOnlyGetter.ts ===
 function /*1*/makePoint(x: number) { 
 >makePoint : (x: number) => { readonly x: number; }
+>          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 
     return {
 >{        get x() { return x; },    } : { readonly x: number; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^
 
         get x() { return x; },
 >x : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 
     };
 };
 var /*4*/point = makePoint(2);
 >point : { readonly x: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >makePoint(2) : { readonly x: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >makePoint : (x: number) => { readonly x: number; }
+>          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
+>  : ^
 
 var /*2*/x = point./*3*/x;
 >x : number
+>  : ^^^^^^
 >point./*3*/x : number
+>             : ^^^^^^
 >point : { readonly x: number; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
+>  : ^^^^^^
 

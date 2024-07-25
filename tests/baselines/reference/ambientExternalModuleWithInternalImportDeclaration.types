@@ -1,35 +1,49 @@
-=== tests/cases/compiler/ambientExternalModuleWithInternalImportDeclaration_1.ts ===
+//// [tests/cases/compiler/ambientExternalModuleWithInternalImportDeclaration.ts] ////
+
+=== ambientExternalModuleWithInternalImportDeclaration_1.ts ===
 ///<reference path='ambientExternalModuleWithInternalImportDeclaration_0.ts'/>
 import A = require('M');
 >A : typeof A
+>  : ^^^^^^^^
 
 var c = new A();
 >c : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
-=== tests/cases/compiler/ambientExternalModuleWithInternalImportDeclaration_0.ts ===
+=== ambientExternalModuleWithInternalImportDeclaration_0.ts ===
 declare module 'M' {
 >'M' : typeof import("M")
+>    : ^^^^^^^^^^^^^^^^^^
 
     module C {
 >C : typeof C
+>  : ^^^^^^^^
 
         export var f: number;
 >f : number
+>  : ^^^^^^
     }
     class C {
 >C : C
+>  : ^
 
         foo(): void;
 >foo : () => void
+>    : ^^^^^^    
     }
     import X = C;
 >X : typeof C
+>  : ^^^^^^^^
 >C : C
+>  : ^
 
     export = X;
 >X : C
+>  : ^
 
 }
 

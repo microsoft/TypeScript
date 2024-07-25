@@ -1,12 +1,19 @@
-=== tests/cases/compiler/illegalModifiersOnClassElements.ts ===
+//// [tests/cases/compiler/illegalModifiersOnClassElements.ts] ////
+
+=== illegalModifiersOnClassElements.ts ===
 class C {
 >C : C
+>  : ^
 
     declare foo = 1;
 >foo : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 
     export bar = 1;
 >bar : number
+>    : ^^^^^^
 >1 : 1
+>  : ^
 }

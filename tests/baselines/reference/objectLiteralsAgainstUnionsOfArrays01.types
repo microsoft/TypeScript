@@ -1,24 +1,35 @@
-=== tests/cases/compiler/objectLiteralsAgainstUnionsOfArrays01.ts ===
+//// [tests/cases/compiler/objectLiteralsAgainstUnionsOfArrays01.ts] ////
+
+=== objectLiteralsAgainstUnionsOfArrays01.ts ===
 interface Foo {
   bar: Bar | Bar[];
 >bar : Bar | Bar[]
+>    : ^^^^^^^^^^^
 }
 
 interface Bar {
   prop: string;
 >prop : string
+>     : ^^^^^^
 }
 
 let x: Foo[] = [
 >x : Foo[]
+>  : ^^^^^
 >[  { bar: { prop: 100 } }] : { bar: { prop: number; }; }[]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   { bar: { prop: 100 } }
 >{ bar: { prop: 100 } } : { bar: { prop: number; }; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : { prop: number; }
+>    : ^^^^^^^^^^^^^^^^^
 >{ prop: 100 } : { prop: number; }
+>              : ^^^^^^^^^^^^^^^^^
 >prop : number
+>     : ^^^^^^
 >100 : 100
+>    : ^^^
 
 ]
 

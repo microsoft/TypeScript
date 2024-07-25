@@ -1,6 +1,9 @@
-=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration26.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration26.ts] ////
+
+=== parserClassDeclaration26.ts ===
 class C {
 >C : C
+>  : ^
 
    var
 >var : any

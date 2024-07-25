@@ -1,127 +1,210 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints4.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints4.ts] ////
+
+=== propertyAccessOnTypeParameterWithConstraints4.ts ===
 class C<T extends Date> {
 >C : C<T>
+>  : ^^^^
 
     f() {
 >f : () => any
+>  : ^^^^^^^^^
 
         var x: T;
 >x : T
+>  : ^
 
         var a = x['notHere'](); // should be string
 >a : any
+>  : ^^^
 >x['notHere']() : any
+>               : ^^^
 >x['notHere'] : any
+>             : ^^^
 >x : T
+>  : ^
 >'notHere' : "notHere"
+>          : ^^^^^^^^^
 
         return a + x.notHere();
 >a + x.notHere() : any
+>                : ^^^
 >a : any
+>  : ^^^
 >x.notHere() : any
+>            : ^^^
 >x.notHere : any
+>          : ^^^
 >x : T
+>  : ^
 >notHere : any
+>        : ^^^
     }
 }
 
 var r = (new C<Date>()).f();
 >r : any
+>  : ^^^
 >(new C<Date>()).f() : any
+>                    : ^^^
 >(new C<Date>()).f : () => any
+>                  : ^^^^^^^^^
 >(new C<Date>()) : C<Date>
+>                : ^^^^^^^
 >new C<Date>() : C<Date>
+>              : ^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >f : () => any
+>  : ^^^^^^^^^
 
 interface I<T extends Date> {
     foo: T;
 >foo : T
+>    : ^
 }
 var i: I<Date>;
 >i : I<Date>
+>  : ^^^^^^^
 
 var r2 = i.foo.notHere();
 >r2 : any
+>   : ^^^
 >i.foo.notHere() : any
+>                : ^^^
 >i.foo.notHere : any
+>              : ^^^
 >i.foo : Date
+>      : ^^^^
 >i : I<Date>
+>  : ^^^^^^^
 >foo : Date
+>    : ^^^^
 >notHere : any
+>        : ^^^
 
 var r2b = i.foo['notHere']();
 >r2b : any
+>    : ^^^
 >i.foo['notHere']() : any
+>                   : ^^^
 >i.foo['notHere'] : any
+>                 : ^^^
 >i.foo : Date
+>      : ^^^^
 >i : I<Date>
+>  : ^^^^^^^
 >foo : Date
+>    : ^^^^
 >'notHere' : "notHere"
+>          : ^^^^^^^^^
 
 var a: {
 >a : <T extends Date>() => T
+>  : ^ ^^^^^^^^^    ^^^^^^^ 
 
     <T extends Date>(): T;
 }
 var r3: string = a().notHere();
 >r3 : string
+>   : ^^^^^^
 >a().notHere() : any
+>              : ^^^
 >a().notHere : any
+>            : ^^^
 >a() : Date
+>    : ^^^^
 >a : <T extends Date>() => T
+>  : ^ ^^^^^^^^^    ^^^^^^^ 
 >notHere : any
+>        : ^^^
 
 var r3b: string = a()['notHere']();
 >r3b : string
+>    : ^^^^^^
 >a()['notHere']() : any
+>                 : ^^^
 >a()['notHere'] : any
+>               : ^^^
 >a() : Date
+>    : ^^^^
 >a : <T extends Date>() => T
+>  : ^ ^^^^^^^^^    ^^^^^^^ 
 >'notHere' : "notHere"
+>          : ^^^^^^^^^
 
 var b = {
 >b : any
+>  : ^^^
 >{    foo: <T extends Date>(x: T): T => {        var a = x['notHere'](); // should be string        return a + x.notHere();    },    bar: b.foo().notHere()} : { foo: <T extends Date>(x: T) => T; bar: any; }
+>                                                                                                                                                            : ^^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 
     foo: <T extends Date>(x: T): T => {
 >foo : <T extends Date>(x: T) => T
+>    : ^ ^^^^^^^^^    ^^ ^^ ^^^^^ 
 ><T extends Date>(x: T): T => {        var a = x['notHere'](); // should be string        return a + x.notHere();    } : <T extends Date>(x: T) => T
+>                                                                                                                      : ^ ^^^^^^^^^    ^^ ^^ ^^^^^ 
 >x : T
+>  : ^
 
         var a = x['notHere'](); // should be string
 >a : any
+>  : ^^^
 >x['notHere']() : any
+>               : ^^^
 >x['notHere'] : any
+>             : ^^^
 >x : T
+>  : ^
 >'notHere' : "notHere"
+>          : ^^^^^^^^^
 
         return a + x.notHere();
 >a + x.notHere() : any
+>                : ^^^
 >a : any
+>  : ^^^
 >x.notHere() : any
+>            : ^^^
 >x.notHere : any
+>          : ^^^
 >x : T
+>  : ^
 >notHere : any
+>        : ^^^
 
     },
     bar: b.foo().notHere()
 >bar : any
+>    : ^^^
 >b.foo().notHere() : any
+>                  : ^^^
 >b.foo().notHere : any
+>                : ^^^
 >b.foo() : any
+>        : ^^^
 >b.foo : any
+>      : ^^^
 >b : any
+>  : ^^^
 >foo : any
+>    : ^^^
 >notHere : any
+>        : ^^^
 }
 
 var r4 = b.foo(new Date());
 >r4 : any
+>   : ^^^
 >b.foo(new Date()) : any
+>                  : ^^^
 >b.foo : any
+>      : ^^^
 >b : any
+>  : ^^^
 >foo : any
+>    : ^^^
 >new Date() : Date
+>           : ^^^^
 >Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
 

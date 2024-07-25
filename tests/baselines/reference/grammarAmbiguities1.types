@@ -1,55 +1,95 @@
-=== tests/cases/compiler/grammarAmbiguities1.ts ===
+//// [tests/cases/compiler/grammarAmbiguities1.ts] ////
+
+=== grammarAmbiguities1.ts ===
 class A { foo() { } }
 >A : A
+>  : ^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 class B { bar() { }}
 >B : B
+>  : ^
 >bar : () => void
+>    : ^^^^^^^^^^
 
 function f(x) { return x; }
 >f : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 
 function g<T, U>(x) { return f(x); }
 >g : <T, U>(x: any) => any
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >f(x) : any
+>     : ^^^
 >f : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 
 g<A, B>(7)
 >g<A, B>(7) : any
+>           : ^^^
 >g : <T, U>(x: any) => any
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^
 >7 : 7
+>  : ^
 
 f(g<A, B>(7));
 >f(g<A, B>(7)) : any
+>              : ^^^
 >f : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >g<A, B>(7) : any
+>           : ^^^
 >g : <T, U>(x: any) => any
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^
 >7 : 7
+>  : ^
 
 f(g < A, B > 7);
 >f(g < A, B > 7) : any
+>                : ^^^
 >f : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >g < A : boolean
+>      : ^^^^^^^
 >g : <T, U>(x: any) => any
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B > 7 : boolean
+>      : ^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >7 : 7
+>  : ^
 
 f(g < A, B > +(7));
 >f(g < A, B > +(7)) : any
+>                   : ^^^
 >f : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >g < A : boolean
+>      : ^^^^^^^
 >g : <T, U>(x: any) => any
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 >B > +(7) : boolean
+>         : ^^^^^^^
 >B : typeof B
+>  : ^^^^^^^^
 >+(7) : number
+>     : ^^^^^^
 >(7) : 7
+>    : ^
 >7 : 7
+>  : ^
 

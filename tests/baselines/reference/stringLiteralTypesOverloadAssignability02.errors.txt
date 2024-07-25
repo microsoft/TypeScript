@@ -1,12 +1,12 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability02.ts(14,1): error TS2322: Type '(x: "bar") => number' is not assignable to type '(x: "foo") => number'.
+stringLiteralTypesOverloadAssignability02.ts(14,1): error TS2322: Type '(x: "bar") => number' is not assignable to type '(x: "foo") => number'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '"foo"' is not assignable to type '"bar"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability02.ts(15,1): error TS2322: Type '(x: "foo") => number' is not assignable to type '(x: "bar") => number'.
+stringLiteralTypesOverloadAssignability02.ts(15,1): error TS2322: Type '(x: "foo") => number' is not assignable to type '(x: "bar") => number'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '"bar"' is not assignable to type '"foo"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability02.ts (2 errors) ====
+==== stringLiteralTypesOverloadAssignability02.ts (2 errors) ====
     function f(x: "foo"): number;
     function f(x: "foo"): number {
         return 0;
