@@ -19,7 +19,7 @@ var o3;
 /** @param {Object.<string, boolean>} o */
 function f(o) {
 >f : (o: {    [x: string]: boolean;}) => void
->  : ^ ^^^    ^^^^      ^^^       ^^^^^^^^^^^
+>  : ^ ^^     ^^^^      ^^^       ^ ^^^^^^^^^
 >o : { [x: string]: boolean; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

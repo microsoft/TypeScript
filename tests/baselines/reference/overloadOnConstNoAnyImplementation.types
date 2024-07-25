@@ -35,7 +35,7 @@ function x1(a: number, cb: (x: string) => number) {
 >cb('hi') : number
 >         : ^^^^^^
 >cb : (x: string) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >'hi' : "hi"
 >     : ^^^^
 
@@ -43,7 +43,7 @@ function x1(a: number, cb: (x: string) => number) {
 >cb('bye') : number
 >          : ^^^^^^
 >cb : (x: string) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >'bye' : "bye"
 >      : ^^^^^
 
@@ -57,7 +57,7 @@ function x1(a: number, cb: (x: string) => number) {
 >cb(hm) : number
 >       : ^^^^^^
 >cb : (x: string) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >hm : string
 >   : ^^^^^^
 
@@ -65,7 +65,7 @@ function x1(a: number, cb: (x: string) => number) {
 >cb('uh') : number
 >         : ^^^^^^
 >cb : (x: string) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >'uh' : "uh"
 >     : ^^^^
 
@@ -73,7 +73,7 @@ function x1(a: number, cb: (x: string) => number) {
 >cb(1) : number
 >      : ^^^^^^
 >cb : (x: string) => number
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >1 : 1
 >  : ^
 }
@@ -98,7 +98,7 @@ x1(1, cb);
 >1 : 1
 >  : ^
 >cb : (number: any) => number
->   : ^      ^^^^^^^^^^^^^^^^
+>   : ^      ^^^^^^^^^^      
 
 x1(1, (x: 'hi') => 1); // error
 >x1(1, (x: 'hi') => 1) : any

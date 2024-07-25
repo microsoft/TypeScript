@@ -21,9 +21,9 @@ orbitol.toExponential()
 >orbitol.toExponential() : string
 >                        : ^^^^^^
 >orbitol.toExponential : (fractionDigits?: number) => string
->                      : ^              ^^^      ^^^^^^^^^^^
+>                      : ^              ^^^      ^^^^^      
 >orbitol : 1
 >        : ^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 

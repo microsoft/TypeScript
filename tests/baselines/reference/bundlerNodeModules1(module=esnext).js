@@ -42,5 +42,4 @@ export {};
 //// [main.mjs]
 export {};
 //// [main.cjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

@@ -112,11 +112,11 @@ function testcase() {
 >a.indexOf(-(4/3)) : number
 >                  : ^^^^^^
 >a.indexOf : (searchElement: boolean, fromIndex?: number) => number
->          : ^             ^^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>          : ^             ^^^^^^^^^^^         ^^^      ^^^^^      
 >a : boolean[]
 >  : ^^^^^^^^^
 >indexOf : (searchElement: boolean, fromIndex?: number) => number
->        : ^             ^^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>        : ^             ^^^^^^^^^^^         ^^^      ^^^^^      
 >-(4/3) : number
 >       : ^^^^^^
 >(4/3) : number
@@ -136,11 +136,11 @@ function testcase() {
 >a.indexOf(0) : number
 >             : ^^^^^^
 >a.indexOf : (searchElement: boolean, fromIndex?: number) => number
->          : ^             ^^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>          : ^             ^^^^^^^^^^^         ^^^      ^^^^^      
 >a : boolean[]
 >  : ^^^^^^^^^
 >indexOf : (searchElement: boolean, fromIndex?: number) => number
->        : ^             ^^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>        : ^             ^^^^^^^^^^^         ^^^      ^^^^^      
 >0 : 0
 >  : ^
 >7 : 7
@@ -152,11 +152,11 @@ function testcase() {
 >a.indexOf(-0) : number
 >              : ^^^^^^
 >a.indexOf : (searchElement: boolean, fromIndex?: number) => number
->          : ^             ^^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>          : ^             ^^^^^^^^^^^         ^^^      ^^^^^      
 >a : boolean[]
 >  : ^^^^^^^^^
 >indexOf : (searchElement: boolean, fromIndex?: number) => number
->        : ^             ^^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>        : ^             ^^^^^^^^^^^         ^^^      ^^^^^      
 >-0 : 0
 >   : ^
 >0 : 0
@@ -170,11 +170,11 @@ function testcase() {
 >a.indexOf(1) : number
 >             : ^^^^^^
 >a.indexOf : (searchElement: boolean, fromIndex?: number) => number
->          : ^             ^^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>          : ^             ^^^^^^^^^^^         ^^^      ^^^^^      
 >a : boolean[]
 >  : ^^^^^^^^^
 >indexOf : (searchElement: boolean, fromIndex?: number) => number
->        : ^             ^^^^^^^^^^^         ^^^      ^^^^^^^^^^^
+>        : ^             ^^^^^^^^^^^         ^^^      ^^^^^      
 >1 : 1
 >  : ^
 >10 : 10

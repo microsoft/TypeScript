@@ -22,7 +22,7 @@ f({
 >f({    m(x) { },}) : void
 >                   : ^^^^
 >f : (options: number | Options) => void
->  : ^       ^^                ^^^^^^^^^
+>  : ^       ^^                ^^^^^    
 >{    m(x) { },} : { m(x: number): void; }
 >                : ^^^^ ^^^^^^^^^^^^^^^^^^
 

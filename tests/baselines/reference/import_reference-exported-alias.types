@@ -27,13 +27,13 @@ var x = new UserServices().getUserName();
 >new UserServices().getUserName() : string
 >                                 : ^^^^^^
 >new UserServices().getUserName : () => string
->                               : ^^^^^^^^^^^^
+>                               : ^^^^^^      
 >new UserServices() : Services.UserServices
 >                   : ^^^^^^^^^^^^^^^^^^^^^
 >UserServices : typeof Services.UserServices
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getUserName : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 === file1.ts ===
 module App {

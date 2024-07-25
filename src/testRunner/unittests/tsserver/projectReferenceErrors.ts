@@ -1,19 +1,19 @@
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import { libContent } from "../helpers/contents";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { libContent } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     GetErrForProjectDiagnostics,
     openFilesForSession,
     TestSession,
     verifyGetErrScenario,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     File,
     libFile,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projectReferenceErrors:: with project references and error reporting", () => {
     const dependecyLocation = `/user/username/projects/myproject/dependency`;

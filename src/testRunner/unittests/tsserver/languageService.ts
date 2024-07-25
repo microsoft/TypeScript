@@ -1,11 +1,11 @@
-import * as Utils from "../../_namespaces/Utils";
+import * as Utils from "../../_namespaces/Utils.js";
 import {
     baselineTsserverLogs,
     logDiagnostics,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/tsserver.js";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: languageService", () => {
     it("should work correctly on case-sensitive file systems", () => {

@@ -44,9 +44,9 @@ new x().message
 
 x.captureStackTrace
 >x.captureStackTrace : (targetObject: Object, constructorOpt?: Function) => void
->                    : ^            ^^      ^^              ^^^        ^^^^^^^^^
+>                    : ^            ^^      ^^              ^^^        ^^^^^    
 >x : ErrorConstructor
 >  : ^^^^^^^^^^^^^^^^
 >captureStackTrace : (targetObject: Object, constructorOpt?: Function) => void
->                  : ^            ^^      ^^              ^^^        ^^^^^^^^^
+>                  : ^            ^^      ^^              ^^^        ^^^^^    
 

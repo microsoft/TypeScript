@@ -28,7 +28,7 @@ class C2<T> implements IFoo<T> {
 
    foo<U>(x: string): number {
 >foo : <U>(x: string) => number
->    : ^^^^ ^^      ^^^^^      
+>    : ^ ^^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 

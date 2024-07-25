@@ -23,7 +23,7 @@ import {
     map,
     TextChange,
     textChanges,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const errorCodeToFixes = createMultiMap<string, CodeFixRegistration>();
 const fixIdToRegistration = new Map<string, CodeFixRegistration>();

@@ -46,7 +46,7 @@ function Cp(t) {
 >m3 : any
 >   : ^^^
 >() => this : () => this
->           : ^^^^^^^^^^
+>           : ^^^^^^    
 >this : this
 >     : ^^^^
 }
@@ -59,7 +59,7 @@ Cp.prototype = {
 >Cp : typeof Cp
 >   : ^^^^^^^^^
 >prototype : { m4(): this; }
->          : ^^^^^^^^^^^^^^^
+>          : ^^^^^^^^    ^^^
 >{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): this; }
 >                                                                               : ^^^^^^^^    ^^^
 
@@ -124,7 +124,7 @@ Cpp.prototype.m2 = function () {
 >m2 : any
 >   : ^^^
 >function () {    this.z = this.y; return this} : () => this
->                                               : ^^^^^^^^^^
+>                                               : ^^^^^^    
 
     this.z = this.y; return this
 >this.z = this.y : T

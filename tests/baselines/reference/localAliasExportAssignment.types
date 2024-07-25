@@ -4,12 +4,12 @@
 ///<reference path='localAliasExportAssignment_0.ts'/>
 import connect = require('./localAliasExportAssignment_0');
 >connect : () => any
->        : ^^^^^^^^^
+>        : ^^^^^^   
 
 connect();
 >connect() : any
 >connect : () => any
->        : ^^^^^^^^^
+>        : ^^^^^^   
 
 
 
@@ -23,5 +23,5 @@ var server: {
 
 export = server;
 >server : () => any
->       : ^^^^^^^^^
+>       : ^^^^^^   
 

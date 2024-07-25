@@ -1,15 +1,15 @@
-import { jsonToReadableText } from "../helpers";
-import { getFsContentsForSampleProjectReferences } from "../helpers/sampleProjectReferences";
+import { jsonToReadableText } from "../helpers.js";
+import { getFsContentsForSampleProjectReferences } from "../helpers/sampleProjectReferences.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projects with references: invoking when references are already built", () => {
     it("on sample project", () => {

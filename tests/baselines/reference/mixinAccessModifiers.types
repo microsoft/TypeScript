@@ -207,7 +207,7 @@ class C1 extends Mix(Private, Private2) {}
 >Mix(Private, Private2) : typeof Private & typeof Private2
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Private : typeof Private
 >        : ^^^^^^^^^^^^^^
 >Private2 : typeof Private2
@@ -219,7 +219,7 @@ class C2 extends Mix(Private, Protected) {}
 >Mix(Private, Protected) : typeof Private & typeof Protected
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Private : typeof Private
 >        : ^^^^^^^^^^^^^^
 >Protected : typeof Protected
@@ -231,7 +231,7 @@ class C3 extends Mix(Private, Public) {}
 >Mix(Private, Public) : typeof Private & typeof Public
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Private : typeof Private
 >        : ^^^^^^^^^^^^^^
 >Public : typeof Public
@@ -243,7 +243,7 @@ class C4 extends Mix(Protected, Protected2) {
 >Mix(Protected, Protected2) : Protected & Protected2
 >                           : ^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Protected : typeof Protected
 >          : ^^^^^^^^^^^^^^^^
 >Protected2 : typeof Protected2
@@ -319,7 +319,7 @@ class C5 extends Mix(Protected, Public) {
 >Mix(Protected, Public) : Protected & Public
 >                       : ^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Protected : typeof Protected
 >          : ^^^^^^^^^^^^^^^^
 >Public : typeof Public
@@ -395,7 +395,7 @@ class C6 extends Mix(Public, Public2) {
 >Mix(Public, Public2) : Public & Public2
 >                     : ^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >Public : typeof Public
 >       : ^^^^^^^^^^^^^
 >Public2 : typeof Public2
@@ -569,7 +569,7 @@ function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>
 >x.privateMethod : (() => void) & (() => void)
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^    ^^^^
 >privateMethod : (() => void) & (() => void)
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -579,7 +579,7 @@ function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>
 >x.protectedMethod : (() => void) & (() => void)
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^    ^^^^
 >protectedMethod : (() => void) & (() => void)
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

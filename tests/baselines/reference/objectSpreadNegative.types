@@ -79,10 +79,10 @@ let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumbe
 >   : ^^^^^^^^^^^^^^^
 >{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->optionalString : { sn?: string | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->optionalNumber : { sn?: number | undefined; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>optionalString : { sn?: string; }
+>               : ^^^^^^^      ^^^
+>optionalNumber : { sn?: number; }
+>               : ^^^^^^^      ^^^
 
 // error, 'sn' is optional in source, required in target
 

@@ -9,11 +9,11 @@ import {
     RunnerBase,
     TestCaseParser,
     TestRunnerKind,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 export const enum CompilerTestType {
     Conformance,
@@ -127,44 +127,32 @@ export class CompilerBaselineRunner extends RunnerBase {
 
 class CompilerTest {
     private static varyBy: readonly string[] = [
-        "allowArbitraryExtensions",
-        "allowImportingTsExtensions",
-        "allowSyntheticDefaultImports",
-        "alwaysStrict",
-        "downlevelIteration",
-        "experimentalDecorators",
-        "emitDecoratorMetadata",
-        "esModuleInterop",
-        "exactOptionalPropertyTypes",
-        "importHelpers",
-        "importHelpers",
-        "isolatedModules",
-        "jsx",
-        "module",
-        "moduleDetection",
-        "moduleResolution",
+        // implicit variations from defined options
+        ...ts.optionDeclarations
+            .filter(option =>
+                !option.isCommandLineOnly
+                && (
+                    option.type === "boolean"
+                    || typeof option.type === "object"
+                )
+                && (
+                    option.affectsProgramStructure
+                    || option.affectsEmit
+                    || option.affectsModuleResolution
+                    || option.affectsBindDiagnostics
+                    || option.affectsSemanticDiagnostics
+                    || option.affectsSourceFile
+                    || option.affectsDeclarationPath
+                    || option.affectsBuildInfo
+                )
+            )
+            .map(option => option.name),
+
+        // explicit variations that do not match above conditions
         "noEmit",
-        "noImplicitAny",
-        "noImplicitThis",
-        "noPropertyAccessFromIndexSignature",
-        "noUncheckedIndexedAccess",
-        "preserveConstEnums",
-        "removeComments",
-        "resolveJsonModule",
-        "resolvePackageJsonExports",
-        "resolvePackageJsonImports",
-        "skipDefaultLibCheck",
-        "skipLibCheck",
-        "strict",
-        "strictBindCallApply",
-        "strictFunctionTypes",
-        "strictNullChecks",
-        "strictPropertyInitialization",
-        "target",
-        "useDefineForClassFields",
-        "useUnknownInCatchVariables",
-        "verbatimModuleSyntax",
+        "isolatedModules",
     ];
+
     private fileName: string;
     private justName: string;
     private configuredName: string;

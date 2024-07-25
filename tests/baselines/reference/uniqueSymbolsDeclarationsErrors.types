@@ -90,7 +90,7 @@ export function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 
     return obj;
 >obj : { method(p: typeof s): void; }
->    : ^^^^^^^^^ ^^        ^^^^^^^^^^
+>    : ^^^^^^^^^ ^^        ^^^    ^^^
 }
 
 export interface InterfaceWithPrivateNamedProperties {

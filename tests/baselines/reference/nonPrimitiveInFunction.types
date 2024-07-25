@@ -40,7 +40,7 @@ nonPrimitive = returnObject();
 >returnObject() : object
 >               : ^^^^^^
 >returnObject : () => object
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 
 takeObject(primitive); // expect error
 >takeObject(primitive) : void
@@ -58,7 +58,7 @@ primitive = returnObject(); // expect error
 >returnObject() : object
 >               : ^^^^^^
 >returnObject : () => object
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 
 function returnError(): object {
 >returnError : () => object

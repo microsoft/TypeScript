@@ -37,7 +37,7 @@ foo({
 >foo({    [Symbol.isConcatSpreadable]: "",    [Symbol.toPrimitive]: 0,    [Symbol.unscopables]: true}) : { t: boolean; u: string; }
 >                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U>(p: I<T, U>) => { t: T; u: U; }
->    : ^ ^^ ^^ ^^       ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^       ^^^^^               
 >{    [Symbol.isConcatSpreadable]: "",    [Symbol.toPrimitive]: 0,    [Symbol.unscopables]: true} : { [Symbol.isConcatSpreadable]: string; [Symbol.toPrimitive]: number; [Symbol.unscopables]: true; }
 >                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

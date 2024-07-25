@@ -1,5 +1,5 @@
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
 
 // NOTE: The contents of this file are all exported from the namespace 'documents'. This is to
 //       support the eventual conversion of harness into a modular system.

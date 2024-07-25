@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/es2022/arbitraryModuleNamespaceIdentifiers/arbitraryModuleNamespaceIdentifiers_importEmpty.ts] ////
+
+=== arbitraryModuleNamespaceIdentifiers_importEmpty.ts ===
+// These should all be errors. In particular, the empty string is a now a valid
+// module export name, and should be treated as such here.
+import {
+  "missing" as x,
+>x : any
+>  : ^^^
+
+  "(missing)" as y,
+>y : any
+>  : ^^^
+
+  "" as z,
+>z : any
+>  : ^^^
+
+} from "./arbitraryModuleNamespaceIdentifiers_importEmpty";
+const xyz = [x, y, z];
+>xyz : any[]
+>    : ^^^^^
+>[x, y, z] : any[]
+>          : ^^^^^
+>x : any
+>  : ^^^
+>y : any
+>  : ^^^
+>z : any
+>  : ^^^
+

@@ -38,7 +38,7 @@ variadicTuples2.ts(73,8): error TS2345: Argument of type '["abc", "def", true]' 
 variadicTuples2.ts(76,5): error TS2322: Type '[number, number]' is not assignable to type '[number, ...T]'.
   Source provides no match for variadic element at position 1 in target.
 variadicTuples2.ts(77,5): error TS2322: Type '[number, ...number[]]' is not assignable to type '[number, ...T]'.
-  Target requires 2 element(s) but source may have fewer.
+  Source provides no match for variadic element at position 1 in target.
 variadicTuples2.ts(78,5): error TS2322: Type '[number, ...T]' is not assignable to type '[number, number]'.
   Type '[number, ...unknown[]]' is not assignable to type '[number, number]'.
     Target requires 2 element(s) but source may have fewer.
@@ -208,7 +208,7 @@ variadicTuples2.ts(139,25): error TS2345: Argument of type '["blah2", 1, 2, 3]' 
         x = z;  // Error
         ~
 !!! error TS2322: Type '[number, ...number[]]' is not assignable to type '[number, ...T]'.
-!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
+!!! error TS2322:   Source provides no match for variadic element at position 1 in target.
         y = x;  // Error
         ~
 !!! error TS2322: Type '[number, ...T]' is not assignable to type '[number, number]'.

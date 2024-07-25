@@ -13,7 +13,7 @@ class A {
 
     @dec                // Error
 >dec : <T>(target: T) => T
->    : ^ ^^      ^^ ^^^^^^
+>    : ^ ^^      ^^ ^^^^^ 
 
     #foo = 1;
 >#foo : number
@@ -23,7 +23,7 @@ class A {
 
     @dec                // Error
 >dec : <T>(target: T) => T
->    : ^ ^^      ^^ ^^^^^^
+>    : ^ ^^      ^^ ^^^^^ 
 
     #bar(): void { }
 >#bar : () => void

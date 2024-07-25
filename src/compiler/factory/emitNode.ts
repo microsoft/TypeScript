@@ -26,7 +26,7 @@ import {
     TextRange,
     TypeNode,
     TypeParameterDeclaration,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /**
  * Associates a node with the current transformation, initializing
@@ -364,7 +364,7 @@ export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifi
     return node;
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function getIdentifierAutoGenerate(node: Identifier | PrivateIdentifier): AutoGenerateInfo | undefined {
     return node.emitNode?.autoGenerate;
 }

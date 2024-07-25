@@ -22,11 +22,11 @@ export type BoundedInteger<
 
 export const toBoundedInteger =
 >toBoundedInteger : <LowerBound extends number, UpperBound extends number>(bounds: { lowerBound: LowerBound; upperBound: UpperBound; }) => (n: number) => BoundedInteger<LowerBound, UpperBound>
->                 : ^          ^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^      ^^                                                   ^^^^^^ ^^      ^^^^^                                      
+>                 : ^          ^^^^^^^^^      ^^          ^^^^^^^^^      ^^      ^^                                                   ^^^^^^ ^^      ^^^^^                                      
 
   <LowerBound extends number, UpperBound extends number>(bounds: {
 ><LowerBound extends number, UpperBound extends number>(bounds: {    lowerBound: LowerBound;    upperBound: UpperBound;  }) =>  (    n: number  ): BoundedInteger<LowerBound, UpperBound> =>  // Implementation doesn't matter here    ({} as any) : <LowerBound extends number, UpperBound extends number>(bounds: { lowerBound: LowerBound; upperBound: UpperBound; }) => (n: number) => BoundedInteger<LowerBound, UpperBound>
->                                                                                                                                                                                                                                                  : ^          ^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^      ^^                                                   ^^^^^^ ^^      ^^^^^                                      
+>                                                                                                                                                                                                                                                  : ^          ^^^^^^^^^      ^^          ^^^^^^^^^      ^^      ^^                                                   ^^^^^^ ^^      ^^^^^                                      
 >bounds : { lowerBound: LowerBound; upperBound: UpperBound; }
 >       : ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^          ^^^
 

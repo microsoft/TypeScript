@@ -13,8 +13,8 @@ module M {
 }
 interface Navigator {
     getGamepads(func?: any): any;
->getGamepads : { (): Gamepad[]; (func?: any): any; }
->            : ^^^^^^^^^^^^^^^^^^    ^^^   ^^^   ^^^
+>getGamepads : { (): (Gamepad | null)[]; (func?: any): any; }
+>            : ^^^^^^                  ^^^    ^^^   ^^^   ^^^
 >func : any
 
     webkitGetGamepads(func?: any): any

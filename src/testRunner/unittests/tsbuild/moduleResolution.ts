@@ -1,17 +1,17 @@
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
-import { Symlink } from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import * as Utils from "../../_namespaces/Utils.js";
+import { Symlink } from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     noChangeOnlyRuns,
     verifyTsc,
-} from "../helpers/tsc";
-import { verifyTscWatch } from "../helpers/tscWatch";
-import { loadProjectFromFiles } from "../helpers/vfs";
+} from "../helpers/tsc.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 import {
     createWatchedSystem,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: moduleResolution:: handles the modules and options from referenced project correctly", () => {
     function sys(optionsToExtend?: ts.CompilerOptions) {

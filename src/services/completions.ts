@@ -1,3 +1,4 @@
+import { StringCompletions } from "./_namespaces/ts.Completions.js";
 import {
     __String,
     addToSeen,
@@ -169,6 +170,8 @@ import {
     isFunctionTypeNode,
     isGetAccessorDeclaration,
     isIdentifier,
+    isIdentifierPart,
+    isIdentifierStart,
     isIdentifierText,
     isImportableFile,
     isImportAttributes,
@@ -296,6 +299,7 @@ import {
     ModifierSyntaxKind,
     modifierToFlag,
     ModuleDeclaration,
+    moduleExportNameTextEscaped,
     ModuleReference,
     moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
@@ -348,7 +352,6 @@ import {
     SortedArray,
     SourceFile,
     SpreadAssignment,
-    stableSort,
     startsWith,
     stringToToken,
     stripQuotes,
@@ -370,6 +373,7 @@ import {
     Token,
     TokenSyntaxKind,
     tokenToString,
+    toSorted,
     tryCast,
     tryGetImportFromModuleSpecifier,
     tryGetTextOfPropertyName,
@@ -389,13 +393,12 @@ import {
     UserPreferences,
     VariableDeclaration,
     walkUpParenthesizedExpressions,
-} from "./_namespaces/ts";
-import { StringCompletions } from "./_namespaces/ts.Completions";
+} from "./_namespaces/ts.js";
 
 // Exported only for tests
 /** @internal */
 export const moduleSpecifierResolutionLimit = 100;
-/** @internal */
+/** @internal @knipignore */
 export const moduleSpecifierResolutionCacheAttemptLimit = 1000;
 
 /** @internal */
@@ -680,6 +683,14 @@ function resolvingModuleSpecifiers<TReturn>(
 }
 
 /** @internal */
+export function getDefaultCommitCharacters(isNewIdentifierLocation: boolean): string[] {
+    if (isNewIdentifierLocation) {
+        return [];
+    }
+    return [".", ",", ";"];
+}
+
+/** @internal */
 export function getCompletionsAtPosition(
     host: LanguageServiceHost,
     program: Program,
@@ -701,7 +712,14 @@ export function getCompletionsAtPosition(
     if (triggerCharacter === " ") {
         // `isValidTrigger` ensures we are at `import |`
         if (preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText) {
-            return { isGlobalCompletion: true, isMemberCompletion: false, isNewIdentifierLocation: true, isIncomplete: true, entries: [] };
+            return {
+                isGlobalCompletion: true,
+                isMemberCompletion: false,
+                isNewIdentifierLocation: true,
+                isIncomplete: true,
+                entries: [],
+                defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ true),
+            };
         }
         return undefined;
     }
@@ -884,7 +902,13 @@ function continuePreviousIncompleteResponse(
 }
 
 function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
-    return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+    return {
+        isGlobalCompletion: false,
+        isMemberCompletion: false,
+        isNewIdentifierLocation: false,
+        entries,
+        defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+    };
 }
 
 function getJSDocParameterCompletions(
@@ -1209,6 +1233,7 @@ function specificKeywordCompletionInfo(entries: readonly CompletionEntry[], isNe
         isMemberCompletion: false,
         isNewIdentifierLocation,
         entries: entries.slice(),
+        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -1384,6 +1409,7 @@ function completionInfoFromData(
         isNewIdentifierLocation,
         optionalReplacementSpan: getOptionalReplacementSpan(location),
         entries,
+        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -1593,7 +1619,14 @@ function getJsxClosingTagCompletion(location: Node | undefined, sourceFile: Sour
             kindModifiers: undefined,
             sortText: SortText.LocationPriority,
         };
-        return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, optionalReplacementSpan: replacementSpan, entries: [entry] };
+        return {
+            isGlobalCompletion: false,
+            isMemberCompletion: true,
+            isNewIdentifierLocation: false,
+            optionalReplacementSpan: replacementSpan,
+            entries: [entry],
+            defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+        };
     }
     return;
 }
@@ -1619,6 +1652,7 @@ function getJSCompletionEntries(
                 kindModifiers: "",
                 sortText: SortText.JavascriptIdentifiers,
                 isFromUncheckedFile: true,
+                commitCharacters: [],
             }, compareCompletionEntries);
         }
     });
@@ -1630,7 +1664,13 @@ function completionNameForLiteral(sourceFile: SourceFile, preferences: UserPrefe
 }
 
 function createCompletionEntryForLiteral(sourceFile: SourceFile, preferences: UserPreferences, literal: string | number | PseudoBigInt): CompletionEntry {
-    return { name: completionNameForLiteral(sourceFile, preferences, literal), kind: ScriptElementKind.string, kindModifiers: ScriptElementKindModifier.none, sortText: SortText.LocationPriority };
+    return {
+        name: completionNameForLiteral(sourceFile, preferences, literal),
+        kind: ScriptElementKind.string,
+        kindModifiers: ScriptElementKindModifier.none,
+        sortText: SortText.LocationPriority,
+        commitCharacters: [],
+    };
 }
 
 function createCompletionEntry(
@@ -1661,7 +1701,7 @@ function createCompletionEntry(
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
     let filterText: string | undefined;
-    let replacementSpan = getReplacementSpanForContextToken(replacementToken);
+    let replacementSpan = getReplacementSpanForContextToken(replacementToken, position);
     let data: CompletionEntryData | undefined;
     let isSnippet: true | undefined;
     let source = getSourceFromOrigin(origin);
@@ -1836,10 +1876,19 @@ function createCompletionEntry(
     }
 
     const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
-    if (parentNamedImportOrExport?.kind === SyntaxKind.NamedImports) {
-        const possibleToken = stringToToken(name);
-        if (parentNamedImportOrExport && possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
-            insertText = `${name} as ${name}_`;
+    if (parentNamedImportOrExport) {
+        const languageVersion = getEmitScriptTarget(host.getCompilationSettings());
+        if (!isIdentifierText(name, languageVersion)) {
+            insertText = JSON.stringify(name);
+            if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+                insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+            }
+        }
+        else if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
+            const possibleToken = stringToToken(name);
+            if (possibleToken && (possibleToken === SyntaxKind.AwaitKeyword || isNonContextualKeyword(possibleToken))) {
+                insertText = `${name} as ${name}_`;
+            }
         }
     }
 
@@ -1851,9 +1900,11 @@ function createCompletionEntry(
 
     // Use a 'sortText' of 0' so that all symbol completion entries come before any other
     // entries (like JavaScript identifier entries).
+    const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location);
+    const commitCharacters = (kind === ScriptElementKind.warning || kind === ScriptElementKind.string) ? [] : undefined;
     return {
         name,
-        kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location),
+        kind,
         kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
         sortText,
         source,
@@ -1868,8 +1919,32 @@ function createCompletionEntry(
         isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         isImportStatementCompletion: !!importStatementCompletion || undefined,
         data,
+        commitCharacters,
         ...includeSymbol ? { symbol } : undefined,
     };
+}
+
+function generateIdentifierForArbitraryString(text: string, languageVersion: ScriptTarget | undefined): string {
+    let needsUnderscore = false;
+    let identifier = "";
+    let ch: number | undefined;
+
+    // Convert "(example, text)" into "_example_text_"
+    for (let i = 0; i < text.length; i += ch !== undefined && ch >= 0x10000 ? 2 : 1) {
+        ch = text.codePointAt(i);
+        if (ch !== undefined && (i === 0 ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion))) {
+            if (needsUnderscore) identifier += "_";
+            identifier += String.fromCodePoint(ch);
+            needsUnderscore = false;
+        }
+        else {
+            needsUnderscore = true;
+        }
+    }
+    if (needsUnderscore) identifier += "_";
+
+    // Default to "_" if the provided text was empty
+    return identifier || "_";
 }
 
 function isClassLikeMemberCompletion(symbol: Symbol, location: Node, sourceFile: SourceFile): boolean {
@@ -2384,7 +2459,7 @@ function createSnippetPrinter(
         });
 
         const allChanges = escapes
-            ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+            ? toSorted(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
             : changes;
         return textChanges.applyChanges(syntheticFile.text, allChanges);
     }
@@ -2431,7 +2506,7 @@ function createSnippetPrinter(
         );
 
         const allChanges = escapes
-            ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+            ? toSorted(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
             : changes;
         return textChanges.applyChanges(syntheticFile.text, allChanges);
     }
@@ -2719,7 +2794,13 @@ export function getCompletionEntriesFromSymbols(
 function getLabelCompletionAtPosition(node: BreakOrContinueStatement): CompletionInfo | undefined {
     const entries = getLabelStatementCompletions(node);
     if (entries.length) {
-        return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+        return {
+            isGlobalCompletion: false,
+            isMemberCompletion: false,
+            isNewIdentifierLocation: false,
+            entries,
+            defaultCommitCharacters: getDefaultCommitCharacters(/*isNewIdentifierLocation*/ false),
+        };
     }
 }
 
@@ -4497,7 +4578,7 @@ function getCompletionData(
         completionKind = CompletionKind.MemberLike;
         isNewIdentifierLocation = false;
         const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
-        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => (n.propertyName || n.name).escapedText));
+        const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => moduleExportNameTextEscaped(n.propertyName || n.name)));
         const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
         symbols = concatenate(symbols, uniques);
         if (!uniques.length) {
@@ -5249,6 +5330,10 @@ function getCompletionEntryDisplayNameForSymbol(
     const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
     if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return validNameResult;
+    }
+    if (symbol.flags & SymbolFlags.Alias) {
+        // Allow non-identifier import/export aliases since we can insert them as string literals
+        return { name, needsConvertPropertyAccess: true };
     }
     switch (kind) {
         case CompletionKind.MemberLike:

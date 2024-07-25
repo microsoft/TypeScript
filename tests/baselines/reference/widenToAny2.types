@@ -17,7 +17,7 @@ var z3:number = foo3([undefined, "def"]);  // Type is any, but should be string
 >foo3([undefined, "def"]) : string
 >                         : ^^^^^^
 >foo3 : <T>(x: T[]) => T
->     : ^ ^^ ^^   ^^^^^^
+>     : ^ ^^ ^^   ^^^^^ 
 >[undefined, "def"] : string[]
 >                   : ^^^^^^^^
 >undefined : undefined

@@ -22,8 +22,8 @@ declare namespace moment {
   }
 }
 export = moment;
->moment : () => import("node_modules/moment/index.d.ts").Moment
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>moment : () => moment.Moment
+>       : ^^^^^^             
 
 === node_modules/moment-timezone/index.d.ts ===
 import * as moment from 'moment';
@@ -56,7 +56,7 @@ declare module "moment" {
     interface Moment {
         strftime(pattern: string): string;
 >strftime : { (pattern: string): string; (pattern: string): string; }
->         : ^^^       ^^      ^^^      ^^^       ^^      ^^^^^^^^^^^^
+>         : ^^^       ^^      ^^^      ^^^       ^^      ^^^      ^^^
 >pattern : string
 >        : ^^^^^^
     }
@@ -68,7 +68,7 @@ declare module "moment-timezone" {
     interface Moment {
         strftime(pattern: string): string;
 >strftime : { (pattern: string): string; (pattern: string): string; }
->         : ^^^       ^^      ^^^^^^^^^^^^       ^^      ^^^      ^^^
+>         : ^^^       ^^      ^^^      ^^^       ^^      ^^^      ^^^
 >pattern : string
 >        : ^^^^^^
     }

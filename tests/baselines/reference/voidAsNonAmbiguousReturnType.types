@@ -14,11 +14,11 @@ function main() {
 >fs.mkdirSync('test') : void
 >                     : ^^^^
 >fs.mkdirSync : (path: string, mode?: number) => void
->             : ^    ^^      ^^    ^^^      ^^^^^^^^^
+>             : ^    ^^      ^^    ^^^      ^^^^^    
 >fs : typeof fs
 >   : ^^^^^^^^^
 >mkdirSync : (path: string, mode?: number) => void
->          : ^    ^^      ^^    ^^^      ^^^^^^^^^
+>          : ^    ^^      ^^    ^^^      ^^^^^    
 >'test' : "test"
 >       : ^^^^^^
 }
@@ -34,7 +34,7 @@ export function mkdirSync(path: string, mode?: number): void;
 
 export function mkdirSync(path: string, mode?: string): void {}
 >mkdirSync : (path: string, mode?: number) => void
->          : ^    ^^      ^^    ^^^      ^^^^^^^^^
+>          : ^    ^^      ^^    ^^^      ^^^^^    
 >path : string
 >     : ^^^^^^
 >mode : string

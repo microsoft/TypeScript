@@ -19,13 +19,13 @@ export const foo = new Cls().foo();
 >new Cls().foo() : Lib
 >                : ^^^
 >new Cls().foo : () => Lib
->              : ^^^^^^^^^
+>              : ^^^^^^   
 >new Cls() : Cls
 >          : ^^^
 >Cls : typeof Cls
 >    : ^^^^^^^^^^
 >foo : () => Lib
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 export const bar = Cls.bar();
 >bar : Lib
@@ -33,11 +33,11 @@ export const bar = Cls.bar();
 >Cls.bar() : Lib
 >          : ^^^
 >Cls.bar : () => Lib
->        : ^^^^^^^^^
+>        : ^^^^^^   
 >Cls : typeof Cls
 >    : ^^^^^^^^^^
 >bar : () => Lib
->    : ^^^^^^^^^
+>    : ^^^^^^   
 
 === /types/lib/index.d.ts ===
 interface Lib { x }
@@ -65,7 +65,7 @@ Cls.prototype.foo = function() { return undefined; }
 >Cls.prototype.foo = function() { return undefined; } : () => any
 >                                                     : ^^^^^^^^^
 >Cls.prototype.foo : () => Lib
->                  : ^^^^^^^^^
+>                  : ^^^^^^   
 >Cls.prototype : Cls
 >              : ^^^
 >Cls : typeof Cls
@@ -73,7 +73,7 @@ Cls.prototype.foo = function() { return undefined; }
 >prototype : Cls
 >          : ^^^
 >foo : () => Lib
->    : ^^^^^^^^^
+>    : ^^^^^^   
 >function() { return undefined; } : () => any
 >                                 : ^^^^^^^^^
 >undefined : undefined

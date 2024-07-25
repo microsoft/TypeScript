@@ -88,7 +88,7 @@ var g = tag `Hello ${123} World` as string;
 >                                   : ^^^^^^
 >tag `Hello ${123} World` : any
 >tag : (...x: any[]) => any
->    : ^^^^ ^^     ^^^^^^^^
+>    : ^^^^ ^^     ^^^^^   
 >`Hello ${123} World` : string
 >                     : ^^^^^^
 >123 : 123
@@ -101,7 +101,7 @@ var h = tag `Hello` as string;
 >                      : ^^^^^^
 >tag `Hello` : any
 >tag : (...x: any[]) => any
->    : ^^^^ ^^     ^^^^^^^^
+>    : ^^^^ ^^     ^^^^^   
 >`Hello` : "Hello"
 >        : ^^^^^^^
 

@@ -1,12 +1,12 @@
-import { jsonToReadableText } from "../helpers";
+import { jsonToReadableText } from "../helpers.js";
 import {
     noChangeOnlyRuns,
     verifyTsc,
-} from "../helpers/tsc";
+} from "../helpers/tsc.js";
 import {
     loadProjectFromFiles,
     replaceText,
-} from "../helpers/vfs";
+} from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: when containerOnly project is referenced", () => {
     verifyTsc({

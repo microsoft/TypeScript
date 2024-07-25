@@ -13,7 +13,7 @@ f((n: number) => n);
 >f((n: number) => n) : number
 >                    : ^^^^^^
 >f : <T>(p: (t: T) => T) => T
->  : ^ ^^ ^^           ^^^^^^
+>  : ^ ^^ ^^           ^^^^^ 
 >(n: number) => n : (n: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >n : number

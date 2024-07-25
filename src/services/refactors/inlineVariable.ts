@@ -38,11 +38,11 @@ import {
     textRangeContainsPositionInclusive,
     TypeChecker,
     VariableDeclaration,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     RefactorErrorInfo,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Inline variable";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable);

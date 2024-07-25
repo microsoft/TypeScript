@@ -46,11 +46,11 @@ module Test {
 >this.getName() : string
 >               : ^^^^^^
 >this.getName : () => string
->             : ^^^^^^^^^^^^
+>             : ^^^^^^      
 >this : this
 >     : ^^^^
 >getName : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >length : number
 >       : ^^^^^^
 >0 : 0

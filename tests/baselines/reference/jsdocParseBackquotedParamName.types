@@ -7,7 +7,7 @@
  */
 function f(args, bwarg) {
 >f : (args?: string | undefined, bwarg: (number | null) | null) => void
->  : ^    ^^^      ^^^^^^^^^^^^^^     ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^^         ^^^^^^^^^^^     ^^^         ^^^^^   ^^^^^^^^^^^^^
 >args : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 >bwarg : number | null

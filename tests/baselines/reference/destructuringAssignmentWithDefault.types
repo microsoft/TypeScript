@@ -16,18 +16,18 @@ let x = 0;
 >  : ^
 
 ({x = 1} = a);
->({x = 1} = a) : { x?: number | undefined; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{x = 1} = a : { x?: number | undefined; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({x = 1} = a) : { x?: number; }
+>              : ^^^^^^      ^^^
+>{x = 1} = a : { x?: number; }
+>            : ^^^^^^      ^^^
 >{x = 1} : { x?: number; }
 >        : ^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
->a : { x?: number | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { x?: number; }
+>  : ^^^^^^      ^^^
 
 // Repro from #26235
 
@@ -46,28 +46,28 @@ function f1(options?: { color?: string, width?: number }) {
 >      : ^^^^^^^^^^^^^^^^^^
 >width : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
->options || {} : { color?: string | undefined; width?: number | undefined; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->options : { color?: string | undefined; width?: number | undefined; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>options || {} : { color?: string; width?: number; }
+>              : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options : { color?: string; width?: number; } | undefined
+>        : ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 
     ({ color, width } = options || {});
->({ color, width } = options || {}) : { color?: string | undefined; width?: number | undefined; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ color, width } = options || {} : { color?: string | undefined; width?: number | undefined; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({ color, width } = options || {}) : { color?: string; width?: number; }
+>                                   : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>{ color, width } = options || {} : { color?: string; width?: number; }
+>                                 : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
 >{ color, width } : { color: string | undefined; width: number | undefined; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >color : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >width : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
->options || {} : { color?: string | undefined; width?: number | undefined; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->options : { color?: string | undefined; width?: number | undefined; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>options || {} : { color?: string; width?: number; }
+>              : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options : { color?: string; width?: number; } | undefined
+>        : ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -76,12 +76,12 @@ function f1(options?: { color?: string, width?: number }) {
 >   : ^^^^^^^^^^^^^^^^^^
 >(options || {}).color : string | undefined
 >                      : ^^^^^^^^^^^^^^^^^^
->(options || {}) : { color?: string | undefined; width?: number | undefined; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->options || {} : { color?: string | undefined; width?: number | undefined; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->options : { color?: string | undefined; width?: number | undefined; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(options || {}) : { color?: string; width?: number; }
+>                : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options || {} : { color?: string; width?: number; }
+>              : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options : { color?: string; width?: number; } | undefined
+>        : ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 >color : string | undefined
@@ -92,12 +92,12 @@ function f1(options?: { color?: string, width?: number }) {
 >   : ^^^^^^^^^^^^^^^^^^
 >(options || {})["color"] : string | undefined
 >                         : ^^^^^^^^^^^^^^^^^^
->(options || {}) : { color?: string | undefined; width?: number | undefined; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->options || {} : { color?: string | undefined; width?: number | undefined; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->options : { color?: string | undefined; width?: number | undefined; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(options || {}) : { color?: string; width?: number; }
+>                : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options || {} : { color?: string; width?: number; }
+>              : ^^^^^^^^^^      ^^^^^^^^^^      ^^^
+>options : { color?: string; width?: number; } | undefined
+>        : ^^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 >"color" : "color"
@@ -171,17 +171,17 @@ function f3(options?: { color: string, width: number }) {
 >width : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >options || {} : { color: string; width: number; } | {}
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options : { color: string; width: number; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 
     ({ color, width } = options || {});
 >({ color, width } = options || {}) : { color: string; width: number; } | {}
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >{ color, width } = options || {} : { color: string; width: number; } | {}
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >{ color, width } : { color: string | undefined; width: number | undefined; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >color : string | undefined
@@ -189,9 +189,9 @@ function f3(options?: { color: string, width: number }) {
 >width : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >options || {} : { color: string; width: number; } | {}
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options : { color: string; width: number; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -201,11 +201,11 @@ function f3(options?: { color: string, width: number }) {
 >(options || {}).color : string | undefined
 >                      : ^^^^^^^^^^^^^^^^^^
 >(options || {}) : { color: string; width: number; } | {}
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options || {} : { color: string; width: number; } | {}
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options : { color: string; width: number; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 >color : string | undefined
@@ -217,11 +217,11 @@ function f3(options?: { color: string, width: number }) {
 >(options || {})["color"] : string | undefined
 >                         : ^^^^^^^^^^^^^^^^^^
 >(options || {}) : { color: string; width: number; } | {}
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options || {} : { color: string; width: number; } | {}
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^
 >options : { color: string; width: number; } | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 >"color" : "color"

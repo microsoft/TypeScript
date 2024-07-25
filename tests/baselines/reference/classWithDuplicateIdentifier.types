@@ -13,7 +13,7 @@ class C {
 
     a: number;
 >a : () => number
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 }
 class K {
 >K : K

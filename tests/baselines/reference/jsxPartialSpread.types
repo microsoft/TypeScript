@@ -20,9 +20,9 @@ const Select = (p: {value?: unknown}) => <p></p>;
 ><p></p> : JSX.Element
 >        : ^^^^^^^^^^^
 >p : { value?: unknown; }
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^       ^^^
 >p : { value?: unknown; }
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^       ^^^
 
 import React from 'react';
 >React : typeof React
@@ -32,11 +32,11 @@ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<t
 >Repro : ({ SelectProps }: { SelectProps?: Partial<Parameters<typeof Select>[0]>; }) => JSX.Element
 >      : ^               ^^                                                        ^^^^^^^^^^^^^^^^
 >SelectProps : Partial<{ value?: unknown; }>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^       ^^^^
 >{} : {}
 >   : ^^
 >SelectProps : Partial<{ value?: unknown; }> | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
 >Select : (p: { value?: unknown; }) => JSX.Element
 >       : ^ ^^                    ^^^^^^^^^^^^^^^^
 
@@ -54,7 +54,7 @@ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<t
 >'test' : "test"
 >       : ^^^^^^
 >SelectProps : Partial<{ value?: unknown; }>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^       ^^^^
 
     );
 }

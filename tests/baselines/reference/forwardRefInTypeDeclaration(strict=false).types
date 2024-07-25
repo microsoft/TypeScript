@@ -95,7 +95,7 @@ interface Foo6 { [Cls1.a]: number; [Cls2.b]: number; [obj1.c]: number; [obj2.d]:
 >obj1.c : "c"
 >       : ^^^
 >obj1 : { c: "c"; }
->     : ^^^^^^^^^^^
+>     : ^^^^^   ^^^
 >c : "c"
 >  : ^^^
 >[obj2.d] : number

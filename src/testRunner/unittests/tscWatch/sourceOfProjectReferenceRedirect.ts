@@ -1,20 +1,20 @@
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
-import { FsContents } from "../helpers/contents";
-import { getFsContentsForDemoProjectReferences } from "../helpers/demoProjectReferences";
-import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { FsContents } from "../helpers/contents.js";
+import { getFsContentsForDemoProjectReferences } from "../helpers/demoProjectReferences.js";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder.js";
 import {
     createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
     runWatchBaseline,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     FileOrFolderOrSymLink,
     libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedirect", () => {
     interface VerifyWatchInput {

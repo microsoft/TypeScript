@@ -19,7 +19,7 @@ var n = typed(1);
 >typed(1) : 1 | undefined
 >         : ^^^^^^^^^^^^^
 >typed : <T>(param?: T) => T | undefined
->      : ^ ^^     ^^^ ^^^^^^^^^^^^^^^^^^
+>      : ^ ^^     ^^^ ^^^^^             
 >1 : 1
 >  : ^
 

@@ -3,8 +3,8 @@ import {
     openExternalProjectForSession,
     TestSession,
     toExternalFile,
-} from "../helpers/tsserver";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/tsserver.js";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: importHelpers", () => {
     it("should not crash in tsserver", () => {

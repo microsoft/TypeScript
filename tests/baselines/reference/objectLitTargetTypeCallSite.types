@@ -15,7 +15,7 @@ function process( x: {a:number; b:string;}) {
 >x.a : number
 >    : ^^^^^^
 >x : { a: number; b: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 }

@@ -47,9 +47,9 @@ module TargetHasOptional {
 
     var b: typeof a = { opt: new Base() }
 >b : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >a : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >{ opt: new Base() } : { opt: Base; }
 >                    : ^^^^^^^^^^^^^^
 >opt : Base
@@ -114,17 +114,17 @@ module TargetHasOptional {
 
     c = a;
 >c = a : { opt?: Base; }
->      : ^^^^^^^^^^^^^^^
+>      : ^^^^^^^^    ^^^
 >c : C
 >  : ^
 >a : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 
     a = d;
 >a = d : D
 >      : ^
 >a : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >d : D
 >  : ^
 
@@ -132,7 +132,7 @@ module TargetHasOptional {
 >a = e : E
 >      : ^
 >a : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >e : E
 >  : ^
 
@@ -140,7 +140,7 @@ module TargetHasOptional {
 >a = f : F
 >      : ^
 >a : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >f : F
 >  : ^
 
@@ -148,7 +148,7 @@ module TargetHasOptional {
 >a = c : C
 >      : ^
 >a : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >c : C
 >  : ^
 
@@ -156,7 +156,7 @@ module TargetHasOptional {
 >b = d : D
 >      : ^
 >b : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >d : D
 >  : ^
 
@@ -164,7 +164,7 @@ module TargetHasOptional {
 >b = e : E
 >      : ^
 >b : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >e : E
 >  : ^
 
@@ -172,23 +172,23 @@ module TargetHasOptional {
 >b = f : F
 >      : ^
 >b : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >f : F
 >  : ^
 
     b = a;
 >b = a : { opt?: Base; }
->      : ^^^^^^^^^^^^^^^
+>      : ^^^^^^^^    ^^^
 >b : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >a : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 
     b = c;
 >b = c : C
 >      : ^
 >b : { opt?: Base; }
->  : ^^^^^^^^^^^^^^^
+>  : ^^^^^^^^    ^^^
 >c : C
 >  : ^
 }
@@ -279,17 +279,17 @@ module SourceHasOptional {
 
     c = a; // ok
 >c = a : { opt: Base; }
->      : ^^^^^^^^^^^^^^
+>      : ^^^^^^^    ^^^
 >c : C
 >  : ^
 >a : { opt: Base; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^
 
     a = d; // error
 >a = d : D
 >      : ^
 >a : { opt: Base; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^
 >d : D
 >  : ^
 
@@ -297,7 +297,7 @@ module SourceHasOptional {
 >a = e : E
 >      : ^
 >a : { opt: Base; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^
 >e : E
 >  : ^
 
@@ -305,7 +305,7 @@ module SourceHasOptional {
 >a = f : F
 >      : ^
 >a : { opt: Base; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^
 >f : F
 >  : ^
 
@@ -313,7 +313,7 @@ module SourceHasOptional {
 >a = c : C
 >      : ^
 >a : { opt: Base; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^
 >c : C
 >  : ^
 
@@ -343,11 +343,11 @@ module SourceHasOptional {
 
     b = a; // ok
 >b = a : { opt: Base; }
->      : ^^^^^^^^^^^^^^
+>      : ^^^^^^^    ^^^
 >b : { opt: Base; }
 >  : ^^^^^^^^^^^^^^
 >a : { opt: Base; }
->  : ^^^^^^^^^^^^^^
+>  : ^^^^^^^    ^^^
 
     b = c; // ok
 >b = c : C

@@ -38,7 +38,7 @@ var p2 = shouldBeIdentity(p1);
 >shouldBeIdentity(p1) : MyPromise<boolean, any>
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >shouldBeIdentity : <T, U>(p: DoNothingAlias<T, U>) => MyPromise<T, U>
->                 : ^ ^^ ^^ ^^                    ^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^ ^^ ^^                    ^^^^^               
 >p1 : MyPromise<boolean, any>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
 

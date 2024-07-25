@@ -24,11 +24,11 @@ export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any);
 >BindingKey.create<ControllerClass>(null as any) : BindingKey<ControllerClass>
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BindingKey.create : <T extends import("monorepo/context/index").Constructor<any>>(ctor: T) => BindingKey<T>
->                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^     ^^    ^^ ^^^^^^^^^^^^^^^^^^
 >BindingKey : typeof BindingKey
 >           : ^^^^^^^^^^^^^^^^^
 >create : <T extends import("monorepo/context/index").Constructor<any>>(ctor: T) => BindingKey<T>
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^     ^^    ^^ ^^^^^^^^^^^^^^^^^^
 >null as any : any
 
 === monorepo/context/src/value-promise.ts ===
@@ -53,7 +53,7 @@ export class BindingKey<T> {
 
   static create<T extends Constructor<any>>(ctor: T) {
 >create : <T extends Constructor<any>>(ctor: T) => BindingKey<T>
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^                ^^    ^^ ^^^^^^^^^^^^^^^^^^
 >ctor : T
 >     : ^
 

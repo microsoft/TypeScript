@@ -22,8 +22,8 @@ function bar(props: { x?: string; y?: string }) {
 >  : ^^^^^^
 >"" : ""
 >   : ^^
->props : { x?: string | undefined; y?: string | undefined; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : { x?: string; y?: string; }
+>      : ^^^^^^      ^^^^^^      ^^^
 
   return {
 >{    [x]: 1,    [y]: 2,  } : { [x: string]: number; }

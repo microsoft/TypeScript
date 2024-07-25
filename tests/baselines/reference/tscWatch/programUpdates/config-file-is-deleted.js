@@ -93,6 +93,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 [91merror[0m[90m TS5083: [0mCannot read file '/a/b/tsconfig.json'.

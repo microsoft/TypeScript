@@ -3,7 +3,7 @@
 === errorElaborationDivesIntoApparentlyPresentPropsOnly.ts ===
 function foo<T extends { a: string }>(x: T) {
 >foo : <T extends { a: string; }>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^      ^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^              ^^ ^^ ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >x : T
@@ -32,7 +32,7 @@ function foo<T extends { a: string }>(x: T) {
 
 function bar<T extends { a: string }>(x: T) {
 >bar : <T extends { a: string; }>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^      ^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^              ^^ ^^ ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >x : T
@@ -53,7 +53,7 @@ function bar<T extends { a: string }>(x: T) {
 
 function baz<T extends { a: string }>(x: T) {
 >baz : <T extends { a: string; }>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^      ^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^              ^^ ^^ ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >x : T

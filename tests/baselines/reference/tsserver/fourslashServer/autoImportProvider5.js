@@ -63,7 +63,6 @@ Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 depe
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/react-hook-form/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/react-hook-form/dist/useForm.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/react-hook-form/dist/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -88,6 +87,18 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -98,8 +109,6 @@ watchedFiles::
   {"pollingInterval":500}
 /node_modules/react-hook-form/dist/index.d.ts: *new*
   {"pollingInterval":500}
-/node_modules/react-hook-form/dist/package.json: *new*
-  {"pollingInterval":2000}
 /node_modules/react-hook-form/dist/useForm.d.ts: *new*
   {"pollingInterval":500}
 /package.json: *new*
@@ -172,7 +181,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject2*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/react-hook-form/dist/package.json 2000 undefined Project: /dev/null/autoImportProviderProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -207,24 +215,19 @@ Info seq  [hh:mm:ss:mss] 	FileName: /package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
+    }
 After Request
-watchedFiles::
-/lib.d.ts:
-  {"pollingInterval":500}
-/lib.decorators.d.ts:
-  {"pollingInterval":500}
-/lib.decorators.legacy.d.ts:
-  {"pollingInterval":500}
-/node_modules/react-hook-form/dist/index.d.ts:
-  {"pollingInterval":500}
-/node_modules/react-hook-form/dist/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000} *new*
-/node_modules/react-hook-form/dist/useForm.d.ts:
-  {"pollingInterval":500}
-/package.json:
-  {"pollingInterval":250}
-
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider)
     projectStateVersion: 1
@@ -449,9 +452,6 @@ watchedFiles::
   {"pollingInterval":500}
 /node_modules/react-hook-form/dist/index.d.ts:
   {"pollingInterval":500}
-/node_modules/react-hook-form/dist/package.json:
-  {"pollingInterval":2000}
-  {"pollingInterval":2000}
 /node_modules/react-hook-form/dist/useForm.d.ts:
   {"pollingInterval":500}
 /package.json:
@@ -474,6 +474,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": "import { useForm } from \"react-hook-form\";\r\n\r\n"
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 7,
+      "success": true
     }
 After Request
 Projects::
@@ -542,6 +550,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 8,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -592,6 +608,14 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 9,
+      "success": true
+    }
 After Request
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -641,6 +665,14 @@ Info seq  [hh:mm:ss:mss] request:
         "insertString": ""
       },
       "command": "change"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "change",
+      "request_seq": 10,
+      "success": true
     }
 After Request
 ScriptInfos::

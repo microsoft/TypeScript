@@ -6,9 +6,8 @@ const a = 2;
 const a = 2;
 
 //// [filename.cjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const a = 2;
+export {};
 //// [filename.mjs]
 const a = 2;
 export {};

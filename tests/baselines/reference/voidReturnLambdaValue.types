@@ -16,7 +16,7 @@ function foo(arg1, arg2, callback:(v1,v2,v3) => void):void {
 >callback(arg1, arg2, arg2) : void
 >                           : ^^^^
 >callback : (v1: any, v2: any, v3: any) => void
->         : ^  ^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^
+>         : ^  ^^^^^^^  ^^^^^^^  ^^^^^^^^^^    
 >arg1 : any
 >arg2 : any
 >arg2 : any

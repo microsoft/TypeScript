@@ -17,7 +17,7 @@ module test {
 
     function map<U>() {
 >map : <U>() => void
->    : ^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^
 
         var ys: U[] = [];
 >ys : U[]

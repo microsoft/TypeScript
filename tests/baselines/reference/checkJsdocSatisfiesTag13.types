@@ -16,11 +16,11 @@ const t1 = { f: s => s.toLowerCase() }; // should work
 >s.toLowerCase() : string
 >                : ^^^^^^
 >s.toLowerCase : () => string
->              : ^^^^^^^^^^^^
+>              : ^^^^^^      
 >s : string
 >  : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 /** @satisfies {{ f: (x: string) => string }} */
 const t2 = { g: "oops" }; // should error

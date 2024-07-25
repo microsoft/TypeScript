@@ -21,11 +21,11 @@ export var a = function () {
     b.b(mod);
 >b.b(mod) : any
 >b.b : (a: any) => any
->    : ^ ^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^   
 >b : typeof b
 >  : ^^^^^^^^
 >b : (a: any) => any
->  : ^ ^^   ^^^^^^^^
+>  : ^ ^^   ^^^^^   
 >mod : typeof mod
 >    : ^^^^^^^^^^
 }

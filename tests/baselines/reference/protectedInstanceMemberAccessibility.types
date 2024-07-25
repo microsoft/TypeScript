@@ -49,11 +49,11 @@ class B extends A {
 >this.f() : string
 >         : ^^^^^^
 >this.f : () => string
->       : ^^^^^^^^^^^^
+>       : ^^^^^^      
 >this : this
 >     : ^^^^
 >f : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
         var t3 = this.y;
 >t3 : string
@@ -91,11 +91,11 @@ class B extends A {
 >super.f() : string
 >          : ^^^^^^
 >super.f : () => string
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 >super : A
 >      : ^
 >f : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
         var s3 = super.y;    // error
 >s3 : any
@@ -137,11 +137,11 @@ class B extends A {
 >a.f() : string
 >      : ^^^^^^
 >a.f : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >a : A
 >  : ^
 >f : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
         var a3 = a.y;    // error
 >a3 : any
@@ -183,11 +183,11 @@ class B extends A {
 >b.f() : string
 >      : ^^^^^^
 >b.f : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >b : B
 >  : ^
 >f : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
         var b3 = b.y;
 >b3 : string
@@ -229,11 +229,11 @@ class B extends A {
 >c.f() : string
 >      : ^^^^^^
 >c.f : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >c : C
 >  : ^
 >f : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
         var c3 = c.y;    // error
 >c3 : any

@@ -24,24 +24,24 @@ class Baz { z: number }
 var g3: () => Iterable<Foo> = function* () {
 >g3 : () => Iterable<Foo>
 >   : ^^^^^^             
->function* () {    yield;    yield new Bar;    yield new Baz;    yield *[new Bar];    yield *[new Baz];} : () => Generator<Bar | Baz, void, undefined>
->                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () {    yield;    yield new Bar;    yield new Baz;    yield *[new Bar];    yield *[new Baz];} : () => Generator<Bar | Baz, void, any>
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield;
->yield : undefined
->      : ^^^^^^^^^
+>yield : any
+>      : ^^^
 
     yield new Bar;
->yield new Bar : undefined
->              : ^^^^^^^^^
+>yield new Bar : any
+>              : ^^^
 >new Bar : Bar
 >        : ^^^
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
     yield new Baz;
->yield new Baz : undefined
->              : ^^^^^^^^^
+>yield new Baz : any
+>              : ^^^
 >new Baz : Baz
 >        : ^^^
 >Baz : typeof Baz

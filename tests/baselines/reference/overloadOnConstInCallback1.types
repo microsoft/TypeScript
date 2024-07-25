@@ -28,7 +28,7 @@ class C {
 >callback('hi') : number
 >               : ^^^^^^
 >callback : (x: any) => number
->         : ^ ^^   ^^^^^^^^^^^
+>         : ^ ^^   ^^^^^      
 >'hi' : "hi"
 >     : ^^^^
 
@@ -36,7 +36,7 @@ class C {
 >callback('bye') : number
 >                : ^^^^^^
 >callback : (x: any) => number
->         : ^ ^^   ^^^^^^^^^^^
+>         : ^ ^^   ^^^^^      
 >'bye' : "bye"
 >      : ^^^^^
 
@@ -50,7 +50,7 @@ class C {
 >callback(hm) : number
 >             : ^^^^^^
 >callback : (x: any) => number
->         : ^ ^^   ^^^^^^^^^^^
+>         : ^ ^^   ^^^^^      
 >hm : string
 >   : ^^^^^^
     }

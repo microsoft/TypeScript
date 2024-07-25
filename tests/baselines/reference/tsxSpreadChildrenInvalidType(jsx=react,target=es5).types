@@ -47,19 +47,19 @@ function Todo(prop: { key: number, todo: string }) {
 >prop.key.toString() : string
 >                    : ^^^^^^
 >prop.key.toString : (radix?: number) => string
->                  : ^     ^^^      ^^^^^^^^^^^
+>                  : ^     ^^^      ^^^^^      
 >prop.key : number
 >         : ^^^^^^
 >prop : { key: number; todo: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >key : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 >prop.todo : string
 >          : ^^^^^^
 >prop : { key: number; todo: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^      ^^^^^^^^      ^^^
 >todo : string
 >     : ^^^^^^
 >div : any

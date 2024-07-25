@@ -16,7 +16,7 @@ function foo<T>(x: new(a: T) => T) {
 >new x(null) : T
 >            : ^
 >x : new (a: T) => T
->  : ^^^^^ ^^ ^^^^^^
+>  : ^^^^^ ^^ ^^^^^ 
 }
 
 interface I {
@@ -84,7 +84,7 @@ var r3b = foo(a); // any
 >foo : <T>(x: new (a: T) => T) => T
 >    : ^ ^^ ^^               ^^^^^^
 >a : new <T>(x: T) => T
->  : ^^^^^ ^^ ^^ ^^^^^^
+>  : ^^^^^ ^^ ^^ ^^^^^ 
 
 function foo2<T, U>(x: T, cb: new(a: T) => U) {
 >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
@@ -100,7 +100,7 @@ function foo2<T, U>(x: T, cb: new(a: T) => U) {
 >new cb(x) : U
 >          : ^
 >cb : new (a: T) => U
->   : ^^^^^ ^^ ^^^^^^
+>   : ^^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -127,7 +127,7 @@ var r4b = foo2(1, a); // any
 >1 : 1
 >  : ^
 >a : new <T>(x: T) => T
->  : ^^^^^ ^^ ^^ ^^^^^^
+>  : ^^^^^ ^^ ^^ ^^^^^ 
 
 var r5 = foo2(1, i); // any
 >r5 : number
@@ -169,7 +169,7 @@ function foo3<T, U>(x: T, cb: new(a: T) => U, y: U) {
 >new cb(x) : U
 >          : ^
 >cb : new (a: T) => U
->   : ^^^^^ ^^ ^^^^^^
+>   : ^^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -194,7 +194,7 @@ var r7b = foo3(null, a, ''); // any
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
 >     : ^ ^^ ^^ ^^ ^^  ^^               ^^ ^^ ^^^^^^
 >a : new <T>(x: T) => T
->  : ^^^^^ ^^ ^^ ^^^^^^
+>  : ^^^^^ ^^ ^^ ^^^^^ 
 >'' : ""
 >   : ^^
 

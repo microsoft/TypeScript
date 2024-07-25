@@ -32,7 +32,7 @@ MyClass.prototype.optionalParam = function(required, notRequired) {
 >optionalParam : any
 >              : ^^^
 >function(required, notRequired) {    return this;} : (required: string, notRequired?: string) => MyClass
->                                                   : ^        ^^      ^^           ^^^      ^^^^^^^^^^^^
+>                                                   : ^        ^^      ^^           ^^^      ^^^^^       
 >required : string
 >         : ^^^^^^
 >notRequired : string
@@ -57,11 +57,11 @@ let c1 = pInst.optionalParam('hello')
 >pInst.optionalParam('hello') : MyClass
 >                             : ^^^^^^^
 >pInst.optionalParam : (required: string, notRequired?: string) => MyClass
->                    : ^        ^^      ^^           ^^^      ^^^^^^^^^^^^
+>                    : ^        ^^      ^^           ^^^      ^^^^^       
 >pInst : MyClass
 >      : ^^^^^^^
 >optionalParam : (required: string, notRequired?: string) => MyClass
->              : ^        ^^      ^^           ^^^      ^^^^^^^^^^^^
+>              : ^        ^^      ^^           ^^^      ^^^^^       
 >'hello' : "hello"
 >        : ^^^^^^^
 
@@ -71,11 +71,11 @@ let c2 = pInst.optionalParam('hello', null)
 >pInst.optionalParam('hello', null) : MyClass
 >                                   : ^^^^^^^
 >pInst.optionalParam : (required: string, notRequired?: string) => MyClass
->                    : ^        ^^      ^^           ^^^      ^^^^^^^^^^^^
+>                    : ^        ^^      ^^           ^^^      ^^^^^       
 >pInst : MyClass
 >      : ^^^^^^^
 >optionalParam : (required: string, notRequired?: string) => MyClass
->              : ^        ^^      ^^           ^^^      ^^^^^^^^^^^^
+>              : ^        ^^      ^^           ^^^      ^^^^^       
 >'hello' : "hello"
 >        : ^^^^^^^
 

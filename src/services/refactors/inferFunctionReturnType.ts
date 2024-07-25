@@ -26,13 +26,13 @@ import {
     Type,
     TypeChecker,
     TypeNode,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     isRefactorErrorInfo,
     RefactorErrorInfo,
     refactorKindBeginsWith,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Infer function return type";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Infer_function_return_type);

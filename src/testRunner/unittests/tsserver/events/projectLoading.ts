@@ -1,5 +1,5 @@
-import * as ts from "../../../_namespaces/ts";
-import { jsonToReadableText } from "../../helpers";
+import * as ts from "../../../_namespaces/ts.js";
+import { jsonToReadableText } from "../../helpers.js";
 import {
     baselineTsserverLogs,
     createSessionWithCustomEventHandler,
@@ -8,13 +8,13 @@ import {
     protocolLocationFromSubstring,
     TestSession,
     toExternalFiles,
-} from "../../helpers/tsserver";
+} from "../../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
     TestServerHost,
-} from "../../helpers/virtualFileSystemWithWatch";
+} from "../../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
     const aTs: File = {

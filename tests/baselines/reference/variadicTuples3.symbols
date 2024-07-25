@@ -1,0 +1,47 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples3.ts] ////
+
+=== variadicTuples3.ts ===
+// https://github.com/microsoft/TypeScript/issues/58697
+
+function test1<T extends any[], P extends any[]>(): [...T, ...P] {
+>test1 : Symbol(test1, Decl(variadicTuples3.ts, 0, 0))
+>T : Symbol(T, Decl(variadicTuples3.ts, 2, 15))
+>P : Symbol(P, Decl(variadicTuples3.ts, 2, 31))
+>T : Symbol(T, Decl(variadicTuples3.ts, 2, 15))
+>P : Symbol(P, Decl(variadicTuples3.ts, 2, 31))
+
+  let x: any[] = [];
+>x : Symbol(x, Decl(variadicTuples3.ts, 3, 5))
+
+  return x;
+>x : Symbol(x, Decl(variadicTuples3.ts, 3, 5))
+}
+
+function test2<T extends any[], P extends any[]>(): [...T, ...P] {
+>test2 : Symbol(test2, Decl(variadicTuples3.ts, 5, 1))
+>T : Symbol(T, Decl(variadicTuples3.ts, 7, 15))
+>P : Symbol(P, Decl(variadicTuples3.ts, 7, 31))
+>T : Symbol(T, Decl(variadicTuples3.ts, 7, 15))
+>P : Symbol(P, Decl(variadicTuples3.ts, 7, 31))
+
+  let x: [any, any] = [null, null];
+>x : Symbol(x, Decl(variadicTuples3.ts, 8, 5))
+
+  return x;
+>x : Symbol(x, Decl(variadicTuples3.ts, 8, 5))
+}
+
+function test3<T extends any[], P extends any[]>(): [...T, ...P] {
+>test3 : Symbol(test3, Decl(variadicTuples3.ts, 10, 1))
+>T : Symbol(T, Decl(variadicTuples3.ts, 12, 15))
+>P : Symbol(P, Decl(variadicTuples3.ts, 12, 31))
+>T : Symbol(T, Decl(variadicTuples3.ts, 12, 15))
+>P : Symbol(P, Decl(variadicTuples3.ts, 12, 31))
+
+  let x: [any, any, any] = [null, null, null];
+>x : Symbol(x, Decl(variadicTuples3.ts, 13, 5))
+
+  return x;
+>x : Symbol(x, Decl(variadicTuples3.ts, 13, 5))
+}
+

@@ -16,11 +16,11 @@ export function register(data: any) {
 >r.push(data) : number
 >             : ^^^^^^
 >r.push : (...items: any[]) => number
->       : ^^^^     ^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^      
 >r : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^      
 >data : any
 }
 === data1.ts ===

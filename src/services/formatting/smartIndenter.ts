@@ -1,4 +1,8 @@
 import {
+    getRangeOfEnclosingComment,
+    TextRangeWithKind,
+} from "../_namespaces/ts.formatting.js";
+import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     CallExpression,
@@ -52,11 +56,7 @@ import {
     TypeLiteralNode,
     TypeReferenceNode,
     VariableDeclarationList,
-} from "../_namespaces/ts";
-import {
-    getRangeOfEnclosingComment,
-    TextRangeWithKind,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export namespace SmartIndenter {

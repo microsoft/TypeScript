@@ -32,6 +32,9 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Debug Failure. False expression.
+Verbose Debug Information: {"fileName":"^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js","currentDirectory":"/user/username/projects/myproject","hostCurrentDirectory":"/","openKeys":[]}
+Dynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -210,7 +213,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: ^walkThroughSnippet:/Users/UserName/projects
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 

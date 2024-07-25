@@ -67,7 +67,7 @@ module TargetIsPublic {
 >a = b : Base
 >      : ^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >b : Base
 >  : ^^^^
 
@@ -75,7 +75,7 @@ module TargetIsPublic {
 >a = i : I
 >      : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >i : I
 >  : ^
 
@@ -83,7 +83,7 @@ module TargetIsPublic {
 >a = d : D
 >      : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >d : D
 >  : ^
 
@@ -91,17 +91,17 @@ module TargetIsPublic {
 >a = e : E
 >      : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >e : E
 >  : ^
 
     b = a;
 >b = a : { foo: string; }
->      : ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^      ^^^
 >b : Base
 >  : ^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     b = i;
 >b = i : I
@@ -129,11 +129,11 @@ module TargetIsPublic {
 
     i = a;
 >i = a : { foo: string; }
->      : ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^      ^^^
 >i : I
 >  : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     i = b;
 >i = b : Base
@@ -161,11 +161,11 @@ module TargetIsPublic {
 
     d = a;
 >d = a : { foo: string; }
->      : ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^      ^^^
 >d : D
 >  : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     d = b;
 >d = b : Base
@@ -193,11 +193,11 @@ module TargetIsPublic {
 
     e = a; // errror
 >e = a : { foo: string; }
->      : ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^      ^^^
 >e : E
 >  : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     e = b; // errror
 >e = b : Base
@@ -295,7 +295,7 @@ module TargetIsPublic {
 >a = b : Base
 >      : ^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >b : Base
 >  : ^^^^
 
@@ -303,7 +303,7 @@ module TargetIsPublic {
 >a = i : I
 >      : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >i : I
 >  : ^
 
@@ -311,7 +311,7 @@ module TargetIsPublic {
 >a = d : D
 >      : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >d : D
 >  : ^
 
@@ -319,17 +319,17 @@ module TargetIsPublic {
 >a = e : E
 >      : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 >e : E
 >  : ^
 
     b = a; // error
 >b = a : { foo: string; }
->      : ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^      ^^^
 >b : Base
 >  : ^^^^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     b = i;
 >b = i : I
@@ -365,11 +365,11 @@ module TargetIsPublic {
     
     i = a; // error
 >i = a : { foo: string; }
->      : ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^      ^^^
 >i : I
 >  : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     i = b;
 >i = b : Base
@@ -405,11 +405,11 @@ module TargetIsPublic {
 
     d = a;
 >d = a : { foo: string; }
->      : ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^      ^^^
 >d : D
 >  : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     d = b; // error
 >d = b : Base
@@ -437,11 +437,11 @@ module TargetIsPublic {
 
     e = a; // errror
 >e = a : { foo: string; }
->      : ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^      ^^^
 >e : E
 >  : ^
 >a : { foo: string; }
->  : ^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^
 
     e = b; // errror
 >e = b : Base

@@ -14,7 +14,7 @@ use(moduleB.value);
 >use(moduleB.value) : void
 >                   : ^^^^
 >use : (v: any) => void
->    : ^ ^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^    
 >moduleB.value : string
 >              : ^^^^^^
 >moduleB : typeof moduleB
@@ -26,7 +26,7 @@ use(moduleB.moduleC);
 >use(moduleB.moduleC) : void
 >                     : ^^^^
 >use : (v: any) => void
->    : ^ ^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^    
 >moduleB.moduleC : string
 >                : ^^^^^^
 >moduleB : typeof moduleB
@@ -38,7 +38,7 @@ use(moduleB.moduleCStar);
 >use(moduleB.moduleCStar) : void
 >                         : ^^^^
 >use : (v: any) => void
->    : ^ ^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^    
 >moduleB.moduleCStar : typeof moduleB.moduleCStar
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >moduleB : typeof moduleB
