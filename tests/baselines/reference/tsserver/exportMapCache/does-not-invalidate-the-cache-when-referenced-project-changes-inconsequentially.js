@@ -516,8 +516,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/packages/lib/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "foo",

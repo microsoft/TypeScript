@@ -308,6 +308,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -315,6 +316,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -322,6 +324,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -329,6 +332,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -336,6 +340,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -343,6 +348,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -350,6 +356,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -357,6 +364,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -425,6 +433,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -432,6 +441,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -439,6 +449,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -446,6 +457,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -453,6 +465,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -460,6 +473,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -467,6 +481,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           },
           {
@@ -474,6 +489,7 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "warning",
             "kindModifiers": "",
             "sortText": "18",
+            "isFromUncheckedFile": true,
             "commitCharacters": []
           }
         ],

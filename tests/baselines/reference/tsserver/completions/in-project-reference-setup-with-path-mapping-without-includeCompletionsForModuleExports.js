@@ -2274,8 +2274,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyClass",
@@ -2289,8 +2289,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/helper",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "MyHelper",
@@ -2304,8 +2304,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/other",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "OtherClass",

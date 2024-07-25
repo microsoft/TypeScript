@@ -21,8 +21,8 @@
       "entries": [
         {
           "name": "aa",
-          "kind": "string",
           "kindModifiers": "",
+          "kind": "string",
           "sortText": "11",
           "replacementSpan": {
             "start": 24,
@@ -39,8 +39,8 @@
         },
         {
           "name": "bb",
-          "kind": "string",
           "kindModifiers": "",
+          "kind": "string",
           "sortText": "11",
           "replacementSpan": {
             "start": 24,
