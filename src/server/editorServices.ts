@@ -4692,10 +4692,16 @@ export class ProjectService {
 
     /** @internal */
     applyChangesInOpenFiles(openFiles: Iterable<OpenFileArguments> | undefined, changedFiles?: Iterable<ChangeFileArguments>, closedFiles?: string[]): void {
+        let existingOpenScriptInfos: (ScriptInfo | undefined)[] | undefined;
         let openScriptInfos: ScriptInfo[] | undefined;
         let assignOrphanScriptInfosToInferredProject = false;
         if (openFiles) {
             for (const file of openFiles) {
+                (existingOpenScriptInfos ??= []).push(this.getScriptInfoForPath(normalizedPathToPath(
+                    toNormalizedPath(file.fileName),
+                    file.projectRootPath ? this.getNormalizedAbsolutePath(file.projectRootPath) : this.currentDirectory,
+                    this.toCanonicalFileName,
+                )));
                 // Create script infos so we have the new content for all the open files before we do any updates to projects
                 const info = this.getOrCreateOpenScriptInfo(
                     toNormalizedPath(file.fileName),
@@ -4726,6 +4732,13 @@ export class ProjectService {
 
         // All the script infos now exist, so ok to go update projects for open files
         let retainProjects: Set<ConfiguredProject> | undefined;
+        forEach(
+            existingOpenScriptInfos,
+            (existing, index) =>
+                !existing && openScriptInfos![index] && !openScriptInfos![index].isDynamic ?
+                    this.tryInvokeWildCardDirectories(openScriptInfos![index]) :
+                    undefined,
+        );
         openScriptInfos?.forEach(info => this.assignProjectToOpenedScriptInfo(info).retainProjects?.forEach(p => (retainProjects ??= new Set()).add(p)));
 
         // While closing files there could be open files that needed assigning new inferred projects, do it now

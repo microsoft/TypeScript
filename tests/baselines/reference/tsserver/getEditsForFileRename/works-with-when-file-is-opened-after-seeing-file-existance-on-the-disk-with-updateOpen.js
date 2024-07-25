@@ -328,6 +328,9 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/myproject/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Invoking /home/src/myproject/tsconfig.json:: wildcard for open scriptInfo:: /home/src/myproject/src/new.ts
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/myproject/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/myproject/src/new.ts ProjectRootPath: /home/src/myproject:: Result: /home/src/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myproject/src 1 undefined Project: /home/src/myproject/tsconfig.json WatchType: Failed Lookup Locations
@@ -413,8 +416,8 @@ FsWatchesRecursive::
 Timeout callback:: count: 2
 1: /home/src/myproject/tsconfig.json *deleted*
 2: *ensureProjectForOpenFiles* *deleted*
-3: /home/src/myproject/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+5: /home/src/myproject/tsconfig.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/myproject/tsconfig.json (Configured) *changed*
@@ -596,14 +599,14 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 3
-3: /home/src/myproject/tsconfig.json
-4: *ensureProjectForOpenFiles*
-5: checkOne *new*
+5: /home/src/myproject/tsconfig.json
+6: *ensureProjectForOpenFiles*
+7: checkOne *new*
 
 Before running Timeout callback:: count: 3
-3: /home/src/myproject/tsconfig.json
-4: *ensureProjectForOpenFiles*
-5: checkOne
+5: /home/src/myproject/tsconfig.json
+6: *ensureProjectForOpenFiles*
+7: checkOne
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myproject/tsconfig.json
