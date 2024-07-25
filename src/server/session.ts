@@ -486,7 +486,7 @@ type Projects = readonly Project[] | {
 /**
  * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
  */
-function combineProjectOutput<T, U>(
+function combineProjectOutput<T, U extends {}>(
     defaultValue: T,
     getValue: (path: Path) => T,
     projects: Projects,

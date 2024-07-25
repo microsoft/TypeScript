@@ -396,7 +396,7 @@ export function flatten<T>(array: T[][] | readonly (T | readonly T[] | undefined
  *
  * @internal
  */
-export function flatMap<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): readonly U[] {
+export function flatMap<T, U extends {}>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): readonly U[] {
     let result: U[] | undefined;
     if (array !== undefined) {
         for (let i = 0; i < array.length; i++) {
@@ -917,18 +917,13 @@ export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | und
  *
  * @internal
  */
-export function append<TArray extends any[] | undefined, TValue extends NonNullable<TArray>[number] | undefined>(to: TArray, value: TValue): [undefined, undefined] extends [TArray, TValue] ? TArray : NonNullable<TArray>[number][];
+export function append<T extends {}>(to: T[], value: T | undefined): T[];
 /** @internal */
-export function append<T>(to: T[], value: T | undefined): T[];
+export function append<T extends {}>(to: T[] | undefined, value: T): T[];
 /** @internal */
-export function append<T>(to: T[] | undefined, value: T): T[];
-/** @internal */
-export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined;
-/** @internal */
-export function append<T>(to: T[], value: T | undefined): void;
-/** @internal */
-export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
-    if (value === undefined) return to as T[];
+export function append<T extends {}>(to: T[] | undefined, value: T | undefined): T[] | undefined;
+export function append<T extends {}>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+    if (value === undefined) return to;
     if (to === undefined) return [value];
     to.push(value);
     return to;
@@ -948,13 +943,13 @@ export function append<T>(to: T[] | undefined, value: T | undefined): T[] | unde
  *
  * @internal
  */
-export function combine<T>(xs: T[] | undefined, ys: T[] | undefined): T[] | undefined;
+export function combine<T extends {}>(xs: T[] | undefined, ys: T[] | undefined): T[] | undefined;
 /** @internal */
-export function combine<T>(xs: T | readonly T[] | undefined, ys: T | readonly T[] | undefined): T | readonly T[] | undefined;
+export function combine<T extends {}>(xs: T | readonly T[] | undefined, ys: T | readonly T[] | undefined): T | readonly T[] | undefined;
 /** @internal */
-export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined): T | T[] | undefined;
+export function combine<T extends {}>(xs: T | T[] | undefined, ys: T | T[] | undefined): T | T[] | undefined;
 /** @internal */
-export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined) {
+export function combine<T extends {}>(xs: T | T[] | undefined, ys: T | T[] | undefined) {
     if (xs === undefined) return ys;
     if (ys === undefined) return xs;
     if (isArray(xs)) return isArray(ys) ? concatenate(xs, ys) : append(xs, ys);
