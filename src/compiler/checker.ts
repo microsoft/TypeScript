@@ -40731,8 +40731,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // deviations, we XOR someOverloadFlags with allOverloadFlags
             const someButNotAllOverloadFlags = someOverloadFlags ^ allOverloadFlags;
             if (someButNotAllOverloadFlags !== 0) {
+                const canonicalFlags = getEffectiveDeclarationFlags(getCanonicalOverload(overloads, implementation), flagsToCheck);
                 group(overloads, o => getSourceFileOfNode(o).fileName).forEach(overloadsInFile => {
-                    const canonicalFlags = getEffectiveDeclarationFlags(getCanonicalOverload(overloads, implementation), flagsToCheck);
                     const canonicalFlagsForFile = getEffectiveDeclarationFlags(getCanonicalOverload(overloadsInFile, implementation), flagsToCheck);
                     for (const o of overloadsInFile) {
                         const deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
