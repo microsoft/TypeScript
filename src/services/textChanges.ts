@@ -1275,7 +1275,15 @@ namespace changesToText {
                 const targetSourceFile = c.kind === ChangeKind.ReplaceWithSingleNode ? getSourceFileOfNode(getOriginalNode(c.node)) ?? c.sourceFile :
                     c.kind === ChangeKind.ReplaceWithMultipleNodes ? getSourceFileOfNode(getOriginalNode(c.nodes[0])) ?? c.sourceFile :
                     c.sourceFile;
-                const newText = computeNewText(c, targetSourceFile, sourceFile, newLineCharacter, formatContext, validate);
+                let newText = computeNewText(c, targetSourceFile, sourceFile, newLineCharacter, formatContext, validate);
+
+                // prevent appending an extra new line to declarations at end of a file
+                const spanTextEnd = span.start + newText.length;
+                const isEndOfFile = span.length !== 0 && (spanTextEnd - newLineCharacter.length) === targetSourceFile.text.length;
+                if (c.kind === ChangeKind.ReplaceWithMultipleNodes && isEndOfFile && endsWith(newText, newLineCharacter)) {
+                    newText = newText.substring(0, newText.length - newLineCharacter.length);
+                }
+
                 // Filter out redundant changes.
                 if (span.length === newText.length && stringContainsAt(targetSourceFile.text, newText, span.start)) {
                     return undefined;

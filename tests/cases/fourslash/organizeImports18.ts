@@ -29,5 +29,5 @@ export { C } from "./C";
 
 export { bFuncA } from "./A";
 export { bFuncB } from "./B";
-export { bFuncC } from "./C";
-`);
+export { bFuncC } from "./C";`
+);

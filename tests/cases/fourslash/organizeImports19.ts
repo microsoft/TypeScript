@@ -17,5 +17,5 @@ const b = 1;
 export { b };
 
 const c = 1;
-export { c };
-`);
+export { c };`
+);
