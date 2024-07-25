@@ -369,7 +369,7 @@ interface BigInt64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     [index: number]: bigint;
 }
 interface BigInt64ArrayConstructor {
-    readonly prototype: BigInt64Array<ArrayBuffer>;
+    readonly prototype: BigInt64Array<ArrayBufferLike>;
     new (length?: number): BigInt64Array<ArrayBuffer>;
     new (array: ArrayLike<bigint> | Iterable<bigint>): BigInt64Array<ArrayBuffer>;
     new <Buffer extends ArrayBufferLike>(buffer: Buffer, byteOffset?: number, length?: number): BigInt64Array<Buffer>;
@@ -645,7 +645,7 @@ interface BigUint64Array<Buffer extends ArrayBufferLike = ArrayBufferLike> {
     [index: number]: bigint;
 }
 interface BigUint64ArrayConstructor {
-    readonly prototype: BigUint64Array<ArrayBuffer>;
+    readonly prototype: BigUint64Array<ArrayBufferLike>;
     new (length?: number): BigUint64Array<ArrayBuffer>;
     new (array: ArrayLike<bigint> | Iterable<bigint>): BigUint64Array<ArrayBuffer>;
     new <Buffer extends ArrayBufferLike>(buffer: Buffer, byteOffset?: number, length?: number): BigUint64Array<Buffer>;
