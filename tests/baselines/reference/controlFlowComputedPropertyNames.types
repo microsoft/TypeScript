@@ -1,0 +1,270 @@
+//// [tests/cases/conformance/controlFlow/controlFlowComputedPropertyNames.ts] ////
+
+=== controlFlowComputedPropertyNames.ts ===
+function f1(obj: Record<string, unknown>, key: string) {
+>f1 : (obj: Record<string, unknown>, key: string) => void
+>   : ^   ^^                       ^^   ^^      ^^^^^^^^^
+>obj : Record<string, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+
+    if (typeof obj[key] === "string") {
+>typeof obj[key] === "string" : boolean
+>                             : ^^^^^^^
+>typeof obj[key] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[key] : unknown
+>         : ^^^^^^^
+>obj : Record<string, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+        obj[key].toUpperCase();
+>obj[key].toUpperCase() : string
+>                       : ^^^^^^
+>obj[key].toUpperCase : () => string
+>                     : ^^^^^^      
+>obj[key] : string
+>         : ^^^^^^
+>obj : Record<string, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^      
+    }
+}
+
+function f2(obj: Record<string, string | undefined>, key: string) {
+>f2 : (obj: Record<string, string | undefined>, key: string) => void
+>   : ^   ^^                                  ^^   ^^      ^^^^^^^^^
+>obj : Record<string, string | undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+
+    if (obj[key] !== undefined) {
+>obj[key] !== undefined : boolean
+>                       : ^^^^^^^
+>obj[key] : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>obj : Record<string, string | undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        obj[key].toUpperCase();
+>obj[key].toUpperCase() : string
+>                       : ^^^^^^
+>obj[key].toUpperCase : () => string
+>                     : ^^^^^^      
+>obj[key] : string
+>         : ^^^^^^
+>obj : Record<string, string | undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^      
+    }
+    let key2 = key + key;
+>key2 : string
+>     : ^^^^^^
+>key + key : string
+>          : ^^^^^^
+>key : string
+>    : ^^^^^^
+>key : string
+>    : ^^^^^^
+
+    if (obj[key2] !== undefined) {
+>obj[key2] !== undefined : boolean
+>                        : ^^^^^^^
+>obj[key2] : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+>obj : Record<string, string | undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key2 : string
+>     : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        obj[key2].toUpperCase();
+>obj[key2].toUpperCase() : string
+>                        : ^^^^^^
+>obj[key2].toUpperCase : () => string
+>                      : ^^^^^^      
+>obj[key2] : string
+>          : ^^^^^^
+>obj : Record<string, string | undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key2 : string
+>     : ^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^      
+    }
+    const key3 = key + key;
+>key3 : string
+>     : ^^^^^^
+>key + key : string
+>          : ^^^^^^
+>key : string
+>    : ^^^^^^
+>key : string
+>    : ^^^^^^
+
+    if (obj[key3] !== undefined) {
+>obj[key3] !== undefined : boolean
+>                        : ^^^^^^^
+>obj[key3] : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+>obj : Record<string, string | undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key3 : string
+>     : ^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        obj[key3].toUpperCase();
+>obj[key3].toUpperCase() : string
+>                        : ^^^^^^
+>obj[key3].toUpperCase : () => string
+>                      : ^^^^^^      
+>obj[key3] : string
+>          : ^^^^^^
+>obj : Record<string, string | undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key3 : string
+>     : ^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^      
+    }
+}
+
+type Thing = { a?: string, b?: number, c?: number };
+>Thing : Thing
+>      : ^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+function f3(obj: Thing, key: keyof Thing) {
+>f3 : (obj: Thing, key: keyof Thing) => void
+>   : ^   ^^     ^^   ^^           ^^^^^^^^^
+>obj : Thing
+>    : ^^^^^
+>key : keyof Thing
+>    : ^^^^^^^^^^^
+
+    if (obj[key] !== undefined) {
+>obj[key] !== undefined : boolean
+>                       : ^^^^^^^
+>obj[key] : string | number | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : Thing
+>    : ^^^^^
+>key : keyof Thing
+>    : ^^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        if (typeof obj[key] === "string") {
+>typeof obj[key] === "string" : boolean
+>                             : ^^^^^^^
+>typeof obj[key] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[key] : string | number
+>         : ^^^^^^^^^^^^^^^
+>obj : Thing
+>    : ^^^^^
+>key : keyof Thing
+>    : ^^^^^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+            obj[key].toUpperCase();
+>obj[key].toUpperCase() : string
+>                       : ^^^^^^
+>obj[key].toUpperCase : () => string
+>                     : ^^^^^^      
+>obj[key] : string
+>         : ^^^^^^
+>obj : Thing
+>    : ^^^^^
+>key : keyof Thing
+>    : ^^^^^^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^      
+        }
+        if (typeof obj[key] === "number") {
+>typeof obj[key] === "number" : boolean
+>                             : ^^^^^^^
+>typeof obj[key] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[key] : string | number
+>         : ^^^^^^^^^^^^^^^
+>obj : Thing
+>    : ^^^^^
+>key : keyof Thing
+>    : ^^^^^^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+
+            obj[key].toFixed();
+>obj[key].toFixed() : string
+>                   : ^^^^^^
+>obj[key].toFixed : (fractionDigits?: number) => string
+>                 : ^              ^^^      ^^^^^      
+>obj[key] : number
+>         : ^^^^^^
+>obj : Thing
+>    : ^^^^^
+>key : keyof Thing
+>    : ^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
+        }
+    }
+}
+
+function f4<K extends string>(obj: Record<K, string | undefined>, key: K) {
+>f4 : <K extends string>(obj: Record<K, string | undefined>, key: K) => void
+>   : ^ ^^^^^^^^^      ^^   ^^                             ^^   ^^ ^^^^^^^^^
+>obj : Record<K, string | undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+
+    if (obj[key]) {
+>obj[key] : Record<K, string | undefined>[K]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : Record<K, string | undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+
+        obj[key].toUpperCase();
+>obj[key].toUpperCase() : string
+>                       : ^^^^^^
+>obj[key].toUpperCase : () => string
+>                     : ^^^^^^      
+>obj[key] : string
+>         : ^^^^^^
+>obj : Record<K, string | undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>key : K
+>    : ^
+>toUpperCase : () => string
+>            : ^^^^^^      
+    }
+}
+

@@ -3,11 +3,14 @@
 === parserInterfaceKeywordInEnum1.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 enum Bar {
 >Bar : Bar
+>    : ^^^
 
     interface,
 >interface : Bar.interface
+>          : ^^^^^^^^^^^^^
 }
 

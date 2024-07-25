@@ -1,0 +1,10 @@
+deleteReadonlyInStrictNullChecks.ts(3,8): error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+
+
+==== deleteReadonlyInStrictNullChecks.ts (1 errors) ====
+    interface Function { readonly name: string; }
+    class Foo {}
+    delete Foo.name;
+           ~~~~~~~~
+!!! error TS2704: The operand of a 'delete' operator cannot be a read-only property.
+    

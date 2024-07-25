@@ -23,6 +23,7 @@ import {
     isArrayBindingElement,
     isArrayBindingOrAssignmentElement,
     isArrayBindingOrAssignmentPattern,
+    isBigIntLiteral,
     isBindingElement,
     isBindingName,
     isBindingOrAssignmentElement,
@@ -60,7 +61,7 @@ import {
     VariableDeclaration,
     visitNode,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 interface FlattenContext {
     context: TransformationContext;
@@ -97,11 +98,12 @@ export const enum FlattenLevel {
  */
 export function flattenDestructuringAssignment(
     node: VariableDeclaration | DestructuringAssignment,
-    visitor: ((node: Node) => VisitResult<Node | undefined>),
+    visitor: (node: Node) => VisitResult<Node | undefined>,
     context: TransformationContext,
     level: FlattenLevel,
     needsValue?: boolean,
-    createAssignmentCallback?: (name: Identifier, value: Expression, location?: TextRange) => Expression): Expression {
+    createAssignmentCallback?: (name: Identifier, value: Expression, location?: TextRange) => Expression,
+): Expression {
     let location: TextRange = node;
     let value: Expression | undefined;
     if (isDestructuringAssignment(node)) {
@@ -128,15 +130,17 @@ export function flattenDestructuringAssignment(
         createArrayBindingOrAssignmentPattern: elements => makeArrayAssignmentPattern(context.factory, elements),
         createObjectBindingOrAssignmentPattern: elements => makeObjectAssignmentPattern(context.factory, elements),
         createArrayBindingOrAssignmentElement: makeAssignmentElement,
-        visitor
+        visitor,
     };
 
     if (value) {
         value = visitNode(value, visitor, isExpression);
         Debug.assert(value);
 
-        if (isIdentifier(value) && bindingOrAssignmentElementAssignsToName(node, value.escapedText) ||
-            bindingOrAssignmentElementContainsNonLiteralComputedName(node)) {
+        if (
+            isIdentifier(value) && bindingOrAssignmentElementAssignsToName(node, value.escapedText) ||
+            bindingOrAssignmentElementContainsNonLiteralComputedName(node)
+        ) {
             // If the right-hand value of the assignment is also an assignment target then
             // we need to cache the right-hand value.
             value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ false, location);
@@ -183,7 +187,7 @@ export function flattenDestructuringAssignment(
             ? createAssignmentCallback(target as Identifier, value, location)
             : setTextRange(
                 context.factory.createAssignment(Debug.checkDefined(visitNode(target as Expression, visitor, isExpression)), value),
-                location
+                location,
             );
         expression.original = original;
         emitExpression(expression);
@@ -244,9 +248,10 @@ export function flattenDestructuringBinding(
     level: FlattenLevel,
     rval?: Expression,
     hoistTempVariables = false,
-    skipInitializer?: boolean): VariableDeclaration[] {
+    skipInitializer?: boolean,
+): VariableDeclaration[] {
     let pendingExpressions: Expression[] | undefined;
-    const pendingDeclarations: { pendingExpressions?: Expression[], name: BindingName, value: Expression, location?: TextRange, original?: Node; }[] = [];
+    const pendingDeclarations: { pendingExpressions?: Expression[]; name: BindingName; value: Expression; location?: TextRange; original?: Node; }[] = [];
     const declarations: VariableDeclaration[] = [];
     const flattenContext: FlattenContext = {
         context,
@@ -258,13 +263,15 @@ export function flattenDestructuringBinding(
         createArrayBindingOrAssignmentPattern: elements => makeArrayBindingPattern(context.factory, elements),
         createObjectBindingOrAssignmentPattern: elements => makeObjectBindingPattern(context.factory, elements),
         createArrayBindingOrAssignmentElement: name => makeBindingElement(context.factory, name),
-        visitor
+        visitor,
     };
 
     if (isVariableDeclaration(node)) {
         let initializer = getInitializerOfBindingOrAssignmentElement(node);
-        if (initializer && (isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText) ||
-            bindingOrAssignmentElementContainsNonLiteralComputedName(node))) {
+        if (
+            initializer && (isIdentifier(initializer) && bindingOrAssignmentElementAssignsToName(node, initializer.escapedText) ||
+                bindingOrAssignmentElementContainsNonLiteralComputedName(node))
+        ) {
             // If the right-hand value of the assignment is also an assignment target then
             // we need to cache the right-hand value.
             initializer = ensureIdentifier(flattenContext, Debug.checkDefined(visitNode(initializer, flattenContext.visitor, isExpression)), /*reuseIdentifierExpressions*/ false, initializer);
@@ -285,7 +292,7 @@ export function flattenDestructuringBinding(
             const pendingDeclaration = last(pendingDeclarations);
             pendingDeclaration.pendingExpressions = append(
                 pendingDeclaration.pendingExpressions,
-                context.factory.createAssignment(temp, pendingDeclaration.value)
+                context.factory.createAssignment(temp, pendingDeclaration.value),
             );
             addRange(pendingDeclaration.pendingExpressions, pendingExpressions);
             pendingDeclaration.value = temp;
@@ -296,7 +303,7 @@ export function flattenDestructuringBinding(
             name,
             /*exclamationToken*/ undefined,
             /*type*/ undefined,
-            pendingExpressions ? context.factory.inlineExpressions(append(pendingExpressions, value)) : value
+            pendingExpressions ? context.factory.inlineExpressions(append(pendingExpressions, value)) : value,
         );
         variable.original = original;
         setTextRange(variable, location);
@@ -333,7 +340,8 @@ function flattenBindingOrAssignmentElement(
     element: BindingOrAssignmentElement,
     value: Expression | undefined,
     location: TextRange,
-    skipInitializer?: boolean) {
+    skipInitializer?: boolean,
+) {
     const bindingTarget = getTargetOfBindingOrAssignmentElement(element)!; // TODO: GH#18217
     if (!skipInitializer) {
         const initializer = visitNode(getInitializerOfBindingOrAssignmentElement(element), flattenContext.visitor, isExpression);
@@ -392,10 +400,12 @@ function flattenObjectBindingOrAssignmentPattern(flattenContext: FlattenContext,
         const element = elements[i];
         if (!getRestIndicatorOfBindingOrAssignmentElement(element)) {
             const propertyName = getPropertyNameOfBindingOrAssignmentElement(element)!;
-            if (flattenContext.level >= FlattenLevel.ObjectRest
+            if (
+                flattenContext.level >= FlattenLevel.ObjectRest
                 && !(element.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                 && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
-                && !isComputedPropertyName(propertyName)) {
+                && !isComputedPropertyName(propertyName)
+            ) {
                 bindingElements = append(bindingElements, visitNode(element, flattenContext.visitor, isBindingOrAssignmentElement));
             }
             else {
@@ -445,16 +455,18 @@ function flattenArrayBindingOrAssignmentPattern(flattenContext: FlattenContext, 
                     value,
                     numElements > 0 && getRestIndicatorOfBindingOrAssignmentElement(elements[numElements - 1])
                         ? undefined
-                        : numElements
+                        : numElements,
                 ),
-                location
+                location,
             ),
             /*reuseIdentifierExpressions*/ false,
-            location
+            location,
         );
     }
-    else if (numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)
-        || every(elements, isOmittedExpression)) {
+    else if (
+        numElements !== 1 && (flattenContext.level < FlattenLevel.ObjectRest || numElements === 0)
+        || every(elements, isOmittedExpression)
+    ) {
         // For anything other than a single-element destructuring we need to generate a temporary
         // to ensure value is evaluated exactly once. Additionally, if we have zero elements
         // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
@@ -547,7 +559,7 @@ function createDestructuringPropertyAccess(flattenContext: FlattenContext, value
         const argumentExpression = ensureIdentifier(flattenContext, Debug.checkDefined(visitNode(propertyName.expression, flattenContext.visitor, isExpression)), /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
         return flattenContext.context.factory.createElementAccessExpression(value, argumentExpression);
     }
-    else if (isStringOrNumericLiteralLike(propertyName)) {
+    else if (isStringOrNumericLiteralLike(propertyName) || isBigIntLiteral(propertyName)) {
         const argumentExpression = factory.cloneNode(propertyName);
         return flattenContext.context.factory.createElementAccessExpression(value, argumentExpression);
     }

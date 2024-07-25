@@ -3,5 +3,7 @@
 === forIn2.ts ===
 for (var i in 1) {
 >i : string
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }

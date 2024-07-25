@@ -3,12 +3,14 @@
 === exportDefaultClassInNamespace.ts ===
 namespace ns_class {
 >ns_class : typeof ns_class
+>         : ^^^^^^^^^^^^^^^
 
     export default class {}
 }
 
 namespace ns_abstract_class {
 >ns_abstract_class : typeof ns_abstract_class
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     export default abstract class {}
 }

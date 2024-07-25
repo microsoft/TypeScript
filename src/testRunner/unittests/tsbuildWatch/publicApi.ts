@@ -1,31 +1,32 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
     runWatchBaseline,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers", () => {
     const solution: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
-        content: JSON.stringify({
+        content: jsonToReadableText({
             references: [
                 { path: "./shared/tsconfig.json" },
-                { path: "./webpack/tsconfig.json" }
+                { path: "./webpack/tsconfig.json" },
             ],
-            files: []
-        })
+            files: [],
+        }),
     };
     const sharedConfig: File = {
         path: `/user/username/projects/myproject/shared/tsconfig.json`,
-        content: JSON.stringify({
+        content: jsonToReadableText({
             compilerOptions: { composite: true },
-        })
+        }),
     };
     const sharedIndex: File = {
         path: `/user/username/projects/myproject/shared/index.ts`,
@@ -33,14 +34,14 @@ it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers",
 export class c { }
 export enum e { }
 // leading
-export function f2() { } // trailing`
+export function f2() { } // trailing`,
     };
     const webpackConfig: File = {
         path: `/user/username/projects/myproject/webpack/tsconfig.json`,
-        content: JSON.stringify({
-            compilerOptions: { composite: true, },
-            references: [{ path: "../shared/tsconfig.json" }]
-        })
+        content: jsonToReadableText({
+            compilerOptions: { composite: true },
+            references: [{ path: "../shared/tsconfig.json" }],
+        }),
     };
     const webpackIndex: File = {
         path: `/user/username/projects/myproject/webpack/index.ts`,
@@ -48,10 +49,10 @@ export function f2() { } // trailing`
 export class c2 { }
 export enum e2 { }
 // leading
-export function f22() { } // trailing`
+export function f22() { } // trailing`,
     };
     const commandLineArgs = ["--b", "--w"];
-    const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: "/user/username/projects/myproject" }));
+    const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: "/user/username/projects/myproject" }));
     const buildHost = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
     buildHost.getCustomTransformers = getCustomTransformers;
     const builder = ts.createSolutionBuilderWithWatch(buildHost, [solution.path], { verbose: true });
@@ -62,7 +63,6 @@ export function f22() { } // trailing`
         commandLineArgs,
         sys,
         baseline,
-        oldSnap,
         getPrograms,
         edits: [
             {
@@ -71,10 +71,10 @@ export function f22() { } // trailing`
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // Shared
                     sys.runQueuedTimeoutCallbacks(); // webpack and solution
-                }
-            }
+                },
+            },
         ],
-        watchOrSolution: builder
+        watchOrSolution: builder,
     });
 
     function getCustomTransformers(project: string): ts.CustomTransformers {

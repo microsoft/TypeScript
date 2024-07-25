@@ -3,6 +3,9 @@
 === parserForOfStatement12.ts ===
 for (const {a, b} of X) {
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >X : any
+>  : ^^^
 }

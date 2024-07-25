@@ -1,5 +1,5 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: config:: initTSConfig", () => {
     function initTSConfigCorrectly(name: string, commandLinesArgs: string[]) {

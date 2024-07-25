@@ -1,0 +1,9 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes5.ts ===
+// type T = {
+//     <|"[|Prop 1RENAME|]": string;|>
+// }
+// 
+// declare const fn: <K extends keyof T>(p: K) => void
+// 
+// fn("[|Prop 1RENAME|]"/*RENAME*/)

@@ -1,8 +1,11 @@
 invariantGenericErrorElaboration.ts(3,7): error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.
   The types of 'constraint.constraint' are incompatible between these types.
     Type 'Constraint<Constraint<Num>>' is not assignable to type 'Constraint<Constraint<Runtype<any>>>'.
-      Type 'Runtype<any>' is not assignable to type 'Num'.
+      Property 'tag' is missing in type 'Runtype<any>' but required in type 'Num'.
 invariantGenericErrorElaboration.ts(4,19): error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.
+  The types of 'constraint.constraint' are incompatible between these types.
+    Type 'Constraint<Constraint<Num>>' is not assignable to type 'Constraint<Constraint<Runtype<any>>>'.
+      Property 'tag' is missing in type 'Runtype<any>' but required in type 'Num'.
 
 
 ==== invariantGenericErrorElaboration.ts (2 errors) ====
@@ -13,10 +16,13 @@ invariantGenericErrorElaboration.ts(4,19): error TS2322: Type 'Num' is not assig
 !!! error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.
 !!! error TS2322:   The types of 'constraint.constraint' are incompatible between these types.
 !!! error TS2322:     Type 'Constraint<Constraint<Num>>' is not assignable to type 'Constraint<Constraint<Runtype<any>>>'.
-!!! error TS2322:       Type 'Runtype<any>' is not assignable to type 'Num'.
+!!! error TS2322:       Property 'tag' is missing in type 'Runtype<any>' but required in type 'Num'.
     const Foo = Obj({ foo: Num })
                       ~~~
 !!! error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.
+!!! error TS2322:   The types of 'constraint.constraint' are incompatible between these types.
+!!! error TS2322:     Type 'Constraint<Constraint<Num>>' is not assignable to type 'Constraint<Constraint<Runtype<any>>>'.
+!!! error TS2322:       Property 'tag' is missing in type 'Runtype<any>' but required in type 'Num'.
 !!! related TS6501 invariantGenericErrorElaboration.ts:17:34: The expected type comes from this index signature.
     
     interface Runtype<A> {

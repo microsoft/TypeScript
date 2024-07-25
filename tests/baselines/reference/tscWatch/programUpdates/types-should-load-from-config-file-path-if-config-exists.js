@@ -4,7 +4,13 @@ Input::
 let x = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"types":["node"]}}
+{
+  "compilerOptions": {
+    "types": [
+      "node"
+    ]
+  }
+}
 
 //// [/a/b/node_modules/@types/node/index.d.ts]
 declare var process: any
@@ -26,14 +32,42 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/a/b/app.ts"]
-Program options: {"types":["node"],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/app.js]
+var x = 1;
+
+
+
+FsWatches::
+/a/b/app.ts: *new*
+  {}
+/a/b/node_modules/@types/node/index.d.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Program root files: [
+  "/a/b/app.ts"
+]
+Program options: {
+  "types": [
+    "node"
+  ],
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -50,23 +84,4 @@ Shape signatures in builder refreshed for::
 /a/b/app.ts (used version)
 /a/b/node_modules/@types/node/index.d.ts (used version)
 
-FsWatches::
-/a/b/app.ts: *new*
-  {}
-/a/b/node_modules/@types/node/index.d.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/app.js]
-var x = 1;
-
-

@@ -3,7 +3,9 @@
 === errorLocationForInterfaceExtension.ts ===
 var n = '';
 >n : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
 interface x extends string { }
 

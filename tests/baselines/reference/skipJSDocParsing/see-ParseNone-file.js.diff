@@ -1,0 +1,250 @@
+===================================================================
+--- default
++++ ParseNone
+@@ -38,235 +38,9 @@
+                     "end": 108,
+                     "hasTrailingComma": false,
+                     "transformFlags": 0
+                 }
+-            },
+-            "jsDoc": [
+-                {
+-                    "kind": "JSDoc",
+-                    "pos": 1,
+-                    "end": 28,
+-                    "flags": "JSDoc",
+-                    "modifierFlagsCache": 0,
+-                    "transformFlags": 0,
+-                    "tags": {
+-                        "0": {
+-                            "kind": "JSDocTypedefTag",
+-                            "pos": 8,
+-                            "end": 24,
+-                            "flags": "JSDoc",
+-                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
+-                            "tagName": {
+-                                "kind": "Identifier",
+-                                "pos": 9,
+-                                "end": 16,
+-                                "flags": "JSDoc",
+-                                "transformFlags": 0,
+-                                "escapedText": "typedef"
+-                            },
+-                            "typeExpression": {
+-                                "kind": "JSDocTypeExpression",
+-                                "pos": 17,
+-                                "end": 22,
+-                                "flags": "JSDoc",
+-                                "modifierFlagsCache": 0,
+-                                "transformFlags": 0,
+-                                "type": {
+-                                    "kind": "AnyKeyword",
+-                                    "pos": 18,
+-                                    "end": 21,
+-                                    "flags": "JSDoc",
+-                                    "transformFlags": 1
+-                                }
+-                            },
+-                            "fullName": {
+-                                "kind": "Identifier",
+-                                "pos": 23,
+-                                "end": 24,
+-                                "flags": "JSDoc",
+-                                "transformFlags": 0,
+-                                "escapedText": "A"
+-                            },
+-                            "name": {
+-                                "kind": "Identifier",
+-                                "pos": 23,
+-                                "end": 24,
+-                                "flags": "JSDoc",
+-                                "transformFlags": 0,
+-                                "escapedText": "A"
+-                            }
+-                        },
+-                        "length": 1,
+-                        "pos": 8,
+-                        "end": 24,
+-                        "hasTrailingComma": false,
+-                        "transformFlags": 0
+-                    }
+-                },
+-                {
+-                    "kind": "JSDoc",
+-                    "pos": 30,
+-                    "end": 100,
+-                    "flags": "JSDoc",
+-                    "modifierFlagsCache": 0,
+-                    "transformFlags": 0,
+-                    "tags": {
+-                        "0": {
+-                            "kind": "JSDocSeeTag",
+-                            "pos": 37,
+-                            "end": 55,
+-                            "flags": "JSDoc",
+-                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
+-                            "tagName": {
+-                                "kind": "Identifier",
+-                                "pos": 38,
+-                                "end": 41,
+-                                "flags": "JSDoc",
+-                                "transformFlags": 0,
+-                                "escapedText": "see"
+-                            },
+-                            "comment": {
+-                                "0": {
+-                                    "kind": "JSDocText",
+-                                    "pos": 42,
+-                                    "end": 42,
+-                                    "flags": "JSDoc",
+-                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
+-                                    "text": ""
+-                                },
+-                                "1": {
+-                                    "kind": "JSDocLink",
+-                                    "pos": 42,
+-                                    "end": 51,
+-                                    "flags": "JSDoc",
+-                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
+-                                    "name": {
+-                                        "kind": "Identifier",
+-                                        "pos": 49,
+-                                        "end": 50,
+-                                        "flags": "JSDoc",
+-                                        "transformFlags": 0,
+-                                        "escapedText": "A"
+-                                    },
+-                                    "text": ""
+-                                },
+-                                "length": 2,
+-                                "pos": 42,
+-                                "end": 55,
+-                                "hasTrailingComma": false,
+-                                "transformFlags": 0
+-                            }
+-                        },
+-                        "1": {
+-                            "kind": "JSDocSeeTag",
+-                            "pos": 55,
+-                            "end": 77,
+-                            "flags": "JSDoc",
+-                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
+-                            "tagName": {
+-                                "kind": "Identifier",
+-                                "pos": 56,
+-                                "end": 59,
+-                                "flags": "JSDoc",
+-                                "transformFlags": 0,
+-                                "escapedText": "see"
+-                            },
+-                            "comment": {
+-                                "0": {
+-                                    "kind": "JSDocText",
+-                                    "pos": 60,
+-                                    "end": 60,
+-                                    "flags": "JSDoc",
+-                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
+-                                    "text": ""
+-                                },
+-                                "1": {
+-                                    "kind": "JSDocLinkCode",
+-                                    "pos": 60,
+-                                    "end": 73,
+-                                    "flags": "JSDoc",
+-                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
+-                                    "name": {
+-                                        "kind": "Identifier",
+-                                        "pos": 71,
+-                                        "end": 72,
+-                                        "flags": "JSDoc",
+-                                        "transformFlags": 0,
+-                                        "escapedText": "A"
+-                                    },
+-                                    "text": ""
+-                                },
+-                                "length": 2,
+-                                "pos": 60,
+-                                "end": 77,
+-                                "hasTrailingComma": false,
+-                                "transformFlags": 0
+-                            }
+-                        },
+-                        "2": {
+-                            "kind": "JSDocSeeTag",
+-                            "pos": 77,
+-                            "end": 98,
+-                            "flags": "JSDoc",
+-                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
+-                            "tagName": {
+-                                "kind": "Identifier",
+-                                "pos": 78,
+-                                "end": 81,
+-                                "flags": "JSDoc",
+-                                "transformFlags": 0,
+-                                "escapedText": "see"
+-                            },
+-                            "comment": {
+-                                "0": {
+-                                    "kind": "JSDocText",
+-                                    "pos": 82,
+-                                    "end": 82,
+-                                    "flags": "JSDoc",
+-                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
+-                                    "text": ""
+-                                },
+-                                "1": {
+-                                    "kind": "JSDocLinkPlain",
+-                                    "pos": 82,
+-                                    "end": 96,
+-                                    "flags": "JSDoc",
+-                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
+-                                    "name": {
+-                                        "kind": "Identifier",
+-                                        "pos": 94,
+-                                        "end": 95,
+-                                        "flags": "JSDoc",
+-                                        "transformFlags": 0,
+-                                        "escapedText": "A"
+-                                    },
+-                                    "text": ""
+-                                },
+-                                "length": 2,
+-                                "pos": 82,
+-                                "end": 98,
+-                                "hasTrailingComma": false,
+-                                "transformFlags": 0
+-                            }
+-                        },
+-                        "length": 3,
+-                        "pos": 37,
+-                        "end": 98,
+-                        "hasTrailingComma": false,
+-                        "transformFlags": 0
+-                    }
+-                }
+-            ]
++            }
+         },
+         "length": 1,
+         "pos": 0,
+         "end": 109,
+@@ -295,7 +69,6 @@
+     "typeReferenceDirectives": [],
+     "libReferenceDirectives": [],
+     "amdDependencies": [],
+     "identifiers": {},
+-    "jsDocParsingMode": 0,
+-    "jsDocDiagnostics": []
++    "jsDocParsingMode": 1
+ }
+\ No newline at end of file

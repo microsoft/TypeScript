@@ -4,7 +4,11 @@
 interface I {
     [Symbol.unscopables](): string;
 >[Symbol.unscopables] : () => string
+>                     : ^^^^^^      
 >Symbol.unscopables : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >unscopables : unique symbol
+>            : ^^^^^^^^^^^^^
 }

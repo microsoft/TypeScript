@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/classFieldSuperNotAccessibleJs.ts] ////
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/55884
+
+class YaddaBase {
+>YaddaBase : Symbol(YaddaBase, Decl(index.js, 0, 0))
+
+    constructor() {
+        this.roots = "hi";
+>this.roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
+>this : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
+
+        /** @type number */
+        this.justProp;
+>this.justProp : Symbol(YaddaBase.justProp, Decl(index.js, 4, 26))
+>this : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>justProp : Symbol(YaddaBase.justProp, Decl(index.js, 4, 26))
+
+        /** @type string */
+        this['literalElementAccess'];
+>this : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>'literalElementAccess' : Symbol(YaddaBase['literalElementAccess'], Decl(index.js, 6, 22))
+
+        this.b()
+>this.b : Symbol(YaddaBase.b, Decl(index.js, 11, 5))
+>this : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>b : Symbol(YaddaBase.b, Decl(index.js, 11, 5))
+    }
+    accessor b = () => {
+>b : Symbol(YaddaBase.b, Decl(index.js, 11, 5))
+
+        this.foo = 10
+>this.foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
+>this : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
+    }
+}
+
+class DerivedYadda extends YaddaBase {
+>DerivedYadda : Symbol(DerivedYadda, Decl(index.js, 15, 1))
+>YaddaBase : Symbol(YaddaBase, Decl(index.js, 0, 0))
+
+    get rootTests() {
+>rootTests : Symbol(DerivedYadda.rootTests, Decl(index.js, 17, 38))
+
+        return super.roots;
+>super.roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
+>super : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>roots : Symbol(YaddaBase.roots, Decl(index.js, 3, 19))
+    }
+    get fooTests() {
+>fooTests : Symbol(DerivedYadda.fooTests, Decl(index.js, 20, 5))
+
+        return super.foo;
+>super.foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
+>super : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>foo : Symbol(YaddaBase.foo, Decl(index.js, 12, 24))
+    }
+    get justPropTests() {
+>justPropTests : Symbol(DerivedYadda.justPropTests, Decl(index.js, 23, 5))
+
+        return super.justProp;
+>super.justProp : Symbol(YaddaBase.justProp, Decl(index.js, 4, 26))
+>super : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>justProp : Symbol(YaddaBase.justProp, Decl(index.js, 4, 26))
+    }
+    get literalElementAccessTests() {
+>literalElementAccessTests : Symbol(DerivedYadda.literalElementAccessTests, Decl(index.js, 26, 5))
+
+        return super.literalElementAccess;
+>super.literalElementAccess : Symbol(YaddaBase['literalElementAccess'], Decl(index.js, 6, 22))
+>super : Symbol(YaddaBase, Decl(index.js, 0, 0))
+>literalElementAccess : Symbol(YaddaBase['literalElementAccess'], Decl(index.js, 6, 22))
+    }
+}
+

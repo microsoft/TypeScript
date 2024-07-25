@@ -3,12 +3,17 @@
 === classExtendsMultipleBaseClasses.ts ===
 class A { }
 >A : A
+>  : ^
 
 class B { }
 >B : B
+>  : ^
 
 class C extends A,B { }
 >C : C
+>  : ^
 >A : A
+>  : ^
 >B : A
+>  : ^
 

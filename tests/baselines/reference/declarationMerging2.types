@@ -3,24 +3,32 @@
 === a.ts ===
 export class A {
 >A : A
+>  : ^
 
     protected _f: number;
 >_f : number
+>   : ^^^^^^
 
     getF() { return this._f; }
 >getF : () => number
+>     : ^^^^^^^^^^^^
 >this._f : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >_f : number
+>   : ^^^^^^
 }
 
 === b.ts ===
 export {}
 declare module "./a" {
 >"./a" : typeof import("a")
+>      : ^^^^^^^^^^^^^^^^^^
 
     interface A {
         run();
 >run : () => any
+>    : ^^^^^^^^^
     }
 }

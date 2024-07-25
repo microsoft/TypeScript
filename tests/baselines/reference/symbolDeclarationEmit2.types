@@ -3,11 +3,17 @@
 === symbolDeclarationEmit2.ts ===
 class C {
 >C : C
+>  : ^
 
     [Symbol.toPrimitive] = "";
 >[Symbol.toPrimitive] : string
+>                     : ^^^^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 }

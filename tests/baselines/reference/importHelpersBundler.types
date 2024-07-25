@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/importHelpersBundler.ts] ////
+
+=== /node_modules/tslib/tslib.d.ts ===
+
+export {};
+
+=== /node_modules/tslib/modules/index.d.ts ===
+export declare var __rest: any;
+>__rest : any
+
+=== /main.ts ===
+export function foo(args: any) {
+>foo : (args: any) => any
+>    : ^    ^^   ^^^^^^^^
+>args : any
+
+  const { bar, ...extraArgs } = args;
+>bar : any
+>    : ^^^
+>extraArgs : any
+>          : ^^^
+>args : any
+
+  return extraArgs;
+>extraArgs : any
+}
+

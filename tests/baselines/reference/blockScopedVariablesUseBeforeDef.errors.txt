@@ -165,3 +165,18 @@ blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: Block-scoped variable
         const foo = 1;
     }
     
+    // #30907
+    function wrapI1() {
+        const iter = (function* foo() {
+            iter;
+            yield 1;
+        })();
+    }
+    
+    function wrapI2() {
+        const iter = (async function* foo() {
+            iter;
+            yield 1;
+        })();
+    }
+    

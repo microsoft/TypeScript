@@ -13,7 +13,7 @@ privateNameMethod.ts(8,14): error TS2554: Expected 1 arguments, but got 0.
                          ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
             this.#method()  // Error 
-                 ~~~~~~~~~
+                 ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 privateNameMethod.ts:2:13: An argument for 'param' was not provided.
     

@@ -7,7 +7,9 @@ export interface IEventSourcedEntity { }
 === test.ts ===
 import { IEventSourcedEntity } from "./bar";
 >IEventSourcedEntity : any
+>                    : ^^^
 
 export type DomainEntityConstructor<TEntity extends IEventSourcedEntity> = { new(): TEntity; };
 >DomainEntityConstructor : DomainEntityConstructor<TEntity>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

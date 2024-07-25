@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/inlineMappedTypeModifierDeclarationEmit.ts] ////
+
+=== index.ts ===
+import { test1, test2 } from "./other";
+>test1 : Symbol(test1, Decl(index.ts, 0, 8))
+>test2 : Symbol(test2, Decl(index.ts, 0, 15))
+
+export function wrappedTest1<T, K extends string>(obj: T, k: K) {
+>wrappedTest1 : Symbol(wrappedTest1, Decl(index.ts, 0, 39))
+>T : Symbol(T, Decl(index.ts, 2, 29))
+>K : Symbol(K, Decl(index.ts, 2, 31))
+>obj : Symbol(obj, Decl(index.ts, 2, 50))
+>T : Symbol(T, Decl(index.ts, 2, 29))
+>k : Symbol(k, Decl(index.ts, 2, 57))
+>K : Symbol(K, Decl(index.ts, 2, 31))
+
+  return test1(obj, k);
+>test1 : Symbol(test1, Decl(index.ts, 0, 8))
+>obj : Symbol(obj, Decl(index.ts, 2, 50))
+>k : Symbol(k, Decl(index.ts, 2, 57))
+}
+
+export function wrappedTest2<T, K extends string>(obj: T, k: K) {
+>wrappedTest2 : Symbol(wrappedTest2, Decl(index.ts, 4, 1))
+>T : Symbol(T, Decl(index.ts, 6, 29))
+>K : Symbol(K, Decl(index.ts, 6, 31))
+>obj : Symbol(obj, Decl(index.ts, 6, 50))
+>T : Symbol(T, Decl(index.ts, 6, 29))
+>k : Symbol(k, Decl(index.ts, 6, 57))
+>K : Symbol(K, Decl(index.ts, 6, 31))
+
+  return test2(obj, k);
+>test2 : Symbol(test2, Decl(index.ts, 0, 15))
+>obj : Symbol(obj, Decl(index.ts, 6, 50))
+>k : Symbol(k, Decl(index.ts, 6, 57))
+}
+
+export type Obj = {
+>Obj : Symbol(Obj, Decl(index.ts, 8, 1))
+
+  a: number;
+>a : Symbol(a, Decl(index.ts, 10, 19))
+
+  readonly foo: string;
+>foo : Symbol(foo, Decl(index.ts, 11, 12))
+
+};
+
+export const processedInternally1 = wrappedTest1({} as Obj, "a");
+>processedInternally1 : Symbol(processedInternally1, Decl(index.ts, 15, 12))
+>wrappedTest1 : Symbol(wrappedTest1, Decl(index.ts, 0, 39))
+>Obj : Symbol(Obj, Decl(index.ts, 8, 1))
+
+export const processedInternally2 = wrappedTest2({} as Obj, "a");
+>processedInternally2 : Symbol(processedInternally2, Decl(index.ts, 16, 12))
+>wrappedTest2 : Symbol(wrappedTest2, Decl(index.ts, 4, 1))
+>Obj : Symbol(Obj, Decl(index.ts, 8, 1))
+
+=== other.ts ===
+// how Omit from lib is defined
+type OmitReal<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+>OmitReal : Symbol(OmitReal, Decl(other.ts, 0, 0))
+>T : Symbol(T, Decl(other.ts, 1, 14))
+>K : Symbol(K, Decl(other.ts, 1, 16))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(other.ts, 1, 14))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(other.ts, 1, 14))
+>K : Symbol(K, Decl(other.ts, 1, 16))
+
+// what we see when we hover it
+type OmitUnveiled<T, K extends string | number | symbol> = {
+>OmitUnveiled : Symbol(OmitUnveiled, Decl(other.ts, 1, 69))
+>T : Symbol(T, Decl(other.ts, 3, 18))
+>K : Symbol(K, Decl(other.ts, 3, 20))
+
+  [P in Exclude<keyof T, K>]: T[P];
+>P : Symbol(P, Decl(other.ts, 4, 3))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(other.ts, 3, 18))
+>K : Symbol(K, Decl(other.ts, 3, 20))
+>T : Symbol(T, Decl(other.ts, 3, 18))
+>P : Symbol(P, Decl(other.ts, 4, 3))
+
+};
+
+export function test1<T, K extends string>(obj: T, k: K): OmitReal<T, K> {
+>test1 : Symbol(test1, Decl(other.ts, 5, 2))
+>T : Symbol(T, Decl(other.ts, 7, 22))
+>K : Symbol(K, Decl(other.ts, 7, 24))
+>obj : Symbol(obj, Decl(other.ts, 7, 43))
+>T : Symbol(T, Decl(other.ts, 7, 22))
+>k : Symbol(k, Decl(other.ts, 7, 50))
+>K : Symbol(K, Decl(other.ts, 7, 24))
+>OmitReal : Symbol(OmitReal, Decl(other.ts, 0, 0))
+>T : Symbol(T, Decl(other.ts, 7, 22))
+>K : Symbol(K, Decl(other.ts, 7, 24))
+
+  return {} as any;
+}
+
+export function test2<T, K extends string>(obj: T, k: K): OmitUnveiled<T, K> {
+>test2 : Symbol(test2, Decl(other.ts, 9, 1))
+>T : Symbol(T, Decl(other.ts, 11, 22))
+>K : Symbol(K, Decl(other.ts, 11, 24))
+>obj : Symbol(obj, Decl(other.ts, 11, 43))
+>T : Symbol(T, Decl(other.ts, 11, 22))
+>k : Symbol(k, Decl(other.ts, 11, 50))
+>K : Symbol(K, Decl(other.ts, 11, 24))
+>OmitUnveiled : Symbol(OmitUnveiled, Decl(other.ts, 1, 69))
+>T : Symbol(T, Decl(other.ts, 11, 22))
+>K : Symbol(K, Decl(other.ts, 11, 24))
+
+  return {} as any;
+}

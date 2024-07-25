@@ -1,8 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @module: es2015
-// @isolatedModules: true
-// @preserveValueImports: true
+// @verbatimModuleSyntax: true
 
 // @Filename: /exports.ts
 //// export interface SomeInterface {}

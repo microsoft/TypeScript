@@ -7,4 +7,5 @@ var v;
 for (v of []) { }
 >v : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 

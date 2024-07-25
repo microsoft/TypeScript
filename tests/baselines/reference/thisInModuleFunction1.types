@@ -3,9 +3,11 @@
 === thisInModuleFunction1.ts ===
 module bar {
 >bar : typeof globalThis.bar
+>    : ^^^^^^^^^^^^^^^^^^^^^
 
  export function bar() {
 >bar : () => any
+>    : ^^^^^^^^^
 
   return this;
 >this : any
@@ -15,6 +17,9 @@ var z = bar.bar();
 >z : any
 >bar.bar() : any
 >bar.bar : () => any
+>        : ^^^^^^^^^
 >bar : typeof bar
+>    : ^^^^^^^^^^
 >bar : () => any
+>    : ^^^^^^^^^
 

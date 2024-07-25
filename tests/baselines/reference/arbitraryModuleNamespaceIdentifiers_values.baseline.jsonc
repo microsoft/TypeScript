@@ -1,0 +1,1628 @@
+// === findRenameLocations ===
+// === /foo.ts ===
+// const foo = "foo";
+// <|export { foo as "/*RENAME*/[|__<alias>RENAME|]" };|>
+// <|import { "[|__<alias>RENAME|]" as bar } from "./foo";|>
+// if (bar !== "foo") throw bar;
+
+// === /bar.ts ===
+// <|import { "[|__<alias>RENAME|]" as first } from "./foo";|>
+// <|export { "[|__<alias>RENAME|]" as "<other>" } from "./foo";|>
+// import { "<other>" as second } from "./bar";
+// if (first !== "foo") throw first;
+// if (second !== "foo") throw second;
+
+
+
+// === findRenameLocations ===
+// === /foo.ts ===
+// const foo = "foo";
+// <|export { foo as "[|__<alias>RENAME|]" };|>
+// <|import { "/*RENAME*/[|__<alias>RENAME|]" as bar } from "./foo";|>
+// if (bar !== "foo") throw bar;
+
+// === /bar.ts ===
+// <|import { "[|__<alias>RENAME|]" as first } from "./foo";|>
+// <|export { "[|__<alias>RENAME|]" as "<other>" } from "./foo";|>
+// import { "<other>" as second } from "./bar";
+// if (first !== "foo") throw first;
+// if (second !== "foo") throw second;
+
+
+
+// === findRenameLocations ===
+// === /foo.ts ===
+// const foo = "foo";
+// <|export { foo as "[|__<alias>RENAME|]" };|>
+// <|import { "[|__<alias>RENAME|]" as bar } from "./foo";|>
+// if (bar !== "foo") throw bar;
+
+// === /bar.ts ===
+// <|import { "/*RENAME*/[|__<alias>RENAME|]" as first } from "./foo";|>
+// <|export { "[|__<alias>RENAME|]" as "<other>" } from "./foo";|>
+// import { "<other>" as second } from "./bar";
+// if (first !== "foo") throw first;
+// if (second !== "foo") throw second;
+
+
+
+// === findRenameLocations ===
+// === /foo.ts ===
+// const foo = "foo";
+// <|export { foo as "[|__<alias>RENAME|]" };|>
+// <|import { "[|__<alias>RENAME|]" as bar } from "./foo";|>
+// if (bar !== "foo") throw bar;
+
+// === /bar.ts ===
+// <|import { "[|__<alias>RENAME|]" as first } from "./foo";|>
+// <|export { "/*RENAME*/[|__<alias>RENAME|]" as "<other>" } from "./foo";|>
+// import { "<other>" as second } from "./bar";
+// if (first !== "foo") throw first;
+// if (second !== "foo") throw second;
+
+
+
+// === goToDefinition ===
+// === /foo.ts ===
+// <|const [|foo|] = "foo";|>
+// export { foo as "/*GOTO DEF*/__<alias>" };
+// import { "__<alias>" as bar } from "./foo";
+// if (bar !== "foo") throw bar;
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "foo",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /foo.ts ===
+// <|const [|foo|] = "foo";|>
+// export { foo as "__<alias>" };
+// import { "/*GOTO DEF*/__<alias>" as bar } from "./foo";
+// if (bar !== "foo") throw bar;
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "foo",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /foo.ts ===
+// <|const [|foo|] = "foo";|>
+// export { foo as "__<alias>" };
+// import { "__<alias>" as bar } from "./foo";
+// if (bar !== "foo") throw bar;
+
+// === /bar.ts ===
+// import { [|"/*GOTO DEF*/__<alias>"|] as first } from "./foo";
+// export { "__<alias>" as "<other>" } from "./foo";
+// import { "<other>" as second } from "./bar";
+// if (first !== "foo") throw first;
+// if (second !== "foo") throw second;
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "foo",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /foo.ts ===
+// <|const [|foo|] = "foo";|>
+// export { foo as "__<alias>" };
+// import { "__<alias>" as bar } from "./foo";
+// if (bar !== "foo") throw bar;
+
+// === /bar.ts ===
+// import { "__<alias>" as first } from "./foo";
+// export { [|"/*GOTO DEF*/__<alias>"|] as "<other>" } from "./foo";
+// import { "<other>" as second } from "./bar";
+// if (first !== "foo") throw first;
+// if (second !== "foo") throw second;
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "foo",
+    "containerName": "",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// const foo = "foo";
+// <|export { foo as "/*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}__<alias>|]" };|>
+// <|<|import { "[|{| contextId: 1, defId: 0 |}__<alias>|]" as [|{| contextId: 2, defId: 1, isWriteAccess: true |}bar|] } from "./foo";|>|>
+// if ([|{| defId: 1 |}bar|] !== "foo") throw [|{| defId: 1 |}bar|];
+
+// === /bar.ts ===
+// <|<|import { "[|{| contextId: 3, defId: 0 |}__<alias>|]" as [|{| contextId: 4, defId: 2, isWriteAccess: true |}first|] } from "./foo";|>|>
+// <|<|export { "[|{| contextId: 5, defId: 0 |}__<alias>|]" as "[|{| contextId: 6, defId: 3, isWriteAccess: true |}<other>|]" } from "./foo";|>|>
+// <|<|import { "[|{| contextId: 7, defId: 3 |}<other>|]" as [|{| contextId: 8, defId: 4, isWriteAccess: true |}second|] } from "./bar";|>|>
+// if ([|{| defId: 2 |}first|] !== "foo") throw [|{| defId: 2 |}first|];
+// if ([|{| defId: 4 |}second|] !== "foo") throw [|{| defId: 4 |}second|];
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // const foo = "foo";
+  // <|export { foo as "/*FIND ALL REFS*/[|{| defId: 0 |}__<alias>|]" };|>
+  // <|import { "__<alias>" as [|{| defId: 1 |}bar|] } from "./foo";|>
+  // if (bar !== "foo") throw bar;
+
+  // === /bar.ts ===
+  // <|import { "__<alias>" as [|{| defId: 2 |}first|] } from "./foo";|>
+  // <|export { "__<alias>" as "[|{| defId: 3 |}<other>|]" } from "./foo";|>
+  // <|import { "<other>" as [|{| defId: 4 |}second|] } from "./bar";|>
+  // if (first !== "foo") throw first;
+  // if (second !== "foo") throw second;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const \"__<alias>\": \"foo\"\nexport \"__<alias>\"",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"__<alias>\"",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"__<alias>\"",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const bar: \"foo\"\nimport bar",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bar",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bar",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const first: \"foo\"\nimport first",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "first",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "first",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 3,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const \"<other>\": \"foo\"\nexport \"<other>\"",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"<other>\"",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"<other>\"",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 4,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const second: \"foo\"\nimport second",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "second",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "second",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// const foo = "foo";
+// <|export { foo as "[|{| defId: 0, isWriteAccess: true |}__<alias>|]" };|>
+// <|<|import { "/*FIND ALL REFS*/[|{| contextId: 1, defId: 0 |}__<alias>|]" as [|{| contextId: 2, defId: 1, isWriteAccess: true |}bar|] } from "./foo";|>|>
+// if ([|{| defId: 1 |}bar|] !== "foo") throw [|{| defId: 1 |}bar|];
+
+// === /bar.ts ===
+// <|<|import { "[|{| contextId: 3, defId: 0 |}__<alias>|]" as [|{| contextId: 4, defId: 2, isWriteAccess: true |}first|] } from "./foo";|>|>
+// <|<|export { "[|{| contextId: 5, defId: 0 |}__<alias>|]" as "[|{| contextId: 6, defId: 3, isWriteAccess: true |}<other>|]" } from "./foo";|>|>
+// <|<|import { "[|{| contextId: 7, defId: 3 |}<other>|]" as [|{| contextId: 8, defId: 4, isWriteAccess: true |}second|] } from "./bar";|>|>
+// if ([|{| defId: 2 |}first|] !== "foo") throw [|{| defId: 2 |}first|];
+// if ([|{| defId: 4 |}second|] !== "foo") throw [|{| defId: 4 |}second|];
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // const foo = "foo";
+  // <|export { foo as "[|{| defId: 0 |}__<alias>|]" };|>
+  // <|import { "/*FIND ALL REFS*/__<alias>" as [|{| defId: 1 |}bar|] } from "./foo";|>
+  // if (bar !== "foo") throw bar;
+
+  // === /bar.ts ===
+  // <|import { "__<alias>" as [|{| defId: 2 |}first|] } from "./foo";|>
+  // <|export { "__<alias>" as "[|{| defId: 3 |}<other>|]" } from "./foo";|>
+  // <|import { "<other>" as [|{| defId: 4 |}second|] } from "./bar";|>
+  // if (first !== "foo") throw first;
+  // if (second !== "foo") throw second;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const \"__<alias>\": \"foo\"\nexport \"__<alias>\"",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"__<alias>\"",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"__<alias>\"",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const bar: \"foo\"\nimport bar",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bar",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bar",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const first: \"foo\"\nimport first",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "first",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "first",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 3,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const \"<other>\": \"foo\"\nexport \"<other>\"",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"<other>\"",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"<other>\"",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 4,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const second: \"foo\"\nimport second",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "second",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "second",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// const foo = "foo";
+// <|export { foo as "[|{| defId: 0, isWriteAccess: true |}__<alias>|]" };|>
+// <|<|import { "[|{| contextId: 1, defId: 0 |}__<alias>|]" as [|{| contextId: 2, defId: 1, isWriteAccess: true |}bar|] } from "./foo";|>|>
+// if ([|{| defId: 1 |}bar|] !== "foo") throw [|{| defId: 1 |}bar|];
+
+// === /bar.ts ===
+// <|<|import { "/*FIND ALL REFS*/[|{| contextId: 3, defId: 0 |}__<alias>|]" as [|{| contextId: 4, defId: 2, isWriteAccess: true |}first|] } from "./foo";|>|>
+// <|<|export { "[|{| contextId: 5, defId: 0 |}__<alias>|]" as "[|{| contextId: 6, defId: 3, isWriteAccess: true |}<other>|]" } from "./foo";|>|>
+// <|<|import { "[|{| contextId: 7, defId: 3 |}<other>|]" as [|{| contextId: 8, defId: 4, isWriteAccess: true |}second|] } from "./bar";|>|>
+// if ([|{| defId: 2 |}first|] !== "foo") throw [|{| defId: 2 |}first|];
+// if ([|{| defId: 4 |}second|] !== "foo") throw [|{| defId: 4 |}second|];
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // const foo = "foo";
+  // <|export { foo as "[|{| defId: 0 |}__<alias>|]" };|>
+  // <|import { "__<alias>" as [|{| defId: 1 |}bar|] } from "./foo";|>
+  // if (bar !== "foo") throw bar;
+
+  // === /bar.ts ===
+  // <|import { "/*FIND ALL REFS*/__<alias>" as [|{| defId: 2 |}first|] } from "./foo";|>
+  // <|export { "__<alias>" as "[|{| defId: 3 |}<other>|]" } from "./foo";|>
+  // <|import { "<other>" as [|{| defId: 4 |}second|] } from "./bar";|>
+  // if (first !== "foo") throw first;
+  // if (second !== "foo") throw second;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const \"__<alias>\": \"foo\"\nexport \"__<alias>\"",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"__<alias>\"",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"__<alias>\"",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const bar: \"foo\"\nimport bar",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bar",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bar",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const first: \"foo\"\nimport first",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "first",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "first",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 3,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const \"<other>\": \"foo\"\nexport \"<other>\"",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"<other>\"",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"<other>\"",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 4,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const second: \"foo\"\nimport second",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "second",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "second",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /foo.ts ===
+// <|const [|{| defId: 0, isWriteAccess: true |}foo|] = "foo";|>
+// <|<|export { [|{| contextId: 1, defId: 0 |}foo|] as "[|{| contextId: 2, defId: 1, isWriteAccess: true |}__<alias>|]" };|>|>
+// <|<|import { "[|{| contextId: 3, defId: 1 |}__<alias>|]" as [|{| contextId: 4, defId: 2, isWriteAccess: true |}bar|] } from "./foo";|>|>
+// if ([|{| defId: 2 |}bar|] !== "foo") throw [|{| defId: 2 |}bar|];
+
+// === /bar.ts ===
+// <|<|import { "[|{| contextId: 5, defId: 1 |}__<alias>|]" as [|{| contextId: 6, defId: 3, isWriteAccess: true |}first|] } from "./foo";|>|>
+// <|<|export { "/*FIND ALL REFS*/[|{| contextId: 7, defId: 1 |}__<alias>|]" as "[|{| contextId: 8, defId: 4, isWriteAccess: true |}<other>|]" } from "./foo";|>|>
+// <|<|import { "[|{| contextId: 9, defId: 4 |}<other>|]" as [|{| contextId: 10, defId: 5, isWriteAccess: true |}second|] } from "./bar";|>|>
+// if ([|{| defId: 3 |}first|] !== "foo") throw [|{| defId: 3 |}first|];
+// if ([|{| defId: 5 |}second|] !== "foo") throw [|{| defId: 5 |}second|];
+
+  // === Definitions ===
+  // === /foo.ts ===
+  // <|const [|{| defId: 0 |}foo|] = "foo";|>
+  // <|export { foo as "[|{| defId: 1 |}__<alias>|]" };|>
+  // <|import { "__<alias>" as [|{| defId: 2 |}bar|] } from "./foo";|>
+  // if (bar !== "foo") throw bar;
+
+  // === /bar.ts ===
+  // <|import { "__<alias>" as [|{| defId: 3 |}first|] } from "./foo";|>
+  // <|export { "/*FIND ALL REFS*/__<alias>" as "[|{| defId: 4 |}<other>|]" } from "./foo";|>
+  // <|import { "<other>" as [|{| defId: 5 |}second|] } from "./bar";|>
+  // if (first !== "foo") throw first;
+  // if (second !== "foo") throw second;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const foo: \"foo\"",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "foo",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const \"__<alias>\": \"foo\"\nexport \"__<alias>\"",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"__<alias>\"",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"__<alias>\"",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const bar: \"foo\"\nimport bar",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bar",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "bar",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 3,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const first: \"foo\"\nimport first",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "first",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "first",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 4,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const \"<other>\": \"foo\"\nexport \"<other>\"",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"<other>\"",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"<other>\"",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 5,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const second: \"foo\"\nimport second",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "second",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"foo\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "second",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]

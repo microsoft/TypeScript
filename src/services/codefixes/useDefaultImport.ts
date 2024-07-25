@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     AnyImportSyntax,
     Diagnostics,
     Expression,
@@ -7,18 +12,14 @@ import {
     Identifier,
     isExternalModuleReference,
     isIdentifier,
+    isImportDeclaration,
     isImportEqualsDeclaration,
     isNamespaceImport,
     makeImport,
     SourceFile,
     textChanges,
     UserPreferences,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "useDefaultImport";
 const errorCodes = [Diagnostics.Import_may_be_converted_to_a_default_import.code];
@@ -32,10 +33,11 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_default_import, fixId, Diagnostics.Convert_all_to_default_imports)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(diag.file, diag.start);
-        if (info) doChange(changes, diag.file, info, context.preferences);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, diag.start);
+            if (info) doChange(changes, diag.file, info, context.preferences);
+        }),
 });
 
 interface Info {
@@ -50,7 +52,7 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     if (isImportEqualsDeclaration(parent) && isExternalModuleReference(parent.moduleReference)) {
         return { importNode: parent, name, moduleSpecifier: parent.moduleReference.expression };
     }
-    else if (isNamespaceImport(parent)) {
+    else if (isNamespaceImport(parent) && isImportDeclaration(parent.parent.parent)) {
         const importNode = parent.parent.parent;
         return { importNode, name, moduleSpecifier: importNode.moduleSpecifier };
     }

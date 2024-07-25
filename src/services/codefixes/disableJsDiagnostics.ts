@@ -1,4 +1,11 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createCodeFixActionWithoutFixAll,
+    createFileTextChanges,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     CodeFixAction,
     createTextChange,
     createTextSpan,
@@ -13,14 +20,7 @@ import {
     SourceFile,
     textChanges,
     tryAddToSet,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    createCodeFixActionWithoutFixAll,
-    createFileTextChanges,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixName = "disableJsDiagnostics";
 const fixId = "disableJsDiagnostics";
@@ -44,11 +44,15 @@ registerCodeFix({
             createCodeFixActionWithoutFixAll(
                 fixName,
                 [createFileTextChanges(sourceFile.fileName, [
-                    createTextChange(sourceFile.checkJsDirective
-                        ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end)
-                        : createTextSpan(0, 0), `// @ts-nocheck${newLineCharacter}`),
+                    createTextChange(
+                        sourceFile.checkJsDirective
+                            ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end)
+                            : createTextSpan(0, 0),
+                        `// @ts-nocheck${newLineCharacter}`,
+                    ),
                 ])],
-                Diagnostics.Disable_checking_for_this_file),
+                Diagnostics.Disable_checking_for_this_file,
+            ),
         ];
 
         if (textChanges.isValidLocationToAddComment(sourceFile, span.start)) {

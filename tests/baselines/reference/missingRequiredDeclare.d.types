@@ -3,5 +3,7 @@
 === missingRequiredDeclare.d.ts ===
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

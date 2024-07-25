@@ -1,3 +1,4 @@
+// === Smart Selection ===
 let a;
 let b: {
     /** Comment */ /**/p0: number

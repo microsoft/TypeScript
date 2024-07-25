@@ -1,5 +1,5 @@
 // @moduleResolution: bundler
-// @module: esnext
+// @module: esnext, preserve
 // @traceResolution: true
 
 // @Filename: /node_modules/conditions/package.json

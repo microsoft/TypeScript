@@ -7,4 +7,5 @@ export interface A {}
 === ./a.js ===
 import { type A } from "./a";
 >A : any
+>  : ^^^
 

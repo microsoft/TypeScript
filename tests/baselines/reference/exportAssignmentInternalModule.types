@@ -3,16 +3,21 @@
 === exportAssignmentInternalModule_B.ts ===
 import modM = require("exportAssignmentInternalModule_A");
 >modM : typeof modM
+>     : ^^^^^^^^^^^
 
 var n: number = modM.x;
 >n : number
+>  : ^^^^^^
 >modM.x : any
 >modM : typeof modM
+>     : ^^^^^^^^^^^
 >x : any
+>  : ^^^
 
 === exportAssignmentInternalModule_A.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
 	export var x;
 >x : any
@@ -20,4 +25,5 @@ module M {
 
 export = M;
 >M : typeof M
+>  : ^^^^^^^^
 

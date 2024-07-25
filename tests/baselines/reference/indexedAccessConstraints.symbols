@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/indexedAccessConstraints.ts] ////
+
+=== indexedAccessConstraints.ts ===
+function foo<T extends object>(a: T[keyof T]) {
+>foo : Symbol(foo, Decl(indexedAccessConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(indexedAccessConstraints.ts, 0, 13))
+>a : Symbol(a, Decl(indexedAccessConstraints.ts, 0, 31))
+>T : Symbol(T, Decl(indexedAccessConstraints.ts, 0, 13))
+>T : Symbol(T, Decl(indexedAccessConstraints.ts, 0, 13))
+
+    let b: number = a;  // Error
+>b : Symbol(b, Decl(indexedAccessConstraints.ts, 1, 7))
+>a : Symbol(a, Decl(indexedAccessConstraints.ts, 0, 31))
+}
+
+// Repro from #54522
+
+export function methodFnLength<T extends {}, K extends keyof T>(obj: T, methodKey: K): number {
+>methodFnLength : Symbol(methodFnLength, Decl(indexedAccessConstraints.ts, 2, 1))
+>T : Symbol(T, Decl(indexedAccessConstraints.ts, 6, 31))
+>K : Symbol(K, Decl(indexedAccessConstraints.ts, 6, 44))
+>T : Symbol(T, Decl(indexedAccessConstraints.ts, 6, 31))
+>obj : Symbol(obj, Decl(indexedAccessConstraints.ts, 6, 64))
+>T : Symbol(T, Decl(indexedAccessConstraints.ts, 6, 31))
+>methodKey : Symbol(methodKey, Decl(indexedAccessConstraints.ts, 6, 71))
+>K : Symbol(K, Decl(indexedAccessConstraints.ts, 6, 44))
+
+    const fn = obj[methodKey];
+>fn : Symbol(fn, Decl(indexedAccessConstraints.ts, 7, 9))
+>obj : Symbol(obj, Decl(indexedAccessConstraints.ts, 6, 64))
+>methodKey : Symbol(methodKey, Decl(indexedAccessConstraints.ts, 6, 71))
+
+    if (typeof fn !== 'function') {
+>fn : Symbol(fn, Decl(indexedAccessConstraints.ts, 7, 9))
+
+        return 0;
+    }
+    return fn.length;
+>fn.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(indexedAccessConstraints.ts, 7, 9))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+}
+
+// Repro from #54837
+
+function getField<T extends object>(x: T | null, k: keyof T) {
+>getField : Symbol(getField, Decl(indexedAccessConstraints.ts, 12, 1))
+>T : Symbol(T, Decl(indexedAccessConstraints.ts, 16, 18))
+>x : Symbol(x, Decl(indexedAccessConstraints.ts, 16, 36))
+>T : Symbol(T, Decl(indexedAccessConstraints.ts, 16, 18))
+>k : Symbol(k, Decl(indexedAccessConstraints.ts, 16, 48))
+>T : Symbol(T, Decl(indexedAccessConstraints.ts, 16, 18))
+
+    const result = x ? x[k] : null;
+>result : Symbol(result, Decl(indexedAccessConstraints.ts, 17, 9))
+>x : Symbol(x, Decl(indexedAccessConstraints.ts, 16, 36))
+>x : Symbol(x, Decl(indexedAccessConstraints.ts, 16, 36))
+>k : Symbol(k, Decl(indexedAccessConstraints.ts, 16, 48))
+
+    return result;  // T[keyof T] | null
+>result : Symbol(result, Decl(indexedAccessConstraints.ts, 17, 9))
+}
+

@@ -24,7 +24,7 @@ verify.moveToNewFile({
 
         "/user.js":
 // TODO: GH#22330
-`const { x, } = require("./a");
+`const { x } = require("./a");
 const { y } = require("./y");
 `,
     },

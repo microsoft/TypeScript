@@ -3,18 +3,23 @@
 === enumDecl1.ts ===
 declare module mAmbient {
 >mAmbient : typeof mAmbient
+>         : ^^^^^^^^^^^^^^^
 
     enum e {
 >e : e
+>  : ^
 
         x,
 >x : e.x
+>  : ^^^
 
         y,
 >y : e.y
+>  : ^^^
 
         z
 >z : e.z
+>  : ^^^
     }
 }
 

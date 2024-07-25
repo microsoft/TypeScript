@@ -1,8 +1,8 @@
+import { FormattingContext } from "../_namespaces/ts.formatting.js";
 import {
     emptyArray,
     SyntaxKind,
-} from "../_namespaces/ts";
-import { FormattingContext } from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export interface Rule {
@@ -18,6 +18,7 @@ export type ContextPredicate = (context: FormattingContext) => boolean;
 /** @internal */
 export const anyContext: readonly ContextPredicate[] = emptyArray;
 
+// dprint-ignore
 /** @internal */
 export const enum RuleAction {
     None                       = 0,

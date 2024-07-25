@@ -4,5 +4,7 @@
 interface I {
     [e]: number 
 >[e] : number
+>    : ^^^^^^
 >e : any
+>  : ^^^
 }

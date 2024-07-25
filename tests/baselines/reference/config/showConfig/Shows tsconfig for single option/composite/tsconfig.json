@@ -1,5 +1,7 @@
 {
     "compilerOptions": {
-        "composite": true
+        "composite": true,
+        "declaration": true,
+        "incremental": true
     }
 }

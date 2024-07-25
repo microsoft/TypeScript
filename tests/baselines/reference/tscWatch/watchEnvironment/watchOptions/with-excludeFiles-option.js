@@ -29,38 +29,34 @@ export function fooBar(): string;
 export function temp(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"exclude":["node_modules"],"watchOptions":{"excludeFiles":["node_modules/*"]}}
+{
+  "exclude": [
+    "node_modules"
+  ],
+  "watchOptions": {
+    "excludeFiles": [
+      "node_modules/*"
+    ]
+  }
+}
 
 
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/src/main.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/node_modules/bar/foo.d.ts
-/user/username/projects/myproject/node_modules/bar/index.d.ts
-/user/username/projects/myproject/src/main.ts
+//// [/user/username/projects/myproject/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var bar_1 = require("bar");
+(0, bar_1.foo)();
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/node_modules/bar/foo.d.ts
-/user/username/projects/myproject/node_modules/bar/index.d.ts
-/user/username/projects/myproject/src/main.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/node_modules/bar/foo.d.ts (used version)
-/user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
-/user/username/projects/myproject/src/main.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -84,15 +80,33 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/src/main.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/node_modules/bar/foo.d.ts
+/user/username/projects/myproject/node_modules/bar/index.d.ts
+/user/username/projects/myproject/src/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/node_modules/bar/foo.d.ts
+/user/username/projects/myproject/node_modules/bar/index.d.ts
+/user/username/projects/myproject/src/main.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/node_modules/bar/foo.d.ts (used version)
+/user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
+/user/username/projects/myproject/src/main.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var bar_1 = require("bar");
-(0, bar_1.foo)();
-
-
 
 Change:: Change foo
 
@@ -101,9 +115,5 @@ Input::
 export function fooBar(): string;
 
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-

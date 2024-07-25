@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/narrowByParenthesizedSwitchExpression.ts] ////
+
+=== narrowByParenthesizedSwitchExpression.ts ===
+interface Base {
+  type: "foo" | "bar";
+>type : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
+}
+
+interface Foo extends Base {
+  type: "foo";
+>type : "foo"
+>     : ^^^^^
+
+  foo: string;
+>foo : string
+>    : ^^^^^^
+}
+
+interface Bar extends Base {
+  type: "bar";
+>type : "bar"
+>     : ^^^^^
+
+  bar: number;
+>bar : number
+>    : ^^^^^^
+}
+
+function getV(): Foo | Bar {
+>getV : () => Foo | Bar
+>     : ^^^^^^         
+
+  return null!;
+>null! : never
+>      : ^^^^^
+}
+
+const v = getV();
+>v : Foo | Bar
+>  : ^^^^^^^^^
+>getV() : Foo | Bar
+>       : ^^^^^^^^^
+>getV : () => Foo | Bar
+>     : ^^^^^^         
+
+switch ((v.type)) {
+>(v.type) : "foo" | "bar"
+>         : ^^^^^^^^^^^^^
+>v.type : "foo" | "bar"
+>       : ^^^^^^^^^^^^^
+>v : Foo | Bar
+>  : ^^^^^^^^^
+>type : "foo" | "bar"
+>     : ^^^^^^^^^^^^^
+
+  case "bar":
+>"bar" : "bar"
+>      : ^^^^^
+
+    v.bar;
+>v.bar : number
+>      : ^^^^^^
+>v : Bar
+>  : ^^^
+>bar : number
+>    : ^^^^^^
+
+    break;
+
+  case "foo":
+>"foo" : "foo"
+>      : ^^^^^
+
+    v.foo;
+>v.foo : string
+>      : ^^^^^^
+>v : Foo
+>  : ^^^
+>foo : string
+>    : ^^^^^^
+
+    break;
+}
+

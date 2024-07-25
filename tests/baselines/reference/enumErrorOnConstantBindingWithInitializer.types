@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/enums/enumErrorOnConstantBindingWithInitializer.ts] ////
+
+=== enumErrorOnConstantBindingWithInitializer.ts ===
+type Thing = {
+>Thing : Thing
+>      : ^^^^^
+
+  value?: string | number;
+>value : string | number | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+declare const thing: Thing;
+>thing : Thing
+>      : ^^^^^
+
+const { value = "123" } = thing;
+>value : string | number
+>      : ^^^^^^^^^^^^^^^
+>"123" : "123"
+>      : ^^^^^
+>thing : Thing
+>      : ^^^^^
+
+enum E {
+>E : E
+>  : ^
+
+  test = value,
+>test : E.test
+>     : ^^^^^^
+>value : string | number
+>      : ^^^^^^^^^^^^^^^
+}
+

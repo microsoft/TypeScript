@@ -1,15 +1,7 @@
 import chalk from "chalk";
 import { readFileSync } from "fs";
 import { join } from "path";
-
-let playwright;
-try {
-    // @ts-ignore-error
-    playwright = await import("playwright");
-}
-catch (error) {
-    throw new Error("Playwright is expected to be installed manually before running this script");
-}
+import playwright from "playwright";
 
 // Turning this on will leave the Chromium browser open, giving you the
 // chance to open up the web inspector.
@@ -37,6 +29,7 @@ for (const browserType of browsers) {
     await page.setContent(`
     <html>
     <script>${readFileSync(join("built", "local", "typescript.js"), "utf8")}</script>
+    <script>if (typeof ts.version !== "string") throw new Error("ts.version not set")</script>
     </html>
     `);
 

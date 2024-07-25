@@ -1,0 +1,132 @@
+//// [tests/cases/compiler/intersectionsAndOptionalProperties2.ts] ////
+
+=== intersectionsAndOptionalProperties2.ts ===
+// https://github.com/microsoft/TypeScript/issues/58174
+
+type A_Primitive = {
+>A_Primitive : Symbol(A_Primitive, Decl(intersectionsAndOptionalProperties2.ts, 0, 0))
+
+  disabled?: boolean;
+>disabled : Symbol(disabled, Decl(intersectionsAndOptionalProperties2.ts, 2, 20))
+
+};
+
+type B_Primitive = {
+>B_Primitive : Symbol(B_Primitive, Decl(intersectionsAndOptionalProperties2.ts, 4, 2))
+
+  disabled?: boolean | undefined;
+>disabled : Symbol(disabled, Decl(intersectionsAndOptionalProperties2.ts, 6, 20))
+
+};
+
+type C_Primitive = {
+>C_Primitive : Symbol(C_Primitive, Decl(intersectionsAndOptionalProperties2.ts, 8, 2))
+
+  disabled?: boolean;
+>disabled : Symbol(disabled, Decl(intersectionsAndOptionalProperties2.ts, 10, 20))
+
+};
+
+declare const ab_primitive: A_Primitive & B_Primitive;
+>ab_primitive : Symbol(ab_primitive, Decl(intersectionsAndOptionalProperties2.ts, 14, 13))
+>A_Primitive : Symbol(A_Primitive, Decl(intersectionsAndOptionalProperties2.ts, 0, 0))
+>B_Primitive : Symbol(B_Primitive, Decl(intersectionsAndOptionalProperties2.ts, 4, 2))
+
+declare const ac_primitive: A_Primitive & C_Primitive;
+>ac_primitive : Symbol(ac_primitive, Decl(intersectionsAndOptionalProperties2.ts, 15, 13))
+>A_Primitive : Symbol(A_Primitive, Decl(intersectionsAndOptionalProperties2.ts, 0, 0))
+>C_Primitive : Symbol(C_Primitive, Decl(intersectionsAndOptionalProperties2.ts, 8, 2))
+
+const ab_disabled_read = ab_primitive.disabled;
+>ab_disabled_read : Symbol(ab_disabled_read, Decl(intersectionsAndOptionalProperties2.ts, 17, 5))
+>ab_primitive.disabled : Symbol(disabled, Decl(intersectionsAndOptionalProperties2.ts, 2, 20), Decl(intersectionsAndOptionalProperties2.ts, 6, 20))
+>ab_primitive : Symbol(ab_primitive, Decl(intersectionsAndOptionalProperties2.ts, 14, 13))
+>disabled : Symbol(disabled, Decl(intersectionsAndOptionalProperties2.ts, 2, 20), Decl(intersectionsAndOptionalProperties2.ts, 6, 20))
+
+const ac_disabled_read = ac_primitive.disabled;
+>ac_disabled_read : Symbol(ac_disabled_read, Decl(intersectionsAndOptionalProperties2.ts, 18, 5))
+>ac_primitive.disabled : Symbol(disabled, Decl(intersectionsAndOptionalProperties2.ts, 2, 20), Decl(intersectionsAndOptionalProperties2.ts, 10, 20))
+>ac_primitive : Symbol(ac_primitive, Decl(intersectionsAndOptionalProperties2.ts, 15, 13))
+>disabled : Symbol(disabled, Decl(intersectionsAndOptionalProperties2.ts, 2, 20), Decl(intersectionsAndOptionalProperties2.ts, 10, 20))
+
+ab_primitive.disabled = undefined;
+>ab_primitive.disabled : Symbol(disabled, Decl(intersectionsAndOptionalProperties2.ts, 2, 20), Decl(intersectionsAndOptionalProperties2.ts, 6, 20))
+>ab_primitive : Symbol(ab_primitive, Decl(intersectionsAndOptionalProperties2.ts, 14, 13))
+>disabled : Symbol(disabled, Decl(intersectionsAndOptionalProperties2.ts, 2, 20), Decl(intersectionsAndOptionalProperties2.ts, 6, 20))
+>undefined : Symbol(undefined)
+
+ac_primitive.disabled = undefined;
+>ac_primitive.disabled : Symbol(disabled, Decl(intersectionsAndOptionalProperties2.ts, 2, 20), Decl(intersectionsAndOptionalProperties2.ts, 10, 20))
+>ac_primitive : Symbol(ac_primitive, Decl(intersectionsAndOptionalProperties2.ts, 15, 13))
+>disabled : Symbol(disabled, Decl(intersectionsAndOptionalProperties2.ts, 2, 20), Decl(intersectionsAndOptionalProperties2.ts, 10, 20))
+>undefined : Symbol(undefined)
+
+type Foo = {
+>Foo : Symbol(Foo, Decl(intersectionsAndOptionalProperties2.ts, 21, 34))
+
+  prop: boolean;
+>prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 23, 12))
+
+};
+
+type A_Obj = {
+>A_Obj : Symbol(A_Obj, Decl(intersectionsAndOptionalProperties2.ts, 25, 2))
+
+  prop?: Foo;
+>prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 27, 14))
+>Foo : Symbol(Foo, Decl(intersectionsAndOptionalProperties2.ts, 21, 34))
+
+};
+
+type B_Obj = {
+>B_Obj : Symbol(B_Obj, Decl(intersectionsAndOptionalProperties2.ts, 29, 2))
+
+  prop?: Foo | undefined;
+>prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 31, 14))
+>Foo : Symbol(Foo, Decl(intersectionsAndOptionalProperties2.ts, 21, 34))
+
+};
+
+type C_Obj = {
+>C_Obj : Symbol(C_Obj, Decl(intersectionsAndOptionalProperties2.ts, 33, 2))
+
+  prop?: Foo;
+>prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 35, 14))
+>Foo : Symbol(Foo, Decl(intersectionsAndOptionalProperties2.ts, 21, 34))
+
+};
+
+declare const ab_obj: A_Obj & B_Obj;
+>ab_obj : Symbol(ab_obj, Decl(intersectionsAndOptionalProperties2.ts, 39, 13))
+>A_Obj : Symbol(A_Obj, Decl(intersectionsAndOptionalProperties2.ts, 25, 2))
+>B_Obj : Symbol(B_Obj, Decl(intersectionsAndOptionalProperties2.ts, 29, 2))
+
+declare const ac_obj: A_Obj & C_Obj;
+>ac_obj : Symbol(ac_obj, Decl(intersectionsAndOptionalProperties2.ts, 40, 13))
+>A_Obj : Symbol(A_Obj, Decl(intersectionsAndOptionalProperties2.ts, 25, 2))
+>C_Obj : Symbol(C_Obj, Decl(intersectionsAndOptionalProperties2.ts, 33, 2))
+
+const ab_prop_read = ab_obj.prop;
+>ab_prop_read : Symbol(ab_prop_read, Decl(intersectionsAndOptionalProperties2.ts, 42, 5))
+>ab_obj.prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 27, 14), Decl(intersectionsAndOptionalProperties2.ts, 31, 14))
+>ab_obj : Symbol(ab_obj, Decl(intersectionsAndOptionalProperties2.ts, 39, 13))
+>prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 27, 14), Decl(intersectionsAndOptionalProperties2.ts, 31, 14))
+
+const ac_prop_read = ac_obj.prop;
+>ac_prop_read : Symbol(ac_prop_read, Decl(intersectionsAndOptionalProperties2.ts, 43, 5))
+>ac_obj.prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 27, 14), Decl(intersectionsAndOptionalProperties2.ts, 35, 14))
+>ac_obj : Symbol(ac_obj, Decl(intersectionsAndOptionalProperties2.ts, 40, 13))
+>prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 27, 14), Decl(intersectionsAndOptionalProperties2.ts, 35, 14))
+
+ab_obj.prop = undefined;
+>ab_obj.prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 27, 14), Decl(intersectionsAndOptionalProperties2.ts, 31, 14))
+>ab_obj : Symbol(ab_obj, Decl(intersectionsAndOptionalProperties2.ts, 39, 13))
+>prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 27, 14), Decl(intersectionsAndOptionalProperties2.ts, 31, 14))
+>undefined : Symbol(undefined)
+
+ac_obj.prop = undefined;
+>ac_obj.prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 27, 14), Decl(intersectionsAndOptionalProperties2.ts, 35, 14))
+>ac_obj : Symbol(ac_obj, Decl(intersectionsAndOptionalProperties2.ts, 40, 13))
+>prop : Symbol(prop, Decl(intersectionsAndOptionalProperties2.ts, 27, 14), Decl(intersectionsAndOptionalProperties2.ts, 35, 14))
+>undefined : Symbol(undefined)
+

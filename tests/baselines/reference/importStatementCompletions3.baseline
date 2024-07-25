@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/./bar.ts ===
 // import f
 //        ^
@@ -49,7 +50,7 @@
           "isImportStatementCompletion": true,
           "data": {
             "exportName": "foo",
-            "exportMapKey": "foo|*|",
+            "exportMapKey": "3 * foo ",
             "moduleSpecifier": "./$foo",
             "fileName": "/tests/cases/fourslash/$foo.ts"
           },
@@ -101,7 +102,8 @@
             }
           ]
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

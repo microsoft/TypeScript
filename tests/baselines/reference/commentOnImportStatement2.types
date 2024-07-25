@@ -4,4 +4,5 @@
 /* not copyright */
 import foo = require('./foo');
 >foo : any
+>    : ^^^
 

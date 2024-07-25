@@ -1,8 +1,0 @@
-    set foo(value) { this.#value = value; }
-                 ^
-{
-  "text": ": number",
-  "position": 83,
-  "kind": "Type",
-  "whitespaceBefore": true
-}
