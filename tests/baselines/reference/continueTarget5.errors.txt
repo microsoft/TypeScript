@@ -1,4 +1,4 @@
-continueTarget5.ts(5,7): error TS18058: Label 'target' used before declaration
+continueTarget5.ts(5,7): error TS18058: Label 'target' used before declaration.
 
 
 ==== continueTarget5.ts (1 errors) ====
@@ -8,7 +8,7 @@ continueTarget5.ts(5,7): error TS18058: Label 'target' used before declaration
         while (true) {
           continue target;
           ~~~~~~~~~~~~~~~~
-!!! error TS18058: Label 'target' used before declaration
+!!! error TS18058: Label 'target' used before declaration.
         }
       }
     }

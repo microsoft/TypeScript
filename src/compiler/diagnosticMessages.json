@@ -8354,7 +8354,7 @@
         "category": "Error",
         "code": 18057
     },
-    "Label '{0}' used before declaration": {
+    "Label '{0}' used before declaration.": {
         "category": "Error",
         "code": 18058
     },
