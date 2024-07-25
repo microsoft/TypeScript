@@ -46,6 +46,7 @@ import {
     isBindingElement,
     isCallLikeExpression,
     isCallOrNewExpressionTarget,
+    isClassDeclaration,
     isClassElement,
     isClassExpression,
     isClassLike,
@@ -230,14 +231,16 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration, failedAliasResolution);
         // For a function, if this is the original function definition, return just sigInfo.
         // If this is the original constructor definition, parent is the class.
+        let includeDeclarations: ((d: Declaration) => boolean) | undefined;
         if (typeChecker.getRootSymbols(symbol).some(s => symbolMatchesSignature(s, calledDeclaration))) {
-            return [sigInfo];
+            if (!isConstructorDeclaration(calledDeclaration)) return [sigInfo];
+
+            // If we found a constructor declaration, we also return class declarations as definitions
+            includeDeclarations = (d: Declaration) => d !== calledDeclaration && (isClassDeclaration(d) || isClassExpression(d));
         }
-        else {
-            const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, calledDeclaration) || emptyArray;
-            // For a 'super()' call, put the signature first, else put the variable first.
-            return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
-        }
+        const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, calledDeclaration, includeDeclarations) || emptyArray;
+        // For a 'super()' call, put the signature first, else put the variable first.
+        return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
     }
 
     // Because name in short-hand property assignment has two different meanings: property name and property value,
@@ -584,9 +587,10 @@ function isExpandoDeclaration(node: Declaration): boolean {
     return !!containingAssignment && getAssignmentDeclarationKind(containingAssignment) === AssignmentDeclarationKind.Property;
 }
 
-function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean, excludeDeclaration?: Node): DefinitionInfo[] | undefined {
-    const filteredDeclarations = filter(symbol.declarations, d => d !== excludeDeclaration);
-    const signatureDefinition = getConstructSignatureDefinition() || getCallSignatureDefinition();
+function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean, excludeDeclaration?: Node, includeDeclarations?: (d: Declaration) => boolean): DefinitionInfo[] | undefined {
+    const excludeConstructorDeclaration = excludeDeclaration !== undefined && isConstructorDeclaration(excludeDeclaration);
+    const filteredDeclarations = filter(symbol.declarations, includeDeclarations ?? (d => d !== excludeDeclaration));
+    const signatureDefinition = !excludeConstructorDeclaration && (getConstructSignatureDefinition() || getCallSignatureDefinition());
     if (signatureDefinition) {
         return signatureDefinition;
     }
