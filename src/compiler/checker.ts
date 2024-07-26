@@ -1653,6 +1653,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getNonOptionalType: removeOptionalTypeMarker,
         getTypeArguments,
         typeToTypeNode: nodeBuilder.typeToTypeNode,
+        typePredicateToTypePredicateNode: nodeBuilder.typePredicateToTypePredicateNode,
         indexInfoToIndexSignatureDeclaration: nodeBuilder.indexInfoToIndexSignatureDeclaration,
         signatureToSignatureDeclaration: nodeBuilder.signatureToSignatureDeclaration,
         symbolToEntityName: nodeBuilder.symbolToEntityName,

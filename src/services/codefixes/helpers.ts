@@ -105,6 +105,7 @@ import {
     TypeFlags,
     TypeNode,
     TypeParameterDeclaration,
+    TypePredicate,
     unescapeLeadingUnderscores,
     UnionType,
     UserPreferences,
@@ -600,6 +601,20 @@ export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: 
 
     // Ensure nodes are fresh so they can have different positions when going through formatting.
     return getSynthesizedDeepClone(typeNode);
+}
+
+/** @internal */
+export function typePredicateToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, typePredicate: TypePredicate, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+    let typePredicateNode = checker.typePredicateToTypePredicateNode(typePredicate, contextNode, flags, tracker);
+    if (typePredicateNode?.type && isImportTypeNode(typePredicateNode.type)) {
+        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typePredicateNode.type, scriptTarget);
+        if (importableReference) {
+            importSymbols(importAdder, importableReference.symbols);
+            typePredicateNode = factory.updateTypePredicateNode(typePredicateNode, typePredicateNode.assertsModifier, typePredicateNode.parameterName, importableReference.typeNode);
+        }
+    }
+    // Ensure nodes are fresh so they can have different positions when going through formatting.
+    return getSynthesizedDeepClone(typePredicateNode);
 }
 
 function typeContainsTypeParameter(type: Type) {

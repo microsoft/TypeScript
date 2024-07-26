@@ -24,7 +24,6 @@ import {
     SyntaxKind,
     textChanges,
     Type,
-    TypeChecker,
     TypeNode,
 } from "../_namespaces/ts.js";
 import {
@@ -113,7 +112,31 @@ function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | u
     }
 
     const typeChecker = context.program.getTypeChecker();
-    const returnType = tryGetReturnType(typeChecker, declaration);
+
+    let returnType: Type | undefined;
+
+    if (typeChecker.isImplementationOfOverload(declaration)) {
+        const signatures = typeChecker.getTypeAtLocation(declaration).getCallSignatures();
+        if (signatures.length > 1) {
+            returnType = typeChecker.getUnionType(mapDefined(signatures, s => s.getReturnType()));
+        }
+    }
+    if (!returnType) {
+        const signature = typeChecker.getSignatureFromDeclaration(declaration);
+        if (signature) {
+            const typePredicate = typeChecker.getTypePredicateOfSignature(signature);
+            if (typePredicate && typePredicate.type) {
+                const typePredicateTypeNode = typeChecker.typePredicateToTypePredicateNode(typePredicate, declaration, NodeBuilderFlags.NoTruncation);
+                if (typePredicateTypeNode) {
+                    return { declaration, returnTypeNode: typePredicateTypeNode };
+                }
+            }
+            else {
+                returnType = typeChecker.getReturnTypeOfSignature(signature);
+            }
+        }
+    }
+
     if (!returnType) {
         return { error: getLocaleSpecificMessage(Diagnostics.Could_not_determine_function_return_type) };
     }
@@ -133,18 +156,5 @@ function isConvertibleDeclaration(node: Node): node is ConvertibleDeclaration {
             return true;
         default:
             return false;
-    }
-}
-
-function tryGetReturnType(typeChecker: TypeChecker, node: ConvertibleDeclaration): Type | undefined {
-    if (typeChecker.isImplementationOfOverload(node)) {
-        const signatures = typeChecker.getTypeAtLocation(node).getCallSignatures();
-        if (signatures.length > 1) {
-            return typeChecker.getUnionType(mapDefined(signatures, s => s.getReturnType()));
-        }
-    }
-    const signature = typeChecker.getSignatureFromDeclaration(node);
-    if (signature) {
-        return typeChecker.getReturnTypeOfSignature(signature);
     }
 }
