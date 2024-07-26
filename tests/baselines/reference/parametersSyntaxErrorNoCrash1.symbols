@@ -1,14 +1,16 @@
 //// [tests/cases/compiler/parametersSyntaxErrorNoCrash1.ts] ////
 
 === parametersSyntaxErrorNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59422
+
 function identity<T>(arg: T: T {
 >identity : Symbol(identity, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 0))
->T : Symbol(T, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 18), Decl(parametersSyntaxErrorNoCrash1.ts, 0, 28))
->arg : Symbol(arg, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 21))
->T : Symbol(T, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 18), Decl(parametersSyntaxErrorNoCrash1.ts, 0, 28))
->T : Symbol(T, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 18), Decl(parametersSyntaxErrorNoCrash1.ts, 0, 28))
+>T : Symbol(T, Decl(parametersSyntaxErrorNoCrash1.ts, 2, 18), Decl(parametersSyntaxErrorNoCrash1.ts, 2, 28))
+>arg : Symbol(arg, Decl(parametersSyntaxErrorNoCrash1.ts, 2, 21))
+>T : Symbol(T, Decl(parametersSyntaxErrorNoCrash1.ts, 2, 18), Decl(parametersSyntaxErrorNoCrash1.ts, 2, 28))
+>T : Symbol(T, Decl(parametersSyntaxErrorNoCrash1.ts, 2, 18), Decl(parametersSyntaxErrorNoCrash1.ts, 2, 28))
 
     return arg;
 >return : Symbol(return)
->arg : Symbol(arg, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 32))
+>arg : Symbol(arg, Decl(parametersSyntaxErrorNoCrash1.ts, 2, 32))
 }

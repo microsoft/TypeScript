@@ -1,6 +1,8 @@
 //// [tests/cases/compiler/parametersSyntaxErrorNoCrash1.ts] ////
 
 === parametersSyntaxErrorNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59422
+
 function identity<T>(arg: T: T {
 >identity : <T>(arg: T, T: any, { return: arg }: { return: any; }) => any
 >         : ^ ^^   ^^ ^^ ^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^
