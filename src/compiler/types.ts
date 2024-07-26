@@ -8199,6 +8199,7 @@ export interface CompilerHostSupportingResolutionCache {
         redirectedReference: ResolvedProjectReference | undefined,
         options: CompilerOptions,
     ): void;
+    onSourceFileNotCreated?(sourceFileOptions: CreateSourceFileOptions): void;
 }
 /** @internal */
 export interface CompilerHost extends CompilerHostSupportingResolutionCache {

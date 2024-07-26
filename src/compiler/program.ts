@@ -3791,6 +3791,9 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
             }
             (filesWithReferencesProcessed ??= new Set()).add(file.path);
         }
+        else {
+            host.onSourceFileNotCreated?.(sourceFileOptions);
+        }
         return file;
     }
 

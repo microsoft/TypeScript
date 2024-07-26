@@ -1241,13 +1241,15 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'c' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/a/1/a-impl/a/lib/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/projects/a/1/a-impl/a/node_modules/c/package.json' exists according to earlier cached lookups.
+Found 'package.json' at '/home/src/projects/a/1/a-impl/a/node_modules/c/package.json'.
 File '/home/src/projects/a/1/a-impl/a/node_modules/c.ts' does not exist.
 File '/home/src/projects/a/1/a-impl/a/node_modules/c.tsx' does not exist.
 File '/home/src/projects/a/1/a-impl/a/node_modules/c.d.ts' does not exist.
+'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field './lib/index.d.ts' that references '/home/src/projects/a/1/a-impl/a/node_modules/c/lib/index.d.ts'.
 File '/home/src/projects/a/1/a-impl/a/node_modules/c/lib/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/a/1/a-impl/a/node_modules/c/lib/index.d.ts', result '/home/src/projects/c/3/c-impl/c/lib/index.d.ts'.
 ======== Module name 'c' was successfully resolved to '/home/src/projects/c/3/c-impl/c/lib/index.d.ts' with Package ID 'c/lib/index.d.ts@1.0.0'. ========
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/node_modules 1 undefined Failed Lookup Locations

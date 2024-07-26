@@ -24,6 +24,7 @@ import {
     createCacheableExportInfoMap,
     createLanguageService,
     createResolutionCache,
+    CreateSourceFileOptions,
     createSymlinkCache,
     Debug,
     Diagnostic,
@@ -882,6 +883,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     resolveLibrary(libraryName: string, resolveFrom: string, options: CompilerOptions, libFileName: string): ResolvedModuleWithFailedLookupLocations {
         return this.resolutionCache.resolveLibrary(libraryName, resolveFrom, options, libFileName);
+    }
+
+    /** @internal */
+    onSourceFileNotCreated(sourceFileOptions: CreateSourceFileOptions): void {
+        this.resolutionCache.onSourceFileNotCreated(sourceFileOptions);
     }
 
     directoryExists(path: string): boolean {

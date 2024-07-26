@@ -524,6 +524,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             getDirectoryPath(getNormalizedAbsolutePath(configFileName, currentDirectory)) :
             currentDirectory,
     );
+    compilerHost.onSourceFileNotCreated = resolutionCache.onSourceFileNotCreated.bind(resolutionCache);
     // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names
     compilerHost.resolveModuleNameLiterals = maybeBind(host, host.resolveModuleNameLiterals);
     compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);

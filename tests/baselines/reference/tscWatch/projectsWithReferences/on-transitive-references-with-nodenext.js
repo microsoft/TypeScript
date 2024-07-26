@@ -951,7 +951,7 @@ File '/user/username/projects/package.json' does not exist according to earlier 
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/transitiveReferences/refs/package.json' does not exist.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -1150,7 +1150,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'NodeNext'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/nrefs/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/transitiveReferences/nrefs/package.json' does not exist.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
