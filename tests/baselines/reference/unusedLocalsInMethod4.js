@@ -95,6 +95,13 @@ function f8() {
 }
 declare function bar(): [number, ...string[]];
 
+function f9() {  
+    const x: number; // should have only one error
+    function bar() {  
+        let y = x;  
+    }  
+}  
+
 
 function rw() {
     let i: number;  // should error
@@ -215,6 +222,12 @@ function f8() {
         var _;
         var rest; // should not error
         _a = bar(), _ = _a[0], rest = _a.slice(1);
+    }
+}
+function f9() {
+    var x; // should have only one error
+    function bar() {
+        var y = x;
     }
 }
 function rw() {

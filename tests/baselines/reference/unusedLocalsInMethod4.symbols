@@ -289,81 +289,96 @@ function f8() {
 declare function bar(): [number, ...string[]];
 >bar : Symbol(bar, Decl(unusedLocalsInMethod4.ts, 91, 1))
 
+function f9() {  
+>f9 : Symbol(f9, Decl(unusedLocalsInMethod4.ts, 92, 46))
+
+    const x: number; // should have only one error
+>x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 95, 9))
+
+    function bar() {  
+>bar : Symbol(bar, Decl(unusedLocalsInMethod4.ts, 95, 20))
+
+        let y = x;  
+>y : Symbol(y, Decl(unusedLocalsInMethod4.ts, 97, 11))
+>x : Symbol(x, Decl(unusedLocalsInMethod4.ts, 95, 9))
+    }  
+}  
+
 
 function rw() {
->rw : Symbol(rw, Decl(unusedLocalsInMethod4.ts, 92, 46))
+>rw : Symbol(rw, Decl(unusedLocalsInMethod4.ts, 99, 1))
 
     let i: number;  // should error
->i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 96, 7))
+>i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 103, 7))
 
     function inside() {
->inside : Symbol(inside, Decl(unusedLocalsInMethod4.ts, 96, 18))
+>inside : Symbol(inside, Decl(unusedLocalsInMethod4.ts, 103, 18))
 
         i++;
->i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 96, 7))
+>i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 103, 7))
 
         console.log(i); // NaN
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 96, 7))
+>i : Symbol(i, Decl(unusedLocalsInMethod4.ts, 103, 7))
     }
     inside();
->inside : Symbol(inside, Decl(unusedLocalsInMethod4.ts, 96, 18))
+>inside : Symbol(inside, Decl(unusedLocalsInMethod4.ts, 103, 18))
 }
 rw();
->rw : Symbol(rw, Decl(unusedLocalsInMethod4.ts, 92, 46))
+>rw : Symbol(rw, Decl(unusedLocalsInMethod4.ts, 99, 1))
 
 function createBinder() {
->createBinder : Symbol(createBinder, Decl(unusedLocalsInMethod4.ts, 103, 5))
+>createBinder : Symbol(createBinder, Decl(unusedLocalsInMethod4.ts, 110, 5))
 
     var file: string;   // should not error
->file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 106, 7))
+>file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 113, 7))
 
     function bindSourceFile(f: string) {
->bindSourceFile : Symbol(bindSourceFile, Decl(unusedLocalsInMethod4.ts, 106, 21))
->f : Symbol(f, Decl(unusedLocalsInMethod4.ts, 108, 28))
+>bindSourceFile : Symbol(bindSourceFile, Decl(unusedLocalsInMethod4.ts, 113, 21))
+>f : Symbol(f, Decl(unusedLocalsInMethod4.ts, 115, 28))
 
         file = f;
->file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 106, 7))
->f : Symbol(f, Decl(unusedLocalsInMethod4.ts, 108, 28))
+>file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 113, 7))
+>f : Symbol(f, Decl(unusedLocalsInMethod4.ts, 115, 28))
 
         file.toString();
 >file.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
->file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 106, 7))
+>file : Symbol(file, Decl(unusedLocalsInMethod4.ts, 113, 7))
 >toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
     }
 }
 
 function transformClassFields() {
->transformClassFields : Symbol(transformClassFields, Decl(unusedLocalsInMethod4.ts, 113, 1))
+>transformClassFields : Symbol(transformClassFields, Decl(unusedLocalsInMethod4.ts, 120, 1))
 
     enum ClassPropertySubstitutionFlags {
->ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 115, 33))
+>ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 122, 33))
 
         ClassAliases = 1 << 0,
->ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 116, 41))
+>ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 123, 41))
 
         ClassStaticThisOrSuperReference = 1 << 1,
->ClassStaticThisOrSuperReference : Symbol(ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference, Decl(unusedLocalsInMethod4.ts, 117, 30))
+>ClassStaticThisOrSuperReference : Symbol(ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference, Decl(unusedLocalsInMethod4.ts, 124, 30))
     }
 
     let enabledSubstitutions: ClassPropertySubstitutionFlags;   // should error
->enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 121, 7))
->ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 115, 33))
+>enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 128, 7))
+>ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 122, 33))
 
     function enableSubstitutionForClassAliases() {
->enableSubstitutionForClassAliases : Symbol(enableSubstitutionForClassAliases, Decl(unusedLocalsInMethod4.ts, 121, 61))
+>enableSubstitutionForClassAliases : Symbol(enableSubstitutionForClassAliases, Decl(unusedLocalsInMethod4.ts, 128, 61))
 
         enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
->enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 121, 7))
->ClassPropertySubstitutionFlags.ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 116, 41))
->ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 115, 33))
->ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 116, 41))
+>enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 128, 7))
+>ClassPropertySubstitutionFlags.ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 123, 41))
+>ClassPropertySubstitutionFlags : Symbol(ClassPropertySubstitutionFlags, Decl(unusedLocalsInMethod4.ts, 122, 33))
+>ClassAliases : Symbol(ClassPropertySubstitutionFlags.ClassAliases, Decl(unusedLocalsInMethod4.ts, 123, 41))
 
         enabledSubstitutions.toString();
 >enabledSubstitutions.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
->enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 121, 7))
+>enabledSubstitutions : Symbol(enabledSubstitutions, Decl(unusedLocalsInMethod4.ts, 128, 7))
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
     }
 }

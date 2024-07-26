@@ -12,11 +12,12 @@ unusedLocalsInMethod4.ts(44,17): error TS2454: Variable 'x8' is used before bein
 unusedLocalsInMethod4.ts(45,17): error TS2454: Variable 'x9' is used before being assigned.
 unusedLocalsInMethod4.ts(49,9): error TS2874: Variable 'x' is used but never initialized.
 unusedLocalsInMethod4.ts(57,9): error TS2874: Variable 'x' is used but never initialized.
-unusedLocalsInMethod4.ts(97,9): error TS2874: Variable 'i' is used but never initialized.
-unusedLocalsInMethod4.ts(122,9): error TS2874: Variable 'enabledSubstitutions' is used but never initialized.
+unusedLocalsInMethod4.ts(96,11): error TS1155: 'const' declarations must be initialized.
+unusedLocalsInMethod4.ts(104,9): error TS2874: Variable 'i' is used but never initialized.
+unusedLocalsInMethod4.ts(129,9): error TS2874: Variable 'enabledSubstitutions' is used but never initialized.
 
 
-==== unusedLocalsInMethod4.ts (16 errors) ====
+==== unusedLocalsInMethod4.ts (17 errors) ====
     function f<T, NonNull extends {}>() {
         let x1: number[]; // should error
             ~~
@@ -138,6 +139,15 @@ unusedLocalsInMethod4.ts(122,9): error TS2874: Variable 'enabledSubstitutions' i
         }
     }
     declare function bar(): [number, ...string[]];
+    
+    function f9() {  
+        const x: number; // should have only one error
+              ~
+!!! error TS1155: 'const' declarations must be initialized.
+        function bar() {  
+            let y = x;  
+        }  
+    }  
     
     
     function rw() {

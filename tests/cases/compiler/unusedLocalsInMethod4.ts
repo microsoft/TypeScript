@@ -94,6 +94,13 @@ function f8() {
 }
 declare function bar(): [number, ...string[]];
 
+function f9() {  
+    const x: number; // should have only one error
+    function bar() {  
+        let y = x;  
+    }  
+}  
+
 
 function rw() {
     let i: number;  // should error

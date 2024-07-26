@@ -29499,12 +29499,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             node.kind === SyntaxKind.PropertyDeclaration)!;
     }
 
-    // Check if a parameter or catch variable is assigned anywhere
+    // Check if a parameter, catch variable, or mutable local variable is assigned anywhere
     function isSymbolAssigned(symbol: Symbol) {
         return !isPastLastAssignment(symbol, /*location*/ undefined);
     }
 
-    // Check if a parameter or catch variable is assigned definitely
+    // Check if a parameter, catch variable, or mutable local variable is assigned anywhere definitely
     function isSymbolAssignedDefinitely(symbol: Symbol) {
         return symbol.isDefinitelyAssigned ?? (isSymbolAssigned(symbol) && symbol.isDefinitelyAssigned);
     }
@@ -43558,7 +43558,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const declaration = local.valueDeclaration;
             if (
-                !declaration || !isVariableDeclaration(declaration) || !(getCombinedNodeFlagsCached(declaration) & NodeFlags.BlockScoped) ||
+                !declaration || !isVariableDeclaration(declaration) || !(getCombinedNodeFlagsCached(declaration) & NodeFlags.Let) ||
                 getCombinedNodeFlagsCached(declaration) & NodeFlags.Ambient ||
                 declaration.exclamationToken ||
                 declaration.initializer ||

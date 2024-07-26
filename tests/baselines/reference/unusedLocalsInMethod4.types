@@ -482,6 +482,26 @@ declare function bar(): [number, ...string[]];
 >bar : () => [number, ...string[]]
 >    : ^^^^^^                     
 
+function f9() {  
+>f9 : () => void
+>   : ^^^^^^^^^^
+
+    const x: number; // should have only one error
+>x : number
+>  : ^^^^^^
+
+    function bar() {  
+>bar : () => void
+>    : ^^^^^^^^^^
+
+        let y = x;  
+>y : number
+>  : ^^^^^^
+>x : number
+>  : ^^^^^^
+    }  
+}  
+
 
 function rw() {
 >rw : () => void
