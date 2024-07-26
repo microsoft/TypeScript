@@ -2733,10 +2733,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         const ancestorFacts = enterSubtree(HierarchyFacts.None, hasSyntacticModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
         let updated: Statement | undefined;
         if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0 && !isVariableStatementOfTypeScriptClassWrapper(node)) {
-            const declarations = node.declarationList.declarations;
             // we are inside a converted loop - hoist variable declarations
             let assignments: Expression[] | undefined;
-            for (const decl of declarations) {
+            for (const decl of node.declarationList.declarations) {
                 hoistVariableDeclarationDeclaredInConvertedLoop(convertedLoopState, decl);
                 if (decl.initializer) {
                     let assignment: Expression;
@@ -2758,7 +2757,8 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             }
             if (assignments) {
                 updated = setTextRange(factory.createExpressionStatement(factory.inlineExpressions(assignments)), node);
-            } else {
+            }
+            else {
                 // none of declarations has initializer - the entire variable statement can be deleted
                 updated = undefined;
             }
