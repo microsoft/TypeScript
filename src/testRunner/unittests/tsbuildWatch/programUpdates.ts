@@ -331,7 +331,10 @@ createSomeObject().message;`,
                 edits: [{
                     caption: "fix error",
                     edit: sys => sys.replaceFileText("core/index.ts", "multiply();", ""),
-                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks();
+                        sys.runQueuedTimeoutCallbacks();
+                    },
                 }],
             })
         );
