@@ -365,7 +365,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 scenario: "sample1",
                 subScenario: `skips builds downstream projects if upstream projects have errors with noDownstreamOnError${skipReferenceCoreFromTest ? " when test does not reference core" : ""}`,
                 fs: () => getFsForSampleProjectReferences(/*withNodeNext*/ undefined, skipReferenceCoreFromTest),
-                commandLineArgs: ["--b", "tests", "--verbose"],
+                commandLineArgs: ["--b", "tests", "--verbose", "--noDownstreamOnError"],
                 modifyFs: fs => appendText(fs, "core/index.ts", `multiply();`),
                 edits: [
                     noChangeRun,

@@ -316,7 +316,7 @@ createSomeObject().message;`,
         }
         verifyIncrementalErrors("when preserveWatchOutput is not used", ts.emptyArray);
         verifyIncrementalErrors("when preserveWatchOutput is passed on command line", ["--preserveWatchOutput"]);
-        verifyIncrementalErrors("when noDownstreamOnError is passed on command line", []);
+        verifyIncrementalErrors("when noDownstreamOnError is passed on command line", ["--noDownstreamOnError"]);
 
         [false, true].forEach(skipReferenceCoreFromTest =>
             verifyTscWatch({
@@ -327,7 +327,7 @@ createSomeObject().message;`,
                     sys.appendFile("core/index.ts", `multiply();`);
                     return sys;
                 },
-                commandLineArgs: ["--b", "-w", "tests", "--verbose"],
+                commandLineArgs: ["--b", "-w", "tests", "--verbose", "--noDownstreamOnError"],
                 edits: [{
                     caption: "fix error",
                     edit: sys => sys.replaceFileText("core/index.ts", "multiply();", ""),

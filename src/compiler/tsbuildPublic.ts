@@ -135,6 +135,7 @@ export interface BuildOptions {
     dry?: boolean;
     force?: boolean;
     verbose?: boolean;
+    noDownstreamOnError?: boolean;
 
     /** @internal */ clean?: boolean;
     /** @internal */ watch?: boolean;

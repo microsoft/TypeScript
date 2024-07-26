@@ -93,7 +93,7 @@ export const m = mod;
 
 
 
-/a/lib/tsc.js -b -w tests
+/a/lib/tsc.js -b -w tests --noDownstreamOnError
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...

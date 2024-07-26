@@ -1694,6 +1694,13 @@ export const optionsForBuild: CommandLineOption[] = [
         type: "boolean",
         defaultValueDescription: false,
     },
+    {
+        name: "noDownstreamOnError",
+        category: Diagnostics.Command_line_Options,
+        description: Diagnostics.Skip_building_downstream_projects_on_error_in_upstream_project,
+        type: "boolean",
+        defaultValueDescription: false,
+    },
 ];
 
 /** @internal */

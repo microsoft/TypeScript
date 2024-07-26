@@ -6095,6 +6095,10 @@
         "category": "Message",
         "code": 6639
     },
+    "Skip building downstream projects on error in upstream project.": {
+        "category": "Message",
+        "code": 6640
+    },
     "Specify a list of glob patterns that match files to be included in compilation.": {
         "category": "Message",
         "code": 6641
