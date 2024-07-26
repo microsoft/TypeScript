@@ -316,6 +316,25 @@ createSomeObject().message;`,
         }
         verifyIncrementalErrors("when preserveWatchOutput is not used", ts.emptyArray);
         verifyIncrementalErrors("when preserveWatchOutput is passed on command line", ["--preserveWatchOutput"]);
+        verifyIncrementalErrors("when noDownstreamOnError is passed on command line", []);
+
+        [false, true].forEach(skipReferenceCoreFromTest =>
+            verifyTscWatch({
+                scenario: "programUpdates",
+                subScenario: `skips builds downstream projects if upstream projects have errors with noDownstreamOnError${skipReferenceCoreFromTest ? " when test does not reference core" : ""}`,
+                sys: () => {
+                    const sys = getSysForSampleProjectReferences(/*withNodeNext*/ undefined, skipReferenceCoreFromTest);
+                    sys.appendFile("core/index.ts", `multiply();`);
+                    return sys;
+                },
+                commandLineArgs: ["--b", "-w", "tests", "--verbose"],
+                edits: [{
+                    caption: "fix error",
+                    edit: sys => sys.replaceFileText("core/index.ts", "multiply();", ""),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                }],
+            })
+        );
 
         describe("when declaration emit errors are present", () => {
             const solution = "solution";
