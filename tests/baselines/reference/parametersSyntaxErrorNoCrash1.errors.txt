@@ -1,0 +1,40 @@
+parametersSyntaxErrorNoCrash1.ts(1,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+parametersSyntaxErrorNoCrash1.ts(1,10): error TS7010: 'identity', which lacks return-type annotation, implicitly has an 'any' return type.
+parametersSyntaxErrorNoCrash1.ts(1,22): error TS2300: Duplicate identifier 'arg'.
+parametersSyntaxErrorNoCrash1.ts(1,28): error TS1005: ',' expected.
+parametersSyntaxErrorNoCrash1.ts(1,30): error TS7006: Parameter 'T' implicitly has an 'any' type.
+parametersSyntaxErrorNoCrash1.ts(1,32): error TS1005: ',' expected.
+parametersSyntaxErrorNoCrash1.ts(2,12): error TS1005: ':' expected.
+parametersSyntaxErrorNoCrash1.ts(2,12): error TS2300: Duplicate identifier 'arg'.
+parametersSyntaxErrorNoCrash1.ts(2,12): error TS2842: 'arg' is an unused renaming of 'return'. Did you intend to use it as a type annotation?
+parametersSyntaxErrorNoCrash1.ts(2,15): error TS1005: ',' expected.
+parametersSyntaxErrorNoCrash1.ts(3,2): error TS1005: ')' expected.
+
+
+==== parametersSyntaxErrorNoCrash1.ts (11 errors) ====
+    function identity<T>(arg: T: T {
+             ~~~~~~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+             ~~~~~~~~
+!!! error TS7010: 'identity', which lacks return-type annotation, implicitly has an 'any' return type.
+                         ~~~
+!!! error TS2300: Duplicate identifier 'arg'.
+                               ~
+!!! error TS1005: ',' expected.
+                                 ~
+!!! error TS7006: Parameter 'T' implicitly has an 'any' type.
+                                   ~
+!!! error TS1005: ',' expected.
+        return arg;
+               ~~~
+!!! error TS1005: ':' expected.
+               ~~~
+!!! error TS2300: Duplicate identifier 'arg'.
+               ~~~
+!!! error TS2842: 'arg' is an unused renaming of 'return'. Did you intend to use it as a type annotation?
+!!! related TS2843 parametersSyntaxErrorNoCrash1.ts:3:2: We can only write a type for 'return' by adding a type for the entire parameter here.
+                  ~
+!!! error TS1005: ',' expected.
+    }
+     
+!!! error TS1005: ')' expected.

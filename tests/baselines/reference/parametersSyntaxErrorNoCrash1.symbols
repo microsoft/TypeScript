@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/parametersSyntaxErrorNoCrash1.ts] ////
+
+=== parametersSyntaxErrorNoCrash1.ts ===
+function identity<T>(arg: T: T {
+>identity : Symbol(identity, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 0))
+>T : Symbol(T, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 18), Decl(parametersSyntaxErrorNoCrash1.ts, 0, 28))
+>arg : Symbol(arg, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 21))
+>T : Symbol(T, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 18), Decl(parametersSyntaxErrorNoCrash1.ts, 0, 28))
+>T : Symbol(T, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 18), Decl(parametersSyntaxErrorNoCrash1.ts, 0, 28))
+
+    return arg;
+>return : Symbol(return)
+>arg : Symbol(arg, Decl(parametersSyntaxErrorNoCrash1.ts, 0, 32))
+}
