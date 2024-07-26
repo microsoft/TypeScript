@@ -435,6 +435,7 @@ export function verifyResolutionCache(
 
     // Verify that caches are same:
     forEachModuleOrTypeRefOrLibCache((cache, cacheType) => verifyModuleOrTypeResolutionCache(cache, actual[cacheType], cacheType));
+    verifyPackageJsonWatchInfo();
 
     // Stop watching resolutions to verify everything gets closed.
     expected.startCachingPerDirectoryResolution();
@@ -453,6 +454,11 @@ export function verifyResolutionCache(
     ts.Debug.assert(expected.countResolutionsResolvedWithGlobalCache() === 0, `${projectName}:: ResolutionsResolvedWithGlobalCache should be cleared`);
     ts.Debug.assert(expected.countResolutionsResolvedWithoutGlobalCache() === 0, `${projectName}:: ResolutionsResolvedWithoutGlobalCache should be cleared`);
     forEachModuleOrTypeRefOrLibCache((cache, cacheType) => verifyModuleOrTypeResolutionCacheIsEmpty(cache, cacheType, /*compacted*/ false));
+    ts.Debug.assert(expected.packageJsonRefCount.size === 0, `${projectName}:: packageJsonRefCount should be cleared`);
+    ts.Debug.assert(
+        expected.moduleResolutionCache.getPackageJsonInfoCache().getInternalMap() === undefined || expected.moduleResolutionCache.getPackageJsonInfoCache().getInternalMap()!.size === 0,
+        `${projectName}:: Shouldnt have any packageJson entries`,
+    );
 
     expected.compactCaches(/*newProgram*/ undefined);
     forEachModuleOrTypeRefOrLibCache((cache, cacheType) => verifyModuleOrTypeResolutionCacheIsEmpty(cache, cacheType, /*compacted*/ true));
@@ -802,6 +808,32 @@ export function verifyResolutionCache(
                 );
             }
         });
+    }
+
+    function verifyPackageJsonWatchInfo() {
+        verifyMap(
+            expected.packageJsonRefCount,
+            actual.packageJsonRefCount,
+            (expectedRefCount, actualRefCount, caption) =>
+                ts.Debug.assert(
+                    expectedRefCount === actualRefCount,
+                    `${projectName}:: ${caption}`,
+                ),
+            "packageJsonRefCount",
+        );
+        verifyMap(
+            actual.packageJsonRefCount,
+            actual.moduleResolutionCache.getPackageJsonInfoCache().getInternalMap(),
+            (refCount, packageJsonCacheEntry, caption) => {
+                // Ok to have refcount on entry not in cache
+                if (!packageJsonCacheEntry) return;
+                ts.Debug.assert(
+                    !!refCount,
+                    `${projectName}:: ${caption}:: expected ref count on packageJson as there is entry in the cache`,
+                );
+            },
+            "Package Json cache watched",
+        );
     }
 }
 

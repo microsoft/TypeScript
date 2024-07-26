@@ -986,12 +986,13 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for pre
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package-b/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package-b/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a/package.json' exists according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/package-a/package.json'.
 Info seq  [hh:mm:ss:mss] Using 'exports' subpath '.' with target './build/index.js'.
 Info seq  [hh:mm:ss:mss] File name '/home/src/projects/project/node_modules/package-a/build/index.js' has a '.js' extension - stripping it.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a/build/index.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a/build/index.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package-a/build/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/package-a/build/index.d.ts', result '/home/src/projects/project/packages/package-a/build/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package-a' was successfully resolved to '/home/src/projects/project/packages/package-a/build/index.d.ts' with Package ID 'package-a/build/index.d.ts@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-b/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations
@@ -1009,7 +1010,7 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/subfolder.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/subfolder.js' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/subfolder.jsx' does not exist.
-Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/subfolder/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/subfolder/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/packages/package-a/src/subfolder/index.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name './subfolder' was successfully resolved to '/home/src/projects/project/packages/package-a/src/subfolder/index.ts'. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package-a 1 undefined Project: /home/src/projects/project/packages/package-b/tsconfig.json WatchType: Failed Lookup Locations

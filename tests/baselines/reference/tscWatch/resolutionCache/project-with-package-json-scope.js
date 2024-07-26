@@ -5192,7 +5192,7 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/src/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/package.json' does not exist.
-File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
