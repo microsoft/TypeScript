@@ -39522,7 +39522,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // Do not check for --verbatimModuleSyntax here because imports of ambient const enums
         // will already be checked for the same error
-        if (compilerOptions.isolatedModules) {
+        if (
+            compilerOptions.isolatedModules || compilerOptions.verbatimModuleSyntax
+                && ok && !(resolveName(node, getFirstIdentifier(node as EntityNameOrEntityNameExpression), SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*isUse*/ false, /*excludeGlobals*/ true))
+        ) {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
             const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
