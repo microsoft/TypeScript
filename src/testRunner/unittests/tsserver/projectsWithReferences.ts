@@ -11,7 +11,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: projects with references: invoking when references are already built", () => {
+describe("unittests:: tsserver:: projectsWithReferences:: invoking when references are already built", () => {
     it("on sample project", () => {
         const host = createServerHost(getFsContentsForSampleProjectReferences());
         const session = new TestSession(host);

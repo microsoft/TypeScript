@@ -3,7 +3,7 @@ import {
     ModuleKind,
     ModuleResolutionKind,
 } from "../../_namespaces/ts.js";
-import * as Utils from "../../_namespaces/Utils.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     getFsConentsForAlternateResultAtTypesPackageJson,
@@ -16,10 +16,11 @@ import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
+    getTypeScriptLibTestLocation,
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: moduleResolution::", () => {
+describe("unittests:: tscWatch:: moduleResolution::", () => {
     verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: `watches for changes to package-json main fields`,
@@ -35,7 +36,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
             import type { TheNum } from 'pkg2'
             export const theNum: TheNum = 42;`,
                 },
@@ -125,7 +126,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         import * as me from "@this/package";
                         me.thing()
                         export function thing(): void {}
@@ -133,7 +134,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/index2.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         export function thing(): void {}
                     `,
                 },
@@ -165,20 +166,20 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
             };
             const fileA: File = {
                 path: `/user/username/projects/myproject/src/fileA.ts`,
-                content: Utils.dedent`
+                content: dedent`
                         import { foo } from "./fileB.mjs";
                         foo();
                     `,
             };
             const fileB: File = {
                 path: `/user/username/projects/myproject/project/src/fileB.mts`,
-                content: Utils.dedent`
+                content: dedent`
                         export function foo() {
                         }
                     `,
             };
             return createWatchedSystem(
-                [configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }],
+                [configFile, fileA, fileB, packageFile, { ...libFile, path: getTypeScriptLibTestLocation("es2016.full") }],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
         }
@@ -323,7 +324,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
                         import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
                         import {x} from "./a";
@@ -331,7 +332,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/a.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         export const x = 10;
                     `,
                 },
@@ -394,7 +395,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
                         import type { RequireInterface } from "pkg1" with { "resolution-mode": "require" };
                         import {x} from "./a";
@@ -402,7 +403,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/a.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                         export const x = 10;
                     `,
                 },
@@ -465,7 +466,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/index.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     /// <reference types="pkg" resolution-mode="import"/>
                     /// <reference types="pkg1" resolution-mode="require"/>
                     export interface LocalInterface extends RequireInterface {}
@@ -473,7 +474,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/a.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     export const x = 10;
                 `,
                 },
@@ -490,7 +491,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/node_modules/pkg/import.d.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     export {};
                     declare global {
                         interface ImportInterface {}
@@ -499,7 +500,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/node_modules/pkg/require.d.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     export {};
                     declare global {
                         interface RequireInterface {}
@@ -519,7 +520,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/node_modules/pkg1/import.d.ts`,
-                    content: Utils.dedent`
+                    content: dedent`
                     export {};
                     declare global {
                         interface ImportInterface {}
@@ -545,7 +546,11 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
     verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: "alternateResult",
-        sys: () => createWatchedSystem(getFsContentsForAlternateResult(), { currentDirectory: "/home/src/projects/project" }),
+        sys: () =>
+            createWatchedSystem(
+                getFsContentsForAlternateResult(),
+                { currentDirectory: "/home/src/projects/project" },
+            ),
         commandLineArgs: ["-w", "--extendedDiagnostics"],
         edits: [
             {
@@ -660,7 +665,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                     },
                     include: ["**/*.ts"],
                 }),
-                "/home/src/project/witha/node_modules/mymodule/index.d.ts": Utils.dedent`
+                "/home/src/project/witha/node_modules/mymodule/index.d.ts": dedent`
                     declare module 'mymodule' {
                         export function readFile(): void;
                     }
@@ -668,14 +673,14 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                         export function promisify(): void;
                     }
                 `,
-                "/home/src/project/witha/a.ts": Utils.dedent`
+                "/home/src/project/witha/a.ts": dedent`
                     import { readFile } from 'mymodule';
                     import { promisify, promisify2 } from 'mymoduleutils';
                     readFile();
                     promisify();
                     promisify2();
                 `,
-                "/home/src/project/withb/node_modules/mymodule/index.d.ts": Utils.dedent`
+                "/home/src/project/withb/node_modules/mymodule/index.d.ts": dedent`
                     declare module 'mymodule' {
                         export function readFile(): void;
                     }
@@ -683,7 +688,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                         export function promisify2(): void;
                     }
                 `,
-                "/home/src/project/withb/b.ts": Utils.dedent`
+                "/home/src/project/withb/b.ts": dedent`
                     import { readFile } from 'mymodule';
                     import { promisify, promisify2 } from 'mymoduleutils';
                     readFile();
@@ -706,7 +711,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                 edit: sys => {
                     sys.ensureFileOrFolder({
                         path: "/home/src/project/withb/node_modules/mymoduleutils/index.d.ts",
-                        content: Utils.dedent`
+                        content: dedent`
                             declare module 'mymoduleutils' {
                                 export function promisify2(): void;
                             }
@@ -737,7 +742,7 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                         types: [],
                     }),
                 }),
-                "/user/username/projects/myproject/index.ts": Utils.dedent`
+                "/user/username/projects/myproject/index.ts": dedent`
                     /// <reference types="pkg"/>
                     interface LocalInterface extends RequireInterface {}
                 `,
@@ -749,20 +754,20 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                         require: "./require.js",
                     },
                 }),
-                "/user/username/projects/myproject/node_modules/@types/pkg/import.d.ts": Utils.dedent`
+                "/user/username/projects/myproject/node_modules/@types/pkg/import.d.ts": dedent`
                     export {};
                     declare global {
                         interface ImportInterface {}
                     }
                 `,
-                "/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts": Utils.dedent`
+                "/user/username/projects/myproject/node_modules/@types/pkg/require.d.ts": dedent`
                     export {};
                     declare global {
                         interface RequireInterface {}
                     }
                 `,
                 [libFile.path]: libFile.content,
-                ["/a/lib/lib.es2022.full.d.ts"]: libFile.content,
+                [getTypeScriptLibTestLocation("es2022.full")]: libFile.content,
             }, { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution", "--explainFiles"],
         edits: [
@@ -780,6 +785,64 @@ describe("unittests:: tsc-watch:: moduleResolution::", () => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
                 },
+            },
+        ],
+    });
+
+    verifyTscWatch({
+        scenario: "moduleResolution",
+        subScenario: "late discovered dependency symlink",
+        sys: () =>
+            createWatchedSystem({
+                "/home/src/workspace/packageA/index.d.ts": dedent`
+            export declare class Foo {
+                private f: any;
+            }`,
+                "/home/src/workspace/packageB/package.json": dedent`
+            {
+                "private": true,
+                "dependencies": {
+                    "package-a": "file:../packageA"
+                }
+            }`,
+                "/home/src/workspace/packageB/index.d.ts": dedent`
+            import { Foo } from "package-a";
+            export declare function invoke(): Foo;`,
+                "/home/src/workspace/packageC/package.json": dedent`
+            {
+                "private": true,
+                "dependencies": {
+                    "package-b": "file:../packageB",
+                    "package-a": "file:../packageA"
+                }
+            }`,
+                "/home/src/workspace/packageC/index.ts": dedent`
+            import * as pkg from "package-b";
+
+            export const a = pkg.invoke();`,
+                "/home/src/workspace/packageC/node_modules/package-a": { symLink: "/home/src/workspace/packageA" },
+                "/home/src/workspace/packageB/node_modules/package-a": { symLink: "/home/src/workspace/packageA" },
+                "/home/src/workspace/packageC/node_modules/package-b": { symLink: "/home/src/workspace/packageB" },
+                [libFile.path]: libFile.content,
+                "/home/src/workspace/packageC/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        declaration: true,
+                    },
+                }),
+            }, { currentDirectory: "/home/src/workspace/packageC" }),
+        commandLineArgs: ["--traceResolution", "--explainFiles", "--watch"],
+        edits: [
+            {
+                caption: "change index.ts",
+                edit: fs =>
+                    fs.writeFile(
+                        "/home/src/workspace/packageC/index.ts",
+                        dedent`
+                import * as pkg from "package-b";
+    
+                export const aa = pkg.invoke();`,
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
     });

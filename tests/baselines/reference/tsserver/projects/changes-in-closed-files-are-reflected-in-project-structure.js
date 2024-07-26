@@ -1,13 +1,13 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/b/f1.ts]
+//// [/user/username/projects/project/b/f1.ts]
 export * from "./f2"
 
-//// [/a/b/f2.ts]
+//// [/user/username/projects/project/b/f2.ts]
 export let x = 1
 
-//// [/a/c/f3.ts]
+//// [/user/username/projects/project/c/f3.ts]
 export let y = 1;
 
 
@@ -15,20 +15,30 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/f1.ts"
+        "file": "/user/username/projects/project/b/f1.ts"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/f1.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/b/f1.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/b/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/b/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/b/f2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/b/f2.ts Text-1 "export let x = 1"
-	/a/b/f1.ts SVC-1-0 "export * from \"./f2\""
+	/user/username/projects/project/b/f2.ts Text-1 "export let x = 1"
+	/user/username/projects/project/b/f1.ts SVC-1-0 "export * from \"./f2\""
 
 
 	f2.ts
@@ -42,7 +52,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/b/f1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -58,11 +68,25 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/b/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/b/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/a/b/f2.ts: *new*
+/user/username/projects/project/b/f2.ts: *new*
   {}
 
 Projects::
@@ -72,11 +96,11 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/b/f1.ts (Open) *new*
+/user/username/projects/project/b/f1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/a/b/f2.ts *new*
+/user/username/projects/project/b/f2.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -87,18 +111,26 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/c/f3.ts"
+        "file": "/user/username/projects/project/c/f3.ts"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/c/f3.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/c/f3.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/c/f3.ts SVC-1-0 "export let y = 1;"
+	/user/username/projects/project/c/f3.ts SVC-1-0 "export let y = 1;"
 
 
 	f3.ts
@@ -114,9 +146,9 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/b/f1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] 	FileName: /a/c/f3.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/c/f3.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -131,6 +163,34 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+PolledWatches::
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/b/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/b/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/c/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project/c/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/c/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/project/b/f2.ts:
+  {}
+
 Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
@@ -142,27 +202,27 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/b/f1.ts (Open)
+/user/username/projects/project/b/f1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/a/b/f2.ts
+/user/username/projects/project/b/f2.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/c/f3.ts (Open) *new*
+/user/username/projects/project/c/f3.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2* *default*
 
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/f2.ts 1:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/project/b/f2.ts 1:: WatchInfo: /user/username/projects/project/b/f2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/f2.ts 1:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/project/b/f2.ts 1:: WatchInfo: /user/username/projects/project/b/f2.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: *ensureProjectForOpenFiles*
-//// [/a/b/f2.ts]
+//// [/user/username/projects/project/b/f2.ts]
 export * from "../c/f3"
 
 
@@ -182,16 +242,16 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/b/f1.ts (Open)
+/user/username/projects/project/b/f1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/a/b/f2.ts *changed*
+/user/username/projects/project/b/f2.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/c/f3.ts (Open)
+/user/username/projects/project/c/f3.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2* *default*
@@ -201,9 +261,9 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/c/f3.ts SVC-1-0 "export let y = 1;"
-	/a/b/f2.ts Text-2 "export * from \"../c/f3\""
-	/a/b/f1.ts SVC-1-0 "export * from \"./f2\""
+	/user/username/projects/project/c/f3.ts SVC-1-0 "export let y = 1;"
+	/user/username/projects/project/b/f2.ts Text-2 "export * from \"../c/f3\""
+	/user/username/projects/project/b/f1.ts SVC-1-0 "export * from \"./f2\""
 
 
 	../c/f3.ts
@@ -225,12 +285,14 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/b/f1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] 	FileName: /a/c/f3.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/c/f3.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*,/dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/c/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/c/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (0)
@@ -248,11 +310,11 @@ Info seq  [hh:mm:ss:mss] 	Files (0)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/b/f1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] 	FileName: /a/c/f3.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/c/f3.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/f1.ts,/a/c/f3.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/project/b/f1.ts,/user/username/projects/project/c/f3.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -260,12 +322,42 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectsUpdatedInBackground",
       "body": {
         "openFiles": [
-          "/a/b/f1.ts",
-          "/a/c/f3.ts"
+          "/user/username/projects/project/b/f1.ts",
+          "/user/username/projects/project/c/f3.ts"
         ]
       }
     }
 After running Timeout callback:: count: 0
+
+PolledWatches::
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/b/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/b/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/user/username/projects/project/c/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/project/c/tsconfig.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/project/b/f2.ts:
+  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
@@ -280,16 +372,16 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/a/b/f1.ts (Open)
+/user/username/projects/project/b/f1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/a/b/f2.ts *changed*
+/user/username/projects/project/b/f2.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/c/f3.ts (Open) *changed*
+/user/username/projects/project/c/f3.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
         /dev/null/inferredProject1* *default* *new*

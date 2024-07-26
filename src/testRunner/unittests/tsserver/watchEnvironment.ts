@@ -5,10 +5,6 @@ import {
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
-    commonFile1,
-    commonFile2,
-} from "../helpers/tscWatch.js";
-import {
     baselineTsserverLogs,
     openExternalProjectForSession,
     openFilesForSession,
@@ -29,7 +25,7 @@ import {
 describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchDirectories implementation", () => {
     function verifyCompletionListWithNewFileInSubFolder(scenario: string, tscWatchDirectory: Tsc_WatchDirectory) {
         it(scenario, () => {
-            const projectFolder = "/a/username/project";
+            const projectFolder = "/a/username/workspace/project";
             const projectSrcFolder = `${projectFolder}/src`;
             const configFile: File = {
                 path: `${projectFolder}/tsconfig.json`,
@@ -120,7 +116,7 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem Watche
 
 describe("unittests:: tsserver:: watchEnvironment:: recursiveWatchDirectory", () => {
     it(`unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem recursive watch directory implementation does not watch files/directories in node_modules starting with "."`, () => {
-        const projectFolder = "/a/username/project";
+        const projectFolder = "/a/username/workspace/project";
         const projectSrcFolder = `${projectFolder}/src`;
         const configFile: File = {
             path: `${projectFolder}/tsconfig.json`,
@@ -214,8 +210,16 @@ describe("unittests:: tsserver:: watchEnvironment:: networkStylePaths", () => {
 
 describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler options", () => {
     it("with watchFile option as host configuration", () => {
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const commonFile2: File = {
+            path: "/user/username/projects/project/commonFile2.ts",
+            content: "let y = 1",
+        };
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: "{}",
         };
         const files = [libFile, commonFile2, configFile];
@@ -234,8 +238,16 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
     });
 
     it("with watchDirectory option as host configuration", () => {
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const commonFile2: File = {
+            path: "/user/username/projects/project/commonFile2.ts",
+            content: "let y = 1",
+        };
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: "{}",
         };
         const files = [libFile, commonFile2, configFile];
@@ -254,8 +266,16 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
     });
 
     it("with fallbackPolling option as host configuration", () => {
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const commonFile2: File = {
+            path: "/user/username/projects/project/commonFile2.ts",
+            content: "let y = 1",
+        };
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: "{}",
         };
         const files = [libFile, commonFile2, configFile];
@@ -274,8 +294,16 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
     });
 
     it("with watchFile option in configFile", () => {
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const commonFile2: File = {
+            path: "/user/username/projects/project/commonFile2.ts",
+            content: "let y = 1",
+        };
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: jsonToReadableText({
                 watchOptions: {
                     watchFile: "UseFsEvents",
@@ -290,8 +318,16 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
     });
 
     it("with watchDirectory option in configFile", () => {
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const commonFile2: File = {
+            path: "/user/username/projects/project/commonFile2.ts",
+            content: "let y = 1",
+        };
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: jsonToReadableText({
                 watchOptions: {
                     watchDirectory: "UseFsEvents",
@@ -306,8 +342,16 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
     });
 
     it("with fallbackPolling option in configFile", () => {
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
+        const commonFile2: File = {
+            path: "/user/username/projects/project/commonFile2.ts",
+            content: "let y = 1",
+        };
         const configFile: File = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: jsonToReadableText({
                 watchOptions: {
                     fallbackPolling: "PriorityInterval",
@@ -363,7 +407,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             };
             const { main, bar, foo } = setupFiles();
             const files = [libFile, main, bar, foo, configFile];
-            const host = createServerHost(files, { currentDirectory: "/user/username/projects/myproject" });
+            const host = createServerHost(files);
             const session = new TestSession(host);
             setupConfigureHost(session, configureHost);
             openFilesForSession([main], session);
@@ -383,7 +427,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         function setupExternalProject(configureHost?: boolean) {
             const { main, bar, foo } = setupFiles();
             const files = [libFile, main, bar, foo];
-            const host = createServerHost(files, { currentDirectory: "/user/username/projects/myproject" });
+            const host = createServerHost(files);
             const session = new TestSession(host);
             setupConfigureHost(session, configureHost);
             openExternalProjectForSession({
@@ -408,7 +452,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         it("external project watch options errors", () => {
             const { main, bar, foo } = setupFiles();
             const files = [libFile, main, bar, foo];
-            const host = createServerHost(files, { currentDirectory: "/user/username/projects/myproject" });
+            const host = createServerHost(files);
             const session = new TestSession(host);
             openExternalProjectForSession({
                 projectFileName: `/user/username/projects/myproject/project.csproj`,
@@ -424,7 +468,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         function setupInferredProject(configureHost?: boolean) {
             const { main, bar, foo } = setupFiles();
             const files = [libFile, main, bar, foo];
-            const host = createServerHost(files, { currentDirectory: "/user/username/projects/myproject" });
+            const host = createServerHost(files);
             const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
             setupConfigureHost(session, configureHost);
             setCompilerOptionsForInferredProjectsRequestForSession({
@@ -448,7 +492,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         it("inferred project watch options errors", () => {
             const { main, bar, foo } = setupFiles();
             const files = [libFile, main, bar, foo];
-            const host = createServerHost(files, { currentDirectory: "/user/username/projects/myproject" });
+            const host = createServerHost(files);
             const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
             setCompilerOptionsForInferredProjectsRequestForSession({
                 options: { excludeDirectories: ["**/../*"] },

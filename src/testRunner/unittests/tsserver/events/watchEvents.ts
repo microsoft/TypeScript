@@ -9,7 +9,7 @@ import {
     libFile,
 } from "../../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: events:: watchEvents", () => {
+describe("unittests:: tsserver:: events:: watchEvents::", () => {
     function verifyCanUseWatchEvents(
         canUseEvents: boolean,
         projectPath: string,

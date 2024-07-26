@@ -161,9 +161,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
         ) {
             it(subScenario, () => {
                 const { moduleA, symlinkA, moduleB, tsconfig } = getFiles();
-                const host = createServerHost([moduleA, symlinkA, moduleB, libFile, tsconfig], {
-                    currentDirectory: "/user/username/projects/myproject",
-                });
+                const host = createServerHost([moduleA, symlinkA, moduleB, libFile, tsconfig]);
                 const session = new TestSession(host);
                 openFilesForSession([moduleB], session);
                 verifyGetErrRequest({
@@ -181,9 +179,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
 
             it(`${subScenario} with target open`, () => {
                 const { moduleA, symlinkA, moduleB, tsconfig } = getFiles();
-                const host = createServerHost([moduleA, symlinkA, moduleB, libFile, tsconfig], {
-                    currentDirectory: "/user/username/projects/myproject",
-                });
+                const host = createServerHost([moduleA, symlinkA, moduleB, libFile, tsconfig]);
                 const session = new TestSession(host);
                 openFilesForSession([moduleB, moduleA], session);
                 verifyGetErrRequest({
@@ -210,9 +206,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
 
             it(`${subScenario} with link open`, () => {
                 const { moduleA, symlinkA, moduleB, tsconfig } = getFiles();
-                const host = createServerHost([moduleA, symlinkA, moduleB, libFile, tsconfig], {
-                    currentDirectory: "/user/username/projects/myproject",
-                });
+                const host = createServerHost([moduleA, symlinkA, moduleB, libFile, tsconfig]);
                 const session = new TestSession(host);
                 openFilesForSession([moduleB, linkPath], session);
                 verifyGetErrRequest({
@@ -230,9 +224,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames::", () => {
 
             it(`${subScenario} with target and link open`, () => {
                 const { moduleA, symlinkA, moduleB, tsconfig } = getFiles();
-                const host = createServerHost([moduleA, symlinkA, moduleB, libFile, tsconfig], {
-                    currentDirectory: "/user/username/projects/myproject",
-                });
+                const host = createServerHost([moduleA, symlinkA, moduleB, libFile, tsconfig]);
                 const session = new TestSession(host);
                 openFilesForSession([moduleB, moduleA, linkPath], session);
                 verifyGetErrRequest({

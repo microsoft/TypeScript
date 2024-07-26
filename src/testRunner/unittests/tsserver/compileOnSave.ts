@@ -22,32 +22,32 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
     describe("for configured projects", () => {
         function files() {
             const moduleFile1: File = {
-                path: "/a/b/moduleFile1.ts",
+                path: "/home/src/workspace/projects/b/moduleFile1.ts",
                 content: "export function Foo() { };",
             };
 
             const file1Consumer1: File = {
-                path: "/a/b/file1Consumer1.ts",
+                path: "/home/src/workspace/projects/b/file1Consumer1.ts",
                 content: `import {Foo} from "./moduleFile1"; export var y = 10;`,
             };
 
             const file1Consumer2: File = {
-                path: "/a/b/file1Consumer2.ts",
+                path: "/home/src/workspace/projects/b/file1Consumer2.ts",
                 content: `import {Foo} from "./moduleFile1"; let z = 10;`,
             };
 
             const moduleFile2: File = {
-                path: "/a/b/moduleFile2.ts",
+                path: "/home/src/workspace/projects/b/moduleFile2.ts",
                 content: `export var Foo4 = 10;`,
             };
 
             const globalFile3: File = {
-                path: "/a/b/globalFile3.ts",
+                path: "/home/src/workspace/projects/b/globalFile3.ts",
                 content: `interface GlobalFoo { age: number }`,
             };
 
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: "/home/src/workspace/projects/b/tsconfig.json",
                 content: `{
                         "compileOnSave": true
                     }`,
@@ -251,7 +251,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             });
 
             const file1Consumer3: File = {
-                path: "/a/b/file1Consumer3.ts",
+                path: "/home/src/workspace/projects/b/file1Consumer3.ts",
                 content: `import {Foo} from "./moduleFile1"; let y = Foo();`,
             };
             host.writeFile(file1Consumer3.path, file1Consumer3.content);
@@ -276,17 +276,17 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
         it("should detect changes in non-root files", () => {
             const moduleFile1: File = {
-                path: "/a/b/moduleFile1.ts",
+                path: "/home/src/workspace/projects/b/moduleFile1.ts",
                 content: "export function Foo() { };",
             };
 
             const file1Consumer1: File = {
-                path: "/a/b/file1Consumer1.ts",
+                path: "/home/src/workspace/projects/b/file1Consumer1.ts",
                 content: `import {Foo} from "./moduleFile1"; let y = Foo();`,
             };
 
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: "/home/src/workspace/projects/b/tsconfig.json",
                 content: `{
                         "compileOnSave": true,
                         "files": ["${file1Consumer1.path}"]
@@ -367,7 +367,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should return empty array if CompileOnSave is not enabled", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2 } = files();
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: "/home/src/workspace/projects/b/tsconfig.json",
                 content: `{}`,
             };
 
@@ -384,7 +384,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should return empty array if noEmit is set", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2 } = files();
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: "/home/src/workspace/projects/b/tsconfig.json",
                 content: `{
                         "compileOnSave": true,
                         "compilerOptions": {
@@ -406,14 +406,14 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should save when compileOnSave is enabled in base tsconfig.json", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2 } = files();
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: "/home/src/workspace/projects/b/tsconfig.json",
                 content: `{
-                        "extends": "/a/tsconfig.json"
+                        "extends": "/home/src/workspace/projects/tsconfig.json"
                     }`,
             };
 
             const configFile2: File = {
-                path: "/a/tsconfig.json",
+                path: "/home/src/workspace/projects/tsconfig.json",
                 content: `{
                         "compileOnSave": true
                     }`,
@@ -433,7 +433,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should always return the file itself if '--isolatedModules' is specified", () => {
             const { moduleFile1, file1Consumer1 } = files();
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: "/home/src/workspace/projects/b/tsconfig.json",
                 content: `{
                         "compileOnSave": true,
                         "compilerOptions": {
@@ -467,12 +467,12 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should always return the file itself if '--out' or '--outFile' is specified", () => {
             const { moduleFile1, file1Consumer1 } = files();
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: "/home/src/workspace/projects/b/tsconfig.json",
                 content: `{
                         "compileOnSave": true,
                         "compilerOptions": {
                             "module": "system",
-                            "outFile": "/a/b/out.js"
+                            "outFile": "/home/src/workspace/projects/b/out.js"
                         }
                     }`,
             };
@@ -502,7 +502,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should return cascaded affected file list", () => {
             const { moduleFile1, file1Consumer1, globalFile3, configFile } = files();
             const file1Consumer1Consumer1: File = {
-                path: "/a/b/file1Consumer1Consumer1.ts",
+                path: "/home/src/workspace/projects/b/file1Consumer1Consumer1.ts",
                 content: `import {y} from "./file1Consumer1";`,
             };
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile, libFile]);
@@ -546,13 +546,13 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should work fine for files with circular references", () => {
             const { configFile } = files();
             const file1: File = {
-                path: "/a/b/file1.ts",
+                path: "/home/src/workspace/projects/b/file1.ts",
                 content: `
                     /// <reference path="./file2.ts" />
                     export var t1 = 10;`,
             };
             const file2: File = {
-                path: "/a/b/file2.ts",
+                path: "/home/src/workspace/projects/b/file2.ts",
                 content: `
                     /// <reference path="./file1.ts" />
                     export var t2 = 10;`,
@@ -569,11 +569,11 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         });
 
         it("should return results for all projects if not specifying projectFileName", () => {
-            const file1: File = { path: "/a/b/file1.ts", content: "export var t = 10;" };
-            const file2: File = { path: "/a/b/file2.ts", content: `import {t} from "./file1"; var t2 = 11;` };
-            const file3: File = { path: "/a/c/file2.ts", content: `import {t} from "../b/file1"; var t3 = 11;` };
-            const configFile1: File = { path: "/a/b/tsconfig.json", content: `{ "compileOnSave": true }` };
-            const configFile2: File = { path: "/a/c/tsconfig.json", content: `{ "compileOnSave": true }` };
+            const file1: File = { path: "/home/src/workspace/projects/b/file1.ts", content: "export var t = 10;" };
+            const file2: File = { path: "/home/src/workspace/projects/b/file2.ts", content: `import {t} from "./file1"; var t2 = 11;` };
+            const file3: File = { path: "/home/src/workspace/projects/c/file2.ts", content: `import {t} from "../b/file1"; var t3 = 11;` };
+            const configFile1: File = { path: "/home/src/workspace/projects/b/tsconfig.json", content: `{ "compileOnSave": true }` };
+            const configFile2: File = { path: "/home/src/workspace/projects/c/tsconfig.json", content: `{ "compileOnSave": true }` };
 
             const host = createServerHost([file1, file2, file3, configFile1, configFile2]);
             const session = new TestSession(host);
@@ -589,7 +589,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should detect removed code file", () => {
             const { moduleFile1, configFile } = files();
             const referenceFile1: File = {
-                path: "/a/b/referenceFile1.ts",
+                path: "/home/src/workspace/projects/b/referenceFile1.ts",
                 content: `
                     /// <reference path="./moduleFile1.ts" />
                     export var x = Foo();`,
@@ -614,7 +614,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         it("should detect non-existing code file", () => {
             const { configFile } = files();
             const referenceFile1: File = {
-                path: "/a/b/referenceFile1.ts",
+                path: "/home/src/workspace/projects/b/referenceFile1.ts",
                 content: `
                     /// <reference path="./moduleFile2.ts" />
                     export var x = Foo();`,
@@ -635,15 +635,15 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         function testDTS(subScenario: string, dtsFileContents: string, tsFileContents: string, opts: ts.CompilerOptions) {
             it(subScenario, () => {
                 const dtsFile = {
-                    path: "/a/runtime/a.d.ts",
+                    path: "/home/src/workspace/projects/runtime/a.d.ts",
                     content: dtsFileContents,
                 };
                 const f2 = {
-                    path: "/a/b.ts",
+                    path: "/home/src/workspace/projects/b.ts",
                     content: tsFileContents,
                 };
                 const config = {
-                    path: "/a/tsconfig.json",
+                    path: "/home/src/workspace/projects/tsconfig.json",
                     content: jsonToReadableText({
                         compilerOptions: opts,
                         compileOnSave: true,
@@ -705,15 +705,15 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         function test(subScenario: string, opts: ts.CompilerOptions) {
             it(subScenario, () => {
                 const f1 = {
-                    path: "/a/a.ts",
+                    path: "/home/src/workspace/projects/project/a.ts",
                     content: "let x = 1",
                 };
                 const f2 = {
-                    path: "/a/b.ts",
+                    path: "/home/src/workspace/projects/project/b.ts",
                     content: "let y = 1",
                 };
                 const config = {
-                    path: "/a/tsconfig.json",
+                    path: "/home/src/workspace/projects/project/tsconfig.json",
                     content: jsonToReadableText({
                         compilerOptions: opts,
                         compileOnSave: true,
@@ -730,7 +730,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             });
         }
         test("compileOnSaveAffectedFileList projectUsesOutFile should not be returned if not set", {});
-        test("compileOnSaveAffectedFileList projectUsesOutFile should be true if outFile is set", { outFile: "/a/out.js" });
+        test("compileOnSaveAffectedFileList projectUsesOutFile should be true if outFile is set", { outFile: "/home/src/workspace/projects/project/out.js" });
     });
 });
 
@@ -743,7 +743,7 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
 
         function test(newLine: string, logger: LoggerWithInMemoryLogs) {
             const lines = ["var x = 1;", "var y = 2;"];
-            const path = "/a/app";
+            const path = "/home/src/workspace/projects/app";
             const f = {
                 path: path + ts.Extension.Ts,
                 content: lines.join(newLine),
@@ -763,15 +763,15 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
 
     it("should emit specified file", () => {
         const file1 = {
-            path: "/a/b/f1.ts",
+            path: "/home/src/workspace/projects/b/f1.ts",
             content: `export function Foo() { return 10; }`,
         };
         const file2 = {
-            path: "/a/b/f2.ts",
+            path: "/home/src/workspace/projects/b/f2.ts",
             content: `import {Foo} from "./f1"; let y = Foo();`,
         };
         const configFile = {
-            path: "/a/b/tsconfig.json",
+            path: "/home/src/workspace/projects/b/tsconfig.json",
             content: `{}`,
         };
         const host = createServerHost([file1, file2, configFile, libFile], { newLine: "\r\n" });
@@ -788,19 +788,19 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
 
     it("shoud not emit js files in external projects", () => {
         const file1 = {
-            path: "/a/b/file1.ts",
+            path: "/home/src/workspace/projects/b/file1.ts",
             content: "consonle.log('file1');",
         };
         // file2 has errors. The emitting should not be blocked.
         const file2 = {
-            path: "/a/b/file2.js",
+            path: "/home/src/workspace/projects/b/file2.js",
             content: "console.log'file2');",
         };
         const file3 = {
-            path: "/a/b/file3.js",
+            path: "/home/src/workspace/projects/b/file3.js",
             content: "console.log('file3');",
         };
-        const projectFileName = "/a/b/externalproject";
+        const projectFileName = "/home/src/workspace/projects/b/externalproject";
         const host = createServerHost([file1, file2, file3, libFile]);
         const session = new TestSession(host);
         openExternalProjectForSession({
@@ -824,10 +824,10 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
     it("should use project root as current directory so that compile on save results in correct file mapping", () => {
         const inputFileName = "Foo.ts";
         const file1 = {
-            path: `/root/TypeScriptProject3/TypeScriptProject3/${inputFileName}`,
+            path: `/home/src/root/TypeScriptProject3/TypeScriptProject3/${inputFileName}`,
             content: "consonle.log('file1');",
         };
-        const projectFileName = "/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj";
+        const projectFileName = "/home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj";
         const host = createServerHost([file1, libFile]);
         const session = new TestSession(host);
         openExternalProjectForSession({

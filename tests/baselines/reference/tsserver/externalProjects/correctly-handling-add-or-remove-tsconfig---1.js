@@ -1,10 +1,10 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/b/app.ts]
+//// [/home/src/projects/project/a/b/app.ts]
 let x = 1;
 
-//// [/a/b/lib.ts]
+//// [/home/src/projects/project/a/b/lib.ts]
 
 
 
@@ -35,13 +35,13 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
-        "projectFileName": "/a/b/proj1",
+        "projectFileName": "/home/src/projects/project/a/b/proj1",
         "rootFiles": [
           {
-            "fileName": "/a/b/app.ts"
+            "fileName": "/home/src/projects/project/a/b/app.ts"
           },
           {
-            "fileName": "/a/b/lib.ts"
+            "fileName": "/home/src/projects/project/a/b/lib.ts"
           }
         ],
         "options": {}
@@ -49,15 +49,23 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj1
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/lib.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/b/proj1
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/a/b/proj1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/b/app.ts Text-1 "let x = 1;"
-	/a/b/lib.ts Text-1 ""
+	/home/src/projects/project/a/b/app.ts Text-1 "let x = 1;"
+	/home/src/projects/project/a/b/lib.ts Text-1 ""
 
 
 	app.ts
@@ -74,7 +82,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "6179ebc6317f2206f8b1c649a4f8dbc8cb8b17ec75e8a104a8b52d60cbb17c85",
+          "projectId": "3d4457890bbd95ec00ff001a59633254d2e432c8fd6bde9fdf3144f626acc322",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -103,7 +111,7 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -119,29 +127,37 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/a/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/a/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/app.ts: *new*
+/home/src/projects/project/a/b/app.ts: *new*
   {}
-/a/b/lib.ts: *new*
+/home/src/projects/project/a/b/lib.ts: *new*
   {}
 
 Projects::
-/a/b/proj1 (External) *new*
+/home/src/projects/project/a/b/proj1 (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/app.ts *new*
+/home/src/projects/project/a/b/app.ts *new*
     version: Text-1
     containingProjects: 1
-        /a/b/proj1
-/a/b/lib.ts *new*
+        /home/src/projects/project/a/b/proj1
+/home/src/projects/project/a/b/lib.ts *new*
     version: Text-1
     containingProjects: 1
-        /a/b/proj1
+        /home/src/projects/project/a/b/proj1
 
 Before request
 
@@ -149,19 +165,19 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/app.ts"
+        "file": "/home/src/projects/project/a/b/app.ts"
       },
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/a/b/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/proj1
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/a/b/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/a/b/proj1
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -173,71 +189,79 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/a/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/lib.ts:
+/home/src/projects/project/a/b/lib.ts:
   {}
 
 FsWatches *deleted*::
-/a/b/app.ts:
+/home/src/projects/project/a/b/app.ts:
   {}
 
 ScriptInfos::
-/a/b/app.ts (Open) *changed*
+/home/src/projects/project/a/b/app.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/proj1 *default*
-/a/b/lib.ts
+        /home/src/projects/project/a/b/proj1 *default*
+/home/src/projects/project/a/b/lib.ts
     version: Text-1
     containingProjects: 1
-        /a/b/proj1
+        /home/src/projects/project/a/b/proj1
 
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/lib.ts 2:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Scheduled: /a/b/proj1
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/a/b/lib.ts 2:: WatchInfo: /home/src/projects/project/a/b/lib.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/a/b/proj1
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/lib.ts 2:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/a/b/lib.ts 2:: WatchInfo: /home/src/projects/project/a/b/lib.ts 500 undefined WatchType: Closed Script info
 Before request
-//// [/a/b/tsconfig.json]
+//// [/home/src/projects/project/a/b/tsconfig.json]
 
 
-//// [/a/b/lib.ts] deleted
+//// [/home/src/projects/project/a/b/lib.ts] deleted
 
 Timeout callback:: count: 2
-1: /a/b/proj1 *new*
+1: /home/src/projects/project/a/b/proj1 *new*
 2: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/a/b/proj1 (External) *changed*
+/home/src/projects/project/a/b/proj1 (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
 
 ScriptInfos::
-/a/b/app.ts (Open)
+/home/src/projects/project/a/b/app.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/proj1 *default*
-/a/b/lib.ts *changed*
+        /home/src/projects/project/a/b/proj1 *default*
+/home/src/projects/project/a/b/lib.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
     containingProjects: 0 *changed*
-        /a/b/proj1 *deleted*
+        /home/src/projects/project/a/b/proj1 *deleted*
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
-        "projectFileName": "/a/b/proj1",
+        "projectFileName": "/home/src/projects/project/a/b/proj1",
         "rootFiles": [
           {
-            "fileName": "/a/b/app.ts"
+            "fileName": "/home/src/projects/project/a/b/app.ts"
           },
           {
-            "fileName": "/a/b/tsconfig.json"
+            "fileName": "/home/src/projects/project/a/b/tsconfig.json"
           }
         ],
         "options": {}
@@ -245,34 +269,42 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project/a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/tsconfig.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/a/b/tsconfig.json",
-        "reason": "Creating configured project in external project: /a/b/proj1"
+        "projectName": "/home/src/projects/project/a/b/tsconfig.json",
+        "reason": "Creating configured project in external project: /home/src/projects/project/a/b/proj1"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /a/b/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/a/b/tsconfig.json : {
  "rootNames": [
-  "/a/b/app.ts"
+  "/home/src/projects/project/a/b/app.ts"
  ],
  "options": {
-  "configFilePath": "/a/b/tsconfig.json"
+  "configFilePath": "/home/src/projects/project/a/b/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/app.ts Text-1 "let x = 1;"
+	/home/src/projects/project/a/b/app.ts Text-1 "let x = 1;"
 
 
 	app.ts
@@ -285,7 +317,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/a/b/tsconfig.json"
+        "projectName": "/home/src/projects/project/a/b/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -296,7 +328,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "e10a1dc99ee63f16cb9b69bcee75540cdf41a1137371d3afbd4e7de507be5207",
+          "projectId": "ada7c0fc4aa834f69b1c1c870ed211cb78e8712a3ea3ceada8227158109abbde",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -335,11 +367,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/a/b/tsconfig.json",
-        "configFile": "/a/b/tsconfig.json",
+        "triggerFile": "/home/src/projects/project/a/b/tsconfig.json",
+        "configFile": "/home/src/projects/project/a/b/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/home/src/tslibs/ts/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
             "code": 6053,
             "category": "error"
           },
@@ -387,10 +419,10 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/b/app.ts
-	/a/b/lib.ts
+	/home/src/projects/project/a/b/app.ts
+	/home/src/projects/project/a/b/lib.ts
 
 
 	app.ts
@@ -399,14 +431,22 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/a/b/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -418,75 +458,83 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/a/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/lib.ts:
+/home/src/projects/project/a/b/lib.ts:
   {}
-/a/b/tsconfig.json: *new*
+/home/src/projects/project/a/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a/b: *new*
+/home/src/projects/project/a/b: *new*
   {}
 
 Projects::
-/a/b/proj1 (External) *deleted*
+/home/src/projects/project/a/b/proj1 (External) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
     isClosed: true *changed*
-/a/b/tsconfig.json (Configured) *new*
+/home/src/projects/project/a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/app.ts (Open) *changed*
+/home/src/projects/project/a/b/app.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /a/b/tsconfig.json *default* *new*
-        /a/b/proj1 *deleted*
-/a/b/lib.ts
+        /home/src/projects/project/a/b/tsconfig.json *default* *new*
+        /home/src/projects/project/a/b/proj1 *deleted*
+/home/src/projects/project/a/b/lib.ts
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
     containingProjects: 0
 
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/tsconfig.json 2:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/a/b/tsconfig.json 2:: WatchInfo: /home/src/projects/project/a/b/tsconfig.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfig.json 2:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/tsconfig.json :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Project: /a/b/tsconfig.json Detected file add/remove of non supported extension: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/tsconfig.json :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/lib.ts 0:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/lib.ts 0:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/lib.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/lib.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/a/b/tsconfig.json 2:: WatchInfo: /home/src/projects/project/a/b/tsconfig.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/a/b/tsconfig.json :: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Project: /home/src/projects/project/a/b/tsconfig.json Detected file add/remove of non supported extension: /home/src/projects/project/a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/a/b/tsconfig.json :: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/a/b/lib.ts 0:: WatchInfo: /home/src/projects/project/a/b/lib.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/a/b/lib.ts 0:: WatchInfo: /home/src/projects/project/a/b/lib.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/a/b/lib.ts :: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/a/b/lib.ts :: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/tsconfig.json WatchType: Wild card directory
 Before request
-//// [/a/b/lib.ts]
+//// [/home/src/projects/project/a/b/lib.ts]
 
 
-//// [/a/b/tsconfig.json] deleted
+//// [/home/src/projects/project/a/b/tsconfig.json] deleted
 
 Timeout callback:: count: 2
 2: *ensureProjectForOpenFiles* *deleted*
-1: /a/b/proj1
+1: /home/src/projects/project/a/b/proj1
 3: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/a/b/tsconfig.json (Configured) *changed*
+/home/src/projects/project/a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     isOrphan: true *changed*
     deferredClose: true *changed*
 
 ScriptInfos::
-/a/b/app.ts (Open)
+/home/src/projects/project/a/b/app.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
-/a/b/lib.ts *changed*
+        /home/src/projects/project/a/b/tsconfig.json
+/home/src/projects/project/a/b/lib.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: undefined *changed*
@@ -496,13 +544,13 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
-        "projectFileName": "/a/b/proj1",
+        "projectFileName": "/home/src/projects/project/a/b/proj1",
         "rootFiles": [
           {
-            "fileName": "/a/b/app.ts"
+            "fileName": "/home/src/projects/project/a/b/app.ts"
           },
           {
-            "fileName": "/a/b/lib.ts"
+            "fileName": "/home/src/projects/project/a/b/lib.ts"
           }
         ],
         "options": {}
@@ -510,13 +558,21 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj1
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/b/proj1
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/proj1 WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/a/b/proj1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/b/app.ts Text-1 "let x = 1;"
-	/a/b/lib.ts Text-1 ""
+	/home/src/projects/project/a/b/app.ts Text-1 "let x = 1;"
+	/home/src/projects/project/a/b/lib.ts Text-1 ""
 
 
 	app.ts
@@ -526,26 +582,34 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/app.ts
+	/home/src/projects/project/a/b/app.ts
 
 
 	app.ts
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/b 1 undefined Config: /home/src/projects/project/a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/a/b/tsconfig.json 2000 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/b/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/project/a/b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/proj1
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/a/b/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/a/b/proj1
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -557,27 +621,35 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/a/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/lib.ts:
+/home/src/projects/project/a/b/lib.ts:
   {}
 
 FsWatches *deleted*::
-/a/b/tsconfig.json:
+/home/src/projects/project/a/b/tsconfig.json:
   {}
 
 FsWatchesRecursive *deleted*::
-/a/b:
+/home/src/projects/project/a/b:
   {}
 
 Projects::
-/a/b/proj1 (External) *new*
+/home/src/projects/project/a/b/proj1 (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
-/a/b/tsconfig.json (Configured) *deleted*
+/home/src/projects/project/a/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
     isClosed: true *changed*
@@ -586,13 +658,13 @@ Projects::
     deferredClose: true
 
 ScriptInfos::
-/a/b/app.ts (Open) *changed*
+/home/src/projects/project/a/b/app.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /a/b/proj1 *default* *new*
-        /a/b/tsconfig.json *deleted*
-/a/b/lib.ts *changed*
+        /home/src/projects/project/a/b/proj1 *default* *new*
+        /home/src/projects/project/a/b/tsconfig.json *deleted*
+/home/src/projects/project/a/b/lib.ts *changed*
     version: Text-1
     pendingReloadFromDisk: false *changed*
     containingProjects: 1 *changed*
-        /a/b/proj1 *new*
+        /home/src/projects/project/a/b/proj1 *new*

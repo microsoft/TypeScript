@@ -1,13 +1,12 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { libContent } from "../helpers/contents.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced project reexports definitions from another file", () => {
+describe("unittests:: tsbuildWatch:: watchMode:: reexport:: with reexport when referenced project reexports definitions from another file", () => {
     verifyTscWatch({
         scenario: "reexport",
         subScenario: "Reports errors correctly",
@@ -49,7 +48,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
                         // bar: number;
                     }
                 `,
-                [libFile.path]: libContent,
+                [libFile.path]: libFile.content,
             }, { currentDirectory: `/user/username/projects/reexport` }),
         edits: [
             {

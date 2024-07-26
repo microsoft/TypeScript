@@ -8,11 +8,12 @@ import {
 import {
     createWatchedSystem,
     File,
+    getTypeScriptLibTestLocation,
     libFile,
     SymLink,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames::", () => {
+describe("unittests:: tscWatch:: forceConsistentCasingInFileNames::", () => {
     const loggerFile: File = {
         path: `/user/username/projects/myproject/logger.ts`,
         content: `export class logger { }`,
@@ -33,7 +34,11 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames::", () => {
             scenario: "forceConsistentCasingInFileNames",
             subScenario,
             commandLineArgs: ["--w", "--p", tsconfig.path],
-            sys: () => createWatchedSystem([loggerFile, anotherFile, tsconfig, libFile]),
+            sys: () =>
+                createWatchedSystem(
+                    [loggerFile, anotherFile, tsconfig, libFile],
+                    { currentDirectory: "/user/username/projects/myproject" },
+                ),
             edits: changes,
         });
     }
@@ -81,7 +86,10 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames::", () => {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
             };
-            return createWatchedSystem([moduleA, moduleB, moduleC, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [moduleA, moduleB, moduleC, libFile, tsconfig],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -163,7 +171,14 @@ a;b;
                     path: `${windowsStyleRoot}/${projectRootRelative}/tsconfig.json`,
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
-                return createWatchedSystem([moduleA, moduleB, libFile, tsconfig], { windowsStyleRoot, useCaseSensitiveFileNames: false });
+                return createWatchedSystem(
+                    [moduleA, moduleB, libFile, tsconfig],
+                    {
+                        windowsStyleRoot,
+                        useCaseSensitiveFileNames: false,
+                        currentDirectory: windowsStyleRoot,
+                    },
+                );
             },
             edits: [
                 {
@@ -213,7 +228,10 @@ a;b;
                     path: `/user/username/projects/myproject/tsconfig.json`,
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
-                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+                return createWatchedSystem(
+                    [moduleA, symlinkA, moduleB, libFile, tsconfig],
+                    { currentDirectory: "/user/username/projects/myproject" },
+                );
             },
             edits: [
                 {
@@ -267,7 +285,10 @@ a;b;
                     // Use outFile because otherwise the real and linked files will have the same output path
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true, outFile: "out.js", module: "system" } }),
                 };
-                return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+                return createWatchedSystem(
+                    [moduleA, symlinkA, moduleB, libFile, tsconfig],
+                    { currentDirectory: "/user/username/projects/myproject" },
+                );
             },
             edits: [
                 {
@@ -350,7 +371,7 @@ a;b;
                         traceResolution: true,
                     },
                 }),
-                "/a/lib/lib.esnext.full.d.ts": libFile.content,
+                [getTypeScriptLibTestLocation("esnext.full")]: libFile.content,
             }, { currentDirectory: "/Users/name/projects/web" }),
     });
 
@@ -380,7 +401,7 @@ a;b;
                         traceResolution: true,
                     },
                 }),
-                "/a/lib/lib.es2021.full.d.ts": libFile.content,
+                [getTypeScriptLibTestLocation("es2021.full")]: libFile.content,
             }, { currentDirectory: "/Users/name/projects/lib-boilerplate" }),
     });
 

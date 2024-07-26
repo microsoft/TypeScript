@@ -1,10 +1,7 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    compilerOptionsToConfigJson,
-    libContent,
-} from "../helpers/contents.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import {
     noChangeOnlyRuns,
     noChangeRun,
@@ -17,6 +14,7 @@ import {
     prependText,
     replaceText,
 } from "../helpers/vfs.js";
+import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({
@@ -329,7 +327,7 @@ declare global {
             }),
         commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
         modifyFs: fs => {
-            fs.writeFileSync("/lib/lib.esnext.d.ts", libContent);
+            fs.writeFileSync("/lib/lib.esnext.d.ts", libFile.content);
         },
     });
 

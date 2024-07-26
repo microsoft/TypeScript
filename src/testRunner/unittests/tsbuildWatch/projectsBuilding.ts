@@ -11,7 +11,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
+describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding::", () => {
     function pkgs<T>(cb: (index: number) => T, count: number, startIndex?: number): T[] {
         const result: T[] = [];
         for (let index = startIndex || 0; count > 0; index++, count--) {

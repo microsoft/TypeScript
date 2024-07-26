@@ -15,21 +15,11 @@ import {
 } from "./baseline.js";
 import {
     changeToHostTrackingWrittenFiles,
-    File,
     SerializeOutputOrder,
     StateLogger,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
 } from "./virtualFileSystemWithWatch.js";
-
-export const commonFile1: File = {
-    path: "/a/b/commonFile1.ts",
-    content: "let x = 1",
-};
-export const commonFile2: File = {
-    path: "/a/b/commonFile2.ts",
-    content: "let y = 1",
-};
 
 export type WatchOrSolution<T extends ts.BuilderProgram> = void | ts.SolutionBuilder<T> | ts.WatchOfConfigFile<T> | ts.WatchOfFilesAndCompilerOptions<T>;
 export interface TscWatchCompileChange<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram> {
@@ -62,7 +52,7 @@ export const noopChange: TscWatchCompileChange = {
 };
 
 function tscWatchCompile(input: TscWatchCompile) {
-    it("tsc-watch:: Generates files matching the baseline", () => {
+    it("tscWatch:: Generates files matching the baseline", () => {
         const { sys, baseline } = createBaseline(input.sys());
         const {
             scenario,

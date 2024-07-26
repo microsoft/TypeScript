@@ -16,7 +16,7 @@ import {
     SymLink,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedirect", () => {
+describe("unittests:: tscWatch:: watchAPI:: with sourceOfProjectReferenceRedirect::", () => {
     interface VerifyWatchInput {
         files: FsContents | readonly FileOrFolderOrSymLink[];
         config: string;
@@ -25,7 +25,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
 
     function verifyWatch({ files, config, subScenario }: VerifyWatchInput, alreadyBuilt: boolean) {
         const { sys, baseline, cb, getPrograms } = createBaseline(
-            createWatchedSystem(files),
+            createWatchedSystem(files, { currentDirectory: ts.getDirectoryPath(ts.getDirectoryPath(config)) }),
             alreadyBuilt ? (sys, originalRead) => {
                 solutionBuildWithBaseline(sys, [config], originalRead);
                 sys.clearOutput();

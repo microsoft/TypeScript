@@ -1,12 +1,12 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Before request
-//// [/a/b/bliss.js]
+//// [/user/username/projects/project/bliss.js]
 let x = 5
 
-//// [/a/b/foo.js]
+//// [/user/username/projects/project/foo.js]
 
 
-//// [/a/b/Bacon.js]
+//// [/user/username/projects/project/Bacon.js]
 let y = 5
 
 //// [/typesMap.json]
@@ -40,10 +40,10 @@ Info seq  [hh:mm:ss:mss] request:
         "options": {},
         "rootFiles": [
           {
-            "fileName": "/a/b/bliss.js"
+            "fileName": "/user/username/projects/project/bliss.js"
           },
           {
-            "fileName": "/a/b/foo.js"
+            "fileName": "/user/username/projects/project/foo.js"
           }
         ],
         "typeAcquisition": {
@@ -53,28 +53,40 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Excluded '/a/b/bliss.js' because it matched bliss from the legacy safelist
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/foo.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Excluded '/user/username/projects/project/bliss.js' because it matched bliss from the legacy safelist
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/foo.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: project
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: project WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: project WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules/@types 1 undefined Project: project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules/@types 1 undefined Project: project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/node_modules/@types 1 undefined Project: project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/node_modules/@types 1 undefined Project: project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/node_modules/@types 1 undefined Project: project WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/node_modules/@types 1 undefined Project: project WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: project projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'project' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/foo.js Text-1 ""
+	/user/username/projects/project/foo.js Text-1 ""
 
 
-	a/b/foo.js
+	../../../../../user/username/projects/project/foo.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/vscode/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/vscode/projects/bin/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/vscode/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/foo.js: *new*
+/user/username/projects/project/foo.js: *new*
   {}
 
 Projects::
@@ -83,25 +95,25 @@ project (External) *new*
     projectProgramVersion: 0
 
 ScriptInfos::
-/a/b/foo.js *new*
+/user/username/projects/project/foo.js *new*
     version: Text-1
     containingProjects: 1
         project
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/typinginstaller/globalcache/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/typinginstaller/globalcache/data'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/typinginstaller/globalcache/data/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/typinginstaller/globalcache/data'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/typinginstaller/globalcache/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/typinginstaller/globalcache/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/a/data/package.json]
+//// [/home/src/typinginstaller/globalcache/data/package.json]
 { "private": true }
 
-//// [/a/data/node_modules/types-registry/index.json]
+//// [/home/src/typinginstaller/globalcache/data/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
@@ -111,8 +123,8 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "project",
       "fileNames": [
-        "/a/b/foo.js",
-        "/a/b/bliss.js"
+        "/user/username/projects/project/foo.js",
+        "/user/username/projects/project/bliss.js"
       ],
       "compilerOptions": {
         "allowNonTsExtensions": true,
@@ -126,7 +138,7 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": []
       },
       "unresolvedImports": [],
-      "projectRootPath": "/",
+      "projectRootPath": "/home/src/vscode/projects/bin",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/typesMap.json'
@@ -140,10 +152,10 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "blissfuljs"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules",
-        "/bower_components",
-        "/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/home/src/vscode/projects/bin/bower_components",
+        "/home/src/vscode/projects/bin/node_modules"
       ]
     }
 TI:: [hh:mm:ss:mss] Sending response:
@@ -151,18 +163,20 @@ TI:: [hh:mm:ss:mss] Sending response:
       "kind": "action::watchTypingLocations",
       "projectName": "project",
       "files": [
-        "/a/b/bower_components",
-        "/a/b/node_modules",
-        "/bower_components",
-        "/node_modules"
+        "/user/username/projects/project/bower_components",
+        "/user/username/projects/project/node_modules",
+        "/home/src/vscode/projects/bin/bower_components",
+        "/home/src/vscode/projects/bin/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: project WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/bower_components 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules 1 undefined Project: project WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["blissfuljs"]
 TI:: [hh:mm:ss:mss] 'blissfuljs':: Entry for package 'blissfuljs' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
@@ -260,19 +274,25 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
-/bower_components: *new*
+/home/src/vscode/node_modules/@types:
   {"pollingInterval":500}
-/node_modules: *new*
+/home/src/vscode/projects/bin/bower_components: *new*
+  {"pollingInterval":500}
+/home/src/vscode/projects/bin/node_modules: *new*
+  {"pollingInterval":500}
+/home/src/vscode/projects/bin/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/vscode/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/bower_components: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/foo.js:
-  {}
-
-FsWatchesRecursive::
-/a: *new*
+/user/username/projects/project/foo.js:
   {}
 
 Projects::

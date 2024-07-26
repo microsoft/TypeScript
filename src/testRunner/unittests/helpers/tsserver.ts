@@ -200,7 +200,9 @@ export interface TestSessionOptions extends ts.server.SessionOptions, TestTyping
     useCancellationToken?: boolean | number;
     regionDiagLineCountThreshold?: number;
 }
-export type TestSessionPartialOptionsAndHost = Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">> & Pick<TestSessionOptions, "host">;
+export type TestSessionPartialOptionsAndHost =
+    & Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">>
+    & Pick<TestSessionOptions, "host">;
 export type TestSessionConstructorOptions = TestServerHost | TestSessionPartialOptionsAndHost;
 export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
 

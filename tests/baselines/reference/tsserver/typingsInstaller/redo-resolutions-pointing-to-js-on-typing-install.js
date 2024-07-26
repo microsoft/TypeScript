@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/a/b/app.js]
@@ -35,7 +35,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/commander/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -58,7 +58,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 /user/username/projects/a/b/jsconfig.json: *new*
   {"pollingInterval":2000}
@@ -104,20 +104,20 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1*
 
-TI:: [hh:mm:ss:mss] Global cache location '/user/username/projects/a/cache', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/user/username/projects/a/cache'
-TI:: [hh:mm:ss:mss] Trying to find '/user/username/projects/a/cache/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/user/username/projects/a/cache'
-TI:: [hh:mm:ss:mss] Npm config file: /user/username/projects/a/cache/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/user/username/projects/a/cache/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/typinginstaller/globalcache/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/typinginstaller/globalcache/data'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/typinginstaller/globalcache/data/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/typinginstaller/globalcache/data'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/typinginstaller/globalcache/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/typinginstaller/globalcache/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/user/username/projects/a/cache/package.json]
+//// [/home/src/typinginstaller/globalcache/data/package.json]
 { "private": true }
 
-//// [/user/username/projects/a/cache/node_modules/types-registry/index.json]
+//// [/home/src/typinginstaller/globalcache/data/node_modules/types-registry/index.json]
 {
   "entries": {
     "commander": {
@@ -188,7 +188,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["commander"]
-TI:: [hh:mm:ss:mss] Npm config file: /user/username/projects/a/cache/package.json
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/typinginstaller/globalcache/data/package.json
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::beginInstallTypes",
@@ -205,7 +205,7 @@ Info seq  [hh:mm:ss:mss] event:
         "eventId": 1
       }
     }
-TI:: [hh:mm:ss:mss] #1 with cwd: /user/username/projects/a/cache arguments: [
+TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/typinginstaller/globalcache/data arguments: [
   "@types/commander@tsFakeMajor.Minor"
 ]
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -229,7 +229,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 /user/username/projects/a/b/bower_components: *new*
   {"pollingInterval":500}
@@ -281,12 +281,12 @@ Before running PendingInstalls callback:: count: 1
 TI:: Installation #1 with arguments:: [
   "@types/commander@tsFakeMajor.Minor"
 ] complete with success::true
-//// [/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts]
+//// [/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts]
 
 
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/commander@tsFakeMajor.Minor"]
-TI:: [hh:mm:ss:mss] Installed typing files ["/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts"]
+TI:: [hh:mm:ss:mss] Installed typing files ["/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -304,7 +304,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "maxNodeModuleJsDepth": 2
       },
       "typings": [
-        "/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts"
+        "/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts"
       ],
       "unresolvedImports": [
         "commander"
@@ -334,7 +334,7 @@ Info seq  [hh:mm:ss:mss] event:
           "maxNodeModuleJsDepth": 2
         },
         "typings": [
-          "/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts"
+          "/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts"
         ],
         "unresolvedImports": [
           "commander"
@@ -385,23 +385,23 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/cache/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/cache/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/cache/node_modules/@types/commander/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/cache/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/cache/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/cache/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/commander/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/commander/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts Text-1 ""
+	/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts Text-1 ""
 	/user/username/projects/a/b/app.js SVC-1-0 "\n                import * as commander from \"commander\";"
 
 
-	../cache/node_modules/@types/commander/index.d.ts
+	../../../../../home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts
 	  Imported via "commander" from file 'app.js'
 	  Root file specified for compilation
 	app.js
@@ -412,7 +412,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts",
+        "/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts",
         "/user/username/projects/a/b/app.js"
       ],
       "compilerOptions": {
@@ -499,8 +499,14 @@ TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discove
 After running Timeout callback:: count: 2
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
+/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/typinginstaller/globalcache/data/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/typinginstaller/globalcache/data/node_modules/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/a/b/bower_components:
   {"pollingInterval":500}
 /user/username/projects/a/b/jsconfig.json:
@@ -510,12 +516,6 @@ PolledWatches::
 /user/username/projects/a/b/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/a/b/tsconfig.json:
-  {"pollingInterval":2000}
-/user/username/projects/a/cache/node_modules/@types/commander/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/a/cache/node_modules/@types/package.json: *new*
-  {"pollingInterval":2000}
-/user/username/projects/a/cache/node_modules/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/a/jsconfig.json:
   {"pollingInterval":2000}
@@ -537,11 +537,11 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/user/username/projects/a/cache/package.json: *new*
+/home/src/typinginstaller/globalcache/data/package.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/a/cache/node_modules: *new*
+/home/src/typinginstaller/globalcache/data/node_modules: *new*
   {}
 /user/username/projects/node_modules:
   {}
@@ -559,13 +559,13 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
+/home/src/typinginstaller/globalcache/data/node_modules/@types/commander/index.d.ts *new*
+    version: Text-1
+    containingProjects: 0
 /user/username/projects/a/b/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts *new*
-    version: Text-1
-    containingProjects: 0
 /user/username/projects/node_modules/commander/index.js *changed*
     version: Text-1
     containingProjects: 0 *changed*

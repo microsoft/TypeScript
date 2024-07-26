@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -12,6 +12,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 //// [/user/username/projects/myproject/node_modules/react/Jsx-runtime/index.d.ts]
 export namespace JSX {
@@ -50,7 +52,7 @@ export const App = () => <div propA={true}></div>;
 }
 
 
-/a/lib/tsc.js --w --p . --explainFiles
+/home/src/tslibs/ts/lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -65,7 +67,7 @@ Output::
     [7m [0m [96m    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
     File is matched by 'files' list specified here.
 
-../../../../a/lib/lib.d.ts
+../../../../home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 node_modules/react/Jsx-Runtime/index.d.ts
   Part of 'files' list in tsconfig.json
@@ -95,7 +97,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/index.tsx: *new*
   {}
@@ -125,14 +127,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/myproject/node_modules/react/Jsx-Runtime/index.d.ts
 /user/username/projects/myproject/index.tsx
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts (used version)
 /user/username/projects/myproject/index.tsx (used version)
 

@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { libContent } from "../helpers/contents.js";
 import { solutionBuildWithBaseline } from "../helpers/solutionBuilder.js";
 import {
     baselineTsserverLogs,
@@ -1961,7 +1960,7 @@ const b: B = new B();`,
                     composite: true,
                 },
             }),
-            [libFile.path]: libContent,
+            [libFile.path]: libFile.content,
         });
         const session = new TestSession(host);
         openFilesForSession([{ file: indexDts, projectRootPath: "/home/src/projects/project" }], session);

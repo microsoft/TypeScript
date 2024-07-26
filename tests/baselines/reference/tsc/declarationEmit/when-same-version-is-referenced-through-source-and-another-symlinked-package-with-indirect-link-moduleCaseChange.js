@@ -90,7 +90,7 @@ export default actionCreatorFactory;
 
 //// [/temp/yarn/data/link/plugin-two] symlink(/user/username/projects/myProject/plugin-two)
 //// [/user/username/projects/myProject/plugin-one/node_modules/plugin-two] symlink(/temp/yarn/data/link/plugin-two)
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -102,9 +102,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -p plugin-one --explainFiles
+/home/src/tslibs/ts/lib/tsc.js -p plugin-one --explainFiles
 Output::
 ======== Resolving module 'plugin-two' from '/user/username/projects/myproject/plugin-one/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -165,7 +167,7 @@ Resolving real path for '/user/username/projects/myProject/plugin-two/node_modul
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
 File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json' exists according to earlier cached lookups.
-../../../../a/lib/lib.d.ts
+../../../../home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 plugin-two/node_modules/typescript-fsa/index.d.ts
   Imported via "typescript-fsa" from file 'plugin-two/dist/commonjs/index.d.ts' with packageId 'typescript-fsa/index.d.ts@3.0.0-beta-2'
@@ -210,7 +212,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts
 /user/username/projects/myProject/plugin-two/dist/commonjs/index.d.ts
 /user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts

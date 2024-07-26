@@ -11,7 +11,7 @@ import {
 
 describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
     const config: File = {
-        path: "/a/tsconfig.json",
+        path: "/home/src/projects/project/a/tsconfig.json",
         content: `{
 "compilerOptions": {
 "checkJs": true,
@@ -47,13 +47,13 @@ describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
     }
 
     const linkInTag: File = {
-        path: "/a/someFile1.js",
+        path: "/home/src/projects/project/a/someFile1.js",
         content: `class C { }
 /** @wat {@link C} */
 var x = 1`,
     };
     const linkInComment: File = {
-        path: "/a/someFile1.js",
+        path: "/home/src/projects/project/a/someFile1.js",
         content: `class C { }
      /** {@link C} */
 var x = 1
@@ -106,7 +106,7 @@ var x = 1
     }) {
         it(subScenario, () => {
             const linkInParamTag: File = {
-                path: "/a/someFile1.js",
+                path: "/home/src/projects/project/a/someFile1.js",
                 content: `class C { }
 /** @param y - {@link C} */
 function x(y) { }
@@ -160,7 +160,7 @@ x(1)`,
     }) {
         it(subScenario, () => {
             const linkInParamJSDoc: File = {
-                path: "/a/someFile1.js",
+                path: "/home/src/projects/project/a/someFile1.js",
                 content: `class C { }
 /** @param x - see {@link C} */
 function foo (x) { }

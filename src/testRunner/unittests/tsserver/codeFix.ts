@@ -21,8 +21,8 @@ describe("unittests:: tsserver:: codeFix::", () => {
             "/home/src/projects/project/tsconfig.json": "{ }",
             "/home/src/projects/project/node_modules/vscode/index.js": "export const x = 10;",
             [libFile.path]: libFile.content,
-        });
-        const session = new TestSession({ host, typesRegistry: ["vscode"] });
+        }, { typingsInstallerTypesRegistry: ["vscode"] });
+        const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project/src/file.ts"], session);
         const actions = session.executeCommandSeq<ts.server.protocol.GetCombinedCodeFixRequest>({
             command: ts.server.protocol.CommandTypes.GetCombinedCodeFix,

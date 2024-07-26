@@ -66,7 +66,7 @@ type MyBarType = BarType;
 
 
 //// [/home/src/projects/project/node_modules/package1] symlink(/home/src/projects/project/packages/package1)
-//// [/a/lib/lib.es2016.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -104,7 +104,7 @@ export type BarType = "bar";
 }
 
 
-/a/lib/tsc.js --w -p packages/package2 --extendedDiagnostics --explainFiles --traceResolution
+/home/src/tslibs/ts/lib/tsc.js --w -p packages/package2 --extendedDiagnostics --explainFiles --traceResolution
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -138,7 +138,7 @@ File '/home/src/projects/project/node_modules/package1/dist/index.d.ts' exists -
 Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
 ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es2016.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Failed Lookup Locations
@@ -158,7 +158,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@t
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
-../../../../a/lib/lib.es2016.full.d.ts
+../../tslibs/ts/lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 packages/package1/dist/index.d.ts
   Imported via "package1" from file 'packages/package2/src/index.ts' with packageId 'package1/dist/index.d.ts@1.0.0'
@@ -195,8 +195,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts: *new*
-  {}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {}
 /home/src/projects/project/packages/package1/package.json: *new*
@@ -204,6 +202,8 @@ FsWatches::
 /home/src/projects/project/packages/package2/src/index.ts: *new*
   {}
 /home/src/projects/project/packages/package2/tsconfig.json: *new*
+  {}
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -238,17 +238,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
 /home/src/projects/project/packages/package1/dist/index.d.ts
 /home/src/projects/project/packages/package2/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
 /home/src/projects/project/packages/package1/dist/index.d.ts
 /home/src/projects/project/packages/package2/src/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.es2016.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts (used version)
 /home/src/projects/project/packages/package1/dist/index.d.ts (used version)
 /home/src/projects/project/packages/package2/src/index.ts (computed .d.ts during emit)
 
@@ -368,7 +368,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
 [7m1[0m import { FooType, BarType } from "package1"
 [7m [0m [91m                                 ~~~~~~~~~~[0m
 
-../../../../a/lib/lib.es2016.full.d.ts
+../../tslibs/ts/lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 packages/package2/src/index.ts
   Matched by default include pattern '**/*'
@@ -396,13 +396,13 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {}
 /home/src/projects/project/packages/package1/package.json:
   {}
 /home/src/projects/project/packages/package2/src/index.ts:
   {}
 /home/src/projects/project/packages/package2/tsconfig.json:
+  {}
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -445,7 +445,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
 /home/src/projects/project/packages/package2/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -536,7 +536,7 @@ Resolving real path for '/home/src/projects/project/node_modules/package1/dist/i
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-../../../../a/lib/lib.es2016.full.d.ts
+../../tslibs/ts/lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
 packages/package1/dist/index.d.ts
   Imported via "package1" from file 'packages/package2/src/index.ts' with packageId 'package1/dist/index.d.ts@1.0.0'
@@ -568,8 +568,6 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {}
 /home/src/projects/project/packages/package1/package.json:
@@ -577,6 +575,8 @@ FsWatches::
 /home/src/projects/project/packages/package2/src/index.ts:
   {}
 /home/src/projects/project/packages/package2/tsconfig.json:
+  {}
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -616,7 +616,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
 /home/src/projects/project/packages/package1/dist/index.d.ts
 /home/src/projects/project/packages/package2/src/index.ts
 

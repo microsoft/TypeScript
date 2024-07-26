@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/anotherProject useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/san2/x.js]
@@ -29,6 +29,23 @@ export function foo() { }
 //// [/users/username/Library/Caches/typescript/2.7/package-lock.json]
 {
   "dependencies": {}
+}
+
+//// [/users/username/Library/Caches/typescript/2.7/node_modules/types-registry/index.json]
+{
+  "entries": {
+    "pkgcurrentdirectory": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
+  }
 }
 
 
@@ -72,7 +89,7 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/san2/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/san2/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es2016.full.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/san2/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/san2/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -90,7 +107,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/a/lib/lib.es2016.full.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -129,23 +146,6 @@ TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/users/username/Library/Caches/typescript/2.7/node_modules/types-registry/index.json]
-{
-  "entries": {
-    "pkgcurrentdirectory": {
-      "latest": "1.3.0",
-      "ts2.0": "1.0.0",
-      "ts2.1": "1.0.0",
-      "ts2.2": "1.2.0",
-      "ts2.3": "1.3.0",
-      "ts2.4": "1.3.0",
-      "ts2.5": "1.3.0",
-      "ts2.6": "1.3.0",
-      "ts2.7": "1.3.0"
-    }
-  }
-}
-
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -271,7 +271,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es2016.full.d.ts:
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}

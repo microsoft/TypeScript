@@ -1,7 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a.ts]
+//// [/home/src/projects/project/a.ts]
 
 
 
@@ -11,24 +11,30 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "rootFiles": [
           {
-            "fileName": "/a.ts"
+            "fileName": "/home/src/projects/project/a.ts"
           }
         ],
         "options": {
           "strict": true
         },
-        "projectFileName": "/hunter2/foo.csproj"
+        "projectFileName": "/home/src/projects/project/hunter2/foo.csproj"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /hunter2/foo.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /hunter2/foo.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/hunter2/foo.csproj
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/hunter2/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/hunter2/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/hunter2/foo.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a.ts Text-1 ""
+	/home/src/projects/project/a.ts Text-1 ""
 
 
 	../a.ts
@@ -43,7 +49,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "ef055f5036459f2705212d5657970dd7bc0280bdb6fa2cddd17d0cd73eb2a989",
+          "projectId": "3bb90106867ac3a5e77dfb40df3f9e976e343e0f6ce93841d4ce74030abe4cc9",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -74,7 +80,7 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -90,23 +96,29 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/hunter2/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a.ts: *new*
+/home/src/projects/project/a.ts: *new*
   {}
 
 Projects::
-/hunter2/foo.csproj (External) *new*
+/home/src/projects/project/hunter2/foo.csproj (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a.ts *new*
+/home/src/projects/project/a.ts *new*
     version: Text-1
     containingProjects: 1
-        /hunter2/foo.csproj
+        /home/src/projects/project/hunter2/foo.csproj
 
 Before request
 
@@ -114,19 +126,19 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a.ts"
+        "file": "/home/src/projects/project/a.ts"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/a.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /hunter2/foo.csproj
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/hunter2/foo.csproj
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -138,19 +150,25 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/hunter2/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a.ts:
+/home/src/projects/project/a.ts:
   {}
 
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/projects/project/a.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /hunter2/foo.csproj *default*
+        /home/src/projects/project/hunter2/foo.csproj *default*
 
 Before request
 
@@ -158,13 +176,13 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "close",
       "arguments": {
-        "file": "/a.ts"
+        "file": "/home/src/projects/project/a.ts"
       },
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -180,19 +198,25 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/hunter2/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a.ts: *new*
+/home/src/projects/project/a.ts: *new*
   {}
 
 ScriptInfos::
-/a.ts *changed*
+/home/src/projects/project/a.ts *changed*
     open: false *changed*
     version: Text-1
     containingProjects: 1
-        /hunter2/foo.csproj
+        /home/src/projects/project/hunter2/foo.csproj
 
 Before request
 
@@ -200,22 +224,28 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "closeExternalProject",
       "arguments": {
-        "projectFileName": "/hunter2/foo.csproj"
+        "projectFileName": "/home/src/projects/project/hunter2/foo.csproj"
       },
       "seq": 4,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a.ts
+	/home/src/projects/project/a.ts
 
 
 	../a.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /hunter2/foo.csproj WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/hunter2/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/hunter2/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -225,24 +255,30 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches *deleted*::
-/a/lib/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/hunter2/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a.ts:
+/home/src/projects/project/a.ts:
   {}
 
 Projects::
-/hunter2/foo.csproj (External) *deleted*
+/home/src/projects/project/hunter2/foo.csproj (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
     isClosed: true *changed*
 
 ScriptInfos::
-/a.ts *changed*
+/home/src/projects/project/a.ts *changed*
     version: Text-1
     containingProjects: 0 *changed*
-        /hunter2/foo.csproj *deleted*
+        /home/src/projects/project/hunter2/foo.csproj *deleted*
 
 Before request
 
@@ -252,7 +288,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "rootFiles": [
           {
-            "fileName": "/a.ts"
+            "fileName": "/home/src/projects/project/a.ts"
           }
         ],
         "options": {
@@ -260,24 +296,30 @@ Info seq  [hh:mm:ss:mss] request:
           "allowNonTsExtensions": true,
           "noEmitForJsFiles": true
         },
-        "projectFileName": "/hunter2/foo.csproj"
+        "projectFileName": "/home/src/projects/project/hunter2/foo.csproj"
       },
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /hunter2/foo.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /hunter2/foo.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/hunter2/foo.csproj
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/hunter2/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/hunter2/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/hunter2/foo.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/hunter2/foo.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a.ts Text-1 ""
+	/home/src/projects/project/a.ts Text-1 ""
 
 
 	../a.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -293,23 +335,29 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/hunter2/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a.ts:
+/home/src/projects/project/a.ts:
   {}
 
 Projects::
-/hunter2/foo.csproj (External) *new*
+/home/src/projects/project/hunter2/foo.csproj (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a.ts *changed*
+/home/src/projects/project/a.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /hunter2/foo.csproj *new*
+        /home/src/projects/project/hunter2/foo.csproj *new*
 
 Before request
 
@@ -317,19 +365,19 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a.ts"
+        "file": "/home/src/projects/project/a.ts"
       },
       "seq": 6,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/a.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /hunter2/foo.csproj
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/a.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/hunter2/foo.csproj
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -341,16 +389,22 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/hunter2/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a.ts:
+/home/src/projects/project/a.ts:
   {}
 
 ScriptInfos::
-/a.ts (Open) *changed*
+/home/src/projects/project/a.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /hunter2/foo.csproj *default*
+        /home/src/projects/project/hunter2/foo.csproj *default*

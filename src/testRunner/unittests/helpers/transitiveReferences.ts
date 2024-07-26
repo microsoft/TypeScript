@@ -3,7 +3,6 @@ import { jsonToReadableText } from "../helpers.js";
 import {
     FsContents,
     getProjectConfigWithNodeNext,
-    libContent,
 } from "./contents.js";
 import { libFile } from "./virtualFileSystemWithWatch.js";
 
@@ -68,6 +67,6 @@ export function getFsContentsForTransitiveReferences(withNodeNext?: boolean): Fs
             },
             references: [{ path: "tsconfig.b.json" }],
         }),
-        [libFile.path]: libContent,
+        [libFile.path]: libFile.content,
     };
 }

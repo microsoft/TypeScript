@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -31,7 +31,7 @@ declare const console: { log(msg: any): void; };
 }
 
 
-/a/lib/tsc.js -b -w -verbose
+/home/src/tslibs/ts/lib/tsc.js -b -w -verbose
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -87,12 +87,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
@@ -141,7 +141,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
@@ -196,12 +196,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 

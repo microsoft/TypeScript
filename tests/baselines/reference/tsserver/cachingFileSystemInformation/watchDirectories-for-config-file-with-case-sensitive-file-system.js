@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: true
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: true
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts]
@@ -7,7 +7,7 @@ export class SomeClass { };
 //// [/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts]
 export class configureStore { }
 
-//// [/a/lib/lib.es2016.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -19,6 +19,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 //// [/Users/someuser/work/applications/frontend/tsconfig.json]
 {
@@ -124,16 +126,16 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/w
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/types 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/node_modules 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/node_modules 1 undefined Project: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/ts/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts Text-1 "export class configureStore { }"
 	/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts SVC-1-0 "export class SomeClass { };"
 
 
-	../../../../../a/lib/lib.es2016.full.d.ts
+	../../../../../home/src/tslibs/ts/lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	src/app/redux/configureStore.ts
 	  Matched by include pattern 'src/**/*' in 'tsconfig.json'
@@ -169,7 +171,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -302,7 +304,7 @@ FsWatches::
   {}
 /Users/someuser/work/applications/frontend/tsconfig.json: *new*
   {}
-/a/lib/lib.es2016.full.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -324,7 +326,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json *default*
-/a/lib/lib.es2016.full.d.ts *new*
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
@@ -357,13 +359,13 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Users/someuser/wo
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Users/someuser/work/applications/frontend/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/ts/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts Text-1 "export class configureStore { }"
 	/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts SVC-1-0 "export class SomeClass { };"
 	/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts Text-1 "export class Cookie { }"
 
 
-	../../../../../a/lib/lib.es2016.full.d.ts
+	../../../../../home/src/tslibs/ts/lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	src/app/redux/configureStore.ts
 	  Matched by include pattern 'src/**/*' in 'tsconfig.json'
@@ -417,7 +419,7 @@ FsWatches::
   {}
 /Users/someuser/work/applications/frontend/tsconfig.json:
   {}
-/a/lib/lib.es2016.full.d.ts:
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -444,7 +446,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
@@ -512,7 +514,7 @@ FsWatches::
   {}
 /Users/someuser/work/applications/frontend/tsconfig.json:
   {}
-/a/lib/lib.es2016.full.d.ts:
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -537,7 +539,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json *default*
-/a/lib/lib.es2016.full.d.ts
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json

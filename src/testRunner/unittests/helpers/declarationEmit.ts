@@ -2,8 +2,8 @@ import { CompilerOptions } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { FileSystem } from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
-import { libContent } from "./contents.js";
 import { loadProjectFromFiles } from "./vfs.js";
+import { libFile } from "./virtualFileSystemWithWatch.js";
 
 export function getFsForDeclarationEmitWithErrors(options: CompilerOptions, incremental: true | undefined) {
     return loadProjectFromFiles({
@@ -36,7 +36,7 @@ export function getFsForDeclarationEmitWithErrors(options: CompilerOptions, incr
             type: "module",
             main: "./distribution/index.js",
         }),
-        "/lib/lib.esnext.full.d.ts": libContent,
+        "/lib/lib.esnext.full.d.ts": libFile.content,
     });
 }
 
@@ -64,7 +64,7 @@ export function getFsForDeclarationEmitWithErrorsWithOutFile(options: CompilerOp
             declare const ky: KyInstance;
             export default ky;
         `,
-        "/lib/lib.esnext.full.d.ts": libContent,
+        "/lib/lib.esnext.full.d.ts": libFile.content,
     });
 }
 

@@ -1,4 +1,4 @@
-currentDirectory:: c:/ useCaseSensitiveFileNames: false
+currentDirectory:: c:\home\src\vscode\projects\bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [C:/a/f1.ts]
@@ -49,7 +49,7 @@ Info seq  [hh:mm:ss:mss] Config: C:/a/tsconfig.json : {
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: C:/a 0 undefined Config: C:/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: C:/a 0 undefined Config: C:/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: C:/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined Project: C:/a/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: C:/a/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: C:/a/node_modules/@types 1 undefined Project: C:/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: C:/a/node_modules/@types 1 undefined Project: C:/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: C:/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -124,7 +124,7 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "C:/a/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File 'c:/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File 'c:/home/src/tslibs/ts/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
             "code": 6053,
             "category": "error"
           },
@@ -194,7 +194,7 @@ After request
 PolledWatches::
 C:/a/node_modules/@types: *new*
   {"pollingInterval":500}
-c:/a/lib/lib.d.ts: *new*
+c:/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::

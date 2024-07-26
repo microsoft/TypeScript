@@ -1,7 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -13,11 +13,13 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-//// [/user/someuser/project/js/site.js]
+//// [/user/someuser/projects/project/js/site.js]
 
 
-//// [/user/someuser/project/tsconfig.json]
+//// [/user/someuser/projects/project/tsconfig.json]
 {}
 
 
@@ -50,13 +52,13 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "projects": [
           {
-            "projectFileName": "/user/someuser/project/WebApplication6.csproj",
+            "projectFileName": "/user/someuser/projects/project/WebApplication6.csproj",
             "rootFiles": [
               {
-                "fileName": "/user/someuser/project/js/site.js"
+                "fileName": "/user/someuser/projects/project/js/site.js"
               },
               {
-                "fileName": "/user/someuser/project/tsconfig.json"
+                "fileName": "/user/someuser/projects/project/tsconfig.json"
               }
             ],
             "options": {
@@ -71,31 +73,33 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/someuser/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Creating configuration project /user/someuser/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/someuser/projects/project/tsconfig.json 2000 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/user/someuser/project/tsconfig.json",
-        "reason": "Creating configured project in external project: /user/someuser/project/WebApplication6.csproj"
+        "projectName": "/user/someuser/projects/project/tsconfig.json",
+        "reason": "Creating configured project in external project: /user/someuser/projects/project/WebApplication6.csproj"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /user/someuser/project/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /user/someuser/projects/project/tsconfig.json : {
  "rootNames": [],
  "options": {
-  "configFilePath": "/user/someuser/project/tsconfig.json"
+  "configFilePath": "/user/someuser/projects/project/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/someuser/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/someuser/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/someuser/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/someuser/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/someuser/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -105,7 +109,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/user/someuser/project/tsconfig.json"
+        "projectName": "/user/someuser/projects/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -116,7 +120,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "f2981569a4e815e316b5ef4e458f93a04ef6d85784edd5b0e329541e6de1dc09",
+          "projectId": "2e97ef70ac353217af69cf7cd5f80b4a0be14a62de40b8d7eb164a5a6e3b4889",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -155,18 +159,18 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/someuser/project/tsconfig.json",
-        "configFile": "/user/someuser/project/tsconfig.json",
+        "triggerFile": "/user/someuser/projects/project/tsconfig.json",
+        "configFile": "/user/someuser/projects/project/tsconfig.json",
         "diagnostics": [
           {
-            "text": "No inputs were found in config file '/user/someuser/project/tsconfig.json'. Specified 'include' paths were '[\"**/*\"]' and 'exclude' paths were '[]'.",
+            "text": "No inputs were found in config file '/user/someuser/projects/project/tsconfig.json'. Specified 'include' paths were '[\"**/*\"]' and 'exclude' paths were '[]'.",
             "code": 18003,
             "category": "error"
           }
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/user/someuser/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -182,19 +186,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/someuser/project/node_modules/@types: *new*
+/user/someuser/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/someuser/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/user/someuser/project/tsconfig.json: *new*
+/user/someuser/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/someuser/project: *new*
+/user/someuser/projects/project: *new*
   {}
 
 Projects::
-/user/someuser/project/tsconfig.json (Configured) *new*
+/user/someuser/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -214,21 +220,21 @@ Info seq  [hh:mm:ss:mss] response:
       "response": [
         {
           "info": {
-            "projectName": "/user/someuser/project/tsconfig.json",
+            "projectName": "/user/someuser/projects/project/tsconfig.json",
             "version": 1,
             "isInferred": false,
             "options": {
-              "configFilePath": "/user/someuser/project/tsconfig.json",
+              "configFilePath": "/user/someuser/projects/project/tsconfig.json",
               "allowNonTsExtensions": true
             },
             "languageServiceDisabled": false
           },
           "files": [
-            "/user/someuser/project/tsconfig.json"
+            "/user/someuser/projects/project/tsconfig.json"
           ],
           "projectErrors": [
             {
-              "message": "No inputs were found in config file '/user/someuser/project/tsconfig.json'. Specified 'include' paths were '[\"**/*\"]' and 'exclude' paths were '[]'.",
+              "message": "No inputs were found in config file '/user/someuser/projects/project/tsconfig.json'. Specified 'include' paths were '[\"**/*\"]' and 'exclude' paths were '[]'.",
               "category": "error",
               "code": 18003
             }
@@ -239,16 +245,16 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/someuser/project/tsconfig.json 2:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/someuser/project/tsconfig.json 2:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/someuser/project/tsconfig.json :: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Project: /user/someuser/project/tsconfig.json Detected file add/remove of non supported extension: /user/someuser/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/someuser/project/tsconfig.json :: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/someuser/projects/project/tsconfig.json 2:: WatchInfo: /user/someuser/projects/project/tsconfig.json 2000 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/someuser/projects/project/tsconfig.json 2:: WatchInfo: /user/someuser/projects/project/tsconfig.json 2000 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/someuser/projects/project/tsconfig.json :: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Project: /user/someuser/projects/project/tsconfig.json Detected file add/remove of non supported extension: /user/someuser/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/someuser/projects/project/tsconfig.json :: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
 Before request
-//// [/user/someuser/project/tsconfig.json] deleted
+//// [/user/someuser/projects/project/tsconfig.json] deleted
 
 Projects::
-/user/someuser/project/tsconfig.json (Configured) *changed*
+/user/someuser/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     isOrphan: true *changed*
@@ -260,11 +266,11 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "knownProjects": [
           {
-            "projectName": "/user/someuser/project/tsconfig.json",
+            "projectName": "/user/someuser/projects/project/tsconfig.json",
             "version": 1,
             "isInferred": false,
             "options": {
-              "configFilePath": "/user/someuser/project/tsconfig.json",
+              "configFilePath": "/user/someuser/projects/project/tsconfig.json",
               "allowNonTsExtensions": true
             },
             "languageServiceDisabled": false
@@ -289,10 +295,10 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "projects": [
           {
-            "projectFileName": "/user/someuser/project/WebApplication6.csproj",
+            "projectFileName": "/user/someuser/projects/project/WebApplication6.csproj",
             "rootFiles": [
               {
-                "fileName": "/user/someuser/project/js/site.js"
+                "fileName": "/user/someuser/projects/project/js/site.js"
               }
             ],
             "options": {
@@ -307,19 +313,21 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/someuser/project/js/site.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/someuser/project/WebApplication6.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/WebApplication6.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/WebApplication6.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/someuser/project/WebApplication6.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/WebApplication6.csproj' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/someuser/projects/project/js/site.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/someuser/projects/project/WebApplication6.csproj
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/someuser/projects/project/WebApplication6.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/someuser/projects/project/WebApplication6.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/user/someuser/project/js/site.js Text-1 ""
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/someuser/projects/project/js/site.js Text-1 ""
 
 
-	../../../a/lib/lib.d.ts
+	../../../../home/src/tslibs/ts/lib/lib.d.ts
 	  Default library for target 'es5'
 	js/site.js
 	  Root file specified for compilation
@@ -328,26 +336,28 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/user/someuser/project/node_modules/@types:
+/user/someuser/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/someuser/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/user/someuser/project/js/site.js: *new*
+/user/someuser/projects/project/js/site.js: *new*
   {}
-/user/someuser/project/tsconfig.json:
+/user/someuser/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/someuser/project:
+/user/someuser/projects/project:
   {}
 
 Projects::
-/user/someuser/project/WebApplication6.csproj (External) *new*
+/user/someuser/projects/project/WebApplication6.csproj (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
-/user/someuser/project/tsconfig.json (Configured) *changed*
+/user/someuser/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     isOrphan: true
@@ -355,29 +365,29 @@ Projects::
     deferredClose: true
 
 ScriptInfos::
-/a/lib/lib.d.ts *new*
+/home/src/tslibs/ts/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
-        /user/someuser/project/WebApplication6.csproj
-/user/someuser/project/js/site.js *new*
+        /user/someuser/projects/project/WebApplication6.csproj
+/user/someuser/projects/project/js/site.js *new*
     version: Text-1
     containingProjects: 1
-        /user/someuser/project/WebApplication6.csproj
+        /user/someuser/projects/project/WebApplication6.csproj
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/typinginstaller/globalcache/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/typinginstaller/globalcache/data'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/typinginstaller/globalcache/data/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/typinginstaller/globalcache/data'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/typinginstaller/globalcache/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/typinginstaller/globalcache/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/a/data/package.json]
+//// [/home/src/typinginstaller/globalcache/data/package.json]
 { "private": true }
 
-//// [/a/data/node_modules/types-registry/index.json]
+//// [/home/src/typinginstaller/globalcache/data/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
@@ -385,10 +395,10 @@ TI:: typing installer creation complete
 
 TI:: [hh:mm:ss:mss] Got install request
     {
-      "projectName": "/user/someuser/project/WebApplication6.csproj",
+      "projectName": "/user/someuser/projects/project/WebApplication6.csproj",
       "fileNames": [
-        "/a/lib/lib.d.ts",
-        "/user/someuser/project/js/site.js"
+        "/home/src/tslibs/ts/lib/lib.d.ts",
+        "/user/someuser/projects/project/js/site.js"
       ],
       "compilerOptions": {
         "allowJs": false,
@@ -401,7 +411,7 @@ TI:: [hh:mm:ss:mss] Got install request
         "enable": true
       },
       "unresolvedImports": [],
-      "projectRootPath": "/user/someuser/project",
+      "projectRootPath": "/user/someuser/projects/project",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
@@ -412,32 +422,32 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "cachedTypingPaths": [],
       "newTypingNames": [],
       "filesToWatch": [
-        "/user/someuser/project/js/bower_components",
-        "/user/someuser/project/js/node_modules",
-        "/user/someuser/project/bower_components",
-        "/user/someuser/project/node_modules"
+        "/user/someuser/projects/project/js/bower_components",
+        "/user/someuser/projects/project/js/node_modules",
+        "/user/someuser/projects/project/bower_components",
+        "/user/someuser/projects/project/node_modules"
       ]
     }
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "action::watchTypingLocations",
-      "projectName": "/user/someuser/project/WebApplication6.csproj",
+      "projectName": "/user/someuser/projects/project/WebApplication6.csproj",
       "files": [
-        "/user/someuser/project/js/bower_components",
-        "/user/someuser/project/js/node_modules",
-        "/user/someuser/project/bower_components",
-        "/user/someuser/project/node_modules"
+        "/user/someuser/projects/project/js/bower_components",
+        "/user/someuser/projects/project/js/node_modules",
+        "/user/someuser/projects/project/bower_components",
+        "/user/someuser/projects/project/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/js 1 undefined Project: /user/someuser/project/WebApplication6.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/js 1 undefined Project: /user/someuser/project/WebApplication6.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/bower_components 1 undefined Project: /user/someuser/project/WebApplication6.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/bower_components 1 undefined Project: /user/someuser/project/WebApplication6.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/node_modules 1 undefined Project: /user/someuser/project/WebApplication6.csproj WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/node_modules 1 undefined Project: /user/someuser/project/WebApplication6.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/js 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/js 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/bower_components 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/bower_components 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/project/node_modules 1 undefined Project: /user/someuser/projects/project/WebApplication6.csproj WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
-      "projectName": "/user/someuser/project/WebApplication6.csproj",
+      "projectName": "/user/someuser/projects/project/WebApplication6.csproj",
       "typeAcquisition": {
         "include": [],
         "exclude": [],
@@ -458,7 +468,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "setTypings",
       "body": {
-        "projectName": "/user/someuser/project/WebApplication6.csproj",
+        "projectName": "/user/someuser/projects/project/WebApplication6.csproj",
         "typeAcquisition": {
           "include": [],
           "exclude": [],
@@ -483,7 +493,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "02fdd4aa9075a6b94875e28d83f663f69759ec9eaeea150a9dd9e858b81359c5",
+          "projectId": "6dcce8f9be144549fd0146a85a6c43c6830fcf02c579678ab8927e313d5effa7",
           "fileStats": {
             "js": 1,
             "jsSize": 0,
@@ -494,7 +504,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -515,18 +525,20 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/user/someuser/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
 
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project 1 undefined Config: /user/someuser/project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/someuser/project/tsconfig.json 2000 undefined Project: /user/someuser/project/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/WebApplication6.csproj' (External)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/project 1 undefined Config: /user/someuser/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/someuser/projects/project/tsconfig.json 2000 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/project/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/someuser/projects/node_modules/@types 1 undefined Project: /user/someuser/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Project '/user/someuser/projects/project/WebApplication6.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -542,36 +554,38 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/someuser/project/bower_components: *new*
+/user/someuser/projects/node_modules/@types:
   {"pollingInterval":500}
-/user/someuser/project/node_modules: *new*
+/user/someuser/projects/project/bower_components: *new*
   {"pollingInterval":500}
-/user/someuser/project/node_modules/@types:
+/user/someuser/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+/user/someuser/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
   {}
-/user/someuser/project/js/site.js:
+/user/someuser/projects/project/js/site.js:
   {}
 
 FsWatches *deleted*::
-/user/someuser/project/tsconfig.json:
+/user/someuser/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/someuser/project/js: *new*
+/user/someuser/projects/project/js: *new*
   {}
 
 FsWatchesRecursive *deleted*::
-/user/someuser/project:
+/user/someuser/projects/project:
   {}
 
 Projects::
-/user/someuser/project/WebApplication6.csproj (External) *changed*
+/user/someuser/projects/project/WebApplication6.csproj (External) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
-/user/someuser/project/tsconfig.json (Configured) *deleted*
+/user/someuser/projects/project/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
     isClosed: true *changed*

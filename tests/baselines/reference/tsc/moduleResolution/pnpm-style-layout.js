@@ -132,7 +132,7 @@ const button: Button = createButton();
 //// [/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/button] symlink(/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button)
 //// [/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components] symlink(/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components)
 //// [/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/sdk] symlink(/home/src/projects/component-type-checker/packages/sdk)
-//// [/a/lib/lib.es5.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -148,7 +148,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --traceResolution --explainFiles
+/home/src/tslibs/ts/lib/tsc.js --traceResolution --explainFiles
 Output::
 ======== Resolving module '@component-type-checker/sdk' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -324,7 +324,7 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es5' was not resolved. ========
-../../../../../../a/lib/lib.es5.d.ts
+../../../../tslibs/ts/lib/lib.es5.d.ts
   Library 'lib.es5.d.ts' specified in compilerOptions
 ../../node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts
   Imported via "@component-type-checker/button" from file '../../node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts' with packageId '@component-type-checker/button/src/index.ts@0.0.1'
@@ -365,7 +365,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.es5.d.ts
+/home/src/tslibs/ts/lib/lib.es5.d.ts
 /home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts
 /home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts
 /home/src/projects/component-type-checker/packages/sdk/src/index.ts

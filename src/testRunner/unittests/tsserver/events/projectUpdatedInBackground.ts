@@ -13,7 +13,7 @@ import {
     TestServerHost,
 } from "../../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
+describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
     function verifyProjectsUpdatedInBackgroundEvent(scenario: string, createSession: (host: TestServerHost) => TestSession) {
         it("when adding new file", () => {
             const commonFile1: File = {

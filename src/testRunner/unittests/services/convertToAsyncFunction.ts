@@ -3,6 +3,7 @@ import * as ts from "../../_namespaces/ts.js";
 import {
     createServerHost,
     File,
+    libFile as vfsWatch_LibFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 import {
     extractTest,
@@ -12,7 +13,7 @@ import {
 } from "./extract/helpers.js";
 
 const libFile: File = {
-    path: "/a/lib/lib.d.ts",
+    path: vfsWatch_LibFile.path,
     content: `/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

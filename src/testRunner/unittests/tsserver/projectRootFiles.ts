@@ -10,7 +10,7 @@ describe("unittests:: tsserver:: projectRootFiles:: roots::", () => {
     describe("when root file is from referenced project", () => {
         forEachScenarioForRootsFromReferencedProject((subScenario, getFsContents) => {
             it(subScenario, () => {
-                const host = createServerHost(getFsContents(), { currentDirectory: "/home/src/workspaces" });
+                const host = createServerHost(getFsContents());
                 const session = new TestSession(host);
                 openFilesForSession(["/home/src/workspaces/projects/server/src/server.ts"], session);
 

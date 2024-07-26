@@ -4,8 +4,6 @@ import { jsonToReadableText } from "../helpers.js";
 import { commandLineCallbacks } from "../helpers/baseline.js";
 import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import {
-    commonFile1,
-    commonFile2,
     createBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
     noopChange,
@@ -17,25 +15,35 @@ import {
 import {
     createWatchedSystem,
     File,
+    getPathForTypeScriptTestLocation,
+    getTypeScriptLibTestLocation,
     libFile,
     SymLink,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: program updates", () => {
+describe("unittests:: tscWatch:: programUpdates::", () => {
     const scenario = "programUpdates";
-    const configFilePath = "/a/b/tsconfig.json";
+    const configFilePath = "/user/username/workspace/projects/project/tsconfig.json";
     const configFile: File = {
         path: configFilePath,
         content: `{}`,
     };
+    const commonFile1: File = {
+        path: "/user/username/workspace/projects/project/commonFile1.ts",
+        content: "let x = 1",
+    };
+    const commonFile2: File = {
+        path: "/user/username/workspace/projects/project/commonFile2.ts",
+        content: "let y = 1",
+    };
     verifyTscWatch({
         scenario,
         subScenario: "create watch without config file",
-        commandLineArgs: ["-w", "/a/b/c/app.ts"],
+        commandLineArgs: ["-w", "/user/username/workspace/projects/project/c/app.ts"],
         sys: () => {
             const appFile: File = {
-                path: "/a/b/c/app.ts",
+                path: "/user/username/workspace/projects/project/c/app.ts",
                 content: `
                 import {f} from "./module"
                 console.log(f)
@@ -43,20 +51,23 @@ describe("unittests:: tsc-watch:: program updates", () => {
             };
 
             const moduleFile: File = {
-                path: "/a/b/c/module.d.ts",
+                path: "/user/username/workspace/projects/project/c/module.d.ts",
                 content: `export let x: number`,
             };
-            return createWatchedSystem([appFile, moduleFile, libFile]);
+            return createWatchedSystem(
+                [appFile, moduleFile, libFile],
+                { currentDirectory: "/user/username/workspace/projects/project" },
+            );
         },
     });
 
     verifyTscWatch({
         scenario,
         subScenario: "can handle tsconfig file name with difference casing",
-        commandLineArgs: ["-w", "-p", "/A/B/tsconfig.json"],
+        commandLineArgs: ["-w", "-p", "/user/username/workspace/PROJECTS/PROJECT/tsconfig.json"],
         sys: () => {
             const f1 = {
-                path: "/a/b/app.ts",
+                path: "/user/username/workspace/projects/project/app.ts",
                 content: "let x = 1",
             };
             const config = {
@@ -65,14 +76,20 @@ describe("unittests:: tsc-watch:: program updates", () => {
                     include: ["app.ts"],
                 }),
             };
-            return createWatchedSystem([f1, libFile, config], { useCaseSensitiveFileNames: false });
+            return createWatchedSystem(
+                [f1, libFile, config],
+                {
+                    currentDirectory: "/user/username/workspace",
+                    useCaseSensitiveFileNames: false,
+                },
+            );
         },
     });
 
     verifyTscWatch({
         scenario,
         subScenario: "create configured project without file list",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const configFile: File = {
                 path: configFilePath,
@@ -85,26 +102,34 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 }`,
             };
             const file1: File = {
-                path: "/a/b/c/f1.ts",
+                path: "/user/username/workspace/projects/project/c/f1.ts",
                 content: "let x = 1",
             };
             const file2: File = {
-                path: "/a/b/d/f2.ts",
+                path: "/user/username/workspace/projects/project/d/f2.ts",
                 content: "let y = 1",
             };
             const file3: File = {
-                path: "/a/b/e/f3.ts",
+                path: "/user/username/workspace/projects/project/e/f3.ts",
                 content: "let z = 1",
             };
-            return createWatchedSystem([configFile, libFile, file1, file2, file3]);
+            return createWatchedSystem(
+                [configFile, libFile, file1, file2, file3],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
     });
 
     verifyTscWatch({
         scenario,
         subScenario: "add new files to a configured program without file list",
-        commandLineArgs: ["-w", "-p", configFilePath],
-        sys: () => createWatchedSystem([commonFile1, libFile, configFile]),
+        commandLineArgs: ["-w"],
+        sys: () =>
+            createWatchedSystem(
+                [commonFile1, libFile, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            ),
+
         edits: [
             {
                 caption: "Create commonFile2",
@@ -117,7 +142,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
     verifyTscWatch({
         scenario,
         subScenario: "should ignore non-existing files specified in the config file",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const configFile: File = {
                 path: configFilePath,
@@ -129,16 +154,22 @@ describe("unittests:: tsc-watch:: program updates", () => {
                     ]
                 }`,
             };
-            return createWatchedSystem([commonFile1, commonFile2, libFile, configFile]);
+            return createWatchedSystem(
+                [commonFile1, commonFile2, libFile, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
     });
 
     verifyTscWatch({
         scenario,
         subScenario: "handle recreated files correctly",
-        commandLineArgs: ["-w", "-p", configFilePath, "--explainFiles"],
+        commandLineArgs: ["-w", "--explainFiles"],
         sys: () => {
-            return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
+            return createWatchedSystem(
+                [libFile, commonFile1, commonFile2, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
         edits: [
             {
@@ -162,14 +193,17 @@ describe("unittests:: tsc-watch:: program updates", () => {
     verifyTscWatch({
         scenario,
         subScenario: "handles the missing files - that were added to program because they were added with tripleSlashRefs",
-        commandLineArgs: ["-w", "/a/b/commonFile1.ts"],
+        commandLineArgs: ["-w", "/user/username/workspace/projects/project/commonFile1.ts"],
         sys: () => {
             const file1: File = {
                 path: commonFile1.path,
                 content: `/// <reference path="commonFile2.ts"/>
                     let x = y`,
             };
-            return createWatchedSystem([file1, libFile]);
+            return createWatchedSystem(
+                [file1, libFile],
+                { currentDirectory: ts.getDirectoryPath(commonFile1.path) },
+            );
         },
         edits: [
             {
@@ -183,7 +217,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
     verifyTscWatch({
         scenario,
         subScenario: "should reflect change in config file",
-        commandLineArgs: ["-w", "-p", configFilePath, "--explainFiles"],
+        commandLineArgs: ["-w", "--explainFiles"],
         sys: () => {
             const configFile: File = {
                 path: configFilePath,
@@ -192,7 +226,10 @@ describe("unittests:: tsc-watch:: program updates", () => {
                     "files": ["${commonFile1.path}", "${commonFile2.path}"]
                 }`,
             };
-            return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
+            return createWatchedSystem(
+                [libFile, commonFile1, commonFile2, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
         edits: [
             {
@@ -218,7 +255,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
     verifyTscWatch({
         scenario,
         subScenario: "works correctly when config file is changed but its content havent",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const configFile: File = {
                 path: configFilePath,
@@ -227,7 +264,10 @@ describe("unittests:: tsc-watch:: program updates", () => {
                         "files": ["${commonFile1.path}", "${commonFile2.path}"]
                     }`,
             };
-            return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
+            return createWatchedSystem(
+                [libFile, commonFile1, commonFile2, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
         edits: [
             {
@@ -248,26 +288,29 @@ describe("unittests:: tsc-watch:: program updates", () => {
     verifyTscWatch({
         scenario,
         subScenario: "Updates diagnostics when '--noUnusedLabels' changes",
-        commandLineArgs: ["-w", "-p", "/tsconfig.json"],
+        commandLineArgs: ["-w", "-p", "/user/username/workspace/projects/project/tsconfig.json"],
         sys: () => {
             const aTs: File = {
-                path: "/a.ts",
+                path: "/user/username/workspace/projects/project/a.ts",
                 content: "label: while (1) {}",
             };
             const tsconfig: File = {
-                path: "/tsconfig.json",
+                path: "/user/username/workspace/projects/project/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: { allowUnusedLabels: true },
                 }),
             };
-            return createWatchedSystem([libFile, aTs, tsconfig]);
+            return createWatchedSystem(
+                [libFile, aTs, tsconfig],
+                { currentDirectory: "/user/username/workspace/projects/project" },
+            );
         },
         edits: [
             {
                 caption: "Disable  allowUnsusedLabels",
                 edit: sys =>
                     sys.modifyFile(
-                        "/tsconfig.json",
+                        "/user/username/workspace/projects/project/tsconfig.json",
                         jsonToReadableText({
                             compilerOptions: { allowUnusedLabels: false },
                         }),
@@ -278,7 +321,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 caption: "Enable  allowUnsusedLabels",
                 edit: sys =>
                     sys.modifyFile(
-                        "/tsconfig.json",
+                        "/user/username/workspace/projects/project/tsconfig.json",
                         jsonToReadableText({
                             compilerOptions: { allowUnusedLabels: true },
                         }),
@@ -291,34 +334,37 @@ describe("unittests:: tsc-watch:: program updates", () => {
     verifyTscWatch({
         scenario,
         subScenario: "Updates diagnostics when '--allowArbitraryExtensions' changes",
-        commandLineArgs: ["-w", "-p", "/tsconfig.json"],
+        commandLineArgs: ["-w", "-p", "/user/username/workspace/projects/project/tsconfig.json"],
         sys: () => {
             const aTs: File = {
-                path: "/a.ts",
+                path: "/user/username/workspace/projects/project/a.ts",
                 content: "import {} from './b.css'",
             };
             const bCssTs: File = {
-                path: "/b.d.css.ts",
+                path: "/user/username/workspace/projects/project/b.d.css.ts",
                 content: "declare const style: string;",
             };
             const tsconfig: File = {
-                path: "/tsconfig.json",
+                path: "/user/username/workspace/projects/project/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: { allowArbitraryExtensions: true },
-                    files: ["/a.ts"],
+                    files: ["a.ts"],
                 }),
             };
-            return createWatchedSystem([libFile, aTs, bCssTs, tsconfig]);
+            return createWatchedSystem(
+                [libFile, aTs, bCssTs, tsconfig],
+                { currentDirectory: "/user/username/workspace/projects/project" },
+            );
         },
         edits: [
             {
                 caption: "Disable  allowArbitraryExtensions",
                 edit: sys =>
                     sys.modifyFile(
-                        "/tsconfig.json",
+                        "/user/username/workspace/projects/project/tsconfig.json",
                         jsonToReadableText({
                             compilerOptions: { allowArbitraryExtensions: false },
-                            files: ["/a.ts"],
+                            files: ["a.ts"],
                         }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -327,10 +373,10 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 caption: "Enable  allowArbitraryExtensions",
                 edit: sys =>
                     sys.modifyFile(
-                        "/tsconfig.json",
+                        "/user/username/workspace/projects/project/tsconfig.json",
                         jsonToReadableText({
                             compilerOptions: { allowArbitraryExtensions: true },
-                            files: ["/a.ts"],
+                            files: ["a.ts"],
                         }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -344,7 +390,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
         commandLineArgs: ["-w"],
         sys: () => {
             const aTs: File = {
-                path: "/a.ts",
+                path: "/user/username/workspace/projects/project/a.ts",
                 content: `import {B} from './b'
 @((_) => {})
 export class A {
@@ -352,23 +398,26 @@ export class A {
 }`,
             };
             const bTs: File = {
-                path: "/b.ts",
+                path: "/user/username/workspace/projects/project/b.ts",
                 content: `export class B {}`,
             };
             const tsconfig: File = {
-                path: "/tsconfig.json",
+                path: "/user/username/workspace/projects/project/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: { target: "es6", verbatimModuleSyntax: true },
                 }),
             };
-            return createWatchedSystem([libFile, aTs, bTs, tsconfig]);
+            return createWatchedSystem(
+                [{ ...libFile, path: getPathForTypeScriptTestLocation("lib.es6.d.ts") }, aTs, bTs, tsconfig],
+                { currentDirectory: "/user/username/workspace/projects/project" },
+            );
         },
         edits: [
             {
                 caption: "Enable experimentalDecorators",
                 edit: sys =>
                     sys.modifyFile(
-                        "/tsconfig.json",
+                        "/user/username/workspace/projects/project/tsconfig.json",
                         jsonToReadableText({
                             compilerOptions: { target: "es6", verbatimModuleSyntax: true, experimentalDecorators: true },
                         }),
@@ -379,7 +428,7 @@ export class A {
                 caption: "Enable emitDecoratorMetadata",
                 edit: sys =>
                     sys.modifyFile(
-                        "/tsconfig.json",
+                        "/user/username/workspace/projects/project/tsconfig.json",
                         jsonToReadableText({
                             compilerOptions: { target: "es6", verbatimModuleSyntax: true, experimentalDecorators: true, emitDecoratorMetadata: true },
                         }),
@@ -398,14 +447,17 @@ export class A {
                 path: configFilePath,
                 content: `{
                     "compilerOptions": {},
-                    "exclude": ["/a/c"]
+                    "exclude": ["/user/username/workspace/projects/projectc"]
                 }`,
             };
             const excludedFile1: File = {
-                path: "/a/c/excluedFile1.ts",
+                path: "/user/username/workspace/projects/projectc/excluedFile1.ts",
                 content: `let t = 1;`,
             };
-            return createWatchedSystem([libFile, commonFile1, commonFile2, excludedFile1, configFile]);
+            return createWatchedSystem(
+                [libFile, commonFile1, commonFile2, excludedFile1, configFile],
+                { currentDirectory: "/user/username/workspace/projects" },
+            );
         },
     });
 
@@ -415,15 +467,15 @@ export class A {
         commandLineArgs: ["-w", "-p", configFilePath],
         sys: () => {
             const file1: File = {
-                path: "/a/b/file1.ts",
+                path: "/user/username/workspace/projects/project/file1.ts",
                 content: `import { T } from "module1";`,
             };
             const nodeModuleFile: File = {
-                path: "/a/b/node_modules/module1.ts",
+                path: "/user/username/workspace/projects/project/node_modules/module1.ts",
                 content: `export interface T {}`,
             };
             const classicModuleFile: File = {
-                path: "/a/module1.ts",
+                path: "/user/username/projects/module1.ts",
                 content: `export interface T {}`,
             };
             const configFile: File = {
@@ -435,7 +487,10 @@ export class A {
                     "files": ["${file1.path}"]
                 }`,
             };
-            return createWatchedSystem([libFile, file1, nodeModuleFile, classicModuleFile, configFile]);
+            return createWatchedSystem(
+                [libFile, file1, nodeModuleFile, classicModuleFile, configFile],
+                { currentDirectory: "/user/username/workspace/projects" },
+            );
         },
         edits: [
             {
@@ -447,7 +502,7 @@ export class A {
                         "compilerOptions": {
                             "moduleResolution": "classic"
                         },
-                        "files": ["/a/b/file1.ts"]
+                        "files": ["/user/username/workspace/projects/project/file1.ts"]
                     }`,
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -458,7 +513,7 @@ export class A {
     verifyTscWatch({
         scenario,
         subScenario: "should tolerate config file errors and still try to build a project",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const configFile: File = {
                 path: configFilePath,
@@ -470,34 +525,40 @@ export class A {
                         "someOtherProperty": {}
                     }`,
             };
-            return createWatchedSystem([commonFile1, commonFile2, libFile, configFile]);
+            return createWatchedSystem(
+                [commonFile1, commonFile2, libFile, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
     });
 
     verifyTscWatch({
         scenario,
         subScenario: "changes in files are reflected in project structure",
-        commandLineArgs: ["-w", "/a/b/f1.ts", "--explainFiles"],
+        commandLineArgs: ["-w", "/user/username/workspace/projects/project/f1.ts", "--explainFiles"],
         sys: () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/user/username/workspace/projects/project/f1.ts",
                 content: `export * from "./f2"`,
             };
             const file2 = {
-                path: "/a/b/f2.ts",
+                path: "/user/username/workspace/projects/project/f2.ts",
                 content: `export let x = 1`,
             };
             const file3 = {
-                path: "/a/c/f3.ts",
+                path: "/user/username/workspace/projects/projectc/f3.ts",
                 content: `export let y = 1;`,
             };
-            return createWatchedSystem([file1, file2, file3, libFile]);
+            return createWatchedSystem(
+                [file1, file2, file3, libFile],
+                { currentDirectory: "/user/username/workspace/projects" },
+            );
         },
         edits: [
             {
                 caption: "Modify f2 to include f3",
                 // now inferred project should inclule file3
-                edit: sys => sys.modifyFile("/a/b/f2.ts", `export * from "../c/f3"`),
+                edit: sys => sys.modifyFile("/user/username/workspace/projects/project/f2.ts", `export * from "../projectc/f3"`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -506,26 +567,29 @@ export class A {
     verifyTscWatch({
         scenario,
         subScenario: "deleted files affect project structure",
-        commandLineArgs: ["-w", "/a/b/f1.ts", "--noImplicitAny"],
+        commandLineArgs: ["-w", "/user/username/workspace/projects/project/f1.ts", "--noImplicitAny"],
         sys: () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/user/username/workspace/projects/project/f1.ts",
                 content: `export * from "./f2"`,
             };
             const file2 = {
-                path: "/a/b/f2.ts",
-                content: `export * from "../c/f3"`,
+                path: "/user/username/workspace/projects/project/f2.ts",
+                content: `export * from "../projectc/f3"`,
             };
             const file3 = {
-                path: "/a/c/f3.ts",
+                path: "/user/username/workspace/projects/projectc/f3.ts",
                 content: `export let y = 1;`,
             };
-            return createWatchedSystem([file1, file2, file3, libFile]);
+            return createWatchedSystem(
+                [file1, file2, file3, libFile],
+                { currentDirectory: "/user/username/workspace/projects" },
+            );
         },
         edits: [
             {
                 caption: "Delete f2",
-                edit: sys => sys.deleteFile("/a/b/f2.ts"),
+                edit: sys => sys.deleteFile("/user/username/workspace/projects/project/f2.ts"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -534,26 +598,29 @@ export class A {
     verifyTscWatch({
         scenario,
         subScenario: "deleted files affect project structure-2",
-        commandLineArgs: ["-w", "/a/b/f1.ts", "/a/c/f3.ts", "--noImplicitAny"],
+        commandLineArgs: ["-w", "/user/username/workspace/projects/project/f1.ts", "/user/username/workspace/projects/projectc/f3.ts", "--noImplicitAny"],
         sys: () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/user/username/workspace/projects/project/f1.ts",
                 content: `export * from "./f2"`,
             };
             const file2 = {
-                path: "/a/b/f2.ts",
-                content: `export * from "../c/f3"`,
+                path: "/user/username/workspace/projects/project/f2.ts",
+                content: `export * from "../projectc/f3"`,
             };
             const file3 = {
-                path: "/a/c/f3.ts",
+                path: "/user/username/workspace/projects/projectc/f3.ts",
                 content: `export let y = 1;`,
             };
-            return createWatchedSystem([file1, file2, file3, libFile]);
+            return createWatchedSystem(
+                [file1, file2, file3, libFile],
+                { currentDirectory: "/user/username/workspace/projects" },
+            );
         },
         edits: [
             {
                 caption: "Delete f2",
-                edit: sys => sys.deleteFile("/a/b/f2.ts"),
+                edit: sys => sys.deleteFile("/user/username/workspace/projects/project/f2.ts"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -562,38 +629,44 @@ export class A {
     verifyTscWatch({
         scenario,
         subScenario: "config file includes the file",
-        commandLineArgs: ["-w", "-p", "/a/c/tsconfig.json"],
+        commandLineArgs: ["-w", "-p", "/user/username/workspace/projects/projectc/tsconfig.json"],
         sys: () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/user/username/workspace/projects/project/f1.ts",
                 content: "export let x = 5",
             };
             const file2 = {
-                path: "/a/c/f2.ts",
-                content: `import {x} from "../b/f1"`,
+                path: "/user/username/workspace/projects/projectc/f2.ts",
+                content: `import {x} from "../project/f1"`,
             };
             const file3 = {
-                path: "/a/c/f3.ts",
+                path: "/user/username/workspace/projects/projectc/f3.ts",
                 content: "export let y = 1",
             };
             const configFile = {
-                path: "/a/c/tsconfig.json",
+                path: "/user/username/workspace/projects/projectc/tsconfig.json",
                 content: jsonToReadableText({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] }),
             };
-            return createWatchedSystem([file1, file2, file3, libFile, configFile]);
+            return createWatchedSystem(
+                [file1, file2, file3, libFile, configFile],
+                { currentDirectory: "/user/username/workspace/projects" },
+            );
         },
     });
 
     verifyTscWatch({
         scenario,
         subScenario: "change module to none",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/user/username/workspace/projects/project/f1.ts",
                 content: "export {}\ndeclare global {}",
             };
-            return createWatchedSystem([file1, libFile, configFile]);
+            return createWatchedSystem(
+                [file1, libFile, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
         edits: [{
             caption: "change `module` to 'none'",
@@ -606,20 +679,23 @@ export class A {
 
     it("two watch programs are not affected by each other", () => {
         const file1 = {
-            path: "/a/b/f1.ts",
+            path: "/user/username/workspace/projects/project/f1.ts",
             content: `
-                export * from "../c/f2";
-                export * from "../d/f3";`,
+                export * from "../projectc/f2";
+                export * from "../projectd/f3";`,
         };
         const file2 = {
-            path: "/a/c/f2.ts",
+            path: "/user/username/workspace/projects/projectc/f2.ts",
             content: "export let x = 1;",
         };
         const file3 = {
-            path: "/a/d/f3.ts",
+            path: "/user/username/workspace/projects/projectd/f3.ts",
             content: "export let y = 1;",
         };
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, file1, file2, file3]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+            [libFile, file1, file2, file3],
+            { currentDirectory: "/user/username/workspace/projects" },
+        ));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [file2.path, file3.path],
             system: sys,
@@ -660,18 +736,21 @@ export class A {
     verifyTscWatch({
         scenario,
         subScenario: "can correctly update configured project when set of root files has changed (new file on disk)",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/user/username/workspace/projects/project/f1.ts",
                 content: "let x = 1",
             };
-            return createWatchedSystem([file1, libFile, configFile]);
+            return createWatchedSystem(
+                [file1, libFile, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
         edits: [
             {
                 caption: "Write f2",
-                edit: sys => sys.writeFile("/a/b/f2.ts", "let y = 1"),
+                edit: sys => sys.writeFile("/user/username/workspace/projects/project/f2.ts", "let y = 1"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -680,21 +759,24 @@ export class A {
     verifyTscWatch({
         scenario,
         subScenario: "can correctly update configured project when set of root files has changed (new file in list of files)",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/user/username/workspace/projects/project/f1.ts",
                 content: "let x = 1",
             };
             const file2 = {
-                path: "/a/b/f2.ts",
+                path: "/user/username/workspace/projects/project/f2.ts",
                 content: "let y = 1",
             };
             const configFile = {
                 path: configFilePath,
                 content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts"] }),
             };
-            return createWatchedSystem([file1, file2, libFile, configFile]);
+            return createWatchedSystem(
+                [file1, file2, libFile, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
         edits: [
             {
@@ -722,7 +804,10 @@ export class A {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { composite: true }, include: ["./", "./**/*.json"] }),
             };
-            return createWatchedSystem([file1, file2, libFile, configFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [file1, file2, libFile, configFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -751,7 +836,10 @@ export class A {
                 path: `/user/username/projects/myproject/Project/tsconfig.json`,
                 content: jsonToReadableText({ include: [".", "./**/*.json"] }),
             };
-            return createWatchedSystem([file1, libFile, configFile], { currentDirectory: `/user/username/projects/myproject/Project` });
+            return createWatchedSystem(
+                [file1, libFile, configFile],
+                { currentDirectory: `/user/username/projects/myproject/Project` },
+            );
         },
         edits: [
             {
@@ -765,21 +853,24 @@ export class A {
     verifyTscWatch({
         scenario,
         subScenario: "can update configured project when set of root files was not changed",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/user/username/workspace/projects/project/f1.ts",
                 content: "let x = 1",
             };
             const file2 = {
-                path: "/a/b/f2.ts",
+                path: "/user/username/workspace/projects/project/f2.ts",
                 content: "let y = 1",
             };
             const configFile = {
                 path: configFilePath,
                 content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }),
             };
-            return createWatchedSystem([file1, file2, libFile, configFile]);
+            return createWatchedSystem(
+                [file1, file2, libFile, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
         edits: [
             {
@@ -793,26 +884,29 @@ export class A {
     verifyTscWatch({
         scenario,
         subScenario: "file in files is deleted",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/user/username/workspace/projects/project/f1.ts",
                 content: "let x = 1",
             };
             const file2 = {
-                path: "/a/b/f2.ts",
+                path: "/user/username/workspace/projects/project/f2.ts",
                 content: "let y = 1",
             };
             const configFile = {
                 path: configFilePath,
                 content: jsonToReadableText({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }),
             };
-            return createWatchedSystem([file1, file2, libFile, configFile]);
+            return createWatchedSystem(
+                [file1, file2, libFile, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
         edits: [
             {
                 caption: "Delete f2",
-                edit: sys => sys.deleteFile("/a/b/f2.ts"),
+                edit: sys => sys.deleteFile("/user/username/workspace/projects/project/f2.ts"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -821,17 +915,20 @@ export class A {
     verifyTscWatch({
         scenario,
         subScenario: "config file is deleted",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: "/user/username/workspace/projects/project/f1.ts",
                 content: "let x = 1;",
             };
             const file2 = {
-                path: "/a/b/f2.ts",
+                path: "/user/username/workspace/projects/project/f2.ts",
                 content: "let y = 2;",
             };
-            return createWatchedSystem([file1, file2, libFile, configFile]);
+            return createWatchedSystem(
+                [file1, file2, libFile, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
         edits: [
             {
@@ -845,40 +942,43 @@ export class A {
     verifyTscWatch({
         scenario,
         subScenario: "Proper errors document is not contained in project",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const file1 = {
-                path: "/a/b/app.ts",
+                path: "/user/username/workspace/projects/project/app.ts",
                 content: "",
             };
             const corruptedConfig = {
                 path: configFilePath,
                 content: "{",
             };
-            return createWatchedSystem([file1, libFile, corruptedConfig]);
+            return createWatchedSystem(
+                [file1, libFile, corruptedConfig],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
     });
 
     verifyTscWatch({
         scenario,
         subScenario: "correctly handles changes in lib section of config file",
-        commandLineArgs: ["-w", "-p", "/src/tsconfig.json"],
+        commandLineArgs: ["-w"],
         sys: () => {
             const libES5 = {
-                path: "/compiler/lib.es5.d.ts",
+                path: getTypeScriptLibTestLocation("es5"),
                 content: `${libFile.content}
 declare const eval: any`,
             };
             const libES2015Promise = {
-                path: "/compiler/lib.es2015.promise.d.ts",
+                path: getTypeScriptLibTestLocation("es2015.promise"),
                 content: `declare class Promise<T> {}`,
             };
             const app = {
-                path: "/src/app.ts",
+                path: "/home/src/projects/project/app.ts",
                 content: "var x: Promise<string>;",
             };
             const config1 = {
-                path: "/src/tsconfig.json",
+                path: "/home/src/projects/project/tsconfig.json",
                 content: jsonToReadableText(
                     {
                         compilerOptions: {
@@ -893,14 +993,17 @@ declare const eval: any`,
                     },
                 ),
             };
-            return createWatchedSystem([libES5, libES2015Promise, app, config1], { executingFilePath: "/compiler/tsc.js" });
+            return createWatchedSystem(
+                [libES5, libES2015Promise, app, config1],
+                { currentDirectory: "/home/src/projects/project" },
+            );
         },
         edits: [
             {
                 caption: "Change the lib in config",
                 edit: sys =>
                     sys.writeFile(
-                        "/src/tsconfig.json",
+                        "/home/src/projects/project/tsconfig.json",
                         jsonToReadableText(
                             {
                                 compilerOptions: {
@@ -924,14 +1027,14 @@ declare const eval: any`,
     verifyTscWatch({
         scenario,
         subScenario: "should handle non-existing directories in config file",
-        commandLineArgs: ["-w", "-p", "/a/tsconfig.json"],
+        commandLineArgs: ["-w", "-p", "/user/username/workspace/projects/project/tsconfig.json"],
         sys: () => {
             const f = {
-                path: "/a/src/app.ts",
+                path: "/user/username/workspace/projects/project/src/app.ts",
                 content: "let x = 1;",
             };
             const config = {
-                path: "/a/tsconfig.json",
+                path: "/user/username/workspace/projects/project/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {},
                     include: [
@@ -940,7 +1043,10 @@ declare const eval: any`,
                     ],
                 }),
             };
-            return createWatchedSystem([f, config, libFile]);
+            return createWatchedSystem(
+                [f, config, libFile],
+                { currentDirectory: "/user/username/workspace/projects/project" },
+            );
         },
     });
 
@@ -976,7 +1082,10 @@ declare const eval: any`,
                 path: "/users/username/projects/project/file1.ts",
                 content: 'import * as T from "./moduleFile"; T.bar();',
             };
-            return createWatchedSystem([moduleFile, file1, libFile]);
+            return createWatchedSystem(
+                [moduleFile, file1, libFile],
+                { currentDirectory: "/users/username/projects/project" },
+            );
         },
         edits: [
             changeModuleFileToModuleFile1,
@@ -1001,7 +1110,10 @@ declare const eval: any`,
                 path: "/users/username/projects/project/tsconfig.json",
                 content: `{}`,
             };
-            return createWatchedSystem([moduleFile, file1, configFile, libFile]);
+            return createWatchedSystem(
+                [moduleFile, file1, configFile, libFile],
+                { currentDirectory: "/users/username/projects/project" },
+            );
         },
         edits: [
             changeModuleFileToModuleFile1,
@@ -1019,7 +1131,7 @@ declare const eval: any`,
                 commandLineArgs: ["-w", "-p", configFilePath],
                 sys: () => {
                     const f1 = {
-                        path: "/a/b/app.ts",
+                        path: "/user/username/workspace/projects/project/app.ts",
                         content: "let x = 1",
                     };
                     const config = {
@@ -1027,13 +1139,16 @@ declare const eval: any`,
                         content: jsonToReadableText({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } }),
                     };
                     const node = {
-                        path: "/a/b/node_modules/@types/node/index.d.ts",
+                        path: "/user/username/workspace/projects/project/node_modules/@types/node/index.d.ts",
                         content: "declare var process: any",
                     };
                     const cwd = {
-                        path: "/a/c",
+                        path: "/user/username/workspace/projects/projectc",
                     };
-                    return createWatchedSystem([f1, config, node, cwd, libFile], { currentDirectory: cwd.path });
+                    return createWatchedSystem(
+                        [f1, config, node, cwd, libFile],
+                        { currentDirectory: cwd.path },
+                    );
                 },
             });
         }
@@ -1050,7 +1165,10 @@ declare const eval: any`,
                 path: "/users/username/projects/project/file1.ts",
                 content: 'import * as T from "./moduleFile"; T.bar();',
             };
-            return createWatchedSystem([file1, libFile]);
+            return createWatchedSystem(
+                [file1, libFile],
+                { currentDirectory: "/users/username/projects/project" },
+            );
         },
         edits: [
             {
@@ -1064,10 +1182,10 @@ declare const eval: any`,
     verifyTscWatch({
         scenario,
         subScenario: "Configure file diagnostics events are generated when the config file has errors",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const file = {
-                path: "/a/b/app.ts",
+                path: "/user/username/workspace/projects/project/app.ts",
                 content: "let x = 10",
             };
             const configFile = {
@@ -1079,17 +1197,20 @@ declare const eval: any`,
                         }
                     }`,
             };
-            return createWatchedSystem([file, configFile, libFile]);
+            return createWatchedSystem(
+                [file, configFile, libFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
     });
 
     verifyTscWatch({
         scenario,
         subScenario: "if config file doesnt have errors, they are not reported",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const file = {
-                path: "/a/b/app.ts",
+                path: "/user/username/workspace/projects/project/app.ts",
                 content: "let x = 10",
             };
             const configFile = {
@@ -1098,20 +1219,26 @@ declare const eval: any`,
                         "compilerOptions": {}
                     }`,
             };
-            return createWatchedSystem([file, configFile, libFile]);
+            return createWatchedSystem(
+                [file, configFile, libFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
     });
 
     verifyTscWatch({
         scenario,
         subScenario: "Reports errors when the config file changes",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const file = {
-                path: "/a/b/app.ts",
+                path: "/user/username/workspace/projects/project/app.ts",
                 content: "let x = 10",
             };
-            return createWatchedSystem([file, configFile, libFile]);
+            return createWatchedSystem(
+                [file, configFile, libFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
         edits: [
             {
@@ -1145,7 +1272,7 @@ declare const eval: any`,
     verifyTscWatch({
         scenario,
         subScenario: "non-existing directories listed in config file input array should be tolerated without crashing the server",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const configFile = {
                 path: configFilePath,
@@ -1155,35 +1282,38 @@ declare const eval: any`,
                     }`,
             };
             const file1 = {
-                path: "/a/b/file1.ts",
+                path: "/user/username/workspace/projects/project/file1.ts",
                 content: "let t = 10;",
             };
-            return createWatchedSystem([file1, configFile, libFile]);
+            return createWatchedSystem(
+                [file1, configFile, libFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
     });
 
     verifyTscWatch({
         scenario,
         subScenario: "non-existing directories listed in config file input array should be able to handle @types if input file list is empty",
-        commandLineArgs: ["-w", "-p", "/a/tsconfig.json"],
+        commandLineArgs: ["-w", "-p", "/user/username/workspace/projects/project/tsconfig.json"],
         sys: () => {
             const f = {
-                path: "/a/app.ts",
+                path: "/user/username/workspace/projects/project/app.ts",
                 content: "let x = 1",
             };
             const config = {
-                path: "/a/tsconfig.json",
+                path: "/user/username/workspace/projects/project/tsconfig.json",
                 content: jsonToReadableText({
                     compiler: {},
                     files: [],
                 }),
             };
             const t1 = {
-                path: "/a/node_modules/@types/typings/index.d.ts",
+                path: "/user/username/workspace/projects/project/node_modules/@types/typings/index.d.ts",
                 content: `export * from "./lib"`,
             };
             const t2 = {
-                path: "/a/node_modules/@types/typings/lib.d.ts",
+                path: "/user/username/workspace/projects/project/node_modules/@types/typings/lib.d.ts",
                 content: `export const x: number`,
             };
             return createWatchedSystem([f, config, t1, t2, libFile], { currentDirectory: ts.getDirectoryPath(f.path) });
@@ -1192,10 +1322,13 @@ declare const eval: any`,
 
     it("should support files without extensions", () => {
         const f = {
-            path: "/a/compile",
+            path: "/user/username/workspace/projects/project/compile",
             content: "let x = 1",
         };
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([f, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+            [f, libFile],
+            { currentDirectory: "/user/username/workspace/projects/project" },
+        ));
         const watch = ts.createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [f.path],
             system: sys,
@@ -1217,10 +1350,10 @@ declare const eval: any`,
     verifyTscWatch({
         scenario,
         subScenario: "Options Diagnostic locations reported correctly with changes in configFile contents when options change",
-        commandLineArgs: ["-w", "-p", configFilePath],
+        commandLineArgs: ["-w"],
         sys: () => {
             const file = {
-                path: "/a/b/app.ts",
+                path: "/user/username/workspace/projects/project/app.ts",
                 content: "let x = 10",
             };
             const configFile = {
@@ -1235,7 +1368,10 @@ declare const eval: any`,
     }
 }`,
             };
-            return createWatchedSystem([file, libFile, configFile]);
+            return createWatchedSystem(
+                [file, libFile, configFile],
+                { currentDirectory: ts.getDirectoryPath(configFilePath) },
+            );
         },
         edits: [
             {
@@ -1277,7 +1413,10 @@ declare const eval: any`,
                             compilerOptions: compilerOptionsToConfigJson(options),
                         }),
                     };
-                    return createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
+                    return createWatchedSystem(
+                        [file1, file2, libFile, tsconfig],
+                        { currentDirectory: "/user/username/projects/myproject" },
+                    );
                 },
                 edits: [
                     noopChange,
@@ -1325,10 +1464,10 @@ declare const eval: any`,
     verifyTscWatch({
         scenario,
         subScenario: "shouldnt report error about unused function incorrectly when file changes from global to module",
-        commandLineArgs: ["-w", "/a/b/file.ts", "--noUnusedLocals"],
+        commandLineArgs: ["-w", "/user/username/workspace/projects/project/file.ts", "--noUnusedLocals"],
         sys: () => {
             const file: File = {
-                path: "/a/b/file.ts",
+                path: "/user/username/workspace/projects/project/file.ts",
                 content: `function one() {}
 function two() {
     return function three() {
@@ -1336,14 +1475,17 @@ function two() {
     }
 }`,
             };
-            return createWatchedSystem([file, libFile]);
+            return createWatchedSystem(
+                [file, libFile],
+                { currentDirectory: "/user/username/workspace/projects/project" },
+            );
         },
         edits: [
             {
                 caption: "Change file to module",
                 edit: sys =>
                     sys.writeFile(
-                        "/a/b/file.ts",
+                        "/user/username/workspace/projects/project/file.ts",
                         `function one() {}
 export function two() {
     return function three() {
@@ -1370,7 +1512,10 @@ export function two() {
                 path: `${projectLocation}/tsconfig.json`,
                 content: "{}",
             };
-            return createWatchedSystem([file, libFile, configFile]);
+            return createWatchedSystem(
+                [file, libFile, configFile],
+                { currentDirectory: projectLocation },
+            );
         },
         edits: [
             {
@@ -1416,7 +1561,10 @@ export default test;`,
                     },
                 }),
             };
-            return createWatchedSystem([aFile, bFile, libFile, tsconfigFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [aFile, bFile, libFile, tsconfigFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             changeParameterTypeOfBFile("x", "string"),
@@ -1483,7 +1631,10 @@ v === 'foo';`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: {} }),
             };
-            return createWatchedSystem([aFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [aFile, config, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -1500,20 +1651,23 @@ v === 'foo';`,
         commandLineArgs: ["-w"],
         sys: () => {
             const aFile: File = {
-                path: `/a.ts`,
+                path: `/user/username/projects/project/a.ts`,
                 content: `class C { get prop() { return 1; } }
 class D extends C { prop = 1; }`,
             };
             const config: File = {
-                path: `/tsconfig.json`,
+                path: `/user/username/projects/project/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { target: "es6" } }),
             };
-            return createWatchedSystem([aFile, config, libFile]);
+            return createWatchedSystem(
+                [aFile, config, { ...libFile, path: getPathForTypeScriptTestLocation("lib.es6.d.ts") }],
+                { currentDirectory: "/user/username/projects/project" },
+            );
         },
         edits: [
             {
                 caption: "Enable useDefineForClassFields",
-                edit: sys => sys.writeFile(`/tsconfig.json`, jsonToReadableText({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
+                edit: sys => sys.writeFile(`/user/username/projects/project/tsconfig.json`, jsonToReadableText({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1537,7 +1691,10 @@ export function f(p: C) { return p; }`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: {} }),
             };
-            return createWatchedSystem([aFile, bFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [aFile, bFile, config, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -1571,23 +1728,26 @@ export function f(p: C) { return p; }`,
         commandLineArgs: ["-w"],
         sys: () => {
             const aFile: File = {
-                path: `/a.ts`,
+                path: `/user/username/projects/project/a.ts`,
                 content: `export class C {}`,
             };
             const bFile: File = {
-                path: `/b.ts`,
+                path: `/user/username/projects/project/b.ts`,
                 content: `import {C} from './a'; import * as A from './A';`,
             };
             const config: File = {
-                path: `/tsconfig.json`,
+                path: `/user/username/projects/project/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: false } }),
             };
-            return createWatchedSystem([aFile, bFile, config, libFile], { useCaseSensitiveFileNames: false });
+            return createWatchedSystem(
+                [aFile, bFile, config, libFile],
+                { useCaseSensitiveFileNames: false, currentDirectory: "/user/username/projects/project" },
+            );
         },
         edits: [
             {
                 caption: "Enable forceConsistentCasingInFileNames",
-                edit: sys => sys.writeFile(`/tsconfig.json`, jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
+                edit: sys => sys.writeFile(`/user/username/projects/project/tsconfig.json`, jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1610,7 +1770,10 @@ export function f(p: C) { return p; }`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: jsonToReadableText({ compilerOptions: { moduleResolution: "node" } }),
             };
-            return createWatchedSystem([aFile, jsonFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [aFile, jsonFile, config, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -1636,7 +1799,10 @@ export function f(p: C) { return p; }`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: "{}",
             };
-            return createWatchedSystem([aFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [aFile, config, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -1679,7 +1845,11 @@ interface Document {
                     scenario,
                     subScenario: `updates errors in lib file/${subScenario}`,
                     commandLineArgs: ["-w", aFile.path, ...commandLineOptions],
-                    sys: () => createWatchedSystem([aFile, libFileWithDocument], { currentDirectory: "/user/username/projects/myproject" }),
+                    sys: () =>
+                        createWatchedSystem(
+                            [aFile, libFileWithDocument],
+                            { currentDirectory: "/user/username/projects/myproject" },
+                        ),
                     edits: [
                         {
                             caption: "Remove document declaration from file",
@@ -1760,7 +1930,10 @@ interface Document {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: "{}",
             };
-            return createWatchedSystem([aFile, bFile, configFile, libFileWithDocument], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [aFile, bFile, configFile, libFileWithDocument],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             changeWhenLibCheckChanges({ skipLibCheck: true }),
@@ -1794,7 +1967,10 @@ const b: string = a;`,
                     },
                 }),
             };
-            return createWatchedSystem([aFile, bFile, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [aFile, bFile, configFile, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -1827,7 +2003,10 @@ const b: string = a;`,
                     },
                 }),
             };
-            return createWatchedSystem([aFile, bFile, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [aFile, bFile, configFile, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -1861,7 +2040,10 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [index, configFile, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -1887,7 +2069,10 @@ import { x } from "../b";`,
                     compilerOptions: {},
                 }),
             };
-            return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [index, configFile, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -1904,7 +2089,7 @@ import { x } from "../b";`,
         commandLineArgs: ["-w", "-p", configFilePath],
         sys: () => {
             const firstExtendedConfigFile: File = {
-                path: "/a/b/first.tsconfig.json",
+                path: "/user/username/workspace/projects/project/first.tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
                         strict: true,
@@ -1912,7 +2097,7 @@ import { x } from "../b";`,
                 }),
             };
             const secondExtendedConfigFile: File = {
-                path: "/a/b/second.tsconfig.json",
+                path: "/user/username/workspace/projects/project/second.tsconfig.json",
                 content: jsonToReadableText({
                     extends: "./first.tsconfig.json",
                 }),
@@ -1931,7 +2116,7 @@ import { x } from "../b";`,
                 configFile,
                 firstExtendedConfigFile,
                 secondExtendedConfigFile,
-            ]);
+            ], { currentDirectory: "/user/username/workspace/projects" });
         },
         edits: [
             {
@@ -1951,7 +2136,7 @@ import { x } from "../b";`,
                 caption: "Change first extended config",
                 edit: sys =>
                     sys.modifyFile(
-                        "/a/b/first.tsconfig.json",
+                        "/user/username/workspace/projects/project/first.tsconfig.json",
                         jsonToReadableText({
                             compilerOptions: {
                                 strict: false,
@@ -1964,7 +2149,7 @@ import { x } from "../b";`,
                 caption: "Change second extended config",
                 edit: sys =>
                     sys.modifyFile(
-                        "/a/b/second.tsconfig.json",
+                        "/user/username/workspace/projects/project/second.tsconfig.json",
                         jsonToReadableText({
                             extends: "./first.tsconfig.json",
                             compilerOptions: {
@@ -2016,7 +2201,10 @@ import { x } from "../b";`,
                     include: ["client/**/*", "folder2"],
                 }),
             };
-            return createWatchedSystem([module1, module2, symlink, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [module1, module2, symlink, config, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -2030,7 +2218,7 @@ import { x } from "../b";`,
     verifyTscWatch({
         scenario,
         subScenario: "when new file is added to the referenced project",
-        commandLineArgs: ["-w", "-p", `/user/username/projects/myproject/projects/project2/tsconfig.json`, "--extendedDiagnostics"],
+        commandLineArgs: ["-w", "-p", `project2/tsconfig.json`, "--extendedDiagnostics"],
         sys: () => {
             const config1: File = {
                 path: `/user/username/projects/myproject/projects/project1/tsconfig.json`,
@@ -2067,7 +2255,10 @@ import { x } from "../b";`,
                 path: `/user/username/projects/myproject/projects/project2/class2.ts`,
                 content: `class class2 {}`,
             };
-            return createWatchedSystem([config1, class1, config2, class2, libFile, class1Dt]);
+            return createWatchedSystem(
+                [config1, class1, config2, class2, libFile, class1Dt],
+                { currentDirectory: "/user/username/projects/myproject/projects" },
+            );
         },
         edits: [
             {
@@ -2111,7 +2302,10 @@ import { x } from "../b";`,
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: `{}`,
             };
-            return createWatchedSystem([module1, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [module1, config, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -2144,7 +2338,10 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem([module1, module2, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [module1, module2, config, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -2186,7 +2383,10 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem([module1, module2, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [module1, module2, config, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -2227,7 +2427,10 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem([module1, module2, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [module1, module2, config, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -2263,7 +2466,10 @@ import { x } from "../b";`,
                     },
                 }),
             };
-            return createWatchedSystem([module1, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [module1, config, libFile],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {

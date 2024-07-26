@@ -13,9 +13,9 @@ import {
     File,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: project telemetry", () => {
+describe("unittests:: tsserver:: project telemetry::", () => {
     it("does nothing for inferred project", () => {
-        const file = makeFile("/a.js");
+        const file = makeFile("/home/src/projects/project/a.js");
         const host = createServerHost([file]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
@@ -23,9 +23,9 @@ describe("unittests:: tsserver:: project telemetry", () => {
     });
 
     it("only sends an event once", () => {
-        const file = makeFile("/a/a.ts");
-        const file2 = makeFile("/b.ts");
-        const tsconfig = makeFile("/a/tsconfig.json", {});
+        const file = makeFile("/home/src/projects/project/a/a.ts");
+        const file2 = makeFile("/home/src/projects/project/b.ts");
+        const tsconfig = makeFile("/home/src/projects/project/a/tsconfig.json", {});
 
         const host = createServerHost([file, file2, tsconfig]);
         const session = new TestSession(host);
@@ -37,10 +37,12 @@ describe("unittests:: tsserver:: project telemetry", () => {
     });
 
     it("counts files by extension", () => {
-        const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(f => makeFile(`/src/${f}`));
-        const notIncludedFile = makeFile("/bin/ts.js");
+        const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(
+            f => makeFile(`/home/src/projects/project/src/${f}`),
+        );
+        const notIncludedFile = makeFile("/home/src/projects/project/bin/ts.js");
         const compilerOptions: ts.CompilerOptions = { allowJs: true };
-        const tsconfig = makeFile("/tsconfig.json", { compilerOptions, include: ["src"] });
+        const tsconfig = makeFile("/home/src/projects/project/tsconfig.json", { compilerOptions, include: ["src"] });
 
         const host = createServerHost([...files, notIncludedFile, tsconfig]);
         const session = new TestSession(host);
@@ -49,12 +51,12 @@ describe("unittests:: tsserver:: project telemetry", () => {
     });
 
     it("works with external project", () => {
-        const file1 = makeFile("/a.ts");
+        const file1 = makeFile("/home/src/projects/project/a.ts");
         const host = createServerHost([file1]);
         const session = new TestSession(host);
         const compilerOptions: ts.server.protocol.CompilerOptions = { strict: true };
 
-        const projectFileName = "/hunter2/foo.csproj";
+        const projectFileName = "/home/src/projects/project/hunter2/foo.csproj";
 
         open();
 
@@ -80,7 +82,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
     });
 
     it("does not expose paths", () => {
-        const file = makeFile("/a.ts");
+        const file = makeFile("/home/src/projects/project/a.ts");
 
         const compilerOptions: ts.CompilerOptions = {
             project: "",
@@ -113,7 +115,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
             checkJs: "hunter2" as any as boolean,
         };
         (compilerOptions as any).unknownCompilerOption = "hunter2"; // These are always ignored.
-        const tsconfig = makeFile("/tsconfig.json", { compilerOptions, files: ["/a.ts"] });
+        const tsconfig = makeFile("/home/src/projects/project/tsconfig.json", { compilerOptions, files: ["/home/src/projects/project/a.ts"] });
 
         const host = createServerHost([file, tsconfig]);
         const session = new TestSession(host);
@@ -122,8 +124,8 @@ describe("unittests:: tsserver:: project telemetry", () => {
     });
 
     it("sends telemetry for extends, files, include, exclude, and compileOnSave", () => {
-        const file = makeFile("/hunter2/a.ts");
-        const tsconfig = makeFile("/tsconfig.json", {
+        const file = makeFile("/home/src/projects/project/hunter2/a.ts");
+        const tsconfig = makeFile("/home/src/projects/project/tsconfig.json", {
             compilerOptions: {},
             extends: "hunter2.json",
             files: ["hunter2/a.ts"],
@@ -147,8 +149,8 @@ describe("unittests:: tsserver:: project telemetry", () => {
     };
 
     it("sends telemetry for typeAcquisition settings", () => {
-        const file = makeFile("/a.js");
-        const jsconfig = makeFile("/jsconfig.json", {
+        const file = makeFile("/home/src/projects/project/a.js");
+        const jsconfig = makeFile("/home/src/projects/project/jsconfig.json", {
             compilerOptions: {},
             typeAcquisition: {
                 enable: true,
@@ -163,9 +165,9 @@ describe("unittests:: tsserver:: project telemetry", () => {
     });
 
     it("sends telemetry for file sizes", () => {
-        const jsFile = makeFile("/a.js", "1");
-        const tsFile = makeFile("/b.ts", "12");
-        const tsconfig = makeFile("/jsconfig.json", {
+        const jsFile = makeFile("/home/src/projects/project/a.js", "1");
+        const tsFile = makeFile("/home/src/projects/project/b.ts", "12");
+        const tsconfig = makeFile("/home/src/projects/project/jsconfig.json", {
             compilerOptions: autoJsCompilerOptions,
         });
         const host = createServerHost([tsconfig, tsFile, jsFile]);
@@ -175,8 +177,8 @@ describe("unittests:: tsserver:: project telemetry", () => {
     });
 
     it("detects whether language service was disabled", () => {
-        const file = makeFile("/a.js");
-        const tsconfig = makeFile("/jsconfig.json", {});
+        const file = makeFile("/home/src/projects/project/a.js");
+        const tsconfig = makeFile("/home/src/projects/project/jsconfig.json", {});
         const host = createServerHost([tsconfig, file]);
         const session = new TestSession(host);
         const fileSize = ts.server.maxProgramSizeForNonTsFiles + 1;
@@ -187,8 +189,8 @@ describe("unittests:: tsserver:: project telemetry", () => {
 
     describe("open files telemetry", () => {
         it("sends event for inferred project", () => {
-            const ajs = makeFile("/a.js", "// @ts-check\nconst x = 0;");
-            const bjs = makeFile("/b.js");
+            const ajs = makeFile("/home/src/projects/project/a.js", "/home/src/projects/project// @ts-check\nconst x = 0;");
+            const bjs = makeFile("/home/src/projects/project/b.js");
             const host = createServerHost([ajs, bjs]);
             const session = new TestSession(host);
             openFilesForSession([ajs, bjs], session);
@@ -199,7 +201,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         });
 
         it("not for '.ts' file", () => {
-            const ats = makeFile("/a.ts", "");
+            const ats = makeFile("/home/src/projects/project/a.ts", "");
             const host = createServerHost([ats]);
             const session = new TestSession(host);
             openFilesForSession([ats], session);
@@ -207,9 +209,9 @@ describe("unittests:: tsserver:: project telemetry", () => {
         });
 
         it("even for project with 'ts-check' in config", () => {
-            const file = makeFile("/a.js");
+            const file = makeFile("/home/src/projects/project/a.js");
             const compilerOptions: ts.CompilerOptions = { checkJs: true };
-            const jsconfig = makeFile("/jsconfig.json", { compilerOptions });
+            const jsconfig = makeFile("/home/src/projects/project/jsconfig.json", { compilerOptions });
             const host = createServerHost([jsconfig, file]);
             const session = new TestSession(host);
             openFilesForSession([file], session);

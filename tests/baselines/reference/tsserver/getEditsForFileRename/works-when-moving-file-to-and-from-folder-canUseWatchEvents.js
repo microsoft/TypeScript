@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/home/src/myprojects/project/tsconfig.json]
@@ -32,7 +32,7 @@ export function alert(message: string) {
 //// [/home/src/myprojects/project/functions/whatever/placeholder.txt]
 
 
-//// [/a/lib/lib.es2016.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -131,7 +131,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Custom watchFile:: Added:: {"id":3,"path":"/home/src/myprojects/project/components/whatever/alert.ts"}
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -139,10 +139,10 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "createFileWatcher",
       "body": {
         "id": 4,
-        "path": "/a/lib/lib.es2016.full.d.ts"
+        "path": "/home/src/tslibs/ts/lib/lib.es2016.full.d.ts"
       }
     }
-Custom watchFile:: Added:: {"id":4,"path":"/a/lib/lib.es2016.full.d.ts"}
+Custom watchFile:: Added:: {"id":4,"path":"/home/src/tslibs/ts/lib/lib.es2016.full.d.ts"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/myprojects/project/node_modules/@types 1 undefined Project: /home/src/myprojects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -176,12 +176,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/ts/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/components/whatever/alert.ts Text-1 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 	/home/src/myprojects/project/index.ts SVC-1-0 "import { alert } from '@app/components/whatever/alert';\nalert('Hello, world!');\n"
 
 
-	../../../../a/lib/lib.es2016.full.d.ts
+	../../tslibs/ts/lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	components/whatever/alert.ts
 	  Imported via '@app/components/whatever/alert' from file 'index.ts'
@@ -280,12 +280,12 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es2016.full.d.ts: *new*
-  {"event":{"id":4,"path":"/a/lib/lib.es2016.full.d.ts"}}
 /home/src/myprojects/project/components/whatever/alert.ts: *new*
   {"event":{"id":3,"path":"/home/src/myprojects/project/components/whatever/alert.ts"}}
 /home/src/myprojects/project/tsconfig.json: *new*
   {"event":{"id":1,"path":"/home/src/myprojects/project/tsconfig.json"}}
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts: *new*
+  {"event":{"id":4,"path":"/home/src/tslibs/ts/lib/lib.es2016.full.d.ts"}}
 
 FsWatchesRecursive::
 /home/src/myprojects/node_modules/@types: *new*
@@ -302,10 +302,6 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/components/whatever/alert.ts *new*
     version: Text-1
     containingProjects: 1
@@ -314,6 +310,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Custom watchDirectory:: Triggered Ignored:: {"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}:: /home/src/myprojects/project/components/whatever deleted
 Custom watchDirectory:: Triggered Ignored:: {"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}:: /home/src/myprojects/project/functions/whatever created
@@ -368,10 +368,6 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/components/whatever/alert.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
@@ -382,6 +378,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Before request
 
@@ -447,12 +447,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/ts/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/index.ts SVC-1-0 "import { alert } from '@app/components/whatever/alert';\nalert('Hello, world!');\n"
 	/home/src/myprojects/project/functions/whatever/alert.ts SVC-1-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 
 
-	../../../../a/lib/lib.es2016.full.d.ts
+	../../tslibs/ts/lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	index.ts
 	  Matched by default include pattern '**/*'
@@ -494,10 +494,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"event":{"id":4,"path":"/a/lib/lib.es2016.full.d.ts"}}
 /home/src/myprojects/project/tsconfig.json:
   {"event":{"id":1,"path":"/home/src/myprojects/project/tsconfig.json"}}
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
+  {"event":{"id":4,"path":"/home/src/tslibs/ts/lib/lib.es2016.full.d.ts"}}
 
 PolledWatches *deleted*::
 /home/src/myprojects/project/components/whatever/alert.ts:
@@ -531,10 +531,6 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/components/whatever/alert.ts *deleted*
     version: Text-1
     pendingReloadFromDisk: true
@@ -548,6 +544,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Before request
 
@@ -590,14 +590,9 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2
     documentPositionMappers: 1 *changed*
-        /a/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *new*
+        /home/src/tslibs/ts/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *new*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts *changed*
-    version: Text-1
-    sourceMapFilePath: false *changed*
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/functions/whatever/alert.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -606,6 +601,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: false *changed*
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Before request
 
@@ -649,11 +649,6 @@ Projects::
     dirty: true *changed*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    sourceMapFilePath: false
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/functions/whatever/alert.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -662,6 +657,11 @@ ScriptInfos::
     version: SVC-1-1 *changed*
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+    version: Text-1
+    sourceMapFilePath: false
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Before running Timeout callback:: count: 2
 7: /home/src/myprojects/project/tsconfig.json
@@ -708,7 +708,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/ts/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/functions/whatever/alert.ts SVC-1-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 	/home/src/myprojects/project/index.ts SVC-1-1 "import { alert } from '@app/functions/whatever/alert';\nalert('Hello, world!');\n"
 
@@ -750,10 +750,10 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"event":{"id":4,"path":"/a/lib/lib.es2016.full.d.ts"}}
 /home/src/myprojects/project/tsconfig.json:
   {"event":{"id":1,"path":"/home/src/myprojects/project/tsconfig.json"}}
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
+  {"event":{"id":4,"path":"/home/src/tslibs/ts/lib/lib.es2016.full.d.ts"}}
 
 FsWatchesRecursive::
 /home/src/myprojects/node_modules/@types:
@@ -777,7 +777,7 @@ Projects::
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
     documentPositionMappers: 0 *changed*
-        /a/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *deleted*
+        /home/src/tslibs/ts/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *deleted*
 
 Custom watchDirectory:: Triggered Ignored:: {"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}:: /home/src/myprojects/project/functions/whatever deleted
 Custom watchDirectory:: Triggered Ignored:: {"id":2,"path":"/home/src/myprojects/project","recursive":true,"ignoreUpdate":true}:: /home/src/myprojects/project/components/whatever created
@@ -863,12 +863,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /ho
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/myprojects/project/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/myprojects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/ts/lib/lib.es2016.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/myprojects/project/index.ts SVC-1-1 "import { alert } from '@app/functions/whatever/alert';\nalert('Hello, world!');\n"
 	/home/src/myprojects/project/components/whatever/alert.ts SVC-2-0 "export function alert(message: string) {\n    console.log(`ALERT: ${message}`);\n}\n"
 
 
-	../../../../a/lib/lib.es2016.full.d.ts
+	../../tslibs/ts/lib/lib.es2016.full.d.ts
 	  Default library for target 'es2016'
 	index.ts
 	  Matched by default include pattern '**/*'
@@ -896,10 +896,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"event":{"id":4,"path":"/a/lib/lib.es2016.full.d.ts"}}
 /home/src/myprojects/project/tsconfig.json:
   {"event":{"id":1,"path":"/home/src/myprojects/project/tsconfig.json"}}
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
+  {"event":{"id":4,"path":"/home/src/tslibs/ts/lib/lib.es2016.full.d.ts"}}
 
 FsWatchesRecursive::
 /home/src/myprojects/node_modules: *new*
@@ -925,11 +925,6 @@ Projects::
     projectProgramVersion: 4 *changed*
 
 ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    sourceMapFilePath: false
-    containingProjects: 1
-        /home/src/myprojects/project/tsconfig.json
 /home/src/myprojects/project/components/whatever/alert.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
@@ -943,6 +938,11 @@ ScriptInfos::
     version: SVC-1-1
     containingProjects: 1
         /home/src/myprojects/project/tsconfig.json *default*
+/home/src/tslibs/ts/lib/lib.es2016.full.d.ts
+    version: Text-1
+    sourceMapFilePath: false
+    containingProjects: 1
+        /home/src/myprojects/project/tsconfig.json
 
 Before request
 
@@ -985,7 +985,7 @@ Projects::
     projectStateVersion: 4
     projectProgramVersion: 4
     documentPositionMappers: 1 *changed*
-        /a/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *new*
+        /home/src/tslibs/ts/lib/lib.es2016.full.d.ts: identitySourceMapConsumer *new*
 
 Before request
 

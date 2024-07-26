@@ -71,7 +71,7 @@ import { a } from 'a';
 }
 
 //// [/home/src/projects/b/2/b-impl/b/node_modules/a] symlink(/home/src/projects/a/1/a-impl/a)
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -185,7 +185,7 @@ export * from 'c';
 }
 
 
-/a/lib/tsc.js --w -p . --extendedDiagnostics --explainFiles --traceResolution
+/home/src/tslibs/ts/lib/tsc.js --w -p . --extendedDiagnostics --explainFiles --traceResolution
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -250,7 +250,7 @@ File '/home/src/projects/c/3/c-impl/c/lib/c.d.ts' exists - use it as a name reso
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/c.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules 1 undefined Failed Lookup Locations
@@ -271,7 +271,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules/@types 1
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
-../../../../../../../a/lib/lib.d.ts
+../../../../../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
@@ -310,8 +310,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
   {}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
@@ -327,6 +325,8 @@ FsWatches::
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
   {}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
+  {}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -355,7 +355,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts
@@ -363,7 +363,7 @@ Program files::
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts
@@ -371,7 +371,7 @@ Semantic diagnostics in builder refreshed for::
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts (used version)
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts (used version)
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts (used version)
@@ -677,7 +677,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 20
 [7m1[0m import { a } from 'a';
 [7m [0m [91m                  ~~~[0m
 
-../../../../../../../a/lib/lib.d.ts
+../../../../../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/index.ts
   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
@@ -712,13 +712,13 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
 /home/src/projects/a/1/a-impl/a/package.json:
   {}
 /home/src/projects/b/2/b-impl/b/src/index.ts:
   {}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
+  {}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -767,7 +767,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -999,7 +999,7 @@ DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-../../../../../../../a/lib/lib.d.ts
+../../../../../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
@@ -1042,8 +1042,6 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
   {}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
@@ -1059,6 +1057,8 @@ FsWatches::
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
   {}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
+  {}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -1096,7 +1096,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts

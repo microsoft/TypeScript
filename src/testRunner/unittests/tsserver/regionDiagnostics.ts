@@ -13,10 +13,10 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: regionDiagnostics", () => {
+describe("unittests:: tsserver:: regionDiagnostics::", () => {
     it("diagnostics for select nodes in a single file", () => {
         const file1 = {
-            path: "/a/b/app.ts",
+            path: "/home/src/projects/project/a/b/app.ts",
             content: dedent`
                 function foo(x: number, y: string): number {
                     return x + y;
@@ -47,7 +47,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
 
     it("diagnostics for select nodes and whole file for multiple files", () => {
         const file1 = {
-            path: "/a/b/app.ts",
+            path: "/home/src/projects/project/a/b/app.ts",
             content: dedent`
                 function add(x: number, y: string): number {
                     return x + y;
@@ -56,7 +56,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
                 add(10, 50);`,
         };
         const file2 = {
-            path: "/a/b/app2.ts",
+            path: "/home/src/projects/project/a/b/app2.ts",
             content: dedent`
                 function booleanNoop(b: boolean): void {
                     b;
@@ -66,7 +66,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
                 booleanNoop("not a boolean");`,
         };
         const file3 = {
-            path: "/a/b/app3.ts",
+            path: "/home/src/projects/project/a/b/app3.ts",
             content: dedent`
                 function stringId(x: string): string {
                     return x;
@@ -78,7 +78,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
         };
 
         const file4 = {
-            path: "/a/b/app4.ts",
+            path: "/home/src/projects/project/a/b/app4.ts",
             content: dedent`
                 function numberId(x: number): number {
                     return x;
@@ -120,7 +120,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
 
     describe("diagnostics for select nodes when files have suggestion diagnostics", () => {
         const config = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: jsonToReadableText({
                 compilerOptions: {
                     allowSyntheticDefaultImports: true,
@@ -128,7 +128,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
             }),
         };
         const indexFile = {
-            path: "/index.ts",
+            path: "/home/src/projects/project/index.ts",
             content: dedent`
                 import add = require("./other.js");
 
@@ -137,7 +137,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
                 add(1, 2);`,
         };
         const otherFile = {
-            path: "/other.ts",
+            path: "/home/src/projects/project/other.ts",
             content: dedent`
                 function add(a: number, b: number) {
                     return a + b
@@ -207,7 +207,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
 
     it("region diagnostics is skipped for small file", () => {
         const file1 = {
-            path: "/a/b/app.ts",
+            path: "/home/src/projects/project/a/b/app.ts",
             content: dedent`
                 function foo(x: number, y: string): number {
                     return x + y;
@@ -218,7 +218,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
                 foo(10, 50);`,
         };
         const host = createServerHost([file1, libFile]);
-        const session = new TestSession({ host });
+        const session = new TestSession(host);
 
         openFilesForSession([file1], session);
 
@@ -238,7 +238,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
 
     it("region diagnostics is skipped for @ts-nocheck file", () => {
         const file1 = {
-            path: "/a/b/app.ts",
+            path: "/home/src/projects/project/a/b/app.ts",
             content: dedent`
                 // @ts-nocheck
                 function foo(x: number, y: string): number {

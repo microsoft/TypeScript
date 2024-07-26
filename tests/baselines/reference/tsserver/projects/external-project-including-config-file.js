@@ -1,10 +1,10 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/b/f1.ts]
+//// [/user/username/projects/project/f1.ts]
 let x =1;
 
-//// [/a/b/tsconfig.json]
+//// [/user/username/projects/project/tsconfig.json]
 {
   "compilerOptions": {},
   "files": [
@@ -19,10 +19,10 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "rootFiles": [
           {
-            "fileName": "/a/b/f1.ts"
+            "fileName": "/user/username/projects/project/f1.ts"
           },
           {
-            "fileName": "/a/b/tsconfig.json"
+            "fileName": "/user/username/projects/project/tsconfig.json"
           }
         ],
         "options": {},
@@ -87,7 +87,7 @@ externalproject (External) *new*
     projectProgramVersion: 0
 
 ScriptInfos::
-/a/b/f1.ts *new*
+/user/username/projects/project/f1.ts *new*
     version: Text-1
     containingProjects: 1
         externalproject

@@ -9,7 +9,6 @@ import { jsonToReadableText } from "../helpers.js";
 import {
     compilerOptionsToConfigJson,
     FsContents,
-    libContent,
 } from "./contents.js";
 import {
     noChangeRun,
@@ -399,7 +398,7 @@ export function forEachNoEmitTscWatch(commandType: string[]) {
         verifyTscWatch({
             scenario: "noEmit",
             subScenario,
-            commandLineArgs: [...commandType, "/home/src/projects/project", "-w"],
+            commandLineArgs: [...commandType, "-w"],
             sys: () => {
                 fsContents["/home/src/projects/project/tsconfig.json"] = jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson({
@@ -407,8 +406,8 @@ export function forEachNoEmitTscWatch(commandType: string[]) {
                         noEmit: true,
                     }),
                 });
-                fsContents[libFile.path] = libContent;
-                return createWatchedSystem(fsContents);
+                fsContents[libFile.path] = libFile.content;
+                return createWatchedSystem(fsContents, { currentDirectory: "/home/src/projects/project" });
             },
             edits: [
                 {

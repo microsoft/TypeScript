@@ -70,7 +70,7 @@ console.log('Hello, world!');
   ]
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -86,7 +86,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --b projects/server -w -v --traceResolution --explainFiles
+/home/src/tslibs/ts/lib/tsc.js --b projects/server -w -v --traceResolution --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -99,7 +99,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
 
-../../../a/lib/lib.d.ts
+../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
@@ -121,7 +121,7 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/projects/shared/src/myClass.ts'. ========
-../../../a/lib/lib.d.ts
+../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
@@ -183,18 +183,18 @@ export declare function randomFn(str: string): void;
 
 
 //// [/home/src/workspaces/projects/shared/dist/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../a/lib/lib.d.ts","../src/logging.ts","../src/myclass.ts","../src/random.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1222780632-export function log(str: string) {\n    console.log(str);\n}\n","signature":"2292560907-export declare function log(str: string): void;\n"},{"version":"-10369713935-export class MyClass { }","signature":"-7943199723-export declare class MyClass {\n}\n"},{"version":"4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n","signature":"-1751303682-export declare function randomFn(str: string): void;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./src/random.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","../src/logging.ts","../src/myclass.ts","../src/random.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1222780632-export function log(str: string) {\n    console.log(str);\n}\n","signature":"2292560907-export declare function log(str: string): void;\n"},{"version":"-10369713935-export class MyClass { }","signature":"-7943199723-export declare class MyClass {\n}\n"},{"version":"4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n","signature":"-1751303682-export declare function randomFn(str: string): void;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./src/random.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/shared/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../a/lib/lib.d.ts",
+    "../../../../tslibs/ts/lib/lib.d.ts",
     "../src/logging.ts",
     "../src/myclass.ts",
     "../src/random.ts"
   ],
   "fileInfos": {
-    "../../../../../../a/lib/lib.d.ts": {
+    "../../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -247,7 +247,7 @@ export declare function randomFn(str: string): void;
   },
   "latestChangedDtsFile": "./src/random.d.ts",
   "version": "FakeTSVersion",
-  "size": 1181
+  "size": 1183
 }
 
 //// [/home/src/workspaces/projects/server/dist/server/src/server.js]
@@ -261,12 +261,12 @@ export {};
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../../shared/dist/src/random.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts","../../../shared/src/random.ts"],"fileIdsList":[[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"2292560907-export declare function log(str: string): void;\n","-7943199723-export declare class MyClass {\n}\n","-1751303682-export declare function randomFn(str: string): void;\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"}],"root":[[2,5]],"resolvedRoot":[[2,6],[3,7],[4,8]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[5,1]],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../tslibs/ts/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../../shared/dist/src/random.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts","../../../shared/src/random.ts"],"fileIdsList":[[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"2292560907-export declare function log(str: string): void;\n","-7943199723-export declare class MyClass {\n}\n","-1751303682-export declare function randomFn(str: string): void;\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"}],"root":[[2,5]],"resolvedRoot":[[2,6],[3,7],[4,8]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[5,1]],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../../a/lib/lib.d.ts",
+    "../../../../../tslibs/ts/lib/lib.d.ts",
     "../../../shared/dist/src/logging.d.ts",
     "../../../shared/dist/src/myclass.d.ts",
     "../../../shared/dist/src/random.d.ts",
@@ -281,7 +281,7 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../../../../../../a/lib/lib.d.ts": {
+    "../../../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -369,7 +369,7 @@ export {};
   },
   "latestChangedDtsFile": "./src/server.d.ts",
   "version": "FakeTSVersion",
-  "size": 1339
+  "size": 1341
 }
 
 
@@ -411,19 +411,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/workspaces/projects/shared/src/logging.ts
 /home/src/workspaces/projects/shared/src/myClass.ts
 /home/src/workspaces/projects/shared/src/random.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/workspaces/projects/shared/src/logging.ts
 /home/src/workspaces/projects/shared/src/myClass.ts
 /home/src/workspaces/projects/shared/src/random.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/workspaces/projects/shared/src/logging.ts (computed .d.ts during emit)
 /home/src/workspaces/projects/shared/src/myclass.ts (computed .d.ts during emit)
 /home/src/workspaces/projects/shared/src/random.ts (computed .d.ts during emit)
@@ -453,21 +453,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/workspaces/projects/shared/dist/src/logging.d.ts
 /home/src/workspaces/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/projects/shared/dist/src/random.d.ts
 /home/src/workspaces/projects/server/src/server.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/workspaces/projects/shared/dist/src/logging.d.ts
 /home/src/workspaces/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/projects/shared/dist/src/random.d.ts
 /home/src/workspaces/projects/server/src/server.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /home/src/workspaces/projects/shared/dist/src/logging.d.ts (used version)
 /home/src/workspaces/projects/shared/dist/src/myclass.d.ts (used version)
 /home/src/workspaces/projects/shared/dist/src/random.d.ts (used version)
@@ -508,7 +508,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
 
-../../../a/lib/lib.d.ts
+../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
@@ -535,18 +535,18 @@ export declare const x = 10;
 
 
 //// [/home/src/workspaces/projects/shared/dist/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../a/lib/lib.d.ts","../src/logging.ts","../src/myclass.ts","../src/random.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;","signature":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n"},{"version":"-10369713935-export class MyClass { }","signature":"-7943199723-export declare class MyClass {\n}\n"},{"version":"4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n","signature":"-1751303682-export declare function randomFn(str: string): void;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./src/logging.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","../src/logging.ts","../src/myclass.ts","../src/random.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;","signature":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n"},{"version":"-10369713935-export class MyClass { }","signature":"-7943199723-export declare class MyClass {\n}\n"},{"version":"4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n","signature":"-1751303682-export declare function randomFn(str: string): void;\n"}],"root":[[2,4]],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./src/logging.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/shared/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../a/lib/lib.d.ts",
+    "../../../../tslibs/ts/lib/lib.d.ts",
     "../src/logging.ts",
     "../src/myclass.ts",
     "../src/random.ts"
   ],
   "fileInfos": {
-    "../../../../../../a/lib/lib.d.ts": {
+    "../../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -599,7 +599,7 @@ export declare const x = 10;
   },
   "latestChangedDtsFile": "./src/logging.d.ts",
   "version": "FakeTSVersion",
-  "size": 1231
+  "size": 1233
 }
 
 
@@ -626,7 +626,7 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/projects/shared/src/myClass.ts'. ========
-../../../a/lib/lib.d.ts
+../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
@@ -645,12 +645,12 @@ projects/server/src/server.ts
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../../shared/dist/src/random.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts","../../../shared/src/random.ts"],"fileIdsList":[[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","-7943199723-export declare class MyClass {\n}\n","-1751303682-export declare function randomFn(str: string): void;\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"}],"root":[[2,5]],"resolvedRoot":[[2,6],[3,7],[4,8]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[5,1]],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../tslibs/ts/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../../shared/dist/src/random.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts","../../../shared/src/random.ts"],"fileIdsList":[[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","-7943199723-export declare class MyClass {\n}\n","-1751303682-export declare function randomFn(str: string): void;\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"}],"root":[[2,5]],"resolvedRoot":[[2,6],[3,7],[4,8]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[5,1]],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../../a/lib/lib.d.ts",
+    "../../../../../tslibs/ts/lib/lib.d.ts",
     "../../../shared/dist/src/logging.d.ts",
     "../../../shared/dist/src/myclass.d.ts",
     "../../../shared/dist/src/random.d.ts",
@@ -665,7 +665,7 @@ projects/server/src/server.ts
     ]
   ],
   "fileInfos": {
-    "../../../../../../../a/lib/lib.d.ts": {
+    "../../../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -753,7 +753,7 @@ projects/server/src/server.ts
   },
   "latestChangedDtsFile": "./src/server.d.ts",
   "version": "FakeTSVersion",
-  "size": 1370
+  "size": 1372
 }
 
 
@@ -774,7 +774,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/workspaces/projects/shared/src/logging.ts
 /home/src/workspaces/projects/shared/src/myClass.ts
 /home/src/workspaces/projects/shared/src/random.ts
@@ -810,7 +810,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/workspaces/projects/shared/dist/src/logging.d.ts
 /home/src/workspaces/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/projects/shared/dist/src/random.d.ts
@@ -852,7 +852,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
 
-../../../a/lib/lib.d.ts
+../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
@@ -861,17 +861,17 @@ projects/shared/src/myClass.ts
 
 
 //// [/home/src/workspaces/projects/shared/dist/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../a/lib/lib.d.ts","../src/logging.ts","../src/myclass.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;","signature":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n"},{"version":"-10369713935-export class MyClass { }","signature":"-7943199723-export declare class MyClass {\n}\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./src/logging.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","../src/logging.ts","../src/myclass.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;","signature":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n"},{"version":"-10369713935-export class MyClass { }","signature":"-7943199723-export declare class MyClass {\n}\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./"},"latestChangedDtsFile":"./src/logging.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/shared/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../a/lib/lib.d.ts",
+    "../../../../tslibs/ts/lib/lib.d.ts",
     "../src/logging.ts",
     "../src/myclass.ts"
   ],
   "fileInfos": {
-    "../../../../../../a/lib/lib.d.ts": {
+    "../../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -913,7 +913,7 @@ projects/shared/src/myClass.ts
   },
   "latestChangedDtsFile": "./src/logging.d.ts",
   "version": "FakeTSVersion",
-  "size": 1036
+  "size": 1038
 }
 
 
@@ -964,7 +964,7 @@ Loading module as file / folder, candidate module location '/home/src/workspaces
 File name '/home/src/workspaces/projects/shared/src/myClass.js' has a '.js' extension - stripping it.
 File '/home/src/workspaces/projects/shared/src/myClass.ts' exists - use it as a name resolution result.
 ======== Module name ':shared/myClass.js' was successfully resolved to '/home/src/workspaces/projects/shared/src/myClass.ts'. ========
-../../../a/lib/lib.d.ts
+../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
@@ -980,12 +980,12 @@ projects/server/src/server.ts
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts"],"fileIdsList":[[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","-7943199723-export declare class MyClass {\n}\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"resolvedRoot":[[2,5],[3,6]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[4,1]],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../tslibs/ts/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts"],"fileIdsList":[[3]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","-7943199723-export declare class MyClass {\n}\n",{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"resolvedRoot":[[2,5],[3,6]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"referencedMap":[[4,1]],"latestChangedDtsFile":"./src/server.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../../a/lib/lib.d.ts",
+    "../../../../../tslibs/ts/lib/lib.d.ts",
     "../../../shared/dist/src/logging.d.ts",
     "../../../shared/dist/src/myclass.d.ts",
     "../../src/server.ts",
@@ -998,7 +998,7 @@ projects/server/src/server.ts
     ]
   ],
   "fileInfos": {
-    "../../../../../../../a/lib/lib.d.ts": {
+    "../../../../../tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -1071,7 +1071,7 @@ projects/server/src/server.ts
   },
   "latestChangedDtsFile": "./src/server.d.ts",
   "version": "FakeTSVersion",
-  "size": 1224
+  "size": 1226
 }
 
 
@@ -1091,7 +1091,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/workspaces/projects/shared/src/logging.ts
 /home/src/workspaces/projects/shared/src/myClass.ts
 
@@ -1123,7 +1123,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/workspaces/projects/shared/dist/src/logging.d.ts
 /home/src/workspaces/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/projects/server/src/server.ts

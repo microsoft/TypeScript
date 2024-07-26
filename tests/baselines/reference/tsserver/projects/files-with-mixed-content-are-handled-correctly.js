@@ -1,7 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/b/f1.html]
+//// [/user/username/projects/project/f1.html]
 <html><script language="javascript">var x = 1;</></html>
 
 
@@ -13,7 +13,7 @@ Info seq  [hh:mm:ss:mss] request:
         "options": {},
         "rootFiles": [
           {
-            "fileName": "/a/b/f1.html",
+            "fileName": "/user/username/projects/project/f1.html",
             "scriptKind": "JS",
             "hasMixedContent": true
           }
@@ -23,21 +23,33 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: projectFileName
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: projectFileName WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: projectFileName WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules/@types 1 undefined Project: projectFileName WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules/@types 1 undefined Project: projectFileName WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/node_modules/@types 1 undefined Project: projectFileName WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/node_modules/@types 1 undefined Project: projectFileName WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/node_modules/@types 1 undefined Project: projectFileName WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/node_modules/@types 1 undefined Project: projectFileName WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: projectFileName projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'projectFileName' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/f1.html Text-1 ""
+	/user/username/projects/project/f1.html Text-1 ""
 
 
-	a/b/f1.html
+	../../../../../user/username/projects/project/f1.html
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/vscode/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/vscode/projects/bin/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/vscode/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 Projects::
@@ -46,25 +58,25 @@ projectFileName (External) *new*
     projectProgramVersion: 0
 
 ScriptInfos::
-/a/b/f1.html *new*
+/user/username/projects/project/f1.html *new*
     version: Text-1
     containingProjects: 1
         projectFileName
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '/home/src/typinginstaller/globalcache/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/home/src/typinginstaller/globalcache/data'
+TI:: [hh:mm:ss:mss] Trying to find '/home/src/typinginstaller/globalcache/data/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/home/src/typinginstaller/globalcache/data'
+TI:: [hh:mm:ss:mss] Npm config file: /home/src/typinginstaller/globalcache/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/home/src/typinginstaller/globalcache/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/a/data/package.json]
+//// [/home/src/typinginstaller/globalcache/data/package.json]
 { "private": true }
 
-//// [/a/data/node_modules/types-registry/index.json]
+//// [/home/src/typinginstaller/globalcache/data/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
@@ -74,7 +86,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "projectFileName",
       "fileNames": [
-        "/a/b/f1.html"
+        "/user/username/projects/project/f1.html"
       ],
       "compilerOptions": {
         "allowNonTsExtensions": true,
@@ -86,7 +98,7 @@ TI:: [hh:mm:ss:mss] Got install request
         "enable": true
       },
       "unresolvedImports": [],
-      "projectRootPath": "/",
+      "projectRootPath": "/home/src/vscode/projects/bin",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
@@ -97,8 +109,8 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
       "cachedTypingPaths": [],
       "newTypingNames": [],
       "filesToWatch": [
-        "/bower_components",
-        "/node_modules"
+        "/home/src/vscode/projects/bin/bower_components",
+        "/home/src/vscode/projects/bin/node_modules"
       ]
     }
 TI:: [hh:mm:ss:mss] Sending response:
@@ -106,14 +118,14 @@ TI:: [hh:mm:ss:mss] Sending response:
       "kind": "action::watchTypingLocations",
       "projectName": "projectFileName",
       "files": [
-        "/bower_components",
-        "/node_modules"
+        "/home/src/vscode/projects/bin/bower_components",
+        "/home/src/vscode/projects/bin/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: projectFileName WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: projectFileName WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: projectFileName WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined Project: projectFileName WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/bower_components 1 undefined Project: projectFileName WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/bower_components 1 undefined Project: projectFileName WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules 1 undefined Project: projectFileName WatchType: Directory location for typing installer
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules 1 undefined Project: projectFileName WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "projectFileName",
@@ -205,11 +217,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
-/bower_components: *new*
+/home/src/vscode/node_modules/@types:
   {"pollingInterval":500}
-/node_modules: *new*
+/home/src/vscode/projects/bin/bower_components: *new*
+  {"pollingInterval":500}
+/home/src/vscode/projects/bin/node_modules: *new*
+  {"pollingInterval":500}
+/home/src/vscode/projects/bin/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/vscode/projects/node_modules/@types:
   {"pollingInterval":500}
 
 Projects::
@@ -217,14 +235,14 @@ projectFileName (External) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
 
-Info seq  [hh:mm:ss:mss] Text of/a/b/f1.html: 
+Info seq  [hh:mm:ss:mss] Text of/user/username/projects/project/f1.html: 
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/f1.html",
+        "file": "/user/username/projects/project/f1.html",
         "fileContent": "var x = 1;"
       },
       "seq": 2,
@@ -234,7 +252,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: projectFileName
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: projectFileName projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'projectFileName' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/f1.html SVC-2-0 "var x = 1;"
+	/user/username/projects/project/f1.html SVC-2-0 "var x = 1;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project 'projectFileName' (External)
@@ -242,7 +260,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.html ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/f1.html ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: projectFileName
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -263,7 +281,7 @@ projectFileName (External) *changed*
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/f1.html (Open) *changed*
+/user/username/projects/project/f1.html (Open) *changed*
     open: true *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1
@@ -275,7 +293,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "quickinfo",
       "arguments": {
-        "file": "/a/b/f1.html",
+        "file": "/user/username/projects/project/f1.html",
         "line": 1,
         "offset": 5
       },
@@ -309,7 +327,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "close",
       "arguments": {
-        "file": "/a/b/f1.html"
+        "file": "/user/username/projects/project/f1.html"
       },
       "seq": 4,
       "type": "request"
@@ -336,11 +354,11 @@ projectFileName (External) *changed*
     dirty: true *changed*
 
 ScriptInfos::
-/a/b/f1.html *changed*
+/user/username/projects/project/f1.html *changed*
     open: false *changed*
     version: SVC-2-0
     pendingReloadFromDisk: true *changed*
     containingProjects: 1
         projectFileName
 
-Info seq  [hh:mm:ss:mss] Text of/a/b/f1.html: 
+Info seq  [hh:mm:ss:mss] Text of/user/username/projects/project/f1.html: 

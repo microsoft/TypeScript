@@ -13,14 +13,14 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", () => {
+describe("unittests:: tsserver:: maxNodeModuleJsDepth:: for inferred projects", () => {
     it("should be set to 2 if the project has js root files", () => {
         const file1: File = {
-            path: "/a/b/file1.js",
+            path: "/home/src/projects/project/file1.js",
             content: `var t = require("test"); t.`,
         };
         const moduleFile: File = {
-            path: "/a/b/node_modules/test/index.js",
+            path: "/home/src/projects/project/node_modules/test/index.js",
             content: `var v = 10; module.exports = v;`,
         };
 
@@ -38,11 +38,11 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", ()
 
     it("should return to normal state when all js root files are removed from project", () => {
         const file1 = {
-            path: "/a/file1.ts",
+            path: "/home/src/projects/project/file1.ts",
             content: "let x =1;",
         };
         const file2 = {
-            path: "/a/file2.js",
+            path: "/home/src/projects/project/file2.js",
             content: "let x =1;",
         };
 

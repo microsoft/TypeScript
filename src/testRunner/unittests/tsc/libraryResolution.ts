@@ -1,6 +1,5 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { libContent } from "../helpers/contents.js";
 import {
     getCommandLineArgsForLibResolution,
     getFsForLibResolution,
@@ -11,6 +10,7 @@ import {
     verifyTsc,
 } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: libraryResolution:: library file resolution", () => {
     function verify(libRedirection?: true, withoutConfig?: true) {
@@ -49,7 +49,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
                         lib: ["es6"],
                     },
                 }),
-                "/lib/lib.es2015.d.ts": libContent,
+                "/lib/lib.es2015.d.ts": libFile.content,
             }),
         commandLineArgs: ["-p", "/src/tsconfig.json"],
         edits: [
@@ -77,7 +77,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
                         lib: ["es6", "dom"],
                     },
                 }),
-                "/lib/lib.es2015.d.ts": libContent,
+                "/lib/lib.es2015.d.ts": libFile.content,
             }),
         commandLineArgs: ["-p", "/src/tsconfig.json", "-i", "--explainFiles"],
         baselinePrograms: true,

@@ -1,10 +1,10 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/jsconfig.json]
+//// [/home/src/projects/project/jsconfig.json]
 {}
 
-//// [/a.js]
+//// [/home/src/projects/project/a.js]
 
 
 
@@ -12,27 +12,27 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a.js"
+        "file": "/home/src/projects/project/a.js"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a.js ProjectRootPath: undefined:: Result: /jsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /jsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /jsconfig.json 2000 undefined Project: /jsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/a.js ProjectRootPath: undefined:: Result: /home/src/projects/project/jsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project/jsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/jsconfig.json 2000 undefined Project: /home/src/projects/project/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/jsconfig.json",
-        "reason": "Creating possible configured project for /a.js to open"
+        "projectName": "/home/src/projects/project/jsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/a.js to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /jsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/jsconfig.json : {
  "rootNames": [
-  "/a.js"
+  "/home/src/projects/project/a.js"
  ],
  "options": {
   "allowJs": true,
@@ -40,38 +40,38 @@ Info seq  [hh:mm:ss:mss] Config: /jsconfig.json : {
   "allowSyntheticDefaultImports": true,
   "skipLibCheck": true,
   "noEmit": true,
-  "configFilePath": "/jsconfig.json"
+  "configFilePath": "/home/src/projects/project/jsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] Non TS file size exceeded limit (20971521). Largest files: /a.js:20971521
+Info seq  [hh:mm:ss:mss] Non TS file size exceeded limit (20971521). Largest files: /home/src/projects/project/a.js:20971521
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLanguageServiceState",
       "body": {
-        "projectName": "/jsconfig.json",
+        "projectName": "/home/src/projects/project/jsconfig.json",
         "languageServiceEnabled": false
       }
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
-Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /a.js for info /a.js: fileSize: 20971521
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/jsconfig.json
+Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /home/src/projects/project/a.js for info /home/src/projects/project/a.js: fileSize: 20971521
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "largeFileReferenced",
       "body": {
-        "file": "/a.js",
+        "file": "/home/src/projects/project/a.js",
         "fileSize": 20971521,
         "maxFileSize": 4194304
       }
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /jsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/project/jsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a.js SVC-1-0 ""
+	/home/src/projects/project/a.js SVC-1-0 ""
 
 
 	a.js
@@ -84,7 +84,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/jsconfig.json"
+        "projectName": "/home/src/projects/project/jsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -95,7 +95,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "d3f7418c3d4888d0a51e42716b5a330dab4da64c452eebe918c1e0e634d8ede1",
+          "projectId": "cecfcfbd31b8e54cb34f66ff8c81163e203c9f016c1e1306419ca4436b4df428",
           "fileStats": {
             "js": 1,
             "jsSize": 20971521,
@@ -140,11 +140,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/a.js",
-        "configFile": "/jsconfig.json",
+        "triggerFile": "/home/src/projects/project/a.js",
+        "configFile": "/home/src/projects/project/jsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/home/src/tslibs/ts/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
             "code": 6053,
             "category": "error"
           },
@@ -191,13 +191,13 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a.js ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /jsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/a.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/jsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -212,20 +212,20 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/jsconfig.json: *new*
+/home/src/projects/project/jsconfig.json: *new*
   {}
 
 Projects::
-/jsconfig.json (Configured) *new*
+/home/src/projects/project/jsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a.js (Open) *new*
+/home/src/projects/project/a.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /jsconfig.json *default*
+        /home/src/projects/project/jsconfig.json *default*

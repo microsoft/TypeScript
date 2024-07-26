@@ -1,6 +1,6 @@
 currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -35,7 +35,7 @@ export const x = {...{}};
 }
 
 
-/a/lib/tsc.js -w
+/home/src/tslibs/ts/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -60,7 +60,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/index.tsx: *new*
   {}
@@ -87,17 +87,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /users/username/projects/project/node_modules/tslib/index.d.ts
 /users/username/projects/project/index.tsx
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /users/username/projects/project/node_modules/tslib/index.d.ts
 /users/username/projects/project/index.tsx
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /users/username/projects/project/node_modules/tslib/index.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
@@ -116,7 +116,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
   {}
 /users/username/projects/project/index.tsx:
   {}
@@ -157,7 +157,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
 /users/username/projects/project/index.tsx: *new*
   {}
@@ -180,15 +180,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /users/username/projects/project/index.tsx
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /users/username/projects/project/index.tsx
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
 exitCode:: ExitStatus.undefined

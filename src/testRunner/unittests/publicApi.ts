@@ -4,8 +4,8 @@ import * as Harness from "../_namespaces/Harness.js";
 import * as ts from "../_namespaces/ts.js";
 import * as vfs from "../_namespaces/vfs.js";
 import { jsonToReadableText } from "./helpers.js";
-import { libContent } from "./helpers/contents.js";
 import { loadProjectFromFiles } from "./helpers/vfs.js";
+import { libFile } from "./helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
@@ -288,7 +288,7 @@ describe("unittests:: Public APIs:: createProgram", () => {
                     },
                 },
             }),
-            "/lib/lib.esnext.full.d.ts": libContent,
+            "/lib/lib.esnext.full.d.ts": libFile.content,
         }, { cwd: "/src/projects/project", executingFilePath: "/lib/tsc.js" });
         const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc.js" });
         const commandLine = ts.getParsedCommandLineOfConfigFile(

@@ -16,7 +16,7 @@ import {
     TestServerHost,
 } from "../../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
+describe("unittests:: tsserver:: events:: projectLoading::", () => {
     const aTs: File = {
         path: `/user/username/projects/a/a.ts`,
         content: "export class A { }",

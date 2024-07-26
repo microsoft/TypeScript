@@ -13,7 +13,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: with project references and compile on save", () => {
+describe("unittests:: tsserver:: projectReferenceCompileOnSave:: with project references and compile on save", () => {
     const dependecyLocation = `/user/username/projects/myproject/dependency`;
     const usageLocation = `/user/username/projects/myproject/usage`;
     const dependencyTs: File = {
@@ -1673,7 +1673,7 @@ fn2();
     });
 });
 
-describe("unittests:: tsserver:: with project references and compile on save with external projects", () => {
+describe("unittests:: tsserver:: projectReferenceCompileOnSave:: with project references and compile on save with external projects", () => {
     it("compile on save emits same output as project build", () => {
         const tsbaseJson: File = {
             path: `/user/username/projects/myproject/tsbase.json`,

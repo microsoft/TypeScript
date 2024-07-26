@@ -1,12 +1,12 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/a.ts]
+//// [/home/src/projects/project/a/a.ts]
 export function fnA() {}
 export interface IfaceA {}
 export const instanceA: IfaceA = {};
 
-//// [/a/bin/a.d.ts.map]
+//// [/home/src/projects/project/a/bin/a.d.ts.map]
 {
   "version": 3,
   "file": "a.d.ts",
@@ -21,17 +21,17 @@ export const instanceA: IfaceA = {};
   ]
 }
 
-//// [/a/bin/a.d.ts]
+//// [/home/src/projects/project/a/bin/a.d.ts]
 export declare function fnA(): void;
 export interface IfaceA {
 }
 export declare const instanceA: IfaceA;
 //# sourceMappingURL=a.d.ts.map
 
-//// [/b/b.ts]
+//// [/home/src/projects/project/b/b.ts]
 export function fnB() {}
 
-//// [/b/bin/b.d.ts.map]
+//// [/home/src/projects/project/b/bin/b.d.ts.map]
 {
   "version": 3,
   "file": "b.d.ts",
@@ -43,16 +43,16 @@ export function fnB() {}
   "mappings": "AAAA,wBAAgB,GAAG,SAAK"
 }
 
-//// [/b/bin/b.d.ts]
+//// [/home/src/projects/project/b/bin/b.d.ts]
 export declare function fnB(): void;
 //# sourceMappingURL=b.d.ts.map
 
-//// [/user/user.ts]
+//// [/home/src/projects/project/user/user.ts]
 import * as a from "../a/bin/a";
 import * as b from "../b/bin/b";
 export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }
 
-//// [/dummy/dummy.ts]
+//// [/home/src/projects/project/dummy/dummy.ts]
 let a = 10;
 
 
@@ -60,22 +60,36 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/user/user.ts"
+        "file": "/home/src/projects/project/user/user.ts"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/user.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/user/user.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/user/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/user/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/bin/b.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/b 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/b 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/bin/a.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/b/bin/b.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/bin/a.d.ts Text-1 "export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# sourceMappingURL=a.d.ts.map"
-	/b/bin/b.d.ts Text-1 "export declare function fnB(): void;\n//# sourceMappingURL=b.d.ts.map"
-	/user/user.ts SVC-1-0 "import * as a from \"../a/bin/a\";\nimport * as b from \"../b/bin/b\";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
+	/home/src/projects/project/a/bin/a.d.ts Text-1 "export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# sourceMappingURL=a.d.ts.map"
+	/home/src/projects/project/b/bin/b.d.ts Text-1 "export declare function fnB(): void;\n//# sourceMappingURL=b.d.ts.map"
+	/home/src/projects/project/user/user.ts SVC-1-0 "import * as a from \"../a/bin/a\";\nimport * as b from \"../b/bin/b\";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
 
 
 	../a/bin/a.d.ts
@@ -91,7 +105,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /user/user.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/user/user.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -107,13 +121,33 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/user/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/user/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/user/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/bin/a.d.ts: *new*
+/home/src/projects/project/a/bin/a.d.ts: *new*
   {}
-/b/bin/b.d.ts: *new*
+/home/src/projects/project/b/bin/b.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project/a: *new*
+  {}
+/home/src/projects/project/b: *new*
   {}
 
 Projects::
@@ -123,15 +157,15 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/bin/a.d.ts *new*
+/home/src/projects/project/a/bin/a.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/b/bin/b.d.ts *new*
+/home/src/projects/project/b/bin/b.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/user/user.ts (Open) *new*
+/home/src/projects/project/user/user.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -142,20 +176,20 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
-        "file": "/user/user.ts",
+        "file": "/home/src/projects/project/user/user.ts",
         "line": 3,
         "offset": 30
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts.map 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/bin/a.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "definitions": [
           {
-            "file": "/a/bin/a.d.ts",
+            "file": "/home/src/projects/project/a/bin/a.d.ts",
             "start": {
               "line": 1,
               "offset": 25
@@ -190,15 +224,35 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/user/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/user/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/user/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/bin/a.d.ts:
+/home/src/projects/project/a/bin/a.d.ts:
   {}
-/a/bin/a.d.ts.map: *new*
+/home/src/projects/project/a/bin/a.d.ts.map: *new*
   {}
-/b/bin/b.d.ts:
+/home/src/projects/project/b/bin/b.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project/a:
+  {}
+/home/src/projects/project/b:
   {}
 
 Projects::
@@ -206,25 +260,25 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
-        /a/bin/a.d.ts: identitySourceMapConsumer *new*
+        /home/src/projects/project/a/bin/a.d.ts: identitySourceMapConsumer *new*
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/bin/a.d.ts *changed*
+/home/src/projects/project/a/bin/a.d.ts *changed*
     version: Text-1
-    sourceMapFilePath: /a/bin/a.d.ts.map *changed*
+    sourceMapFilePath: /home/src/projects/project/a/bin/a.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/bin/a.d.ts.map *new*
+/home/src/projects/project/a/bin/a.d.ts.map *new*
     version: Text-1
-    declarationInfoPath: /a/bin/a.d.ts
+    declarationInfoPath: /home/src/projects/project/a/bin/a.d.ts
     documentPositionMapper: false
     containingProjects: 0
-/b/bin/b.d.ts
+/home/src/projects/project/b/bin/b.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/user/user.ts (Open)
+/home/src/projects/project/user/user.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -235,21 +289,21 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "definitionAndBoundSpan",
       "arguments": {
-        "file": "/user/user.ts",
+        "file": "/home/src/projects/project/user/user.ts",
         "line": 3,
         "offset": 39
       },
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/bin/b.d.ts.map 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/b/bin/b.d.ts.map 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "definitions": [
           {
-            "file": "/b/b.ts",
+            "file": "/home/src/projects/project/b/b.ts",
             "start": {
               "line": 1,
               "offset": 17
@@ -284,19 +338,39 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/user/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/user/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/user/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/bin/a.d.ts:
+/home/src/projects/project/a/bin/a.d.ts:
   {}
-/a/bin/a.d.ts.map:
+/home/src/projects/project/a/bin/a.d.ts.map:
   {}
-/b/b.ts: *new*
+/home/src/projects/project/b/b.ts: *new*
   {}
-/b/bin/b.d.ts:
+/home/src/projects/project/b/bin/b.d.ts:
   {}
-/b/bin/b.d.ts.map: *new*
+/home/src/projects/project/b/bin/b.d.ts.map: *new*
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project/a:
+  {}
+/home/src/projects/project/b:
   {}
 
 Projects::
@@ -304,37 +378,37 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     documentPositionMappers: 2 *changed*
-        /a/bin/a.d.ts: identitySourceMapConsumer
-        /b/bin/b.d.ts: DocumentPositionMapper1 *new*
+        /home/src/projects/project/a/bin/a.d.ts: identitySourceMapConsumer
+        /home/src/projects/project/b/bin/b.d.ts: DocumentPositionMapper1 *new*
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/bin/a.d.ts
+/home/src/projects/project/a/bin/a.d.ts
     version: Text-1
-    sourceMapFilePath: /a/bin/a.d.ts.map
+    sourceMapFilePath: /home/src/projects/project/a/bin/a.d.ts.map
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/bin/a.d.ts.map
+/home/src/projects/project/a/bin/a.d.ts.map
     version: Text-1
-    declarationInfoPath: /a/bin/a.d.ts
+    declarationInfoPath: /home/src/projects/project/a/bin/a.d.ts
     documentPositionMapper: false
     containingProjects: 0
-/b/b.ts *new*
+/home/src/projects/project/b/b.ts *new*
     version: Text-1
     containingProjects: 0
-/b/bin/b.d.ts *changed*
+/home/src/projects/project/b/bin/b.d.ts *changed*
     version: Text-1
-    sourceMapFilePath: /b/bin/b.d.ts.map *changed*
+    sourceMapFilePath: /home/src/projects/project/b/bin/b.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
-/b/bin/b.d.ts.map *new*
+/home/src/projects/project/b/bin/b.d.ts.map *new*
     version: Text-1
-    declarationInfoPath: /b/bin/b.d.ts
+    declarationInfoPath: /home/src/projects/project/b/bin/b.d.ts
     sourceInfos: 1
-        /b/b.ts
+        /home/src/projects/project/b/b.ts
     documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
-/user/user.ts (Open)
+/home/src/projects/project/user/user.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -348,12 +422,16 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "close",
       "arguments": {
-        "file": "/user/user.ts"
+        "file": "/home/src/projects/project/user/user.ts"
       },
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/user.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/user/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/user/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/user/user.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -370,21 +448,43 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/user/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 
+PolledWatches *deleted*::
+/home/src/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/user/jsconfig.json:
+  {"pollingInterval":2000}
+/home/src/projects/project/user/tsconfig.json:
+  {"pollingInterval":2000}
+
 FsWatches::
-/a/bin/a.d.ts:
+/home/src/projects/project/a/bin/a.d.ts:
   {}
-/a/bin/a.d.ts.map:
+/home/src/projects/project/a/bin/a.d.ts.map:
   {}
-/b/b.ts:
+/home/src/projects/project/b/b.ts:
   {}
-/b/bin/b.d.ts:
+/home/src/projects/project/b/bin/b.d.ts:
   {}
-/b/bin/b.d.ts.map:
+/home/src/projects/project/b/bin/b.d.ts.map:
   {}
-/user/user.ts: *new*
+/home/src/projects/project/user/user.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project/a:
+  {}
+/home/src/projects/project/b:
   {}
 
 Projects::
@@ -396,32 +496,32 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/bin/a.d.ts
+/home/src/projects/project/a/bin/a.d.ts
     version: Text-1
-    sourceMapFilePath: /a/bin/a.d.ts.map
+    sourceMapFilePath: /home/src/projects/project/a/bin/a.d.ts.map
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/bin/a.d.ts.map
+/home/src/projects/project/a/bin/a.d.ts.map
     version: Text-1
-    declarationInfoPath: /a/bin/a.d.ts
+    declarationInfoPath: /home/src/projects/project/a/bin/a.d.ts
     documentPositionMapper: false
     containingProjects: 0
-/b/b.ts
+/home/src/projects/project/b/b.ts
     version: Text-1
     containingProjects: 0
-/b/bin/b.d.ts
+/home/src/projects/project/b/bin/b.d.ts
     version: Text-1
-    sourceMapFilePath: /b/bin/b.d.ts.map
+    sourceMapFilePath: /home/src/projects/project/b/bin/b.d.ts.map
     containingProjects: 1
         /dev/null/inferredProject1*
-/b/bin/b.d.ts.map
+/home/src/projects/project/b/bin/b.d.ts.map
     version: Text-1
-    declarationInfoPath: /b/bin/b.d.ts
+    declarationInfoPath: /home/src/projects/project/b/bin/b.d.ts
     sourceInfos: 1
-        /b/b.ts
+        /home/src/projects/project/b/b.ts
     documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
-/user/user.ts *changed*
+/home/src/projects/project/user/user.ts *changed*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*
@@ -433,18 +533,28 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/dummy/dummy.ts"
+        "file": "/home/src/projects/project/dummy/dummy.ts"
       },
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /dummy/dummy.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/dummy/dummy.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/dummy/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/dummy/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/dummy/dummy.ts SVC-1-0 "let a = 10;"
+	/home/src/projects/project/dummy/dummy.ts SVC-1-0 "let a = 10;"
 
 
 	dummy.ts
@@ -454,9 +564,9 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/bin/a.d.ts
-	/b/bin/b.d.ts
-	/user/user.ts
+	/home/src/projects/project/a/bin/a.d.ts
+	/home/src/projects/project/b/bin/b.d.ts
+	/home/src/projects/project/user/user.ts
 
 
 	../a/bin/a.d.ts
@@ -467,19 +577,29 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/user.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/bin/a.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/bin/b.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/bin/a.d.ts.map 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/bin/b.d.ts.map 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/a 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/b 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/b 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/user/user.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/a/bin/a.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/b/bin/b.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/a/bin/a.d.ts.map 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/b/bin/b.d.ts.map 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -495,21 +615,45 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/dummy/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/dummy/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/dummy/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/home/src/projects/project/user/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/bin/a.d.ts:
+/home/src/projects/project/a/bin/a.d.ts:
   {}
-/a/bin/a.d.ts.map:
+/home/src/projects/project/a/bin/a.d.ts.map:
   {}
-/b/b.ts:
+/home/src/projects/project/b/b.ts:
   {}
-/b/bin/b.d.ts:
+/home/src/projects/project/b/bin/b.d.ts:
   {}
-/b/bin/b.d.ts.map:
+/home/src/projects/project/b/bin/b.d.ts.map:
   {}
-/user/user.ts:
+/home/src/projects/project/user/user.ts:
+  {}
+
+FsWatchesRecursive *deleted*::
+/home/src/projects/project/a:
+  {}
+/home/src/projects/project/b:
   {}
 
 Projects::
@@ -520,8 +664,8 @@ Projects::
     isClosed: true *changed*
     isOrphan: true
     documentPositionMappers: 0 *changed*
-        /a/bin/a.d.ts: identitySourceMapConsumer *deleted*
-        /b/bin/b.d.ts: DocumentPositionMapper1 *deleted*
+        /home/src/projects/project/a/bin/a.d.ts: identitySourceMapConsumer *deleted*
+        /home/src/projects/project/b/bin/b.d.ts: DocumentPositionMapper1 *deleted*
     autoImportProviderHost: undefined *changed*
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
@@ -529,36 +673,36 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/bin/a.d.ts *deleted*
+/home/src/projects/project/a/bin/a.d.ts *deleted*
     version: Text-1
-    sourceMapFilePath: /a/bin/a.d.ts.map
+    sourceMapFilePath: /home/src/projects/project/a/bin/a.d.ts.map
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/a/bin/a.d.ts.map *deleted*
+/home/src/projects/project/a/bin/a.d.ts.map *deleted*
     version: Text-1
-    declarationInfoPath: /a/bin/a.d.ts
+    declarationInfoPath: /home/src/projects/project/a/bin/a.d.ts
     documentPositionMapper: false
     containingProjects: 0
-/b/b.ts *deleted*
+/home/src/projects/project/b/b.ts *deleted*
     version: Text-1
     containingProjects: 0
-/b/bin/b.d.ts *deleted*
+/home/src/projects/project/b/bin/b.d.ts *deleted*
     version: Text-1
-    sourceMapFilePath: /b/bin/b.d.ts.map
+    sourceMapFilePath: /home/src/projects/project/b/bin/b.d.ts.map
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/b/bin/b.d.ts.map *deleted*
+/home/src/projects/project/b/bin/b.d.ts.map *deleted*
     version: Text-1
-    declarationInfoPath: /b/bin/b.d.ts
+    declarationInfoPath: /home/src/projects/project/b/bin/b.d.ts
     sourceInfos: 1
-        /b/b.ts
+        /home/src/projects/project/b/b.ts
     documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
-/dummy/dummy.ts (Open) *new*
+/home/src/projects/project/dummy/dummy.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2* *default*
-/user/user.ts *deleted*
+/home/src/projects/project/user/user.ts *deleted*
     version: SVC-1-0
     containingProjects: 0
 

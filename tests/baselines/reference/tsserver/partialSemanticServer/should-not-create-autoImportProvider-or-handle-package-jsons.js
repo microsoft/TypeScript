@@ -1,22 +1,22 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/node_modules/@angular/forms/forms.d.ts]
+//// [/user/username/projects/myproject/node_modules/@angular/forms/forms.d.ts]
 export declare class PatternValidator {}
 
-//// [/node_modules/@angular/forms/package.json]
+//// [/user/username/projects/myproject/node_modules/@angular/forms/package.json]
 { "name": "@angular/forms", "typings": "./forms.d.ts" }
 
-//// [/tsconfig.json]
+//// [/user/username/projects/myproject/tsconfig.json]
 { "compilerOptions": { "module": "commonjs" } }
 
-//// [/package.json]
+//// [/user/username/projects/myproject/package.json]
 { "dependencies": { "@angular/forms": "*", "@angular/core": "*" } }
 
-//// [/index.ts]
+//// [/user/username/projects/myproject/index.ts]
 
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -28,13 +28,15 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/index.ts"
+        "file": "/user/username/projects/myproject/index.ts"
       },
       "seq": 1,
       "type": "request"
@@ -43,13 +45,13 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/index.ts SVC-1-0 ""
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/user/username/projects/myproject/index.ts SVC-1-0 ""
 
 
-	a/lib/lib.d.ts
+	../../../tslibs/ts/lib/lib.d.ts
 	  Default library for target 'es5'
-	index.ts
+	../../../../../user/username/projects/myproject/index.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -58,7 +60,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -80,11 +82,11 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.d.ts *new*
+/home/src/tslibs/ts/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/index.ts (Open) *new*
+/user/username/projects/myproject/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*

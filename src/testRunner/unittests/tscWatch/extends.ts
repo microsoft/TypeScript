@@ -6,7 +6,7 @@ import {
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: extends::", () => {
+describe("unittests:: tscWatch:: extends::", () => {
     verifyTscWatch({
         scenario: "extends",
         subScenario: "resolves the symlink path",
@@ -17,7 +17,11 @@ describe("unittests:: tsc-watch:: extends::", () => {
     verifyTscWatch({
         scenario: "extends",
         subScenario: "configDir template",
-        sys: () => createWatchedSystem(getConfigDirExtendsSys(), { currentDirectory: "/home/src/projects/myproject" }),
+        sys: () =>
+            createWatchedSystem(
+                getConfigDirExtendsSys(),
+                { currentDirectory: "/home/src/projects/myproject" },
+            ),
         commandLineArgs: ["-w", "--extendedDiagnostics", "--explainFiles"],
         edits: [{
             caption: "edit extended config file",

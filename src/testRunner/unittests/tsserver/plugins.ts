@@ -58,9 +58,9 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             "myPlugin/../malicious",
             "myPlugin/subpath/../../malicious",
         ];
-        const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: jsonToReadableText({
                 compilerOptions: {
                     plugins: [
@@ -90,9 +90,9 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             "myPlugin/../malicious",
             "myPlugin/subpath/../../malicious",
         ];
-        const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: "{}",
         };
         const { session } = createHostWithPlugin([aTs, tsconfig, libFile], [...expectedToLoad, ...notToLoad]);
@@ -102,9 +102,9 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
 
     it("With session and custom protocol message", () => {
         const pluginName = "some-plugin";
-        const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+        const aTs: File = { path: "/home/src/projects/project/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
         const tsconfig: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: jsonToReadableText({
                 compilerOptions: {
                     plugins: [
@@ -213,19 +213,19 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
 describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", () => {
     it("getSupportedCodeFixes can be proxied", () => {
         const aTs: File = {
-            path: "/a.ts",
+            path: "/home/src/projects/project/a.ts",
             content: `class c { prop = "hello"; foo() { const x = 0; } }`,
         };
         const bTs: File = {
-            path: "/b.ts",
+            path: "/home/src/projects/project/b.ts",
             content: aTs.content,
         };
         const cTs: File = {
-            path: "/c.ts",
+            path: "/home/src/projects/project/c.ts",
             content: aTs.content,
         };
         const config: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: jsonToReadableText({
                 compilerOptions: { plugins: [{ name: "myplugin" }] },
             }),
@@ -238,9 +238,9 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
                         const proxy = Harness.LanguageService.makeDefaultProxy(info);
                         proxy.getSupportedCodeFixes = fileName => {
                             switch (fileName) {
-                                case "/a.ts":
+                                case "/home/src/projects/project/a.ts":
                                     return ["a"];
-                                case "/b.ts":
+                                case "/home/src/projects/project/b.ts":
                                     return ["b"];
                                 default:
                                     // Make this stable list of single item so we dont have to update the baseline for every additional error

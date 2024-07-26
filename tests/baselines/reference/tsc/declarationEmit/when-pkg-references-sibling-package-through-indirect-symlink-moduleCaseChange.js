@@ -62,7 +62,7 @@ export const ADMIN = MetadataAccessor.create<boolean>('1');
 
 //// [/user/username/projects/myProject/pkg2/node_modules/@raymondfeng/pkg1] symlink(/user/username/projects/myProject/pkg1)
 //// [/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2] symlink(/user/username/projects/myproject/pkg2)
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -74,16 +74,18 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -p pkg3 --explainFiles
+/home/src/tslibs/ts/lib/tsc.js -p pkg3 --explainFiles
 Output::
 [96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
 
 [7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
 [7m [0m [91m             ~~~~~[0m
 
-../../../../a/lib/lib.d.ts
+../../../../home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 pkg1/dist/types.d.ts
   Imported via './types' from file 'pkg1/dist/index.d.ts'
@@ -154,7 +156,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/myProject/pkg1/dist/types.d.ts
 /user/username/projects/myProject/pkg1/dist/index.d.ts
 /user/username/projects/myproject/pkg2/dist/types.d.ts

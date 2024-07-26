@@ -1,7 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/b/app.ts]
+//// [/home/src/projects/myproject/app.ts]
 let xyz = 1;
 
 
@@ -9,19 +9,25 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/app.ts"
+        "file": "/home/src/projects/myproject/app.ts"
       },
       "seq": 1,
       "type": "request"
     }
 TestServerCancellationToken:: Cancellation Request id:: 1
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/app.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/myproject/app.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/app.ts SVC-1-0 "let xyz = 1;"
+	/home/src/projects/myproject/app.ts SVC-1-0 "let xyz = 1;"
 
 
 	app.ts
@@ -33,7 +39,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/myproject/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -50,7 +56,15 @@ TestServerCancellationToken:: resetRequest:: 1 is as expected
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects/myproject/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/myproject/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 Projects::
@@ -60,7 +74,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/b/app.ts (Open) *new*
+/home/src/projects/myproject/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -72,7 +86,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "geterr",
       "arguments": {
         "files": [
-          "/a/b/app.ts"
+          "/home/src/projects/myproject/app.ts"
         ],
         "delay": 0
       },
@@ -92,11 +106,11 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "documentHighlights",
       "arguments": {
-        "file": "/a/b/app.ts",
+        "file": "/home/src/projects/myproject/app.ts",
         "line": 1,
         "offset": 6,
         "filesToSearch": [
-          "/a/b/app.ts"
+          "/home/src/projects/myproject/app.ts"
         ]
       },
       "seq": 3,
@@ -108,7 +122,7 @@ Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
-          "file": "/a/b/app.ts",
+          "file": "/home/src/projects/myproject/app.ts",
           "highlightSpans": [
             {
               "start": {
@@ -146,7 +160,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "syntaxDiag",
       "body": {
-        "file": "/a/b/app.ts",
+        "file": "/home/src/projects/myproject/app.ts",
         "diagnostics": []
       }
     }
@@ -166,7 +180,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "semanticDiag",
       "body": {
-        "file": "/a/b/app.ts",
+        "file": "/home/src/projects/myproject/app.ts",
         "diagnostics": []
       }
     }
@@ -186,7 +200,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "suggestionDiag",
       "body": {
-        "file": "/a/b/app.ts",
+        "file": "/home/src/projects/myproject/app.ts",
         "diagnostics": []
       }
     }
@@ -203,7 +217,7 @@ Info seq  [hh:mm:ss:mss] event:
               "syntaxDiag": *,
               "semanticDiag": *,
               "suggestionDiag": *,
-              "file": "/a/b/app.ts"
+              "file": "/home/src/projects/myproject/app.ts"
             }
           ]
         }

@@ -1,19 +1,19 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 
-//// [/a/app.js]
+//// [/home/src/projects/project/app.js]
 
 
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/a",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {
         "node": {
-          "typingLocation": "/a/cache/node_modules/@types/node/index.d.ts",
+          "typingLocation": "/home/src/typinginstaller/globalcache/data/node_modules/@types/node/index.d.ts",
           "version": {
             "major": 1,
             "minor": 0,
@@ -52,7 +52,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "node"
       ],
       "filesToWatch": [
-        "/a/bower_components",
-        "/a/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }

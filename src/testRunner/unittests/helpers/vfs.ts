@@ -1,6 +1,6 @@
 import { getDirectoryPath } from "../../_namespaces/ts.js";
 import * as vfs from "../../_namespaces/vfs.js";
-import { libContent } from "./contents.js";
+import { libFile } from "./virtualFileSystemWithWatch.js";
 
 export interface FsOptions {
     libContentToAppend?: string;
@@ -31,7 +31,7 @@ export function loadProjectFromFiles(
     });
     const libContentToAppend = valueOfFsOptions(options, "libContentToAppend");
     fs.mkdirpSync(defaultLibLocation);
-    fs.writeFileSync(`${defaultLibLocation}/lib.d.ts`, libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
+    fs.writeFileSync(`${defaultLibLocation}/lib.d.ts`, libContentToAppend ? `${libFile.content}${libContentToAppend}` : libFile.content);
     fs.makeReadonly();
     return fs;
 }

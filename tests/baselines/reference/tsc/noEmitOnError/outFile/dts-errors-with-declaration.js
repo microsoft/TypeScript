@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -44,7 +44,7 @@ export { }
 
 
 Output::
-/a/lib/tsc 
+/home/src/tslibs/ts/lib/tsc 
 [96msrc/main.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m2[0m export const a = class { private p = 10; };
@@ -73,7 +73,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -86,7 +86,7 @@ Input::
 
 
 Output::
-/a/lib/tsc 
+/home/src/tslibs/ts/lib/tsc 
 [96msrc/main.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m2[0m export const a = class { private p = 10; };
@@ -115,7 +115,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -133,7 +133,7 @@ export const a = class { p = 10; };
 
 
 Output::
-/a/lib/tsc 
+/home/src/tslibs/ts/lib/tsc 
 exitCode:: ExitStatus.Success
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -149,7 +149,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -203,7 +203,7 @@ Input::
 
 
 Output::
-/a/lib/tsc 
+/home/src/tslibs/ts/lib/tsc 
 exitCode:: ExitStatus.Success
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -219,7 +219,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts

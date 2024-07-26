@@ -1,19 +1,19 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/node_modules/@angular/forms/forms.d.ts]
+//// [/user/username/projects/project/node_modules/@angular/forms/forms.d.ts]
 export declare class PatternValidator {}
 
-//// [/node_modules/@angular/forms/package.json]
+//// [/user/username/projects/project/node_modules/@angular/forms/package.json]
 { "name": "@angular/forms", "typings": "./forms.d.ts" }
 
-//// [/tsconfig.json]
+//// [/user/username/projects/project/tsconfig.json]
 { "compilerOptions": { "module": "commonjs" } }
 
-//// [/package.json]
+//// [/user/username/projects/project/package.json]
 { "dependencies": { "@angular/forms": "*", "@angular/core": "*" } }
 
-//// [/index.ts]
+//// [/user/username/projects/project/index.ts]
 
 
 
@@ -45,57 +45,61 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/index.ts"
+        "file": "/user/username/projects/project/index.ts"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /index.ts to open"
+        "projectName": "/user/username/projects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/project/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/tsconfig.json : {
  "rootNames": [
-  "/index.ts"
+  "/user/username/projects/project/index.ts"
  ],
  "options": {
   "module": 1,
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/index.ts SVC-1-0 ""
+	/user/username/projects/project/index.ts SVC-1-0 ""
 
 
 	index.ts
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@angular/forms/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@angular/forms/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/node_modules/@angular/forms/forms.d.ts Text-1 "export declare class PatternValidator {}"
+	/user/username/projects/project/node_modules/@angular/forms/forms.d.ts Text-1 "export declare class PatternValidator {}"
 
 
 	node_modules/@angular/forms/forms.d.ts
@@ -108,7 +112,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/user/username/projects/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -119,7 +123,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "projectId": "ff5803d884ff4e4485901596e00c181622d4efba4fec19a41fe48adf94ccdf94",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -160,11 +164,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/index.ts",
-        "configFile": "/tsconfig.json",
+        "triggerFile": "/user/username/projects/project/index.ts",
+        "configFile": "/user/username/projects/project/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/home/src/tslibs/ts/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
             "code": 6053,
             "category": "error"
           },
@@ -211,7 +215,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -220,8 +224,8 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -237,38 +241,42 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/node_modules/@angular/forms/package.json: *new*
+/user/username/projects/project/node_modules/@angular/forms/package.json: *new*
   {}
-/package.json: *new*
+/user/username/projects/project/package.json: *new*
   {}
-/tsconfig.json: *new*
+/user/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/: *new*
+/user/username/projects/project: *new*
   {}
-/node_modules: *new*
+/user/username/projects/project/node_modules: *new*
   {}
 
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured) *new*
+/user/username/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
-/index.ts (Open) *new*
+/user/username/projects/project/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json *default*
-/node_modules/@angular/forms/forms.d.ts *new*
+        /user/username/projects/project/tsconfig.json *default*
+/user/username/projects/project/node_modules/@angular/forms/forms.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
@@ -281,13 +289,13 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "close",
       "arguments": {
-        "file": "/index.ts"
+        "file": "/user/username/projects/project/index.ts"
       },
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -307,42 +315,46 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/index.ts: *new*
+/user/username/projects/project/index.ts: *new*
   {}
-/node_modules/@angular/forms/package.json:
+/user/username/projects/project/node_modules/@angular/forms/package.json:
   {}
-/package.json:
+/user/username/projects/project/package.json:
   {}
-/tsconfig.json:
+/user/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/:
+/user/username/projects/project:
   {}
-/node_modules:
+/user/username/projects/project/node_modules:
   {}
 
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider)
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured) *changed*
+/user/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: true *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
-/index.ts *changed*
+/user/username/projects/project/index.ts *changed*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
-/node_modules/@angular/forms/forms.d.ts
+        /user/username/projects/project/tsconfig.json
+/user/username/projects/project/node_modules/@angular/forms/forms.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
@@ -353,20 +365,31 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/random/random.ts",
-        "projectRootPath": "/random",
+        "file": "/user/username/projects/project/random/random.ts",
+        "projectRootPath": "/user/username/projects/project/random",
         "fileContent": "export const y = 10;"
       },
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /random/random.ts ProjectRootPath: /random:: Result: undefined
+Info seq  [hh:mm:ss:mss] Invoking /user/username/projects/project/tsconfig.json:: wildcard for open scriptInfo:: /user/username/projects/project/random/random.ts
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/random/random.ts ProjectRootPath: /user/username/projects/project/random:: Result: undefined
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/random/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/random/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/random/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/random/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/random/random.ts SVC-1-0 "export const y = 10;"
+	/user/username/projects/project/random/random.ts SVC-1-0 "export const y = 10;"
 
 
 	random.ts
@@ -375,11 +398,11 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject2*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@angular/forms/package.json 2000 undefined Project: /dev/null/autoImportProviderProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@angular/forms/package.json 2000 undefined Project: /dev/null/autoImportProviderProject2* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject2*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/node_modules/@angular/forms/forms.d.ts Text-1 "export declare class PatternValidator {}"
+	/user/username/projects/project/node_modules/@angular/forms/forms.d.ts Text-1 "export declare class PatternValidator {}"
 
 
 	../node_modules/@angular/forms/forms.d.ts
@@ -387,9 +410,9 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/index.ts
+	/user/username/projects/project/index.ts
 
 
 	index.ts
@@ -400,12 +423,16 @@ Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoIm
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /node_modules/@angular/forms/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules/@angular/forms/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
@@ -415,7 +442,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /random/random.ts ProjectRootPath: /random
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/random/random.ts ProjectRootPath: /user/username/projects/project/random
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -432,28 +459,42 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/random/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/project/random/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/random/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/node_modules/@angular/forms/package.json:
+/user/username/projects/project/node_modules/@angular/forms/package.json:
   {}
-/package.json:
+/user/username/projects/project/package.json:
   {}
 
 FsWatches *deleted*::
-/index.ts:
+/user/username/projects/project/index.ts:
   {}
-/tsconfig.json:
+/user/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/node_modules:
+/user/username/projects/project/node_modules:
   {}
 
 FsWatchesRecursive *deleted*::
-/:
+/user/username/projects/project:
   {}
+
+Timeout callback:: count: 2
+1: /user/username/projects/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
@@ -467,24 +508,25 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject2*
-/tsconfig.json (Configured) *deleted*
-    projectStateVersion: 1
+/user/username/projects/project/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
     isClosed: true *changed*
     noOpenRef: true
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/index.ts *deleted*
+/user/username/projects/project/index.ts *deleted*
     version: SVC-1-0
     containingProjects: 0 *changed*
-        /tsconfig.json *deleted*
-/node_modules/@angular/forms/forms.d.ts *changed*
+        /user/username/projects/project/tsconfig.json *deleted*
+/user/username/projects/project/node_modules/@angular/forms/forms.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
         /dev/null/autoImportProviderProject2* *new*
         /dev/null/autoImportProviderProject1* *deleted*
-/random/random.ts (Open) *new*
+/user/username/projects/project/random/random.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*

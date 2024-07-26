@@ -13,10 +13,10 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: console clearing", () => {
+describe("unittests:: tscWatch:: consoleClearing::", () => {
     const scenario = "consoleClearing";
     const file: File = {
-        path: "/f.ts",
+        path: "/user/username/projects/myproject/f.ts",
         content: "",
     };
 
@@ -31,7 +31,7 @@ describe("unittests:: tsc-watch:: console clearing", () => {
             scenario,
             subScenario,
             commandLineArgs: ["--w", file.path, ...commandLineOptions || ts.emptyArray],
-            sys: () => createWatchedSystem([file, libFile]),
+            sys: () => createWatchedSystem([file, libFile], { currentDirectory: ts.getDirectoryPath(file.path) }),
             edits: makeChangeToFile,
         });
     }
@@ -46,12 +46,11 @@ describe("unittests:: tsc-watch:: console clearing", () => {
             preserveWatchOutput: true,
         };
         const configFile: File = {
-            path: "/tsconfig.json",
+            path: "/user/username/projects/myproject/tsconfig.json",
             content: jsonToReadableText({ compilerOptions }),
         };
-        const files = [file, configFile, libFile];
         it("using createWatchOfConfigFile ", () => {
-            const baseline = createBaseline(createWatchedSystem(files));
+            const baseline = createBaseline(sys());
             const watch = ts.createWatchProgram(createWatchCompilerHostOfConfigFileForBaseline({
                 system: baseline.sys,
                 cb: baseline.cb,
@@ -72,8 +71,15 @@ describe("unittests:: tsc-watch:: console clearing", () => {
             scenario,
             subScenario: "when preserveWatchOutput is true in config file/when createWatchProgram is invoked with configFileParseResult on WatchCompilerHostOfConfigFile",
             commandLineArgs: ["--w", "-p", configFile.path],
-            sys: () => createWatchedSystem(files),
+            sys,
             edits: makeChangeToFile,
         });
+
+        function sys() {
+            return createWatchedSystem(
+                [file, configFile, libFile],
+                { currentDirectory: ts.getDirectoryPath(configFile.path) },
+            );
+        }
     });
 });

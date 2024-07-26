@@ -1,4 +1,4 @@
-currentDirectory:: c:/ useCaseSensitiveFileNames: false
+currentDirectory:: c:\ useCaseSensitiveFileNames: false
 Input::
 //// [c:/project/a.ts]
 
@@ -14,7 +14,7 @@ import { b } from "c://project/a"
 a;b;
 
 
-//// [c:/a/lib/lib.d.ts]
+//// [c:/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -26,6 +26,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 //// [c:/project/tsconfig.json]
 {
@@ -35,12 +37,12 @@ interface Array<T> { length: number; [n: number]: T; }
 }
 
 
-c:/a/lib/tsc.js --w --p c://project --explainFiles
+c:\home\src\tslibs\ts\lib\tsc.js --w --p c://project --explainFiles
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-a/lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 project/a.ts
   Matched by default include pattern '**/*'
@@ -75,7 +77,7 @@ c:/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/a/lib/lib.d.ts: *new*
+c:/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
 c:/project/a.ts: *new*
   {}
@@ -101,17 +103,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/ts/lib/lib.d.ts
 c:/project/a.ts
 c:/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/ts/lib/lib.d.ts
 c:/project/a.ts
 c:/project/b.ts
 
 Shape signatures in builder refreshed for::
-c:/a/lib/lib.d.ts (used version)
+c:/home/src/tslibs/ts/lib/lib.d.ts (used version)
 c:/project/a.ts (used version)
 c:/project/b.ts (used version)
 
@@ -140,7 +142,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-a/lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 project/a.ts
   Matched by default include pattern '**/*'
@@ -177,7 +179,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-c:/a/lib/lib.d.ts
+c:/home/src/tslibs/ts/lib/lib.d.ts
 c:/project/a.ts
 c:/project/b.ts
 

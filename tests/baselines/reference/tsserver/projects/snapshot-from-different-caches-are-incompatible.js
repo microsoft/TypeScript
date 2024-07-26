@@ -1,7 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/b/app.ts]
+//// [/user/username/projects/project/app.ts]
 let x = 1;
 
 
@@ -9,10 +9,10 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
       "arguments": {
-        "projectFileName": "/a/b/proj.csproj",
+        "projectFileName": "/user/username/projects/project/proj.csproj",
         "rootFiles": [
           {
-            "fileName": "/a/b/app.ts"
+            "fileName": "/user/username/projects/project/app.ts"
           }
         ],
         "options": {}
@@ -20,13 +20,17 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/proj.csproj
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /user/username/projects/project/proj.csproj WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/proj.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/proj.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/proj.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/proj.csproj WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/proj.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/app.ts Text-1 "let x = 1;"
+	/user/username/projects/project/app.ts Text-1 "let x = 1;"
 
 
 	app.ts
@@ -41,7 +45,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "7d0d239eb8f7600241cce3b3ce765a6b11bf39462cafa1532e07ec468540ed99",
+          "projectId": "18a2058beb6d369fca2b96221855a8acc41d895614c04223c0ff32067ba312ac",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -70,7 +74,7 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -86,23 +90,27 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/app.ts: *new*
+/user/username/projects/project/app.ts: *new*
   {}
 
 Projects::
-/a/b/proj.csproj (External) *new*
+/user/username/projects/project/proj.csproj (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/app.ts *new*
+/user/username/projects/project/app.ts *new*
     version: Text-1
     containingProjects: 1
-        /a/b/proj.csproj
+        /user/username/projects/project/proj.csproj
 
 Before request
 
@@ -110,27 +118,27 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/app.ts",
+        "file": "/user/username/projects/project/app.ts",
         "fileContent": "let x = 1;\nlet y = 2;"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj.csproj
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj.csproj projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/proj.csproj
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/proj.csproj projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/app.ts SVC-2-0 "let x = 1;\nlet y = 2;"
+	/user/username/projects/project/app.ts SVC-2-0 "let x = 1;\nlet y = 2;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/proj.csproj
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/proj.csproj
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -145,24 +153,28 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/b/app.ts:
+/user/username/projects/project/app.ts:
   {}
 
 Projects::
-/a/b/proj.csproj (External) *changed*
+/user/username/projects/project/proj.csproj (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/app.ts (Open) *changed*
+/user/username/projects/project/app.ts (Open) *changed*
     open: true *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1
-        /a/b/proj.csproj *default*
+        /user/username/projects/project/proj.csproj *default*
 
 Before request
 
@@ -170,7 +182,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "navbar",
       "arguments": {
-        "file": "/a/b/app.ts"
+        "file": "/user/username/projects/project/app.ts"
       },
       "seq": 3,
       "type": "request"
@@ -247,13 +259,13 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "close",
       "arguments": {
-        "file": "/a/b/app.ts"
+        "file": "/user/username/projects/project/app.ts"
       },
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -269,26 +281,30 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/app.ts: *new*
+/user/username/projects/project/app.ts: *new*
   {}
 
 Projects::
-/a/b/proj.csproj (External) *changed*
+/user/username/projects/project/proj.csproj (External) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
 
 ScriptInfos::
-/a/b/app.ts *changed*
+/user/username/projects/project/app.ts *changed*
     open: false *changed*
     version: SVC-2-0
     pendingReloadFromDisk: true *changed*
     containingProjects: 1
-        /a/b/proj.csproj
+        /user/username/projects/project/proj.csproj
 
 Before request
 
@@ -296,26 +312,26 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/app.ts"
+        "file": "/user/username/projects/project/app.ts"
       },
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj.csproj
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj.csproj projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/proj.csproj
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/proj.csproj projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/app.ts SVC-3-0 "let x = 1;"
+	/user/username/projects/project/app.ts SVC-3-0 "let x = 1;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/a/b/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/proj.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/proj.csproj
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/proj.csproj
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -330,26 +346,30 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/b/app.ts:
+/user/username/projects/project/app.ts:
   {}
 
 Projects::
-/a/b/proj.csproj (External) *changed*
+/user/username/projects/project/proj.csproj (External) *changed*
     projectStateVersion: 3
     projectProgramVersion: 1
     dirty: false *changed*
 
 ScriptInfos::
-/a/b/app.ts (Open) *changed*
+/user/username/projects/project/app.ts (Open) *changed*
     open: true *changed*
     version: SVC-3-0 *changed*
     pendingReloadFromDisk: false *changed*
     containingProjects: 1
-        /a/b/proj.csproj *default*
+        /user/username/projects/project/proj.csproj *default*
 
 Before request
 
@@ -357,7 +377,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "navbar",
       "arguments": {
-        "file": "/a/b/app.ts"
+        "file": "/user/username/projects/project/app.ts"
       },
       "seq": 6,
       "type": "request"

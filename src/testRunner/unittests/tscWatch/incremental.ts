@@ -2,7 +2,6 @@ import * as Harness from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
 import { CommandLineProgram } from "../helpers/baseline.js";
-import { libContent } from "../helpers/contents.js";
 import {
     applyEdit,
     createBaseline,
@@ -16,7 +15,7 @@ import {
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: emit file --incremental", () => {
+describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
     const project = "/users/username/projects/project";
 
     const configFile: File = {
@@ -45,7 +44,10 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         { subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput,
         incremental: boolean,
     ) {
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+            files(),
+            { currentDirectory: project },
+        ));
         if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
         const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || ts.emptyArray)];
         baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
@@ -149,7 +151,10 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
             });
 
             it("verify that state is read correctly", () => {
-                const system = createWatchedSystem([libFile, file1, fileModified, config], { currentDirectory: project });
+                const system = createWatchedSystem(
+                    [libFile, file1, fileModified, config],
+                    { currentDirectory: project },
+                );
                 const reportDiagnostic = ts.createDiagnosticReporter(system);
                 const parsedConfig = ts.parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, reportDiagnostic)!;
                 ts.performIncrementalCompilation({
@@ -291,7 +296,7 @@ export interface A {
     verifyIncrementalWatchEmit({
         subScenario: "when file with ambient global declaration file is deleted",
         files: () => [
-            { path: libFile.path, content: libContent },
+            { path: libFile.path, content: libFile.content },
             { path: `${project}/globals.d.ts`, content: `declare namespace Config { const value: string;} ` },
             { path: `${project}/index.ts`, content: `console.log(Config.value);` },
             { path: configFile.path, content: jsonToReadableText({ compilerOptions: { incremental: true } }) },
@@ -317,7 +322,7 @@ export const Fragment: unique symbol;
         verifyIncrementalWatchEmit({
             subScenario: "jsxImportSource option changed",
             files: () => [
-                { path: libFile.path, content: libContent },
+                { path: libFile.path, content: libFile.content },
                 { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
                 { path: `${project}/node_modules/react/package.json`, content: jsonToReadableText({ name: "react", version: "0.0.1" }) },
                 { path: `${project}/node_modules/preact/jsx-runtime/index.d.ts`, content: jsxLibraryContent.replace("propA", "propB") },
@@ -332,7 +337,7 @@ export const Fragment: unique symbol;
         verifyIncrementalWatchEmit({
             subScenario: "jsxImportSource backing types added",
             files: () => [
-                { path: libFile.path, content: libContent },
+                { path: libFile.path, content: libFile.content },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
                 { path: configFile.path, content: jsonToReadableText({ compilerOptions: jsxImportSourceOptions }) },
             ],
@@ -348,7 +353,7 @@ export const Fragment: unique symbol;
         verifyIncrementalWatchEmit({
             subScenario: "jsxImportSource backing types removed",
             files: () => [
-                { path: libFile.path, content: libContent },
+                { path: libFile.path, content: libFile.content },
                 { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
                 { path: `${project}/node_modules/react/package.json`, content: jsonToReadableText({ name: "react", version: "0.0.1" }) },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
@@ -363,7 +368,7 @@ export const Fragment: unique symbol;
         verifyIncrementalWatchEmit({
             subScenario: "importHelpers backing types removed",
             files: () => [
-                { path: libFile.path, content: libContent },
+                { path: libFile.path, content: libFile.content },
                 { path: `${project}/node_modules/tslib/index.d.ts`, content: "export function __assign(...args: any[]): any;" },
                 { path: `${project}/node_modules/tslib/package.json`, content: jsonToReadableText({ name: "tslib", version: "0.0.1" }) },
                 { path: `${project}/index.tsx`, content: `export const x = {...{}};` },
@@ -380,7 +385,7 @@ export const Fragment: unique symbol;
         verifyIncrementalWatchEmit({
             subScenario: "editing module augmentation",
             files: () => [
-                { path: libFile.path, content: libContent },
+                { path: libFile.path, content: libFile.content },
                 { path: `${project}/node_modules/classnames/index.d.ts`, content: `export interface Result {} export default function classNames(): Result;` },
                 { path: `${project}/src/types/classnames.d.ts`, content: `export {}; declare module "classnames" { interface Result { foo } }` },
                 { path: `${project}/src/index.ts`, content: `import classNames from "classnames"; classNames().foo;` },
@@ -398,11 +403,11 @@ export const Fragment: unique symbol;
         subScenario: "tsbuildinfo has error",
         sys: () =>
             createWatchedSystem({
-                "/src/project/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": "{}",
-                "/src/project/tsconfig.tsbuildinfo": "Some random string",
+                "/home/src/projects/project/main.ts": "export const x = 10;",
+                "/home/src/projects/project/tsconfig.json": "{}",
+                "/home/src/projects/project/tsconfig.tsbuildinfo": "Some random string",
                 [libFile.path]: libFile.content,
-            }),
-        commandLineArgs: ["--p", "src/project", "-i", "-w"],
+            }, { currentDirectory: "/home/src/projects/project" }),
+        commandLineArgs: ["-i", "-w"],
     });
 });

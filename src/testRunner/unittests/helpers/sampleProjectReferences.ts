@@ -107,8 +107,5 @@ export function getSysForSampleProjectReferences(withNodeNext?: boolean, skipRef
 export function getServerHostForSampleProjectReferences() {
     return createServerHost(
         getFsContentsForSampleProjectReferences(),
-        {
-            currentDirectory: "/user/username/projects/sample1",
-        },
     );
 }

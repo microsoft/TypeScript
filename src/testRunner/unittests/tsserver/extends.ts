@@ -16,11 +16,11 @@ describe("unittests:: tsserver:: extends::", () => {
         const host = getSymlinkedExtendsSys(/*forTsserver*/ true);
         const session = new TestSession(host);
         openFilesForSession(["/users/user/projects/myproject/src/index.ts"], session);
-        baselineTsserverLogs("tsserver", "resolves the symlink path", session);
+        baselineTsserverLogs("extends", "resolves the symlink path", session);
     });
 
     it("configDir template", () => {
-        const host = createServerHost(getConfigDirExtendsSys(), { currentDirectory: "/home/src/projects/myproject" });
+        const host = createServerHost(getConfigDirExtendsSys());
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -33,6 +33,6 @@ describe("unittests:: tsserver:: extends::", () => {
         openFilesForSession(["/home/src/projects/myproject/src/secondary.ts"], session);
         modifyFirstExtendedConfigOfConfigDirExtendsSys(host);
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("tsserver", "configDir template", session);
+        baselineTsserverLogs("extends", "configDir template", session);
     });
 });

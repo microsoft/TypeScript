@@ -1,18 +1,5 @@
 currentDirectory:: /home/src/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-
 //// [/home/src/projects/configs/first/tsconfig.json]
 {
   "extends": "../second/tsconfig.json",
@@ -82,6 +69,21 @@ import { k } from "other/sometype2";
 //// [/home/src/projects/myproject/types/sometype.ts]
 export const x = 10;
 
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>

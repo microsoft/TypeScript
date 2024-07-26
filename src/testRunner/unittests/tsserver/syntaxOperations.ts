@@ -10,7 +10,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: syntax operations", () => {
+describe("unittests:: tsserver:: syntaxOperations::", () => {
     it("works when file is removed and added with different content", () => {
         const app: File = {
             path: `/user/username/projects/myproject/app.ts`,

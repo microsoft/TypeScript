@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/sample1 useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -97,7 +97,7 @@ export const m = mod;
 
 
 Output::
-/a/lib/tsc --b tests --dry
+/home/src/tslibs/ts/lib/tsc --b tests --dry
 [[90mHH:MM:SS AM[0m] A non-dry build would build project '/user/username/projects/sample1/core/tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] A non-dry build would build project '/user/username/projects/sample1/logic/tsconfig.json'

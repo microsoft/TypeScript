@@ -1,13 +1,13 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/bar.jsx]
+//// [/home/src/projects/project/bar.jsx]
 export function bar() { }
 
-//// [/foo.js]
+//// [/home/src/projects/project/foo.js]
 export function foo() { }
 
-//// [/tsconfig.json]
+//// [/home/src/projects/project/tsconfig.json]
 {
   "allowJS": true,
   "jsx": "preserve",
@@ -22,41 +22,45 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/bar.jsx"
+        "file": "/home/src/projects/project/bar.jsx"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /bar.jsx ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/bar.jsx ProjectRootPath: undefined:: Result: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /bar.jsx to open"
+        "projectName": "/home/src/projects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/bar.jsx to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/tsconfig.json : {
  "rootNames": [
-  "/foo.js",
-  "/bar.jsx"
+  "/home/src/projects/project/foo.js",
+  "/home/src/projects/project/bar.jsx"
  ],
  "options": {
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /foo.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/foo.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/foo.js Text-1 "export function foo() { }"
-	/bar.jsx SVC-1-0 "export function bar() { }"
+	/home/src/projects/project/foo.js Text-1 "export function foo() { }"
+	/home/src/projects/project/bar.jsx SVC-1-0 "export function bar() { }"
 
 
 	foo.js
@@ -71,7 +75,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/home/src/projects/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -82,7 +86,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "projectId": "1097a5f82e8323ba7aba7567ec06402f7ad4ea74abce44ec5efd223ac77ff169",
           "fileStats": {
             "js": 1,
             "jsSize": 25,
@@ -121,16 +125,16 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/bar.jsx",
-        "configFile": "/tsconfig.json",
+        "triggerFile": "/home/src/projects/project/bar.jsx",
+        "configFile": "/home/src/projects/project/tsconfig.json",
         "diagnostics": [
           {
-            "text": "Cannot write file '/foo.js' because it would overwrite input file.",
+            "text": "Cannot write file '/home/src/projects/project/foo.js' because it would overwrite input file.",
             "code": 5055,
             "category": "error"
           },
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/home/src/tslibs/ts/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
             "code": 6053,
             "category": "error"
           },
@@ -186,18 +190,18 @@ Info seq  [hh:mm:ss:mss] event:
             "text": "'jsx' should be set inside the 'compilerOptions' object of the config json file",
             "code": 6258,
             "category": "error",
-            "fileName": "/tsconfig.json"
+            "fileName": "/home/src/projects/project/tsconfig.json"
           }
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /bar.jsx ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/bar.jsx ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -212,30 +216,34 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/foo.js: *new*
+/home/src/projects/project/foo.js: *new*
   {}
-/tsconfig.json: *new*
+/home/src/projects/project/tsconfig.json: *new*
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/home/src/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/bar.jsx (Open) *new*
+/home/src/projects/project/bar.jsx (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json *default*
-/foo.js *new*
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/foo.js *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
+        /home/src/projects/project/tsconfig.json
 
 Before request
 
@@ -243,7 +251,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "getMoveToRefactoringFileSuggestions",
       "arguments": {
-        "file": "/bar.jsx",
+        "file": "/home/src/projects/project/bar.jsx",
         "line": 1,
         "offset": 7
       },
@@ -253,9 +261,9 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "newFileName": "/bar.1.jsx",
+        "newFileName": "/home/src/projects/project/bar.1.jsx",
         "files": [
-          "/foo.js"
+          "/home/src/projects/project/foo.js"
         ]
       },
       "responseRequired": true

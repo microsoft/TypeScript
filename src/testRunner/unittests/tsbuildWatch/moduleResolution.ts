@@ -3,10 +3,11 @@ import { jsonToReadableText } from "../helpers.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
+    getTypeScriptLibTestLocation,
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
+describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution::", () => {
     verifyTscWatch({
         scenario: "moduleResolutionCache",
         subScenario: "handles the cache correctly when two projects use different module resolution settings",
@@ -118,7 +119,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg2`,
                     symLink: `/user/username/projects/myproject/packages/pkg2`,
                 },
-                { ...libFile, path: `/a/lib/lib.es2022.full.d.ts` },
+                { ...libFile, path: getTypeScriptLibTestLocation("es2022.full") },
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"],
         edits: [

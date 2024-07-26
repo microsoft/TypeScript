@@ -1,9 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace useCaseSensitiveFileNames: false
 Input::
-//// [/a/b/app.ts]
+//// [/user/username/workspace/projects/project/app.ts]
 let x = 1
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,8 +15,10 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-//// [/a/b/tsconfig.json]
+//// [/user/username/workspace/projects/project/tsconfig.json]
 {
   "include": [
     "app.ts"
@@ -24,7 +26,7 @@ interface Array<T> { length: number; [n: number]: T; }
 }
 
 
-/a/lib/tsc.js -w -p /A/B/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js -w -p /user/username/workspace/PROJECTS/PROJECT/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -33,38 +35,46 @@ Output::
 
 
 
-//// [/A/B/app.js]
+//// [/user/username/workspace/PROJECTS/PROJECT/app.js]
 var x = 1;
 
 
 
+PolledWatches::
+/user/username/workspace/PROJECTS/PROJECT/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/PROJECTS/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/workspace/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/A/B/app.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
-/A/B/tsconfig.json: *new*
+/user/username/workspace/PROJECTS/PROJECT/app.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/workspace/PROJECTS/PROJECT/tsconfig.json: *new*
   {}
 
 Program root files: [
-  "/A/B/app.ts"
+  "/user/username/workspace/PROJECTS/PROJECT/app.ts"
 ]
 Program options: {
   "watch": true,
-  "project": "/A/B/tsconfig.json",
-  "configFilePath": "/A/B/tsconfig.json"
+  "project": "/user/username/workspace/PROJECTS/PROJECT/tsconfig.json",
+  "configFilePath": "/user/username/workspace/PROJECTS/PROJECT/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/A/B/app.ts
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/workspace/PROJECTS/PROJECT/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/A/B/app.ts
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/workspace/PROJECTS/PROJECT/app.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/app.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/workspace/projects/project/app.ts (used version)
 
 exitCode:: ExitStatus.undefined

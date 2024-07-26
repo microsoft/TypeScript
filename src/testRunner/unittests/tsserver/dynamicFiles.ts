@@ -31,8 +31,8 @@ var x = 10;`,
 describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
     const untitledFile = "untitled:^Untitled-1";
     it("Can convert positions to locations", () => {
-        const aTs: File = { path: "/proj/a.ts", content: "" };
-        const tsconfig: File = { path: "/proj/tsconfig.json", content: "{}" };
+        const aTs: File = { path: "/home/src/projects/project/proj/a.ts", content: "" };
+        const tsconfig: File = { path: "/home/src/projects/project/proj/tsconfig.json", content: "{}" };
         const host = createServerHost([aTs, tsconfig]);
         const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
 
@@ -44,7 +44,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
                 file: untitledFile,
                 fileContent: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />\nlet foo = 1;\nfooo/**/`,
                 scriptKindName: "TS",
-                projectRootPath: "/proj",
+                projectRootPath: "/home/src/projects/project/proj",
             },
         });
         session.executeCommandSeq<ts.server.protocol.CodeFixRequest>({
@@ -66,8 +66,8 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([config, libFile], { useCaseSensitiveFileNames: true, currentDirectory: "/user/username/projects/myproject" });
-        const session = new TestSession(host);
+        const host = createServerHost([config, libFile], { useCaseSensitiveFileNames: true });
+        const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
         openFilesForSession([{
             file: untitledFile,
             content: "const x = 10;",
@@ -86,13 +86,55 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
         }], session);
 
         closeFilesForSession([untitledFile], session);
-
         openFilesForSession([{
             file: untitledFile,
             content: "const x = 10;",
             projectRootPath: "/user/username/projects/myproject",
         }], session);
         baselineTsserverLogs("dynamicFiles", "opening untitled files", session);
+    });
+
+    it("opening untitled files without inferred project per projectRootPath", () => {
+        const config: File = {
+            path: `/user/username/projects/myproject/tsconfig.json`,
+            content: "{}",
+        };
+        const host = createServerHost([config, libFile], { useCaseSensitiveFileNames: true });
+        const session = new TestSession(host);
+        try {
+            openFilesForSession([{
+                file: untitledFile,
+                content: "const x = 10;",
+                projectRootPath: "/user/username/projects/myproject",
+            }], session);
+        }
+        catch (e) {
+            session.logger.info(e.message);
+        }
+
+        const untitled: File = {
+            path: `/user/username/projects/myproject/Untitled-1.ts`,
+            content: "const x = 10;",
+        };
+        host.writeFile(untitled.path, untitled.content);
+        openFilesForSession([{
+            file: untitled.path,
+            content: untitled.content,
+            projectRootPath: "/user/username/projects/myproject",
+        }], session);
+
+        closeFilesForSession([untitledFile], session);
+        try {
+            openFilesForSession([{
+                file: untitledFile,
+                content: "const x = 10;",
+                projectRootPath: "/user/username/projects/myproject",
+            }], session);
+        }
+        catch (e) {
+            session.logger.info(e.message);
+        }
+        baselineTsserverLogs("dynamicFiles", "opening untitled files without inferred project per projectRootPath", session);
     });
 
     it("opening and closing untitled files when projectRootPath is different from currentDirectory", () => {

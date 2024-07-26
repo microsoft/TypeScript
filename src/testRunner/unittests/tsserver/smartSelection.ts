@@ -11,10 +11,10 @@ import {
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 // More tests in fourslash/smartSelection_*
-describe("unittests:: tsserver:: smartSelection", () => {
+describe("unittests:: tsserver:: smartSelection::", () => {
     it("works for simple JavaScript", () => {
         const file: File = {
-            path: "/file.js",
+            path: "/home/src/projects/project/file.js",
             content: `
 class Foo {
     bar(a, b) {

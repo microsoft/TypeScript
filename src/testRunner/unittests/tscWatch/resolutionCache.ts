@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts.js";
 import * as Utils from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { libContent } from "../helpers/contents.js";
 import {
     createBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
@@ -15,7 +14,7 @@ import {
     SymLink,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution caching", () => {
+describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution caching", () => {
     const scenario = "resolutionCache";
     it("caching works", () => {
         const root = {
@@ -27,7 +26,10 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `foo()`,
         };
 
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+            [root, imported, libFile],
+            { currentDirectory: "/users/username/projects/project" },
+        ));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
@@ -112,7 +114,10 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `export const y = 1;`,
         };
 
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([root, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+            [root, libFile],
+            { currentDirectory: "/users/username/projects/project" },
+        ));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
@@ -169,7 +174,10 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `export const y = 1;export const x = 10;`,
         };
 
-        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
+            [root, imported, libFile],
+            { currentDirectory: "/users/username/projects/project" },
+        ));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
@@ -285,7 +293,10 @@ declare module "url" {
 }
 `,
             };
-            return createWatchedSystem([root, file, libFile], { currentDirectory: "/users/username/projects/project" });
+            return createWatchedSystem(
+                [root, file, libFile],
+                { currentDirectory: "/users/username/projects/project" },
+            );
         },
         edits: [
             {
@@ -336,7 +347,10 @@ declare module "fs" {
                     },
                 }),
             };
-            return createWatchedSystem([file1, file2, module1, libFile, configFile], { currentDirectory: "/a/b/projects/myProject/" });
+            return createWatchedSystem(
+                [file1, file2, module1, libFile, configFile],
+                { currentDirectory: "/a/b/projects/myProject/" },
+            );
         },
         edits: [
             {
@@ -360,7 +374,10 @@ declare module "fs" {
                 path: `/user/username/projects/myproject/node_modules2/@types/qqq/index.d.ts`,
                 content: "export {}",
             };
-            return createWatchedSystem([file, libFile, module], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem(
+                [file, libFile, module],
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
         },
         edits: [
             {
@@ -390,7 +407,10 @@ declare module "fs" {
                         path: `/user/username/projects/myproject/tsconfig.json`,
                         content: "{}",
                     };
-                    return createWatchedSystem([libFile, file1, file2, config]);
+                    return createWatchedSystem(
+                        [libFile, file1, file2, config],
+                        { currentDirectory: ts.getDirectoryPath(config.path) },
+                    );
                 },
                 edits: [
                     {
@@ -412,7 +432,7 @@ declare module "fs" {
     verifyTscWatch({
         scenario,
         subScenario: "when types in compiler option are global and installed at later point",
-        commandLineArgs: ["--w", "-p", `/user/username/projects/myproject/tsconfig.json`],
+        commandLineArgs: ["--w"],
         sys: () => {
             const app: File = {
                 path: `/user/username/projects/myproject/lib/app.ts`,
@@ -427,7 +447,10 @@ declare module "fs" {
                     },
                 }),
             };
-            return createWatchedSystem([app, tsconfig, libFile]);
+            return createWatchedSystem(
+                [app, tsconfig, libFile],
+                { currentDirectory: ts.getDirectoryPath(tsconfig.path) },
+            );
         },
         edits: [
             {
@@ -499,8 +522,10 @@ declare namespace myapp {
                 path: `${linkedPackageRoot}/dist/other.d.ts`,
                 content: 'export declare const Foo = "BAR";',
             };
-            const files = [libFile, mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther];
-            return createWatchedSystem(files, { currentDirectory: mainPackageRoot });
+            return createWatchedSystem(
+                [libFile, mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther],
+                { currentDirectory: mainPackageRoot },
+            );
         },
     });
 
@@ -544,7 +569,10 @@ declare namespace NodeJS {
                     content: "{}",
                 };
                 const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
-                return createWatchedSystem([file, libFile, tsconfig, nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals], { currentDirectory: "/user/username/projects/myproject" });
+                return createWatchedSystem(
+                    [file, libFile, tsconfig, nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals],
+                    { currentDirectory: "/user/username/projects/myproject" },
+                );
             },
             edits: [
                 {
@@ -642,7 +670,7 @@ declare namespace NodeJS {
                 const x: 10 = myapp;
             `,
                 "/user/username/projects/myproject/tsconfig.json": "{}",
-                [libFile.path]: libContent,
+                [libFile.path]: libFile.content,
             }, { currentDirectory: "/user/username/projects/myproject" }),
         edits: [
             {

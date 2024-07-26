@@ -1,31 +1,31 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/file1.ts]
+//// [/home/src/projects/project/file1.ts]
 interface ka {
                 name: string;
             }
             
 
-//// [/file2.tsx]
+//// [/home/src/projects/project/file2.tsx]
 
 
-//// [/file3.mts]
+//// [/home/src/projects/project/file3.mts]
 
 
-//// [/file4.cts]
+//// [/home/src/projects/project/file4.cts]
 
 
-//// [/file5.js]
+//// [/home/src/projects/project/file5.js]
 
 
-//// [/file6.d.ts]
+//// [/home/src/projects/project/file6.d.ts]
 
 
-//// [/file7.ts]
+//// [/home/src/projects/project/file7.ts]
 
 
-//// [/tsconfig.json]
+//// [/home/src/projects/project/tsconfig.json]
 {
   "files": [
     "./file1.ts",
@@ -43,56 +43,60 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/file1.ts"
+        "file": "/home/src/projects/project/file1.ts"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /file1.ts ProjectRootPath: undefined:: Result: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/file1.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /file1.ts to open"
+        "projectName": "/home/src/projects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/file1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/tsconfig.json : {
  "rootNames": [
-  "/file1.ts",
-  "/file2.tsx",
-  "/file3.mts",
-  "/file4.cts",
-  "/file5.js",
-  "/file6.d.ts",
-  "/file7.ts"
+  "/home/src/projects/project/file1.ts",
+  "/home/src/projects/project/file2.tsx",
+  "/home/src/projects/project/file3.mts",
+  "/home/src/projects/project/file4.cts",
+  "/home/src/projects/project/file5.js",
+  "/home/src/projects/project/file6.d.ts",
+  "/home/src/projects/project/file7.ts"
  ],
  "options": {
-  "configFilePath": "/tsconfig.json"
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file2.tsx 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file3.mts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file4.cts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file5.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file6.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file7.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/file2.tsx 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/file3.mts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/file4.cts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/file5.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/file6.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/file7.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (7)
-	/file1.ts SVC-1-0 "interface ka {\n                name: string;\n            }\n            "
-	/file2.tsx Text-1 ""
-	/file3.mts Text-1 ""
-	/file4.cts Text-1 ""
-	/file5.js Text-1 ""
-	/file6.d.ts Text-1 ""
-	/file7.ts Text-1 ""
+	/home/src/projects/project/file1.ts SVC-1-0 "interface ka {\n                name: string;\n            }\n            "
+	/home/src/projects/project/file2.tsx Text-1 ""
+	/home/src/projects/project/file3.mts Text-1 ""
+	/home/src/projects/project/file4.cts Text-1 ""
+	/home/src/projects/project/file5.js Text-1 ""
+	/home/src/projects/project/file6.d.ts Text-1 ""
+	/home/src/projects/project/file7.ts Text-1 ""
 
 
 	file1.ts
@@ -117,7 +121,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/home/src/projects/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -128,7 +132,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "projectId": "1097a5f82e8323ba7aba7567ec06402f7ad4ea74abce44ec5efd223ac77ff169",
           "fileStats": {
             "js": 1,
             "jsSize": 0,
@@ -167,16 +171,16 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/file1.ts",
-        "configFile": "/tsconfig.json",
+        "triggerFile": "/home/src/projects/project/file1.ts",
+        "configFile": "/home/src/projects/project/tsconfig.json",
         "diagnostics": [
           {
-            "text": "Cannot write file '/file5.js' because it would overwrite input file.",
+            "text": "Cannot write file '/home/src/projects/project/file5.js' because it would overwrite input file.",
             "code": 5055,
             "category": "error"
           },
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/home/src/tslibs/ts/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
             "code": 6053,
             "category": "error"
           },
@@ -223,13 +227,13 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (7)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /file1.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/file1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -244,60 +248,64 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/file2.tsx: *new*
+/home/src/projects/project/file2.tsx: *new*
   {}
-/file3.mts: *new*
+/home/src/projects/project/file3.mts: *new*
   {}
-/file4.cts: *new*
+/home/src/projects/project/file4.cts: *new*
   {}
-/file5.js: *new*
+/home/src/projects/project/file5.js: *new*
   {}
-/file6.d.ts: *new*
+/home/src/projects/project/file6.d.ts: *new*
   {}
-/file7.ts: *new*
+/home/src/projects/project/file7.ts: *new*
   {}
-/tsconfig.json: *new*
+/home/src/projects/project/tsconfig.json: *new*
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/home/src/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/file1.ts (Open) *new*
+/home/src/projects/project/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json *default*
-/file2.tsx *new*
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/file2.tsx *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/file3.mts *new*
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/file3.mts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/file4.cts *new*
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/file4.cts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/file5.js *new*
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/file5.js *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/file6.d.ts *new*
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/file6.d.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/file7.ts *new*
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/file7.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
+        /home/src/projects/project/tsconfig.json
 
 Before request
 
@@ -305,7 +313,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "getMoveToRefactoringFileSuggestions",
       "arguments": {
-        "file": "/file1.ts",
+        "file": "/home/src/projects/project/file1.ts",
         "line": 1,
         "offset": 11
       },
@@ -315,9 +323,9 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
-        "newFileName": "/ka.ts",
+        "newFileName": "/home/src/projects/project/ka.ts",
         "files": [
-          "/file7.ts"
+          "/home/src/projects/project/file7.ts"
         ]
       },
       "responseRequired": true

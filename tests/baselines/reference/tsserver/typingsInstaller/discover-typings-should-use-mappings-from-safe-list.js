@@ -1,23 +1,23 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 
-//// [/a/b/app.js]
-
-
-//// [/a/b/jquery.js]
+//// [/home/src/projects/project/app.js]
 
 
-//// [/a/b/chroma.min.js]
+//// [/home/src/projects/project/jquery.js]
+
+
+//// [/home/src/projects/project/chroma.min.js]
 
 
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js",
-        "/a/b/jquery.js",
-        "/a/b/chroma.min.js"
+        "/home/src/projects/project/app.js",
+        "/home/src/projects/project/jquery.js",
+        "/home/src/projects/project/chroma.min.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {
         "jquery": "jquery",
         "chroma": "chroma-js"
@@ -40,7 +40,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "chroma-js"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }

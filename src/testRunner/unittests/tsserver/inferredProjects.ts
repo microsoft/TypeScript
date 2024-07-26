@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { commonFile1 } from "../helpers/tscWatch.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -15,7 +14,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: inferredProjects", () => {
+describe("unittests:: tsserver:: inferredProjects::", () => {
     it("create inferred project", () => {
         const appFile: File = {
             path: `/user/username/projects/myproject/app.ts`,
@@ -70,7 +69,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
 
     it("disable inferred project", () => {
         const file1 = {
-            path: "/a/b/f1.ts",
+            path: "/user/username/projects/project/f1.ts",
             content: "let x =1;",
         };
 
@@ -85,11 +84,11 @@ describe("unittests:: tsserver:: inferredProjects", () => {
 
     it("project settings for inferred projects", () => {
         const file1 = {
-            path: "/a/b/app.ts",
+            path: "/user/username/projects/project/b/app.ts",
             content: `import {x} from "mod"`,
         };
         const modFile = {
-            path: "/a/mod.ts",
+            path: "/user/username/projects/project/mod.ts",
             content: "export let x: number",
         };
         const host = createServerHost([file1, modFile]);
@@ -105,7 +104,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
 
     it("should support files without extensions", () => {
         const f = {
-            path: "/a/compile",
+            path: "/user/username/projects/project/compile",
             content: "let x = 1",
         };
         const host = createServerHost([f]);
@@ -116,10 +115,10 @@ describe("unittests:: tsserver:: inferredProjects", () => {
     });
 
     it("inferred projects per project root", () => {
-        const file1 = { path: "/a/file1.ts", content: "let x = 1;", projectRootPath: "/a" };
-        const file2 = { path: "/a/file2.ts", content: "let y = 2;", projectRootPath: "/a" };
-        const file3 = { path: "/b/file2.ts", content: "let x = 3;", projectRootPath: "/b" };
-        const file4 = { path: "/c/file3.ts", content: "let z = 4;" };
+        const file1 = { path: "/user/username/projects/project/a/file1.ts", content: "let x = 1;", projectRootPath: "/user/username/projects/project/a" };
+        const file2 = { path: "/user/username/projects/project/a/file2.ts", content: "let y = 2;", projectRootPath: "/user/username/projects/project/a" };
+        const file3 = { path: "/user/username/projects/project/b/file2.ts", content: "let x = 3;", projectRootPath: "/user/username/projects/project/b" };
+        const file4 = { path: "/user/username/projects/project/c/file3.ts", content: "let z = 4;" };
         const host = createServerHost([file1, file2, file3, file4]);
         const session = new TestSession({
             host,
@@ -135,7 +134,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
                 allowJs: true,
                 target: ts.server.protocol.ScriptTarget.ES2015,
             },
-            projectRootPath: "/b",
+            projectRootPath: "/user/username/projects/project/b",
         }, session);
         openFilesForSession([{
             file: file1.path,
@@ -171,10 +170,10 @@ describe("unittests:: tsserver:: inferredProjects", () => {
     function verifyProjectRootWithCaseSensitivity(subScenario: string, useCaseSensitiveFileNames: boolean) {
         it(subScenario, () => {
             const files: [File, File, File, File] = [
-                { path: "/a/file1.ts", content: "let x = 1;" },
-                { path: "/A/file2.ts", content: "let y = 2;" },
-                { path: "/b/file2.ts", content: "let x = 3;" },
-                { path: "/c/file3.ts", content: "let z = 4;" },
+                { path: "/user/username/projects/project/a/file1.ts", content: "let x = 1;" },
+                { path: "/user/username/projects/project/A/file2.ts", content: "let y = 2;" },
+                { path: "/user/username/projects/project/b/file2.ts", content: "let x = 3;" },
+                { path: "/user/username/projects/project/c/file3.ts", content: "let z = 4;" },
             ];
             const host = createServerHost(files, { useCaseSensitiveFileNames });
             const session = new TestSession({ host, useSingleInferredProject: true, useInferredProjectPerProjectRoot: true });
@@ -187,13 +186,13 @@ describe("unittests:: tsserver:: inferredProjects", () => {
                     allowJs: true,
                     target: ts.server.protocol.ScriptTarget.ES2015,
                 },
-                projectRootPath: "/a",
+                projectRootPath: "/user/username/projects/project/a",
             }, session);
 
-            openClientFiles(["/a", "/a", "/b", undefined]);
+            openClientFiles(["/user/username/projects/project/a", "/user/username/projects/project/a", "/user/username/projects/project/b", undefined]);
             closeClientFiles();
 
-            openClientFiles(["/a", "/A", "/b", undefined]);
+            openClientFiles(["/user/username/projects/project/a", "/user/username/projects/project/A", "/user/username/projects/project/b", undefined]);
             closeClientFiles();
 
             setCompilerOptionsForInferredProjectsRequestForSession({
@@ -201,13 +200,13 @@ describe("unittests:: tsserver:: inferredProjects", () => {
                     allowJs: true,
                     target: ts.server.protocol.ScriptTarget.ES2017,
                 },
-                projectRootPath: "/A",
+                projectRootPath: "/user/username/projects/project/A",
             }, session);
 
-            openClientFiles(["/a", "/a", "/b", undefined]);
+            openClientFiles(["/user/username/projects/project/a", "/user/username/projects/project/a", "/user/username/projects/project/b", undefined]);
             closeClientFiles();
 
-            openClientFiles(["/a", "/A", "/b", undefined]);
+            openClientFiles(["/user/username/projects/project/a", "/user/username/projects/project/A", "/user/username/projects/project/b", undefined]);
             closeClientFiles();
             baselineTsserverLogs("inferredProjects", subScenario, session);
 
@@ -260,7 +259,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
     });
 
     it("regression test - should infer typeAcquisition for inferred projects when set undefined", () => {
-        const file1 = { path: "/a/file1.js", content: "" };
+        const file1 = { path: "/user/username/projects/project/a/file1.js", content: "" };
         const host = createServerHost([file1]);
 
         const session = new TestSession(host);
@@ -275,6 +274,10 @@ describe("unittests:: tsserver:: inferredProjects", () => {
     });
 
     it("Setting compiler options for inferred projects when there are no open files should not schedule any refresh", () => {
+        const commonFile1: File = {
+            path: "/user/username/projects/project/commonFile1.ts",
+            content: "let x = 1",
+        };
         const host = createServerHost([commonFile1, libFile]);
         const session = new TestSession(host);
         setCompilerOptionsForInferredProjectsRequestForSession({

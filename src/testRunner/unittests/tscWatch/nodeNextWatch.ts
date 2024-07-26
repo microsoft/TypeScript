@@ -4,17 +4,18 @@ import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
+    getTypeScriptLibTestLocation,
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is specified as nodenext", () => {
+describe("unittests:: tscWatch:: nodeNextWatch:: emit when module emit is specified as nodenext", () => {
     verifyTscWatch({
-        scenario: "nodenext watch emit",
+        scenario: "nodeNextWatch",
         subScenario: "esm-mode file is edited",
-        commandLineArgs: ["--w", "--p", "/project/tsconfig.json"],
+        commandLineArgs: ["--w"],
         sys: () => {
             const configFile: File = {
-                path: "/project/tsconfig.json",
+                path: "/home/src/projects/project/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
                         strict: true,
@@ -26,7 +27,7 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
                 }),
             };
             const packageFile: File = {
-                path: "/project/package.json",
+                path: "/home/src/projects/project/package.json",
                 content: jsonToReadableText({
                     name: "some-proj",
                     version: "1.0.0",
@@ -36,24 +37,27 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
                 }),
             };
             const file1: File = {
-                path: "/project/src/index.ts",
+                path: "/home/src/projects/project/src/index.ts",
                 content: Utils.dedent`
                         import * as Thing from "thing";
 
                         Thing.fn();`,
             };
             const declFile: File = {
-                path: "/project/src/deps.d.ts",
+                path: "/home/src/projects/project/src/deps.d.ts",
                 content: `declare module "thing";`,
             };
-            return createWatchedSystem([configFile, file1, declFile, packageFile, { ...libFile, path: "/a/lib/lib.es2020.full.d.ts" }]);
+            return createWatchedSystem(
+                [configFile, file1, declFile, packageFile, { ...libFile, path: getTypeScriptLibTestLocation("es2020.full") }],
+                { currentDirectory: "/home/src/projects/project" },
+            );
         },
         edits: [
             {
                 caption: "Modify typescript file",
                 edit: sys =>
                     sys.modifyFile(
-                        "/project/src/index.ts",
+                        "/home/src/projects/project/src/index.ts",
                         Utils.dedent`
                             import * as Thing from "thing";
                             Thing.fn();`,

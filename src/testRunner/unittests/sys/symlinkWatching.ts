@@ -767,7 +767,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
             return createWatchedSystem({
                 [`${root}/folder/file.ts`]: "export const x = 10;",
                 [`${root}/linked`]: { symLink: `${root}/folder` },
-            }, { osFlavor });
+            }, { osFlavor, currentDirectory: root });
         }
         verifyWatchFile(
             "watchFile using polling",
@@ -811,7 +811,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                 ...getRecursiveFs("recursivefsevents"),
                 ...getRecursiveFs("recursivefseventssub"),
                 ...getRecursiveFs("recursivefseventsparallel"),
-            }, { osFlavor });
+            }, { osFlavor, currentDirectory: root });
 
             function getRecursiveFs(recursiveName: string): FileOrFolderOrSymLinkMap {
                 return {

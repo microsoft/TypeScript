@@ -11,7 +11,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers", () => {
+it("unittests:: tsbuildWatch:: watchMode:: publicAPI:: Public API with custom transformers", () => {
     const solution: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
         content: jsonToReadableText({

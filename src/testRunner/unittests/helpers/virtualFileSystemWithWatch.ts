@@ -1,3 +1,4 @@
+import { replaceAll } from "../../../harness/tsserverLogger.js";
 import {
     createWatchUtils,
     Watches,
@@ -18,6 +19,7 @@ import {
     createSystemWatchFunctions,
     Debug,
     directorySeparator,
+    emptyArray,
     FileSystemEntryKind,
     FileWatcherCallback,
     FileWatcherEventKind,
@@ -36,6 +38,7 @@ import {
     insertSorted,
     isArray,
     isString,
+    libMap,
     mapDefined,
     matchFiles,
     ModuleImportResult,
@@ -51,10 +54,15 @@ import {
 } from "../../_namespaces/ts.js";
 import { typingsInstaller } from "../../_namespaces/ts.server.js";
 import { timeIncrements } from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
 import { sanitizeSysOutput } from "./baseline.js";
+import {
+    createTypesRegistryFileContent,
+    getTypesRegistryFileLocation,
+} from "./typingsInstaller.js";
 
 export const libFile: File = {
-    path: "/a/lib/lib.d.ts",
+    path: "/home/src/tslibs/ts/lib/lib.d.ts",
     content: `/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -65,11 +73,17 @@ interface Number { toExponential: any; }
 interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }`,
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };`,
 };
 
-function getExecutingFilePathFromLibFile(): string {
-    return combinePaths(getDirectoryPath(libFile.path), "tsc.js");
+export function getPathForTypeScriptTestLocation(fileName: string) {
+    return combinePaths(getDirectoryPath(libFile.path), fileName);
+}
+
+export function getTypeScriptLibTestLocation(libName: string) {
+    return getPathForTypeScriptTestLocation(libMap.get(libName) ?? `lib.${libName}.d.ts`);
 }
 
 export const enum TestServerHostOsFlavor {
@@ -87,13 +101,23 @@ export interface TestServerHostCreationParameters {
     environmentVariables?: Map<string, string>;
     runWithFallbackPolling?: boolean;
     osFlavor?: TestServerHostOsFlavor;
+    typingsInstallerGlobalCacheLocation?: string;
+    typingsInstallerTypesRegistry?: string | readonly string[];
 }
 
-export function createWatchedSystem(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
+export function createWatchedSystem(
+    fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
+    params?:
+        & Omit<TestServerHostCreationParameters, "typingsInstallerGlobalCacheLocation" | "typingsInstallerTypesRegistry">
+        & { currentDirectory: string; },
+): TestServerHost {
     return new TestServerHost(fileOrFolderList, params);
 }
 
-export function createServerHost(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
+export function createServerHost(
+    fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
+    params?: Omit<TestServerHostCreationParameters, "currentDirectory">,
+): TestServerHost {
     const host = new TestServerHost(fileOrFolderList, params);
     // Just like sys, patch the host to use writeFile
     patchWriteFileEnsuringDirectory(host);
@@ -337,6 +361,13 @@ export enum SerializeOutputOrder {
     BeforeDiff,
     AfterDiff,
 }
+
+const typeScriptTypingInstallerCacheTest = "/home/src/typinginstaller/globalcache/data";
+
+export function getPathForTypeScriptTypingInstallerCacheTest(fileName: string) {
+    return `${typeScriptTypingInstallerCacheTest}/${fileName}`;
+}
+
 export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
     args: string[] = [];
 
@@ -369,6 +400,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     service?: server.ProjectService;
     osFlavor: TestServerHostOsFlavor;
     preferNonRecursiveWatch: boolean;
+    globalTypingsCacheLocation: string;
+    private readonly typesRegistry: string | readonly string[] | undefined;
     constructor(
         fileOrFolderorSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
         {
@@ -380,6 +413,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             environmentVariables,
             runWithFallbackPolling,
             osFlavor,
+            typingsInstallerGlobalCacheLocation,
+            typingsInstallerTypesRegistry,
         }: TestServerHostCreationParameters = {},
     ) {
         this.useCaseSensitiveFileNames = !!useCaseSensitiveFileNames;
@@ -387,11 +422,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.osFlavor = osFlavor || TestServerHostOsFlavor.Windows;
         this.windowsStyleRoot = windowsStyleRoot;
         this.environmentVariables = environmentVariables;
-        currentDirectory = currentDirectory || "/";
+        currentDirectory = currentDirectory ?? "/home/src/vscode/projects/bin";
         this.getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
         this.watchUtils = createWatchUtils("PolledWatches", "FsWatches", s => this.getCanonicalFileName(s), this);
         this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
-        this.executingFilePath = this.getHostSpecificPath(executingFilePath || getExecutingFilePathFromLibFile());
+        this.executingFilePath = this.getHostSpecificPath(executingFilePath ?? getPathForTypeScriptTestLocation("tsc.js"));
         this.currentDirectory = this.getHostSpecificPath(currentDirectory);
         this.runWithFallbackPolling = !!runWithFallbackPolling;
         const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE");
@@ -424,6 +459,34 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.watchFile = watchFile;
         this.watchDirectory = watchDirectory;
         this.reloadFS(fileOrFolderorSymLinkList);
+
+        // Ensure libs
+
+        // Ensure global cache location has required data
+        this.globalTypingsCacheLocation = this.getHostSpecificPath(typingsInstallerGlobalCacheLocation ?? typeScriptTypingInstallerCacheTest);
+        this.typesRegistry = typingsInstallerTypesRegistry;
+        if (this.directoryExists(this.globalTypingsCacheLocation)) {
+            // Package.json
+            const npmConfigPath = combinePaths(this.globalTypingsCacheLocation, "package.json");
+            if (!this.fileExists(npmConfigPath)) {
+                this.writeFile(npmConfigPath, '{ "private": true }');
+            }
+            // Typings registry
+            this.ensureTypingRegistryFile();
+        }
+    }
+
+    ensureTypingRegistryFile() {
+        this.ensureFileOrFolder({
+            path: getTypesRegistryFileLocation(this.globalTypingsCacheLocation),
+            content: jsonToReadableText(createTypesRegistryFileContent(
+                this.typesRegistry ?
+                    isString(this.typesRegistry) ?
+                        [this.typesRegistry] :
+                        this.typesRegistry :
+                    emptyArray,
+            )),
+        });
     }
 
     private nextInode = 0;
@@ -449,8 +512,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     getHostSpecificPath(s: string) {
-        if (this.windowsStyleRoot && s.startsWith(directorySeparator)) {
-            return this.windowsStyleRoot + s.substring(1);
+        if (this.windowsStyleRoot) {
+            let result = s;
+            if (s.startsWith(directorySeparator)) {
+                result = this.windowsStyleRoot + s.substring(1);
+            }
+            if (!result.startsWith(directorySeparator)) result = replaceAll(result, directorySeparator, "\\");
+            return result;
         }
         return s;
     }

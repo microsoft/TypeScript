@@ -1,17 +1,17 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/b/file1.ts]
+//// [/home/src/workspace/projects/b/file1.ts]
 
                     /// <reference path="./file2.ts" />
                     export var t1 = 10;
 
-//// [/a/b/file2.ts]
+//// [/home/src/workspace/projects/b/file2.ts]
 
                     /// <reference path="./file1.ts" />
                     export var t2 = 10;
 
-//// [/a/b/tsconfig.json]
+//// [/home/src/workspace/projects/b/tsconfig.json]
 {
                         "compileOnSave": true
                     }
@@ -21,43 +21,49 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/file1.ts"
+        "file": "/home/src/workspace/projects/b/file1.ts"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/file1.ts ProjectRootPath: undefined:: Result: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/b/file1.ts ProjectRootPath: undefined:: Result: /home/src/workspace/projects/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/workspace/projects/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/b/tsconfig.json 2000 undefined Project: /home/src/workspace/projects/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/a/b/tsconfig.json",
-        "reason": "Creating possible configured project for /a/b/file1.ts to open"
+        "projectName": "/home/src/workspace/projects/b/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/workspace/projects/b/file1.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /a/b/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/workspace/projects/b/tsconfig.json : {
  "rootNames": [
-  "/a/b/file1.ts",
-  "/a/b/file2.ts"
+  "/home/src/workspace/projects/b/file1.ts",
+  "/home/src/workspace/projects/b/file2.ts"
  ],
  "options": {
-  "configFilePath": "/a/b/tsconfig.json"
+  "configFilePath": "/home/src/workspace/projects/b/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/b 1 undefined Config: /home/src/workspace/projects/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/b 1 undefined Config: /home/src/workspace/projects/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/b/file2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspace/projects/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/workspace/projects/b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/b/node_modules/@types 1 undefined Project: /home/src/workspace/projects/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/b/node_modules/@types 1 undefined Project: /home/src/workspace/projects/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Project: /home/src/workspace/projects/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@types 1 undefined Project: /home/src/workspace/projects/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Project: /home/src/workspace/projects/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/node_modules/@types 1 undefined Project: /home/src/workspace/projects/b/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/b/file2.ts Text-1 "\n                    /// <reference path=\"./file1.ts\" />\n                    export var t2 = 10;"
-	/a/b/file1.ts SVC-1-0 "\n                    /// <reference path=\"./file2.ts\" />\n                    export var t1 = 10;"
+	/home/src/workspace/projects/b/file2.ts Text-1 "\n                    /// <reference path=\"./file1.ts\" />\n                    export var t2 = 10;"
+	/home/src/workspace/projects/b/file1.ts SVC-1-0 "\n                    /// <reference path=\"./file2.ts\" />\n                    export var t1 = 10;"
 
 
 	file2.ts
@@ -74,7 +80,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/a/b/tsconfig.json"
+        "projectName": "/home/src/workspace/projects/b/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -85,7 +91,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "e10a1dc99ee63f16cb9b69bcee75540cdf41a1137371d3afbd4e7de507be5207",
+          "projectId": "c0a84d11f98c5933c3e8f82d2291dbd11543de93a797aefb5c207ade07013ab3",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -124,11 +130,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/a/b/file1.ts",
-        "configFile": "/a/b/tsconfig.json",
+        "triggerFile": "/home/src/workspace/projects/b/file1.ts",
+        "configFile": "/home/src/workspace/projects/b/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/home/src/tslibs/ts/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
             "code": 6053,
             "category": "error"
           },
@@ -175,13 +181,13 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/b/file1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -196,34 +202,40 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/workspace/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/workspace/projects/b/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/workspace/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/file2.ts: *new*
+/home/src/workspace/projects/b/file2.ts: *new*
   {}
-/a/b/tsconfig.json: *new*
+/home/src/workspace/projects/b/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a/b: *new*
+/home/src/workspace/projects/b: *new*
   {}
 
 Projects::
-/a/b/tsconfig.json (Configured) *new*
+/home/src/workspace/projects/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/b/file1.ts (Open) *new*
+/home/src/workspace/projects/b/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json *default*
-/a/b/file2.ts *new*
+        /home/src/workspace/projects/b/tsconfig.json *default*
+/home/src/workspace/projects/b/file2.ts *new*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /home/src/workspace/projects/b/tsconfig.json
 
 Before request
 
@@ -231,22 +243,22 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/file2.ts"
+        "file": "/home/src/workspace/projects/b/file2.ts"
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/file2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/file2.ts ProjectRootPath: undefined:: Result: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/workspace/projects/b/file2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/workspace/projects/b/file2.ts ProjectRootPath: undefined:: Result: /home/src/workspace/projects/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file2.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/b/file1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/b/file2.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -258,31 +270,37 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/workspace/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/workspace/projects/b/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/workspace/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/tsconfig.json:
+/home/src/workspace/projects/b/tsconfig.json:
   {}
 
 FsWatches *deleted*::
-/a/b/file2.ts:
+/home/src/workspace/projects/b/file2.ts:
   {}
 
 FsWatchesRecursive::
-/a/b:
+/home/src/workspace/projects/b:
   {}
 
 ScriptInfos::
-/a/b/file1.ts (Open)
+/home/src/workspace/projects/b/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json *default*
-/a/b/file2.ts (Open) *changed*
+        /home/src/workspace/projects/b/tsconfig.json *default*
+/home/src/workspace/projects/b/file2.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json *default*
+        /home/src/workspace/projects/b/tsconfig.json *default*
 
 Before request
 
@@ -290,39 +308,39 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "compileOnSaveAffectedFileList",
       "arguments": {
-        "file": "/a/b/file1.ts"
+        "file": "/home/src/workspace/projects/b/file1.ts"
       },
       "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file2.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/b/file1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/b/file2.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/file2.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/b/file1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/workspace/projects/b/file2.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/workspace/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
         {
-          "projectFileName": "/a/b/tsconfig.json",
+          "projectFileName": "/home/src/workspace/projects/b/tsconfig.json",
           "fileNames": [
-            "/a/b/file1.ts",
-            "/a/b/file2.ts"
+            "/home/src/workspace/projects/b/file1.ts",
+            "/home/src/workspace/projects/b/file2.ts"
           ],
           "projectUsesOutFile": false
         }

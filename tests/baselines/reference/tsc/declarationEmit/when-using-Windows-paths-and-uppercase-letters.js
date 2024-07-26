@@ -78,7 +78,7 @@ export interface MyType<T = any> extends Function {
 }
 
 
-//// [D:/a/lib/lib.d.ts]
+//// [D:/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -90,9 +90,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-D:/a/lib/tsc.js -p D:\Work\pkg1 --explainFiles
+D:\home\src\tslibs\ts\lib\tsc.js -p D:\Work\pkg1 --explainFiles
 Output::
 [91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
 
@@ -110,7 +112,7 @@ Output::
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'String'.
 
-[91merror[0m[90m TS6053: [0mFile 'D:/a/lib/lib.es2017.full.d.ts' not found.
+[91merror[0m[90m TS6053: [0mFile 'D:/home/src/tslibs/ts/lib/lib.es2017.full.d.ts' not found.
   The file is in the program because:
     Default library for target 'es2017'
 

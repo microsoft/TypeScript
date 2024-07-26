@@ -4,7 +4,6 @@ import {
 } from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import { libContent } from "./contents.js";
 import { solutionBuildWithBaseline } from "./solutionBuilder.js";
 import {
     TscWatchCompileChange,
@@ -13,6 +12,7 @@ import {
 import {
     createServerHost,
     createWatchedSystem,
+    getTypeScriptLibTestLocation,
     libFile,
     osFlavorToString,
     TestServerHost,
@@ -53,7 +53,7 @@ function getMonorepoSymlinkedSiblingPackagesSys(forTsserver: boolean, built: boo
             type MyBarType = BarType;
         `,
         "/home/src/projects/project/node_modules/package1": { symLink: "/home/src/projects/project/packages/package1" },
-        "/a/lib/lib.es2016.full.d.ts": libContent,
+        [getTypeScriptLibTestLocation("es2016.full")]: libFile.content,
     }, { currentDirectory: "/home/src/projects/project", osFlavor });
     if (built) buildMonorepoSymlinkedSiblingPackage1(sys);
     return sys;
@@ -192,7 +192,7 @@ function getMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(
             include: ["src/**/*.ts"],
         }),
         "/home/src/projects/b/2/b-impl/b/node_modules/a": { symLink: "/home/src/projects/a/1/a-impl/a" },
-        [libFile.path]: libContent,
+        [libFile.path]: libFile.content,
     }, { currentDirectory: "/home/src/projects/b/2/b-impl/b", osFlavor });
     if (built) buildDependenciesOfMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(sys);
     return sys;

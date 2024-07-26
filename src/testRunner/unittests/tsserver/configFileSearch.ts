@@ -13,16 +13,16 @@ import {
 describe("unittests:: tsserver:: configFileSearch:: searching for config file", () => {
     it("should stop at projectRootPath if given", () => {
         const f1 = {
-            path: "/a/file1.ts",
+            path: "/home/src/project/project/a/file1.ts",
             content: "",
         };
         const configFile = {
-            path: "/tsconfig.json",
+            path: "/home/src/project/project/tsconfig.json",
             content: "{}",
         };
         const host = createServerHost([f1, configFile]);
         const session = new TestSession(host);
-        openFilesForSession([{ file: f1, projectRootPath: "/a" }], session);
+        openFilesForSession([{ file: f1, projectRootPath: "/home/src/project/project/a" }], session);
 
         closeFilesForSession([f1], session);
         openFilesForSession([f1], session);

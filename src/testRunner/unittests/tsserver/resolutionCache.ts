@@ -11,6 +11,7 @@ import {
     toExternalFiles,
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
+import { getPathForTypeScriptTypingInstallerCacheTest } from "../helpers/typingsInstaller.js";
 import {
     createServerHost,
     File,
@@ -20,18 +21,19 @@ import {
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in server host", () => {
     it("can load typings that are proper modules", () => {
         const file1 = {
-            path: "/a/b/app.js",
+            path: "/user/username/projects/project/app.js",
             content: `var x = require("lib")`,
         };
         const lib = {
-            path: "/a/cache/node_modules/@types/lib/index.d.ts",
+            path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/lib/index.d.ts"),
             content: "export let x = 1",
         };
         const host = createServerHost([file1, lib]);
-        const session = new TestSession({ host, globalTypingsCacheLocation: "/a/cache" });
+        const session = new TestSession(host);
 
         setCompilerOptionsForInferredProjectsRequestForSession({ traceResolution: true, allowJs: true }, session);
         openFilesForSession([file1], session);
+        host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("resolutionCache", "can load typings that are proper modules", session);
     });
 });
@@ -145,7 +147,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
 
     it("suggestion diagnostics", () => {
         const file: File = {
-            path: "/a.js",
+            path: "/user/username/projects/project/a.js",
             content: "function f(p) {}",
         };
 
@@ -163,7 +165,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
 
     it("disable suggestion diagnostics", () => {
         const file: File = {
-            path: "/a.js",
+            path: "/user/username/projects/project/a.js",
             content: 'require("b")',
         };
 
@@ -188,7 +190,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
 
     it("suppressed diagnostic events", () => {
         const file: File = {
-            path: "/a.ts",
+            path: "/user/username/projects/project/a.ts",
             content: "1 = 2;",
         };
 
@@ -305,11 +307,11 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
 
     it("should property handle missing config files", () => {
         const f1 = {
-            path: "/a/b/app.ts",
+            path: "/user/username/projects/project/app.ts",
             content: "let x = 1",
         };
         const config = {
-            path: "/a/b/tsconfig.json",
+            path: "/user/username/projects/project/tsconfig.json",
             content: "{}",
         };
         const projectFileName = "project1";
@@ -336,21 +338,21 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
         function verifyTypesLoad(subScenario: string, includeTypeRoots: boolean) {
             it(subScenario, () => {
                 const f1 = {
-                    path: "/a/b/app.ts",
+                    path: "/user/username/projects/project/app.ts",
                     content: "let x = 1",
                 };
                 const config = {
-                    path: "/a/b/tsconfig.json",
+                    path: "/user/username/projects/project/tsconfig.json",
                     content: jsonToReadableText({ compilerOptions: { types: ["node"], typeRoots: includeTypeRoots ? [] : undefined } }),
                 };
                 const node = {
-                    path: "/a/b/node_modules/@types/node/index.d.ts",
+                    path: "/user/username/projects/project/node_modules/@types/node/index.d.ts",
                     content: "declare var process: any",
                 };
                 const cwd = {
-                    path: "/a/c",
+                    path: "/user/username/projects/another",
                 };
-                const host = createServerHost([f1, config, node, cwd], { currentDirectory: cwd.path });
+                const host = createServerHost([f1, config, node, cwd]);
                 const session = new TestSession(host);
                 openFilesForSession([f1], session);
                 baselineTsserverLogs("resolutionCache", subScenario, session);

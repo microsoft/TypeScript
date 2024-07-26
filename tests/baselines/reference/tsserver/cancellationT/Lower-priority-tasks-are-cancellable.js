@@ -1,10 +1,10 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/app.ts]
+//// [/home/src/projects/myproject/app.ts]
 { let x = 1; } var foo = "foo"; var bar = "bar"; var fooBar = "fooBar";
 
-//// [/a/tsconfig.json]
+//// [/home/src/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {}
 }
@@ -14,41 +14,45 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/app.ts"
+        "file": "/home/src/projects/myproject/app.ts"
       },
       "seq": 1,
       "type": "request"
     }
 TestServerCancellationToken:: Cancellation Request id:: 1
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/app.ts ProjectRootPath: undefined:: Result: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/myproject/app.ts ProjectRootPath: undefined:: Result: /home/src/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/tsconfig.json 2000 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/a/tsconfig.json",
-        "reason": "Creating possible configured project for /a/app.ts to open"
+        "projectName": "/home/src/projects/myproject/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/myproject/app.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /a/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/myproject/tsconfig.json : {
  "rootNames": [
-  "/a/app.ts"
+  "/home/src/projects/myproject/app.ts"
  ],
  "options": {
-  "configFilePath": "/a/tsconfig.json"
+  "configFilePath": "/home/src/projects/myproject/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 1 undefined Config: /home/src/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject 1 undefined Config: /home/src/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/myproject/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/app.ts SVC-1-0 "{ let x = 1; } var foo = \"foo\"; var bar = \"bar\"; var fooBar = \"fooBar\";"
+	/home/src/projects/myproject/app.ts SVC-1-0 "{ let x = 1; } var foo = \"foo\"; var bar = \"bar\"; var fooBar = \"fooBar\";"
 
 
 	app.ts
@@ -61,7 +65,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/a/tsconfig.json"
+        "projectName": "/home/src/projects/myproject/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -72,7 +76,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "bcbb3eb9a7f46ab3b8f574ad3733f3e5a7ce50557c14c0c6192f1203aedcacca",
+          "projectId": "c082244e14d80420126a10c084f20f9b41809e79e7f5a330fc4d923f1197daa1",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -111,11 +115,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/a/app.ts",
-        "configFile": "/a/tsconfig.json",
+        "triggerFile": "/home/src/projects/myproject/app.ts",
+        "configFile": "/home/src/projects/myproject/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "text": "File '/home/src/tslibs/ts/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
             "code": 6053,
             "category": "error"
           },
@@ -162,13 +166,13 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/app.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/myproject/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -184,28 +188,32 @@ TestServerCancellationToken:: resetRequest:: 1 is as expected
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/tsconfig.json: *new*
+/home/src/projects/myproject/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/a: *new*
+/home/src/projects/myproject: *new*
   {}
 
 Projects::
-/a/tsconfig.json (Configured) *new*
+/home/src/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/app.ts (Open) *new*
+/home/src/projects/myproject/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json *default*
+        /home/src/projects/myproject/tsconfig.json *default*
 
 Before request
 
@@ -213,7 +221,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "navbar",
       "arguments": {
-        "file": "/a/app.ts"
+        "file": "/home/src/projects/myproject/app.ts"
       },
       "seq": 2,
       "type": "request"
@@ -331,7 +339,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "navbar",
       "arguments": {
-        "file": "/a/app.ts"
+        "file": "/home/src/projects/myproject/app.ts"
       },
       "seq": 3,
       "type": "request"
@@ -346,7 +354,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "outliningSpans",
       "arguments": {
-        "file": "/a/app.ts"
+        "file": "/home/src/projects/myproject/app.ts"
       },
       "seq": 4,
       "type": "request"
@@ -381,7 +389,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "outliningSpans",
       "arguments": {
-        "file": "/a/app.ts"
+        "file": "/home/src/projects/myproject/app.ts"
       },
       "seq": 5,
       "type": "request"

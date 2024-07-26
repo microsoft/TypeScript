@@ -14,15 +14,15 @@ import {
 describe("unittests:: tsserver:: completions::", () => {
     it("works", () => {
         const aTs: File = {
-            path: "/a.ts",
+            path: "/home/src/project/project/a.ts",
             content: "export const foo = 0;",
         };
         const bTs: File = {
-            path: "/b.ts",
+            path: "/home/src/project/project/b.ts",
             content: "foo",
         };
         const tsconfig: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/project/project/tsconfig.json",
             content: "{}",
         };
 
@@ -57,7 +57,15 @@ describe("unittests:: tsserver:: completions::", () => {
             command: ts.server.protocol.CommandTypes.CompletionDetails,
             arguments: {
                 ...requestLocation,
-                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
+                entryNames: [{
+                    name: "foo",
+                    source: "/home/src/project/project/a",
+                    data: {
+                        exportName: "foo",
+                        fileName: "/home/src/project/project/a.ts",
+                        exportMapKey,
+                    },
+                }],
             },
         });
 
@@ -69,7 +77,15 @@ describe("unittests:: tsserver:: completions::", () => {
             command: ts.server.protocol.CommandTypes.CompletionDetailsFull,
             arguments: {
                 ...requestLocation,
-                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
+                entryNames: [{
+                    name: "foo",
+                    source: "/home/src/project/project/a",
+                    data: {
+                        exportName: "foo",
+                        fileName: "/home/src/project/project/a.ts",
+                        exportMapKey,
+                    },
+                }],
             },
         });
         baselineTsserverLogs("completions", "works", session);
@@ -187,8 +203,8 @@ export interface BrowserRouterProps {
             globalReactPackage,
         ];
 
-        const host = createServerHost(files, { windowsStyleRoot: "c:/" });
-        const session = new TestSession({ host, globalTypingsCacheLocation });
+        const host = createServerHost(files, { windowsStyleRoot: "c:/", typingsInstallerGlobalCacheLocation: globalTypingsCacheLocation });
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
             arguments: {

@@ -10,7 +10,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
+describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error updates in builder after program changes", () => {
     const config: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
         content: `{}`,
@@ -18,13 +18,11 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
     interface VerifyEmitAndErrorUpdates {
         subScenario: string;
         files: () => FsContents | readonly File[];
-        currentDirectory?: string;
         changes: TscWatchCompileChange[];
     }
     function verifyEmitAndErrorUpdates({
         subScenario,
         files,
-        currentDirectory,
         changes,
     }: VerifyEmitAndErrorUpdates) {
         verifyTscWatch({
@@ -34,7 +32,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             sys: () =>
                 createWatchedSystem(
                     files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                    { currentDirectory: "/user/username/projects/myproject" },
                 ),
             edits: changes,
             baselineIncremental: true,
@@ -47,7 +45,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             sys: () =>
                 createWatchedSystem(
                     files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                    { currentDirectory: "/user/username/projects/myproject" },
                 ),
             edits: changes,
             baselineIncremental: true,
@@ -60,7 +58,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             sys: () =>
                 createWatchedSystem(
                     files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                    { currentDirectory: "/user/username/projects/myproject" },
                 ),
             edits: changes,
             baselineIncremental: true,
@@ -73,7 +71,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             sys: () =>
                 createWatchedSystem(
                     files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                    { currentDirectory: "/user/username/projects/myproject" },
                 ),
             edits: changes,
             baselineIncremental: true,
@@ -86,7 +84,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             sys: () =>
                 createWatchedSystem(
                     files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                    { currentDirectory: "/user/username/projects/myproject" },
                 ),
             edits: changes,
             baselineIncremental: true,
@@ -99,7 +97,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             sys: () =>
                 createWatchedSystem(
                     files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                    { currentDirectory: "/user/username/projects/myproject" },
                 ),
             edits: changes,
             baselineIncremental: true,

@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/home/username/project/src/a.ts] Inode:: 5
@@ -17,7 +17,7 @@ export const b = 10;
   ]
 }
 
-//// [/a/lib/lib.d.ts] Inode:: 10
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 12
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -29,6 +29,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -68,18 +70,18 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/username/project/src 1 undefined Config: /home/username/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/username/project/src/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/username/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/username/project/node_modules/@types 1 undefined Project: /home/username/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/username/project/node_modules/@types 1 undefined Project: /home/username/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/username/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/username/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/username/project/src/a.ts SVC-1-0 "export const a = 10;"
 	/home/username/project/src/b.ts Text-1 "export const b = 10;"
 
 
-	../../../a/lib/lib.d.ts
+	../../src/tslibs/ts/lib/lib.d.ts
 	  Default library for target 'es5'
 	src/a.ts
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
@@ -115,7 +117,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -175,8 +177,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {"inode":10}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
+  {"inode":12}
 /home/username/project/src: *new*
   {"inode":4}
 /home/username/project/src/b.ts: *new*
@@ -191,7 +193,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.d.ts *new*
+/home/src/tslibs/ts/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/username/project/tsconfig.json
@@ -209,7 +211,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/username/project/src/b.ts 2:: WatchInfo: /home/username/project/src/b.ts 500 undefined WatchType: Closed Script info
 Before request
-//// [/home/username/project/src/c.ts] Inode:: 11
+//// [/home/username/project/src/c.ts] Inode:: 13
 export const b = 10;
 
 //// [/home/username/project/src/b.ts] deleted
@@ -221,8 +223,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":10}
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"inode":12}
 /home/username/project/src:
   {"inode":4}
 /home/username/project/tsconfig.json:
@@ -245,7 +247,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /home/username/project/tsconfig.json
@@ -279,12 +281,12 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/username/pro
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/username/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/username/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/username/project/src/a.ts SVC-1-0 "export const a = 10;"
 	/home/username/project/src/c.ts SVC-1-0 "export const b = 10;"
 
 
-	../../../a/lib/lib.d.ts
+	../../src/tslibs/ts/lib/lib.d.ts
 	  Default library for target 'es5'
 	src/a.ts
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
@@ -324,8 +326,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":10}
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"inode":12}
 /home/username/project/src:
   {"inode":4}
 /home/username/project/tsconfig.json:
@@ -346,7 +348,7 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /home/username/project/tsconfig.json
@@ -476,12 +478,12 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":10}
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"inode":12}
 /home/username/project/src:
   {"inode":4}
 /home/username/project/src/c.ts: *new*
-  {"inode":11}
+  {"inode":13}
 /home/username/project/tsconfig.json:
   {"inode":7}
 
@@ -492,7 +494,7 @@ Projects::
     dirty: true *changed*
 
 ScriptInfos::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /home/username/project/tsconfig.json

@@ -1,14 +1,14 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 
-//// [/app.js]
+//// [/home/src/projects/project/app.js]
 
 
-//// [/node_modules/a/package.json]
+//// [/home/src/projects/project/node_modules/a/package.json]
 {
   "name": "a"
 }
 
-//// [/node_modules/a/b/package.json]
+//// [/home/src/projects/project/node_modules/a/b/package.json]
 {
   "name": "b"
 }
@@ -17,9 +17,9 @@ currentDirectory:: / useCaseSensitiveFileNames: false
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/app.js"
+        "/home/src/projects/project/app.js"
       ],
-      "projectRootPath": "/",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {},
       "packageNameToTypingLocation": {},
       "typeAcquisition": {
@@ -29,7 +29,7 @@ ts.JsTyping.discoverTypings::
       "typesRegistry": {},
       "compilerOptions": {}
     }
-TI:: [hh:mm:ss:mss] Searching for typing names in /node_modules; all files: ["/node_modules/a/package.json"]
+TI:: [hh:mm:ss:mss] Searching for typing names in /home/src/projects/project/node_modules; all files: ["/home/src/projects/project/node_modules/a/package.json"]
 TI:: [hh:mm:ss:mss]     Found package names: ["a"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -39,7 +39,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "a"
       ],
       "filesToWatch": [
-        "/bower_components",
-        "/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }

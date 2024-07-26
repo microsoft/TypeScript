@@ -1,7 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/b/app.ts]
+//// [/home/src/projects/project/a/b/app.ts]
 let x = 1
 
 
@@ -12,7 +12,7 @@ Info seq  [hh:mm:ss:mss] request:
         "projectFileName": "externalProject",
         "rootFiles": [
           {
-            "fileName": "/a/b/app.ts"
+            "fileName": "/home/src/projects/project/a/b/app.ts"
           }
         ],
         "options": {}
@@ -20,16 +20,22 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: externalProject
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: externalProject WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: externalProject WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules/@types 1 undefined Project: externalProject WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules/@types 1 undefined Project: externalProject WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/node_modules/@types 1 undefined Project: externalProject WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/node_modules/@types 1 undefined Project: externalProject WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/node_modules/@types 1 undefined Project: externalProject WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/node_modules/@types 1 undefined Project: externalProject WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: externalProject projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'externalProject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/app.ts Text-1 "let x = 1"
+	/home/src/projects/project/a/b/app.ts Text-1 "let x = 1"
 
 
-	a/b/app.ts
+	../../../projects/project/a/b/app.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -86,11 +92,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/vscode/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/vscode/projects/bin/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/vscode/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/app.ts: *new*
+/home/src/projects/project/a/b/app.ts: *new*
   {}
 
 Projects::
@@ -99,7 +111,7 @@ externalProject (External) *new*
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/app.ts *new*
+/home/src/projects/project/a/b/app.ts *new*
     version: Text-1
     containingProjects: 1
         externalProject
@@ -110,18 +122,18 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/a/b/app.ts",
+        "file": "/home/src/projects/project/a/b/app.ts",
         "fileContent": ""
       },
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/a/b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: externalProject
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: externalProject projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'externalProject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/a/b/app.ts SVC-2-0 ""
+	/home/src/projects/project/a/b/app.ts SVC-2-0 ""
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project 'externalProject' (External)
@@ -129,7 +141,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/a/b/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: externalProject
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -145,11 +157,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {"pollingInterval":500}
+/home/src/vscode/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/vscode/projects/bin/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/vscode/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/b/app.ts:
+/home/src/projects/project/a/b/app.ts:
   {}
 
 Projects::
@@ -158,7 +176,7 @@ externalProject (External) *changed*
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/app.ts (Open) *changed*
+/home/src/projects/project/a/b/app.ts (Open) *changed*
     open: true *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1

@@ -4,10 +4,6 @@ import * as ts from "../../_namespaces/ts.js";
 import * as vfs from "../../_namespaces/vfs.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
-    libContent,
-    libPath,
-} from "../helpers/contents.js";
-import {
     getFsForSampleProjectReferences,
     getSysForSampleProjectReferences,
 } from "../helpers/sampleProjectReferences.js";
@@ -29,6 +25,7 @@ import {
 } from "../helpers/vfs.js";
 import {
     changeToHostTrackingWrittenFiles,
+    getTypeScriptLibTestLocation,
     libFile,
     SerializeOutputOrder,
 } from "../helpers/virtualFileSystemWithWatch.js";
@@ -170,7 +167,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                     caption: "rebuilds when tsconfig changes",
                     edit: fs => {
                         replaceText(fs, "tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es2020"`);
-                        fs.writeFileSync(libPath("es2020.full"), libContent);
+                        fs.writeFileSync(getTypeScriptLibTestLocation("es2020.full"), libFile.content);
                     },
                 },
             ],
@@ -541,11 +538,11 @@ class someClass2 { }`,
             commandLineArgs: ["--b", "core", "--verbose"],
             modifyFs: fs => {
                 fs.writeFileSync(
-                    libPath("esnext.full"),
+                    getTypeScriptLibTestLocation("esnext.full"),
                     `/// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />`,
                 );
-                fs.writeFileSync(libPath("esnext"), libContent);
+                fs.writeFileSync(getTypeScriptLibTestLocation("esnext"), libFile.content);
                 fs.writeFileSync(
                     libFile.path,
                     `/// <reference no-default-lib="true"/>

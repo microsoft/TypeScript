@@ -10,14 +10,14 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: reload", () => {
+describe("unittests:: tsserver:: reload::", () => {
     it("should work with temp file", () => {
         const f1 = {
-            path: "/a/b/app.ts",
+            path: "/home/src/projects/project/app.ts",
             content: "let x = 1",
         };
         const tmp = {
-            path: "/a/b/app.tmp",
+            path: "/home/src/projects/project/app.tmp",
             content: "const y = 42",
         };
         const host = createServerHost([f1, tmp]);
@@ -50,11 +50,11 @@ describe("unittests:: tsserver:: reload", () => {
 
     it("should work when script info doesnt have any project open", () => {
         const f1 = {
-            path: "/a/b/app.ts",
+            path: "/home/src/projects/project/app.ts",
             content: "let x = 1",
         };
         const tmp = {
-            path: "/a/b/app.tmp",
+            path: "/home/src/projects/project/app.tmp",
             content: "const y = 42",
         };
         const host = createServerHost([f1, tmp, libFile]);

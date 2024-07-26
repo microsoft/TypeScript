@@ -11,14 +11,14 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: navigate-to for javascript project", () => {
+describe("unittests:: tsserver:: navTo:: navigate-to for javascript project", () => {
     it("should not include type symbols", () => {
         const file1: File = {
-            path: "/a/b/file1.js",
+            path: "/home/src/projects/project/a/b/file1.js",
             content: "function foo() {}",
         };
         const configFile: File = {
-            path: "/a/b/jsconfig.json",
+            path: "/home/src/projects/project/a/b/jsconfig.json",
             content: "{}",
         };
         const host = createServerHost([file1, configFile, libFile]);
@@ -40,7 +40,7 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
 
     it("should de-duplicate symbols", () => {
         const configFile1: File = {
-            path: "/a/tsconfig.json",
+            path: "/home/src/projects/project/a/tsconfig.json",
             content: `{
     "compilerOptions": {
         "composite": true
@@ -48,11 +48,11 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
 }`,
         };
         const file1: File = {
-            path: "/a/index.ts",
+            path: "/home/src/projects/project/a/index.ts",
             content: "export const abcdef = 1;",
         };
         const configFile2: File = {
-            path: "/b/tsconfig.json",
+            path: "/home/src/projects/project/b/tsconfig.json",
             content: `{
     "compilerOptions": {
         "composite": true
@@ -63,7 +63,7 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
 }`,
         };
         const file2: File = {
-            path: "/b/index.ts",
+            path: "/home/src/projects/project/b/index.ts",
             content: `import a = require("../a");
 export const ghijkl = a.abcdef;`,
         };
@@ -81,14 +81,14 @@ export const ghijkl = a.abcdef;`,
 
     it("should de-duplicate symbols when searching all projects", () => {
         const solutionConfig: File = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: jsonToReadableText({
                 references: [{ path: "./a" }, { path: "./b" }],
                 files: [],
             }),
         };
         const configFile1: File = {
-            path: "/a/tsconfig.json",
+            path: "/home/src/projects/project/a/tsconfig.json",
             content: `{
     "compilerOptions": {
         "composite": true
@@ -96,11 +96,11 @@ export const ghijkl = a.abcdef;`,
 }`,
         };
         const file1: File = {
-            path: "/a/index.ts",
+            path: "/home/src/projects/project/a/index.ts",
             content: "export const abcdef = 1;",
         };
         const configFile2: File = {
-            path: "/b/tsconfig.json",
+            path: "/home/src/projects/project/b/tsconfig.json",
             content: `{
     "compilerOptions": {
         "composite": true
@@ -111,7 +111,7 @@ export const ghijkl = a.abcdef;`,
 }`,
         };
         const file2: File = {
-            path: "/b/index.ts",
+            path: "/home/src/projects/project/b/index.ts",
             content: `import a = require("../a");
 export const ghijkl = a.abcdef;`,
         };
@@ -128,11 +128,11 @@ export const ghijkl = a.abcdef;`,
 
     it("should work with Deprecated", () => {
         const file1: File = {
-            path: "/a/b/file1.js",
-            content: "/** @deprecated */\nfunction foo () {}",
+            path: "/home/src/projects/project/a/b/file1.js",
+            content: "/home/src/projects/project/** @deprecated */\nfunction foo () {}",
         };
         const configFile: File = {
-            path: "/a/b/jsconfig.json",
+            path: "/home/src/projects/project/a/b/jsconfig.json",
             content: "{}",
         };
         const host = createServerHost([file1, configFile, libFile]);

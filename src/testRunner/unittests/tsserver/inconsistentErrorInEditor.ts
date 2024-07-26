@@ -5,7 +5,7 @@ import {
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
-describe("unittests:: tsserver:: inconsistentErrorInEditor", () => {
+describe("unittests:: tsserver:: inconsistentErrorInEditor::", () => {
     it("should not error", () => {
         const host = createServerHost([]);
         const session = new TestSession(host);
@@ -35,10 +35,8 @@ describe("unittests:: tsserver:: inconsistentErrorInEditor", () => {
         verifyGetErrRequest({ session, files: ["^/untitled/ts-nul-authority/Untitled-1"] });
         baselineTsserverLogs("inconsistentErrorInEditor", "should not error", session);
     });
-});
 
-describe("unittests:: tsserver:: inconsistentErrorInEditor2", () => {
-    it("should not error", () => {
+    it("should not error 2", () => {
         const host = createServerHost([]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
@@ -65,6 +63,6 @@ describe("unittests:: tsserver:: inconsistentErrorInEditor2", () => {
             },
         });
         verifyGetErrRequest({ session, files: ["^/untitled/ts-nul-authority/Untitled-1"] });
-        baselineTsserverLogs("inconsistentErrorInEditor2", "should not error", session);
+        baselineTsserverLogs("inconsistentErrorInEditor", "should not error 2", session);
     });
 });

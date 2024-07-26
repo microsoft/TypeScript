@@ -19,7 +19,7 @@ import {
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: projects with references: invoking when references are already built", () => {
+describe("unittests:: tscWatch:: projectsWithReferences:: invoking when references are already built", () => {
     function verifySampleProject(withNodeNext: boolean) {
         verifyTscWatch({
             scenario: "projectsWithReferences",

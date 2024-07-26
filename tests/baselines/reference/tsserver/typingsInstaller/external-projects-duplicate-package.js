@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/app.js]
@@ -28,6 +28,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "seq": 1,
       "type": "request"
+<<<<<<< HEAD
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test.csproj
@@ -37,6 +38,16 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/n
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test.csproj WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/app/test.csproj' (External)
+=======
+    }
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.js 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test.csproj
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test.csproj WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/a/app/test.csproj' (External)
+>>>>>>> a32c02cf67 (Update all watch and tsserver tests so that paths are always watchable : unless testcase is for unwatchable scenario)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/app.js Text-1 ""
 	/node_modules/@types/node/index.d.ts Text-1 "declare var node;"
@@ -46,6 +57,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 	../../node_modules/@types/node/index.d.ts
 	  Entry point for implicit type library 'node'
+<<<<<<< HEAD
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
@@ -93,6 +105,53 @@ TI:: typing installer creation complete
 { "private": true }
 
 //// [/a/data/node_modules/types-registry/index.json]
+=======
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: Creating typing installer
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/app.js: *new*
+  {}
+
+FsWatchesRecursive::
+/node_modules: *new*
+  {}
+
+Projects::
+/a/app/test.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/app.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test.csproj
+/node_modules/@types/node/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test.csproj
+
+TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
+TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Updating types-registry npm package...
+TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
+TI:: typing installer creation complete
+//// [/a/data/package.json]
+{ "private": true }
+
+//// [/a/data/node_modules/types-registry/index.json]
+>>>>>>> a32c02cf67 (Update all watch and tsserver tests so that paths are always watchable : unless testcase is for unwatchable scenario)
 {
   "entries": {
     "node": {
@@ -249,6 +308,7 @@ Info seq  [hh:mm:ss:mss] response:
       "performanceData": {
         "updateGraphDurationMs": *
       }
+<<<<<<< HEAD
     }
 After request
 
@@ -278,3 +338,32 @@ Projects::
 /a/app/test.csproj (External) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+=======
+    }
+After request
+
+PolledWatches::
+/a/app/bower_components: *new*
+  {"pollingInterval":500}
+/a/app/node_modules: *new*
+  {"pollingInterval":500}
+/a/b/bower_components: *new*
+  {"pollingInterval":500}
+/a/b/node_modules: *new*
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/app.js:
+  {}
+
+FsWatchesRecursive::
+/node_modules:
+  {}
+
+Projects::
+/a/app/test.csproj (External) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+>>>>>>> a32c02cf67 (Update all watch and tsserver tests so that paths are always watchable : unless testcase is for unwatchable scenario)

@@ -1,9 +1,6 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    FsContents,
-    libContent,
-} from "./contents.js";
+import { FsContents } from "./contents.js";
 import {
     noChangeRun,
     verifyTsc,
@@ -43,7 +40,7 @@ function getFsContentsForNoEmitOnError(
             console.log("hi");
             export { }
         `,
-        [libFile.path]: libContent,
+        [libFile.path]: libFile.content,
     };
 }
 

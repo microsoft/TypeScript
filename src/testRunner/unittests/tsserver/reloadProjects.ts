@@ -14,7 +14,7 @@ import {
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: reloadProjects", () => {
+describe("unittests:: tsserver:: reloadProjects::", () => {
     const configFile: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
         content: jsonToReadableText({

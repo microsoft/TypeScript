@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -12,14 +12,16 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-//// [/a/b/commonFile1.ts]
+//// [/user/username/projects/project/commonFile1.ts]
 let x = 1
 
-//// [/a/b/commonFile2.ts]
+//// [/user/username/projects/project/commonFile2.ts]
 let y = 1
 
-//// [/a/b/tsconfig.json]
+//// [/user/username/projects/project/tsconfig.json]
 {
   "watchOptions": {
     "watchFile": "FixedChunkSizePolling"
@@ -27,7 +29,7 @@ let y = 1
 }
 
 
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -36,46 +38,51 @@ Output::
 
 
 
-//// [/a/b/commonFile1.js]
+//// [/user/username/projects/project/commonFile1.js]
 var x = 1;
 
 
-//// [/a/b/commonFile2.js]
+//// [/user/username/projects/project/commonFile2.js]
 var y = 1;
 
 
 
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
 FsWatchesRecursive::
-/a/b: *new*
+/user/username/projects/project: *new*
   {}
 
 Timeout callback:: count: 1
 1: pollQueue *new*
 
 Program root files: [
-  "/a/b/commonFile1.ts",
-  "/a/b/commonFile2.ts"
+  "/user/username/projects/project/commonFile1.ts",
+  "/user/username/projects/project/commonFile2.ts"
 ]
 Program options: {
   "watch": true,
-  "project": "/a/b/tsconfig.json",
-  "configFilePath": "/a/b/tsconfig.json"
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/project/commonFile1.ts
+/user/username/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/project/commonFile1.ts
+/user/username/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/commonfile1.ts (used version)
-/a/b/commonfile2.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/user/username/projects/project/commonfile1.ts (used version)
+/user/username/projects/project/commonfile2.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -124,7 +131,7 @@ exitCode:: ExitStatus.undefined
 Change:: Make change to file but should detect as changed and schedule program update
 
 Input::
-//// [/a/b/commonFile1.ts]
+//// [/user/username/projects/project/commonFile1.ts]
 var zz30 = 100;
 
 
@@ -158,39 +165,38 @@ Output::
 
 
 
-//// [/a/b/commonFile1.js]
+//// [/user/username/projects/project/commonFile1.js]
 var zz30 = 100;
 
 
-//// [/a/b/commonFile2.js] file written with same contents
+//// [/user/username/projects/project/commonFile2.js] file written with same contents
 
 Timeout callback:: count: 1
 8: pollQueue *new*
 
 
 Program root files: [
-  "/a/b/commonFile1.ts",
-  "/a/b/commonFile2.ts"
+  "/user/username/projects/project/commonFile1.ts",
+  "/user/username/projects/project/commonFile2.ts"
 ]
 Program options: {
   "watch": true,
-  "project": "/a/b/tsconfig.json",
-  "configFilePath": "/a/b/tsconfig.json"
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/project/commonFile1.ts
+/user/username/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/ts/lib/lib.d.ts
+/user/username/projects/project/commonFile1.ts
+/user/username/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/a/b/commonfile1.ts (computed .d.ts)
-/a/b/commonfile2.ts (computed .d.ts)
+/user/username/projects/project/commonfile1.ts (computed .d.ts)
+/user/username/projects/project/commonfile2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 

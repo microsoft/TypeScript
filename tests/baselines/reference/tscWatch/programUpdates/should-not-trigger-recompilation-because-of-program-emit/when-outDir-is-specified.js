@@ -6,7 +6,7 @@ export const c = 30;
 //// [/user/username/projects/myproject/src/file2.ts]
 import {c} from "file1"; export const d = 30;
 
-//// [/a/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -18,6 +18,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 //// [/user/username/projects/myproject/tsconfig.json]
 {
@@ -28,7 +30,7 @@ interface Array<T> { length: number; [n: number]: T; }
 }
 
 
-/a/lib/tsc.js -w -p /user/username/projects/myproject/tsconfig.json
+/home/src/tslibs/ts/lib/tsc.js -w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -63,7 +65,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
 /user/username/projects/myproject/file1.ts: *new*
   {}
@@ -91,17 +93,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/myproject/file1.ts
 /user/username/projects/myproject/src/file2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/myproject/file1.ts
 /user/username/projects/myproject/src/file2.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /user/username/projects/myproject/file1.ts (used version)
 /user/username/projects/myproject/src/file2.ts (used version)
 
@@ -156,7 +158,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/ts/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/file1.ts:
   {}
@@ -188,7 +190,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /user/username/projects/myproject/file1.ts
 /user/username/projects/myproject/src/file2.ts
 /user/username/projects/myproject/src/file3.ts

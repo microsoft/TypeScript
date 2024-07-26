@@ -11,7 +11,7 @@ import {
     libFile,
 } from "../../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large file", () => {
+describe("unittests:: tsserver:: events:: largeFileReferenced:: with large file", () => {
     function getFileType(useLargeTsFile: boolean) {
         return useLargeTsFile ? "ts" : "js";
     }

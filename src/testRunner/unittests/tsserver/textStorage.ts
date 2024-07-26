@@ -6,9 +6,9 @@ import {
 } from "../helpers/tsserver.js";
 import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: Text storage", () => {
+describe("unittests:: tsserver:: textStorage", () => {
     const f = {
-        path: "/a/app.ts",
+        path: "/home/src/projects/project/a/app.ts",
         content: `
                 let x = 1;
                 let y = 2;
@@ -105,7 +105,7 @@ describe("unittests:: tsserver:: Text storage", () => {
 
     it("should be able to return the file size when a JS file is too large to load into text", () => {
         const largeFile = {
-            path: "/a/large.js",
+            path: "/home/src/projects/project/a/large.js",
             content: " ".repeat(ts.server.maxFileSize + 1),
         };
 
@@ -130,7 +130,7 @@ describe("unittests:: tsserver:: Text storage", () => {
         const newText = "goodbye";
 
         const changingFile = {
-            path: "/a/changing.ts",
+            path: "/home/src/projects/project/a/changing.ts",
             content: oldText,
         };
 

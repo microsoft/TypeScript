@@ -1,7 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/packages/babel-loader/tsconfig.json]
+//// [/home/src/projects/project/packages/babel-loader/tsconfig.json]
 
 {
     "compilerOptions": {
@@ -18,12 +18,12 @@ Before request
 }
 
 
-//// [/packages/babel-loader/src/index.ts]
+//// [/home/src/projects/project/packages/babel-loader/src/index.ts]
 
 import type { Foo } from "../../core/src/index.js";
 
 
-//// [/packages/core/tsconfig.json]
+//// [/home/src/projects/project/packages/core/tsconfig.json]
 
 {
     "compilerOptions": {
@@ -39,7 +39,7 @@ import type { Foo } from "../../core/src/index.js";
 }
 
 
-//// [/packages/core/src/index.ts]
+//// [/home/src/projects/project/packages/core/src/index.ts]
 
 import { Bar } from "./loading-indicator.js";
 export type Foo = {};
@@ -48,7 +48,7 @@ const bar: Bar = {
 }
 
 
-//// [/packages/core/src/loading-indicator.ts]
+//// [/home/src/projects/project/packages/core/src/loading-indicator.ts]
 
 export interface Bar {
     prop: number;
@@ -65,7 +65,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "openFiles": [
           {
-            "file": "/packages/babel-loader/src/index.ts",
+            "file": "/home/src/projects/project/packages/babel-loader/src/index.ts",
             "fileContent": "\nimport type { Foo } from \"../../core/src/index.js\";\n"
           }
         ]
@@ -73,22 +73,22 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/babel-loader/src/index.ts ProjectRootPath: undefined:: Result: /packages/babel-loader/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /packages/babel-loader/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/babel-loader/tsconfig.json 2000 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/babel-loader/src/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/packages/babel-loader/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project/packages/babel-loader/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/babel-loader/tsconfig.json 2000 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/packages/babel-loader/tsconfig.json",
-        "reason": "Creating possible configured project for /packages/babel-loader/src/index.ts to open"
+        "projectName": "/home/src/projects/project/packages/babel-loader/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/packages/babel-loader/src/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /packages/babel-loader/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/packages/babel-loader/tsconfig.json : {
  "rootNames": [
-  "/packages/babel-loader/src/index.ts"
+  "/home/src/projects/project/packages/babel-loader/src/index.ts"
  ],
  "options": {
   "target": 5,
@@ -96,24 +96,24 @@ Info seq  [hh:mm:ss:mss] Config: /packages/babel-loader/tsconfig.json : {
   "strict": true,
   "esModuleInterop": true,
   "composite": true,
-  "rootDir": "/packages/babel-loader/src",
-  "outDir": "/packages/babel-loader/dist",
-  "configFilePath": "/packages/babel-loader/tsconfig.json"
+  "rootDir": "/home/src/projects/project/packages/babel-loader/src",
+  "outDir": "/home/src/projects/project/packages/babel-loader/dist",
+  "configFilePath": "/home/src/projects/project/packages/babel-loader/tsconfig.json"
  },
  "projectReferences": [
   {
-   "path": "/packages/core",
+   "path": "/home/src/projects/project/packages/core",
    "originalPath": "../core"
   }
  ]
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/babel-loader/src 1 undefined Config: /packages/babel-loader/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/babel-loader/src 1 undefined Config: /packages/babel-loader/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/babel-loader/tsconfig.json
-Info seq  [hh:mm:ss:mss] Config: /packages/core/tsconfig.json : {
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/babel-loader/src 1 undefined Config: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/babel-loader/src 1 undefined Config: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/babel-loader/tsconfig.json
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/packages/core/tsconfig.json : {
  "rootNames": [
-  "/packages/core/src/index.ts",
-  "/packages/core/src/loading-indicator.ts"
+  "/home/src/projects/project/packages/core/src/index.ts",
+  "/home/src/projects/project/packages/core/src/loading-indicator.ts"
  ],
  "options": {
   "target": 5,
@@ -121,23 +121,31 @@ Info seq  [hh:mm:ss:mss] Config: /packages/core/tsconfig.json : {
   "strict": true,
   "esModuleInterop": true,
   "composite": true,
-  "rootDir": "/packages/core/src",
-  "outDir": "/packages/core/dist",
-  "configFilePath": "/packages/core/tsconfig.json"
+  "rootDir": "/home/src/projects/project/packages/core/src",
+  "outDir": "/home/src/projects/project/packages/core/dist",
+  "configFilePath": "/home/src/projects/project/packages/core/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/tsconfig.json 2000 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/core/src 1 undefined Config: /packages/core/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/core/src 1 undefined Config: /packages/core/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/loading-indicator.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2018.full.d.ts 500 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/tsconfig.json 2000 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/src 1 undefined Config: /home/src/projects/project/packages/core/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/src 1 undefined Config: /home/src/projects/project/packages/core/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/src/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/src/loading-indicator.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es2018.full.d.ts 500 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/babel-loader/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/babel-loader/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/babel-loader/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
-	/packages/core/src/index.ts Text-1 "\nimport { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n    prop: 0\n}\n"
-	/packages/babel-loader/src/index.ts SVC-1-0 "\nimport type { Foo } from \"../../core/src/index.js\";\n"
+	/home/src/projects/project/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
+	/home/src/projects/project/packages/core/src/index.ts Text-1 "\nimport { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n    prop: 0\n}\n"
+	/home/src/projects/project/packages/babel-loader/src/index.ts SVC-1-0 "\nimport type { Foo } from \"../../core/src/index.js\";\n"
 
 
 	../core/src/loading-indicator.ts
@@ -154,7 +162,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/packages/babel-loader/tsconfig.json"
+        "projectName": "/home/src/projects/project/packages/babel-loader/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -165,7 +173,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "b5c9ceadb72d6d15d60a31707ef7d6e2798bddc428873ecb3036d48757a18392",
+          "projectId": "0b2579a5dab38b62470159ea898b5b78e12c94ce69ffdc2d5564aaae36c1bec8",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -212,11 +220,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/packages/babel-loader/src/index.ts",
-        "configFile": "/packages/babel-loader/tsconfig.json",
+        "triggerFile": "/home/src/projects/project/packages/babel-loader/src/index.ts",
+        "configFile": "/home/src/projects/project/packages/babel-loader/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.es2018.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es2018'",
+            "text": "File '/home/src/tslibs/ts/lib/lib.es2018.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es2018'",
             "code": 6053,
             "category": "error"
           },
@@ -273,14 +281,14 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/babel-loader/tsconfig.json ProjectRootPath: undefined:: Result: undefined
-Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/babel-loader/tsconfig.json ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /packages/babel-loader/src/index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /packages/babel-loader/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/packages/babel-loader/src/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/packages/babel-loader/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -292,44 +300,52 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es2018.full.d.ts: *new*
+/home/src/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/packages/babel-loader/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/packages/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.es2018.full.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/packages/babel-loader/tsconfig.json: *new*
+/home/src/projects/project/packages/babel-loader/tsconfig.json: *new*
   {}
-/packages/core/src/index.ts: *new*
+/home/src/projects/project/packages/core/src/index.ts: *new*
   {}
-/packages/core/src/loading-indicator.ts: *new*
+/home/src/projects/project/packages/core/src/loading-indicator.ts: *new*
   {}
-/packages/core/tsconfig.json: *new*
+/home/src/projects/project/packages/core/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/packages/babel-loader/src: *new*
+/home/src/projects/project/packages/babel-loader/src: *new*
   {}
-/packages/core/src: *new*
+/home/src/projects/project/packages/core/src: *new*
   {}
 
 Projects::
-/packages/babel-loader/tsconfig.json (Configured) *new*
+/home/src/projects/project/packages/babel-loader/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/packages/babel-loader/src/index.ts (Open) *new*
+/home/src/projects/project/packages/babel-loader/src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /packages/babel-loader/tsconfig.json *default*
-/packages/core/src/index.ts *new*
+        /home/src/projects/project/packages/babel-loader/tsconfig.json *default*
+/home/src/projects/project/packages/core/src/index.ts *new*
     version: Text-1
     containingProjects: 1
-        /packages/babel-loader/tsconfig.json
-/packages/core/src/loading-indicator.ts *new*
+        /home/src/projects/project/packages/babel-loader/tsconfig.json
+/home/src/projects/project/packages/core/src/loading-indicator.ts *new*
     version: Text-1
     containingProjects: 1
-        /packages/babel-loader/tsconfig.json
+        /home/src/projects/project/packages/babel-loader/tsconfig.json
 
 Before request
 
@@ -339,7 +355,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "openFiles": [
           {
-            "file": "/packages/core/src/index.ts",
+            "file": "/home/src/projects/project/packages/core/src/index.ts",
             "fileContent": "\nimport { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n    prop: 0\n}\n"
           }
         ]
@@ -347,26 +363,34 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/core/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/core/src/index.ts ProjectRootPath: undefined:: Result: /packages/core/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /packages/core/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/core/src/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/core/src/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/packages/core/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project/packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/packages/core/tsconfig.json",
-        "reason": "Creating possible configured project for /packages/core/src/index.ts to open"
+        "projectName": "/home/src/projects/project/packages/core/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/packages/core/src/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/core/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2018.full.d.ts 500 undefined Project: /packages/core/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/core/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/packages/core/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/core/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es2018.full.d.ts 500 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/core/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/core/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
-	/packages/core/src/index.ts Text-1 "\nimport { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n    prop: 0\n}\n"
+	/home/src/projects/project/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
+	/home/src/projects/project/packages/core/src/index.ts Text-1 "\nimport { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n    prop: 0\n}\n"
 
 
 	src/loading-indicator.ts
@@ -382,7 +406,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/packages/core/tsconfig.json"
+        "projectName": "/home/src/projects/project/packages/core/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -393,7 +417,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "ec773ccbd2b6bb7f39f525c229566d00ea24dcfc9cd257b987c2c6551fd8d4c1",
+          "projectId": "e6f0bd161f6c734a19239e904454c3d928d93fb78327d3564d9989c64261f0a3",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -440,11 +464,11 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/packages/core/src/index.ts",
-        "configFile": "/packages/core/tsconfig.json",
+        "triggerFile": "/home/src/projects/project/packages/core/src/index.ts",
+        "configFile": "/home/src/projects/project/packages/core/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.es2018.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es2018'",
+            "text": "File '/home/src/tslibs/ts/lib/lib.es2018.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es2018'",
             "code": 6053,
             "category": "error"
           },
@@ -501,20 +525,20 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/core/tsconfig.json ProjectRootPath: undefined:: Result: undefined
-Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/core/tsconfig.json ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/packages/core/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/core/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /packages/babel-loader/src/index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /packages/babel-loader/tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /packages/core/src/index.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /packages/babel-loader/tsconfig.json,/packages/core/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/packages/babel-loader/src/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/packages/babel-loader/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/packages/core/src/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/packages/babel-loader/tsconfig.json,/home/src/projects/project/packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -526,53 +550,63 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es2018.full.d.ts:
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/babel-loader/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/core/node_modules/@types: *new*
+  {"pollingInterval":500}
+/home/src/projects/project/packages/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.es2018.full.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/packages/babel-loader/tsconfig.json:
+/home/src/projects/project/packages/babel-loader/tsconfig.json:
   {}
-/packages/core/src/loading-indicator.ts:
+/home/src/projects/project/packages/core/src/loading-indicator.ts:
   {}
-/packages/core/tsconfig.json:
+/home/src/projects/project/packages/core/tsconfig.json:
   {}
 
 FsWatches *deleted*::
-/packages/core/src/index.ts:
+/home/src/projects/project/packages/core/src/index.ts:
   {}
 
 FsWatchesRecursive::
-/packages/babel-loader/src:
+/home/src/projects/project/packages/babel-loader/src:
   {}
-/packages/core/src:
+/home/src/projects/project/packages/core/src:
   {}
 
 Projects::
-/packages/babel-loader/tsconfig.json (Configured)
+/home/src/projects/project/packages/babel-loader/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
-/packages/core/tsconfig.json (Configured) *new*
+/home/src/projects/project/packages/core/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/packages/babel-loader/src/index.ts (Open)
+/home/src/projects/project/packages/babel-loader/src/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /packages/babel-loader/tsconfig.json *default*
-/packages/core/src/index.ts (Open) *changed*
+        /home/src/projects/project/packages/babel-loader/tsconfig.json *default*
+/home/src/projects/project/packages/core/src/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 2 *changed*
-        /packages/babel-loader/tsconfig.json
-        /packages/core/tsconfig.json *default* *new*
-/packages/core/src/loading-indicator.ts *changed*
+        /home/src/projects/project/packages/babel-loader/tsconfig.json
+        /home/src/projects/project/packages/core/tsconfig.json *default* *new*
+/home/src/projects/project/packages/core/src/loading-indicator.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
-        /packages/babel-loader/tsconfig.json
-        /packages/core/tsconfig.json *new*
+        /home/src/projects/project/packages/babel-loader/tsconfig.json
+        /home/src/projects/project/packages/core/tsconfig.json *new*
 
 Before request
 
@@ -582,7 +616,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "changedFiles": [
           {
-            "fileName": "/packages/babel-loader/src/index.ts",
+            "fileName": "/home/src/projects/project/packages/babel-loader/src/index.ts",
             "textChanges": [
               {
                 "start": {
@@ -610,31 +644,31 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/packages/babel-loader/tsconfig.json (Configured) *changed*
+/home/src/projects/project/packages/babel-loader/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
     autoImportProviderHost: false
-/packages/core/tsconfig.json (Configured)
+/home/src/projects/project/packages/core/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: false
 
 ScriptInfos::
-/packages/babel-loader/src/index.ts (Open) *changed*
+/home/src/projects/project/packages/babel-loader/src/index.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /packages/babel-loader/tsconfig.json *default*
-/packages/core/src/index.ts (Open)
+        /home/src/projects/project/packages/babel-loader/tsconfig.json *default*
+/home/src/projects/project/packages/core/src/index.ts (Open)
     version: Text-1
     containingProjects: 2
-        /packages/babel-loader/tsconfig.json
-        /packages/core/tsconfig.json *default*
-/packages/core/src/loading-indicator.ts
+        /home/src/projects/project/packages/babel-loader/tsconfig.json
+        /home/src/projects/project/packages/core/tsconfig.json *default*
+/home/src/projects/project/packages/core/src/loading-indicator.ts
     version: Text-1
     containingProjects: 2
-        /packages/babel-loader/tsconfig.json
-        /packages/core/tsconfig.json
+        /home/src/projects/project/packages/babel-loader/tsconfig.json
+        /home/src/projects/project/packages/core/tsconfig.json
 
 Before request
 
@@ -642,32 +676,32 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "references",
       "arguments": {
-        "file": "/packages/core/src/index.ts",
+        "file": "/home/src/projects/project/packages/core/src/index.ts",
         "line": 5,
         "offset": 5
       },
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Finding references to /packages/core/src/index.ts position 92 in project /packages/core/tsconfig.json
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/babel-loader/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Finding references to /home/src/projects/project/packages/core/src/index.ts position 92 in project /home/src/projects/project/packages/core/tsconfig.json
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/babel-loader/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/babel-loader/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/packages/babel-loader/src/index.ts SVC-1-1 "\nimport type { Foo } from// comment \"../../core/src/index.js\";\n"
+	/home/src/projects/project/packages/babel-loader/src/index.ts SVC-1-1 "\nimport type { Foo } from// comment \"../../core/src/index.js\";\n"
 
 
 	src/index.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/dist/loading-indicator.d.ts 2000 undefined Project: /packages/core/tsconfig.json WatchType: Missing generated file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/dist/loading-indicator.d.ts 2000 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Missing generated file
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
         "refs": [
           {
-            "file": "/packages/core/src/loading-indicator.ts",
+            "file": "/home/src/projects/project/packages/core/src/loading-indicator.ts",
             "start": {
               "line": 3,
               "offset": 5
@@ -689,7 +723,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isDefinition": false
           },
           {
-            "file": "/packages/core/src/loading-indicator.ts",
+            "file": "/home/src/projects/project/packages/core/src/loading-indicator.ts",
             "start": {
               "line": 6,
               "offset": 5
@@ -711,7 +745,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isDefinition": false
           },
           {
-            "file": "/packages/core/src/index.ts",
+            "file": "/home/src/projects/project/packages/core/src/index.ts",
             "start": {
               "line": 5,
               "offset": 5
@@ -745,50 +779,60 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/a/lib/lib.es2018.full.d.ts:
+/home/src/projects/node_modules/@types:
   {"pollingInterval":500}
-/packages/core/dist/loading-indicator.d.ts: *new*
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/babel-loader/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/core/dist/loading-indicator.d.ts: *new*
   {"pollingInterval":2000}
+/home/src/projects/project/packages/core/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/tslibs/ts/lib/lib.es2018.full.d.ts:
+  {"pollingInterval":500}
 
 FsWatches::
-/packages/babel-loader/tsconfig.json:
+/home/src/projects/project/packages/babel-loader/tsconfig.json:
   {}
-/packages/core/src/loading-indicator.ts:
+/home/src/projects/project/packages/core/src/loading-indicator.ts:
   {}
-/packages/core/tsconfig.json:
+/home/src/projects/project/packages/core/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/packages/babel-loader/src:
+/home/src/projects/project/packages/babel-loader/src:
   {}
-/packages/core/src:
+/home/src/projects/project/packages/core/src:
   {}
 
 Projects::
-/packages/babel-loader/tsconfig.json (Configured) *changed*
+/home/src/projects/project/packages/babel-loader/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
     autoImportProviderHost: undefined *changed*
-/packages/core/tsconfig.json (Configured) *changed*
+/home/src/projects/project/packages/core/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
-        /packages/core/dist/loading-indicator.d.ts: identitySourceMapConsumer *new*
+        /home/src/projects/project/packages/core/dist/loading-indicator.d.ts: identitySourceMapConsumer *new*
     autoImportProviderHost: false
 
 ScriptInfos::
-/packages/babel-loader/src/index.ts (Open)
+/home/src/projects/project/packages/babel-loader/src/index.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /packages/babel-loader/tsconfig.json *default*
-/packages/core/src/index.ts (Open) *changed*
+        /home/src/projects/project/packages/babel-loader/tsconfig.json *default*
+/home/src/projects/project/packages/core/src/index.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /packages/core/tsconfig.json *default*
-        /packages/babel-loader/tsconfig.json *deleted*
-/packages/core/src/loading-indicator.ts *changed*
+        /home/src/projects/project/packages/core/tsconfig.json *default*
+        /home/src/projects/project/packages/babel-loader/tsconfig.json *deleted*
+/home/src/projects/project/packages/core/src/loading-indicator.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /packages/core/tsconfig.json
-        /packages/babel-loader/tsconfig.json *deleted*
+        /home/src/projects/project/packages/core/tsconfig.json
+        /home/src/projects/project/packages/babel-loader/tsconfig.json *deleted*

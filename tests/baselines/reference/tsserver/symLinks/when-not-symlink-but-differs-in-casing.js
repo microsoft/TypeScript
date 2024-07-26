@@ -1,4 +1,4 @@
-currentDirectory:: C:/ useCaseSensitiveFileNames: false
+currentDirectory:: C:\home\src\vscode\projects\bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [C:/temp/replay/axios-src/lib/core/AxiosHeaders.js]
@@ -60,7 +60,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/axios-s
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/replay/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -123,7 +123,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-C:/a/lib/lib.d.ts: *new*
+C:/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 c:/temp/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -267,7 +267,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/node_modules 1 undefined Project: /dev/null/inferredProject2* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/replay/axios-src/node_modules/follow-redirects/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
@@ -321,7 +321,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: c:/temp/replay/no
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: c:/temp/replay/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: c:/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: c:/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/temp/replay/axios-src/node_modules/follow-redirects/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: C:/temp/replay/axios-src/node_modules/follow-redirects/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
@@ -347,7 +347,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-C:/a/lib/lib.d.ts:
+C:/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 c:/temp/node_modules: *new*
   {"pollingInterval":500}
@@ -456,7 +456,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/ax
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/AxiosHeaders.js 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core 0 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core 0 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject3* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject3* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/core/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/replay/axios-src/lib/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
@@ -603,7 +603,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-C:/a/lib/lib.d.ts:
+C:/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 c:/temp/node_modules:
   {"pollingInterval":500}
@@ -757,7 +757,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-C:/a/lib/lib.d.ts:
+C:/home/src/tslibs/ts/lib/lib.d.ts:
   {"pollingInterval":500}
 c:/temp/node_modules:
   {"pollingInterval":500}

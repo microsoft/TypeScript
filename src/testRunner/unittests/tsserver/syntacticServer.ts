@@ -13,7 +13,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
+describe("unittests:: tsserver:: syntacticServer:: Semantic operations on Syntax server", () => {
     function setup() {
         const file1: File = {
             path: `/user/username/projects/myproject/a.ts`,
@@ -117,7 +117,7 @@ import { something } from "something";
     it("should not include auto type reference directives", () => {
         const { host, session, file1 } = setup();
         const atTypes: File = {
-            path: `/node_modules/@types/somemodule/index.d.ts`,
+            path: `/user/username/projects/myproject/node_modules/@types/somemodule/index.d.ts`,
             content: "export const something = 10;",
         };
         host.ensureFileOrFolder(atTypes);
