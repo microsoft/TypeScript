@@ -12,7 +12,7 @@ for (let x of []) {
 "use strict";
 var _loop_1 = function (x) {
     v0 = x;
-    foo: var y;
+    foo: ;
     (function () { return x + v0; });
 };
 var v0, y;

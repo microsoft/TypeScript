@@ -42,7 +42,7 @@ var ParseThemeData = /** @class */ (function () {
             }
             -fontSize;
             ",\n          ";
-            height: var foo;
+            height: ;
             ",\n        ].join(';')\n      );\n    }\n  }\n}\n";
         };
         var this_1 = this, foo;

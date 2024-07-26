@@ -2731,11 +2731,12 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
     function visitVariableStatement(node: VariableStatement): Statement {
         const ancestorFacts = enterSubtree(HierarchyFacts.None, hasSyntacticModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
-        let updated: Statement = node;
+        let updated: Statement;
         if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0 && !isVariableStatementOfTypeScriptClassWrapper(node)) {
+            const declarations = node.declarationList.declarations;
             // we are inside a converted loop - hoist variable declarations
             let assignments: Expression[] | undefined;
-            for (const decl of node.declarationList.declarations) {
+            for (const decl of declarations) {
                 hoistVariableDeclarationDeclaredInConvertedLoop(convertedLoopState, decl);
                 if (decl.initializer) {
                     let assignment: Expression;
@@ -2757,6 +2758,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             }
             if (assignments) {
                 updated = setTextRange(factory.createExpressionStatement(factory.inlineExpressions(assignments)), node);
+            } else if (declarations.length) {
+                updated = setTextRange(factory.createEmptyStatement(), node);
+            } else {
+                updated = node;
             }
         }
         else {
