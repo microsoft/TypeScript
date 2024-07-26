@@ -1,0 +1,361 @@
+//// [tests/cases/compiler/unconstrainedTypeComparison.ts] ////
+
+=== unconstrainedTypeComparison.ts ===
+function f1<T>(a: T, b: T): boolean {
+>f1 : <T>(a: T, b: T) => boolean
+>   : ^ ^^ ^^ ^^ ^^ ^^^^^       
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+    return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+}
+
+function f2<T extends {} | undefined | null>(a: T, b: T): boolean {
+>f2 : <T extends {} | undefined | null>(a: T, b: T) => boolean
+>   : ^ ^^^^^^^^^                     ^^ ^^ ^^ ^^ ^^^^^       
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+    return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+}
+
+function f3<T extends unknown>(a: T, b: T): boolean {
+>f3 : <T extends unknown>(a: T, b: T) => boolean
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^       
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+    return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : T
+>  : ^
+>b : T
+>  : ^
+}
+
+function f4<T, U extends T>(a: U, b: U): boolean {
+>f4 : <T, U extends T>(a: U, b: U) => boolean
+>   : ^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^       
+>a : U
+>  : ^
+>b : U
+>  : ^
+
+    return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : U
+>  : ^
+>b : U
+>  : ^
+}
+
+function f5<T extends {} | undefined | null, U extends T>(a: U, b: U): boolean {
+>f5 : <T extends {} | undefined | null, U extends T>(a: U, b: U) => boolean
+>   : ^ ^^^^^^^^^                     ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^       
+>a : U
+>  : ^
+>b : U
+>  : ^
+
+    return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : U
+>  : ^
+>b : U
+>  : ^
+}
+
+function f6<T extends unknown, U extends T>(a: U, b: U): boolean {
+>f6 : <T extends unknown, U extends T>(a: U, b: U) => boolean
+>   : ^ ^^^^^^^^^       ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^       
+>a : U
+>  : ^
+>b : U
+>  : ^
+
+    return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : U
+>  : ^
+>b : U
+>  : ^
+}
+
+function f7<T extends {} | undefined, U extends T>(a: U, b: U): boolean {
+>f7 : <T extends {} | undefined, U extends T>(a: U, b: U) => boolean
+>   : ^ ^^^^^^^^^              ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^       
+>a : U
+>  : ^
+>b : U
+>  : ^
+
+    return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : U
+>  : ^
+>b : U
+>  : ^
+}
+
+function f8<T extends {} | null, U extends T>(a: U, b: U): boolean {
+>f8 : <T extends {} | null, U extends T>(a: U, b: U) => boolean
+>   : ^ ^^^^^^^^^         ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^       
+>a : U
+>  : ^
+>b : U
+>  : ^
+
+    return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : U
+>  : ^
+>b : U
+>  : ^
+}
+
+function f9<T extends undefined | null, U extends T>(a: U, b: U): boolean {
+>f9 : <T extends undefined | null, U extends T>(a: U, b: U) => boolean
+>   : ^ ^^^^^^^^^                ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^       
+>a : U
+>  : ^
+>b : U
+>  : ^
+
+    return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : U
+>  : ^
+>b : U
+>  : ^
+}
+
+function f10<T, U>(x: T | U, y: T | U) {
+>f10 : <T, U>(x: T | U, y: T | U) => boolean
+>    : ^ ^^ ^^ ^^     ^^ ^^     ^^^^^^^^^^^^
+>x : T | U
+>  : ^^^^^
+>y : T | U
+>  : ^^^^^
+
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : T | U
+>  : ^^^^^
+>y : T | U
+>  : ^^^^^
+}
+
+function f11<T, U extends T>(x: T | number, y: U | number) {
+>f11 : <T, U extends T>(x: T | number, y: U | number) => boolean
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^^^^
+>x : number | T
+>  : ^^^^^^^^^^
+>y : number | U
+>  : ^^^^^^^^^^
+
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : number | T
+>  : ^^^^^^^^^^
+>y : number | U
+>  : ^^^^^^^^^^
+}
+
+function f12<T, U extends T>(x: T | number, y: U | number) {
+>f12 : <T, U extends T>(x: T | number, y: U | number) => boolean
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^^^^
+>x : number | T
+>  : ^^^^^^^^^^
+>y : number | U
+>  : ^^^^^^^^^^
+
+    if (x === undefined) {
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : number | T
+>  : ^^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return false;
+>false : false
+>      : ^^^^^
+    }
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : number | (T & ({} | null))
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : number | U
+>  : ^^^^^^^^^^
+}
+
+function f13<T, U extends T | number>(x: U, y: U) {
+>f13 : <T, U extends T | number>(x: U, y: U) => boolean
+>    : ^ ^^ ^^^^^^^^^          ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>x : U
+>  : ^
+>y : U
+>  : ^
+
+    if (x === undefined) {
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : U
+>  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return false;
+>false : false
+>      : ^^^^^
+    }
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : U & ({} | null)
+>  : ^^^^^^^^^^^^^^^
+>y : U
+>  : ^
+}
+
+function f14<T, U>(x: T & U, y: T & U) {
+>f14 : <T, U>(x: T & U, y: T & U) => boolean
+>    : ^ ^^ ^^ ^^     ^^ ^^     ^^^^^^^^^^^^
+>x : T & U
+>  : ^^^^^
+>y : T & U
+>  : ^^^^^
+
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : T & U
+>  : ^^^^^
+>y : T & U
+>  : ^^^^^
+}
+
+function f15<T, U extends T>(x: T & number, y: U & number) {
+>f15 : <T, U extends T>(x: T & number, y: U & number) => boolean
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^^^^
+>x : T & number
+>  : ^^^^^^^^^^
+>y : U & number
+>  : ^^^^^^^^^^
+
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : T & number
+>  : ^^^^^^^^^^
+>y : U & number
+>  : ^^^^^^^^^^
+}
+
+function f16<T, U extends T>(x: T & U, y: U) {
+>f16 : <T, U extends T>(x: T & U, y: U) => boolean
+>    : ^ ^^ ^^^^^^^^^ ^^ ^^     ^^ ^^ ^^^^^^^^^^^^
+>x : T & U
+>  : ^^^^^
+>y : U
+>  : ^
+
+    if (x === undefined) {
+>x === undefined : boolean
+>                : ^^^^^^^
+>x : T & U
+>  : ^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return false;
+>false : false
+>      : ^^^^^
+    }
+    if (y === null) {
+>y === null : boolean
+>           : ^^^^^^^
+>y : U
+>  : ^
+
+        return false;
+>false : false
+>      : ^^^^^
+    }
+    return x < y;
+>x < y : boolean
+>      : ^^^^^^^
+>x : T & U & ({} | null)
+>  : ^^^^^^^^^^^^^^^^^^^
+>y : U & ({} | undefined)
+>  : ^^^^^^^^^^^^^^^^^^^^
+}
+
+
+function compare<T>(a: T, b: T): boolean {
+>compare : <T>(a: T, b: T) => boolean
+>        : ^ ^^ ^^ ^^ ^^ ^^^^^       
+>a : T
+>  : ^
+>b : T
+>  : ^
+
+    if (a === undefined) {
+>a === undefined : boolean
+>                : ^^^^^^^
+>a : T
+>  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+        return false;
+>false : false
+>      : ^^^^^
+    }
+    if (b === null) {
+>b === null : boolean
+>           : ^^^^^^^
+>b : T
+>  : ^
+
+        return false;
+>false : false
+>      : ^^^^^
+    }
+    return a > b;
+>a > b : boolean
+>      : ^^^^^^^
+>a : T & ({} | null)
+>  : ^^^^^^^^^^^^^^^
+>b : T & ({} | undefined)
+>  : ^^^^^^^^^^^^^^^^^^^^
+}
+
