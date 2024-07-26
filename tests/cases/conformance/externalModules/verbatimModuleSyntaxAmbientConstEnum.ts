@@ -7,6 +7,11 @@
 // @Filename: /node_modules/pkg/index.d.ts
 export declare const enum E { A, B, C }
 
-// @Filename: /app.ts
+// @Filename: /a.ts
 import { E } from "pkg"; // Error
+import type { E as _E } from "pkg"; // Ok
 console.log(E.A); // Ok
+
+// @Filename: /b.ts
+export { E } from "pkg"; // Error
+export type { E as _E } from "pkg"; // Ok
