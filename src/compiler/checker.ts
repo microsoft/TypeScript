@@ -39520,7 +39520,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
         }
 
-        if (getIsolatedModules(compilerOptions)) {
+        // Do not check for --verbatimModuleSyntax here because imports of ambient const enums
+        // will already be checked for the same error
+        if (compilerOptions.isolatedModules) {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
             const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
@@ -46096,6 +46098,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // that inconsistency, we disallow ESM syntax in files that are unambiguously CommonJS in
                     // this mode.
                     error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve);
+                }
+
+                if (
+                    compilerOptions.verbatimModuleSyntax &&
+                    !isTypeOnlyImportOrExportDeclaration(node) &&
+                    !(node.flags & NodeFlags.Ambient) &&
+                    targetFlags & SymbolFlags.ConstEnum
+                ) {
+                    const constEnumDeclaration = target.valueDeclaration as EnumDeclaration;
+                    const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
+                    if (constEnumDeclaration.flags & NodeFlags.Ambient && (!redirect || !shouldPreserveConstEnums(redirect.commandLine.options))) {
+                        error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
+                    }
                 }
             }
 
