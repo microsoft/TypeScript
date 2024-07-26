@@ -2729,9 +2729,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             && !!(getInternalEmitFlags(node.declarationList.declarations[0].initializer) & InternalEmitFlags.TypeScriptClassWrapper);
     }
 
-    function visitVariableStatement(node: VariableStatement): Statement | undefined {
+    function visitVariableStatement(node: VariableStatement): Statement {
         const ancestorFacts = enterSubtree(HierarchyFacts.None, hasSyntacticModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
-        let updated: Statement | undefined;
+        let updated: Statement = node;
         if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0 && !isVariableStatementOfTypeScriptClassWrapper(node)) {
             // we are inside a converted loop - hoist variable declarations
             let assignments: Expression[] | undefined;
@@ -2757,10 +2757,6 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             }
             if (assignments) {
                 updated = setTextRange(factory.createExpressionStatement(factory.inlineExpressions(assignments)), node);
-            }
-            else {
-                // none of declarations has initializer - the entire variable statement can be deleted
-                updated = undefined;
             }
         }
         else {
