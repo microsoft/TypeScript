@@ -356,7 +356,6 @@ function foo2(x) {
 function foo3(x) {
     var _loop_5 = function () {
         var x_5;
-        ;
         (function () { return x_5 + v; });
         (function () { return x_5 + v; });
         if (x_5 == 1) {
@@ -535,7 +534,6 @@ function foo2_c(x) {
 function foo3_c(x) {
     var _loop_15 = function () {
         var x_15 = 1;
-        ;
         (function () { return x_15 + v; });
         (function () { return x_15 + v; });
         if (x_15 == 1) {

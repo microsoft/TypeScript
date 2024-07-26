@@ -2729,9 +2729,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             && !!(getInternalEmitFlags(node.declarationList.declarations[0].initializer) & InternalEmitFlags.TypeScriptClassWrapper);
     }
 
-    function visitVariableStatement(node: VariableStatement): Statement {
+    function visitVariableStatement(node: VariableStatement): Statement | undefined {
         const ancestorFacts = enterSubtree(HierarchyFacts.None, hasSyntacticModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
-        let updated: Statement;
+        let updated: Statement | undefined;
         if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0 && !isVariableStatementOfTypeScriptClassWrapper(node)) {
             const declarations = node.declarationList.declarations;
             // we are inside a converted loop - hoist variable declarations
@@ -2758,10 +2758,9 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             }
             if (assignments) {
                 updated = setTextRange(factory.createExpressionStatement(factory.inlineExpressions(assignments)), node);
-            } else if (declarations.length) {
-                updated = setTextRange(factory.createEmptyStatement(), node);
             } else {
-                updated = node;
+                // none of declarations has initializer - the entire variable statement can be deleted
+                updated = undefined;
             }
         }
         else {
@@ -2947,7 +2946,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         const statement = unwrapInnermostStatementOfLabel(node, convertedLoopState && recordLabel);
         return isIterationStatement(statement, /*lookInLabeledStatements*/ false)
             ? visitIterationStatement(statement, /*outermostLabeledStatement*/ node)
-            : factory.restoreEnclosingLabel(Debug.checkDefined(visitNode(statement, visitor, isStatement, factory.liftToBlock)), node, convertedLoopState && resetLabel);
+            : factory.restoreEnclosingLabel(visitNode(statement, visitor, isStatement, factory.liftToBlock) ?? setTextRange(factory.createEmptyStatement(), statement), node, convertedLoopState && resetLabel);
     }
 
     function visitIterationStatement(node: IterationStatement, outermostLabeledStatement: LabeledStatement) {

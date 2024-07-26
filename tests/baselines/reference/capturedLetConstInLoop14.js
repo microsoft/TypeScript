@@ -23,7 +23,6 @@ function foo(x) {
     var v = 1;
     var _loop_1 = function () {
         var x_1 = v;
-        ;
         v = 2;
         (function () { return x_1 + v; });
     };

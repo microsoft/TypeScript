@@ -35,7 +35,6 @@ var ParseThemeData = /** @class */ (function () {
             var fontType = item.type;
             var style = function (state) { return "color: var(--button-".concat(fontType, "-").concat(state, "-font-color)"); };
             this_1.classFormat("".concat(style('active'), ");\n    }\n    for (let item of size) {\n      const fontType = item.type;\n      this.classFormat(\n        [\n          "), font - size);
-            var ;
             (--button - size - $);
             {
                 fontType;
