@@ -889,6 +889,7 @@ import {
     Node,
     NodeArray,
     NodeBuilderFlags,
+    NodeBuilderFlagsIgnoreErrors,
     nodeCanBeDecorated,
     NodeCheckFlags,
     NodeFlags,
@@ -1119,7 +1120,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    NodeBuilderFlagsIgnoreErrors,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
