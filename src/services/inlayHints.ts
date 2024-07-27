@@ -473,7 +473,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function typeToInlayHintParts(type: Type): InlayHintDisplayPart[] | string {
         const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
-        
+
         if (!shouldUseInteractiveInlayHints(preferences)) {
             return checker.typeToString(type, /*enclosingDeclaration*/ undefined, flags);
         }
@@ -485,7 +485,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
     function typePredicateToInlayHintParts(typePredicate: TypePredicate): InlayHintDisplayPart[] | string {
         const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
-        
+
         if (!shouldUseInteractiveInlayHints(preferences)) {
             return checker.typePredicateToString(typePredicate, /*enclosingDeclaration*/ undefined, flags);
         }
