@@ -17673,6 +17673,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // We optimize for the common case of unioning a union type with some other type (such as `undefined`).
         if (types.length === 2 && !origin && (types[0].flags & TypeFlags.Union || types[1].flags & TypeFlags.Union)) {
+            // avoid subtype reduction when one of the types has only types that can't have subtypes
+            if (unionReduction === UnionReduction.Subtype && some(types, t => everyType(t, t => !!(t.flags & TypeFlags.Nullable)))) {
+                unionReduction = UnionReduction.Literal;
+            }
             const infix = unionReduction === UnionReduction.None ? "N" : unionReduction === UnionReduction.Subtype ? "S" : "L";
             const index = types[0].id < types[1].id ? 0 : 1;
             const id = types[index].id + infix + types[1 - index].id + getAliasId(aliasSymbol, aliasTypeArguments);
