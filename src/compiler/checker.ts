@@ -1893,11 +1893,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 Debug.assert(!!(getNodeLinks(file).flags & NodeCheckFlags.TypeChecked));
 
                 diagnostics = addRange(diagnostics, suggestionDiagnostics.getDiagnostics(file.fileName));
-                checkUnusedOrUninitializedIdentifiers(getPotentiallyUnusedOrUninitializedIdentifiers(file), (containingNode, kind, diag) => {
+                checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(file), (containingNode, kind, diag) => {
                     if (!containsParseError(containingNode) && !unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
                         (diagnostics || (diagnostics = [])).push({ ...diag, category: DiagnosticCategory.Suggestion });
                     }
-                }, /*checkUnused*/ true);
+                });
 
                 return diagnostics || emptyArray;
             }
@@ -2275,7 +2275,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var deferredGlobalClassAccessorDecoratorResultType: GenericType | undefined;
     var deferredGlobalClassFieldDecoratorContextType: GenericType | undefined;
 
-    var allPotentiallyUnusedOrUninitializedIdentifiers = new Map<Path, PotentiallyUnusedIdentifier[]>(); // key is file name
+    var allPotentiallyUnusedIdentifiers = new Map<Path, PotentiallyUnusedIdentifier[]>(); // key is file name
 
     var flowLoopStart = 0;
     var flowLoopCount = 0;
@@ -29504,14 +29504,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             node.kind === SyntaxKind.PropertyDeclaration)!;
     }
 
-    // Check if a parameter, catch variable, or mutable local variable is assigned anywhere
+    // Check if a parameter or catch variable is assigned anywhere
     function isSymbolAssigned(symbol: Symbol) {
         return !isPastLastAssignment(symbol, /*location*/ undefined);
-    }
-
-    // Check if a parameter, catch variable, or mutable local variable is assigned anywhere definitely
-    function isSymbolAssignedDefinitely(symbol: Symbol) {
-        return symbol.isDefinitelyAssigned ?? (isSymbolAssigned(symbol) && symbol.isDefinitelyAssigned);
     }
 
     // Return true if there are no assignments to the given symbol or if the given location
@@ -29526,7 +29521,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             links.flags |= NodeCheckFlags.AssignmentsMarked;
             if (!hasParentWithAssignmentsMarked(parent)) {
                 markNodeAssignments(parent);
-                symbol.isDefinitelyAssigned ??= false;
             }
         }
         return !symbol.lastAssignmentPos || location && symbol.lastAssignmentPos < location.pos;
@@ -29563,19 +29557,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function markNodeAssignments(node: Node) {
         switch (node.kind) {
             case SyntaxKind.Identifier:
-                const assignmentKind = getAssignmentTargetKind(node);
-                if (assignmentKind !== AssignmentKind.None) {
+                if (isAssignmentTarget(node)) {
                     const symbol = getResolvedSymbol(node as Identifier);
-                    if (isParameterOrMutableLocalVariable(symbol)) {
-                        if (assignmentKind === AssignmentKind.Definite) {
-                            symbol.isDefinitelyAssigned = true;
-                        }
-
-                        if (symbol.lastAssignmentPos !== Number.MAX_VALUE) {
-                            const referencingFunction = findAncestor(node, isFunctionOrSourceFile);
-                            const declaringFunction = findAncestor(symbol.valueDeclaration, isFunctionOrSourceFile);
-                            symbol.lastAssignmentPos = referencingFunction === declaringFunction ? extendAssignmentPosition(node, symbol.valueDeclaration!) : Number.MAX_VALUE;
-                        }
+                    if (isParameterOrMutableLocalVariable(symbol) && symbol.lastAssignmentPos !== Number.MAX_VALUE) {
+                        const referencingFunction = findAncestor(node, isFunctionOrSourceFile);
+                        const declaringFunction = findAncestor(symbol.valueDeclaration, isFunctionOrSourceFile);
+                        symbol.lastAssignmentPos = referencingFunction === declaringFunction ? extendAssignmentPosition(node, symbol.valueDeclaration!) : Number.MAX_VALUE;
                     }
                 }
                 return;
@@ -41142,7 +41129,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             if (node.kind !== SyntaxKind.IndexSignature && node.kind !== SyntaxKind.JSDocFunctionType) {
-                registerForUnusedOrUninitializedIdentifiersCheck(node);
+                registerForUnusedIdentifiersCheck(node);
             }
         }
     }
@@ -41853,7 +41840,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        registerForUnusedOrUninitializedIdentifiersCheck(node);
+        registerForUnusedIdentifiersCheck(node);
     }
 
     function checkTemplateLiteralType(node: TemplateLiteralTypeNode) {
@@ -43234,34 +43221,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function registerForUnusedOrUninitializedIdentifiersCheck(node: PotentiallyUnusedIdentifier): void {
-        addLazyDiagnostic(registerForUnusedOrUninitializedIdentifiersCheckDiagnostics);
+    function registerForUnusedIdentifiersCheck(node: PotentiallyUnusedIdentifier): void {
+        addLazyDiagnostic(registerForUnusedIdentifiersCheckDiagnostics);
 
-        function registerForUnusedOrUninitializedIdentifiersCheckDiagnostics() {
+        function registerForUnusedIdentifiersCheckDiagnostics() {
             // May be in a call such as getTypeOfNode that happened to call this. But potentiallyUnusedIdentifiers is only defined in the scope of `checkSourceFile`.
             const sourceFile = getSourceFileOfNode(node);
-            let potentiallyUnusedOrUninitializedIdentifiers = allPotentiallyUnusedOrUninitializedIdentifiers.get(sourceFile.path);
-            if (!potentiallyUnusedOrUninitializedIdentifiers) {
-                potentiallyUnusedOrUninitializedIdentifiers = [];
-                allPotentiallyUnusedOrUninitializedIdentifiers.set(sourceFile.path, potentiallyUnusedOrUninitializedIdentifiers);
+            let potentiallyUnusedIdentifiers = allPotentiallyUnusedIdentifiers.get(sourceFile.path);
+            if (!potentiallyUnusedIdentifiers) {
+                potentiallyUnusedIdentifiers = [];
+                allPotentiallyUnusedIdentifiers.set(sourceFile.path, potentiallyUnusedIdentifiers);
             }
             // TODO: GH#22580
             // Debug.assert(addToSeen(seenPotentiallyUnusedIdentifiers, getNodeId(node)), "Adding potentially-unused identifier twice");
-            potentiallyUnusedOrUninitializedIdentifiers.push(node);
+            potentiallyUnusedIdentifiers.push(node);
         }
     }
 
     type PotentiallyUnusedIdentifier = SourceFile | ModuleDeclaration | ClassLikeDeclaration | InterfaceDeclaration | Block | CaseBlock | ForStatement | ForInStatement | ForOfStatement | Exclude<SignatureDeclaration, IndexSignatureDeclaration | JSDocFunctionType> | TypeAliasDeclaration | InferTypeNode;
 
-    function checkUnusedOrUninitializedIdentifiers(potentiallyUnusedIdentifiers: readonly PotentiallyUnusedIdentifier[], addDiagnostic: AddUnusedDiagnostic, checkUnused?: boolean, checkUninitialized?: boolean) {
+    function checkUnusedIdentifiers(potentiallyUnusedIdentifiers: readonly PotentiallyUnusedIdentifier[], addDiagnostic: AddUnusedDiagnostic) {
         for (const node of potentiallyUnusedIdentifiers) {
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
-                    if (checkUnused) {
-                        checkUnusedClassMembers(node, addDiagnostic);
-                        checkUnusedTypeParameters(node, addDiagnostic);
-                    }
+                    checkUnusedClassMembers(node, addDiagnostic);
+                    checkUnusedTypeParameters(node, addDiagnostic);
                     break;
                 case SyntaxKind.SourceFile:
                 case SyntaxKind.ModuleDeclaration:
@@ -43270,12 +43255,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
-                    if (checkUnused) {
-                        checkUnusedLocalsAndParameters(node, addDiagnostic);
-                    }
-                    if (checkUninitialized) {
-                        checkUninitializedLocals(node);
-                    }
+                    checkUnusedLocalsAndParameters(node, addDiagnostic);
                     break;
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionExpression:
@@ -43284,16 +43264,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    if (checkUnused) {
-                        // Only report unused parameters on the implementation, not overloads.
-                        if (node.body) {
-                            checkUnusedLocalsAndParameters(node, addDiagnostic);
-                        }
-                        checkUnusedTypeParameters(node, addDiagnostic);
+                    if (node.body) { // Don't report unused parameters in overloads
+                        checkUnusedLocalsAndParameters(node, addDiagnostic);
                     }
-                    if (checkUninitialized) {
-                        checkUninitializedLocals(node);
-                    }
+                    checkUnusedTypeParameters(node, addDiagnostic);
                     break;
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.CallSignature:
@@ -43302,14 +43276,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
-                    if (checkUnused) {
-                        checkUnusedTypeParameters(node, addDiagnostic);
-                    }
+                    checkUnusedTypeParameters(node, addDiagnostic);
                     break;
                 case SyntaxKind.InferType:
-                    if (checkUnused) {
-                        checkUnusedInferTypeParameter(node, addDiagnostic);
-                    }
+                    checkUnusedInferTypeParameter(node, addDiagnostic);
                     break;
                 default:
                     Debug.assertNever(node, "Node should not have been registered for unused identifiers check");
@@ -43556,28 +43526,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         });
     }
 
-    function checkUninitializedLocals(nodeWithLocals: HasLocals) {
-        nodeWithLocals.locals!.forEach(local => {
-            if (!(local.flags & SymbolFlags.Variable) || !local.isReferenced || isSymbolAssignedDefinitely(local)) {
-                return;
-            }
-            const declaration = local.valueDeclaration;
-            if (
-                !declaration || !isVariableDeclaration(declaration) || !(getCombinedNodeFlagsCached(declaration) & NodeFlags.Let) ||
-                getCombinedNodeFlagsCached(declaration) & NodeFlags.Ambient ||
-                declaration.exclamationToken ||
-                declaration.initializer ||
-                !declaration.type
-            ) {
-                return;
-            }
-            const type = getTypeFromTypeNode(declaration.type);
-            if (!(type.flags & TypeFlags.AnyOrUnknown) && !containsUndefinedType(type)) {
-                error(declaration, Diagnostics.Variable_0_is_used_but_never_initialized, idText(declaration.name as Identifier));
-            }
-        });
-    }
-
     function checkPotentialUncheckedRenamedBindingElementsInTypes() {
         for (const node of potentialUnusedRenamedBindingElementsInTypes) {
             if (!getSymbolOfDeclaration(node)?.isReferenced) {
@@ -43630,7 +43578,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             forEach(node.statements, checkSourceElement);
         }
         if (node.locals) {
-            registerForUnusedOrUninitializedIdentifiersCheck(node);
+            registerForUnusedIdentifiersCheck(node);
         }
     }
 
@@ -44408,7 +44356,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node.incrementor) checkExpression(node.incrementor);
         checkSourceElement(node.statement);
         if (node.locals) {
-            registerForUnusedOrUninitializedIdentifiersCheck(node);
+            registerForUnusedIdentifiersCheck(node);
         }
     }
 
@@ -44472,7 +44420,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         checkSourceElement(node.statement);
         if (node.locals) {
-            registerForUnusedOrUninitializedIdentifiersCheck(node);
+            registerForUnusedIdentifiersCheck(node);
         }
     }
 
@@ -44524,7 +44472,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         checkSourceElement(node.statement);
         if (node.locals) {
-            registerForUnusedOrUninitializedIdentifiersCheck(node);
+            registerForUnusedIdentifiersCheck(node);
         }
     }
 
@@ -45464,7 +45412,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         });
         if (node.caseBlock.locals) {
-            registerForUnusedOrUninitializedIdentifiersCheck(node.caseBlock);
+            registerForUnusedIdentifiersCheck(node.caseBlock);
         }
     }
 
@@ -45875,7 +45823,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkClassExpressionDeferred(node: ClassExpression) {
         forEach(node.members, checkSourceElement);
-        registerForUnusedOrUninitializedIdentifiersCheck(node);
+        registerForUnusedIdentifiersCheck(node);
     }
 
     function checkClassDeclaration(node: ClassDeclaration) {
@@ -45889,7 +45837,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkClassLikeDeclaration(node);
         forEach(node.members, checkSourceElement);
 
-        registerForUnusedOrUninitializedIdentifiersCheck(node);
+        registerForUnusedIdentifiersCheck(node);
     }
 
     function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
@@ -46633,7 +46581,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         addLazyDiagnostic(() => {
             checkTypeForDuplicateIndexSignatures(node);
-            registerForUnusedOrUninitializedIdentifiersCheck(node);
+            registerForUnusedIdentifiersCheck(node);
         });
     }
 
@@ -46653,7 +46601,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else {
             checkSourceElement(node.type);
-            registerForUnusedOrUninitializedIdentifiersCheck(node);
+            registerForUnusedIdentifiersCheck(node);
         }
     }
 
@@ -46912,7 +46860,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node.body) {
             checkSourceElement(node.body);
             if (!isGlobalScopeAugmentation(node)) {
-                registerForUnusedOrUninitializedIdentifiersCheck(node);
+                registerForUnusedIdentifiersCheck(node);
             }
         }
 
@@ -48205,8 +48153,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getPotentiallyUnusedOrUninitializedIdentifiers(sourceFile: SourceFile): readonly PotentiallyUnusedIdentifier[] {
-        return allPotentiallyUnusedOrUninitializedIdentifiers.get(sourceFile.path) || emptyArray;
+    function getPotentiallyUnusedIdentifiers(sourceFile: SourceFile): readonly PotentiallyUnusedIdentifier[] {
+        return allPotentiallyUnusedIdentifiers.get(sourceFile.path) || emptyArray;
     }
 
     // Fully type check a source file and collect the relevant diagnostics.
@@ -48240,23 +48188,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkDeferredNodes(node);
 
             if (isExternalOrCommonJsModule(node)) {
-                registerForUnusedOrUninitializedIdentifiersCheck(node);
+                registerForUnusedIdentifiersCheck(node);
             }
 
             addLazyDiagnostic(() => {
                 // This relies on the results of other lazy diagnostics, so must be computed after them
-                const checkUnused = !node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters);
-                if (checkUnused || strictNullChecks) {
-                    checkUnusedOrUninitializedIdentifiers(
-                        getPotentiallyUnusedOrUninitializedIdentifiers(node),
-                        (containingNode, kind, diag) => {
-                            if (!containsParseError(containingNode) && unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
-                                diagnostics.add(diag);
-                            }
-                        },
-                        checkUnused,
-                        strictNullChecks,
-                    );
+                if (!node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters)) {
+                    checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(node), (containingNode, kind, diag) => {
+                        if (!containsParseError(containingNode) && unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
+                            diagnostics.add(diag);
+                        }
+                    });
                 }
                 if (!node.isDeclarationFile) {
                     checkPotentialUncheckedRenamedBindingElementsInTypes();
