@@ -776,8 +776,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@types/node/index",
+            "hasAction": true,
             "data": {
               "exportName": "Stats",
               "exportMapKey": "5 * Stats ",
@@ -789,8 +789,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/memfs/lib/index",
+            "hasAction": true,
             "isPackageJsonImport": true,
             "data": {
               "exportName": "Volume",
@@ -799,6 +799,11 @@ Info seq  [hh:mm:ss:mss] response:
               "isPackageJsonImport": true
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true

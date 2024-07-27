@@ -938,6 +938,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -4081,8 +4086,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "fs",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "fs",
@@ -4108,6 +4113,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -4789,6 +4799,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

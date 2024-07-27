@@ -2946,7 +2946,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         const statement = unwrapInnermostStatementOfLabel(node, convertedLoopState && recordLabel);
         return isIterationStatement(statement, /*lookInLabeledStatements*/ false)
             ? visitIterationStatement(statement, /*outermostLabeledStatement*/ node)
-            : factory.restoreEnclosingLabel(Debug.checkDefined(visitNode(statement, visitor, isStatement, factory.liftToBlock)), node, convertedLoopState && resetLabel);
+            : factory.restoreEnclosingLabel(visitNode(statement, visitor, isStatement, factory.liftToBlock) ?? setTextRange(factory.createEmptyStatement(), statement), node, convertedLoopState && resetLabel);
     }
 
     function visitIterationStatement(node: IterationStatement, outermostLabeledStatement: LabeledStatement) {

@@ -990,8 +990,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "react-router-dom",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "react-router-dom",
@@ -1019,6 +1019,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

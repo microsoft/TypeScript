@@ -1227,8 +1227,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "type",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "fp-ts/lib/string",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "fp-ts/lib/string",
@@ -1249,8 +1249,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "alias",
             "kindModifiers": "declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "fp-ts",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "fp-ts",
@@ -1272,6 +1272,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

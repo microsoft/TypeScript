@@ -3268,6 +3268,7 @@ declare namespace ts {
             private delayUpdateProjectsOfScriptInfoPath;
             private handleDeletedFile;
             private watchWildcardDirectory;
+            private onWildCardDirectoryWatcherInvoke;
             private delayUpdateProjectsFromParsedConfigOnConfigFileChange;
             private onConfigFileChanged;
             private removeProject;
@@ -3338,6 +3339,7 @@ declare namespace ts {
             private ensureProjectChildren;
             private cleanupConfiguredProjects;
             private cleanupProjectsAndScriptInfos;
+            private tryInvokeWildCardDirectories;
             openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
             private removeOrphanScriptInfos;
             private telemetryOnOpenFile;
@@ -10764,6 +10766,10 @@ declare namespace ts {
          */
         isIncomplete?: true;
         entries: CompletionEntry[];
+        /**
+         * Default commit characters for the completion entries.
+         */
+        defaultCommitCharacters?: string[];
     }
     interface CompletionEntryDataAutoImport {
         /**
@@ -10870,6 +10876,10 @@ declare namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+        /**
+         * If this completion entry is selected, typing a commit character will cause the entry to be accepted.
+         */
+        commitCharacters?: string[];
     }
     interface CompletionEntryLabelDetails {
         /**

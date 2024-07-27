@@ -671,8 +671,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "@repo/ui/Card",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "@repo/ui/Card",
@@ -700,6 +700,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

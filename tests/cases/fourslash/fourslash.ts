@@ -719,6 +719,7 @@ declare namespace FourSlashInterface {
         readonly excludes?: ArrayOrSingle<string>;
         readonly preferences?: UserPreferences;
         readonly triggerCharacter?: string;
+        readonly defaultCommitCharacters?: string[];
     }
     type ExpectedCompletionEntry = string | ExpectedCompletionEntryObject;
     interface ExpectedCompletionEntryObject {
@@ -735,6 +736,7 @@ declare namespace FourSlashInterface {
         readonly sortText?: completion.SortText;
         readonly isPackageJsonImport?: boolean;
         readonly isSnippet?: boolean;
+        readonly commitCharacters?: string[];
 
         // details
         readonly text?: string;
