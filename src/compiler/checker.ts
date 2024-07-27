@@ -1713,8 +1713,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         writeSignature: (signature, enclosingDeclaration, flags, kind, writer) => {
             return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer);
         },
-        writeType: (type, enclosingDeclaration, flags, writer) => {
-            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer);
+        writeType: (type, enclosingDeclaration, flags, writer, verbosityLevel) => {
+            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer, verbosityLevel);
         },
         writeSymbol: (symbol, enclosingDeclaration, meaning, flags, writer) => {
             return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
@@ -5960,9 +5960,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer: EmitTextWriter = createTextWriter("")): string {
+    function typeToString(
+        type: Type,
+        enclosingDeclaration?: Node,
+        flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
+        writer: EmitTextWriter = createTextWriter(""),
+        verbosityLevel = 0): string {
         const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
-        const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0));
+        const typeNode = nodeBuilder.typeToTypeNode(
+            type,
+            enclosingDeclaration,
+            toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0),
+            /*tracker*/ undefined,
+            verbosityLevel);
         if (typeNode === undefined) return Debug.fail("should always get typenode");
         // The unresolved type gets a synthesized comment on `any` to hint to users that it's not a plain `any`.
         // Otherwise, we always strip comments out.
@@ -6013,20 +6023,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
     function createNodeBuilder() {
         return {
-            typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
-            typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
-            expressionOrTypeToTypeNode: (expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => expressionOrTypeToTypeNode(context, expr, type, addUndefined)),
-            serializeTypeForDeclaration: (declaration: Declaration, type: Type, symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => serializeTypeForDeclaration(context, declaration, type, symbol)),
-            serializeReturnTypeForSignature: (signature: Signature, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => serializeReturnTypeForSignature(context, signature)),
-            indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
-            signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
-            symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
-            symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => symbolToExpression(symbol, context, meaning)),
-            symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typeParametersToTypeParameterDeclarations(symbol, context)),
-            symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => symbolToParameterDeclaration(symbol, context)),
-            typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typeParameterToDeclaration(parameter, context)),
-            symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => symbolTableToDeclarationStatements(symbolTable, context)),
-            symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => symbolToNode(symbol, context, meaning)),
+            typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number) =>
+                withContext(enclosingDeclaration, flags, tracker, verbosityLevel, context => typeToTypeNodeHelper(type, context)),
+            typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
+            expressionOrTypeToTypeNode: (expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => expressionOrTypeToTypeNode(context, expr, type, addUndefined)),
+            serializeTypeForDeclaration: (declaration: Declaration, type: Type, symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => serializeTypeForDeclaration(context, declaration, type, symbol)),
+            serializeReturnTypeForSignature: (signature: Signature, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => serializeReturnTypeForSignature(context, signature)),
+            indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
+            signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
+            symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
+            symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                withContext(enclosingDeclaration, flags, tracker,  /*verbosityLevel*/ 0, context => symbolToExpression(symbol, context, meaning)),
+            symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => typeParametersToTypeParameterDeclarations(symbol, context)),
+            symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => 
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => symbolToParameterDeclaration(symbol, context)),
+            typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => 
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => typeParameterToDeclaration(parameter, context)),
+            symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => 
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => symbolTableToDeclarationStatements(symbolTable, context)),
+            symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => 
+                withContext(enclosingDeclaration, flags, tracker, /*verbosityLevel*/ 0, context => symbolToNode(symbol, context, meaning)),
         };
 
         function getTypeFromTypeNode(context: NodeBuilderContext, node: TypeNode, noMappedTypes?: false): Type;
@@ -6154,7 +6178,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return symbolToExpression(symbol, context, meaning);
         }
 
-        function withContext<T>(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker: SymbolTracker | undefined, cb: (context: NodeBuilderContext) => T): T | undefined {
+        function withContext<T>(
+            enclosingDeclaration: Node | undefined,
+            flags: NodeBuilderFlags | undefined,
+            tracker: SymbolTracker | undefined,
+            verbosityLevel: number | undefined,
+            cb: (context: NodeBuilderContext) => T): T | undefined {
             const moduleResolverHost = tracker?.trackSymbol ? tracker.moduleResolverHost :
                 flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? createBasicNodeBuilderModuleSpecifierResolutionHost(host) :
                 undefined;
@@ -6183,6 +6212,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeParameterNamesByText: undefined,
                 typeParameterNamesByTextNextNameCount: undefined,
                 mapper: undefined,
+                unfoldCount: verbosityLevel ?? 0,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -6346,12 +6376,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
-                const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
-                if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
-                if (length(typeArgumentNodes) === 1 && type.aliasSymbol === globalArrayType.symbol) {
-                    return factory.createArrayTypeNode(typeArgumentNodes![0]);
+                if (context.unfoldCount === 0) {
+                    const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
+                    if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
+                    if (length(typeArgumentNodes) === 1 && type.aliasSymbol === globalArrayType.symbol) {
+                        return factory.createArrayTypeNode(typeArgumentNodes![0]);
+                    }
+                    return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
-                return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
+                context.unfoldCount -= 1;
             }
 
             const objectFlags = getObjectFlags(type);
@@ -52448,6 +52481,7 @@ interface NodeBuilderContext {
     reverseMappedStack: ReverseMappedSymbol[] | undefined;
     bundled: boolean;
     mapper: TypeMapper | undefined;
+    unfoldCount: number;
 }
 
 class SymbolTrackerImpl implements SymbolTracker {
