@@ -3,11 +3,9 @@ import {
     ArrowFunction,
     CallExpression,
     CharacterCodes,
-    createPrinterWithRemoveComments,
     createTextSpanFromNode,
     Debug,
     ElementFlags,
-    EmitHint,
     EnumMember,
     equateStringsCaseInsensitive,
     escapeString,
@@ -122,7 +120,6 @@ import {
     TypePredicate,
     unescapeLeadingUnderscores,
     UserPreferences,
-    usingSingleLineStringWriter,
     VariableDeclaration,
 } from "./_namespaces/ts.js";
 
@@ -474,45 +471,25 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         return typeToInlayHintParts(signatureParamType);
     }
 
-    function printTypeInSingleLine(type: Type) {
-        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
-        const printer = createPrinterWithRemoveComments();
-
-        return usingSingleLineStringWriter(writer => {
-            const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);
-            Debug.assertIsDefined(typeNode, "should always get typenode");
-            printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ file, writer);
-        });
-    }
-
-    function printTypePredicateInSingleLine(typePredicate: TypePredicate) {
-        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
-        const printer = createPrinterWithRemoveComments();
-
-        return usingSingleLineStringWriter(writer => {
-            const typePredicateNode = checker.typePredicateToTypePredicateNode(typePredicate, /*enclosingDeclaration*/ undefined, flags);
-            Debug.assertIsDefined(typePredicateNode, "should always get typePredicateNode");
-            printer.writeNode(EmitHint.Unspecified, typePredicateNode, /*sourceFile*/ file, writer);
-        });
-    }
-
     function typeToInlayHintParts(type: Type): InlayHintDisplayPart[] | string {
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        
         if (!shouldUseInteractiveInlayHints(preferences)) {
-            return printTypeInSingleLine(type);
+            return checker.typeToString(type, /*enclosingDeclaration*/ undefined, flags);
         }
 
-        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);
         Debug.assertIsDefined(typeNode, "should always get typeNode");
         return getInlayHintDisplayParts(typeNode);
     }
 
     function typePredicateToInlayHintParts(typePredicate: TypePredicate): InlayHintDisplayPart[] | string {
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        
         if (!shouldUseInteractiveInlayHints(preferences)) {
-            return printTypePredicateInSingleLine(typePredicate);
+            return checker.typePredicateToString(typePredicate, /*enclosingDeclaration*/ undefined, flags);
         }
 
-        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const typeNode = checker.typePredicateToTypePredicateNode(typePredicate, /*enclosingDeclaration*/ undefined, flags);
         Debug.assertIsDefined(typeNode, "should always get typenode");
         return getInlayHintDisplayParts(typeNode);
