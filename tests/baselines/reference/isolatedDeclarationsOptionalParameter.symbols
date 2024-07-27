@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/isolatedDeclarationsOptionalParameter.ts] ////
+
+=== /node_modules/foo/index.d.ts ===
+export interface Foo<T> {
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 0))
+>T : Symbol(T, Decl(index.d.ts, 0, 21))
+
+    a: T;
+>a : Symbol(Foo.a, Decl(index.d.ts, 0, 25))
+>T : Symbol(T, Decl(index.d.ts, 0, 21))
+}
+
+=== /bar.ts ===
+import { type Foo } from "foo";
+>Foo : Symbol(Foo, Decl(bar.ts, 0, 8))
+
+export const bar = <T,>(foo?: Foo<T>): void => { };
+>bar : Symbol(bar, Decl(bar.ts, 1, 12))
+>T : Symbol(T, Decl(bar.ts, 1, 20))
+>foo : Symbol(foo, Decl(bar.ts, 1, 24))
+>Foo : Symbol(Foo, Decl(bar.ts, 0, 8))
+>T : Symbol(T, Decl(bar.ts, 1, 20))
+
