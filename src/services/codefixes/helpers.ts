@@ -221,7 +221,7 @@ export function addNewNodeForMemberSymbol(
         case SyntaxKind.PropertySignature:
         case SyntaxKind.PropertyDeclaration:
             let flags = NodeBuilderFlags.NoTruncation;
-            flags |= quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0;
+            flags |= quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None;
             let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
             if (importAdder) {
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);

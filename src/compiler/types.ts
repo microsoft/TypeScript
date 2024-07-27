@@ -5427,52 +5427,61 @@ export const enum ContextFlags {
     SkipBindingPatterns = 1 << 3, // Ignore contextual types applied by binding patterns
 }
 
+export type NodeBuilderFlags = bigint;
+
 // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
 // dprint-ignore
-export const enum NodeBuilderFlags {
-    None                                    = 0,
+export const NodeBuilderFlags = {
+    None                                    : 0n,
     // Options
-    NoTruncation                            = 1 << 0,   // Don't truncate result
-    WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
-    GenerateNamesForShadowedTypeParams      = 1 << 2,   // When a type parameter T is shadowing another T, generate a name for it so it can still be referenced
-    UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
-    ForbidIndexedAccessSymbolReferences     = 1 << 4,   // Forbid references like `I["a"]["b"]` - print `typeof I.a<x>.b<y>` instead
-    WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
-    UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
-    UseOnlyExternalAliasing                 = 1 << 7,   // Only use external aliases for a symbol
-    SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like and can be elided, don't offer a return type.
-    WriteTypeParametersInQualifiedName      = 1 << 9,
-    MultilineObjectLiterals                 = 1 << 10,  // Always write object literals across multiple lines
-    WriteClassExpressionAsTypeLiteral       = 1 << 11,  // Write class {} as { new(): {} } - used for mixin declaration emit
-    UseTypeOfFunction                       = 1 << 12,  // Build using typeof instead of function type literal
-    OmitParameterModifiers                  = 1 << 13,  // Omit modifiers on parameters
-    UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
-    UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
-    NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
-    OmitThisParameter                       = 1 << 25,
+    NoTruncation                            : 1n << 0n,   // Don't truncate result
+    WriteArrayAsGenericType                 : 1n << 1n,   // Write Array<T> instead T[]
+    GenerateNamesForShadowedTypeParams      : 1n << 2n,   // When a type parameter T is shadowing another T, generate a name for it so it can still be referenced
+    UseStructuralFallback                   : 1n << 3n,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
+    ForbidIndexedAccessSymbolReferences     : 1n << 4n,   // Forbid references like `I["a"]["b"]` - print `typeof I.a<x>.b<y>` instead
+    WriteTypeArgumentsOfSignature           : 1n << 5n,   // Write the type arguments instead of type parameters of the signature
+    UseFullyQualifiedType                   : 1n << 6n,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
+    UseOnlyExternalAliasing                 : 1n << 7n,   // Only use external aliases for a symbol
+    SuppressAnyReturnType                   : 1n << 8n,   // If the return type is any-like and can be elided, don't offer a return type.
+    WriteTypeParametersInQualifiedName      : 1n << 9n,
+    MultilineObjectLiterals                 : 1n << 10n,  // Always write object literals across multiple lines
+    WriteClassExpressionAsTypeLiteral       : 1n << 11n,  // Write class {} as { new(): {} } - used for mixin declaration emit
+    UseTypeOfFunction                       : 1n << 12n,  // Build using typeof instead of function type literal
+    OmitParameterModifiers                  : 1n << 13n,  // Omit modifiers on parameters
+    UseAliasDefinedOutsideCurrentScope      : 1n << 14n,  // Allow non-visible aliases
+    UseSingleQuotesForStringLiteralType     : 1n << 28n,  // Use single quotes for string literal type
+    NoTypeReduction                         : 1n << 29n,  // Don't call getReducedType
+    OmitThisParameter                       : 1n << 25n,
 
     // Error handling
-    AllowThisInObjectLiteral                = 1 << 15,
-    AllowQualifiedNameInPlaceOfIdentifier   = 1 << 16,
-    AllowAnonymousIdentifier                = 1 << 17,
-    AllowEmptyUnionOrIntersection           = 1 << 18,
-    AllowEmptyTuple                         = 1 << 19,
-    AllowUniqueESSymbolType                 = 1 << 20,
-    AllowEmptyIndexInfoType                 = 1 << 21,
-    /** @internal */ WriteComputedProps      = 1 << 30, // { [E.A]: 1 }
-    /** @internal */ NoSyntacticPrinter     = 1 << 31,
+    AllowThisInObjectLiteral                : 1n << 15n,
+    AllowQualifiedNameInPlaceOfIdentifier   : 1n << 16n,
+    AllowAnonymousIdentifier                : 1n << 17n,
+    AllowEmptyUnionOrIntersection           : 1n << 18n,
+    AllowEmptyTuple                         : 1n << 19n,
+    AllowUniqueESSymbolType                 : 1n << 20n,
+    AllowEmptyIndexInfoType                 : 1n << 21n,
+    /** @internal */ WriteComputedProps      : 1n << 30n, // { [E.A]: 1 }
+    /** @internal */ NoSyntacticPrinter     : 1n << 31n,
     // Errors (cont.)
-    AllowNodeModulesRelativePaths           = 1 << 26,
-    /** @internal */ DoNotIncludeSymbolChain = 1 << 27,    // Skip looking up and printing an accessible symbol chain
-    /** @internal */ AllowUnresolvedNames = 1 << 32,
-
-    IgnoreErrors = AllowThisInObjectLiteral | AllowQualifiedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple | AllowEmptyIndexInfoType | AllowNodeModulesRelativePaths,
+    AllowNodeModulesRelativePaths           : 1n << 26n,
+    /** @internal */ DoNotIncludeSymbolChain : 1n << 27n,    // Skip looking up and printing an accessible symbol chain
+    /** @internal */ AllowUnresolvedNames : 1n << 32n,
 
     // State
-    InObjectTypeLiteral                     = 1 << 22,
-    InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
-    InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
+    InObjectTypeLiteral                     : 1n << 22n,
+    InTypeAlias                             : 1n << 23n,    // Writing type in type alias declaration
+    InInitialEntityName                     : 1n << 24n,    // Set when writing the LHS of an entity name or entity name expression
 }
+
+export const NodeBuilderFlagsIgnoreErrors = 
+    NodeBuilderFlags.AllowThisInObjectLiteral 
+    | NodeBuilderFlags.AllowQualifiedNameInPlaceOfIdentifier 
+    | NodeBuilderFlags.AllowAnonymousIdentifier 
+    | NodeBuilderFlags.AllowEmptyUnionOrIntersection 
+    | NodeBuilderFlags.AllowEmptyTuple 
+    | NodeBuilderFlags.AllowEmptyIndexInfoType 
+    | NodeBuilderFlags.AllowNodeModulesRelativePaths;
 
 // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
 // dprint-ignore

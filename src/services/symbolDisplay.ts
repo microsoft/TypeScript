@@ -75,6 +75,7 @@ import {
     NewExpression,
     Node,
     NodeBuilderFlags,
+    NodeBuilderFlagsIgnoreErrors,
     ObjectFlags,
     operatorPart,
     PropertyAccessExpression,
@@ -110,7 +111,7 @@ import {
     VariableDeclaration,
 } from "./_namespaces/ts.js";
 
-const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlagsIgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 
 // TODO(drosen): use contextual SemanticMeaning.
 /** @internal */

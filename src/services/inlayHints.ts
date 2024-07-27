@@ -102,6 +102,7 @@ import {
     Node,
     NodeArray,
     NodeBuilderFlags,
+    NodeBuilderFlagsIgnoreErrors,
     ParameterDeclaration,
     PrefixUnaryExpression,
     PropertyDeclaration,
@@ -464,7 +465,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function printTypeInSingleLine(type: Type) {
-        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        const flags = NodeBuilderFlagsIgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const printer = createPrinterWithRemoveComments();
 
         return usingSingleLineStringWriter(writer => {
@@ -479,7 +480,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return printTypeInSingleLine(type);
         }
 
-        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        const flags = NodeBuilderFlagsIgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);
         Debug.assertIsDefined(typeNode, "should always get typenode");
 

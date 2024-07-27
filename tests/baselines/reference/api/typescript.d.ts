@@ -6274,39 +6274,44 @@ declare namespace ts {
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
     }
-    enum NodeBuilderFlags {
-        None = 0,
-        NoTruncation = 1,
-        WriteArrayAsGenericType = 2,
-        GenerateNamesForShadowedTypeParams = 4,
-        UseStructuralFallback = 8,
-        ForbidIndexedAccessSymbolReferences = 16,
-        WriteTypeArgumentsOfSignature = 32,
-        UseFullyQualifiedType = 64,
-        UseOnlyExternalAliasing = 128,
-        SuppressAnyReturnType = 256,
-        WriteTypeParametersInQualifiedName = 512,
-        MultilineObjectLiterals = 1024,
-        WriteClassExpressionAsTypeLiteral = 2048,
-        UseTypeOfFunction = 4096,
-        OmitParameterModifiers = 8192,
-        UseAliasDefinedOutsideCurrentScope = 16384,
-        UseSingleQuotesForStringLiteralType = 268435456,
-        NoTypeReduction = 536870912,
-        OmitThisParameter = 33554432,
-        AllowThisInObjectLiteral = 32768,
-        AllowQualifiedNameInPlaceOfIdentifier = 65536,
-        AllowAnonymousIdentifier = 131072,
-        AllowEmptyUnionOrIntersection = 262144,
-        AllowEmptyTuple = 524288,
-        AllowUniqueESSymbolType = 1048576,
-        AllowEmptyIndexInfoType = 2097152,
-        AllowNodeModulesRelativePaths = 67108864,
-        IgnoreErrors = 70221824,
-        InObjectTypeLiteral = 4194304,
-        InTypeAlias = 8388608,
-        InInitialEntityName = 16777216,
-    }
+    type NodeBuilderFlags = bigint;
+    const NodeBuilderFlags: {
+        None: bigint;
+        NoTruncation: bigint;
+        WriteArrayAsGenericType: bigint;
+        GenerateNamesForShadowedTypeParams: bigint;
+        UseStructuralFallback: bigint;
+        ForbidIndexedAccessSymbolReferences: bigint;
+        WriteTypeArgumentsOfSignature: bigint;
+        UseFullyQualifiedType: bigint;
+        UseOnlyExternalAliasing: bigint;
+        SuppressAnyReturnType: bigint;
+        WriteTypeParametersInQualifiedName: bigint;
+        MultilineObjectLiterals: bigint;
+        WriteClassExpressionAsTypeLiteral: bigint;
+        UseTypeOfFunction: bigint;
+        OmitParameterModifiers: bigint;
+        UseAliasDefinedOutsideCurrentScope: bigint;
+        UseSingleQuotesForStringLiteralType: bigint;
+        NoTypeReduction: bigint;
+        OmitThisParameter: bigint;
+        AllowThisInObjectLiteral: bigint;
+        AllowQualifiedNameInPlaceOfIdentifier: bigint;
+        AllowAnonymousIdentifier: bigint;
+        AllowEmptyUnionOrIntersection: bigint;
+        AllowEmptyTuple: bigint;
+        AllowUniqueESSymbolType: bigint;
+        AllowEmptyIndexInfoType: bigint;
+        /** @internal */ WriteComputedProps: bigint;
+        /** @internal */ NoSyntacticPrinter: bigint;
+        AllowNodeModulesRelativePaths: bigint;
+        /** @internal */ DoNotIncludeSymbolChain: bigint;
+        /** @internal */ AllowUnresolvedNames: bigint;
+        InObjectTypeLiteral: bigint;
+        InTypeAlias: bigint;
+        InInitialEntityName: bigint;
+    };
+    const NodeBuilderFlagsIgnoreErrors: bigint;
     enum TypeFormatFlags {
         None = 0,
         NoTruncation = 1,
