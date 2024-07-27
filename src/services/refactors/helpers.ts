@@ -10,6 +10,7 @@ import {
     isClassLike,
     isPrivateIdentifier,
     isPropertyAccessExpression,
+    isSourceFile,
     ModuleBlock,
     Node,
     Program,
@@ -76,7 +77,7 @@ export function addTargetFileImports(
      * So in that case, fall back to copying the import verbatim.
      */
     importsToCopy.forEach(([isValidTypeOnlyUseSite, declaration], symbol) => {
-        const targetSymbol = skipAlias(symbol, checker);
+        const targetSymbol = resolveTargetSymbol(checker, symbol);
         if (checker.isUnknownSymbol(targetSymbol)) {
             importAdder.addVerbatimImport(Debug.checkDefined(declaration ?? findAncestor(symbol.declarations?.[0], isAnyImportOrRequireStatement)));
         }
@@ -86,4 +87,12 @@ export function addTargetFileImports(
     });
 
     addImportsForMovedSymbols(targetFileImportsFromOldFile, oldFile.fileName, importAdder, program);
+}
+
+function resolveTargetSymbol(checker: TypeChecker, symbol: Symbol) {
+    if (symbol.flags & SymbolFlags.Alias) {
+        const targetSymbol = skipAlias(symbol, checker);
+        return targetSymbol.declarations?.some(isSourceFile) && targetSymbol.exports?.has(symbol.escapedName) ? targetSymbol.exports.get(symbol.escapedName) as Symbol : targetSymbol;
+    }
+    return symbol;
 }
