@@ -731,3 +731,34 @@ function f12() {
 >  : ^^^^^^
 }
 
+function f13() {
+>f13 : () => () => void
+>    : ^^^^^^^^^^^^^^^^
+
+    var foo: string | undefined;
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+    foo = '';
+>foo = '' : ""
+>         : ^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>'' : ""
+>   : ^^
+
+    return () => {
+>() => {        foo.toLocaleLowerCase();    } : () => void
+>                                             : ^^^^^^^^^^
+
+        foo.toLocaleLowerCase();
+>foo.toLocaleLowerCase() : string
+>                        : ^^^^^^
+>foo.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                      : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+>foo : string
+>    : ^^^^^^
+>toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
+>                  : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
+    }
+}

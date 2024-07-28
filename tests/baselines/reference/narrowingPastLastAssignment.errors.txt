@@ -161,3 +161,11 @@ narrowingPastLastAssignment.ts(90,20): error TS7005: Variable 'x' implicitly has
         values.forEach(v => foo.push(v));
     }
     
+    function f13() {
+        var foo: string | undefined;
+        foo = '';
+    
+        return () => {
+            foo.toLocaleLowerCase();
+        }
+    }

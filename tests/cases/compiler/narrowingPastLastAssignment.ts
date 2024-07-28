@@ -155,3 +155,12 @@ function f12() {
     }
     values.forEach(v => foo.push(v));
 }
+
+function f13() {
+    var foo: string | undefined;
+    foo = '';
+
+    return () => {
+        foo.toLocaleLowerCase();
+    }
+}

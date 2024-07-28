@@ -29638,13 +29638,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
         return !!declaration && (
             isParameter(declaration) ||
-            isVariableDeclaration(declaration) && (isCatchClause(declaration.parent) || isMutableLocalVariableDeclaration(declaration))
+            isVariableDeclaration(declaration) && (isCatchClause(declaration.parent) || isMutableLocalVariableDeclaration(symbol, declaration))
         );
     }
 
-    function isMutableLocalVariableDeclaration(declaration: VariableDeclaration) {
+    function isMutableLocalVariableDeclaration(symbol: Symbol, declaration: VariableDeclaration) {
         // Return true if symbol is a non-exported and non-global `let` variable
-        return !!(declaration.parent.flags & NodeFlags.Let) && !(
+        return !!(symbol.flags & SymbolFlags.FunctionScopedVariable || (declaration.parent.flags & NodeFlags.Let)) && !(
             getCombinedModifierFlags(declaration) & ModifierFlags.Export ||
             declaration.parent.parent.kind === SyntaxKind.VariableStatement && isGlobalSourceFile(declaration.parent.parent.parent)
         );
@@ -30419,7 +30419,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         ) {
             flowContainer = getControlFlowContainer(flowContainer);
         }
-        const isMutableLocalVariableWithoutInitializer = immediateDeclaration && isVariableDeclaration(immediateDeclaration) && !immediateDeclaration.initializer && !immediateDeclaration.exclamationToken && isMutableLocalVariableDeclaration(immediateDeclaration);
+        const isMutableLocalVariableWithoutInitializer = immediateDeclaration && isVariableDeclaration(immediateDeclaration) && !immediateDeclaration.initializer && !immediateDeclaration.exclamationToken && isMutableLocalVariableDeclaration(symbol, immediateDeclaration);
         // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
         // the entire control flow graph from the variable's declaration (i.e. when the flow container and
         // declaration container are the same).

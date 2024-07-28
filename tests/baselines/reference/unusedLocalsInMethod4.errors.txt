@@ -2,6 +2,7 @@ unusedLocalsInMethod4.ts(15,21): error TS2454: Variable 'x1' is used before bein
 unusedLocalsInMethod4.ts(16,21): error TS2454: Variable 'x2' is used before being assigned.
 unusedLocalsInMethod4.ts(22,21): error TS2454: Variable 'x8' is used before being assigned.
 unusedLocalsInMethod4.ts(23,21): error TS2454: Variable 'x9' is used before being assigned.
+unusedLocalsInMethod4.ts(24,21): error TS2454: Variable 'x10' is used before being assigned.
 unusedLocalsInMethod4.ts(44,17): error TS2454: Variable 'x1' is used before being assigned.
 unusedLocalsInMethod4.ts(45,17): error TS2454: Variable 'x2' is used before being assigned.
 unusedLocalsInMethod4.ts(51,17): error TS2454: Variable 'x8' is used before being assigned.
@@ -15,7 +16,7 @@ unusedLocalsInMethod4.ts(139,9): error TS2454: Variable 'enabledSubstitutions' i
 unusedLocalsInMethod4.ts(141,9): error TS2454: Variable 'enabledSubstitutions' is used before being assigned.
 
 
-==== unusedLocalsInMethod4.ts (15 errors) ====
+==== unusedLocalsInMethod4.ts (16 errors) ====
     function f<T, NonNull extends {}>() {
         let x1: number[]; // should error
         let x2: number[] | null; // should error
@@ -48,6 +49,8 @@ unusedLocalsInMethod4.ts(141,9): error TS2454: Variable 'enabledSubstitutions' i
                         ~~
 !!! error TS2454: Variable 'x9' is used before being assigned.
             console.log(x10);
+                        ~~~
+!!! error TS2454: Variable 'x10' is used before being assigned.
             console.log(x11);
         }
         function bar() {
