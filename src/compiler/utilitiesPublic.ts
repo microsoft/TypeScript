@@ -140,6 +140,7 @@ import {
     isJSDocDeprecatedTag,
     isJSDocEnumTag,
     isJSDocFunctionType,
+    isJSDocIgnoreTag,
     isJSDocImplementsTag,
     isJSDocOverloadTag,
     isJSDocOverrideTag,
@@ -183,6 +184,7 @@ import {
     JSDocContainer,
     JSDocDeprecatedTag,
     JSDocEnumTag,
+    JSDocIgnoreTag,
     JSDocImplementsTag,
     JSDocLink,
     JSDocLinkCode,
@@ -1161,6 +1163,11 @@ export function getJSDocDeprecatedTagNoCache(node: Node): JSDocDeprecatedTag | u
     return getFirstJSDocTag(node, isJSDocDeprecatedTag, /*noCache*/ true);
 }
 
+/** Gets the JSDoc ignore tag for the node if present */
+export function getJSDocIgnoreTag(node: Node): JSDocIgnoreTag | undefined {
+    return getFirstJSDocTag(node, isJSDocIgnoreTag);
+}
+
 /** Gets the JSDoc enum tag for the node if present */
 export function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined {
     return getFirstJSDocTag(node, isJSDocEnumTag);
@@ -1260,11 +1267,8 @@ export function getJSDocTags(node: Node): readonly JSDocTag[] {
     return getJSDocTagsWorker(node, /*noCache*/ false);
 }
 
-/**
- * @internal
- * Get the first JSDoc tag of a specified kind, or undefined if not present.
- */
-export function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T, noCache?: boolean): T | undefined {
+/** Get the first JSDoc tag of a specified kind, or undefined if not present. */
+function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T, noCache?: boolean): T | undefined {
     return find(getJSDocTagsWorker(node, noCache), predicate);
 }
 
