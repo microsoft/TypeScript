@@ -41,6 +41,14 @@ function f<T, NonNull extends {}>() {
 >x9 : NonNull
 >   : ^^^^^^^
 
+    var x10: NonNull; // should error
+>x10 : NonNull
+>    : ^^^^^^^
+
+    var x11: NonNull; // should not error
+>x11 : NonNull
+>    : ^^^^^^^
+
     function foo() {
 >foo : () => void
 >    : ^^^^^^^^^^
@@ -152,6 +160,44 @@ function f<T, NonNull extends {}>() {
 >    : ^^^^    ^^     ^^^^^    
 >x9 : NonNull
 >   : ^^^^^^^
+
+        console.log(x10);
+>console.log(x10) : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x10 : NonNull
+>    : ^^^^^^^
+
+        console.log(x11);
+>console.log(x11) : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>x11 : NonNull
+>    : ^^^^^^^
+    }
+    function bar() {
+>bar : () => void
+>    : ^^^^^^^^^^
+
+        x11 = {} as any;
+>x11 = {} as any : any
+>                : ^^^
+>x11 : NonNull
+>    : ^^^^^^^
+>{} as any : any
+>          : ^^^
+>{} : {}
+>   : ^^
     }
     foo();
 >foo() : void
@@ -367,7 +413,7 @@ function f4() {
     };
 }
 
-declare let x: number;  // should error
+declare let x: number;  // should not error
 >x : number
 >  : ^^^^^^
 

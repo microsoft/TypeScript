@@ -1,13 +1,12 @@
-typeGuardsAsAssertions.ts(3,5): error TS2874: Variable 'cond' is used but never initialized.
-typeGuardsAsAssertions.ts(123,9): error TS2874: Variable 'x' is used but never initialized.
+typeGuardsAsAssertions.ts(23,12): error TS2454: Variable 'cond' is used before being assigned.
+typeGuardsAsAssertions.ts(33,12): error TS2454: Variable 'cond' is used before being assigned.
+typeGuardsAsAssertions.ts(44,12): error TS2454: Variable 'cond' is used before being assigned.
 
 
-==== typeGuardsAsAssertions.ts (2 errors) ====
+==== typeGuardsAsAssertions.ts (3 errors) ====
     // Repro from #8513
     
     let cond: boolean;
-        ~~~~
-!!! error TS2874: Variable 'cond' is used but never initialized.
     
     export type Optional<a> = Some<a> | None;
     
@@ -28,6 +27,8 @@ typeGuardsAsAssertions.ts(123,9): error TS2874: Variable 'x' is used but never i
         let result: Optional<r> = none;
         result;  // None
         while (cond) {
+               ~~~~
+!!! error TS2454: Variable 'cond' is used before being assigned.
             result;  // Some<r> | None
             result = someFrom(isSome(result) ? result.some : makeSome());
             result;  // Some<r>
@@ -38,6 +39,8 @@ typeGuardsAsAssertions.ts(123,9): error TS2874: Variable 'x' is used but never i
         let x: string | number | boolean = 0;
         x;  // number
         while (cond) {
+               ~~~~
+!!! error TS2454: Variable 'cond' is used before being assigned.
             x;  // number, then string | number
             x = typeof x === "string" ? x.slice() : "abc";
             x;  // string
@@ -49,6 +52,8 @@ typeGuardsAsAssertions.ts(123,9): error TS2874: Variable 'x' is used but never i
         let x: string | number | boolean = 0;
         x;  // number
         while (cond) {
+               ~~~~
+!!! error TS2454: Variable 'cond' is used before being assigned.
             x;  // number, then string | number
             if (typeof x === "string") {
                 x = x.slice();
@@ -128,8 +133,6 @@ typeGuardsAsAssertions.ts(123,9): error TS2874: Variable 'x' is used but never i
     
     function f7() {
         let x: string;
-            ~
-!!! error TS2874: Variable 'x' is used but never initialized.
         x!.slice();
     }
     

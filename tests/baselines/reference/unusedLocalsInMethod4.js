@@ -11,6 +11,8 @@ function f<T, NonNull extends {}>() {
     let x7: unknown; // should not error
     let x8: T; // should error
     let x9: NonNull; // should error
+    var x10: NonNull; // should error
+    var x11: NonNull; // should not error
 
     function foo() {
         console.log(x1);
@@ -22,6 +24,11 @@ function f<T, NonNull extends {}>() {
         console.log(x7);
         console.log(x8);
         console.log(x9);
+        console.log(x10);
+        console.log(x11);
+    }
+    function bar() {
+        x11 = {} as any;
     }
     foo();
 }
@@ -65,7 +72,7 @@ function f4() {
     };
 }
 
-declare let x: number;  // should error
+declare let x: number;  // should not error
 function f5() {
     x.toString();
 }
@@ -151,6 +158,8 @@ function f() {
     var x7; // should not error
     var x8; // should error
     var x9; // should error
+    var x10; // should error
+    var x11; // should not error
     function foo() {
         console.log(x1);
         console.log(x2);
@@ -161,6 +170,11 @@ function f() {
         console.log(x7);
         console.log(x8);
         console.log(x9);
+        console.log(x10);
+        console.log(x11);
+    }
+    function bar() {
+        x11 = {};
     }
     foo();
 }

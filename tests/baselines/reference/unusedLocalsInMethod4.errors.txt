@@ -1,74 +1,71 @@
-unusedLocalsInMethod4.ts(2,9): error TS2874: Variable 'x1' is used but never initialized.
-unusedLocalsInMethod4.ts(3,9): error TS2874: Variable 'x2' is used but never initialized.
-unusedLocalsInMethod4.ts(9,9): error TS2874: Variable 'x8' is used but never initialized.
-unusedLocalsInMethod4.ts(10,9): error TS2874: Variable 'x9' is used but never initialized.
-unusedLocalsInMethod4.ts(27,9): error TS2874: Variable 'x1' is used but never initialized.
-unusedLocalsInMethod4.ts(28,9): error TS2874: Variable 'x2' is used but never initialized.
-unusedLocalsInMethod4.ts(34,9): error TS2874: Variable 'x8' is used but never initialized.
-unusedLocalsInMethod4.ts(35,9): error TS2874: Variable 'x9' is used but never initialized.
-unusedLocalsInMethod4.ts(37,17): error TS2454: Variable 'x1' is used before being assigned.
-unusedLocalsInMethod4.ts(38,17): error TS2454: Variable 'x2' is used before being assigned.
-unusedLocalsInMethod4.ts(44,17): error TS2454: Variable 'x8' is used before being assigned.
-unusedLocalsInMethod4.ts(45,17): error TS2454: Variable 'x9' is used before being assigned.
-unusedLocalsInMethod4.ts(49,9): error TS2874: Variable 'x' is used but never initialized.
-unusedLocalsInMethod4.ts(57,9): error TS2874: Variable 'x' is used but never initialized.
-unusedLocalsInMethod4.ts(96,11): error TS1155: 'const' declarations must be initialized.
-unusedLocalsInMethod4.ts(104,9): error TS2874: Variable 'i' is used but never initialized.
-unusedLocalsInMethod4.ts(129,9): error TS2874: Variable 'enabledSubstitutions' is used but never initialized.
+unusedLocalsInMethod4.ts(15,21): error TS2454: Variable 'x1' is used before being assigned.
+unusedLocalsInMethod4.ts(16,21): error TS2454: Variable 'x2' is used before being assigned.
+unusedLocalsInMethod4.ts(22,21): error TS2454: Variable 'x8' is used before being assigned.
+unusedLocalsInMethod4.ts(23,21): error TS2454: Variable 'x9' is used before being assigned.
+unusedLocalsInMethod4.ts(44,17): error TS2454: Variable 'x1' is used before being assigned.
+unusedLocalsInMethod4.ts(45,17): error TS2454: Variable 'x2' is used before being assigned.
+unusedLocalsInMethod4.ts(51,17): error TS2454: Variable 'x8' is used before being assigned.
+unusedLocalsInMethod4.ts(52,17): error TS2454: Variable 'x9' is used before being assigned.
+unusedLocalsInMethod4.ts(58,9): error TS2454: Variable 'x' is used before being assigned.
+unusedLocalsInMethod4.ts(67,20): error TS2454: Variable 'x' is used before being assigned.
+unusedLocalsInMethod4.ts(103,11): error TS1155: 'const' declarations must be initialized.
+unusedLocalsInMethod4.ts(113,9): error TS2454: Variable 'i' is used before being assigned.
+unusedLocalsInMethod4.ts(114,21): error TS2454: Variable 'i' is used before being assigned.
+unusedLocalsInMethod4.ts(139,9): error TS2454: Variable 'enabledSubstitutions' is used before being assigned.
+unusedLocalsInMethod4.ts(141,9): error TS2454: Variable 'enabledSubstitutions' is used before being assigned.
 
 
-==== unusedLocalsInMethod4.ts (17 errors) ====
+==== unusedLocalsInMethod4.ts (15 errors) ====
     function f<T, NonNull extends {}>() {
         let x1: number[]; // should error
-            ~~
-!!! error TS2874: Variable 'x1' is used but never initialized.
         let x2: number[] | null; // should error
-            ~~
-!!! error TS2874: Variable 'x2' is used but never initialized.
         let x3: number[] | undefined; // should not error
         let x4: number[] | undefined | null; // should not error
         let x5!: number[]; // should not error
         let x6: any; // should not error
         let x7: unknown; // should not error
         let x8: T; // should error
-            ~~
-!!! error TS2874: Variable 'x8' is used but never initialized.
         let x9: NonNull; // should error
-            ~~
-!!! error TS2874: Variable 'x9' is used but never initialized.
+        var x10: NonNull; // should error
+        var x11: NonNull; // should not error
     
         function foo() {
             console.log(x1);
+                        ~~
+!!! error TS2454: Variable 'x1' is used before being assigned.
             console.log(x2);
+                        ~~
+!!! error TS2454: Variable 'x2' is used before being assigned.
             console.log(x3);
             console.log(x4);
             console.log(x5);
             console.log(x6);
             console.log(x7);
             console.log(x8);
+                        ~~
+!!! error TS2454: Variable 'x8' is used before being assigned.
             console.log(x9);
+                        ~~
+!!! error TS2454: Variable 'x9' is used before being assigned.
+            console.log(x10);
+            console.log(x11);
+        }
+        function bar() {
+            x11 = {} as any;
         }
         foo();
     }
     
     function f2<T, NonNull extends {}>() {
         let x1: number[]; // should error
-            ~~
-!!! error TS2874: Variable 'x1' is used but never initialized.
         let x2: number[] | null; // should error
-            ~~
-!!! error TS2874: Variable 'x2' is used but never initialized.
         let x3: number[] | undefined; // should not error
         let x4: number[] | undefined | null; // should not error
         let x5!: number[]; // should not error
         let x6: any; // should not error
         let x7: unknown; // should not error
         let x8: T; // should error
-            ~~
-!!! error TS2874: Variable 'x8' is used but never initialized.
         let x9: NonNull; // should error
-            ~~
-!!! error TS2874: Variable 'x9' is used but never initialized.
     
         console.log(x1);
                     ~~
@@ -91,26 +88,26 @@ unusedLocalsInMethod4.ts(129,9): error TS2874: Variable 'enabledSubstitutions' i
     
     function f3() {
         let x: number[];    // should error
-            ~
-!!! error TS2874: Variable 'x' is used but never initialized.
         function foo() {
             x.toString();
+            ~
+!!! error TS2454: Variable 'x' is used before being assigned.
         }
         foo();
     }
     
     function f4() {
         let x: number;  // should error
-            ~
-!!! error TS2874: Variable 'x' is used but never initialized.
         return {
             foo() {
                 return x.toString();
+                       ~
+!!! error TS2454: Variable 'x' is used before being assigned.
             }
         };
     }
     
-    declare let x: number;  // should error
+    declare let x: number;  // should not error
     function f5() {
         x.toString();
     }
@@ -152,11 +149,13 @@ unusedLocalsInMethod4.ts(129,9): error TS2874: Variable 'enabledSubstitutions' i
     
     function rw() {
         let i: number;  // should error
-            ~
-!!! error TS2874: Variable 'i' is used but never initialized.
         function inside() {
             i++;
+            ~
+!!! error TS2454: Variable 'i' is used before being assigned.
             console.log(i); // NaN
+                        ~
+!!! error TS2454: Variable 'i' is used before being assigned.
         }
         inside();
     }
@@ -179,12 +178,14 @@ unusedLocalsInMethod4.ts(129,9): error TS2874: Variable 'enabledSubstitutions' i
         }
     
         let enabledSubstitutions: ClassPropertySubstitutionFlags;   // should error
-            ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2874: Variable 'enabledSubstitutions' is used but never initialized.
     
         function enableSubstitutionForClassAliases() {
             enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassAliases;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'enabledSubstitutions' is used before being assigned.
     
             enabledSubstitutions.toString();
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'enabledSubstitutions' is used before being assigned.
         }
     }
