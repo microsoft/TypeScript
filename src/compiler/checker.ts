@@ -303,6 +303,7 @@ import {
     getExternalModuleRequireArgument,
     getFirstConstructorWithBody,
     getFirstIdentifier,
+    getFirstJSDocTag,
     getFunctionFlags,
     getHostSignatureFromJSDoc,
     getIdentifierGeneratedImportReference,
@@ -805,6 +806,7 @@ import {
     JSDocPublicTag,
     JSDocSatisfiesTag,
     JSDocSignature,
+    JSDocTag,
     JSDocTemplateTag,
     JSDocThisTag,
     JSDocTypeAssertion,
@@ -34489,7 +34491,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param property the accessed property's symbol.
      */
     function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode | QualifiedName, type: Type, property: Symbol): boolean {
-        return isPropertyAccessible(node, node.kind === SyntaxKind.PropertyAccessExpression && node.expression.kind === SyntaxKind.SuperKeyword, /*isWrite*/ false, type, property);
+        return isPropertyAccessible(node, node.kind === SyntaxKind.PropertyAccessExpression && node.expression.kind === SyntaxKind.SuperKeyword, /*isWrite*/ false, type, property)
+            && (!property.valueDeclaration || !getFirstJSDocTag(property.valueDeclaration, (t): t is JSDocTag => t.kind === SyntaxKind.JSDocTag && t.tagName.escapedText === "ignore"));
         // Previously we validated the 'this' type of methods but this adversely affected performance. See #31377 for more context.
     }
 
