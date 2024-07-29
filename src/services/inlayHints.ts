@@ -119,6 +119,7 @@ import {
     TupleTypeReference,
     Type,
     TypeFlags,
+    TypePredicate,
     unescapeLeadingUnderscores,
     UserPreferences,
     usingSingleLineStringWriter,
@@ -405,6 +406,16 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
+        const typePredicate = checker.getTypePredicateOfSignature(signature);
+
+        if (typePredicate?.type) {
+            const hintParts = typePredicateToInlayHintParts(typePredicate);
+            if (hintParts) {
+                addTypeHints(hintParts, getTypeAnnotationPosition(decl));
+                return;
+            }
+        }
+
         const returnType = checker.getReturnTypeOfSignature(signature);
         if (isModuleReferenceType(returnType)) {
             return;
@@ -474,6 +485,17 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         });
     }
 
+    function printTypePredicateInSingleLine(typePredicate: TypePredicate) {
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        const printer = createPrinterWithRemoveComments();
+
+        return usingSingleLineStringWriter(writer => {
+            const typePredicateNode = checker.typePredicateToTypePredicateNode(typePredicate, /*enclosingDeclaration*/ undefined, flags);
+            Debug.assertIsDefined(typePredicateNode, "should always get typePredicateNode");
+            printer.writeNode(EmitHint.Unspecified, typePredicateNode, /*sourceFile*/ file, writer);
+        });
+    }
+
     function typeToInlayHintParts(type: Type): InlayHintDisplayPart[] | string {
         if (!shouldUseInteractiveInlayHints(preferences)) {
             return printTypeInSingleLine(type);
@@ -481,10 +503,24 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
 
         const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
         const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);
-        Debug.assertIsDefined(typeNode, "should always get typenode");
+        Debug.assertIsDefined(typeNode, "should always get typeNode");
+        return getInlayHintDisplayParts(typeNode);
+    }
 
+    function typePredicateToInlayHintParts(typePredicate: TypePredicate): InlayHintDisplayPart[] | string {
+        if (!shouldUseInteractiveInlayHints(preferences)) {
+            return printTypePredicateInSingleLine(typePredicate);
+        }
+
+        const flags = NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.AllowUniqueESSymbolType | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+        const typeNode = checker.typePredicateToTypePredicateNode(typePredicate, /*enclosingDeclaration*/ undefined, flags);
+        Debug.assertIsDefined(typeNode, "should always get typenode");
+        return getInlayHintDisplayParts(typeNode);
+    }
+
+    function getInlayHintDisplayParts(node: Node) {
         const parts: InlayHintDisplayPart[] = [];
-        visitForDisplayParts(typeNode);
+        visitForDisplayParts(node);
         return parts;
 
         function visitForDisplayParts(node: Node) {
