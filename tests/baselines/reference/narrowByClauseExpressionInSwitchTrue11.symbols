@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue11.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue11.ts ===
+function uhoh(input: string) : "A"|"B"|"C" {
+>uhoh : Symbol(uhoh, Decl(narrowByClauseExpressionInSwitchTrue11.ts, 0, 0))
+>input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue11.ts, 0, 14))
+
+    switch (true) {
+        case /a/.test(input):
+>/a/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue11.ts, 0, 14))
+
+            return "A";
+        case /b/.test(input):
+>/b/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue11.ts, 0, 14))
+
+            return "B";
+        case true:
+            return "C";
+    }
+}
+
+function uhoh1(input: string) : "A"|"B"|"C" {
+>uhoh1 : Symbol(uhoh1, Decl(narrowByClauseExpressionInSwitchTrue11.ts, 9, 1))
+>input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue11.ts, 11, 15))
+
+    switch ((true)) {
+        case /a/.test(input):
+>/a/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue11.ts, 11, 15))
+
+            return "A";
+        case /b/.test(input):
+>/b/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>input : Symbol(input, Decl(narrowByClauseExpressionInSwitchTrue11.ts, 11, 15))
+
+            return "B";
+        case (true):
+            return "C";
+    }
+}

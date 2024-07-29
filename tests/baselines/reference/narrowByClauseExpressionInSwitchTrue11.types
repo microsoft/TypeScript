@@ -1,0 +1,110 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue11.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue11.ts ===
+function uhoh(input: string) : "A"|"B"|"C" {
+>uhoh : (input: string) => "A" | "B" | "C"
+>     : ^     ^^      ^^^^^               
+>input : string
+>      : ^^^^^^
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        case /a/.test(input):
+>/a/.test(input) : boolean
+>                : ^^^^^^^
+>/a/.test : (string: string) => boolean
+>         : ^      ^^      ^^^^^       
+>/a/ : RegExp
+>    : ^^^^^^
+>test : (string: string) => boolean
+>     : ^      ^^      ^^^^^       
+>input : string
+>      : ^^^^^^
+
+            return "A";
+>"A" : "A"
+>    : ^^^
+
+        case /b/.test(input):
+>/b/.test(input) : boolean
+>                : ^^^^^^^
+>/b/.test : (string: string) => boolean
+>         : ^      ^^      ^^^^^       
+>/b/ : RegExp
+>    : ^^^^^^
+>test : (string: string) => boolean
+>     : ^      ^^      ^^^^^       
+>input : string
+>      : ^^^^^^
+
+            return "B";
+>"B" : "B"
+>    : ^^^
+
+        case true:
+>true : true
+>     : ^^^^
+
+            return "C";
+>"C" : "C"
+>    : ^^^
+    }
+}
+
+function uhoh1(input: string) : "A"|"B"|"C" {
+>uhoh1 : (input: string) => "A" | "B" | "C"
+>      : ^     ^^      ^^^^^               
+>input : string
+>      : ^^^^^^
+
+    switch ((true)) {
+>(true) : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+
+        case /a/.test(input):
+>/a/.test(input) : boolean
+>                : ^^^^^^^
+>/a/.test : (string: string) => boolean
+>         : ^      ^^      ^^^^^       
+>/a/ : RegExp
+>    : ^^^^^^
+>test : (string: string) => boolean
+>     : ^      ^^      ^^^^^       
+>input : string
+>      : ^^^^^^
+
+            return "A";
+>"A" : "A"
+>    : ^^^
+
+        case /b/.test(input):
+>/b/.test(input) : boolean
+>                : ^^^^^^^
+>/b/.test : (string: string) => boolean
+>         : ^      ^^      ^^^^^       
+>/b/ : RegExp
+>    : ^^^^^^
+>test : (string: string) => boolean
+>     : ^      ^^      ^^^^^       
+>input : string
+>      : ^^^^^^
+
+            return "B";
+>"B" : "B"
+>    : ^^^
+
+        case (true):
+>(true) : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+
+            return "C";
+>"C" : "C"
+>    : ^^^
+    }
+}
