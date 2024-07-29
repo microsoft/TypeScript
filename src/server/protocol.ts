@@ -1968,6 +1968,11 @@ export interface QuickInfoRequest extends FileLocationRequest {
     arguments: FileLocationRequestArgs;
 }
 
+export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
+    /** TODO */
+    verbosityLevel?: number;
+}
+
 /**
  * Body of QuickInfoResponse.
  */

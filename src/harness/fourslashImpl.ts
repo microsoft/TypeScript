@@ -2423,10 +2423,10 @@ export class TestState {
         return result;
     }
 
-    public baselineQuickInfo() {
+    public baselineQuickInfo(verbosityLevels?: { [markerName: string]: number }) {
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
-            item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position),
+            item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position, verbosityLevels?.[name]),
         }));
         const annotations = this.annotateContentWithTooltips(
             result,

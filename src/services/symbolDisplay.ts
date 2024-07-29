@@ -256,7 +256,16 @@ export interface SymbolDisplayPartsDocumentationAndSymbolKind {
     tags: JSDocTagInfo[] | undefined;
 }
 
-function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined, location: Node, type: Type | undefined, semanticMeaning: SemanticMeaning, alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
+function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
+    typeChecker: TypeChecker,
+    symbol: Symbol,
+    sourceFile: SourceFile,
+    enclosingDeclaration: Node | undefined,
+    location: Node,
+    type: Type | undefined,
+    semanticMeaning: SemanticMeaning,
+    alias?: Symbol,
+    verbosityLevel?: number): SymbolDisplayPartsDocumentationAndSymbolKind {
     const displayParts: SymbolDisplayPart[] = [];
     let documentation: SymbolDisplayPart[] = [];
     let tags: JSDocTagInfo[] = [];
@@ -656,7 +665,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                         addRange(displayParts, typeParameterParts);
                     }
                     else {
-                        addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
+                        addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration, /*flags*/ undefined, verbosityLevel));
                     }
                     if (isTransientSymbol(symbol) && symbol.links.target && isTransientSymbol(symbol.links.target) && symbol.links.target.links.tupleLabelDeclaration) {
                         const labelDecl = symbol.links.target.links.tupleLabelDeclaration;
@@ -866,8 +875,16 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
 
 // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
 /** @internal */
-export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined, location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
-    return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker, symbol, sourceFile, enclosingDeclaration, location, /*type*/ undefined, semanticMeaning, alias);
+export function getSymbolDisplayPartsDocumentationAndSymbolKind(
+    typeChecker: TypeChecker,
+    symbol: Symbol,
+    sourceFile: SourceFile,
+    enclosingDeclaration: Node | undefined,
+    location: Node,
+    semanticMeaning = getMeaningFromLocation(location),
+    alias?: Symbol,
+    verbosityLevel?: number): SymbolDisplayPartsDocumentationAndSymbolKind {
+    return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker, symbol, sourceFile, enclosingDeclaration, location, /*type*/ undefined, semanticMeaning, alias, verbosityLevel);
 }
 
 function isLocalVariableOrFunction(symbol: Symbol) {

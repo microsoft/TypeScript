@@ -2263,7 +2263,7 @@ export function createLanguageService(
         return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
     }
 
-    function getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel: number): QuickInfo | undefined {
+    function getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel?: number): QuickInfo | undefined {
         synchronizeHostData();
 
         const sourceFile = getValidSourceFile(fileName);
@@ -2288,7 +2288,17 @@ export function createLanguageService(
             };
         }
 
-        const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker => SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo));
+        const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(
+            cancellationToken,
+            typeChecker => SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
+                typeChecker,
+                symbol,
+                sourceFile,
+                getContainerNode(nodeForQuickInfo),
+                nodeForQuickInfo,
+                /*semanticMeaning*/ undefined,
+                /*alias*/ undefined,
+                verbosityLevel));
         return {
             kind: symbolKind,
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),

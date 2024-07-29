@@ -361,7 +361,7 @@ declare namespace FourSlashInterface {
         baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineCompletions(preferences?: UserPreferences): void;
-        baselineQuickInfo(): void;
+        baselineQuickInfo(verbosityLevels?: { [markerName: string]: number }): void;
         baselineSmartSelection(): void;
         baselineSignatureHelp(): void;
         nameOrDottedNameSpanTextIs(text: string): void;

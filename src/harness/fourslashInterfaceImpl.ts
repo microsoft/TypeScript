@@ -439,8 +439,8 @@ export class Verify extends VerifyNegatable {
         this.state.baselineGetEmitOutput();
     }
 
-    public baselineQuickInfo() {
-        this.state.baselineQuickInfo();
+    public baselineQuickInfo(verbosityLevels?: { [markerName: string]: number }) {
+        this.state.baselineQuickInfo(verbosityLevels);
     }
 
     public baselineSignatureHelp() {
