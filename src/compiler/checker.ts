@@ -41906,7 +41906,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkFunctionOrConstructorSymbolWorker(symbol: Symbol): void {
-        function getCanonicalOverload(overloads: Declaration[], implementation: FunctionLikeDeclaration | undefined): Declaration {
+        function getCanonicalOverload(overloads: readonly Declaration[], implementation: FunctionLikeDeclaration | undefined): Declaration {
             // Consider the canonical set of flags to be the flags of the bodyDeclaration or the first declaration
             // Error on all deviations from this canonical set of flags
             // The caveat is that if some overloads are defined in lib.d.ts, we don't want to
@@ -41922,19 +41922,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const someButNotAllOverloadFlags = someOverloadFlags ^ allOverloadFlags;
             if (someButNotAllOverloadFlags !== 0) {
                 const canonicalFlags = getEffectiveDeclarationFlags(getCanonicalOverload(overloads, implementation), flagsToCheck);
-                forEach(overloads, o => {
-                    const deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
-                    if (deviation & ModifierFlags.Export) {
-                        error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_exported_or_non_exported);
-                    }
-                    else if (deviation & ModifierFlags.Ambient) {
-                        error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
-                    }
-                    else if (deviation & (ModifierFlags.Private | ModifierFlags.Protected)) {
-                        error(getNameOfDeclaration(o) || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
-                    }
-                    else if (deviation & ModifierFlags.Abstract) {
-                        error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
+                group(overloads, o => getSourceFileOfNode(o).fileName).forEach(overloadsInFile => {
+                    const canonicalFlagsForFile = getEffectiveDeclarationFlags(getCanonicalOverload(overloadsInFile, implementation), flagsToCheck);
+                    for (const o of overloadsInFile) {
+                        const deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
+                        const deviationInFile = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlagsForFile;
+                        if (deviationInFile & ModifierFlags.Export) {
+                            // Overloads in different files need not all have export modifiers. This is ok:
+                            //   // lib.d.ts
+                            //   declare function foo(s: number): string;
+                            //   declare function foo(s: string): number;
+                            //   export { foo };
+                            //
+                            //   // app.ts
+                            //   declare module "lib" {
+                            //     export function foo(s: boolean): boolean;
+                            //   }
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_exported_or_non_exported);
+                        }
+                        else if (deviationInFile & ModifierFlags.Ambient) {
+                            // Though rare, a module augmentation (necessarily ambient) is allowed to add overloads
+                            // to a non-ambient function in an implementation file.
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
+                        }
+                        else if (deviation & (ModifierFlags.Private | ModifierFlags.Protected)) {
+                            error(getNameOfDeclaration(o) || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
+                        }
+                        else if (deviation & ModifierFlags.Abstract) {
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
+                        }
                     }
                 });
             }
