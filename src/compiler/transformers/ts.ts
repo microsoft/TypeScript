@@ -60,7 +60,6 @@ import {
     getStrictOptionValue,
     getTextOfNode,
     hasDecorators,
-    hasStaticModifier,
     hasSyntacticModifier,
     HeritageClause,
     Identifier,
