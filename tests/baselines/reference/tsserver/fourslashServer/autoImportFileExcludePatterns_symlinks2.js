@@ -209,6 +209,8 @@ Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 2 depe
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/@remix-run/server-runtime/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/project/node_modules/@remix-run/server-runtime/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -265,6 +267,8 @@ c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/index.d.ts: *new*
   {"pollingInterval":500}
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/jsconfig.json:
   {"pollingInterval":2000}
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json: *new*
+  {"pollingInterval":2000}
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/tsconfig.json:
   {"pollingInterval":2000}
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/tsconfig.json:
@@ -275,6 +279,8 @@ c:/project/node_modules/.store/tsconfig.json:
   {"pollingInterval":2000}
 c:/project/node_modules/@remix-run/server-runtime/index.d.ts: *new*
   {"pollingInterval":500}
+c:/project/node_modules/@remix-run/server-runtime/package.json: *new*
+  {"pollingInterval":2000}
 c:/project/node_modules/jsconfig.json:
   {"pollingInterval":2000}
 c:/project/node_modules/tsconfig.json:
