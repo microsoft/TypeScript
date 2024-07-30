@@ -1,19 +1,18 @@
-import * as Utils from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { getFsContentsForMultipleErrorsForceConsistentCasingInFileNames } from "../helpers/forceConsistentCasingInFileNames.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
+describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames::", () => {
     const loggerFile: File = {
         path: `/user/username/projects/myproject/logger.ts`,
         content: `export class logger { }`,
@@ -188,7 +187,7 @@ a;b;
         verifyTscWatch({
             scenario: "forceConsistentCasingInFileNames",
             subScenario,
-            commandLineArgs: ["--w", "--p", ".", "--explainFiles"],
+            commandLineArgs: ["--w", "--p", ".", "--explainFiles", "--extendedDiagnostics"],
             sys: () => {
                 const moduleA: File = {
                     path: diskPath,
@@ -226,7 +225,6 @@ a;b;
                         `,
                         ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-                    symlinksNotReflected: [`/user/username/projects/myproject/link.ts`],
                 },
             ],
         });
@@ -236,13 +234,13 @@ a;b;
     verifyFileSymlink("when file symlink target matches disk but import does not", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./XY`);
     verifyFileSymlink("when import matches disk but file symlink target does not", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/XY.ts`, `./Xy`);
     verifyFileSymlink("when import and file symlink target agree but do not match disk", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./Xy`);
-    verifyFileSymlink("when import, file symlink target, and disk are all different", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./yX`);
+    verifyFileSymlink("when import, file symlink target, and disk are all different", `/user/username/projects/myproject/XY.ts`, `/user/username/projects/myproject/Xy.ts`, `./xY`);
 
     function verifyDirSymlink(subScenario: string, diskPath: string, targetPath: string, importedPath: string) {
         verifyTscWatch({
             scenario: "forceConsistentCasingInFileNames",
             subScenario,
-            commandLineArgs: ["--w", "--p", ".", "--explainFiles"],
+            commandLineArgs: ["--w", "--p", ".", "--explainFiles", "--extendedDiagnostics"],
             sys: () => {
                 const moduleA: File = {
                     path: `${diskPath}/a.ts`,
@@ -281,7 +279,6 @@ a;b;
                         `,
                         ),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-                    symlinksNotReflected: [`/user/username/projects/myproject/link/a.ts`],
                 },
             ],
         });
@@ -291,7 +288,7 @@ a;b;
     verifyDirSymlink("when directory symlink target matches disk but import does not", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./XY`);
     verifyDirSymlink("when import matches disk but directory symlink target does not", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/XY`, `./Xy`);
     verifyDirSymlink("when import and directory symlink target agree but do not match disk", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./Xy`);
-    verifyDirSymlink("when import, directory symlink target, and disk are all different", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./yX`);
+    verifyDirSymlink("when import, directory symlink target, and disk are all different", `/user/username/projects/myproject/XY`, `/user/username/projects/myproject/Xy`, `./xY`);
 
     verifyTscWatch({
         scenario: "forceConsistentCasingInFileNames",
@@ -338,7 +335,7 @@ a;b;
                         ".": "./dist/index.js",
                     },
                 }),
-                "/Users/name/projects/web/index.ts": Utils.dedent`
+                "/Users/name/projects/web/index.ts": dedent`
                     import * as me from "@this/package";
                     me.thing();
                     export function thing(): void {}
@@ -369,10 +366,10 @@ a;b;
                     type: "module",
                     exports: "./src/index.ts",
                 }),
-                "/Users/name/projects/lib-boilerplate/src/index.ts": Utils.dedent`
+                "/Users/name/projects/lib-boilerplate/src/index.ts": dedent`
                     export function thing(): void {}
                 `,
-                "/Users/name/projects/lib-boilerplate/test/basic.spec.ts": Utils.dedent`
+                "/Users/name/projects/lib-boilerplate/test/basic.spec.ts": dedent`
                     import { thing } from 'lib-boilerplate'
                 `,
                 "/Users/name/projects/lib-boilerplate/tsconfig.json": jsonToReadableText({
@@ -385,5 +382,36 @@ a;b;
                 }),
                 "/a/lib/lib.es2021.full.d.ts": libFile.content,
             }, { currentDirectory: "/Users/name/projects/lib-boilerplate" }),
+    });
+
+    verifyTscWatch({
+        scenario: "forceConsistentCasingInFileNames",
+        subScenario: "when file is included from multiple places with different casing",
+        commandLineArgs: ["-w", "--explainFiles"],
+        sys: () =>
+            createWatchedSystem(
+                getFsContentsForMultipleErrorsForceConsistentCasingInFileNames(),
+                { currentDirectory: "/home/src/projects/project" },
+            ),
+        edits: [
+            {
+                caption: "change to reuse imports",
+                edit: sys => sys.appendFile("/home/src/projects/project/src/struct.d.ts", "export const y = 10;"),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "change to update imports",
+                edit: sys =>
+                    sys.writeFile(
+                        "/home/src/projects/project/src/struct.d.ts",
+                        dedent`
+                            import * as xs1 from "fp-ts/lib/Struct";
+                            import * as xs2 from "fp-ts/lib/struct";
+                            import * as xs3 from "./Struct";
+                        `,
+                    ),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+        ],
     });
 });

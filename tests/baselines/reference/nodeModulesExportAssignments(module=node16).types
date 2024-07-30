@@ -4,17 +4,23 @@
 // cjs format file
 const a = {};
 >a : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 export = a;
 >a : {}
+>  : ^^
 
 === index.ts ===
 // esm format file
 const a = {};
 >a : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 export = a;
 >a : {}
+>  : ^^
 

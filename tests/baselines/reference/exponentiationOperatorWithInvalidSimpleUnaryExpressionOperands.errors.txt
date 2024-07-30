@@ -1,11 +1,13 @@
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(4,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(5,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(6,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(6,3): error TS2872: This kind of expression is always truthy.
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(7,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(8,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(10,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(11,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(12,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(12,3): error TS2872: This kind of expression is always truthy.
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(13,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(14,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(16,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -36,7 +38,7 @@ exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(36,6): error T
 exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(36,14): error TS2703: The operand of a 'delete' operator must be a property reference.
 
 
-==== exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts (36 errors) ====
+==== exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts (38 errors) ====
     var temp: any;
     
     // Error: incorrect type on left-hand side 
@@ -49,6 +51,8 @@ exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(36,14): error 
     (!3) ** 4;
     ~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+      ~
+!!! error TS2872: This kind of expression is always truthy.
     (!temp++) ** 4;
     ~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -65,6 +69,8 @@ exponentiationOperatorWithInvalidSimpleUnaryExpressionOperands.ts(36,14): error 
     (!3) ** 4 ** 1;
     ~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+      ~
+!!! error TS2872: This kind of expression is always truthy.
     (!temp++) ** 4 ** 1;
     ~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

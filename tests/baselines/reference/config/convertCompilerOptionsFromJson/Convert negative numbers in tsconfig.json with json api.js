@@ -19,7 +19,7 @@ CompilerOptions::
 {
   "allowJs": true,
   "maxNodeModuleJsDepth": -1,
-  "configFilePath": "tsconfig.json"
+  "configFilePath": "/apath/tsconfig.json"
 }
 Errors::
 

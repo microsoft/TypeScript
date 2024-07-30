@@ -1,8 +1,6 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -12,12 +10,12 @@ import {
     TestSession,
     toExternalFile,
     toExternalFiles,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: externalProjects", () => {
     describe("can handle tsconfig file name with difference casing", () => {
@@ -467,7 +465,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
                 arguments: {
                     knownProjects: knownProjects.map(p => p.info!),
                 },
-            }).response as ts.server.protocol.ProjectFilesWithDiagnostics[];
+            });
 
             externalProject.rootFiles.length = 1;
             openExternalProjectsForSession([externalProject], session);

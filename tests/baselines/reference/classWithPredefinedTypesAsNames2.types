@@ -5,5 +5,7 @@
 
 class void {}
 >void {} : undefined
+>        : ^^^^^^^^^
 >{} : {}
+>   : ^^
 

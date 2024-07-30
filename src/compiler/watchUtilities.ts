@@ -30,6 +30,7 @@ import {
     identity,
     insertSorted,
     isArray,
+    isBuilderProgram,
     isDeclarationFileName,
     isExcludedFile,
     isSupportedSourceFileName,
@@ -56,7 +57,7 @@ import {
     WatchDirectoryFlags,
     WatchFileKind,
     WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Partial interface of the System thats needed to support the caching of directory structure
@@ -485,8 +486,8 @@ export function updateMissingFilePathsWatch(
 }
 
 /** @internal */
-export interface WildcardDirectoryWatcher {
-    watcher: FileWatcher;
+export interface WildcardDirectoryWatcher<T extends FileWatcher = FileWatcher> {
+    watcher: T;
     flags: WatchDirectoryFlags;
 }
 
@@ -498,10 +499,10 @@ export interface WildcardDirectoryWatcher {
  *
  * @internal
  */
-export function updateWatchingWildcardDirectories(
-    existingWatchedForWildcards: Map<string, WildcardDirectoryWatcher>,
+export function updateWatchingWildcardDirectories<T extends FileWatcher>(
+    existingWatchedForWildcards: Map<string, WildcardDirectoryWatcher<T>>,
     wildcardDirectories: MapLike<WatchDirectoryFlags> | undefined,
-    watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher,
+    watchDirectory: (directory: string, flags: WatchDirectoryFlags) => T,
 ) {
     if (wildcardDirectories) {
         mutateMap(
@@ -521,7 +522,7 @@ export function updateWatchingWildcardDirectories(
         clearMap(existingWatchedForWildcards, closeFileWatcherOf);
     }
 
-    function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatcher {
+    function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatcher<T> {
         // Create new watch and recursive info
         return {
             watcher: watchDirectory(directory, flags),
@@ -529,7 +530,7 @@ export function updateWatchingWildcardDirectories(
         };
     }
 
-    function updateWildcardDirectoryWatcher(existingWatcher: WildcardDirectoryWatcher, flags: WatchDirectoryFlags, directory: string) {
+    function updateWildcardDirectoryWatcher(existingWatcher: WildcardDirectoryWatcher<T>, flags: WatchDirectoryFlags, directory: string) {
         // Watcher needs to be updated if the recursive flags dont match
         if (existingWatcher.flags === flags) {
             return;
@@ -627,7 +628,7 @@ export function isIgnoredFileFromWildCardWatching({
         return realProgram ?
             !!realProgram.getSourceFileByPath(file) :
             builderProgram ?
-            builderProgram.getState().fileInfos.has(file) :
+            builderProgram.state.fileInfos.has(file) :
             !!find(program as readonly string[], rootFile => toPath(rootFile) === file);
     }
 
@@ -649,10 +650,6 @@ export function isIgnoredFileFromWildCardWatching({
                 return false;
         }
     }
-}
-
-function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T {
-    return !!(program as T).getState;
 }
 
 /** @internal */

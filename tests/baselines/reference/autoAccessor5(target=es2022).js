@@ -30,7 +30,7 @@ class C1 {
     static set ["z"](value) { C1.#_d_accessor_storage = value; }
 }
 class C2 {
-    #_e_accessor_storage = 1;
-    get [_a = f()]() { return this.#_e_accessor_storage; }
-    set [_a](value) { this.#_e_accessor_storage = value; }
+    #_a_accessor_storage = 1;
+    get [_a = f()]() { return this.#_a_accessor_storage; }
+    set [_a](value) { this.#_a_accessor_storage = value; }
 }

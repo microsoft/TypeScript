@@ -4,6 +4,7 @@
 for (var _a of []) {
 >_a : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     var x = _a;
 >x : any

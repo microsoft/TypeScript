@@ -57,13 +57,13 @@ interface Array<T> { length: number; [n: number]: T; }
 
 /a/lib/tsc.js -b packages/pkg1 --verbose --traceResolution
 Output::
-[[90m12:00:39 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/pkg2/tsconfig.json
     * packages/pkg1/tsconfig.json
 
-[[90m12:00:40 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output file 'packages/pkg2/build/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:41 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 ======== Resolving module 'const' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -72,9 +72,9 @@ Resolving module name 'const' relative to base url '/user/username/projects/mypr
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name 'const' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
-[[90m12:00:58 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:59 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -94,6 +94,7 @@ File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' h
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 ======== Resolving module 'const' from '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
@@ -124,81 +125,69 @@ export type { TheNum } from 'const';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-10837689162-export type { TheNum } from 'const';","signature":"-9751391360-export type { TheNum } from 'const';\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-13194036030-export type TheNum = 42;\n"},{"version":"-10837689162-export type { TheNum } from 'const';","signature":"-9751391360-export type { TheNum } from 'const';\n"}],"root":[2,3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../../../a/lib/lib.d.ts",
-      "../const.ts",
-      "../index.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../const.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../../../../../../a/lib/lib.d.ts",
+    "../const.ts",
+    "../index.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../const.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "../const.ts": {
-        "original": {
-          "version": "-11202312776-export type TheNum = 42;",
-          "signature": "-13194036030-export type TheNum = 42;\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "../const.ts": {
+      "original": {
         "version": "-11202312776-export type TheNum = 42;",
         "signature": "-13194036030-export type TheNum = 42;\n"
       },
-      "../index.ts": {
-        "original": {
-          "version": "-10837689162-export type { TheNum } from 'const';",
-          "signature": "-9751391360-export type { TheNum } from 'const';\n"
-        },
+      "version": "-11202312776-export type TheNum = 42;",
+      "signature": "-13194036030-export type TheNum = 42;\n"
+    },
+    "../index.ts": {
+      "original": {
         "version": "-10837689162-export type { TheNum } from 'const';",
         "signature": "-9751391360-export type { TheNum } from 'const';\n"
-      }
-    },
-    "root": [
-      [
-        2,
-        "../const.ts"
-      ],
-      [
-        3,
-        "../index.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "outDir": "./"
-    },
-    "referencedMap": {
-      "../index.ts": [
-        "../const.ts"
-      ]
-    },
-    "exportedModulesMap": {
-      "../index.ts": [
-        "../const.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../../../../../../a/lib/lib.d.ts",
-      "../const.ts",
-      "../index.ts"
-    ],
-    "latestChangedDtsFile": "./index.d.ts"
+      },
+      "version": "-10837689162-export type { TheNum } from 'const';",
+      "signature": "-9751391360-export type { TheNum } from 'const';\n"
+    }
   },
+  "root": [
+    [
+      2,
+      "../const.ts"
+    ],
+    [
+      3,
+      "../index.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "outDir": "./"
+  },
+  "referencedMap": {
+    "../index.ts": [
+      "../const.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./index.d.ts",
   "version": "FakeTSVersion",
-  "size": 971
+  "size": 893
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
@@ -207,6 +196,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.theNum = void 0;
 exports.theNum = 42;
 
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo]
+{"root":["../index.ts"],"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/packages/pkg1/build/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "../index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 50
+}
 
 
 Program root files: [
@@ -219,6 +220,7 @@ Program options: {
   "baseUrl": "/user/username/projects/myproject/packages/pkg2",
   "preserveSymlinks": true,
   "traceResolution": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/packages/pkg2/tsconfig.json"
 }
 Program structureReused: Not
@@ -244,6 +246,7 @@ Program options: {
   "outDir": "/user/username/projects/myproject/packages/pkg1/build",
   "preserveSymlinks": true,
   "traceResolution": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
 }
 Program structureReused: Not

@@ -58,8 +58,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src/somefolder
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/somefolder/srcfile.ts :: Config file name: /user/username/projects/myproject/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/somefolder/srcfile.ts ProjectRootPath: /user/username/projects/myproject:: Result: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -219,7 +218,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/somefo
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -283,3 +289,21 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/src/tsconfig.json
+
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/somefolder/module1.js :: WatchInfo: /user/username/projects/myproject/src/somefolder 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/somefolder/module1.js :: WatchInfo: /user/username/projects/myproject/src/somefolder 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/somefolder/module1.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/src/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/src/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/src/somefolder/module1.js
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/somefolder/module1.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/src/tsconfig.json WatchType: Wild card directory
+Before running Timeout callback:: count: 1
+1: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
+//// [/user/username/projects/myproject/src/somefolder/module1.js]
+export const x = 10;
+
+
+Timeout callback:: count: 1
+1: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
+After running Timeout callback:: count: 0

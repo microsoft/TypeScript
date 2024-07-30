@@ -5,23 +5,32 @@
 
 async function bar() {
 >bar : () => Promise<number>
+>    : ^^^^^^^^^^^^^^^^^^^^^
 
     return 2;
 >2 : 2
+>  : ^
 }
 
 async function foo() {
 >foo : () => Promise<(Anonymous class)>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new class {
 >new class {        baz = await bar();    } : (Anonymous class)
+>                                           : ^^^^^^^^^^^^^^^^^
 >class {        baz = await bar();    } : typeof (Anonymous class)
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 
         baz = await bar();
 >baz : number
+>    : ^^^^^^
 >await bar() : number
+>            : ^^^^^^
 >bar() : Promise<number>
+>      : ^^^^^^^^^^^^^^^
 >bar : () => Promise<number>
+>    : ^^^^^^^^^^^^^^^^^^^^^
 
     };
 }

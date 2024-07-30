@@ -3,5 +3,7 @@
 === noImplicitUseStrict_commonjs.ts ===
 export var x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 

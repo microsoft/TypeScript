@@ -24,7 +24,6 @@ module.exports.A.B = {
 
 
 //// [index.d.ts]
-/// <reference types="node" />
 export namespace A {
     namespace B {
         let thing: Something;

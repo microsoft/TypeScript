@@ -4,6 +4,7 @@
 /// <reference no-default-lib="true"/>
 var x;
 >x : any
+>  : ^^^
 
 interface Array {}
 interface String {}

@@ -3,6 +3,9 @@
 === parserClassDeclaration6.ts ===
 class C extends A, B {
 >C : C
+>  : ^
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 }

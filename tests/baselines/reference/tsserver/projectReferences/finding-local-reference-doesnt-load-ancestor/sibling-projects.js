@@ -88,8 +88,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/compiler
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/compiler/program.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/compiler/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/compiler/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/compiler/tsconfig.json 2000 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -202,12 +201,10 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/compiler
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/compiler/tsconfig.json :: Config file name: /user/username/projects/solution/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/compiler/tsconfig.json ProjectRootPath: undefined:: Result: /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/tsconfig.json 2000 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -221,7 +218,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/solution/compiler/pr
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -251,7 +255,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -342,7 +345,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -546,12 +548,21 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/solution/services/tsconfig.json",
+        "configFile": "/user/username/projects/solution/services/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/compiler/types.d.ts 2000 undefined Project: /user/username/projects/solution/compiler/tsconfig.json WatchType: Missing generated file
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/compiler/types.ts position 103 in project /user/username/projects/solution/services/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/compiler
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/compiler/types.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/compiler
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/compiler/types.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/compiler/types.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/compiler/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/compiler/types.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/compiler/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -619,7 +630,10 @@ Info seq  [hh:mm:ss:mss] response:
         "symbolStartOffset": 25,
         "symbolDisplayString": "(method) ts.Program.getSourceFiles(): string[]"
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -658,7 +672,6 @@ Projects::
 /user/username/projects/solution/services/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
     originalConfiguredProjects: 2
         /user/username/projects/solution/compiler/tsconfig.json
         /user/username/projects/solution/services/tsconfig.json
@@ -666,7 +679,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

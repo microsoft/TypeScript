@@ -103,78 +103,70 @@ export {};
 //# sourceMappingURL=keyboard.test.d.ts.map
 
 //// [/user/username/projects/project/out/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../src/common/input/keyboard.ts","../src/common/input/keyboard.test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-15187822601-function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }","signature":"-14411843863-export declare function evaluateKeyboardEvent(): void;\n"},{"version":"-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"composite":true,"declarationMap":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./input/keyboard.test.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","../src/common/input/keyboard.ts","../src/common/input/keyboard.test.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-15187822601-function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }","signature":"-14411843863-export declare function evaluateKeyboardEvent(): void;\n"},{"version":"-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"composite":true,"declarationMap":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./input/keyboard.test.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/project/out/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "../src/common/input/keyboard.ts",
-      "../src/common/input/keyboard.test.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../src/common/input/keyboard.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "../src/common/input/keyboard.ts",
+    "../src/common/input/keyboard.test.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../src/common/input/keyboard.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "../src/common/input/keyboard.ts": {
-        "original": {
-          "version": "-15187822601-function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }",
-          "signature": "-14411843863-export declare function evaluateKeyboardEvent(): void;\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "../src/common/input/keyboard.ts": {
+      "original": {
         "version": "-15187822601-function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }",
         "signature": "-14411843863-export declare function evaluateKeyboardEvent(): void;\n"
       },
-      "../src/common/input/keyboard.test.ts": {
-        "original": {
-          "version": "-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n",
-          "signature": "-3531856636-export {};\n"
-        },
+      "version": "-15187822601-function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }",
+      "signature": "-14411843863-export declare function evaluateKeyboardEvent(): void;\n"
+    },
+    "../src/common/input/keyboard.test.ts": {
+      "original": {
         "version": "-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n",
         "signature": "-3531856636-export {};\n"
-      }
-    },
-    "root": [
-      [
-        2,
-        "../src/common/input/keyboard.ts"
-      ],
-      [
-        3,
-        "../src/common/input/keyboard.test.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declarationMap": true,
-      "outDir": "./"
-    },
-    "referencedMap": {
-      "../src/common/input/keyboard.test.ts": [
-        "../src/common/input/keyboard.ts"
-      ]
-    },
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "../src/common/input/keyboard.test.ts",
+      },
+      "version": "-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n",
+      "signature": "-3531856636-export {};\n"
+    }
+  },
+  "root": [
+    [
+      2,
       "../src/common/input/keyboard.ts"
     ],
-    "latestChangedDtsFile": "./input/keyboard.test.d.ts"
+    [
+      3,
+      "../src/common/input/keyboard.test.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationMap": true,
+    "outDir": "./"
   },
+  "referencedMap": {
+    "../src/common/input/keyboard.test.ts": [
+      "../src/common/input/keyboard.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./input/keyboard.test.d.ts",
   "version": "FakeTSVersion",
-  "size": 1257
+  "size": 1184
 }
 
 //// [/user/username/projects/project/out/terminal.js]
@@ -193,108 +185,100 @@ function foo() {
 export {};
 //# sourceMappingURL=terminal.d.ts.map
 
-//// [/user/username/projects/project/out/common/input/keyboard.test.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var keyboard_1 = require("common/input/keyboard");
-function testEvaluateKeyboardEvent() {
-    return (0, keyboard_1.evaluateKeyboardEvent)();
-}
-
-
-//// [/user/username/projects/project/out/common/input/keyboard.test.d.ts.map]
-{"version":3,"file":"keyboard.test.d.ts","sourceRoot":"","sources":["../../../src/common/input/keyboard.test.ts"],"names":[],"mappings":""}
-
-//// [/user/username/projects/project/out/common/input/keyboard.test.d.ts]
-export {};
-//# sourceMappingURL=keyboard.test.d.ts.map
-
 //// [/user/username/projects/project/out/src.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./input/keyboard.d.ts","../src/terminal.ts","../src/common/input/keyboard.test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-14411843863-export declare function evaluateKeyboardEvent(): void;\n",{"version":"-9992649704-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"},{"version":"-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"}],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"outDir":"./","tsBuildInfoFile":"./src.tsconfig.tsbuildinfo"},"fileIdsList":[[2]],"referencedMap":[[4,1],[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,4,3],"latestChangedDtsFile":"./common/input/keyboard.test.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./input/keyboard.d.ts","../src/terminal.ts","./input/keyboard.test.d.ts","../src/common/input/keyboard.test.ts","../src/common/input/keyboard.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-14411843863-export declare function evaluateKeyboardEvent(): void;\n",{"version":"-9992649704-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"},"-3531856636-export {};\n"],"root":[[2,4]],"resolvedRoot":[[4,5],[2,6]],"options":{"composite":true,"declarationMap":true,"outDir":"./","tsBuildInfoFile":"./src.tsconfig.tsbuildinfo"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./terminal.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/project/out/src.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "./input/keyboard.d.ts",
-      "../src/terminal.ts",
-      "../src/common/input/keyboard.test.ts"
-    ],
-    "fileNamesList": [
-      [
-        "./input/keyboard.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "./input/keyboard.d.ts",
+    "../src/terminal.ts",
+    "./input/keyboard.test.d.ts",
+    "../src/common/input/keyboard.test.ts",
+    "../src/common/input/keyboard.ts"
+  ],
+  "fileIdsList": [
+    [
+      "./input/keyboard.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./input/keyboard.d.ts": {
-        "version": "-14411843863-export declare function evaluateKeyboardEvent(): void;\n",
-        "signature": "-14411843863-export declare function evaluateKeyboardEvent(): void;\n"
-      },
-      "../src/terminal.ts": {
-        "original": {
-          "version": "-9992649704-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n",
-          "signature": "-3531856636-export {};\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "./input/keyboard.d.ts": {
+      "version": "-14411843863-export declare function evaluateKeyboardEvent(): void;\n",
+      "signature": "-14411843863-export declare function evaluateKeyboardEvent(): void;\n"
+    },
+    "../src/terminal.ts": {
+      "original": {
         "version": "-9992649704-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n",
         "signature": "-3531856636-export {};\n"
       },
-      "../src/common/input/keyboard.test.ts": {
-        "original": {
-          "version": "-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n",
-        "signature": "-3531856636-export {};\n"
-      }
+      "version": "-9992649704-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n",
+      "signature": "-3531856636-export {};\n"
     },
-    "root": [
-      [
-        [
-          2,
-          4
-        ],
-        [
-          "./input/keyboard.d.ts",
-          "../src/terminal.ts",
-          "../src/common/input/keyboard.test.ts"
-        ]
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declarationMap": true,
-      "outDir": "./",
-      "tsBuildInfoFile": "./src.tsconfig.tsbuildinfo"
-    },
-    "referencedMap": {
-      "../src/common/input/keyboard.test.ts": [
-        "./input/keyboard.d.ts"
-      ],
-      "../src/terminal.ts": [
-        "./input/keyboard.d.ts"
-      ]
-    },
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./input/keyboard.d.ts",
-      "../src/common/input/keyboard.test.ts",
-      "../src/terminal.ts"
-    ],
-    "latestChangedDtsFile": "./common/input/keyboard.test.d.ts"
+    "./input/keyboard.test.d.ts": {
+      "version": "-3531856636-export {};\n",
+      "signature": "-3531856636-export {};\n"
+    }
   },
+  "root": [
+    [
+      [
+        2,
+        4
+      ],
+      [
+        "./input/keyboard.d.ts",
+        "../src/terminal.ts",
+        "./input/keyboard.test.d.ts"
+      ]
+    ]
+  ],
+  "resolvedRoot": [
+    [
+      [
+        4,
+        5
+      ],
+      [
+        "./input/keyboard.test.d.ts",
+        "../src/common/input/keyboard.test.ts"
+      ]
+    ],
+    [
+      [
+        2,
+        6
+      ],
+      [
+        "./input/keyboard.d.ts",
+        "../src/common/input/keyboard.ts"
+      ]
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationMap": true,
+    "outDir": "./",
+    "tsBuildInfoFile": "./src.tsconfig.tsbuildinfo"
+  },
+  "referencedMap": {
+    "../src/terminal.ts": [
+      "./input/keyboard.d.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./terminal.d.ts",
   "version": "FakeTSVersion",
-  "size": 1351
+  "size": 1161
 }
 
 
@@ -307,8 +291,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/tsconfig.json 2000 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -432,12 +415,10 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/tsconfig.json :: Config file name: /user/username/projects/project/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/common/tsconfig.json ProjectRootPath: undefined:: Result: /user/username/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/src/tsconfig.json 2000 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -451,7 +432,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/src/common/i
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -487,7 +475,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -514,9 +501,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/terminal.ts :: Config file name: /user/username/projects/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/project/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/terminal.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -649,13 +634,12 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/username/projects/project/src/tsconfig.json",
+        "triggerFile": "/user/username/projects/project/src/terminal.ts",
         "configFile": "/user/username/projects/project/src/tsconfig.json",
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -671,7 +655,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/src/terminal
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -709,7 +700,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
-    noOpenRef: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -747,12 +737,9 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/project/src/common/input/keyboard.ts position 99 in project /user/username/projects/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.test.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.test.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project/src/common/input
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/src/common/input/keyboard.test.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/common/input/keyboard.test.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/src/common/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/common/input/keyboard.test.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/src/common/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/common/input/keyboard.test.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {

@@ -94,55 +94,47 @@ export declare function fn5(): void;
 //# sourceMappingURL=FnS.d.ts.map
 
 //// [/user/username/projects/myproject/dependency/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./fns.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-18619918033-export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n","signature":"-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"}],"root":[2],"options":{"composite":true,"declarationDir":"../decls","declarationMap":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"../decls/FnS.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","./fns.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-18619918033-export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n","signature":"-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"}],"root":[2],"options":{"composite":true,"declarationDir":"../decls","declarationMap":true},"latestChangedDtsFile":"../decls/FnS.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/dependency/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "./fns.ts"
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "./fns.ts"
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "./fns.ts": {
-        "original": {
-          "version": "-18619918033-export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n",
-          "signature": "-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "./fns.ts": {
+      "original": {
         "version": "-18619918033-export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n",
         "signature": "-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"
-      }
-    },
-    "root": [
-      [
-        2,
-        "./fns.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declarationDir": "../decls",
-      "declarationMap": true
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "./fns.ts"
-    ],
-    "latestChangedDtsFile": "../decls/FnS.d.ts"
+      },
+      "version": "-18619918033-export function fn1() { }\nexport function fn2() { }\nexport function fn3() { }\nexport function fn4() { }\nexport function fn5() { }\n",
+      "signature": "-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"
+    }
   },
+  "root": [
+    [
+      2,
+      "./fns.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationDir": "../decls",
+    "declarationMap": true
+  },
+  "latestChangedDtsFile": "../decls/FnS.d.ts",
   "version": "FakeTSVersion",
-  "size": 1101
+  "size": 1011
 }
 
 //// [/user/username/projects/myproject/main/main.js]
@@ -164,69 +156,61 @@ export {};
 //# sourceMappingURL=main.d.ts.map
 
 //// [/user/username/projects/myproject/main/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../decls/fns.d.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n",{"version":"-805644102-import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"declarationMap":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./main.d.ts"},"version":"FakeTSVersion"}
+{"fileNames":["../../../../../a/lib/lib.d.ts","../decls/fns.d.ts","./main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n",{"version":"-805644102-import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"declarationMap":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./main.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/main/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
-  "program": {
-    "fileNames": [
-      "../../../../../a/lib/lib.d.ts",
-      "../decls/fns.d.ts",
-      "./main.ts"
-    ],
-    "fileNamesList": [
-      [
-        "../decls/fns.d.ts"
-      ]
-    ],
-    "fileInfos": {
-      "../../../../../a/lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
+  "fileNames": [
+    "../../../../../a/lib/lib.d.ts",
+    "../decls/fns.d.ts",
+    "./main.ts"
+  ],
+  "fileIdsList": [
+    [
+      "../decls/fns.d.ts"
+    ]
+  ],
+  "fileInfos": {
+    "../../../../../a/lib/lib.d.ts": {
+      "original": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
-      "../decls/fns.d.ts": {
-        "version": "-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n",
-        "signature": "-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"
-      },
-      "./main.ts": {
-        "original": {
-          "version": "-805644102-import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n",
-          "signature": "-3531856636-export {};\n"
-        },
+      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "affectsGlobalScope": true
+    },
+    "../decls/fns.d.ts": {
+      "version": "-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n",
+      "signature": "-18267052502-export declare function fn1(): void;\nexport declare function fn2(): void;\nexport declare function fn3(): void;\nexport declare function fn4(): void;\nexport declare function fn5(): void;\n"
+    },
+    "./main.ts": {
+      "original": {
         "version": "-805644102-import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n",
         "signature": "-3531856636-export {};\n"
-      }
-    },
-    "root": [
-      [
-        3,
-        "./main.ts"
-      ]
-    ],
-    "options": {
-      "composite": true,
-      "declarationMap": true
-    },
-    "referencedMap": {
-      "./main.ts": [
-        "../decls/fns.d.ts"
-      ]
-    },
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../../../../a/lib/lib.d.ts",
-      "../decls/fns.d.ts",
-      "./main.ts"
-    ],
-    "latestChangedDtsFile": "./main.d.ts"
+      },
+      "version": "-805644102-import {\n    fn1,\n    fn2,\n    fn3,\n    fn4,\n    fn5\n} from '../decls/fns'\n\nfn1();\nfn2();\nfn3();\nfn4();\nfn5();\n",
+      "signature": "-3531856636-export {};\n"
+    }
   },
+  "root": [
+    [
+      3,
+      "./main.ts"
+    ]
+  ],
+  "options": {
+    "composite": true,
+    "declarationMap": true
+  },
+  "referencedMap": {
+    "./main.ts": [
+      "../decls/fns.d.ts"
+    ]
+  },
+  "latestChangedDtsFile": "./main.d.ts",
   "version": "FakeTSVersion",
-  "size": 1129
+  "size": 1056
 }
 
 
@@ -239,8 +223,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/main
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/main/main.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -378,8 +361,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/main
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/main/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/main/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -389,7 +371,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/main/main.
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 1,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -449,8 +438,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -547,8 +535,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/dependency/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -564,7 +551,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/dependency
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 2,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -634,8 +628,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/random
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/random/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/random/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -760,7 +753,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/random/ran
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 3,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1082,7 +1082,6 @@ Projects::
     projectProgramVersion: 1
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 2:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
@@ -1093,44 +1092,6 @@ Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tscon
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Before request
 //// [/user/username/projects/myproject/decls/FnS.d.ts] deleted
-
-PolledWatches::
-/user/username/projects/myproject/dependency/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/random/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/decls/FnS.d.ts.map:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/random/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/myproject/decls/fns.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/decls:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/random:
-  {}
 
 Timeout callback:: count: 4
 1: /user/username/projects/myproject/main/tsconfig.json *new*
@@ -1169,8 +1130,10 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/fns.ts
     documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
-/user/username/projects/myproject/decls/fns.d.ts *deleted*
+/user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0 *changed*
         /user/username/projects/myproject/main/tsconfig.json *deleted*
@@ -1247,7 +1210,10 @@ Info seq  [hh:mm:ss:mss] response:
           }
         }
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
 
@@ -1545,45 +1511,12 @@ Info seq  [hh:mm:ss:mss] response:
           }
         ]
       },
-      "responseRequired": true
+      "responseRequired": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
     }
 After request
-
-PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/dependency/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/random/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/decls/FnS.d.ts.map:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/random/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/decls:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/random:
-  {}
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
@@ -1884,13 +1817,15 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/dependency
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 16,
+      "success": true
     }
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1906,6 +1841,8 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/decls/FnS.d.ts.map:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -1954,6 +1891,12 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/fns.ts
     documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
+/user/username/projects/myproject/decls/fns.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
+    containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1980,8 +1923,8 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/random
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/random/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -2004,13 +1947,15 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/random/ran
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 17,
+      "success": true
     }
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/main/node_modules/@types:
@@ -2024,6 +1969,8 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -2076,6 +2023,12 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/fns.ts
     documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
+/user/username/projects/myproject/decls/fns.d.ts *deleted*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
+    containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2124,13 +2077,15 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/random/ran
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 18,
+      "success": true
     }
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/main/node_modules/@types:
@@ -2144,6 +2099,8 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -2163,20 +2120,6 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/random:
   {}
-
-Projects::
-/user/username/projects/myproject/dependency/tsconfig.json (Configured)
-    projectStateVersion: 2
-    projectProgramVersion: 1
-/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2
-    projectProgramVersion: 2
-    noOpenRef: true *changed*
-    originalConfiguredProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
-/user/username/projects/myproject/random/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -2228,13 +2171,15 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/random/ran
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 19,
+      "success": true
     }
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/main/node_modules/@types:
@@ -2248,6 +2193,8 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/FnS.ts: *new*
   {}
@@ -2275,10 +2222,10 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     noOpenRef: true *changed*
-/user/username/projects/myproject/main/tsconfig.json (Configured)
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2
-    noOpenRef: true
+    noOpenRef: true *changed*
     originalConfiguredProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/tsconfig.json (Configured)
@@ -2333,13 +2280,15 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "close",
+      "request_seq": 20,
+      "success": true
     }
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/main/node_modules/@types:
@@ -2353,6 +2302,8 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/FnS.ts:
   {}
@@ -2426,8 +2377,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/random
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -2486,7 +2436,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/random/ran
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/random/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
-      "responseRequired": false
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 21,
+      "success": true
     }
 After request
 
@@ -2499,8 +2453,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/main/node_modules/@types:
@@ -2513,6 +2465,8 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
 /user/username/projects/myproject/dependency/FnS.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:

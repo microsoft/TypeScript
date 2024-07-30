@@ -70,13 +70,13 @@ export function foo(): void;
 
 Output::
 /lib/tsc -b /src/projects/a /src/projects/b --verbose --traceResolution --explainFiles
-[[90m12:00:22 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/projects/a/tsconfig.json
     * src/projects/b/tsconfig.json
 
-[[90m12:00:23 AM[0m] Project 'src/projects/a/tsconfig.json' is out of date because output file 'src/projects/a/src/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/projects/a/tsconfig.json' is out of date because output file 'src/projects/a/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:24 AM[0m] Building project '/src/projects/a/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/projects/a/tsconfig.json'...
 
 ======== Resolving type reference directive 'pg', containing file '/src/projects/a/__inferred type names__.ts', root directory '/src/projects/a/node_modules/@types,/src/projects/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/src/projects/a/node_modules/@types, /src/projects/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
@@ -94,9 +94,9 @@ src/projects/a/src/index.ts
   Matched by default include pattern '**/*'
 src/projects/node_modules/@types/pg/index.d.ts
   Entry point for implicit type library 'pg'
-[[90m12:00:26 AM[0m] Project 'src/projects/b/tsconfig.json' is out of date because output file 'src/projects/b/src/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/projects/b/tsconfig.json' is out of date because output file 'src/projects/b/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:27 AM[0m] Building project '/src/projects/b/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/src/projects/b/tsconfig.json'...
 
 File '/src/projects/b/src/package.json' does not exist.
 Found 'package.json' at '/src/projects/b/package.json'.
@@ -143,10 +143,34 @@ exitCode:: ExitStatus.Success
 "use strict";
 
 
+//// [/src/projects/a/tsconfig.tsbuildinfo]
+{"root":["./src/index.ts"],"version":"FakeTSVersion"}
+
+//// [/src/projects/a/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./src/index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 53
+}
+
 //// [/src/projects/b/src/index.js]
 import pg from "pg";
 pg.foo();
 
+
+//// [/src/projects/b/tsconfig.tsbuildinfo]
+{"root":["./src/index.ts"],"version":"FakeTSVersion"}
+
+//// [/src/projects/b/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "root": [
+    "./src/index.ts"
+  ],
+  "version": "FakeTSVersion",
+  "size": 53
+}
 
 
 
@@ -156,13 +180,13 @@ Input::
 
 Output::
 /lib/tsc -b /src/projects/a /src/projects/b --verbose --traceResolution --explainFiles
-[[90m12:00:29 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/projects/a/tsconfig.json
     * src/projects/b/tsconfig.json
 
-[[90m12:00:30 AM[0m] Project 'src/projects/a/tsconfig.json' is up to date because newest input 'src/projects/a/src/index.ts' is older than output 'src/projects/a/src/index.js'
+[[90mHH:MM:SS AM[0m] Project 'src/projects/a/tsconfig.json' is up to date because newest input 'src/projects/a/src/index.ts' is older than output 'src/projects/a/src/index.js'
 
-[[90m12:00:31 AM[0m] Project 'src/projects/b/tsconfig.json' is up to date because newest input 'src/projects/b/src/index.ts' is older than output 'src/projects/b/src/index.js'
+[[90mHH:MM:SS AM[0m] Project 'src/projects/b/tsconfig.json' is up to date because newest input 'src/projects/b/src/index.ts' is older than output 'src/projects/b/src/index.js'
 
 exitCode:: ExitStatus.Success
 

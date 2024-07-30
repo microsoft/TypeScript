@@ -3,12 +3,15 @@
 === duplicateConstructorOverloadSignature2.ts ===
 class C<T> {
 >C : C<T>
+>  : ^^^^
 
     constructor(x: T);
 >x : T
+>  : ^
 
     constructor(x: T);
 >x : T
+>  : ^
 
     constructor(x: any) { }
 >x : any

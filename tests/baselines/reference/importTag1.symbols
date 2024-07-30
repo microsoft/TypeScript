@@ -1,0 +1,22 @@
+//// [tests/cases/conformance/jsdoc/importTag1.ts] ////
+
+=== /types.ts ===
+export interface Foo {
+>Foo : Symbol(Foo, Decl(types.ts, 0, 0))
+
+    a: number;
+>a : Symbol(Foo.a, Decl(types.ts, 0, 22))
+}
+
+=== /foo.js ===
+/**
+ * @import { Foo } from "./types"
+ */
+
+/**
+ * @param { Foo } foo
+ */
+function f(foo) {}
+>f : Symbol(f, Decl(foo.js, 0, 0))
+>foo : Symbol(foo, Decl(foo.js, 7, 11))
+

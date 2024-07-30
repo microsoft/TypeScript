@@ -3,9 +3,11 @@
 === file.ts ===
 export class Foo {
 >Foo : Foo
+>    : ^^^
 
     member: string;
 >member : string
+>       : ^^^^^^
 }
 === reexport.ts ===
 
@@ -13,21 +15,29 @@ export * from "./file";
 === augment.ts ===
 import * as ns from "./reexport";
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 declare module "./reexport" {
 >"./reexport" : typeof ns
+>             : ^^^^^^^^^
 
     export enum Foo {
 >Foo : Foo
+>    : ^^^
 
         A, B, C
 >A : Foo.A
+>  : ^^^^^
 >B : Foo.B
+>  : ^^^^^
 >C : Foo.C
+>  : ^^^^^
     }
 }
 
 declare const f: ns.Foo; //is this the enum or the class? should be an error.
 >f : ns.Foo
+>  : ^^^^^^
 >ns : any
+>   : ^^^
 

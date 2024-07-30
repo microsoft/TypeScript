@@ -43,7 +43,7 @@ import {
     Type,
     TypeChecker,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const enum TokenEncodingConsts {

@@ -19,7 +19,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [app.d.ts]
-/// <reference types="lib" />
 export interface A {
     x: typeof $;
 }

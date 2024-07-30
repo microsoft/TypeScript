@@ -32,6 +32,7 @@
     "File '/node_modules/pkg/definitely-not-index.ts' does not exist.",
     "File '/node_modules/pkg/definitely-not-index.tsx' does not exist.",
     "File '/node_modules/pkg/definitely-not-index.d.ts' exists - use it as a name resolution result.",
+    "'package.json' does not have a 'peerDependencies' field.",
     "======== Module name 'pkg' was not resolved. ========",
     "======== Resolving module '@typescript/lib-es5' from '/.src/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========",
     "Explicitly specified module resolution kind: 'Node10'.",

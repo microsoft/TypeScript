@@ -409,7 +409,6 @@ export declare namespace SpecializedWidget {
     function createWidget2(): Widget2;
 }
 //// [privacyCannotNameAccessorDeclFile_exporter.d.ts]
-/// <reference path="privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts" />
 import Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;
@@ -417,7 +416,6 @@ export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widge
 export declare function createExportedWidget3(): Widgets1.Widget3;
 export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
 //// [privacyCannotNameAccessorDeclFile_consumer.d.ts]
-/// <reference path="privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts" />
 export declare class publicClassWithWithPrivateGetAccessorTypes {
     static get myPublicStaticMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
     private static get myPrivateStaticMethod();
@@ -434,3 +432,74 @@ export declare class publicClassWithPrivateModuleGetAccessorTypes {
     static get myPublicStaticMethod1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
     get myPublicMethod1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
 }
+
+
+//// [DtsFileErrors]
+
+
+privacyCannotNameAccessorDeclFile_consumer.d.ts(6,48): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyCannotNameAccessorDeclFile_consumer.d.ts(8,35): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyCannotNameAccessorDeclFile_consumer.d.ts(14,48): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyCannotNameAccessorDeclFile_consumer.d.ts(15,35): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+
+
+==== privacyCannotNameAccessorDeclFile_consumer.d.ts (4 errors) ====
+    export declare class publicClassWithWithPrivateGetAccessorTypes {
+        static get myPublicStaticMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
+        private static get myPrivateStaticMethod();
+        get myPublicMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
+        private get myPrivateMethod();
+        static get myPublicStaticMethod1(): import("GlobalWidgets").Widget3;
+                                                   ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        private static get myPrivateStaticMethod1();
+        get myPublicMethod1(): import("GlobalWidgets").Widget3;
+                                      ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        private get myPrivateMethod1();
+    }
+    export declare class publicClassWithPrivateModuleGetAccessorTypes {
+        static get myPublicStaticMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2;
+        get myPublicMethod(): import("./privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2;
+        static get myPublicStaticMethod1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+                                                   ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        get myPublicMethod1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+                                      ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+    }
+    
+==== privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts (0 errors) ====
+    declare module "GlobalWidgets" {
+        class Widget3 {
+            name: string;
+        }
+        function createWidget3(): Widget3;
+        namespace SpecializedGlobalWidget {
+            class Widget4 {
+                name: string;
+            }
+            function createWidget4(): Widget4;
+        }
+    }
+    
+==== privacyCannotNameAccessorDeclFile_Widgets.d.ts (0 errors) ====
+    export declare class Widget1 {
+        name: string;
+    }
+    export declare function createWidget1(): Widget1;
+    export declare namespace SpecializedWidget {
+        class Widget2 {
+            name: string;
+        }
+        function createWidget2(): Widget2;
+    }
+    
+==== privacyCannotNameAccessorDeclFile_exporter.d.ts (0 errors) ====
+    import Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
+    import Widgets1 = require("GlobalWidgets");
+    export declare function createExportedWidget1(): Widgets.Widget1;
+    export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;
+    export declare function createExportedWidget3(): Widgets1.Widget3;
+    export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
+    

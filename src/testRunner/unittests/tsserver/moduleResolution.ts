@@ -1,34 +1,26 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     getFsConentsForAlternateResultAtTypesPackageJson,
     getFsContentsForAlternateResult,
     getFsContentsForAlternateResultDts,
     getFsContentsForAlternateResultPackageJson,
-} from "../helpers/alternateResult";
-import {
-    libContent,
-} from "../helpers/contents";
-import {
-    solutionBuildWithBaseline,
-} from "../helpers/solutionBuilder";
+} from "../helpers/alternateResult.js";
+import { libContent } from "../helpers/contents.js";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     protocolTextSpanFromSubstring,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: moduleResolution", () => {
     describe("package json file is edited", () => {
@@ -76,14 +68,16 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             const { host, session, packageFile, verifyErr } = setup(jsonToReadableText({ name: "app", version: "1.0.0" }));
 
             session.logger.info("Modify package json file to add type module");
-            host.writeFile(
+            host.modifyFile(
                 packageFile.path,
                 jsonToReadableText({
                     name: "app",
                     version: "1.0.0",
                     type: "module",
                 }),
+                { ignoreWatches: true },
             );
+            host.invokeFsWatches(packageFile.path, "rename", packageFile.path, /*useTildeSuffix*/ undefined); // Create event instead of change
             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();

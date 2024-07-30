@@ -75,7 +75,7 @@ import {
     TokenClass,
     TypeChecker,
     TypeParameterDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** The classifier is used for syntactic highlighting in editors via the TSServer */
 export function createClassifier(): Classifier {

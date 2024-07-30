@@ -1035,7 +1035,7 @@ interface Date {
     getUTCMilliseconds(): number;
 >getUTCMilliseconds : Symbol(Date.getUTCMilliseconds, Decl(1.0lib-noErrors.ts, 659, 30))
 
-    /** Gets the difference in minutes between the time on the local computer and Universal Coordinated Time (UTC). */
+    /** Gets the difference in minutes between Universal Coordinated Time (UTC) and the time on the local computer. */
     getTimezoneOffset(): number;
 >getTimezoneOffset : Symbol(Date.getTimezoneOffset, Decl(1.0lib-noErrors.ts, 661, 33))
 
