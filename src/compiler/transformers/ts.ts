@@ -1236,9 +1236,7 @@ export function transformTypeScript(context: TransformationContext) {
     function visitPropertyNameOfClassElement(member: ClassElement): PropertyName {
         const name = member.name!;
         // Computed property names need to be transformed into a hoisted variable when they are used more than once.
-        // The names are used more than once when:
-        //   - the property is non-static and its initializer is moved to the constructor (when there are parameter property assignments).
-        //   - the property has a decorator.
+        // The names are used more than once when the property has a decorator.
         if (isComputedPropertyName(name) && hasDecorators(member) && legacyDecorators) {
             const expression = visitNode(name.expression, visitor, isExpression);
             Debug.assert(expression);
