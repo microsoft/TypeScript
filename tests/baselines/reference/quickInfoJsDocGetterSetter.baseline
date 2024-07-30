@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoJsDocGetterSetter.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoJsDocGetterSetter.ts ===
 // class A {
 //     /**

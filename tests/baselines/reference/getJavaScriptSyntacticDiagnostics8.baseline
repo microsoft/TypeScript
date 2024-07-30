@@ -1,5 +1,7 @@
 //// [/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics8.ts] ////
 
+// === Syntax Diagnostics ===
+Syntactic Diagnostics:
 /tests/cases/fourslash/a.js(1,6): error TS8008: Type aliases can only be used in TypeScript files.
 
 

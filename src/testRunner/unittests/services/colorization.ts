@@ -1,5 +1,5 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 // lots of tests use quoted code
 /* eslint-disable no-template-curly-in-string */
@@ -11,8 +11,7 @@ interface ClassificationEntry {
 }
 
 describe("unittests:: services:: Colorization", () => {
-    // Use the shim adapter to ensure test coverage of the shim layer for the classifier
-    const languageServiceAdapter = new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false);
+    const languageServiceAdapter = new Harness.LanguageService.NativeLanguageServiceAdapter();
     const classifier = languageServiceAdapter.getClassifier();
 
     function getEntryAtPosition(result: ts.ClassificationResult, position: number) {
@@ -80,293 +79,139 @@ describe("unittests:: services:: Colorization", () => {
 
     describe("test getClassifications", () => {
         it("returns correct token classes", () => {
-            testLexicalClassification("var x: string = \"foo\" ?? \"bar\"; //Hello",
-                ts.EndOfLineState.None,
-                keyword("var"),
-                whitespace(" "),
-                identifier("x"),
-                punctuation(":"),
-                keyword("string"),
-                operator("="),
-                stringLiteral("\"foo\""),
-                whitespace(" "),
-                operator("??"),
-                stringLiteral("\"foo\""),
-                comment("//Hello"),
-                punctuation(";"));
+            testLexicalClassification('var x: string = "foo" ?? "bar"; //Hello', ts.EndOfLineState.None, keyword("var"), whitespace(" "), identifier("x"), punctuation(":"), keyword("string"), operator("="), stringLiteral('"foo"'), whitespace(" "), operator("??"), stringLiteral('"foo"'), comment("//Hello"), punctuation(";"));
         });
 
         it("correctly classifies a comment after a divide operator", () => {
-            testLexicalClassification("1 / 2 // comment",
-                ts.EndOfLineState.None,
-                numberLiteral("1"),
-                whitespace(" "),
-                operator("/"),
-                numberLiteral("2"),
-                comment("// comment"));
+            testLexicalClassification("1 / 2 // comment", ts.EndOfLineState.None, numberLiteral("1"), whitespace(" "), operator("/"), numberLiteral("2"), comment("// comment"));
         });
 
         it("correctly classifies a literal after a divide operator", () => {
-            testLexicalClassification("1 / 2, 3 / 4",
-                ts.EndOfLineState.None,
-                numberLiteral("1"),
-                whitespace(" "),
-                operator("/"),
-                numberLiteral("2"),
-                numberLiteral("3"),
-                numberLiteral("4"),
-                operator(","));
+            testLexicalClassification("1 / 2, 3 / 4", ts.EndOfLineState.None, numberLiteral("1"), whitespace(" "), operator("/"), numberLiteral("2"), numberLiteral("3"), numberLiteral("4"), operator(","));
         });
 
         it("correctly classifies a multiline string with one backslash", () => {
-            testLexicalClassification("'line1\\",
-                ts.EndOfLineState.None,
-                stringLiteral("'line1\\"),
-                finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
+            testLexicalClassification("'line1\\", ts.EndOfLineState.None, stringLiteral("'line1\\"), finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
         });
 
         it("correctly classifies a multiline string with three backslashes", () => {
-            testLexicalClassification("'line1\\\\\\",
-                ts.EndOfLineState.None,
-                stringLiteral("'line1\\\\\\"),
-                finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
+            testLexicalClassification("'line1\\\\\\", ts.EndOfLineState.None, stringLiteral("'line1\\\\\\"), finalEndOfLineState(ts.EndOfLineState.InSingleQuoteStringLiteral));
         });
 
         it("correctly classifies an unterminated single-line string with no backslashes", () => {
-            testLexicalClassification("'line1",
-                ts.EndOfLineState.None,
-                stringLiteral("'line1"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("'line1", ts.EndOfLineState.None, stringLiteral("'line1"), finalEndOfLineState(ts.EndOfLineState.None));
         });
 
         it("correctly classifies an unterminated single-line string with two backslashes", () => {
-            testLexicalClassification("'line1\\\\",
-                ts.EndOfLineState.None,
-                stringLiteral("'line1\\\\"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("'line1\\\\", ts.EndOfLineState.None, stringLiteral("'line1\\\\"), finalEndOfLineState(ts.EndOfLineState.None));
         });
 
         it("correctly classifies an unterminated single-line string with four backslashes", () => {
-            testLexicalClassification("'line1\\\\\\\\",
-                ts.EndOfLineState.None,
-                stringLiteral("'line1\\\\\\\\"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("'line1\\\\\\\\", ts.EndOfLineState.None, stringLiteral("'line1\\\\\\\\"), finalEndOfLineState(ts.EndOfLineState.None));
         });
 
         it("correctly classifies the continuing line of a multiline string ending in one backslash", () => {
-            testLexicalClassification("\\",
-                ts.EndOfLineState.InDoubleQuoteStringLiteral,
-                stringLiteral("\\"),
-                finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
+            testLexicalClassification("\\", ts.EndOfLineState.InDoubleQuoteStringLiteral, stringLiteral("\\"), finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
         });
 
         it("correctly classifies the continuing line of a multiline string ending in three backslashes", () => {
-            testLexicalClassification("\\",
-                ts.EndOfLineState.InDoubleQuoteStringLiteral,
-                stringLiteral("\\"),
-                finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
+            testLexicalClassification("\\", ts.EndOfLineState.InDoubleQuoteStringLiteral, stringLiteral("\\"), finalEndOfLineState(ts.EndOfLineState.InDoubleQuoteStringLiteral));
         });
 
         it("correctly classifies the last line of an unterminated multiline string ending in no backslashes", () => {
-            testLexicalClassification("  ",
-                ts.EndOfLineState.InDoubleQuoteStringLiteral,
-                stringLiteral("  "),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("  ", ts.EndOfLineState.InDoubleQuoteStringLiteral, stringLiteral("  "), finalEndOfLineState(ts.EndOfLineState.None));
         });
 
         it("correctly classifies the last line of an unterminated multiline string ending in two backslashes", () => {
-            testLexicalClassification("\\\\",
-                ts.EndOfLineState.InDoubleQuoteStringLiteral,
-                stringLiteral("\\\\"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("\\\\", ts.EndOfLineState.InDoubleQuoteStringLiteral, stringLiteral("\\\\"), finalEndOfLineState(ts.EndOfLineState.None));
         });
 
         it("correctly classifies the last line of an unterminated multiline string ending in four backslashes", () => {
-            testLexicalClassification("\\\\\\\\",
-                ts.EndOfLineState.InDoubleQuoteStringLiteral,
-                stringLiteral("\\\\\\\\"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("\\\\\\\\", ts.EndOfLineState.InDoubleQuoteStringLiteral, stringLiteral("\\\\\\\\"), finalEndOfLineState(ts.EndOfLineState.None));
         });
 
         it("correctly classifies the last line of a multiline string", () => {
-            testLexicalClassification("'",
-                ts.EndOfLineState.InSingleQuoteStringLiteral,
-                stringLiteral("'"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("'", ts.EndOfLineState.InSingleQuoteStringLiteral, stringLiteral("'"), finalEndOfLineState(ts.EndOfLineState.None));
         });
 
         it("correctly classifies an unterminated multiline comment", () => {
-            testLexicalClassification("/*",
-                ts.EndOfLineState.None,
-                comment("/*"),
-                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+            testLexicalClassification("/*", ts.EndOfLineState.None, comment("/*"), finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
         it("correctly classifies the termination of a multiline comment", () => {
-            testLexicalClassification("   */     ",
-                ts.EndOfLineState.InMultiLineCommentTrivia,
-                comment("   */"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("   */     ", ts.EndOfLineState.InMultiLineCommentTrivia, comment("   */"), finalEndOfLineState(ts.EndOfLineState.None));
         });
 
         it("correctly classifies the continuation of a multiline comment", () => {
-            testLexicalClassification("LOREM IPSUM DOLOR   ",
-                ts.EndOfLineState.InMultiLineCommentTrivia,
-                comment("LOREM IPSUM DOLOR   "),
-                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+            testLexicalClassification("LOREM IPSUM DOLOR   ", ts.EndOfLineState.InMultiLineCommentTrivia, comment("LOREM IPSUM DOLOR   "), finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
         it("correctly classifies an unterminated multiline comment on a line ending in '/*/'", () => {
-            testLexicalClassification("   /*/",
-                ts.EndOfLineState.None,
-                comment("/*/"),
-                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+            testLexicalClassification("   /*/", ts.EndOfLineState.None, comment("/*/"), finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
         it("correctly classifies an unterminated multiline comment with trailing space", () => {
-            testLexicalClassification("/* ",
-                ts.EndOfLineState.None,
-                comment("/* "),
-                finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
+            testLexicalClassification("/* ", ts.EndOfLineState.None, comment("/* "), finalEndOfLineState(ts.EndOfLineState.InMultiLineCommentTrivia));
         });
 
         it("correctly classifies a keyword after a dot", () => {
-            testLexicalClassification("a.var",
-                ts.EndOfLineState.None,
-                identifier("var"));
+            testLexicalClassification("a.var", ts.EndOfLineState.None, identifier("var"));
         });
 
         it("correctly classifies a string literal after a dot", () => {
-            testLexicalClassification("a.\"var\"",
-                ts.EndOfLineState.None,
-                stringLiteral("\"var\""));
+            testLexicalClassification('a."var"', ts.EndOfLineState.None, stringLiteral('"var"'));
         });
 
         it("correctly classifies a keyword after a dot separated by comment trivia", () => {
-            testLexicalClassification("a./*hello world*/ var",
-                ts.EndOfLineState.None,
-                identifier("a"),
-                punctuation("."),
-                comment("/*hello world*/"),
-                identifier("var"));
+            testLexicalClassification("a./*hello world*/ var", ts.EndOfLineState.None, identifier("a"), punctuation("."), comment("/*hello world*/"), identifier("var"));
         });
 
         it("classifies a property access with whitespace around the dot", () => {
-            testLexicalClassification("   x  .\tfoo ()",
-                ts.EndOfLineState.None,
-                identifier("x"),
-                identifier("foo"));
+            testLexicalClassification("   x  .\tfoo ()", ts.EndOfLineState.None, identifier("x"), identifier("foo"));
         });
 
         it("classifies a keyword after a dot on previous line", () => {
-            testLexicalClassification("var",
-                ts.EndOfLineState.None,
-                keyword("var"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("var", ts.EndOfLineState.None, keyword("var"), finalEndOfLineState(ts.EndOfLineState.None));
         });
 
         it("classifies multiple keywords properly", () => {
-            testLexicalClassification("public static",
-                ts.EndOfLineState.None,
-                keyword("public"),
-                keyword("static"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("public static", ts.EndOfLineState.None, keyword("public"), keyword("static"), finalEndOfLineState(ts.EndOfLineState.None));
 
-            testLexicalClassification("public var",
-                ts.EndOfLineState.None,
-                keyword("public"),
-                identifier("var"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("public var", ts.EndOfLineState.None, keyword("public"), identifier("var"), finalEndOfLineState(ts.EndOfLineState.None));
         });
 
         it("classifies a single line no substitution template string correctly", () => {
-            testLexicalClassification("`number number public string`",
-                ts.EndOfLineState.None,
-                stringLiteral("`number number public string`"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("`number number public string`", ts.EndOfLineState.None, stringLiteral("`number number public string`"), finalEndOfLineState(ts.EndOfLineState.None));
         });
         it("classifies substitution parts of a template string correctly", () => {
-            testLexicalClassification("`number '${ 1 + 1 }' string '${ 'hello' }'`",
-                ts.EndOfLineState.None,
-                stringLiteral("`number '${"),
-                numberLiteral("1"),
-                operator("+"),
-                numberLiteral("1"),
-                stringLiteral("}' string '${"),
-                stringLiteral("'hello'"),
-                stringLiteral("}'`"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("`number '${ 1 + 1 }' string '${ 'hello' }'`", ts.EndOfLineState.None, stringLiteral("`number '${"), numberLiteral("1"), operator("+"), numberLiteral("1"), stringLiteral("}' string '${"), stringLiteral("'hello'"), stringLiteral("}'`"), finalEndOfLineState(ts.EndOfLineState.None));
         });
         it("classifies an unterminated no substitution template string correctly", () => {
-            testLexicalClassification("`hello world",
-                ts.EndOfLineState.None,
-                stringLiteral("`hello world"),
-                finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate));
+            testLexicalClassification("`hello world", ts.EndOfLineState.None, stringLiteral("`hello world"), finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate));
         });
         it("classifies the entire line of an unterminated multiline no-substitution/head template", () => {
-            testLexicalClassification("...",
-                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
-                stringLiteral("..."),
-                finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate));
+            testLexicalClassification("...", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("..."), finalEndOfLineState(ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate));
         });
         it("classifies the entire line of an unterminated multiline template middle/end", () => {
-            testLexicalClassification("...",
-                ts.EndOfLineState.InTemplateMiddleOrTail,
-                stringLiteral("..."),
-                finalEndOfLineState(ts.EndOfLineState.InTemplateMiddleOrTail));
+            testLexicalClassification("...", ts.EndOfLineState.InTemplateMiddleOrTail, stringLiteral("..."), finalEndOfLineState(ts.EndOfLineState.InTemplateMiddleOrTail));
         });
         it("classifies a termination of a multiline template head", () => {
-            testLexicalClassification("...${",
-                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
-                stringLiteral("...${"),
-                finalEndOfLineState(ts.EndOfLineState.InTemplateSubstitutionPosition));
+            testLexicalClassification("...${", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("...${"), finalEndOfLineState(ts.EndOfLineState.InTemplateSubstitutionPosition));
         });
         it("classifies the termination of a multiline no substitution template", () => {
-            testLexicalClassification("...`",
-                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
-                stringLiteral("...`"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("...`", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("...`"), finalEndOfLineState(ts.EndOfLineState.None));
         });
         it("classifies the substitution parts and middle/tail of a multiline template string", () => {
-            testLexicalClassification("${ 1 + 1 }...`",
-                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
-                stringLiteral("${"),
-                numberLiteral("1"),
-                operator("+"),
-                numberLiteral("1"),
-                stringLiteral("}...`"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("${ 1 + 1 }...`", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("${"), numberLiteral("1"), operator("+"), numberLiteral("1"), stringLiteral("}...`"), finalEndOfLineState(ts.EndOfLineState.None));
         });
         it("classifies a template middle and propagates the end of line state", () => {
-            testLexicalClassification("${ 1 + 1 }...`",
-                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
-                stringLiteral("${"),
-                numberLiteral("1"),
-                operator("+"),
-                numberLiteral("1"),
-                stringLiteral("}...`"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("${ 1 + 1 }...`", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral("${"), numberLiteral("1"), operator("+"), numberLiteral("1"), stringLiteral("}...`"), finalEndOfLineState(ts.EndOfLineState.None));
         });
         it("classifies substitution expressions with curly braces appropriately", () => {
             let pos = 0;
             let lastLength = 0;
 
-            testLexicalClassification("...${ () => { } } ${ { x: `1` } }...`",
-                ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate,
-                stringLiteral(track("...${"), pos),
-                punctuation(track(" ", "("), pos),
-                punctuation(track(")"), pos),
-                punctuation(track(" ", "=>"), pos),
-                punctuation(track(" ", "{"), pos),
-                punctuation(track(" ", "}"), pos),
-                stringLiteral(track(" ", "} ${"), pos),
-                punctuation(track(" ", "{"), pos),
-                identifier(track(" ", "x"), pos),
-                punctuation(track(":"), pos),
-                stringLiteral(track(" ", "`1`"), pos),
-                punctuation(track(" ", "}"), pos),
-                stringLiteral(track(" ", "}...`"), pos),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("...${ () => { } } ${ { x: `1` } }...`", ts.EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate, stringLiteral(track("...${"), pos), punctuation(track(" ", "("), pos), punctuation(track(")"), pos), punctuation(track(" ", "=>"), pos), punctuation(track(" ", "{"), pos), punctuation(track(" ", "}"), pos), stringLiteral(track(" ", "} ${"), pos), punctuation(track(" ", "{"), pos), identifier(track(" ", "x"), pos), punctuation(track(":"), pos), stringLiteral(track(" ", "`1`"), pos), punctuation(track(" ", "}"), pos), stringLiteral(track(" ", "}...`"), pos), finalEndOfLineState(ts.EndOfLineState.None));
 
             // Adjusts 'pos' by accounting for the length of each portion of the string,
             // but only return the last given string
@@ -380,31 +225,13 @@ describe("unittests:: services:: Colorization", () => {
         });
 
         it("classifies partially written generics correctly.", () => {
-            testLexicalClassification("Foo<number",
-                ts.EndOfLineState.None,
-                identifier("Foo"),
-                operator("<"),
-                identifier("number"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("Foo<number", ts.EndOfLineState.None, identifier("Foo"), operator("<"), identifier("number"), finalEndOfLineState(ts.EndOfLineState.None));
 
             // Looks like a cast, should get classified as a keyword.
-            testLexicalClassification("<number",
-                ts.EndOfLineState.None,
-                operator("<"),
-                keyword("number"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("<number", ts.EndOfLineState.None, operator("<"), keyword("number"), finalEndOfLineState(ts.EndOfLineState.None));
 
             // handle nesting properly.
-            testLexicalClassification("Foo<Foo,Foo<number",
-                ts.EndOfLineState.None,
-                identifier("Foo"),
-                operator("<"),
-                identifier("Foo"),
-                operator(","),
-                identifier("Foo"),
-                operator("<"),
-                identifier("number"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("Foo<Foo,Foo<number", ts.EndOfLineState.None, identifier("Foo"), operator("<"), identifier("Foo"), operator(","), identifier("Foo"), operator("<"), identifier("number"), finalEndOfLineState(ts.EndOfLineState.None));
         });
 
         it("LexicallyClassifiesConflictTokens", () => {
@@ -429,7 +256,8 @@ describe("unittests:: services:: Colorization", () => {
                 comment("=======\r\n    v = 2;\r\n"),
                 comment(">>>>>>> Branch - a"),
                 punctuation("}"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
 
             testLexicalClassification(
                 "<<<<<<< HEAD\r\n\
@@ -445,7 +273,8 @@ class D { }\r\n\
                 punctuation("}"),
                 comment("=======\r\nclass D { }\r\n"),
                 comment(">>>>>>> Branch - a"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
 
             testLexicalClassification(
                 "class C {\r\n\
@@ -470,7 +299,8 @@ class D { }\r\n\
                 comment("=======\r\n    v = 2;\r\n"),
                 comment(">>>>>>> Branch - a"),
                 punctuation("}"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
 
             testLexicalClassification(
                 "<<<<<<< HEAD\r\n\
@@ -489,22 +319,12 @@ class D { }\r\n\
                 comment("||||||| merged common ancestors\r\nclass E { }\r\n"),
                 comment("=======\r\nclass D { }\r\n"),
                 comment(">>>>>>> Branch - a"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+                finalEndOfLineState(ts.EndOfLineState.None),
+            );
         });
 
         it("'of' keyword", () => {
-            testLexicalClassification("for (var of of of) { }",
-                ts.EndOfLineState.None,
-                keyword("for"),
-                punctuation("("),
-                keyword("var"),
-                keyword("of"),
-                keyword("of"),
-                keyword("of"),
-                punctuation(")"),
-                punctuation("{"),
-                punctuation("}"),
-                finalEndOfLineState(ts.EndOfLineState.None));
+            testLexicalClassification("for (var of of of) { }", ts.EndOfLineState.None, keyword("for"), punctuation("("), keyword("var"), keyword("of"), keyword("of"), keyword("of"), punctuation(")"), punctuation("{"), punctuation("}"), finalEndOfLineState(ts.EndOfLineState.None));
         });
     });
 });

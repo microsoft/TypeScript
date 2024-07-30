@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoJsDoc.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoJsDoc.ts ===
 // /**
 //  * A constant

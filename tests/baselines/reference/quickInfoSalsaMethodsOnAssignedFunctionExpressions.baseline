@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoSalsaMethodsOnAssignedFunctionExpressions.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/something.js ===
 // var C = function () { }
 // /**

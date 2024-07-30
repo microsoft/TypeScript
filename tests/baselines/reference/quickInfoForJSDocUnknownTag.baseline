@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoForJSDocUnknownTag.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoForJSDocUnknownTag.ts ===
 // /**
 //  * @example

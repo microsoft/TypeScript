@@ -1,5 +1,7 @@
 //// [/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics13.ts] ////
 
+// === Syntax Diagnostics ===
+Syntactic Diagnostics:
 /tests/cases/fourslash/a.js(1,8): error TS8010: Type annotations can only be used in TypeScript files.
 
 

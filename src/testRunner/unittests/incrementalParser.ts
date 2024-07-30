@@ -1,5 +1,5 @@
-import * as ts from "../_namespaces/ts";
-import * as Utils from "../_namespaces/Utils";
+import * as ts from "../_namespaces/ts.js";
+import * as Utils from "../_namespaces/Utils.js";
 
 function withChange(text: ts.IScriptSnapshot, start: number, length: number, newText: string): { text: ts.IScriptSnapshot; textChangeRange: ts.TextChangeRange; } {
     const contents = ts.getSnapshotText(text);
@@ -120,7 +120,7 @@ function insertCode(source: string, index: number, toInsert: string) {
     }
 }
 
-describe("unittests:: Incremental Parser", () => {
+describe("unittests:: incrementalParser::", () => {
     it("Inserting into method", () => {
         const source = "class C {\r\n" +
             "    public foo1() { }\r\n" +
@@ -160,7 +160,7 @@ describe("unittests:: Incremental Parser", () => {
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withInsert(oldText, semicolonIndex, "/");
 
-        compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
     });
 
     it("Regular expression 2", () => {
@@ -249,7 +249,7 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Strict mode 1", () => {
-        const source = "foo1();\r\nfoo1();\r\nfoo1();\r\package();";
+        const source = "foo1();\r\nfoo1();\r\nfoo1();\r\npackage();";
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withInsert(oldText, 0, "'strict';\r\n");
@@ -258,7 +258,7 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Strict mode 2", () => {
-        const source = "foo1();\r\nfoo1();\r\nfoo1();\r\package();";
+        const source = "foo1();\r\nfoo1();\r\nfoo1();\r\npackage();";
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withInsert(oldText, 0, "'use strict';\r\n");
@@ -549,8 +549,7 @@ describe("unittests:: Incremental Parser", () => {
     });
 
     it("Modifier added to accessor", () => {
-        const source =
-            "class C {\
+        const source = "class C {\
     set Bar(bar:string) {}\
 }\
 var o2 = { set Foo(val:number) { } };";
@@ -563,8 +562,7 @@ var o2 = { set Foo(val:number) { } };";
     });
 
     it("Insert parameter ahead of parameter", () => {
-        const source =
-            "alert(100);\
+        const source = "alert(100);\
 \
 class OverloadedMonster {\
 constructor();\
@@ -579,8 +577,7 @@ constructor(name) { }\
     });
 
     it("Insert declare modifier before module", () => {
-        const source =
-            "module mAmbient {\
+        const source = "module mAmbient {\
 module m3 { }\
 }";
 
@@ -592,8 +589,7 @@ module m3 { }\
     });
 
     it("Insert function above arrow function with comment", () => {
-        const source =
-            "\
+        const source = "\
 () =>\
    // do something\
 0;";
@@ -702,7 +698,7 @@ module m3 { }\
     });
 
     it("Moving methods from object literal to class in strict mode", () => {
-        const source = "\"use strict\"; var v = { public A() { } public B() { } public C() { } }";
+        const source = '"use strict"; var v = { public A() { } public B() { } public C() { } }';
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 14, "var v =".length, "class C");
@@ -719,7 +715,7 @@ module m3 { }\
         compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
     });
 
-    it("Do not move methods called \"constructor\" from object literal to class", () => {
+    it('Do not move methods called "constructor" from object literal to class', () => {
         const source = "var v = { public constructor() { } public constructor() { } public constructor() { } }";
 
         const oldText = ts.ScriptSnapshot.fromString(source);
@@ -738,7 +734,7 @@ module m3 { }\
     });
 
     it("Moving index signatures from class to interface in strict mode", () => {
-        const source = "\"use strict\"; class C { public [a: number]: string; public [a: number]: string; public [a: number]: string }";
+        const source = '"use strict"; class C { public [a: number]: string; public [a: number]: string; public [a: number]: string }';
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 14, "class".length, "interface");
@@ -755,9 +751,8 @@ module m3 { }\
         compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 18);
     });
 
-
     it("Moving index signatures from interface to class in strict mode", () => {
-        const source = "\"use strict\"; interface C { public [a: number]: string; public [a: number]: string; public [a: number]: string }";
+        const source = '"use strict"; interface C { public [a: number]: string; public [a: number]: string; public [a: number]: string }';
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 14, "interface".length, "class");
@@ -783,9 +778,8 @@ module m3 { }\
         compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
     });
 
-
     it("Moving accessors from object literal to class in strict mode", () => {
-        const source = "\"use strict\"; var v = { public get A() { } public get B() { } public get C() { } }";
+        const source = '"use strict"; var v = { public get A() { } public get B() { } public get C() { } }';
 
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withChange(oldText, 14, "var v =".length, "class C");
@@ -812,6 +806,15 @@ module m3 { }\
         deleteCode(source, index, "extends IFoo<T>");
     });
 
+    it("when comment changes to incomplete", () => {
+        const source = "function bug(\r\n    test /** */ true = test test 123\r\n) {}";
+        const oldText = ts.ScriptSnapshot.fromString(source);
+        const index = source.indexOf("/");
+        const newTextAndChange = withChange(oldText, index, 1, "");
+
+        compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+    });
+
     it("Type after incomplete enum 1", () => {
         const source = "function foo() {\r\n" +
             "            function getOccurrencesAtPosition() {\r\n" +
@@ -834,11 +837,13 @@ module m3 { }\
         insertCode(source, index, "Fo");
     });
 
-    for (const tsIgnoreComment of [
-        "// @ts-ignore",
-        "/* @ts-ignore */",
-        "/*\n  @ts-ignore */"
-    ]) {
+    for (
+        const tsIgnoreComment of [
+            "// @ts-ignore",
+            "/* @ts-ignore */",
+            "/*\n  @ts-ignore */",
+        ]
+    ) {
         describe(`${tsIgnoreComment} comment directives`, () => {
             const textWithIgnoreComment = `const x = 10;
     function foo() {

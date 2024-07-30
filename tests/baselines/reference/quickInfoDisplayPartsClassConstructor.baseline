@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoDisplayPartsClassConstructor.ts ===
 // class c {
 //     constructor() {

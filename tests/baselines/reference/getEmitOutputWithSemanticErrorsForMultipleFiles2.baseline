@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/getEmitOutputWithSemanticErrorsForMultipleFiles2.ts] ////
 
+// === EmitOutput ===
 EmitSkipped: false
 
 FileName : out.js

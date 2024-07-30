@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/jsdocReturnsTag.ts] ////
 
+// === SignatureHelp ===
 === /tests/cases/fourslash/dummy.js ===
 // /**
 //  * Find an item

@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoImportMeta.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/foo.ts ===
 // /// <reference no-default-lib="true"/>
 // /// <reference path='./bar.d.ts' />

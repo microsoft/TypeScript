@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/smartSelection_templateStrings2.ts] ////
 
+// === Smart Selection ===
 `a ${b} /**/c`
 
  a ${b} c 

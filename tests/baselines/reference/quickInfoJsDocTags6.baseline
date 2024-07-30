@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoJsDocTags6.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoJsDocTags6.js ===
 // class Foo {
 //     /**

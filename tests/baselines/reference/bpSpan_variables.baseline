@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/breakpointValidationVariables.ts] ////
 
+// === breakpoints ===
 
 1  >var a = 10;
 

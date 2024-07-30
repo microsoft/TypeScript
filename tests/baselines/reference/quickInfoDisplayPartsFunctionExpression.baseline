@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoDisplayPartsFunctionExpression.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoDisplayPartsFunctionExpression.ts ===
 // var x = function foo() {
 //     ^

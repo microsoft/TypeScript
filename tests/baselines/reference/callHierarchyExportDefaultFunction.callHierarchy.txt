@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/callHierarchyExportDefaultFunction.ts] ////
 
+// === Call Hierarchy ===
 ╭ name: default
 ├ kind: function
 ├ file: /tests/cases/fourslash/other.ts

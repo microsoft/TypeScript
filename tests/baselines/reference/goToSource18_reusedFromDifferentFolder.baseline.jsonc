@@ -1,0 +1,23 @@
+//// [/tests/cases/fourslash/server/goToSource18_reusedFromDifferentFolder.ts] ////
+
+// === goToSourceDefinition ===
+// === /node_modules/yargs/callback.js ===
+// export class Yargs { [|positional|]() { } }
+
+// === /some/index.ts ===
+// import { random } from "../folder/random";
+// import { command } from "yargs";
+// command("foo", yargs => {
+//     yargs./*GOTO SOURCE DEF*/positional();
+// });
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": "",
+    "unverified": true
+   }
+  ]

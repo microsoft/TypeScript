@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/signatureHelpJSDocTags.ts] ////
 
+// === SignatureHelp ===
 === /tests/cases/fourslash/signatureHelpJSDocTags.ts ===
 // /**
 //  * This is class Foo.

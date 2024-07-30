@@ -19,19 +19,33 @@ declare const console: { log(msg: any): void; };
 export const x = 10;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"module":"amd","outFile":"theApp.js"},"references":[{"path":"../Util/Dates"}]}
+{
+  "compilerOptions": {
+    "module": "amd",
+    "outFile": "theApp.js"
+  },
+  "references": [
+    {
+      "path": "../Util/Dates"
+    }
+  ]
+}
 
 
 
 Output::
 /lib/tsc --p src/project
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m73[0m - [91merror[0m[90m TS6053: [0mFile '/src/Util/Dates' not found.
+[96msrc/project/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/src/Util/Dates' not found.
 
-[7m1[0m {"compilerOptions":{"module":"amd","outFile":"theApp.js"},"references":[{"path":"../Util/Dates"}]}
-[7m [0m [91m                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m7[0m     {
+[7m [0m [91m    ~[0m
+[7m8[0m       "path": "../Util/Dates"
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m9[0m     }
+[7m [0m [91m~~~~~[0m
 
 
-Found 1 error in src/project/tsconfig.json[90m:1[0m
+Found 1 error in src/project/tsconfig.json[90m:7[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 

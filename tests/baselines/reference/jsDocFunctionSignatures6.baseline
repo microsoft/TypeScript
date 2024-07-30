@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/jsDocFunctionSignatures6.ts] ////
 
+// === SignatureHelp ===
 === /tests/cases/fourslash/Foo.js ===
 // /**
 //  * @param {string} p1 - A string param
@@ -11,19 +12,19 @@
 // f1('foo', 'bar', 'baz', 'qux');
 //    ^
 // | ----------------------------------------------------------------------
-// | f1(**p1: string**, p2: string, p3?: string, p4?: string): void
+// | f1(**p1: string**, p2: string | null, p3?: string, p4?: string): void
 // | ----------------------------------------------------------------------
 //           ^
 // | ----------------------------------------------------------------------
-// | f1(p1: string, **p2: string**, p3?: string, p4?: string): void
+// | f1(p1: string, **p2: string | null**, p3?: string, p4?: string): void
 // | ----------------------------------------------------------------------
 //                  ^
 // | ----------------------------------------------------------------------
-// | f1(p1: string, p2: string, **p3?: string**, p4?: string): void
+// | f1(p1: string, p2: string | null, **p3?: string**, p4?: string): void
 // | ----------------------------------------------------------------------
 //                         ^
 // | ----------------------------------------------------------------------
-// | f1(p1: string, p2: string, p3?: string, **p4?: string**): void
+// | f1(p1: string, p2: string | null, p3?: string, **p4?: string**): void
 // | @param p1 - A string param
 // | @param p2 - An optional param
 // | @param p3 - Another optional param
@@ -132,6 +133,22 @@
                 },
                 {
                   "text": "string",
+                  "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "|",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "null",
                   "kind": "keyword"
                 }
               ],
@@ -389,6 +406,22 @@
                 {
                   "text": "string",
                   "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "|",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "null",
+                  "kind": "keyword"
                 }
               ],
               "isOptional": false,
@@ -645,6 +678,22 @@
                 {
                   "text": "string",
                   "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "|",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "null",
+                  "kind": "keyword"
                 }
               ],
               "isOptional": false,
@@ -900,6 +949,22 @@
                 },
                 {
                   "text": "string",
+                  "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "|",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "null",
                   "kind": "keyword"
                 }
               ],

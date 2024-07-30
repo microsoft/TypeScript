@@ -2,7 +2,7 @@
 
 // @BaselineFile: getEmitOutputDeclarationSingleFile.baseline
 // @declaration: true
-// @out: declSingleFile.js
+// @outFile: declSingleFile.js
 
 // @Filename: inputFile1.ts
 // @emitThisFile: true

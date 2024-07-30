@@ -4,8 +4,6 @@
 
 
 ==== /tsconfig.json (0 errors) ====
-    // moduleSuffixes has three entries, and the last one is blank. Module resolution should fail.
-    
     {
     	"compilerOptions": {
     		"moduleResolution": "node",

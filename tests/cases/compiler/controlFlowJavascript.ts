@@ -1,6 +1,6 @@
 // @allowJs: true
 // @Filename: controlFlowJavascript.js
-// @out: out.js
+// @outFile: out.js
 
 let cond = true;
 

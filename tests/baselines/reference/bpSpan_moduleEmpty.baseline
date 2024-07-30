@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/breakpointValidationModuleEmpty.ts] ////
 
+// === breakpoints ===
 
 1  >module Bar {
 

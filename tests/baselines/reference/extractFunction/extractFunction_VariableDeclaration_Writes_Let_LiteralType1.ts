@@ -10,7 +10,7 @@ function f() {
 
 function f() {
     let a = 1;
-    let x: 8 | 10 | 2 = /*RENAME*/newFunction();
+    let x: 0o10 | 10 | 0b10 = /*RENAME*/newFunction();
     a; x;
 
     function newFunction() {
@@ -23,7 +23,7 @@ function f() {
 
 function f() {
     let a = 1;
-    let x: (8 | 10 | 2) | undefined;
+    let x: (0o10 | 10 | 0b10) | undefined;
     ({ x, a } = /*RENAME*/newFunction(a));
     a; x;
 }

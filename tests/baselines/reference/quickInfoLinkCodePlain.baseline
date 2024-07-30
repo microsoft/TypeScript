@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoLinkCodePlain.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoLinkCodePlain.ts ===
 // export class C {
 //      /**

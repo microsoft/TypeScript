@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoDisplayPartsInterfaceMembers.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoDisplayPartsInterfaceMembers.ts ===
 // interface I {
 //     property: string;

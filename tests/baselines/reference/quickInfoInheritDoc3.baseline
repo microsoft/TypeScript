@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoInheritDoc3.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoInheritDoc3.ts ===
 // function getBaseClass() {
 //     return class Base {

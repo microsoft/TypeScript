@@ -11,7 +11,7 @@
 // --- (line: 7) skipped ---
 
 // === lib.d.ts ===
-// --- (line: 1310) skipped ---
+// --- (line: --) skipped ---
 //     slice(start?: number, end?: number): T[];
 // }
 // 
@@ -200,10 +200,10 @@
 // }|>
 // 
 // interface ArrayConstructor {
-//     new(arrayLength?: number): any[];
-// --- (line: 1500) skipped ---
+//     new (arrayLength?: number): any[];
+// --- (line: --) skipped ---
 
-// --- (line: 1505) skipped ---
+// --- (line: --) skipped ---
 //     readonly prototype: any[];
 // }
 // 
@@ -211,7 +211,7 @@
 // 
 // interface TypedPropertyDescriptor<T> {
 //     enumerable?: boolean;
-// --- (line: 1513) skipped ---
+// --- (line: --) skipped ---
 
   // === Details ===
   [
@@ -264,7 +264,7 @@
 // users3
 
 // === lib.d.ts ===
-// --- (line: 1310) skipped ---
+// --- (line: --) skipped ---
 //     slice(start?: number, end?: number): T[];
 // }
 // 
@@ -453,10 +453,10 @@
 // }|>
 // 
 // interface ArrayConstructor {
-//     new(arrayLength?: number): any[];
-// --- (line: 1500) skipped ---
+//     new (arrayLength?: number): any[];
+// --- (line: --) skipped ---
 
-// --- (line: 1505) skipped ---
+// --- (line: --) skipped ---
 //     readonly prototype: any[];
 // }
 // 
@@ -464,7 +464,7 @@
 // 
 // interface TypedPropertyDescriptor<T> {
 //     enumerable?: boolean;
-// --- (line: 1513) skipped ---
+// --- (line: --) skipped ---
 
   // === Details ===
   [

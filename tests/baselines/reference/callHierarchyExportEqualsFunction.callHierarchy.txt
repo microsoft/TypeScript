@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/callHierarchyExportEqualsFunction.ts] ////
 
+// === Call Hierarchy ===
 ╭ name: /tests/cases/fourslash/other.ts
 ├ kind: module
 ├ file: /tests/cases/fourslash/other.ts

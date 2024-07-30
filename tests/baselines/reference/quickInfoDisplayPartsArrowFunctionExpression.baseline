@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoDisplayPartsArrowFunctionExpression.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoDisplayPartsArrowFunctionExpression.ts ===
 // var x = a => 10;
 //     ^

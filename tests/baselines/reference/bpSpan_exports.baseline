@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/breakpointValidationExports.ts] ////
 
+// === breakpoints ===
 
 1  >export * from "a";
 

@@ -1,5 +1,7 @@
 //// [/tests/cases/fourslash/server/getJavaScriptSyntacticDiagnostics02.ts] ////
 
+// === Syntax and Semantic Diagnostics ===
+Syntactic Diagnostics:
 /tests/cases/fourslash/server/b.js(2,8): error TS8010: Type annotations can only be used in TypeScript files.
 /tests/cases/fourslash/server/b.js(3,17): error TS8010: Type annotations can only be used in TypeScript files.
 /tests/cases/fourslash/server/b.js(4,5): error TS1389: 'var' is not allowed as a variable declaration name.
@@ -23,6 +25,7 @@
               ~~~
 !!! error TS1134: Variable declaration expected.
 
+Semantic Diagnostics:
 
 
 ==== /tests/cases/fourslash/server/b.js (0 errors) ====

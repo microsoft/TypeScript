@@ -4,19 +4,26 @@
 /// <reference path="component.d.ts" />
 import BaseComponent from 'BaseComponent';
 >BaseComponent : typeof BaseComponent
+>              : ^^^^^^^^^^^^^^^^^^^^
 
 class TestComponent extends React.Component<any, {}> {
 >TestComponent : TestComponent
+>              : ^^^^^^^^^^^^^
 >React.Component : React.Component<any, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
 
     render() {
 >render : () => any
+>       : ^^^^^^^^^
 
         return <BaseComponent />;
 ><BaseComponent /> : error
 >BaseComponent : typeof BaseComponent
+>              : ^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -27,17 +34,23 @@ declare module JSX {
 }
 declare module React {
 >React : typeof React
+>      : ^^^^^^^^^^^^
 
   class Component<T, U> { }
 >Component : Component<T, U>
+>          : ^^^^^^^^^^^^^^^
 }
 declare module "BaseComponent" {
 >"BaseComponent" : typeof import("BaseComponent")
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     export default class extends React.Component<any, {}> {
 >React.Component : React.Component<any, {}>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
+>      : ^^^^^^^^^^^^
 >Component : typeof React.Component
+>          : ^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

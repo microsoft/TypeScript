@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/smartSelection_JSDoc.ts] ////
 
+// === Smart Selection ===
 // Not a JSDoc comment
 /**
  * @param {number} x The number to square

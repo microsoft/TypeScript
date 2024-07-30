@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/smartSelection_functionParams1.ts] ////
 
+// === Smart Selection ===
 function f(/**/p, q?, ...r: any[] = []) {}
 
            p                          

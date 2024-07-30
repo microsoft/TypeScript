@@ -8,10 +8,12 @@ export namespace ns {
 
         throttle(): Function<T>;
 >throttle : () => Function<T>
+>         : ^^^^^^           
     }
     interface Function<T> {
         unary(): Function<() => ReturnType<T>>;
 >unary : () => Function<() => ReturnType<T>>
+>      : ^^^^^^                             
     }
 }
 === regression.ts ===
@@ -19,11 +21,13 @@ export namespace ns {
     interface Function<T> {
         unary(): Function<() => ReturnType<T>>;
 >unary : () => Function<() => ReturnType<T>>
+>      : ^^^^^^                             
     }
     interface Function<T extends (...args: any) => any> {
 >args : any
 
         throttle(): Function<T>;
 >throttle : () => Function<T>
+>         : ^^^^^^           
     }
 }

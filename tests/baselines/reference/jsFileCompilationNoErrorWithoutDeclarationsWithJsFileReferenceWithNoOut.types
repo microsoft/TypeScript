@@ -3,6 +3,7 @@
 === a.ts ===
 class c {
 >c : c
+>  : ^
 }
 
 === b.ts ===
@@ -10,9 +11,11 @@ class c {
 // no error on above reference path since not emitting declarations
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 === c.js ===
 function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 }

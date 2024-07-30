@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoJsDocTagsFunctionOverload01.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoJsDocTagsFunctionOverload01.ts ===
 // /**
 //  * Doc foo

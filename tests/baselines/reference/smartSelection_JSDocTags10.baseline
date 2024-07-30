@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/smartSelection_JSDocTags10.ts] ////
 
+// === Smart Selection ===
 /**
  * @template T
  * @extends {/**/Set<T>}

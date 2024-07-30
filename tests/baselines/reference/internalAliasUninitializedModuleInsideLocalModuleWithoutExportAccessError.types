@@ -6,32 +6,46 @@ export module a {
         export interface I {
             foo();
 >foo : () => any
+>    : ^^^^^^^^^
         }
     }
 }
 
 export module c {
 >c : typeof c
+>  : ^^^^^^^^
 
     import b = a.b;
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 
     export var x: b.I;
 >x : b.I
+>  : ^^^
 >b : any
+>  : ^^^
 
     x.foo();
 >x.foo() : any
+>        : ^^^
 >x.foo : () => any
+>      : ^^^^^^^^^
 >x : b.I
+>  : ^^^
 >foo : () => any
+>    : ^^^^^^^^^
 }
 
 
 export var z: c.b.I;
 >z : c.b.I
+>  : ^^^^^
 >c : any
+>  : ^^^
 >b : any
+>  : ^^^
 

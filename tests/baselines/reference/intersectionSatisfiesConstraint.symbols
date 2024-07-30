@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/intersectionSatisfiesConstraint.ts] ////
+
+=== intersectionSatisfiesConstraint.ts ===
+interface FirstInterface {
+>FirstInterface : Symbol(FirstInterface, Decl(intersectionSatisfiesConstraint.ts, 0, 0))
+
+    commonProperty: number
+>commonProperty : Symbol(FirstInterface.commonProperty, Decl(intersectionSatisfiesConstraint.ts, 0, 26))
+}
+
+interface SecondInterface {
+>SecondInterface : Symbol(SecondInterface, Decl(intersectionSatisfiesConstraint.ts, 2, 1))
+
+    commonProperty: number
+>commonProperty : Symbol(SecondInterface.commonProperty, Decl(intersectionSatisfiesConstraint.ts, 4, 27))
+}
+
+const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) => {
+>myFirstFunction : Symbol(myFirstFunction, Decl(intersectionSatisfiesConstraint.ts, 8, 5))
+>T : Symbol(T, Decl(intersectionSatisfiesConstraint.ts, 8, 25))
+>FirstInterface : Symbol(FirstInterface, Decl(intersectionSatisfiesConstraint.ts, 0, 0))
+>SecondInterface : Symbol(SecondInterface, Decl(intersectionSatisfiesConstraint.ts, 2, 1))
+>param1 : Symbol(param1, Decl(intersectionSatisfiesConstraint.ts, 8, 69))
+>T : Symbol(T, Decl(intersectionSatisfiesConstraint.ts, 8, 25))
+
+    const newParam: T & { otherProperty: number } = Object.assign(param1, { otherProperty: 3 })
+>newParam : Symbol(newParam, Decl(intersectionSatisfiesConstraint.ts, 9, 9))
+>T : Symbol(T, Decl(intersectionSatisfiesConstraint.ts, 8, 25))
+>otherProperty : Symbol(otherProperty, Decl(intersectionSatisfiesConstraint.ts, 9, 25))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>param1 : Symbol(param1, Decl(intersectionSatisfiesConstraint.ts, 8, 69))
+>otherProperty : Symbol(otherProperty, Decl(intersectionSatisfiesConstraint.ts, 9, 75))
+
+    mySecondFunction(newParam)
+>mySecondFunction : Symbol(mySecondFunction, Decl(intersectionSatisfiesConstraint.ts, 13, 5))
+>newParam : Symbol(newParam, Decl(intersectionSatisfiesConstraint.ts, 9, 9))
+}
+
+const mySecondFunction = <T extends { commonProperty: number, otherProperty: number }>(newParam: T) => {
+>mySecondFunction : Symbol(mySecondFunction, Decl(intersectionSatisfiesConstraint.ts, 13, 5))
+>T : Symbol(T, Decl(intersectionSatisfiesConstraint.ts, 13, 26))
+>commonProperty : Symbol(commonProperty, Decl(intersectionSatisfiesConstraint.ts, 13, 37))
+>otherProperty : Symbol(otherProperty, Decl(intersectionSatisfiesConstraint.ts, 13, 61))
+>newParam : Symbol(newParam, Decl(intersectionSatisfiesConstraint.ts, 13, 87))
+>T : Symbol(T, Decl(intersectionSatisfiesConstraint.ts, 13, 26))
+
+    return newParam
+>newParam : Symbol(newParam, Decl(intersectionSatisfiesConstraint.ts, 13, 87))
+}
+

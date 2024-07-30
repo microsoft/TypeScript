@@ -2,6 +2,11 @@
 /// Window Iterable APIs
 /////////////////////////////
 
+interface AbortSignal {
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AbortSignal/any_static) */
+    any(signals: Iterable<AbortSignal>): AbortSignal;
+}
+
 interface AudioParam {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/AudioParam/setValueCurveAtTime) */
     setValueCurveAtTime(values: Iterable<number>, startTime: number, duration: number): AudioParam;
@@ -18,36 +23,36 @@ interface BaseAudioContext {
 }
 
 interface CSSKeyframesRule {
-    [Symbol.iterator](): IterableIterator<CSSKeyframeRule>;
+    [Symbol.iterator](): BuiltinIterator<CSSKeyframeRule, BuiltinIteratorReturn>;
 }
 
 interface CSSNumericArray {
-    [Symbol.iterator](): IterableIterator<CSSNumericValue>;
-    entries(): IterableIterator<[number, CSSNumericValue]>;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<CSSNumericValue>;
+    [Symbol.iterator](): BuiltinIterator<CSSNumericValue, BuiltinIteratorReturn>;
+    entries(): BuiltinIterator<[number, CSSNumericValue], BuiltinIteratorReturn>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
+    values(): BuiltinIterator<CSSNumericValue, BuiltinIteratorReturn>;
 }
 
 interface CSSRuleList {
-    [Symbol.iterator](): IterableIterator<CSSRule>;
+    [Symbol.iterator](): BuiltinIterator<CSSRule, BuiltinIteratorReturn>;
 }
 
 interface CSSStyleDeclaration {
-    [Symbol.iterator](): IterableIterator<string>;
+    [Symbol.iterator](): BuiltinIterator<string, BuiltinIteratorReturn>;
 }
 
 interface CSSTransformValue {
-    [Symbol.iterator](): IterableIterator<CSSTransformComponent>;
-    entries(): IterableIterator<[number, CSSTransformComponent]>;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<CSSTransformComponent>;
+    [Symbol.iterator](): BuiltinIterator<CSSTransformComponent, BuiltinIteratorReturn>;
+    entries(): BuiltinIterator<[number, CSSTransformComponent], BuiltinIteratorReturn>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
+    values(): BuiltinIterator<CSSTransformComponent, BuiltinIteratorReturn>;
 }
 
 interface CSSUnparsedValue {
-    [Symbol.iterator](): IterableIterator<CSSUnparsedSegment>;
-    entries(): IterableIterator<[number, CSSUnparsedSegment]>;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<CSSUnparsedSegment>;
+    [Symbol.iterator](): BuiltinIterator<CSSUnparsedSegment, BuiltinIteratorReturn>;
+    entries(): BuiltinIterator<[number, CSSUnparsedSegment], BuiltinIteratorReturn>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
+    values(): BuiltinIterator<CSSUnparsedSegment, BuiltinIteratorReturn>;
 }
 
 interface Cache {
@@ -65,73 +70,82 @@ interface CanvasPathDrawingStyles {
     setLineDash(segments: Iterable<number>): void;
 }
 
+interface CustomStateSet extends Set<string> {
+}
+
 interface DOMRectList {
-    [Symbol.iterator](): IterableIterator<DOMRect>;
+    [Symbol.iterator](): BuiltinIterator<DOMRect, BuiltinIteratorReturn>;
 }
 
 interface DOMStringList {
-    [Symbol.iterator](): IterableIterator<string>;
+    [Symbol.iterator](): BuiltinIterator<string, BuiltinIteratorReturn>;
 }
 
 interface DOMTokenList {
-    [Symbol.iterator](): IterableIterator<string>;
-    entries(): IterableIterator<[number, string]>;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<string>;
+    [Symbol.iterator](): BuiltinIterator<string, BuiltinIteratorReturn>;
+    entries(): BuiltinIterator<[number, string], BuiltinIteratorReturn>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
+    values(): BuiltinIterator<string, BuiltinIteratorReturn>;
 }
 
 interface DataTransferItemList {
-    [Symbol.iterator](): IterableIterator<DataTransferItem>;
+    [Symbol.iterator](): BuiltinIterator<DataTransferItem, BuiltinIteratorReturn>;
 }
 
 interface EventCounts extends ReadonlyMap<string, number> {
 }
 
 interface FileList {
-    [Symbol.iterator](): IterableIterator<File>;
+    [Symbol.iterator](): BuiltinIterator<File, BuiltinIteratorReturn>;
 }
 
 interface FontFaceSet extends Set<FontFace> {
 }
 
 interface FormData {
-    [Symbol.iterator](): IterableIterator<[string, FormDataEntryValue]>;
+    [Symbol.iterator](): BuiltinIterator<[string, FormDataEntryValue], BuiltinIteratorReturn>;
     /** Returns an array of key, value pairs for every entry in the list. */
-    entries(): IterableIterator<[string, FormDataEntryValue]>;
+    entries(): BuiltinIterator<[string, FormDataEntryValue], BuiltinIteratorReturn>;
     /** Returns a list of keys in the list. */
-    keys(): IterableIterator<string>;
+    keys(): BuiltinIterator<string, BuiltinIteratorReturn>;
     /** Returns a list of values in the list. */
-    values(): IterableIterator<FormDataEntryValue>;
+    values(): BuiltinIterator<FormDataEntryValue, BuiltinIteratorReturn>;
 }
 
 interface HTMLAllCollection {
-    [Symbol.iterator](): IterableIterator<Element>;
+    [Symbol.iterator](): BuiltinIterator<Element, BuiltinIteratorReturn>;
 }
 
 interface HTMLCollectionBase {
-    [Symbol.iterator](): IterableIterator<Element>;
+    [Symbol.iterator](): BuiltinIterator<Element, BuiltinIteratorReturn>;
 }
 
 interface HTMLCollectionOf<T extends Element> {
-    [Symbol.iterator](): IterableIterator<T>;
+    [Symbol.iterator](): BuiltinIterator<T, BuiltinIteratorReturn>;
 }
 
 interface HTMLFormElement {
-    [Symbol.iterator](): IterableIterator<Element>;
+    [Symbol.iterator](): BuiltinIterator<Element, BuiltinIteratorReturn>;
 }
 
 interface HTMLSelectElement {
-    [Symbol.iterator](): IterableIterator<HTMLOptionElement>;
+    [Symbol.iterator](): BuiltinIterator<HTMLOptionElement, BuiltinIteratorReturn>;
 }
 
 interface Headers {
-    [Symbol.iterator](): IterableIterator<[string, string]>;
+    [Symbol.iterator](): BuiltinIterator<[string, string], BuiltinIteratorReturn>;
     /** Returns an iterator allowing to go through all key/value pairs contained in this object. */
-    entries(): IterableIterator<[string, string]>;
+    entries(): BuiltinIterator<[string, string], BuiltinIteratorReturn>;
     /** Returns an iterator allowing to go through all keys of the key/value pairs contained in this object. */
-    keys(): IterableIterator<string>;
+    keys(): BuiltinIterator<string, BuiltinIteratorReturn>;
     /** Returns an iterator allowing to go through all values of the key/value pairs contained in this object. */
-    values(): IterableIterator<string>;
+    values(): BuiltinIterator<string, BuiltinIteratorReturn>;
+}
+
+interface Highlight extends Set<AbstractRange> {
+}
+
+interface HighlightRegistry extends Map<string, Highlight> {
 }
 
 interface IDBDatabase {
@@ -166,31 +180,27 @@ interface MIDIOutputMap extends ReadonlyMap<string, MIDIOutput> {
 }
 
 interface MediaKeyStatusMap {
-    [Symbol.iterator](): IterableIterator<[BufferSource, MediaKeyStatus]>;
-    entries(): IterableIterator<[BufferSource, MediaKeyStatus]>;
-    keys(): IterableIterator<BufferSource>;
-    values(): IterableIterator<MediaKeyStatus>;
+    [Symbol.iterator](): BuiltinIterator<[BufferSource, MediaKeyStatus], BuiltinIteratorReturn>;
+    entries(): BuiltinIterator<[BufferSource, MediaKeyStatus], BuiltinIteratorReturn>;
+    keys(): BuiltinIterator<BufferSource, BuiltinIteratorReturn>;
+    values(): BuiltinIterator<MediaKeyStatus, BuiltinIteratorReturn>;
 }
 
 interface MediaList {
-    [Symbol.iterator](): IterableIterator<string>;
+    [Symbol.iterator](): BuiltinIterator<string, BuiltinIteratorReturn>;
 }
 
 interface MessageEvent<T = any> {
-    /**
-     * @deprecated
-     *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/MessageEvent/initMessageEvent)
-     */
+    /** @deprecated */
     initMessageEvent(type: string, bubbles?: boolean, cancelable?: boolean, data?: any, origin?: string, lastEventId?: string, source?: MessageEventSource | null, ports?: Iterable<MessagePort>): void;
 }
 
 interface MimeTypeArray {
-    [Symbol.iterator](): IterableIterator<MimeType>;
+    [Symbol.iterator](): BuiltinIterator<MimeType, BuiltinIteratorReturn>;
 }
 
 interface NamedNodeMap {
-    [Symbol.iterator](): IterableIterator<Attr>;
+    [Symbol.iterator](): BuiltinIterator<Attr, BuiltinIteratorReturn>;
 }
 
 interface Navigator {
@@ -205,88 +215,89 @@ interface Navigator {
 }
 
 interface NodeList {
-    [Symbol.iterator](): IterableIterator<Node>;
+    [Symbol.iterator](): BuiltinIterator<Node, BuiltinIteratorReturn>;
     /** Returns an array of key, value pairs for every entry in the list. */
-    entries(): IterableIterator<[number, Node]>;
+    entries(): BuiltinIterator<[number, Node], BuiltinIteratorReturn>;
     /** Returns an list of keys in the list. */
-    keys(): IterableIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
     /** Returns an list of values in the list. */
-    values(): IterableIterator<Node>;
+    values(): BuiltinIterator<Node, BuiltinIteratorReturn>;
 }
 
 interface NodeListOf<TNode extends Node> {
-    [Symbol.iterator](): IterableIterator<TNode>;
+    [Symbol.iterator](): BuiltinIterator<TNode, BuiltinIteratorReturn>;
     /** Returns an array of key, value pairs for every entry in the list. */
-    entries(): IterableIterator<[number, TNode]>;
+    entries(): BuiltinIterator<[number, TNode], BuiltinIteratorReturn>;
     /** Returns an list of keys in the list. */
-    keys(): IterableIterator<number>;
+    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
     /** Returns an list of values in the list. */
-    values(): IterableIterator<TNode>;
+    values(): BuiltinIterator<TNode, BuiltinIteratorReturn>;
 }
 
 interface Plugin {
-    [Symbol.iterator](): IterableIterator<MimeType>;
+    [Symbol.iterator](): BuiltinIterator<MimeType, BuiltinIteratorReturn>;
 }
 
 interface PluginArray {
-    [Symbol.iterator](): IterableIterator<Plugin>;
+    [Symbol.iterator](): BuiltinIterator<Plugin, BuiltinIteratorReturn>;
 }
 
 interface RTCRtpTransceiver {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/RTCRtpTransceiver/setCodecPreferences) */
-    setCodecPreferences(codecs: Iterable<RTCRtpCodecCapability>): void;
+    setCodecPreferences(codecs: Iterable<RTCRtpCodec>): void;
 }
 
 interface RTCStatsReport extends ReadonlyMap<string, any> {
 }
 
 interface SVGLengthList {
-    [Symbol.iterator](): IterableIterator<SVGLength>;
+    [Symbol.iterator](): BuiltinIterator<SVGLength, BuiltinIteratorReturn>;
 }
 
 interface SVGNumberList {
-    [Symbol.iterator](): IterableIterator<SVGNumber>;
+    [Symbol.iterator](): BuiltinIterator<SVGNumber, BuiltinIteratorReturn>;
 }
 
 interface SVGPointList {
-    [Symbol.iterator](): IterableIterator<DOMPoint>;
+    [Symbol.iterator](): BuiltinIterator<DOMPoint, BuiltinIteratorReturn>;
 }
 
 interface SVGStringList {
-    [Symbol.iterator](): IterableIterator<string>;
+    [Symbol.iterator](): BuiltinIterator<string, BuiltinIteratorReturn>;
 }
 
 interface SVGTransformList {
-    [Symbol.iterator](): IterableIterator<SVGTransform>;
+    [Symbol.iterator](): BuiltinIterator<SVGTransform, BuiltinIteratorReturn>;
 }
 
 interface SourceBufferList {
-    [Symbol.iterator](): IterableIterator<SourceBuffer>;
+    [Symbol.iterator](): BuiltinIterator<SourceBuffer, BuiltinIteratorReturn>;
 }
 
 interface SpeechRecognitionResult {
-    [Symbol.iterator](): IterableIterator<SpeechRecognitionAlternative>;
+    [Symbol.iterator](): BuiltinIterator<SpeechRecognitionAlternative, BuiltinIteratorReturn>;
 }
 
 interface SpeechRecognitionResultList {
-    [Symbol.iterator](): IterableIterator<SpeechRecognitionResult>;
+    [Symbol.iterator](): BuiltinIterator<SpeechRecognitionResult, BuiltinIteratorReturn>;
 }
 
 interface StylePropertyMapReadOnly {
-    [Symbol.iterator](): IterableIterator<[string, Iterable<CSSStyleValue>]>;
-    entries(): IterableIterator<[string, Iterable<CSSStyleValue>]>;
-    keys(): IterableIterator<string>;
-    values(): IterableIterator<Iterable<CSSStyleValue>>;
+    [Symbol.iterator](): BuiltinIterator<[string, Iterable<CSSStyleValue>], BuiltinIteratorReturn>;
+    entries(): BuiltinIterator<[string, Iterable<CSSStyleValue>], BuiltinIteratorReturn>;
+    keys(): BuiltinIterator<string, BuiltinIteratorReturn>;
+    values(): BuiltinIterator<Iterable<CSSStyleValue>, BuiltinIteratorReturn>;
 }
 
 interface StyleSheetList {
-    [Symbol.iterator](): IterableIterator<CSSStyleSheet>;
+    [Symbol.iterator](): BuiltinIterator<CSSStyleSheet, BuiltinIteratorReturn>;
 }
 
 interface SubtleCrypto {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/deriveKey) */
     deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | AesDerivedKeyParams | HmacImportParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/SubtleCrypto/generateKey) */
+    generateKey(algorithm: "Ed25519", extractable: boolean, keyUsages: ReadonlyArray<"sign" | "verify">): Promise<CryptoKeyPair>;
     generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKeyPair>;
     generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey>;
     generateKey(algorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKeyPair | CryptoKey>;
@@ -298,25 +309,25 @@ interface SubtleCrypto {
 }
 
 interface TextTrackCueList {
-    [Symbol.iterator](): IterableIterator<TextTrackCue>;
+    [Symbol.iterator](): BuiltinIterator<TextTrackCue, BuiltinIteratorReturn>;
 }
 
 interface TextTrackList {
-    [Symbol.iterator](): IterableIterator<TextTrack>;
+    [Symbol.iterator](): BuiltinIterator<TextTrack, BuiltinIteratorReturn>;
 }
 
 interface TouchList {
-    [Symbol.iterator](): IterableIterator<Touch>;
+    [Symbol.iterator](): BuiltinIterator<Touch, BuiltinIteratorReturn>;
 }
 
 interface URLSearchParams {
-    [Symbol.iterator](): IterableIterator<[string, string]>;
+    [Symbol.iterator](): BuiltinIterator<[string, string], BuiltinIteratorReturn>;
     /** Returns an array of key, value pairs for every entry in the search params. */
-    entries(): IterableIterator<[string, string]>;
+    entries(): BuiltinIterator<[string, string], BuiltinIteratorReturn>;
     /** Returns a list of keys in the search params. */
-    keys(): IterableIterator<string>;
+    keys(): BuiltinIterator<string, BuiltinIteratorReturn>;
     /** Returns a list of values in the search params. */
-    values(): IterableIterator<string>;
+    values(): BuiltinIterator<string, BuiltinIteratorReturn>;
 }
 
 interface WEBGL_draw_buffers {
@@ -326,22 +337,22 @@ interface WEBGL_draw_buffers {
 
 interface WEBGL_multi_draw {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysInstancedWEBGL) */
-    multiDrawArraysInstancedWEBGL(mode: GLenum, firstsList: Int32Array | Iterable<GLint>, firstsOffset: GLuint, countsList: Int32Array | Iterable<GLsizei>, countsOffset: GLuint, instanceCountsList: Int32Array | Iterable<GLsizei>, instanceCountsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawArraysInstancedWEBGL(mode: GLenum, firstsList: Int32Array | Iterable<GLint>, firstsOffset: number, countsList: Int32Array | Iterable<GLsizei>, countsOffset: number, instanceCountsList: Int32Array | Iterable<GLsizei>, instanceCountsOffset: number, drawcount: GLsizei): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawArraysWEBGL) */
-    multiDrawArraysWEBGL(mode: GLenum, firstsList: Int32Array | Iterable<GLint>, firstsOffset: GLuint, countsList: Int32Array | Iterable<GLsizei>, countsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawArraysWEBGL(mode: GLenum, firstsList: Int32Array | Iterable<GLint>, firstsOffset: number, countsList: Int32Array | Iterable<GLsizei>, countsOffset: number, drawcount: GLsizei): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsInstancedWEBGL) */
-    multiDrawElementsInstancedWEBGL(mode: GLenum, countsList: Int32Array | Iterable<GLsizei>, countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | Iterable<GLsizei>, offsetsOffset: GLuint, instanceCountsList: Int32Array | Iterable<GLsizei>, instanceCountsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawElementsInstancedWEBGL(mode: GLenum, countsList: Int32Array | Iterable<GLsizei>, countsOffset: number, type: GLenum, offsetsList: Int32Array | Iterable<GLsizei>, offsetsOffset: number, instanceCountsList: Int32Array | Iterable<GLsizei>, instanceCountsOffset: number, drawcount: GLsizei): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WEBGL_multi_draw/multiDrawElementsWEBGL) */
-    multiDrawElementsWEBGL(mode: GLenum, countsList: Int32Array | Iterable<GLsizei>, countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | Iterable<GLsizei>, offsetsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawElementsWEBGL(mode: GLenum, countsList: Int32Array | Iterable<GLsizei>, countsOffset: number, type: GLenum, offsetsList: Int32Array | Iterable<GLsizei>, offsetsOffset: number, drawcount: GLsizei): void;
 }
 
 interface WebGL2RenderingContextBase {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) */
-    clearBufferfv(buffer: GLenum, drawbuffer: GLint, values: Iterable<GLfloat>, srcOffset?: GLuint): void;
+    clearBufferfv(buffer: GLenum, drawbuffer: GLint, values: Iterable<GLfloat>, srcOffset?: number): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) */
-    clearBufferiv(buffer: GLenum, drawbuffer: GLint, values: Iterable<GLint>, srcOffset?: GLuint): void;
+    clearBufferiv(buffer: GLenum, drawbuffer: GLint, values: Iterable<GLint>, srcOffset?: number): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/clearBuffer) */
-    clearBufferuiv(buffer: GLenum, drawbuffer: GLint, values: Iterable<GLuint>, srcOffset?: GLuint): void;
+    clearBufferuiv(buffer: GLenum, drawbuffer: GLint, values: Iterable<GLuint>, srcOffset?: number): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/drawBuffers) */
     drawBuffers(buffers: Iterable<GLenum>): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/getActiveUniforms) */
@@ -355,25 +366,25 @@ interface WebGL2RenderingContextBase {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/transformFeedbackVaryings) */
     transformFeedbackVaryings(program: WebGLProgram, varyings: Iterable<string>, bufferMode: GLenum): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) */
-    uniform1uiv(location: WebGLUniformLocation | null, data: Iterable<GLuint>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform1uiv(location: WebGLUniformLocation | null, data: Iterable<GLuint>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) */
-    uniform2uiv(location: WebGLUniformLocation | null, data: Iterable<GLuint>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform2uiv(location: WebGLUniformLocation | null, data: Iterable<GLuint>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) */
-    uniform3uiv(location: WebGLUniformLocation | null, data: Iterable<GLuint>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform3uiv(location: WebGLUniformLocation | null, data: Iterable<GLuint>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniform) */
-    uniform4uiv(location: WebGLUniformLocation | null, data: Iterable<GLuint>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform4uiv(location: WebGLUniformLocation | null, data: Iterable<GLuint>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) */
-    uniformMatrix2x3fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix2x3fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) */
-    uniformMatrix2x4fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix2x4fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) */
-    uniformMatrix3x2fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix3x2fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) */
-    uniformMatrix3x4fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix3x4fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) */
-    uniformMatrix4x2fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix4x2fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/uniformMatrix) */
-    uniformMatrix4x3fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix4x3fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI) */
     vertexAttribI4iv(index: GLuint, values: Iterable<GLint>): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGL2RenderingContext/vertexAttribI) */
@@ -382,27 +393,27 @@ interface WebGL2RenderingContextBase {
 
 interface WebGL2RenderingContextOverloads {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) */
-    uniform1fv(location: WebGLUniformLocation | null, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform1fv(location: WebGLUniformLocation | null, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) */
-    uniform1iv(location: WebGLUniformLocation | null, data: Iterable<GLint>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform1iv(location: WebGLUniformLocation | null, data: Iterable<GLint>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) */
-    uniform2fv(location: WebGLUniformLocation | null, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform2fv(location: WebGLUniformLocation | null, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) */
-    uniform2iv(location: WebGLUniformLocation | null, data: Iterable<GLint>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform2iv(location: WebGLUniformLocation | null, data: Iterable<GLint>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) */
-    uniform3fv(location: WebGLUniformLocation | null, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform3fv(location: WebGLUniformLocation | null, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) */
-    uniform3iv(location: WebGLUniformLocation | null, data: Iterable<GLint>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform3iv(location: WebGLUniformLocation | null, data: Iterable<GLint>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) */
-    uniform4fv(location: WebGLUniformLocation | null, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform4fv(location: WebGLUniformLocation | null, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniform) */
-    uniform4iv(location: WebGLUniformLocation | null, data: Iterable<GLint>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniform4iv(location: WebGLUniformLocation | null, data: Iterable<GLint>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) */
-    uniformMatrix2fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix2fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) */
-    uniformMatrix3fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix3fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/WebGLRenderingContext/uniformMatrix) */
-    uniformMatrix4fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: GLuint, srcLength?: GLuint): void;
+    uniformMatrix4fv(location: WebGLUniformLocation | null, transpose: GLboolean, data: Iterable<GLfloat>, srcOffset?: number, srcLength?: GLuint): void;
 }
 
 interface WebGLRenderingContextBase {

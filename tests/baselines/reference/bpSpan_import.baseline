@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/breakpointValidationImport.ts] ////
 
+// === breakpoints ===
 
 1  >module m {
 

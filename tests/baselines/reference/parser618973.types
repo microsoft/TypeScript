@@ -3,8 +3,10 @@
 === parser618973.ts ===
 export export class Foo {
 >Foo : Foo
+>    : ^^^
 
   public Bar() {
 >Bar : () => void
+>    : ^^^^^^^^^^
   }
 }

@@ -25,33 +25,33 @@ import {
     IScriptSnapshot,
     isString,
     LineInfo,
+    missingFileModifiedTime,
+    orderedRemoveItem,
     Path,
     ScriptKind,
     ScriptSnapshot,
     some,
     SourceFile,
     SourceFileLike,
-    stringContains,
     TextSpan,
-    unorderedRemoveItem,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     AbsolutePositionAndLineText,
     ConfiguredProject,
     Errors,
-    ExternalProject,
     InferredProject,
+    isBackgroundProject,
     isConfiguredProject,
     isExternalProject,
     isInferredProject,
+    isProjectDeferredClose,
     maxFileSize,
     NormalizedPath,
     Project,
-    ProjectKind,
     ScriptVersionCache,
     ServerHost,
-} from "./_namespaces/ts.server";
-import * as protocol from "./protocol";
+} from "./_namespaces/ts.server.js";
+import * as protocol from "./protocol.js";
 
 /** @internal */
 export class TextStorage {
@@ -94,7 +94,7 @@ export class TextStorage {
     /**
      * True when reloading contents of file from the disk is pending
      */
-    private pendingReloadFromDisk = false;
+    pendingReloadFromDisk = false;
 
     constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: number) {
         this.version = initialVersion || 0;
@@ -181,6 +181,14 @@ export class TextStorage {
         const reloaded = this.reload(newText);
         this.fileSize = fileSize; // NB: after reload since reload clears it
         this.ownFileText = !tempFileName || tempFileName === this.info.fileName;
+        // In case we update this text before mTime gets updated to present file modified time
+        // because its schedule to do that later, update the mTime so we dont re-update the text
+        // Eg. with npm ci where file gets created and editor calls say get error request before
+        // the timeout to update the file stamps in node_modules is run
+        // Test:: watching npm install in codespaces where workspaces folder is hosted at root
+        if (this.ownFileText && this.info.mTime === missingFileModifiedTime.getTime()) {
+            this.info.mTime = (this.host.getModifiedTime!(this.info.fileName) || missingFileModifiedTime).getTime();
+        }
         return reloaded;
     }
 
@@ -209,10 +217,10 @@ export class TextStorage {
         return !!this.fileSize
             ? this.fileSize
             : !!this.text // Check text before svc because its length is cheaper
-                ? this.text.length // Could be wrong if this.pendingReloadFromDisk
-                : !!this.svc
-                    ? this.svc.getSnapshot().getLength() // Could be wrong if this.pendingReloadFromDisk
-                    : this.getSnapshot().getLength(); // Should be strictly correct
+            ? this.text.length // Could be wrong if this.pendingReloadFromDisk
+            : !!this.svc
+            ? this.svc.getSnapshot().getLength() // Could be wrong if this.pendingReloadFromDisk
+            : this.getSnapshot().getLength(); // Should be strictly correct
     }
 
     public getSnapshot(): IScriptSnapshot {
@@ -264,7 +272,7 @@ export class TextStorage {
         return { line: line + 1, offset: character + 1 };
     }
 
-    private getFileTextAndSize(tempFileName?: string): { text: string, fileSize?: number } {
+    private getFileTextAndSize(tempFileName?: string): { text: string; fileSize?: number; } {
         let text: string;
         const fileName = tempFileName || this.info.fileName;
         const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
@@ -329,7 +337,7 @@ export class TextStorage {
         if (svc) {
             return {
                 getLineCount: () => svc.getLineCount(),
-                getLineText: line => svc.getAbsolutePositionAndLineText(line + 1).lineText!
+                getLineText: line => svc.getAbsolutePositionAndLineText(line + 1).lineText!,
             };
         }
         const lineMap = this.getLineMap();
@@ -339,9 +347,9 @@ export class TextStorage {
 
 export function isDynamicFileName(fileName: NormalizedPath) {
     return fileName[0] === "^" ||
-        ((stringContains(fileName, "walkThroughSnippet:/") || stringContains(fileName, "untitled:/")) &&
+        ((fileName.includes("walkThroughSnippet:/") || fileName.includes("untitled:/")) &&
             getBaseFileName(fileName)[0] === "^") ||
-        (stringContains(fileName, ":^") && !stringContains(fileName, directorySeparator));
+        (fileName.includes(":^") && !fileName.includes(directorySeparator));
 }
 
 /** @internal */
@@ -374,8 +382,6 @@ export class ScriptInfo {
 
     /**
      * Set to real path if path is different from info.path
-     *
-     * @internal
      */
     private realpath: Path | undefined;
 
@@ -399,13 +405,17 @@ export class ScriptInfo {
     /** @internal */
     documentPositionMapper?: DocumentPositionMapper | false;
 
+    /** @internal */
+    deferredDelete?: boolean;
+
     constructor(
         private readonly host: ServerHost,
         readonly fileName: NormalizedPath,
         readonly scriptKind: ScriptKind,
         public readonly hasMixedContent: boolean,
         readonly path: Path,
-        initialVersion?: number) {
+        initialVersion?: number,
+    ) {
         this.isDynamic = isDynamicFileName(fileName);
 
         this.textStorage = new TextStorage(host, this, initialVersion);
@@ -428,8 +438,10 @@ export class ScriptInfo {
 
     public open(newText: string | undefined) {
         this.textStorage.isOpen = true;
-        if (newText !== undefined &&
-            this.textStorage.reload(newText)) {
+        if (
+            newText !== undefined &&
+            this.textStorage.reload(newText)
+        ) {
             // reload new contents only if the existing contents changed
             this.markContainingProjectsAsDirty();
         }
@@ -479,8 +491,12 @@ export class ScriptInfo {
         return this.realpath && this.realpath !== this.path;
     }
 
-    getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
-    getPreferences(): protocol.UserPreferences | undefined { return this.preferences; }
+    getFormatCodeSettings(): FormatCodeSettings | undefined {
+        return this.formatSettings;
+    }
+    getPreferences(): protocol.UserPreferences | undefined {
+        return this.preferences;
+    }
 
     attachToProject(project: Project): boolean {
         const isNew = !this.isAttached(project);
@@ -497,10 +513,14 @@ export class ScriptInfo {
     isAttached(project: Project) {
         // unrolled for common cases
         switch (this.containingProjects.length) {
-            case 0: return false;
-            case 1: return this.containingProjects[0] === project;
-            case 2: return this.containingProjects[0] === project || this.containingProjects[1] === project;
-            default: return contains(this.containingProjects, project);
+            case 0:
+                return false;
+            case 1:
+                return this.containingProjects[0] === project;
+            case 2:
+                return this.containingProjects[0] === project || this.containingProjects[1] === project;
+            default:
+                return contains(this.containingProjects, project);
         }
     }
 
@@ -526,7 +546,8 @@ export class ScriptInfo {
                 }
                 break;
             default:
-                if (unorderedRemoveItem(this.containingProjects, project)) {
+                // We use first configured project as default so we shouldnt change the order of the containing projects
+                if (orderedRemoveItem(this.containingProjects, project)) {
                     project.onFileAddedOrRemoved(this.isSymlink());
                 }
                 break;
@@ -556,15 +577,16 @@ export class ScriptInfo {
             case 0:
                 return Errors.ThrowNoProject();
             case 1:
-                return ensurePrimaryProjectKind(this.containingProjects[0]);
+                return isProjectDeferredClose(this.containingProjects[0]) || isBackgroundProject(this.containingProjects[0]) ?
+                    Errors.ThrowNoProject() :
+                    this.containingProjects[0];
             default:
                 // If this file belongs to multiple projects, below is the order in which default project is used
+                // - first external project
                 // - for open script info, its default configured project during opening is default if info is part of it
                 // - first configured project of which script info is not a source of project reference redirect
                 // - first configured project
-                // - first external project
                 // - first inferred project
-                let firstExternalProject: ExternalProject | undefined;
                 let firstConfiguredProject: ConfiguredProject | undefined;
                 let firstInferredProject: InferredProject | undefined;
                 let firstNonSourceOfProjectReferenceRedirect: ConfiguredProject | undefined;
@@ -572,11 +594,14 @@ export class ScriptInfo {
                 for (let index = 0; index < this.containingProjects.length; index++) {
                     const project = this.containingProjects[index];
                     if (isConfiguredProject(project)) {
+                        if (project.deferredClose) continue;
                         if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) {
                             // If we havent found default configuredProject and
                             // its not the last one, find it and use that one if there
-                            if (defaultConfiguredProject === undefined &&
-                                index !== this.containingProjects.length - 1) {
+                            if (
+                                defaultConfiguredProject === undefined &&
+                                index !== this.containingProjects.length - 1
+                            ) {
                                 defaultConfiguredProject = project.projectService.findDefaultConfiguredProject(this) || false;
                             }
                             if (defaultConfiguredProject === project) return project;
@@ -584,18 +609,17 @@ export class ScriptInfo {
                         }
                         if (!firstConfiguredProject) firstConfiguredProject = project;
                     }
-                    else if (!firstExternalProject && isExternalProject(project)) {
-                        firstExternalProject = project;
+                    else if (isExternalProject(project)) {
+                        return project;
                     }
                     else if (!firstInferredProject && isInferredProject(project)) {
                         firstInferredProject = project;
                     }
                 }
-                return ensurePrimaryProjectKind(defaultConfiguredProject ||
+                return (defaultConfiguredProject ||
                     firstNonSourceOfProjectReferenceRedirect ||
                     firstConfiguredProject ||
-                    firstExternalProject ||
-                    firstInferredProject);
+                    firstInferredProject) ?? Errors.ThrowNoProject();
         }
     }
 
@@ -661,14 +685,15 @@ export class ScriptInfo {
     }
 
     isOrphan() {
-        return !forEach(this.containingProjects, p => !p.isOrphan());
+        return this.deferredDelete || !forEach(this.containingProjects, p => !p.isOrphan());
     }
 
     /** @internal */
     isContainedByBackgroundProject() {
         return some(
             this.containingProjects,
-            p => p.projectKind === ProjectKind.AutoImportProvider || p.projectKind === ProjectKind.Auxiliary);
+            isBackgroundProject,
+        );
     }
 
     /**
@@ -707,18 +732,6 @@ export class ScriptInfo {
             this.sourceMapFilePath = undefined;
         }
     }
-}
-
-/**
- * Throws an error if `project` is an AutoImportProvider or AuxiliaryProject,
- * which are used in the background by other Projects and should never be
- * reported as the default project for a ScriptInfo.
- */
-function ensurePrimaryProjectKind(project: Project | undefined) {
-    if (!project || project.projectKind === ProjectKind.AutoImportProvider || project.projectKind === ProjectKind.Auxiliary) {
-        return Errors.ThrowNoProject();
-    }
-    return project;
 }
 
 function failIfInvalidPosition(position: number) {

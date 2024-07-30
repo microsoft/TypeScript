@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoInheritDoc5.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoInheritDoc5.js ===
 // function A() {}
 // 

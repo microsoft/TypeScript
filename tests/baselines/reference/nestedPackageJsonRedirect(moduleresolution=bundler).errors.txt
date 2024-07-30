@@ -1,9 +1,9 @@
 //// [tests/cases/conformance/moduleResolution/nestedPackageJsonRedirect.ts] ////
 
-error TS5095: Option 'bundler' can only be used when 'module' is set to 'es2015' or later.
+error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
 
 
-!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'es2015' or later.
+!!! error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
 ==== /node_modules/@restart/hooks/package.json (0 errors) ====
     {
         "name": "@restart/hooks",

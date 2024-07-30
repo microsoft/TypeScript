@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/smartSelection_comment2.ts] ////
 
+// === Smart Selection ===
 const a = 1; //a b/**/c d
 
                a bc d

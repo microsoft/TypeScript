@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoDisplayPartsFunctionIncomplete.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoDisplayPartsFunctionIncomplete.ts ===
 // function (param: string) {
 // ^^^^^^^^

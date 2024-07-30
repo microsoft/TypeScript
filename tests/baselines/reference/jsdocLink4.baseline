@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/jsdocLink4.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/jsdocLink4.ts ===
 // declare class I {
 //   /** {@link I} */

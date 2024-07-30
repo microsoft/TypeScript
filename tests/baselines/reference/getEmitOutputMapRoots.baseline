@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/getEmitOutputMapRoot.ts] ////
 
+// === EmitOutput ===
 EmitSkipped: false
 
 FileName : declSingleFile.js.map

@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/signatureHelpAfterParameter.ts] ////
 
+// === SignatureHelp ===
 === /tests/cases/fourslash/signatureHelpAfterParameter.ts ===
 // type Type = (a, b, c) => void
 // const a: Type = (a, b) => {}

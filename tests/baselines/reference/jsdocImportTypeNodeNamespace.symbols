@@ -1,13 +1,11 @@
 //// [tests/cases/compiler/jsdocImportTypeNodeNamespace.ts] ////
 
 === GeometryType.d.ts ===
-// #40767
-
 declare namespace _default {
 >_default : Symbol(_default, Decl(GeometryType.d.ts, 0, 0))
 
   export const POINT: string;
->POINT : Symbol(POINT, Decl(GeometryType.d.ts, 3, 14))
+>POINT : Symbol(POINT, Decl(GeometryType.d.ts, 1, 14))
 }
 export default _default;
 >_default : Symbol(_default, Decl(GeometryType.d.ts, 0, 0))

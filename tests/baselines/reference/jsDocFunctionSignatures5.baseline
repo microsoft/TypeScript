@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/jsDocFunctionSignatures5.ts] ////
 
+// === SignatureHelp ===
 === /tests/cases/fourslash/Foo.js ===
 // /**
 //  * Filters a path based on a regexp or glob pattern.

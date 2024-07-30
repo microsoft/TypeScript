@@ -1,5 +1,7 @@
 //// [/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics14.ts] ////
 
+// === Syntax Diagnostics ===
+Syntactic Diagnostics:
 /tests/cases/fourslash/a.js(1,13): error TS1109: Expression expected.
 
 

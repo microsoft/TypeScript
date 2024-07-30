@@ -1,0 +1,7 @@
+//// [/tests/cases/fourslash/goToDefinitionJsDocImportTag2.ts] ////
+
+// === goToDefinition ===
+// === /a.js ===
+// /**
+//  * @import { A } from/*GOTO DEF*/       "./b"
+//  */

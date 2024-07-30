@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoSatisfiesTag.ts] ////
 
+// === QuickInfo ===
 === /a.js ===
 // /** @satisfies {number} comment */
 // const a = 1;

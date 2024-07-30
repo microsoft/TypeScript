@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/completionsClassMembers4.ts] ////
 
+// === Completions ===
 === /foo.ts ===
 // export class Observable<T> {
 //     pipe(): Observable<T>;
@@ -316,7 +317,8 @@
             }
           ]
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

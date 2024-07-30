@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reexportedMissingAlias.ts] ////
 
 //// [second.d.ts]
-// Fixes #15094
 export import Component = CompletelyMissing;
 //// [first.d.ts]
 import * as Second from './second';

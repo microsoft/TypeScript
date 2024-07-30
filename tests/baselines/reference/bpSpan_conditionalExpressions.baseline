@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/breakpointValidationConditionalExpressions.ts] ////
 
+// === breakpoints ===
 
 1  >var x = 10;
 

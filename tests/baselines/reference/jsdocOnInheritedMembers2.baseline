@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/jsdocOnInheritedMembers2.ts] ////
 
+// === QuickInfo ===
 === /a.js ===
 // /** @template T */
 // class A {

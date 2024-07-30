@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoCommentsCommentParsing.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoCommentsCommentParsing.ts ===
 // /// This is simple /// comments
 // function simple() {

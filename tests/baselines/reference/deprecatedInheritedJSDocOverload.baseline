@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/deprecatedInheritedJSDocOverload.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/deprecatedInheritedJSDocOverload.ts ===
 // interface PartialObserver<T> {}
 // interface Subscription {}

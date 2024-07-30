@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/getEmitOutputWithEmitterErrors.ts] ////
 
+// === EmitOutput ===
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile.js

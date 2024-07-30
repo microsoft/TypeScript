@@ -1,5 +1,7 @@
 //// [/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics3.ts] ////
 
+// === Syntax Diagnostics ===
+Syntactic Diagnostics:
 /tests/cases/fourslash/a.js(1,9): error TS8004: Type parameter declarations can only be used in TypeScript files.
 
 

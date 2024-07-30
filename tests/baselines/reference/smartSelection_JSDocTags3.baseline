@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/smartSelection_JSDocTags3.ts] ////
 
+// === Smart Selection ===
 /**
  * @param {/**/string} x
  */

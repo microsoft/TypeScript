@@ -3,11 +3,14 @@
 === parserErrorRecovery_ClassElement2.ts ===
 module M {
 >M : typeof M
+>  : ^^^^^^^^
 
   class C {
 >C : C
+>  : ^
 
   enum E {
 >E : E
+>  : ^
   }
 }

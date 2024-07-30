@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoInheritDoc2.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoInheritDoc2.ts ===
 // class Base<T> {
 //     /**

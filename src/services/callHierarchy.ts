@@ -91,6 +91,7 @@ import {
     ParameterDeclaration,
     Program,
     PropertyAccessExpression,
+    PropertyDeclaration,
     SatisfiesExpression,
     SetAccessorDeclaration,
     skipTrivia,
@@ -104,13 +105,12 @@ import {
     TypeChecker,
     usingSingleLineStringWriter,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export type NamedExpression =
-    | ClassExpression & { name: Identifier }
-    | FunctionExpression & { name: Identifier }
-    ;
+    | ClassExpression & { name: Identifier; }
+    | FunctionExpression & { name: Identifier; };
 
 /** Indictates whether a node is named function or class expression. */
 function isNamedExpression(node: Node): node is NamedExpression {
@@ -118,25 +118,33 @@ function isNamedExpression(node: Node): node is NamedExpression {
 }
 
 /** @internal */
-export type ConstNamedExpression =
-    | ClassExpression & { name: undefined, parent: VariableDeclaration & { name: Identifier } }
-    | FunctionExpression & { name: undefined, parent: VariableDeclaration & { name: Identifier } }
-    | ArrowFunction & { name: undefined, parent: VariableDeclaration & { name: Identifier } }
-    ;
+export type VariableLike =
+    | VariableDeclaration
+    | PropertyDeclaration;
 
-/** Indicates whether a node is a function, arrow, or class expression assigned to a constant variable. */
-function isConstNamedExpression(node: Node): node is ConstNamedExpression {
+function isVariableLike(node: Node): node is VariableLike {
+    return isPropertyDeclaration(node) || isVariableDeclaration(node);
+}
+
+/** @internal */
+export type AssignedExpression =
+    | ClassExpression & { name: undefined; parent: VariableLike & { name: Identifier; }; }
+    | FunctionExpression & { name: undefined; parent: VariableLike & { name: Identifier; }; }
+    | ArrowFunction & { name: undefined; parent: VariableLike & { name: Identifier; }; };
+
+/** Indicates whether a node is a function, arrow, or class expression assigned to a constant variable or class property. */
+function isAssignedExpression(node: Node): node is AssignedExpression {
     return (isFunctionExpression(node) || isArrowFunction(node) || isClassExpression(node))
-        && isVariableDeclaration(node.parent)
+        && isVariableLike(node.parent)
         && node === node.parent.initializer
         && isIdentifier(node.parent.name)
-        && !!(getCombinedNodeFlags(node.parent) & NodeFlags.Const);
+        && (!!(getCombinedNodeFlags(node.parent) & NodeFlags.Const) || isPropertyDeclaration(node.parent));
 }
 
 /** @internal */
 export type CallHierarchyDeclaration =
     | SourceFile
-    | ModuleDeclaration & { name: Identifier }
+    | ModuleDeclaration & { name: Identifier; }
     | FunctionDeclaration
     | ClassDeclaration
     | ClassStaticBlockDeclaration
@@ -144,8 +152,7 @@ export type CallHierarchyDeclaration =
     | GetAccessorDeclaration
     | SetAccessorDeclaration
     | NamedExpression
-    | ConstNamedExpression
-    ;
+    | AssignedExpression;
 
 /**
  * Indicates whether a node could possibly be a call hierarchy declaration.
@@ -182,14 +189,14 @@ function isValidCallHierarchyDeclaration(node: Node): node is CallHierarchyDecla
         || isGetAccessorDeclaration(node)
         || isSetAccessorDeclaration(node)
         || isNamedExpression(node)
-        || isConstNamedExpression(node);
+        || isAssignedExpression(node);
 }
 
 /** Gets the node that can be used as a reference to a call hierarchy declaration. */
 function getCallHierarchyDeclarationReferenceNode(node: Exclude<CallHierarchyDeclaration, ClassStaticBlockDeclaration>) {
     if (isSourceFile(node)) return node;
     if (isNamedDeclaration(node)) return node.name;
-    if (isConstNamedExpression(node)) return node.parent.name;
+    if (isAssignedExpression(node)) return node.parent.name;
     return Debug.checkDefined(node.modifiers && find(node.modifiers, isDefaultModifier));
 }
 
@@ -204,7 +211,7 @@ function getSymbolOfCallHierarchyDeclaration(typeChecker: TypeChecker, node: Exc
 }
 
 /** Gets the text and range for the name of a call hierarchy declaration. */
-function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclaration): { text: string, pos: number, end: number } {
+function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclaration): { text: string; pos: number; end: number; } {
     if (isSourceFile(node)) {
         return { text: node.fileName, pos: 0, end: 0 };
     }
@@ -226,14 +233,13 @@ function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclarati
         return { text: `${prefix}static {}`, pos, end };
     }
 
-    const declName = isConstNamedExpression(node) ? node.parent.name :
+    const declName = isAssignedExpression(node) ? node.parent.name :
         Debug.checkDefined(getNameOfDeclaration(node), "Expected call hierarchy item to have a name");
 
-    let text =
-        isIdentifier(declName) ? idText(declName) :
+    let text = isIdentifier(declName) ? idText(declName) :
         isStringOrNumericLiteralLike(declName) ? declName.text :
         isComputedPropertyName(declName) ?
-            isStringOrNumericLiteralLike(declName.expression) ? declName.expression.text :
+        isStringOrNumericLiteralLike(declName.expression) ? declName.expression.text :
             undefined :
         undefined;
     if (text === undefined) {
@@ -252,7 +258,10 @@ function getCallHierarchyItemName(program: Program, node: CallHierarchyDeclarati
 }
 
 function getCallHierarchItemContainerName(node: CallHierarchyDeclaration): string | undefined {
-    if (isConstNamedExpression(node)) {
+    if (isAssignedExpression(node)) {
+        if (isPropertyDeclaration(node.parent) && isClassLike(node.parent.parent)) {
+            return isClassExpression(node.parent.parent) ? getAssignedName(node.parent.parent)?.getText() : node.parent.parent.name?.getText();
+        }
         if (isModuleBlock(node.parent.parent.parent.parent) && isIdentifier(node.parent.parent.parent.parent.parent.name)) {
             return node.parent.parent.parent.parent.parent.name.getText();
         }
@@ -368,7 +377,7 @@ export function resolveCallHierarchyDeclaration(program: Program, location: Node
                 const ancestor = findAncestor(location.parent, isValidCallHierarchyDeclaration);
                 return ancestor && findImplementationOrAllInitialDeclarations(typeChecker, ancestor);
             }
-            if (isVariableDeclaration(location.parent) && location.parent.initializer && isConstNamedExpression(location.parent.initializer)) {
+            if (isVariableLike(location.parent) && location.parent.initializer && isAssignedExpression(location.parent.initializer)) {
                 return location.parent.initializer;
             }
             return undefined;
@@ -384,7 +393,7 @@ export function resolveCallHierarchyDeclaration(program: Program, location: Node
             continue;
         }
         // #39453
-        if (isVariableDeclaration(location) && location.initializer && isConstNamedExpression(location.initializer)) {
+        if (isVariableDeclaration(location) && location.initializer && isAssignedExpression(location.initializer)) {
             return location.initializer;
         }
         if (!followingSymbol) {
@@ -432,12 +441,14 @@ interface CallSite {
 function convertEntryToCallSite(entry: FindAllReferences.Entry): CallSite | undefined {
     if (entry.kind === FindAllReferences.EntryKind.Node) {
         const { node } = entry;
-        if (isCallOrNewExpressionTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
+        if (
+            isCallOrNewExpressionTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
             || isTaggedTemplateTag(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
             || isDecoratorTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
             || isJsxOpeningLikeElementTagName(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
             || isRightSideOfPropertyAccess(node)
-            || isArgumentExpressionOfElementAccess(node)) {
+            || isArgumentExpressionOfElementAccess(node)
+        ) {
             const sourceFile = node.getSourceFile();
             const ancestor = findAncestor(node, isValidCallHierarchyDeclaration) || sourceFile;
             return { declaration: ancestor, range: createTextRangeFromNode(node, sourceFile) };
@@ -474,8 +485,7 @@ export function getIncomingCalls(program: Program, declaration: CallHierarchyDec
 
 function createCallSiteCollector(program: Program, callSites: CallSite[]): (node: Node | undefined) => void {
     function recordCallSite(node: CallExpression | NewExpression | TaggedTemplateExpression | PropertyAccessExpression | ElementAccessExpression | Decorator | JsxOpeningLikeElement | ClassStaticBlockDeclaration) {
-        const target =
-            isTaggedTemplateExpression(node) ? node.tag :
+        const target = isTaggedTemplateExpression(node) ? node.tag :
             isJsxOpeningLikeElement(node) ? node.tagName :
             isAccessExpression(node) ? node :
             isClassStaticBlockDeclaration(node) ? node :

@@ -1,0 +1,9 @@
+//// [/tests/cases/fourslash/exportInLabeledStatement.ts] ////
+
+// === documentHighlights ===
+// filesToSearch:
+//   /tests/cases/fourslash/a.ts
+
+// === /tests/cases/fourslash/a.ts ===
+// subTitle:
+// /*HIGHLIGHTS*/export const title: string

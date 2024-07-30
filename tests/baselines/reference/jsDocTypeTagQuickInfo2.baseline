@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/jsDocTypeTagQuickInfo2.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/jsDocTypeTag2.js ===
 // /** @type {string} */
 // var s;

@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoJsDocTagsCallback.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoJsDocTagsCallback.js ===
 // /**
 //  * @callback cb

@@ -1,9 +1,9 @@
 config:
 {
- "include": [
-  "x/**/*",
-  "w/*/*"
- ]
+  "include": [
+    "x/**/*",
+    "w/*/*"
+  ]
 }
 Fs::
 //// [c:/dev/.z/.b.ts]
@@ -34,30 +34,30 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/dev/x/d.ts",
-  "c:/dev/x/y/d.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "include": [
-   "x/**/*",
-   "w/*/*"
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/dev/x/d.ts",
+    "c:/dev/x/y/d.ts"
   ],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "include": [
+      "x/**/*",
+      "w/*/*"
+    ],
+    "compileOnSave": false
+  },
+  "wildcardDirectories": {
+    "c:/dev/x": "WatchDirectoryFlags.Recursive",
+    "c:/dev/w": "WatchDirectoryFlags.Recursive"
+  },
   "compileOnSave": false
- },
- "wildcardDirectories": {
-  "c:/dev/x": "WatchDirectoryFlags.Recursive",
-  "c:/dev/w": "WatchDirectoryFlags.Recursive"
- },
- "compileOnSave": false
 }
 Errors::
 

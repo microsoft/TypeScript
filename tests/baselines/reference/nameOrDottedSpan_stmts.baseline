@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/nameOrDottedNameStatements.ts] ////
 
+// === NameOrDottedNameSpans ===
 
 1  >function f() {
 

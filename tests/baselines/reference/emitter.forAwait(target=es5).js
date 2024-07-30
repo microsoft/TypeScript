@@ -95,24 +95,24 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function f1() {
-    var _a, e_1, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
-        var y, _d, y_1, y_1_1, x, e_1_1;
+        var y, _a, y_1, y_1_1, x, e_1_1;
+        var _b, e_1, _c, _d;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
                     _e.trys.push([0, 5, 6, 11]);
-                    _d = true, y_1 = __asyncValues(y);
+                    _a = true, y_1 = __asyncValues(y);
                     _e.label = 1;
                 case 1: return [4 /*yield*/, y_1.next()];
                 case 2:
-                    if (!(y_1_1 = _e.sent(), _a = y_1_1.done, !_a)) return [3 /*break*/, 4];
-                    _c = y_1_1.value;
-                    _d = false;
-                    x = _c;
+                    if (!(y_1_1 = _e.sent(), _b = y_1_1.done, !_b)) return [3 /*break*/, 4];
+                    _d = y_1_1.value;
+                    _a = false;
+                    x = _d;
                     _e.label = 3;
                 case 3:
-                    _d = true;
+                    _a = true;
                     return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
@@ -121,8 +121,8 @@ function f1() {
                     return [3 /*break*/, 11];
                 case 6:
                     _e.trys.push([6, , 9, 10]);
-                    if (!(!_d && !_a && (_b = y_1.return))) return [3 /*break*/, 8];
-                    return [4 /*yield*/, _b.call(y_1)];
+                    if (!(!_a && !_b && (_c = y_1.return))) return [3 /*break*/, 8];
+                    return [4 /*yield*/, _c.call(y_1)];
                 case 7:
                     _e.sent();
                     _e.label = 8;
@@ -181,24 +181,24 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function f2() {
-    var _a, e_1, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
-        var x, y, _d, y_1, y_1_1, e_1_1;
+        var x, y, _a, y_1, y_1_1, e_1_1;
+        var _b, e_1, _c, _d;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
                     _e.trys.push([0, 5, 6, 11]);
-                    _d = true, y_1 = __asyncValues(y);
+                    _a = true, y_1 = __asyncValues(y);
                     _e.label = 1;
                 case 1: return [4 /*yield*/, y_1.next()];
                 case 2:
-                    if (!(y_1_1 = _e.sent(), _a = y_1_1.done, !_a)) return [3 /*break*/, 4];
-                    _c = y_1_1.value;
-                    _d = false;
-                    x = _c;
+                    if (!(y_1_1 = _e.sent(), _b = y_1_1.done, !_b)) return [3 /*break*/, 4];
+                    _d = y_1_1.value;
+                    _a = false;
+                    x = _d;
                     _e.label = 3;
                 case 3:
-                    _d = true;
+                    _a = true;
                     return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
@@ -207,8 +207,8 @@ function f2() {
                     return [3 /*break*/, 11];
                 case 6:
                     _e.trys.push([6, , 9, 10]);
-                    if (!(!_d && !_a && (_b = y_1.return))) return [3 /*break*/, 8];
-                    return [4 /*yield*/, _b.call(y_1)];
+                    if (!(!_a && !_b && (_c = y_1.return))) return [3 /*break*/, 8];
+                    return [4 /*yield*/, _c.call(y_1)];
                 case 7:
                     _e.sent();
                     _e.label = 8;
@@ -261,8 +261,9 @@ var __await = (this && this.__await) || function (v) { return this instanceof __
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
     function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
     function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
     function fulfill(value) { resume("next", value); }
@@ -350,8 +351,9 @@ var __await = (this && this.__await) || function (v) { return this instanceof __
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
     function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
     function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
     function fulfill(value) { resume("next", value); }
@@ -446,24 +448,24 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 // https://github.com/Microsoft/TypeScript/issues/21363
 function f5() {
-    var _a, e_1, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
-        var y, _d, y_1, y_1_1, x, e_1_1;
+        var y, _a, y_1, y_1_1, x, e_1_1;
+        var _b, e_1, _c, _d;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
                     _e.trys.push([0, 5, 6, 11]);
-                    _d = true, y_1 = __asyncValues(y);
+                    _a = true, y_1 = __asyncValues(y);
                     _e.label = 1;
                 case 1: return [4 /*yield*/, y_1.next()];
                 case 2:
-                    if (!(y_1_1 = _e.sent(), _a = y_1_1.done, !_a)) return [3 /*break*/, 4];
-                    _c = y_1_1.value;
-                    _d = false;
-                    x = _c;
+                    if (!(y_1_1 = _e.sent(), _b = y_1_1.done, !_b)) return [3 /*break*/, 4];
+                    _d = y_1_1.value;
+                    _a = false;
+                    x = _d;
                     return [3 /*break*/, 3];
                 case 3:
-                    _d = true;
+                    _a = true;
                     return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
@@ -472,8 +474,8 @@ function f5() {
                     return [3 /*break*/, 11];
                 case 6:
                     _e.trys.push([6, , 9, 10]);
-                    if (!(!_d && !_a && (_b = y_1.return))) return [3 /*break*/, 8];
-                    return [4 /*yield*/, _b.call(y_1)];
+                    if (!(!_a && !_b && (_c = y_1.return))) return [3 /*break*/, 8];
+                    return [4 /*yield*/, _c.call(y_1)];
                 case 7:
                     _e.sent();
                     _e.label = 8;
@@ -526,8 +528,9 @@ var __await = (this && this.__await) || function (v) { return this instanceof __
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
     function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
     function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
     function fulfill(value) { resume("next", value); }
@@ -616,8 +619,9 @@ var __await = (this && this.__await) || function (v) { return this instanceof __
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
     function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
     function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
     function fulfill(value) { resume("next", value); }

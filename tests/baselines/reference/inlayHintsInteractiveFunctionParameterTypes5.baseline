@@ -1,0 +1,19 @@
+//// [/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes5.ts] ////
+
+// === Inlay Hints ===
+export function fn(b = foo) {}
+                    ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "1n"
+    }
+  ],
+  "position": 40,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

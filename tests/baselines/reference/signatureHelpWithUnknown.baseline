@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/signatureHelpWithUnknown.ts] ////
 
+// === SignatureHelp ===
 === /tests/cases/fourslash/signatureHelpWithUnknown.ts ===
 // eval(\
 //       ^

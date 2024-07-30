@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoThrowsTag.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoThrowsTag.ts ===
 // class E extends Error {}
 // 

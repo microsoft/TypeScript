@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/breakpointValidationArrayLiteralExpressions.ts] ////
 
+// === breakpoints ===
 
 1  >var a = [10, 20, 30];
 

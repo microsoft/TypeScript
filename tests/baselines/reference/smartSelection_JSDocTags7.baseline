@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/smartSelection_JSDocTags7.ts] ////
 
+// === Smart Selection ===
 /**
  * @constructor
  * @param {/**/number} data

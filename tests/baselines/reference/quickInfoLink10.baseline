@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoLink10.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoLink10.ts ===
 // /**
 //  * start {@link https://vscode.dev/ | end}

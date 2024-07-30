@@ -3,9 +3,11 @@
 === classOrder1.ts ===
 class A {
 >A : A
+>  : ^
 
     public foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         /*WScript.Echo("Here!");*/
     }
@@ -13,14 +15,21 @@ class A {
 
 var a = new A();
 >a : A
+>  : ^
 >new A() : A
+>        : ^
 >A : typeof A
+>  : ^^^^^^^^
 
 a.foo();
 >a.foo() : void
+>        : ^^^^
 >a.foo : () => void
+>      : ^^^^^^^^^^
 >a : A
+>  : ^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 
 

@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoForArgumentsPropertyNameInJsMode1.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/a.js ===
 // const foo = {
 //     f1: (params) => { }

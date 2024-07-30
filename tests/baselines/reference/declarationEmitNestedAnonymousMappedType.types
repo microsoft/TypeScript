@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/declarationEmitNestedAnonymousMappedType.ts] ////
+
+=== declarationEmitNestedAnonymousMappedType.ts ===
+export function enumFromStrings<const Members extends readonly string[]>() {
+>enumFromStrings : <const Members extends readonly string[]>() => { [Property in keyof { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }]: { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }[Property]; }
+>                : ^^^^^^^       ^^^^^^^^^                 ^^^^^^^^^^        ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type Part1 = {
+>Part1 : { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }
+>      : ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        [key in keyof Members as Members[key] extends string
+        ? Members[key]
+        : never]: Members[key];
+    };
+    type Part2 = { [Property in keyof Part1]: Part1[Property] };
+>Part2 : { [Property in keyof { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }]: { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }[Property]; }
+>      : ^^^        ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    return Object.create(null) as Part2;
+>Object.create(null) as Part2 : { [Property in keyof { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }]: { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }[Property]; }
+>                             : ^^^        ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.create(null) : any
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
+}
+

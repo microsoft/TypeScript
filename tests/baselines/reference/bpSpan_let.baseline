@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/breakpointValidationLet.ts] ////
 
+// === breakpoints ===
 
 1  >let l1;
 

@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/completionsClassMembers2.ts] ////
 
+// === Completions ===
 === /tests/cases/fourslash/completionsClassMembers2.ts ===
 // interface I {
 //     method(): void;
@@ -255,7 +256,8 @@
             }
           ]
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

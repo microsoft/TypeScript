@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/getEmitOutputSingleFile2.ts] ////
 
+// === EmitOutput ===
 EmitSkipped: false
 
 FileName : declSingleFile.js

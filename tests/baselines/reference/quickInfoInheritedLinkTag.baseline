@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoInheritedLinkTag.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoInheritedLinkTag.ts ===
 // export class C {
 //      /**

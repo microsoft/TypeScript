@@ -3,10 +3,12 @@
 === cls.js ===
 export class Foo {}
 >Foo : Foo
+>    : ^^^
 
 === func.js ===
 export function func() {}
 >func : () => void
+>     : ^^^^^^^^^^
 
 === bar.js ===
 
@@ -20,92 +22,138 @@ export * from "./cls";
 === baz.js ===
 import {Foo} from "./cls";
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 export {Foo};
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 === bat.js ===
 import * as ns from "./cls";
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 export default ns;
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 === ban.js ===
 import * as ns from "./cls";
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 export {ns};
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 === bol.js ===
 import * as ns from "./cls";
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 export { ns as classContainer };
 >ns : typeof ns
+>   : ^^^^^^^^^
 >classContainer : typeof ns
+>               : ^^^^^^^^^
 
 === cjs.js ===
 const ns = require("./cls");
 >ns : typeof ns
+>   : ^^^^^^^^^
 >require("./cls") : typeof ns
+>                 : ^^^^^^^^^
 >require : any
 >"./cls" : "./cls"
+>        : ^^^^^^^
 
 module.exports = { ns };
 >module.exports = { ns } : typeof module.exports
+>                        : ^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{ ns } : { ns: typeof ns; }
+>       : ^^^^^^^^^^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 === cjs2.js ===
 const ns = require("./cls");
 >ns : typeof ns
+>   : ^^^^^^^^^
 >require("./cls") : typeof ns
+>                 : ^^^^^^^^^
 >require : any
 >"./cls" : "./cls"
+>        : ^^^^^^^
 
 module.exports = ns;
 >module.exports = ns : typeof ns
+>                    : ^^^^^^^^^
 >module.exports : typeof ns
+>               : ^^^^^^^^^
 >module : { exports: typeof ns; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof ns
+>        : ^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 === cjs3.js ===
 const ns = require("./cls");
 >ns : typeof ns
+>   : ^^^^^^^^^
 >require("./cls") : typeof ns
+>                 : ^^^^^^^^^
 >require : any
 >"./cls" : "./cls"
+>        : ^^^^^^^
 
 module.exports.ns = ns;
 >module.exports.ns = ns : typeof ns
+>                       : ^^^^^^^^^
 >module.exports.ns : typeof ns
+>                  : ^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 === cjs4.js ===
 const ns = require("./cls");
 >ns : typeof ns
+>   : ^^^^^^^^^
 >require("./cls") : typeof ns
+>                 : ^^^^^^^^^
 >require : any
 >"./cls" : "./cls"
+>        : ^^^^^^^
 
 module.exports.names = ns;
 >module.exports.names = ns : typeof ns
+>                          : ^^^^^^^^^
 >module.exports.names : typeof ns
+>                     : ^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >names : typeof ns
+>      : ^^^^^^^^^
 >ns : typeof ns
+>   : ^^^^^^^^^
 
 === includeAll.js ===
 

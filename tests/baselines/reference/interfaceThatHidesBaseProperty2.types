@@ -4,15 +4,19 @@
 interface Base {
     x: { a: number };
 >x : { a: number; }
+>  : ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 }
 
 interface Derived extends Base { // error
     x: {
 >x : { a: string; }
+>  : ^^^^^      ^^^
 
         a: string;
 >a : string
+>  : ^^^^^^
 
     };
 }

@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoNestedExportEqualExportDefault.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoNestedExportEqualExportDefault.ts ===
 // export = (state, messages) => {
 //    export default {

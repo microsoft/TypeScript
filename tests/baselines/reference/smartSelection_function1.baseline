@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/smartSelection_function1.ts] ////
 
+// === Smart Selection ===
 const f1 = () => {
    /**/
 };

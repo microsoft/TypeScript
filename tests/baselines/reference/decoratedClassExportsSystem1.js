@@ -28,7 +28,7 @@ System.register([], function (exports_1, context_1) {
             exports_1("Testing123", Testing123);
             Testing123.prop1 = Testing123_1.prop0;
             exports_1("Testing123", Testing123 = Testing123_1 = __decorate([
-                Something({ v: () => Testing123_1 })
+                Something({ v: () => Testing123 })
             ], Testing123));
         }
     };

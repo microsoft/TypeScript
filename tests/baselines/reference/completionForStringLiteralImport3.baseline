@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/completionForStringLiteralImport3.ts] ////
 
+// === Completions ===
 === /a.ts ===
 // import * as foo from "";
 //                       ^
@@ -17,7 +18,8 @@
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
-      "entries": []
+      "entries": [],
+      "defaultCommitCharacters": []
     }
   }
 ]

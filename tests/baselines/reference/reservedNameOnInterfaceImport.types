@@ -7,7 +7,10 @@ declare module test {
     // Should error; 'test.istring' is a type, so this import conflicts with the 'string' type.
     import string = test.istring;
 >string : any
+>       : ^^^
 >test : any
+>     : ^^^
 >istring : istring
+>        : ^^^^^^^
 }
 

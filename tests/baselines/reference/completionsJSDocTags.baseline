@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/completionsJSDocTags.ts] ////
 
+// === Completions ===
 === /tests/cases/fourslash/completionsJSDocTags.ts ===
 // /**
 //  * This is class Foo.
@@ -591,6 +592,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

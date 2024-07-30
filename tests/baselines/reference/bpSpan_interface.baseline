@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/breakpointValidationInterface.ts] ////
 
+// === breakpoints ===
 
 1  >interface I {
 

@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/smartSelection_JSDocTags9.ts] ////
 
+// === Smart Selection ===
 /** @enum {/**/number} */
 const Foo = {
     x: 0,

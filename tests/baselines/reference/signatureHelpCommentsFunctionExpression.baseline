@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/signatureHelpCommentsFunctionExpression.ts] ////
 
+// === SignatureHelp ===
 === /tests/cases/fourslash/signatureHelpCommentsFunctionExpression.ts ===
 // /** lambdaFoo var comment*/
 // var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => a + b;

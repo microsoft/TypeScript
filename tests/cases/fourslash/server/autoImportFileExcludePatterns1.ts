@@ -12,7 +12,7 @@
 //// export declare class S3 {}
 
 // @Filename: /project/package.json
-//// { "dependencies": "aws-sdk" }
+//// { "dependencies": { "aws-sdk": "*" } }
 
 // @Filename: /project/index.ts
 //// S3/**/

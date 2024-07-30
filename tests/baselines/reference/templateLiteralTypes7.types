@@ -1,0 +1,65 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes7.ts] ////
+
+=== templateLiteralTypes7.ts ===
+// https://github.com/microsoft/TypeScript/issues/57807
+
+interface NMap {
+  1: 'A'
+>1 : "A"
+>  : ^^^
+
+  2: 'B'
+>2 : "B"
+>  : ^^^
+
+  3: 'C'
+>3 : "C"
+>  : ^^^
+
+  4: 'D'
+>4 : "D"
+>  : ^^^
+}
+
+declare const g: <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
+>g : <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
+>  : ^ ^^^^^^^^^         ^^ ^^      ^^^^^       
+>x : `${T}`
+>  : ^^^^^^
+
+type G1 = <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
+>G1 : G1
+>   : ^^
+>x : `${T}`
+>  : ^^^^^^
+
+const g1: G1 = g; // ok
+>g1 : G1
+>   : ^^
+>g : <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
+>  : ^ ^^^^^^^^^         ^^ ^^      ^^^^^       
+
+type G2 = <T extends 1 | 2 | 3 | 4>(x: `${T}`) => NMap[T]
+>G2 : G2
+>   : ^^
+>x : `${T}`
+>  : ^^^^^^
+
+const g2: G2 = g; // error
+>g2 : G2
+>   : ^^
+>g : <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
+>  : ^ ^^^^^^^^^         ^^ ^^      ^^^^^       
+
+type G3 = <T extends 1 | 2>(x: `${T}`) => NMap[T]
+>G3 : G3
+>   : ^^
+>x : `${T}`
+>  : ^^^^^^
+
+const g3: G3 = g; // ok
+>g3 : G3
+>   : ^^
+>g : <T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]
+>  : ^ ^^^^^^^^^         ^^ ^^      ^^^^^       
+

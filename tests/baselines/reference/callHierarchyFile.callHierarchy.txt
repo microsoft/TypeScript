@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/callHierarchyFile.ts] ////
 
+// === Call Hierarchy ===
 ╭ name: foo
 ├ kind: function
 ├ file: /tests/cases/fourslash/callHierarchyFile.ts

@@ -5,12 +5,12 @@ const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024);
 >sab : Symbol(sab, Decl(es2022SharedMemory.ts, 0, 5))
 >SharedArrayBuffer : Symbol(SharedArrayBuffer, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --))
 >Int32Array.BYTES_PER_ELEMENT : Symbol(Int32ArrayConstructor.BYTES_PER_ELEMENT, Decl(lib.es5.d.ts, --, --))
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >BYTES_PER_ELEMENT : Symbol(Int32ArrayConstructor.BYTES_PER_ELEMENT, Decl(lib.es5.d.ts, --, --))
 
 const int32 = new Int32Array(sab);
 >int32 : Symbol(int32, Decl(es2022SharedMemory.ts, 1, 5))
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --) ... and 1 more)
+>Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
 >sab : Symbol(sab, Decl(es2022SharedMemory.ts, 0, 5))
 
 const sab64 = new SharedArrayBuffer(BigInt64Array.BYTES_PER_ELEMENT * 1024);

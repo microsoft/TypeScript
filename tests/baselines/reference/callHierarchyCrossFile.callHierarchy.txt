@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/callHierarchyCrossFile.ts] ////
 
+// === Call Hierarchy ===
 ╭ name: createModelReference
 ├ kind: function
 ├ file: /a.ts

@@ -1,4 +1,11 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    generateAccessorFromProperty,
+    getAllSupers,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     CodeFixAllContext,
     CodeFixContext,
     Debug,
@@ -11,14 +18,7 @@ import {
     singleOrUndefined,
     SourceFile,
     unescapeLeadingUnderscores,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    generateAccessorFromProperty,
-    getAllSupers,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [
     Diagnostics._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property.code,
@@ -35,14 +35,15 @@ registerCodeFix({
     },
     fixIds: [fixId],
 
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const edits = doChange(diag.file, diag.start, diag.length, diag.code, context);
-        if (edits) {
-            for (const edit of edits) {
-                changes.pushRaw(context.sourceFile, edit);
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const edits = doChange(diag.file, diag.start, diag.length, diag.code, context);
+            if (edits) {
+                for (const edit of edits) {
+                    changes.pushRaw(context.sourceFile, edit);
+                }
             }
-        }
-    }),
+        }),
 });
 
 function doChange(file: SourceFile, start: number, length: number, code: number, context: CodeFixContext | CodeFixAllContext) {

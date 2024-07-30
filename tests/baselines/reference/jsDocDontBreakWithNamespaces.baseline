@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/jsDocDontBreakWithNamespaces.ts] ////
 
+// === SignatureHelp ===
 === /tests/cases/fourslash/jsDocDontBreakWithNamespaces.js ===
 // /**
 //  * @returns {module:@nodefuel/web~Webserver~wsServer#hello} Websocket server object

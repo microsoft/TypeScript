@@ -3,9 +3,12 @@
 === parser585151.ts ===
 class Foo2 {
 >Foo2 : Foo2
+>     : ^^^^
 
   var icecream = "chocolate";
 >icecream : string
+>         : ^^^^^^
 >"chocolate" : "chocolate"
+>            : ^^^^^^^^^^^
 }
 

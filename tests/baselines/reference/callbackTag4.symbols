@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/jsdoc/callbackTag4.ts] ////
+
+=== ./a.js ===
+/**
+ * @callback C
+ * @this {{ a: string, b: number }}
+ * @param {string} a
+ * @param {number} b
+ * @returns {boolean}
+ */
+
+/** @type {C} */
+const cb = function (a, b) {
+>cb : Symbol(cb, Decl(a.js, 9, 5))
+>a : Symbol(a, Decl(a.js, 9, 21))
+>b : Symbol(b, Decl(a.js, 9, 23))
+
+    this
+>this : Symbol(this)
+
+    return true
+}
+

@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoCommentsFunctionDeclaration.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoCommentsFunctionDeclaration.ts ===
 // /** This comment should appear for foo*/
 // function foo() {

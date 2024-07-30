@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/smartSelection_JSDocTags4.ts] ////
 
+// === Smart Selection ===
 /**
  * @typedef {object} Foo
  * @property {string} a

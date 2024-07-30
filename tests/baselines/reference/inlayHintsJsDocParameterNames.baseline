@@ -1,0 +1,20 @@
+//// [/tests/cases/fourslash/inlayHintsJsDocParameterNames.ts] ////
+
+// === Inlay Hints ===
+y.foo(1, 2)
+      ^
+{
+  "text": "a:",
+  "position": 88,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}
+
+y.foo(1, 2)
+         ^
+{
+  "text": "b:",
+  "position": 91,
+  "kind": "Parameter",
+  "whitespaceAfter": true
+}

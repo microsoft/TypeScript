@@ -3,6 +3,7 @@
 === noImplicitReturnInConstructors.ts ===
 class C {
 >C : C
+>  : ^
 
   constructor() {
     return;

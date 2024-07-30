@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoOnThis5.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoOnThis5.ts ===
 // const foo = {
 //     num: 0,

@@ -3,4 +3,5 @@
 === scannerNumericLiteral6.ts ===
 1e+
 >1e+ : 1
+>    : ^
 

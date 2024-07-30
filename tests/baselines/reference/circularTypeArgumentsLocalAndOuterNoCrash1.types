@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/circularTypeArgumentsLocalAndOuterNoCrash1.ts] ////
+
+=== circularTypeArgumentsLocalAndOuterNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59062
+
+function f<_T, _S>() {
+>f : <_T, _S>() => void
+>  : ^  ^^  ^^^^^^^^^^^
+
+  interface NumArray<T extends number> extends Array<T> {}
+  type X = NumArray<X extends {} ? number : number>;
+>X : NumArray<any>
+>  : ^^^^^^^^^^^^^
+}
+

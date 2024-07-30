@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/callHierarchyTaggedTemplate.ts] ////
 
+// === Call Hierarchy ===
 ╭ name: bar
 ├ kind: function
 ├ file: /tests/cases/fourslash/callHierarchyTaggedTemplate.ts

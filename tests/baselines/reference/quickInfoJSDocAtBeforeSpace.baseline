@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoJSDocAtBeforeSpace.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoJSDocAtBeforeSpace.ts ===
 // /**
 //  * @return Don't @ me

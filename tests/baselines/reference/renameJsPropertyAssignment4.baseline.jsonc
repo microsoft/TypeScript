@@ -1,0 +1,17 @@
+//// [/tests/cases/fourslash/renameJsPropertyAssignment4.ts] ////
+
+// === findRenameLocations ===
+// === /a.js ===
+// function f() {
+//    <|var /*RENAME*/[|fooRENAME|] = this;|>
+//    <|[|fooRENAME|].x = 1;|>
+// }
+
+
+
+// === findRenameLocations ===
+// === /a.js ===
+// function f() {
+//    <|var [|fooRENAME|] = this;|>
+//    /*RENAME*/<|[|fooRENAME|].x = 1;|>
+// }

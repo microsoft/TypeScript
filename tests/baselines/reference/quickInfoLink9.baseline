@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoLink9.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoLink9.ts ===
 // type Foo = {
 //     /**

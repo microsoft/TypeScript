@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/signatureHelpCommentsFunctionDeclaration.ts] ////
 
+// === SignatureHelp ===
 === /tests/cases/fourslash/signatureHelpCommentsFunctionDeclaration.ts ===
 // /** This comment should appear for foo*/
 // function foo() {

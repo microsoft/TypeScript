@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/completionsOverridingMethod15.ts] ////
 
+// === Completions ===
 === /tests/cases/fourslash/completionsOverridingMethod15.ts ===
 // declare class B {
 //     get foo(): any;
@@ -246,7 +247,8 @@
             }
           ]
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

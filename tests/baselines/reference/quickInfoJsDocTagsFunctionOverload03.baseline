@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoJsDocTagsFunctionOverload03.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoJsDocTagsFunctionOverload03.ts ===
 // declare function foo(): void;
 //                  ^^^

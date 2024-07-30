@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoJsDocAlias.ts] ////
 
+// === QuickInfo ===
 === /b.ts ===
 // import { A } from "./a";
 // A()

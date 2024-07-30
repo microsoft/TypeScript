@@ -1,0 +1,18 @@
+//// [/tests/cases/fourslash/goToDefinitionSwitchCase5.ts] ////
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionSwitchCase5.ts ===
+// [|export /*GOTO DEF*/default {}|]
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "default",
+    "containerName": "\"/tests/cases/fourslash/goToDefinitionSwitchCase5\"",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

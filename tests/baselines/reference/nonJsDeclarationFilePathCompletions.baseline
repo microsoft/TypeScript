@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/server/nonJsDeclarationFilePathCompletions.ts] ////
 
+// === Completions ===
 === /project/usage.ts ===
 // import { HtmlModuleThing } from "./";
 //                                    ^
@@ -51,7 +52,8 @@
           ],
           "tags": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   },
   {
@@ -78,7 +80,8 @@
           ],
           "tags": []
         }
-      ]
+      ],
+      "defaultCommitCharacters": []
     }
   }
 ]

@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/signatureHelp_unionType.ts] ////
 
+// === SignatureHelp ===
 === /tests/cases/fourslash/signatureHelp_unionType.ts ===
 // declare const a: (fn?: ((x: string) => string) | ((y: number) => number)) => void;
 // declare const b: (x: string | number) => void;

@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/smartSelection_punctuationPriority.ts] ////
 
+// === Smart Selection ===
 console/**/.log();
 
 console       

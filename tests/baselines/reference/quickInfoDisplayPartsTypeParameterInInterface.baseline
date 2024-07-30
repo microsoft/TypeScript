@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoDisplayPartsTypeParameterInInterface.ts ===
 // interface I<T> {
 //           ^

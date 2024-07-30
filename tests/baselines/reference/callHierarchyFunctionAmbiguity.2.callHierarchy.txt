@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/callHierarchyFunctionAmbiguity.2.ts] ////
 
+// === Call Hierarchy ===
 ╭ name: foo
 ├ kind: function
 ├ file: /tests/cases/fourslash/a.d.ts

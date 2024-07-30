@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/breakpointValidationTryCatchFinally.ts] ////
 
+// === breakpoints ===
 
 1  >var x = 10;
 

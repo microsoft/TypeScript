@@ -10,7 +10,7 @@
 // export {}
 
 // === lib.d.ts ===
-// --- (line: 1531) skipped ---
+// --- (line: --) skipped ---
 // /**
 //  * Represents the completion of an asynchronous operation
 //  */
@@ -33,7 +33,7 @@
 // 
 // /**
 //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
-// --- (line: 1554) skipped ---
+// --- (line: --) skipped ---
 
   // === Details ===
   [
@@ -71,7 +71,7 @@
 // export {}
 
 // === lib.d.ts ===
-// --- (line: 1531) skipped ---
+// --- (line: --) skipped ---
 // /**
 //  * Represents the completion of an asynchronous operation
 //  */
@@ -94,7 +94,7 @@
 // 
 // /**
 //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
-// --- (line: 1554) skipped ---
+// --- (line: --) skipped ---
 
   // === Details ===
   [

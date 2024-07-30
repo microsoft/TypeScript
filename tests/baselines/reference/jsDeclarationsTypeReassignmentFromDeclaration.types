@@ -4,23 +4,33 @@
 interface Item {
     x: string;
 >x : string
+>  : ^^^^^^
 }
 declare const items: Item[];
 >items : Item[]
+>      : ^^^^^^
 
 export = items;
 >items : Item[]
+>      : ^^^^^^
 
 === index.js ===
 /** @type {typeof import("/some-mod")} */
 const items = [];
 >items : Item[]
+>      : ^^^^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
 module.exports = items;
 >module.exports = items : Item[]
+>                       : ^^^^^^
 >module.exports : Item[]
+>               : ^^^^^^
 >module : { exports: Item[]; }
+>       : ^^^^^^^^^^^^^^^^^^^^
 >exports : Item[]
+>        : ^^^^^^
 >items : Item[]
+>      : ^^^^^^
 

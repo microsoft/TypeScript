@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoJsDocTags8.ts] ////
 
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoJsDocTags8.js ===
 // /**
 //  * @typedef {{ [x: string]: any, y: number }} Foo

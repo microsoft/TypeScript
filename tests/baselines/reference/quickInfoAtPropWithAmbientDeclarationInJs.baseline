@@ -1,5 +1,6 @@
 //// [/tests/cases/fourslash/quickInfoAtPropWithAmbientDeclarationInJs.ts] ////
 
+// === QuickInfo ===
 === /a.js ===
 // class C {
 //     constructor() {
