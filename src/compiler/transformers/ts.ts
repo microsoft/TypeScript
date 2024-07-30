@@ -266,7 +266,6 @@ export function transformTypeScript(context: TransformationContext) {
     let currentNamespaceContainerName: Identifier;
     let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
     let currentScopeFirstDeclarationsOfName: Map<__String, Node> | undefined;
-    let currentClassHasParameterProperties: boolean | undefined;
 
     /**
      * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -323,7 +322,6 @@ export function transformTypeScript(context: TransformationContext) {
         // Save state
         const savedCurrentScope = currentLexicalScope;
         const savedCurrentScopeFirstDeclarationsOfName = currentScopeFirstDeclarationsOfName;
-        const savedCurrentClassHasParameterProperties = currentClassHasParameterProperties;
 
         // Handle state changes before visiting a node.
         onBeforeVisitNode(node);
@@ -336,7 +334,6 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         currentLexicalScope = savedCurrentScope;
-        currentClassHasParameterProperties = savedCurrentClassHasParameterProperties;
         return visited;
     }
 
@@ -1242,7 +1239,7 @@ export function transformTypeScript(context: TransformationContext) {
         // The names are used more than once when:
         //   - the property is non-static and its initializer is moved to the constructor (when there are parameter property assignments).
         //   - the property has a decorator.
-        if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member) && legacyDecorators)) {
+        if (isComputedPropertyName(name) && hasDecorators(member) && legacyDecorators) {
             const expression = visitNode(name.expression, visitor, isExpression);
             Debug.assert(expression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
