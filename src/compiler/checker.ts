@@ -39527,14 +39527,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             compilerOptions.isolatedModules
             || compilerOptions.verbatimModuleSyntax
                 && ok
-                && !(resolveName(
+                && !resolveName(
                     node,
                     getFirstIdentifier(node as EntityNameOrEntityNameExpression),
                     SymbolFlags.Alias,
                     /*nameNotFoundMessage*/ undefined,
                     /*isUse*/ false,
                     /*excludeGlobals*/ true,
-                ))
+                )
         ) {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
