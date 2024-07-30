@@ -1,5 +1,5 @@
 // @strict: true
-// @noemit: true
+// @declaration: true
 
 const C00 = "a";
 const C01 = "b" as const;
