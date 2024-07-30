@@ -1237,7 +1237,7 @@ export function transformTypeScript(context: TransformationContext) {
         const name = member.name!;
         // Computed property names need to be transformed into a hoisted variable when they are used more than once.
         // The names are used more than once when the property has a decorator.
-        if (isComputedPropertyName(name) && hasDecorators(member) && legacyDecorators) {
+        if (legacyDecorators && isComputedPropertyName(name) && hasDecorators(member)) {
             const expression = visitNode(name.expression, visitor, isExpression);
             Debug.assert(expression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
