@@ -64,7 +64,6 @@ import {
     mapToDisplayParts,
     Node,
     NodeBuilderFlags,
-    NodeBuilderFlagsIgnoreErrors,
     ParameterDeclaration,
     ParenthesizedExpression,
     Printer,
@@ -644,7 +643,7 @@ function getEnclosingDeclarationFromInvocation(invocation: Invocation): Node {
     return invocation.kind === InvocationKind.Call ? invocation.node : invocation.kind === InvocationKind.TypeArgs ? invocation.called : invocation.node;
 }
 
-const signatureHelpNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlagsIgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+const signatureHelpNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 function createSignatureHelpItems(
     candidates: readonly Signature[],
     resolvedSignature: Signature,
