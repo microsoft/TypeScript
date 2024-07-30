@@ -42,7 +42,7 @@
         "@dprint/formatter": "^0.4.1",
         "@dprint/typescript": "0.91.6",
         "@esfx/canceltoken": "^1.0.0",
-        "@eslint/js": "^8.57.0",
+        "@eslint/js": "^9.8.0",
         "@octokit/rest": "^21.0.1",
         "@types/chai": "^4.3.17",
         "@types/diff": "^5.2.1",
@@ -52,7 +52,7 @@
         "@types/node": "latest",
         "@types/source-map-support": "^0.5.10",
         "@types/which": "^3.0.4",
-        "@typescript-eslint/utils": "^7.18.0",
+        "@typescript-eslint/utils": "^8.0.0",
         "azure-devops-node-api": "^14.0.1",
         "c8": "^10.1.2",
         "chai": "^4.5.0",
@@ -61,7 +61,7 @@
         "diff": "^5.2.0",
         "dprint": "^0.47.2",
         "esbuild": "^0.23.0",
-        "eslint": "^8.57.0",
+        "eslint": "^9.8.0",
         "eslint-formatter-autolinkable-stylish": "^1.3.0",
         "fast-xml-parser": "^4.4.1",
         "glob": "^10.4.5",
@@ -79,11 +79,14 @@
         "source-map-support": "^0.5.21",
         "tslib": "^2.6.3",
         "typescript": "^5.5.4",
-        "typescript-eslint": "^7.18.0",
+        "typescript-eslint": "^8.0.0",
         "which": "^3.0.1"
     },
     "overrides": {
-        "typescript@*": "$typescript"
+        "typescript@*": "$typescript",
+        "eslint-formatter-autolinkable-stylish": {
+            "eslint": "$eslint"
+        }
     },
     "scripts": {
         "test": "hereby runtests-parallel --light=false",
