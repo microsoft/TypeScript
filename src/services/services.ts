@@ -2290,15 +2290,18 @@ export function createLanguageService(
 
         const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(
             cancellationToken,
-            typeChecker => SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
-                typeChecker,
-                symbol,
-                sourceFile,
-                getContainerNode(nodeForQuickInfo),
-                nodeForQuickInfo,
-                /*semanticMeaning*/ undefined,
-                /*alias*/ undefined,
-                verbosityLevel));
+            typeChecker =>
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    typeChecker,
+                    symbol,
+                    sourceFile,
+                    getContainerNode(nodeForQuickInfo),
+                    nodeForQuickInfo,
+                    /*semanticMeaning*/ undefined,
+                    /*alias*/ undefined,
+                    verbosityLevel,
+                ),
+        );
         return {
             kind: symbolKind,
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),

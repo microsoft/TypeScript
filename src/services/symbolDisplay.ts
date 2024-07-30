@@ -265,7 +265,8 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(
     type: Type | undefined,
     semanticMeaning: SemanticMeaning,
     alias?: Symbol,
-    verbosityLevel?: number): SymbolDisplayPartsDocumentationAndSymbolKind {
+    verbosityLevel?: number,
+): SymbolDisplayPartsDocumentationAndSymbolKind {
     const displayParts: SymbolDisplayPart[] = [];
     let documentation: SymbolDisplayPart[] = [];
     let tags: JSDocTagInfo[] = [];
@@ -883,7 +884,8 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(
     location: Node,
     semanticMeaning = getMeaningFromLocation(location),
     alias?: Symbol,
-    verbosityLevel?: number): SymbolDisplayPartsDocumentationAndSymbolKind {
+    verbosityLevel?: number,
+): SymbolDisplayPartsDocumentationAndSymbolKind {
     return getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker, symbol, sourceFile, enclosingDeclaration, location, /*type*/ undefined, semanticMeaning, alias, verbosityLevel);
 }
 
