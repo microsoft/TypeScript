@@ -5474,12 +5474,13 @@ export const NodeBuilderFlags = {
     InInitialEntityName                     : 1n << 24n,    // Set when writing the LHS of an entity name or entity name expression
 }
 
-export const NodeBuilderFlagsIgnoreErrors = NodeBuilderFlags.AllowThisInObjectLiteral
-    | NodeBuilderFlags.AllowQualifiedNameInPlaceOfIdentifier
-    | NodeBuilderFlags.AllowAnonymousIdentifier
-    | NodeBuilderFlags.AllowEmptyUnionOrIntersection
-    | NodeBuilderFlags.AllowEmptyTuple
-    | NodeBuilderFlags.AllowEmptyIndexInfoType
+export const NodeBuilderFlagsIgnoreErrors = 
+    NodeBuilderFlags.AllowThisInObjectLiteral 
+    | NodeBuilderFlags.AllowQualifiedNameInPlaceOfIdentifier 
+    | NodeBuilderFlags.AllowAnonymousIdentifier 
+    | NodeBuilderFlags.AllowEmptyUnionOrIntersection 
+    | NodeBuilderFlags.AllowEmptyTuple 
+    | NodeBuilderFlags.AllowEmptyIndexInfoType 
     | NodeBuilderFlags.AllowNodeModulesRelativePaths;
 
 // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
