@@ -131,6 +131,7 @@ export default tseslint.config(
                     // Ignore: (solely underscores | starting with exactly one underscore)
                     argsIgnorePattern: "^(_+$|_[^_])",
                     varsIgnorePattern: "^(_+$|_[^_])",
+                    // Not setting an ignore pattern for caught errors; those can always be safely removed.
                 },
             ],
             "@typescript-eslint/no-inferrable-types": "off",

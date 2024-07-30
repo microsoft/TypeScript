@@ -45,7 +45,7 @@ class FailedTestsReporter extends Mocha.reporters.Base {
                 try {
                     reporter = require(reporterOptions.reporter);
                 }
-                catch (_) {
+                catch {
                     reporter = require(path.resolve(process.cwd(), reporterOptions.reporter));
                 }
             }
