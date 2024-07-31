@@ -1,6 +1,7 @@
-import { findIndex } from "../compiler/core.js";
+import { findIndex, forEach } from "../compiler/core.js";
 import {
     CancellationToken,
+    Node,
     Program,
     SourceFile,
     Statement,
@@ -15,7 +16,9 @@ import {
     forEachChild,
     formatting,
     getQuotePreference,
+    getTokenAtPosition,
     isIdentifier,
+    rangeContainsPosition,
     textChanges,
 } from "./_namespaces/ts.js";
 import { addTargetFileImports } from "./refactors/helpers.js";
@@ -64,6 +67,7 @@ function pasteEdits(
     }
 
     const statements: Statement[] = [];
+    const newStatements: Statement[] = [];
 
     let newText = targetFile.text;
     for (let i = pasteLocations.length - 1; i >= 0; i--) {
@@ -106,12 +110,40 @@ function pasteEdits(
                 preferences,
                 formatContext,
             };
-            forEachChild(updatedFile, function cb(node) {
-                if (isIdentifier(node) && !originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
-                    // generate imports
-                    importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
-                }
-                node.forEachChild(cb);
+
+            for (const location of pasteLocations) {
+                const statementsInSourceFile = updatedFile.statements;
+                const startNodeIndex = findIndex(statementsInSourceFile, s => s.end > location.pos);
+                if (startNodeIndex === -1) return undefined;
+                const endNodeIndex = findIndex(statementsInSourceFile, s => s.end >= ( actualPastedText ? actualPastedText[0].length + location.pos : location.end ), startNodeIndex);
+                newStatements.push(...statementsInSourceFile.slice(startNodeIndex, endNodeIndex === -1 ? statementsInSourceFile.length : endNodeIndex + 1));
+                // if (actualPastedText) {
+                //     break;
+                // }
+            }
+            newStatements.forEach((statement, i) => {
+                forEachChild(statement, function cb(node) {
+                    if (isIdentifier(node) && !originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
+                        if (!actualPastedText && rangeContainsPosition({pos: pasteLocations[i].pos, end: pasteLocations[i].pos + pastedText[i].length}, node.getStart())) {
+                            importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
+                        }
+                        else if(actualPastedText && rangeContainsPosition({pos: pasteLocations[i].pos, end: pasteLocations[i].pos + actualPastedText[0].length}, node.getStart())) {
+                            /**
+                             * If actualPastedText is added at a position like, const t = 1;[||]
+                             * This can be true only for the first statement in `pastedText` because the rest will be added to newStatements as separate statements.
+                             */
+                            // if (i === 0 && statement.getStart() !== pasteLocations[0].pos) {
+                            //     if (rangeContainsPosition({pos: pasteLocations[0].pos, end: pasteLocations[0].pos + pastedText[0].length}, node.getStart())) {
+                            //         importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
+                            //     }
+                            // }
+                            // else {
+                                importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
+                            // }
+                        }
+                    }
+                    node.forEachChild(cb);  
+                });
             });
         }
         importAdder.writeFixes(changes, getQuotePreference(copiedFrom ? copiedFrom.file : targetFile, preferences));
