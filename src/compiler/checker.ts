@@ -31611,9 +31611,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }, /*noReductions*/ true);
 
         function getTypeOfApplicableIndexedMappedTypeSubstitutionOfContextualType(t: MappedType) {
-            const constraint = getConstraintTypeFromMappedType(t);
-            const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
             const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
+            const constraint = getConstraintTypeFromMappedType(t);
+            // special case for conditional types pretending to be negated types
+            if (constraint.flags & TypeFlags.Conditional && getReducedType(getTrueTypeFromConditionalType(constraint as ConditionalType)).flags & TypeFlags.Never && isTypeAssignableTo(propertyNameType, (constraint as ConditionalType).extendsType)) {
+                return undefined;
+            }
+            const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
             if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
                 return substituteIndexedMappedType(t, propertyNameType);
             }
