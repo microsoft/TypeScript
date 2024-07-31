@@ -6548,9 +6548,12 @@ export interface DeferredTypeReference extends TypeReference {
     /** @internal */
     node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode;
     /** @internal */
-    mapper?: TypeMapper;
-    /** @internal */
     instantiations?: Map<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
+}
+
+/** @internal */
+export interface NonDeferredTypeReference extends TypeReference {
+    node?: never;
 }
 
 // dprint-ignore

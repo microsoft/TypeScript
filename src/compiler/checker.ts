@@ -899,6 +899,7 @@ import {
     NodeLinks,
     nodeStartsNewLexicalEnvironment,
     NodeWithTypeArguments,
+    NonDeferredTypeReference,
     NonNullChain,
     NonNullExpression,
     NoSubstitutionTemplateLiteral,
@@ -20093,8 +20094,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
-    function getObjectTypeInstantiation(type: AnonymousType | DeferredTypeReference, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
-        const declaration = type.objectFlags & ObjectFlags.Reference ? (type as TypeReference).node! :
+    function getObjectTypeInstantiation(type: DeferredTypeReference | AnonymousType | MappedType, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]) {
+        const declaration = type.objectFlags & ObjectFlags.Reference ? (type as DeferredTypeReference).node :
             type.objectFlags & ObjectFlags.InstantiationExpressionType ? (type as InstantiationExpressionType).node :
             type.symbol.declarations![0];
         const links = getNodeLinks(declaration);
@@ -20118,15 +20119,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeParameters;
             links.outerTypeParameters = typeParameters;
         }
-        if (typeParameters.length) {
+
+        const deferredMapperId = type.objectFlags & ObjectFlags.Reference ? mapper === permissiveMapper ? "P" : mapper === restrictiveMapper ? "R" : "" : "";
+
+        if (typeParameters.length || deferredMapperId) {
             // We are instantiating an anonymous type that has one or more type parameters in scope. Apply the
             // mapper to the type parameters to produce the effective list of type arguments, and compute the
             // instantiation cache key from the type IDs of the type arguments.
             const combinedMapper = combineTypeMappers(type.mapper, mapper);
-            const typeArguments = map(typeParameters, t => getMappedType(t, combinedMapper));
+            const typeArguments = sameMap(typeParameters, t => getMappedType(t, combinedMapper));
             const newAliasSymbol = aliasSymbol || type.aliasSymbol;
             const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
-            const id = (type.objectFlags & ObjectFlags.SingleSignatureType ? "S" : "") + getTypeListId(typeArguments) + getAliasId(newAliasSymbol, newAliasTypeArguments);
+            const id = (type.objectFlags & ObjectFlags.SingleSignatureType ? "S" : "") + deferredMapperId + getTypeListId(typeArguments) + getAliasId(newAliasSymbol, newAliasTypeArguments);
             if (!target.instantiations) {
                 target.instantiations = new Map<string, Type>();
                 target.instantiations.set(getTypeListId(typeParameters) + getAliasId(target.aliasSymbol, target.aliasTypeArguments), target);
@@ -20138,8 +20142,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     target.instantiations.set(id, result);
                     return result;
                 }
+                if (type.objectFlags & ObjectFlags.Reference && !typeParameters.length) {
+                    result = createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, combinedMapper, newAliasSymbol, newAliasTypeArguments);
+                    target.instantiations.set(id, result);
+                    return result;
+                }
                 const newMapper = createTypeMapper(typeParameters, typeArguments);
-                result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, newMapper, newAliasSymbol, newAliasTypeArguments) :
+                result = target.objectFlags & ObjectFlags.Reference ? createDeferredTypeReference((type as DeferredTypeReference).target, (type as DeferredTypeReference).node, combineTypeMappers(newMapper, mapper), newAliasSymbol, newAliasTypeArguments) :
                     target.objectFlags & ObjectFlags.Mapped ? instantiateMappedType(target as MappedType, newMapper, newAliasSymbol, newAliasTypeArguments) :
                     instantiateAnonymousType(target, newMapper, newAliasSymbol, newAliasTypeArguments);
                 target.instantiations.set(id, result); // Set cached result early in case we recursively invoke instantiation while eagerly computing type variable visibility below
@@ -20407,15 +20416,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (flags & TypeFlags.Object) {
             const objectFlags = (type as ObjectType).objectFlags;
             if (objectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
-                if (objectFlags & ObjectFlags.Reference && !(type as TypeReference).node) {
-                    const resolvedTypeArguments = (type as TypeReference).resolvedTypeArguments;
+                if (isNonDeferredTypeReference(type)) {
+                    const resolvedTypeArguments = type.resolvedTypeArguments;
                     const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
-                    return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference((type as TypeReference).target, newTypeArguments) : type;
+                    return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference(type.target, newTypeArguments) : type;
                 }
                 if (objectFlags & ObjectFlags.ReverseMapped) {
                     return instantiateReverseMappedType(type as ReverseMappedType, mapper);
                 }
-                return getObjectTypeInstantiation(type as TypeReference | AnonymousType | MappedType, mapper, aliasSymbol, aliasTypeArguments);
+                return getObjectTypeInstantiation(type as DeferredTypeReference | AnonymousType | MappedType, mapper, aliasSymbol, aliasTypeArguments);
             }
             return type;
         }
@@ -24408,7 +24417,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type.flags & TypeFlags.TypeParameter && !getConstraintOfTypeParameter(type as TypeParameter);
     }
 
-    function isNonDeferredTypeReference(type: Type): type is TypeReference {
+    function isNonDeferredTypeReference(type: Type): type is NonDeferredTypeReference {
         return !!(getObjectFlags(type) & ObjectFlags.Reference) && !(type as TypeReference).node;
     }
 

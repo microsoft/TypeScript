@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/deferredConditionalTypes3.ts] ////
+
+=== deferredConditionalTypes3.ts ===
+// https://github.com/microsoft/TypeScript/issues/59450
+
+declare function f(fun: <T>(t: T) => void): void;
+>f : Symbol(f, Decl(deferredConditionalTypes3.ts, 0, 0))
+>fun : Symbol(fun, Decl(deferredConditionalTypes3.ts, 2, 19))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 2, 25))
+>t : Symbol(t, Decl(deferredConditionalTypes3.ts, 2, 28))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 2, 25))
+
+f((t) => {
+>f : Symbol(f, Decl(deferredConditionalTypes3.ts, 0, 0))
+>t : Symbol(t, Decl(deferredConditionalTypes3.ts, 4, 3))
+
+  type T = typeof t;
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 4, 10))
+>t : Symbol(t, Decl(deferredConditionalTypes3.ts, 4, 3))
+
+  type IsAny = T extends any ? true : false;
+>IsAny : Symbol(IsAny, Decl(deferredConditionalTypes3.ts, 5, 20))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 4, 10))
+
+  type IsAnyArray = T[] extends any[] ? true : false;
+>IsAnyArray : Symbol(IsAnyArray, Decl(deferredConditionalTypes3.ts, 7, 44))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 4, 10))
+
+  type IsString = T extends string ? true : false;
+>IsString : Symbol(IsString, Decl(deferredConditionalTypes3.ts, 8, 53))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 4, 10))
+
+  type IsStringArray = T[] extends string[] ? true : false;
+>IsStringArray : Symbol(IsStringArray, Decl(deferredConditionalTypes3.ts, 10, 50))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 4, 10))
+
+});
+
+function g<T>(t: T) {
+>g : Symbol(g, Decl(deferredConditionalTypes3.ts, 12, 3))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 14, 11))
+>t : Symbol(t, Decl(deferredConditionalTypes3.ts, 14, 14))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 14, 11))
+
+  type IsAny = T extends any ? true : false;
+>IsAny : Symbol(IsAny, Decl(deferredConditionalTypes3.ts, 14, 21))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 14, 11))
+
+  type IsAnyArray = T[] extends any[] ? true : false;
+>IsAnyArray : Symbol(IsAnyArray, Decl(deferredConditionalTypes3.ts, 15, 44))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 14, 11))
+
+  type IsString = T extends string ? true : false;
+>IsString : Symbol(IsString, Decl(deferredConditionalTypes3.ts, 16, 53))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 14, 11))
+
+  type IsStringArray = T[] extends string[] ? true : false;
+>IsStringArray : Symbol(IsStringArray, Decl(deferredConditionalTypes3.ts, 18, 50))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 14, 11))
+}
+
+function h<Outer>() {
+>h : Symbol(h, Decl(deferredConditionalTypes3.ts, 20, 1))
+>Outer : Symbol(Outer, Decl(deferredConditionalTypes3.ts, 22, 11))
+
+  f((t) => {
+>f : Symbol(f, Decl(deferredConditionalTypes3.ts, 0, 0))
+>t : Symbol(t, Decl(deferredConditionalTypes3.ts, 23, 5))
+
+    type T = typeof t;
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 23, 12))
+>t : Symbol(t, Decl(deferredConditionalTypes3.ts, 23, 5))
+
+    type IsAny = T extends any ? true : false;
+>IsAny : Symbol(IsAny, Decl(deferredConditionalTypes3.ts, 24, 22))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 23, 12))
+
+    type IsAnyArray = T[] extends any[] ? true : false;
+>IsAnyArray : Symbol(IsAnyArray, Decl(deferredConditionalTypes3.ts, 26, 46))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 23, 12))
+
+    type IsString = T extends string ? true : false;
+>IsString : Symbol(IsString, Decl(deferredConditionalTypes3.ts, 27, 55))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 23, 12))
+
+    type IsStringArray = T[] extends string[] ? true : false;
+>IsStringArray : Symbol(IsStringArray, Decl(deferredConditionalTypes3.ts, 29, 52))
+>T : Symbol(T, Decl(deferredConditionalTypes3.ts, 23, 12))
+
+  });
+}
+
