@@ -4439,7 +4439,7 @@ function getCompletionData(
                         case SyntaxKind.CallExpression:               // func( a, |
                         case SyntaxKind.NewExpression:                // new C(a, |
                         case SyntaxKind.ArrayLiteralExpression:       // [a, |
-                            return { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true };
+                            return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
                         case SyntaxKind.Constructor:                  // constructor( a, |   /* public, protected, private keywords are allowed here, so show completion */
                         case SyntaxKind.BinaryExpression:             // const x = (a, |
                         case SyntaxKind.FunctionType:                 // var x: (s: string, list|
@@ -4452,6 +4452,7 @@ function getCompletionData(
                     switch (containingNodeKind) {
                         case SyntaxKind.CallExpression:               // func( |
                         case SyntaxKind.NewExpression:                // new C(a|
+                            return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
                         case SyntaxKind.ParenthesizedExpression:      // const x = (a|
                             return { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true };
                         case SyntaxKind.Constructor:                  // constructor( |
@@ -4463,7 +4464,7 @@ function getCompletionData(
                 case SyntaxKind.OpenBracketToken:
                     switch (containingNodeKind) {
                         case SyntaxKind.ArrayLiteralExpression:       // [ |
-                            return { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true };
+                            return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
                         case SyntaxKind.IndexSignature:               // [ | : string ]
                         case SyntaxKind.ComputedPropertyName:         // [ |    /* this can become an index signature */
                             return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
@@ -4498,19 +4499,19 @@ function getCompletionData(
                     switch (containingNodeKind) {
                         case SyntaxKind.VariableDeclaration:          // const x = a|
                         case SyntaxKind.BinaryExpression:             // x = a|
-                            return { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true };
+                            return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
                         default:
                             return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
                     }
 
                 case SyntaxKind.TemplateHead:
                     return containingNodeKind === SyntaxKind.TemplateExpression // `aa ${|
-                        ? { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true }
+                        ? { commitCharacters: allCommitCharacters, isNewIdentifierLocation: true }
                         : { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
 
                 case SyntaxKind.TemplateMiddle:
                     return containingNodeKind === SyntaxKind.TemplateSpan // `aa ${10} dd ${|
-                        ? { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true }
+                        ? { commitCharacters: allCommitCharacters, isNewIdentifierLocation: true }
                         : { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
 
                 case SyntaxKind.AsyncKeyword:
@@ -4522,7 +4523,7 @@ function getCompletionData(
                 case SyntaxKind.AsteriskToken:
                     return containingNodeKind === SyntaxKind.MethodDeclaration // const obj = { * c|
                         ? { commitCharacters: [], isNewIdentifierLocation: true }
-                        : { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };       
+                        : { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
             }
 
             if (isClassMemberCompletionKeyword(tokenKind)) {

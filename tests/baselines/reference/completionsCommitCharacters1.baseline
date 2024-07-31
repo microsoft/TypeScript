@@ -3561,6 +3561,7 @@
       ],
       "defaultCommitCharacters": [
         ".",
+        ",",
         ";"
       ]
     }
