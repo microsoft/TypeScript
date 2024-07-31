@@ -433,6 +433,21 @@ export const SortText = {
     },
 };
 
+/** All commit characters, valid when `isNewIdentifierLocation` is false. */
+const allCommitCharacters = [".", ",", ";"];
+// In an expression position,
+// the only way for a new identifier to be valid is if we're typing an arrow expression, e.g.:
+// `const x = |`
+// `const x = a|`
+// `const x = (|`
+// `const x = (a|`
+// `const x = (a, |`
+// Those could all end up becoming something like:
+// `const x = a => a + 1` or `const x = (a: number) => a + 1` or `const x = (a = 0) => a + 1`
+// In those cases, a new identifier could be validly followed by `)`, `(`, `,`, ` `, `:`, `=`, `{`, `[`.
+/** Commit characters valid at expression positions. */
+const expressionCommitCharacters = [".", ";"];
+
 /**
  * Special values for `CompletionInfo['source']` used to disambiguate
  * completion items with the same `name`. (Each completion item must
@@ -687,7 +702,7 @@ export function getDefaultCommitCharacters(isNewIdentifierLocation: boolean): st
     if (isNewIdentifierLocation) {
         return [];
     }
-    return [".", ",", ";"];
+    return allCommitCharacters;
 }
 
 /** @internal */
@@ -1291,6 +1306,7 @@ function completionInfoFromData(
         insideJsDocTagTypeExpression,
         symbolToSortTextMap,
         hasUnresolvedAutoImports,
+        defaultCommitCharacters,
     } = completionData;
     let literals = completionData.literals;
 
@@ -1409,7 +1425,7 @@ function completionInfoFromData(
         isNewIdentifierLocation,
         optionalReplacementSpan: getOptionalReplacementSpan(location),
         entries,
-        defaultCommitCharacters: getDefaultCommitCharacters(isNewIdentifierLocation),
+        defaultCommitCharacters: defaultCommitCharacters ?? getDefaultCommitCharacters(isNewIdentifierLocation),
     };
 }
 
@@ -3194,6 +3210,7 @@ interface CompletionData {
     readonly importStatementCompletion?: ImportStatementCompletionInfo;
     readonly hasUnresolvedAutoImports?: boolean;
     readonly flags: CompletionInfoFlags;
+    readonly defaultCommitCharacters: string[] | undefined;
 }
 type Request =
     | { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag; }
@@ -3387,6 +3404,7 @@ function getCompletionData(
     let keywordFilters = KeywordCompletionFilters.None;
     let isNewIdentifierLocation = false;
     let flags = CompletionInfoFlags.None;
+    let defaultCommitCharacters: string[] | undefined;
 
     if (contextToken) {
         const importStatementCompletionInfo = getImportStatementCompletionInfo(contextToken, sourceFile);
@@ -3630,6 +3648,7 @@ function getCompletionData(
         importStatementCompletion,
         hasUnresolvedAutoImports,
         flags,
+        defaultCommitCharacters,
     };
 
     type JSDocTagWithTypeExpression =
@@ -3941,7 +3960,7 @@ function getCompletionData(
 
         // Get all entities in the current scope.
         completionKind = CompletionKind.Global;
-        isNewIdentifierLocation = isNewIdentifierDefinitionLocation();
+        ({ isNewIdentifierLocation, commitCharacters: defaultCommitCharacters } = computeCommitCharactersAndIsNewIdentifier());
 
         if (previousToken !== contextToken) {
             Debug.assert(!!previousToken, "Expected 'contextToken' to be defined when different from 'previousToken'.");
@@ -4341,6 +4360,7 @@ function getCompletionData(
         return false;
     }
 
+    // >> TODO: remove this function
     function isNewIdentifierDefinitionLocation(): boolean {
         if (contextToken) {
             const containingNodeKind = contextToken.parent.kind;
@@ -4405,6 +4425,112 @@ function getCompletionData(
         }
 
         return false;
+    }
+
+    function computeCommitCharactersAndIsNewIdentifier(): { commitCharacters: string[]; isNewIdentifierLocation: boolean; } {
+        if (contextToken) {
+            const containingNodeKind = contextToken.parent.kind;
+            const tokenKind = keywordForNode(contextToken);
+            // Previous token may have been a keyword that was converted to an identifier.
+            // dprint-ignore
+            switch (tokenKind) {
+                case SyntaxKind.CommaToken:
+                    switch (containingNodeKind) {    
+                        case SyntaxKind.CallExpression:               // func( a, |
+                        case SyntaxKind.NewExpression:                // new C(a, |
+                        case SyntaxKind.ArrayLiteralExpression:       // [a, |
+                            return { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true };
+                        case SyntaxKind.Constructor:                  // constructor( a, |   /* public, protected, private keywords are allowed here, so show completion */
+                        case SyntaxKind.BinaryExpression:             // const x = (a, |
+                        case SyntaxKind.FunctionType:                 // var x: (s: string, list|
+                        case SyntaxKind.ObjectLiteralExpression:      // const obj = { x, |
+                            return { commitCharacters: [], isNewIdentifierLocation: true };
+                        default:
+                            return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
+                case SyntaxKind.OpenParenToken:
+                    switch (containingNodeKind) {
+                        case SyntaxKind.CallExpression:               // func( |
+                        case SyntaxKind.NewExpression:                // new C(a|
+                        case SyntaxKind.ParenthesizedExpression:      // const x = (a|
+                            return { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true };
+                        case SyntaxKind.Constructor:                  // constructor( |
+                        case SyntaxKind.ParenthesizedType:            // function F(pred: (a| /* this can become an arrow function, where 'a' is the argument */
+                            return { commitCharacters: [], isNewIdentifierLocation: true };
+                        default:
+                            return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
+                case SyntaxKind.OpenBracketToken:
+                    switch (containingNodeKind) {
+                        case SyntaxKind.ArrayLiteralExpression:       // [ |
+                            return { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true };
+                        case SyntaxKind.IndexSignature:               // [ | : string ]
+                        case SyntaxKind.ComputedPropertyName:         // [ |    /* this can become an index signature */
+                            return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: true };
+                        default:
+                            return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
+
+                case SyntaxKind.ModuleKeyword:                        // module |
+                case SyntaxKind.NamespaceKeyword:                     // namespace |
+                case SyntaxKind.ImportKeyword:                        // import |
+                    return { commitCharacters: [], isNewIdentifierLocation: true }; // >> TODO: not changing those for now
+
+                case SyntaxKind.DotToken:
+                    switch (containingNodeKind) {
+                        case SyntaxKind.ModuleDeclaration:            // module A.|
+                            return { commitCharacters: [], isNewIdentifierLocation: true }; // >> TODO: not changing those for now, also may be superfluous with code in `getTypeScriptMemberSymbols`?
+                        default:
+                            return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
+
+                case SyntaxKind.OpenBraceToken:
+                    switch (containingNodeKind) {
+                        // >> TODO: also include interface or object type literal??
+                        case SyntaxKind.ClassDeclaration:             // class A { |
+                        case SyntaxKind.ObjectLiteralExpression:      // const obj = { |
+                            return { commitCharacters: [], isNewIdentifierLocation: true };
+                        default:
+                            return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
+
+                case SyntaxKind.EqualsToken:
+                    switch (containingNodeKind) {
+                        case SyntaxKind.VariableDeclaration:          // const x = a|
+                        case SyntaxKind.BinaryExpression:             // x = a|
+                            return { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true };
+                        default:
+                            return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+                    }
+
+                case SyntaxKind.TemplateHead:
+                    return containingNodeKind === SyntaxKind.TemplateExpression // `aa ${|
+                        ? { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true }
+                        : { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+
+                case SyntaxKind.TemplateMiddle:
+                    return containingNodeKind === SyntaxKind.TemplateSpan // `aa ${10} dd ${|
+                        ? { commitCharacters: expressionCommitCharacters, isNewIdentifierLocation: true }
+                        : { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+
+                case SyntaxKind.AsyncKeyword:
+                    return (containingNodeKind === SyntaxKind.MethodDeclaration            // const obj = { async c|()
+                        || containingNodeKind === SyntaxKind.ShorthandPropertyAssignment)  // const obj = { async c|
+                        ? { commitCharacters: [], isNewIdentifierLocation: true }
+                        : { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
+
+                case SyntaxKind.AsteriskToken:
+                    return containingNodeKind === SyntaxKind.MethodDeclaration // const obj = { * c|
+                        ? { commitCharacters: [], isNewIdentifierLocation: true }
+                        : { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };       
+            }
+
+            if (isClassMemberCompletionKeyword(tokenKind)) {
+                return { commitCharacters: [], isNewIdentifierLocation: true };
+            }
+        }
+
+        return { commitCharacters: allCommitCharacters, isNewIdentifierLocation: false };
     }
 
     function isInStringOrRegularExpressionOrTemplateLiteral(contextToken: Node): boolean {
