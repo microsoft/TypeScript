@@ -1985,10 +1985,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.parameters = createNodeArray(parameters);
         node.body = body;
 
-        node.transformFlags = propagateChildrenFlags(node.modifiers) |
-            propagateChildrenFlags(node.parameters) |
-            (propagateChildFlags(node.body) & ~TransformFlags.ContainsPossibleTopLevelAwait) |
-            TransformFlags.ContainsES2015;
+        if (!node.body) {
+            node.transformFlags = TransformFlags.ContainsTypeScript;
+        }
+        else {
+            node.transformFlags = propagateChildrenFlags(node.modifiers) |
+                propagateChildrenFlags(node.parameters) |
+                (propagateChildFlags(node.body) & ~TransformFlags.ContainsPossibleTopLevelAwait) |
+                TransformFlags.ContainsES2015;
+        }
 
         node.typeParameters = undefined; // initialized by parser for grammar errors
         node.type = undefined; // initialized by parser for grammar errors
