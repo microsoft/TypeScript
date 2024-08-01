@@ -18118,7 +18118,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     result = getUnionType([getIntersectionType(typeSet, flags), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                 }
                 else if (typeSet.length >= 3 && types.length > 2) {
-                    // When we have four or more constituents, some of which are unions, we employ a "divide and conquer" strategy
+                    // When we have three or more constituents, more than two inputs (to head off infinite reexpansion), some of which are unions, we employ a "divide and conquer" strategy
                     // where A & B & C & D is processed as (A & B) & (C & D). Since intersections of unions often produce far smaller
                     // unions of intersections than the full cartesian product (due to some intersections becoming `never`), this can
                     // dramatically reduce the overall work.
