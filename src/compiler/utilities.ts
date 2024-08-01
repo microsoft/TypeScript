@@ -1558,8 +1558,6 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
                 "keys",
                 "values",
             ],
-        })),
-        SetConstructor: new Map(Object.entries({
             esnext: [
                 "union",
                 "intersection",
