@@ -33,10 +33,10 @@ const f3 = async function * () {
 }
 === F4.ts ===
 const f4 = async function * () {
->f4 : () => AsyncGenerator<number, void, any>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->async function * () {    const x = yield* [1];} : () => AsyncGenerator<number, void, any>
->                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f4 : () => AsyncGenerator<number, void, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    const x = yield* [1];} : () => AsyncGenerator<number, void, unknown>
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = yield* [1];
 >x : any

@@ -1,7 +1,8 @@
 //// [tests/cases/compiler/excessiveStackDepthFlatArray.ts] ////
 
 === Performance Stats ===
-Instantiation count: 1,000 -> 2,500
+Type Count: 1,000
+Instantiation count: 2,500
 
 === index.tsx ===
 interface MiddlewareArray<T> extends Array<T> {}
