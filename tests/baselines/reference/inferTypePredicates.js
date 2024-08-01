@@ -280,6 +280,11 @@ if (foobarPred(foobar)) {
   foobar.foo;
 }
 
+type X = { type: 'A'; a: string } | { type: 'B'; b: string };
+let xs: X[] = [];
+const filtered1: { type: 'A'; a: string }[] = xs.filter(({ type }) => type === 'A');
+const filtered2: { type: 'A'; a: string }[] = xs.filter(x => x.type === 'A');
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -538,6 +543,12 @@ var foobarPred = function (fb) { return fb.type === "foo"; };
 if (foobarPred(foobar)) {
     foobar.foo;
 }
+var xs = [];
+var filtered1 = xs.filter(function (_a) {
+    var type = _a.type;
+    return type === 'A';
+});
+var filtered2 = xs.filter(function (x) { return x.type === 'A'; });
 
 
 //// [inferTypePredicates.d.ts]
@@ -630,3 +641,19 @@ declare const foobarPred: (fb: typeof foobar) => fb is {
     type: "foo";
     foo: number;
 };
+type X = {
+    type: 'A';
+    a: string;
+} | {
+    type: 'B';
+    b: string;
+};
+declare let xs: X[];
+declare const filtered1: {
+    type: 'A';
+    a: string;
+}[];
+declare const filtered2: {
+    type: 'A';
+    a: string;
+}[];

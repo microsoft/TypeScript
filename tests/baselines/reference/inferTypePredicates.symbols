@@ -777,3 +777,36 @@ if (foobarPred(foobar)) {
 >foo : Symbol(foo, Decl(inferTypePredicates.ts, 271, 18))
 }
 
+type X = { type: 'A'; a: string } | { type: 'B'; b: string };
+>X : Symbol(X, Decl(inferTypePredicates.ts, 277, 1))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 279, 10))
+>a : Symbol(a, Decl(inferTypePredicates.ts, 279, 21))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 279, 37))
+>b : Symbol(b, Decl(inferTypePredicates.ts, 279, 48))
+
+let xs: X[] = [];
+>xs : Symbol(xs, Decl(inferTypePredicates.ts, 280, 3))
+>X : Symbol(X, Decl(inferTypePredicates.ts, 277, 1))
+
+const filtered1: { type: 'A'; a: string }[] = xs.filter(({ type }) => type === 'A');
+>filtered1 : Symbol(filtered1, Decl(inferTypePredicates.ts, 281, 5))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 281, 18))
+>a : Symbol(a, Decl(inferTypePredicates.ts, 281, 29))
+>xs.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>xs : Symbol(xs, Decl(inferTypePredicates.ts, 280, 3))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 281, 58))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 281, 58))
+
+const filtered2: { type: 'A'; a: string }[] = xs.filter(x => x.type === 'A');
+>filtered2 : Symbol(filtered2, Decl(inferTypePredicates.ts, 282, 5))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 282, 18))
+>a : Symbol(a, Decl(inferTypePredicates.ts, 282, 29))
+>xs.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>xs : Symbol(xs, Decl(inferTypePredicates.ts, 280, 3))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 282, 56))
+>x.type : Symbol(type, Decl(inferTypePredicates.ts, 279, 10), Decl(inferTypePredicates.ts, 279, 37))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 282, 56))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 279, 10), Decl(inferTypePredicates.ts, 279, 37))
+

@@ -1649,3 +1649,77 @@ if (foobarPred(foobar)) {
 >    : ^^^^^^
 }
 
+type X = { type: 'A'; a: string } | { type: 'B'; b: string };
+>X : X
+>  : ^
+>type : "A"
+>     : ^^^
+>a : string
+>  : ^^^^^^
+>type : "B"
+>     : ^^^
+>b : string
+>  : ^^^^^^
+
+let xs: X[] = [];
+>xs : X[]
+>   : ^^^
+>[] : never[]
+>   : ^^^^^^^
+
+const filtered1: { type: 'A'; a: string }[] = xs.filter(({ type }) => type === 'A');
+>filtered1 : { type: "A"; a: string; }[]
+>          : ^^^^^^^^   ^^^^^      ^^^^^
+>type : "A"
+>     : ^^^
+>a : string
+>  : ^^^^^^
+>xs.filter(({ type }) => type === 'A') : { type: "A"; a: string; }[]
+>                                      : ^^^^^^^^   ^^^^^      ^^^^^
+>xs.filter : { <S extends X>(predicate: (value: X, index: number, array: X[]) => value is S, thisArg?: any): S[]; (predicate: (value: X, index: number, array: X[]) => unknown, thisArg?: any): X[]; }
+>          : ^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^
+>xs : X[]
+>   : ^^^
+>filter : { <S extends X>(predicate: (value: X, index: number, array: X[]) => value is S, thisArg?: any): S[]; (predicate: (value: X, index: number, array: X[]) => unknown, thisArg?: any): X[]; }
+>       : ^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^
+>({ type }) => type === 'A' : ({ type }: X) => arg_0 is { type: "A"; a: string; }
+>                           : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+>type === 'A' : boolean
+>             : ^^^^^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+
+const filtered2: { type: 'A'; a: string }[] = xs.filter(x => x.type === 'A');
+>filtered2 : { type: "A"; a: string; }[]
+>          : ^^^^^^^^   ^^^^^      ^^^^^
+>type : "A"
+>     : ^^^
+>a : string
+>  : ^^^^^^
+>xs.filter(x => x.type === 'A') : { type: "A"; a: string; }[]
+>                               : ^^^^^^^^   ^^^^^      ^^^^^
+>xs.filter : { <S extends X>(predicate: (value: X, index: number, array: X[]) => value is S, thisArg?: any): S[]; (predicate: (value: X, index: number, array: X[]) => unknown, thisArg?: any): X[]; }
+>          : ^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^
+>xs : X[]
+>   : ^^^
+>filter : { <S extends X>(predicate: (value: X, index: number, array: X[]) => value is S, thisArg?: any): S[]; (predicate: (value: X, index: number, array: X[]) => unknown, thisArg?: any): X[]; }
+>       : ^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^
+>x => x.type === 'A' : (x: X) => x is { type: "A"; a: string; }
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^
+>x : X
+>  : ^
+>x.type === 'A' : boolean
+>               : ^^^^^^^
+>x.type : "A" | "B"
+>       : ^^^^^^^^^
+>x : X
+>  : ^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+

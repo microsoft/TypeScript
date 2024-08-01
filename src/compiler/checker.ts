@@ -38473,13 +38473,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         return forEach(func.parameters, (param, i) => {
             const initType = getTypeOfSymbol(param.symbol);
-            if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol) || isRestParameter(param)) {
+            if (!initType || initType.flags & TypeFlags.Boolean || isSymbolAssigned(param.symbol) || isRestParameter(param)) {
                 // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
                 return;
             }
             const trueType = checkIfExpressionRefinesParameter(func, expr, param, initType);
             if (trueType) {
-                return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, trueType);
+                return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(isIdentifier(param.name) ? param.name.escapedText : (`arg_${i}`) as __String), i, trueType);
             }
         });
     }

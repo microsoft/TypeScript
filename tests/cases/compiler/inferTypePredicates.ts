@@ -279,3 +279,8 @@ const foobarPred = (fb: typeof foobar) => fb.type === "foo";
 if (foobarPred(foobar)) {
   foobar.foo;
 }
+
+type X = { type: 'A'; a: string } | { type: 'B'; b: string };
+let xs: X[] = [];
+const filtered1: { type: 'A'; a: string }[] = xs.filter(({ type }) => type === 'A');
+const filtered2: { type: 'A'; a: string }[] = xs.filter(x => x.type === 'A');
