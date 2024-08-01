@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationCrossFileInferences.ts] ////
+
 //// [defines.ts] ////
 export class A {
     field = { x: 1 }

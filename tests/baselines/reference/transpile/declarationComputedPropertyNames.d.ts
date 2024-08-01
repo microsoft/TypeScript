@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationComputedPropertyNames.ts] ////
+
 //// [declarationComputedPropertyNames.ts] ////
 export namespace presentNs {
     export const a = Symbol();

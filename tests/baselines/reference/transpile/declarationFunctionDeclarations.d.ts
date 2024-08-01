@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationFunctionDeclarations.ts] ////
+
 //// [fnDecl.ts] ////
 type T = number[]
 export function fnDeclBasic1(p: number[] | string[] | [T] = [], rParam: string): void { };

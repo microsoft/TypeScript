@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationsSimple.ts] ////
+
 //// [declarationsSimple.ts] ////
 export const c: number = 1;
 

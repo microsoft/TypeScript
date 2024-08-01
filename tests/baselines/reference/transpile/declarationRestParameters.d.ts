@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationRestParameters.ts] ////
+
 //// [v1.ts] ////
 export const v1 = (...a: [n: "n", a: "a"]): {
     /** r rest param */

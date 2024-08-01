@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationUnresolvedGlobalReferencesNoErrors.ts] ////
+
 //// [declarationUnresolvedGlobalReferencesNoErrors.ts] ////
 export const x: MissingGlobalType = null!;
 export const fn = (a: MissingGlobalType): MissingGlobalType => null!;

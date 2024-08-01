@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationPartialNodeReuseTypeOf.ts] ////
+
 //// [a.ts] ////
 export const nImported = "nImported"
 export const nNotImported = "nNotImported"

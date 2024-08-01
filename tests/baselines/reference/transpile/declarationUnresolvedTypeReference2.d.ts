@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationUnresolvedTypeReference2.ts] ////
+
 //// [globals.ts] ////
 type MissingGlobalType = "global";
 declare const missingGlobalValue: "A";

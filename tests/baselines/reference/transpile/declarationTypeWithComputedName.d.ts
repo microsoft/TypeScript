@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationTypeWithComputedName.ts] ////
+
 //// [declarationTypeWithComputedName.ts] ////
 import {Foo} from './a';
 

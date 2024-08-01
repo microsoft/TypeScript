@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationAsyncAndGeneratorFunctions.ts] ////
+
 //// [declarationAsyncAndGeneratorFunctions.ts] ////
 export async function asyncFn() {
     return {} as Promise<void>
