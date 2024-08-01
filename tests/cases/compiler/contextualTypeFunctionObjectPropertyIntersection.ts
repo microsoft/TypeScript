@@ -31,6 +31,17 @@ createMachine({
   },
 });
 
+createMachine({
+  schema: {
+    events: {} as { type: "FOO" } | { type: "BAR" },
+  },
+  on: {
+    "*": (ev) => {
+      ev.type; // should be 'FOO'
+    },
+  },
+});
+
 // repro from #49307#issuecomment-1143103607
 
 declare function createSlice<T>(
