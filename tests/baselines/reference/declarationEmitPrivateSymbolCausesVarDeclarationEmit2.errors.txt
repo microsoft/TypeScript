@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitPrivateSymbolCausesVarDeclarationEmit2.ts] ////
+
 c.ts(4,14): error TS2415: Class 'D' incorrectly extends base class 'C'.
   Types have separate declarations of a private property '[x]'.
 

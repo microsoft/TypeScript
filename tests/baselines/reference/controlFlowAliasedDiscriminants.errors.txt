@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowAliasedDiscriminants.ts] ////
+
 controlFlowAliasedDiscriminants.ts(39,9): error TS18048: 'data1' is possibly 'undefined'.
 controlFlowAliasedDiscriminants.ts(40,9): error TS18048: 'data2' is possibly 'undefined'.
 controlFlowAliasedDiscriminants.ts(65,9): error TS18048: 'bar2' is possibly 'undefined'.

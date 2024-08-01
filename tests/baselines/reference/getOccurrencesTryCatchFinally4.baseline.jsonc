@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
 // [|{| kind: "none" |}try|]/*HIGHLIGHTS*/ {

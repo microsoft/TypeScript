@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/linkedEditingJsxTag12.ts] ////
+
 // === Linked Editing ===
 === /incomplete.tsx ===
 function Test() {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportWithExportPropertyAssignment.ts] ////
+
 a.js(4,6): error TS2554: Expected 1 arguments, but got 0.
 
 

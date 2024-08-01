@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForClassMembersExtendingGenericClass.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForClassMembersExtendingGenericClass.ts ===
 // class Base<T> {

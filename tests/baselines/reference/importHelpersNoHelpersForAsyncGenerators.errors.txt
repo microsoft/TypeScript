@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importHelpersNoHelpersForAsyncGenerators.ts] ////
+
 main.ts(1,25): error TS2343: This syntax requires an imported helper named '__asyncGenerator' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 main.ts(1,25): error TS2343: This syntax requires an imported helper named '__await' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 main.ts(1,25): error TS2343: This syntax requires an imported helper named '__generator' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.

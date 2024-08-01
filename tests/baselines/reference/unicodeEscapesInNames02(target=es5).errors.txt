@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unicodeEscapesInNames02.ts] ////
+
 error TS-1: Pre-emit (44) and post-emit (45) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 astralAsSurrogatePair.ts(1,11): error TS1127: Invalid character.
 astralAsSurrogatePair.ts(1,14): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'as'.

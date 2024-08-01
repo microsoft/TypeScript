@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pushTypeGetTypeOfAlias.ts] ////
+
 bar.js(2,1): error TS2303: Circular definition of import alias 'blah'.
 bar.js(2,24): error TS2339: Property 'someProp' does not exist on type '{ (): void; blah: any; }'.
 

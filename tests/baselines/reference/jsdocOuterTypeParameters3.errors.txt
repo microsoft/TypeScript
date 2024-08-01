@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocOuterTypeParameters3.ts] ////
+
 error TS5055: Cannot write file 'jsdocOuterTypeParameters3.js' because it would overwrite input file.
   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 jsdocOuterTypeParameters3.js(1,16): error TS2304: Cannot find name 'T'.

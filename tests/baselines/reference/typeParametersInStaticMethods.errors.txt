@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParametersInStaticMethods.ts] ////
+
 typeParametersInStaticMethods.ts(2,21): error TS2302: Static members cannot reference class type parameters.
 typeParametersInStaticMethods.ts(2,37): error TS2302: Static members cannot reference class type parameters.
 

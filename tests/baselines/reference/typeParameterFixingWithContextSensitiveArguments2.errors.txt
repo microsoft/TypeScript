@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments2.ts] ////
+
 typeParameterFixingWithContextSensitiveArguments2.ts(7,30): error TS2741: Property 'b' is missing in type 'A' but required in type 'B'.
 
 

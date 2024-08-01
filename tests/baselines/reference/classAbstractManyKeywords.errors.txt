@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractManyKeywords.ts] ////
+
 classAbstractManyKeywords.ts(3,1): error TS1005: 'export' expected.
 classAbstractManyKeywords.ts(4,17): error TS1005: '=' expected.
 

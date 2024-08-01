@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/elementAccessChain/elementAccessChain.3.ts] ////
+
 elementAccessChain.3.ts(3,1): error TS2777: The operand of an increment or decrement operator may not be an optional property access.
 elementAccessChain.3.ts(4,1): error TS2777: The operand of an increment or decrement operator may not be an optional property access.
 elementAccessChain.3.ts(5,1): error TS2777: The operand of an increment or decrement operator may not be an optional property access.

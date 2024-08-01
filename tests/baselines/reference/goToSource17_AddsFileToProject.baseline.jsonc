@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/goToSource17_AddsFileToProject.ts] ////
+
 // === goToSourceDefinition ===
 // === /node_modules/yargs/callback.js ===
 // export class Yargs { [|positional|]() { } }

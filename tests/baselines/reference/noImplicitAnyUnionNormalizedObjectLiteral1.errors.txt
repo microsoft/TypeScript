@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyUnionNormalizedObjectLiteral1.ts] ////
+
 noImplicitAnyUnionNormalizedObjectLiteral1.ts(16,3): error TS7018: Object literal's property 'p' implicitly has an 'any' type.
 noImplicitAnyUnionNormalizedObjectLiteral1.ts(17,3): error TS7018: Object literal's property 's' implicitly has an 'any' type.
 

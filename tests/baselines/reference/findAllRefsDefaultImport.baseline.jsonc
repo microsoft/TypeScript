@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsDefaultImport.ts] ////
+
 // === findAllReferences ===
 // === /a.ts ===
 // <|export default function /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}a|]() {}|>

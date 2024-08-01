@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts] ////
+
 unionTypeIdentity.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'string'.
 unionTypeIdentity.ts(7,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'boolean'.
 unionTypeIdentity.ts(8,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'number'.

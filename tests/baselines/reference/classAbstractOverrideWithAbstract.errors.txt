@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractOverrideWithAbstract.ts] ////
+
 classAbstractOverrideWithAbstract.ts(19,7): error TS2515: Non-abstract class 'CC' does not implement inherited abstract member foo from class 'BB'.
 
 

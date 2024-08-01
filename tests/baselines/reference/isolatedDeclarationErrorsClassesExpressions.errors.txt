@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsClassesExpressions.ts] ////
+
 isolatedDeclarationErrorsClassesExpressions.ts(1,20): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
 isolatedDeclarationErrorsClassesExpressions.ts(15,26): error TS9021: Extends clause can't contain an expression with --isolatedDeclarations.
 isolatedDeclarationErrorsClassesExpressions.ts(19,25): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.

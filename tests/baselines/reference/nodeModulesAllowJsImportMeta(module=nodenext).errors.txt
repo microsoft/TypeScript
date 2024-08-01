@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/allowJs/nodeModulesAllowJsImportMeta.ts] ////
+
 subfolder/index.js(2,11): error TS1470: The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.
 
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForExpressionKeywords.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForExpressionKeywords.ts ===
 // <|class [|{| isWriteAccess: true |}C|] {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumAssignmentCompat5.ts] ////
+
 enumAssignmentCompat5.ts(12,1): error TS2322: Type '4' is not assignable to type 'E'.
 enumAssignmentCompat5.ts(14,1): error TS2322: Type '2' is not assignable to type 'E.A'.
 enumAssignmentCompat5.ts(20,5): error TS2322: Type '1' is not assignable to type 'Computed.A'.

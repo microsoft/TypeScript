@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx] ////
+
 tsxLibraryManagedAttributes.tsx(55,12): error TS2322: Type '{ foo: number; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
   Type '{ foo: number; }' is missing the following properties from type '{ bar: ReactNode | null | undefined; baz: string; }': bar, baz
 tsxLibraryManagedAttributes.tsx(57,41): error TS2322: Type '{ bar: string; baz: string; bat: string; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.

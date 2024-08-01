@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadResolutionTest1.ts] ////
+
 overloadResolutionTest1.ts(7,18): error TS2769: No overload matches this call.
   Overload 1 of 2, '(bar: { a: number; }[]): string', gave the following error.
     Type 'string' is not assignable to type 'number'.

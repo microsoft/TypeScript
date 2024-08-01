@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/umd-errors.ts] ////
+
 err1.d.ts(2,1): error TS1314: Global module exports may only appear in module files.
 err2.d.ts(3,2): error TS1316: Global module exports may only appear at top level.
 err3.d.ts(3,1): error TS1184: Modifiers cannot appear here.

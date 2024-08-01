@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/regularExpressionScanning.ts] ////
+
 regularExpressionScanning.ts(3,10): error TS1502: The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.
 regularExpressionScanning.ts(3,11): error TS1499: Unknown regular expression flag.
 regularExpressionScanning.ts(3,12): error TS1499: Unknown regular expression flag.

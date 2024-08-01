@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reverseMappedTypeIntersectionConstraint.ts] ////
+
 reverseMappedTypeIntersectionConstraint.ts(19,7): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
 reverseMappedTypeIntersectionConstraint.ts(32,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: "foo"; states: { a: { entry: "foo"; }; }; }'.
 reverseMappedTypeIntersectionConstraint.ts(43,3): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: "y"; }'.

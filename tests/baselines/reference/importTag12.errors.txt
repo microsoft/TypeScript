@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/importTag12.ts] ////
+
 /foo.js(2,20): error TS1109: Expression expected.
 
 

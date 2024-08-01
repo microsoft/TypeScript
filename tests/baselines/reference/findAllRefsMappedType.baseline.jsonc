@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsMappedType.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsMappedType.ts ===
 // interface T { /*FIND ALL REFS*/<|[|{| isDefinition: true |}a|]: number;|> }

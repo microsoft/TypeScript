@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitVarInElidedBlock.ts] ////
+
 declarationEmitVarInElidedBlock.ts(4,22): error TS4025: Exported variable 'b' has or is using private name 'a'.
 
 

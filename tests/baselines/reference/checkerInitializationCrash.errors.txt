@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkerInitializationCrash.ts] ////
+
 /node_modules/@fullcalendar/core/index.d.ts(4,10): error TS2300: Duplicate identifier 'VNode'.
 /node_modules/@fullcalendar/react/index.d.ts(4,19): error TS2300: Duplicate identifier 'VNode'.
 

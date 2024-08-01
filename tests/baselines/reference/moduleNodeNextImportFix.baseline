@@ -1,5 +1,7 @@
+//// [/tests/cases/fourslash/moduleNodeNextImportFix.ts] ////
+
 // === Syntax and Semantic Diagnostics ===
-Syntactic Diagnostics for file '/tests/cases/fourslash/moduleNodeNextImportFix.ts':
+Syntactic Diagnostics:
 
 
 ==== /tests/cases/fourslash/src/index.mts (0 errors) ====
@@ -10,7 +12,7 @@ Syntactic Diagnostics for file '/tests/cases/fourslash/moduleNodeNextImportFix.t
 ==== /tests/cases/fourslash/src/deps.mts (0 errors) ====
     export function util() {}
 
-Semantic Diagnostics for file '/tests/cases/fourslash/moduleNodeNextImportFix.ts':
+Semantic Diagnostics:
 /tests/cases/fourslash/src/index.mts(1,22): error TS5097: An import path can only end with a '.mts' extension when 'allowImportingTsExtensions' is enabled.
 
 

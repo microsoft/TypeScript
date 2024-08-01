@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts] ////
+
 subtypingWithObjectMembersOptionality2.ts(10,11): error TS2430: Interface 'S' incorrectly extends interface 'T'.
   Property 'Foo' is optional in type 'S' but required in type 'T'.
 subtypingWithObjectMembersOptionality2.ts(18,11): error TS2430: Interface 'S2' incorrectly extends interface 'T2'.

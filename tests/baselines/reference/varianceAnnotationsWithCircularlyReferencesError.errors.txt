@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/varianceAnnotationsWithCircularlyReferencesError.ts] ////
+
 varianceAnnotationsWithCircularlyReferencesError.ts(1,6): error TS2456: Type alias 'T1' circularly references itself.
 varianceAnnotationsWithCircularlyReferencesError.ts(1,9): error TS2637: Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.
 varianceAnnotationsWithCircularlyReferencesError.ts(1,11): error TS2300: Duplicate identifier '(Missing)'.

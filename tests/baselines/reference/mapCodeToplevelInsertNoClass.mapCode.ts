@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/mapCodeToplevelInsertNoClass.ts] ////
+
 // === mapCode ===
 
 // === ORIGINAL ===

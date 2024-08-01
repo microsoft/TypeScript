@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionCSSPatternAmbientModule.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/index.css ===
 // [|{| defId: 0 |}|]html { font-size: 16px; }

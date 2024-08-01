@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/esDecorators-classDeclaration-missingEmitHelpers-staticComputedField.ts] ////
+
 main.ts(8,5): error TS2343: This syntax requires an imported helper named '__esDecorate' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 main.ts(8,5): error TS2343: This syntax requires an imported helper named '__propKey' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
 main.ts(8,5): error TS2343: This syntax requires an imported helper named '__runInitializers' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.

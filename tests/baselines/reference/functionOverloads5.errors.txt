@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads5.ts] ////
+
 functionOverloads5.ts(2,10): error TS2385: Overload signatures must all be public, private or protected.
 
 

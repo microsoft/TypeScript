@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditoinIsAnyType.ts] ////
+
 conditionalOperatorConditoinIsAnyType.ts(26,1): error TS2873: This kind of expression is always falsy.
 conditionalOperatorConditoinIsAnyType.ts(27,1): error TS2873: This kind of expression is always falsy.
 conditionalOperatorConditoinIsAnyType.ts(28,1): error TS2873: This kind of expression is always falsy.

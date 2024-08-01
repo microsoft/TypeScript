@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requiredInitializedParameter1.ts] ////
+
 requiredInitializedParameter1.ts(11,1): error TS2554: Expected 3 arguments, but got 2.
 requiredInitializedParameter1.ts(16,1): error TS2554: Expected 3 arguments, but got 1.
 

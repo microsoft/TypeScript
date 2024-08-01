@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionTypeReferenceDirective.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/src/types/lib/index.d.ts ===
 // [||]declare let $: {x: number};

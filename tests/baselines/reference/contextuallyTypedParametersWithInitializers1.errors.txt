@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypedParametersWithInitializers1.ts] ////
+
 contextuallyTypedParametersWithInitializers1.ts(24,24): error TS7006: Parameter 'x' implicitly has an 'any' type.
 contextuallyTypedParametersWithInitializers1.ts(40,5): error TS7006: Parameter 'x' implicitly has an 'any' type.
 

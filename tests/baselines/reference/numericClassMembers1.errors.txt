@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numericClassMembers1.ts] ////
+
 numericClassMembers1.ts(3,3): error TS2300: Duplicate identifier '0.0'.
 numericClassMembers1.ts(8,2): error TS2300: Duplicate identifier ''0''.
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefs_importType_js.ts] ////
+
 // === findAllReferences ===
 // === /b.js ===
 // /** <|@type {import("[|./a|]")} |>*/

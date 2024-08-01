@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/resolutionModeTripleSlash4.ts] ////
+
 /app.ts(1,23): error TS2688: Cannot find type definition file for 'foo'.
 /app.ts(2,1): error TS2304: Cannot find name 'MODULE'.
 /app.ts(3,1): error TS2552: Cannot find name 'SCRIPT'. Did you mean 'WScript'?

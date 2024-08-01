@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fillInMissingTypeArgsOnJSConstructCalls.ts] ////
+
 BaseB.js(2,24): error TS8004: Type parameter declarations can only be used in TypeScript files.
 BaseB.js(2,25): error TS1005: ',' expected.
 BaseB.js(3,14): error TS2304: Cannot find name 'Class'.

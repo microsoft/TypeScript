@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationLocalAliasOfImportAlias.ts] ////
+
 //// [declarationLocalAliasOfImportAlias.ts] ////
 import { Record } from "./a";
 export type Foo<K extends string> = Record<K, number>;

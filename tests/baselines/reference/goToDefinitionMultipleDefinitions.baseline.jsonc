@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionMultipleDefinitions.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/a.ts ===
 // <|interface [|{| defId: 0 |}IFoo|] {

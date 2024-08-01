@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/regularExpressionUnicodePropertyValueExpressionSuggestions.ts] ////
+
 regularExpressionUnicodePropertyValueExpressionSuggestions.ts(1,19): error TS1529: Unknown Unicode property name or value.
 regularExpressionUnicodePropertyValueExpressionSuggestions.ts(1,28): error TS1524: Unknown Unicode property name.
 regularExpressionUnicodePropertyValueExpressionSuggestions.ts(1,45): error TS1526: Unknown Unicode property value.

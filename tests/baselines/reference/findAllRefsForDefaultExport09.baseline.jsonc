@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForDefaultExport09.ts] ////
+
 // === findAllReferences ===
 // === /foo.ts ===
 // <|import * as /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}a|] from "./a.js"|>

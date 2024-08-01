@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitIsolatedDeclarationErrorNotEmittedForNonEmittedFile.ts] ////
+
 index.ts(5,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 index.ts(6,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 index.ts(7,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.

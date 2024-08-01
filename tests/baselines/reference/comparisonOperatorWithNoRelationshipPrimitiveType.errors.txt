@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts] ////
+
 comparisonOperatorWithNoRelationshipPrimitiveType.ts(10,12): error TS2365: Operator '<' cannot be applied to types 'number' and 'boolean'.
 comparisonOperatorWithNoRelationshipPrimitiveType.ts(11,12): error TS2365: Operator '<' cannot be applied to types 'number' and 'string'.
 comparisonOperatorWithNoRelationshipPrimitiveType.ts(12,12): error TS2365: Operator '<' cannot be applied to types 'number' and 'void'.

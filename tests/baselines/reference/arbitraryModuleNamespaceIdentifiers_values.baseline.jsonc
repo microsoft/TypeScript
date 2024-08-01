@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/arbitraryModuleNamespaceIdentifiers_values.ts] ////
+
 // === findRenameLocations ===
 // === /foo.ts ===
 // const foo = "foo";

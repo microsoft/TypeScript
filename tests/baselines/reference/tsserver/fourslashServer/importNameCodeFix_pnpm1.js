@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/importNameCodeFix_pnpm1.ts] ////
+
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 //// [/lib.d.ts]

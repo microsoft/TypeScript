@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationNotInScopeTypes.ts] ////
+
 //// [variables.ts] ////
 const x = "";
 export function one() {

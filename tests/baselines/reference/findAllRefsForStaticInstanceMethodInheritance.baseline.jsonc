@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForStaticInstanceMethodInheritance.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForStaticInstanceMethodInheritance.ts ===
 // class X{

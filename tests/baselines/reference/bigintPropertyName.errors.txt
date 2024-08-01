@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bigintPropertyName.ts] ////
+
 a.ts(2,5): error TS1539: A 'bigint' literal cannot be used as a property name.
 a.ts(5,13): error TS1539: A 'bigint' literal cannot be used as a property name.
 a.ts(6,13): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.

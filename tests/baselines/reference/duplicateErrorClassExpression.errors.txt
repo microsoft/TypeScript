@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateErrorClassExpression.ts] ////
+
 duplicateErrorClassExpression.ts(17,5): error TS2416: Property 'foo' in type 'Derived' is not assignable to the same property in base type 'Base'.
   Type 'ComplicatedTypeDerived' is not assignable to type 'ComplicatedTypeBase'.
     'string' index signatures are incompatible.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList1.ts] ////
+
 parserParameterList1.ts(2,6): error TS1014: A rest parameter must be last in a parameter list.
 
 

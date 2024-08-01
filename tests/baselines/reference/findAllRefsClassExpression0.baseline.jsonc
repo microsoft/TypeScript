@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsClassExpression0.ts] ////
+
 // === findAllReferences ===
 // === /a.ts ===
 // export = <|class /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}A|] {

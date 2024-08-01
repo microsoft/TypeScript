@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/importAttributes/importAttributes3.ts] ////
+
 1.ts(1,27): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
 1.ts(2,30): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
 2.ts(1,31): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsImportNamed.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/f.ts ===
 // <|<|export { [|{| contextId: 0, defId: 0 |}foo|] as [|{| contextId: 1, defId: 1, isWriteAccess: true |}foo|] }|>|>

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionsWithImplicitReturnTypeAssignableToUndefined.ts] ////
+
 functionsWithImplicitReturnTypeAssignableToUndefined.ts(22,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 functionsWithImplicitReturnTypeAssignableToUndefined.ts(28,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
 functionsWithImplicitReturnTypeAssignableToUndefined.ts(35,16): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.

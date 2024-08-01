@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidOperands.es2015.ts] ////
+
 instanceofOperatorWithInvalidOperands.es2015.ts(14,11): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 instanceofOperatorWithInvalidOperands.es2015.ts(15,11): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 instanceofOperatorWithInvalidOperands.es2015.ts(16,11): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.

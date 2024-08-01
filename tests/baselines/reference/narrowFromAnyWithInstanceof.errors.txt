@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/any/narrowFromAnyWithInstanceof.ts] ////
+
 narrowFromAnyWithInstanceof.ts(17,7): error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
 narrowFromAnyWithInstanceof.ts(22,7): error TS2551: Property 'getHuors' does not exist on type 'Date'. Did you mean 'getHours'?
 

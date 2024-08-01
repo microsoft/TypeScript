@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration6.ts] ////
+
 parserVariableDeclaration6.ts(1,4): error TS1123: Variable declaration list cannot be empty.
 
 

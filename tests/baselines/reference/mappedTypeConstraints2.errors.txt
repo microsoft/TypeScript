@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts] ////
+
 mappedTypeConstraints2.ts(10,11): error TS2322: Type 'Mapped2<K>[`get${K}`]' is not assignable to type '{ a: K; }'.
   Type 'Mapped2<K>[`get${string}`]' is not assignable to type '{ a: K; }'.
 mappedTypeConstraints2.ts(16,11): error TS2322: Type 'Mapped3<K>[Uppercase<K>]' is not assignable to type '{ a: K; }'.

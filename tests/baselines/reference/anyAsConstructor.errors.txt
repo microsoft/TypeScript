@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/any/anyAsConstructor.ts] ////
+
 anyAsConstructor.ts(10,9): error TS2347: Untyped function calls may not accept type arguments.
 
 

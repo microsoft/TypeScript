@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/derivedClasses.ts] ////
+
 derivedClasses.ts(1,19): error TS2449: Class 'Color' used before its declaration.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedSwitchStatement.ts] ////
+
 unusedSwitchStatement.ts(2,10): error TS2678: Type '0' is not comparable to type '1'.
 unusedSwitchStatement.ts(3,13): error TS6133: 'x' is declared but its value is never read.
 unusedSwitchStatement.ts(6,15): error TS6133: 'c' is declared but its value is never read.

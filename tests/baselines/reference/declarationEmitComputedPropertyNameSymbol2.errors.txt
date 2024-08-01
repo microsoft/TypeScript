@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitComputedPropertyNameSymbol2.ts] ////
+
 index.ts(3,14): error TS4023: Exported variable 'foo' has or is using name 'Foo' from external module "type" but cannot be named.
 
 

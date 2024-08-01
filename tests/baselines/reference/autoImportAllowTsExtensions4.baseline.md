@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/autoImportAllowTsExtensions4.ts] ////
+
 // === Auto Imports ===
 ```ts
 // @Filename: /main.ts

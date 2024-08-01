@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleWithValuesAsType.ts] ////
+
 moduleWithValuesAsType.ts(5,8): error TS2709: Cannot use namespace 'A' as a type.
 
 

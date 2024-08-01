@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/mapCodePlainJsInsertion.ts] ////
+
 // === mapCode ===
 
 // === ORIGINAL ===

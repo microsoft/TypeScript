@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames46_ES6.ts] ////
+
 computedPropertyNames46_ES6.ts(2,6): error TS2873: This kind of expression is always falsy.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deeplyNestedAssignabilityIssue.ts] ////
+
 [96mdeeplyNestedAssignabilityIssue.ts[0m:[93m22[0m:[93m17[0m - [91merror[0m[90m TS2741: [0mProperty 'a' is missing in type '{}' but required in type 'A'.
 
 [7m22[0m                 thing: {}

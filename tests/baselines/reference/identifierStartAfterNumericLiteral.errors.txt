@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/identifierStartAfterNumericLiteral.ts] ////
+
 identifierStartAfterNumericLiteral.ts(1,16): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
 identifierStartAfterNumericLiteral.ts(3,2): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
 identifierStartAfterNumericLiteral.ts(3,2): error TS2304: Cannot find name 'a'.

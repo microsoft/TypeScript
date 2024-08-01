@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts] ////
+
 interfaceExtendsClassWithPrivate1.ts(21,1): error TS2741: Property 'other' is missing in type 'C' but required in type 'I'.
 interfaceExtendsClassWithPrivate1.ts(24,1): error TS2741: Property 'bar' is missing in type 'I' but required in type 'D'.
 interfaceExtendsClassWithPrivate1.ts(27,1): error TS2739: Type 'C' is missing the following properties from type 'D': other, bar

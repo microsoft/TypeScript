@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag2.ts] ////
+
 0.js(3,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
 0.js(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
 0.js(8,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.

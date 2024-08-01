@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashOnMethodSignatures.ts] ////
+
 crashOnMethodSignatures.ts(2,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 

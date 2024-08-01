@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionsAndOptionalProperties3.ts] ////
+
 intersectionsAndOptionalProperties3.ts(19,1): error TS2412: Type 'undefined' is not assignable to type 'boolean' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
 intersectionsAndOptionalProperties3.ts(44,1): error TS2412: Type 'undefined' is not assignable to type 'Foo' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
 

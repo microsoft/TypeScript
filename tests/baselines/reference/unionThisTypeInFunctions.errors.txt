@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/unionThisTypeInFunctions.ts] ////
+
 unionThisTypeInFunctions.ts(10,5): error TS2684: The 'this' context of type 'Real | Fake' is not assignable to method's 'this' of type 'Real & Fake'.
   Type 'Real' is not assignable to type 'Real & Fake'.
     Type 'Real' is not assignable to type 'Fake'.

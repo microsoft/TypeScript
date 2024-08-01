@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsDefaultImportThroughNamespace.ts] ////
+
 // === findAllReferences ===
 // === /a.ts ===
 // <|export /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}default|] function f() {}|>

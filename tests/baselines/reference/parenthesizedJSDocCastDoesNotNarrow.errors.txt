@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parenthesizedJSDocCastDoesNotNarrow.ts] ////
+
 index.js(12,8): error TS2678: Type '"invalid"' is not comparable to type '"foo" | "bar"'.
 
 

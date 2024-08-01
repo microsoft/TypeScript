@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration4.ts] ////
+
 parserInterfaceDeclaration4.ts(1,1): error TS1044: 'static' modifier cannot appear on a module or namespace element.
 
 

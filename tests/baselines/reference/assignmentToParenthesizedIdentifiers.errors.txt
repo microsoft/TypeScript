@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts] ////
+
 assignmentToParenthesizedIdentifiers.ts(4,1): error TS2322: Type 'string' is not assignable to type 'number'.
 assignmentToParenthesizedIdentifiers.ts(5,1): error TS2322: Type 'string' is not assignable to type 'number'.
 assignmentToParenthesizedIdentifiers.ts(13,1): error TS2322: Type 'string' is not assignable to type 'number'.

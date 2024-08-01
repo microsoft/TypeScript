@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorConditionIsObjectType.ts] ////
+
 conditionalOperatorConditionIsObjectType.ts(28,1): error TS2872: This kind of expression is always truthy.
 conditionalOperatorConditionIsObjectType.ts(29,1): error TS2872: This kind of expression is always truthy.
 conditionalOperatorConditionIsObjectType.ts(30,1): error TS2872: This kind of expression is always truthy.

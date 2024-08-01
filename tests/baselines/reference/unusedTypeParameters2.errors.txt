@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameters2.ts] ////
+
 unusedTypeParameters2.ts(1,15): error TS6133: 'typeparameter1' is declared but its value is never read.
 
 

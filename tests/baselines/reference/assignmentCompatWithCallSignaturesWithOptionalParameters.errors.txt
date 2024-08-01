@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts] ////
+
 assignmentCompatWithCallSignaturesWithOptionalParameters.ts(16,5): error TS2322: Type '(x: number) => number' is not assignable to type '() => number'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
 assignmentCompatWithCallSignaturesWithOptionalParameters.ts(19,5): error TS2322: Type '(x: number) => number' is not assignable to type '() => number'.

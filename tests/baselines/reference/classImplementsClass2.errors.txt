@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classImplementsClass2.ts] ////
+
 classImplementsClass2.ts(2,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
   Property 'foo' is missing in type 'C' but required in type 'A'.
 classImplementsClass2.ts(13,1): error TS2741: Property 'foo' is missing in type 'C' but required in type 'C2'.

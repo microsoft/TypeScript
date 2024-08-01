@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxParsingErrorImmediateSpreadInAttributeValue.tsx] ////
+
 a.tsx(11,7): error TS1109: Expression expected.
 a.tsx(11,11): error TS1003: Identifier expected.
 

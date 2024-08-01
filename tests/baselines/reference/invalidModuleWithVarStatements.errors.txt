@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/moduleBody/invalidModuleWithVarStatements.ts] ////
+
 invalidModuleWithVarStatements.ts(4,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
 invalidModuleWithVarStatements.ts(8,5): error TS1044: 'public' modifier cannot appear on a module or namespace element.
 invalidModuleWithVarStatements.ts(12,5): error TS1044: 'static' modifier cannot appear on a module or namespace element.

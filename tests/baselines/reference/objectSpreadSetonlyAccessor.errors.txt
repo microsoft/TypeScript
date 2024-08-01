@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/objectSpreadSetonlyAccessor.ts] ////
+
 objectSpreadSetonlyAccessor.ts(2,34): error TS2783: 'foo' is specified more than once, so this usage will be overwritten.
 
 

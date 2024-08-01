@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateConstructorFunction.ts] ////
+
 templateTagOnConstructorFunctions.js(24,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 

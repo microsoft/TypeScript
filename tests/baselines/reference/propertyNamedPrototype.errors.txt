@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedPrototype.ts] ////
+
 propertyNamedPrototype.ts(3,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'C'.
 
 

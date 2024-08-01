@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importAssertionNonstring.ts] ////
+
 mod.mts(1,37): error TS2322: Type '{ field: 0; }' is not assignable to type 'ImportAttributes'.
   Property 'field' is incompatible with index signature.
     Type 'number' is not assignable to type 'string'.

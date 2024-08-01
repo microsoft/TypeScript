@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intTypeCheck.ts] ////
+
 intTypeCheck.ts(35,6): error TS2304: Cannot find name 'p'.
 intTypeCheck.ts(71,6): error TS2304: Cannot find name 'p'.
 intTypeCheck.ts(85,5): error TS2386: Overload signatures must all be optional or required.

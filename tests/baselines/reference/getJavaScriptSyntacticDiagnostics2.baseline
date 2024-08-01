@@ -1,5 +1,7 @@
+//// [/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics2.ts] ////
+
 // === Syntax Diagnostics ===
-Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics2.ts':
+Syntactic Diagnostics:
 /tests/cases/fourslash/a.js(1,1): error TS8003: 'export =' can only be used in TypeScript files.
 
 

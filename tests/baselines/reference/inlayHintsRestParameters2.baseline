@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/inlayHintsRestParameters2.ts] ////
+
 // === Inlay Hints ===
     foo(...x, 3);
         ^

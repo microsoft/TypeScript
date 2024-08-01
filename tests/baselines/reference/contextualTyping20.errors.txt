@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTyping20.ts] ////
+
 contextualTyping20.ts(1,58): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.
 
 

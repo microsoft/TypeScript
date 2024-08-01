@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocAugments_errorInExtendsExpression.ts] ////
+
 /a.js(3,17): error TS2304: Cannot find name 'err'.
 
 

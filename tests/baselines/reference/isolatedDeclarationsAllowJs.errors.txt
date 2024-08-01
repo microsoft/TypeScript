@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedDeclarationsAllowJs.ts] ////
+
 error TS5053: Option 'allowJs' cannot be specified with option 'isolatedDeclarations'.
 error TS5055: Cannot write file 'file2.js' because it would overwrite input file.
   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.

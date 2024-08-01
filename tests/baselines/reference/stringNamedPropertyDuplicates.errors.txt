@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/stringNamedPropertyDuplicates.ts] ////
+
 stringNamedPropertyDuplicates.ts(3,5): error TS2300: Duplicate identifier '"a b"'.
 stringNamedPropertyDuplicates.ts(5,12): error TS2300: Duplicate identifier '"c d"'.
 stringNamedPropertyDuplicates.ts(9,5): error TS2300: Duplicate identifier 'a b'.

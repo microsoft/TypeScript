@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/string/invalidStringAssignments.ts] ////
+
 invalidStringAssignments.ts(3,5): error TS2322: Type 'string' is not assignable to type 'boolean'.
 invalidStringAssignments.ts(4,5): error TS2322: Type 'string' is not assignable to type 'number'.
 invalidStringAssignments.ts(5,5): error TS2322: Type 'string' is not assignable to type 'void'.

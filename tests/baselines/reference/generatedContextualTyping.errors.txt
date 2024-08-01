@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts] ////
+
 generatedContextualTyping.ts(219,12): error TS2873: This kind of expression is always falsy.
 generatedContextualTyping.ts(220,12): error TS2873: This kind of expression is always falsy.
 generatedContextualTyping.ts(221,12): error TS2873: This kind of expression is always falsy.

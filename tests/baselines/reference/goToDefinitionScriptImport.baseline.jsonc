@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionScriptImport.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/scriptThing.ts ===
 // [||]console.log("woooo side effects")

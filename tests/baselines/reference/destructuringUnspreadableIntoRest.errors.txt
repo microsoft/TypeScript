@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringUnspreadableIntoRest.ts] ////
+
 destructuringUnspreadableIntoRest.ts(22,15): error TS2339: Property 'publicProp' does not exist on type 'Omit<this, "publicProp" | "getter" | "setter" | "method">'.
 destructuringUnspreadableIntoRest.ts(23,15): error TS2339: Property 'publicProp' does not exist on type '{}'.
 destructuringUnspreadableIntoRest.ts(25,15): error TS2339: Property 'privateProp' does not exist on type 'Omit<this, "getter" | "setter" | "method">'.

@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationUnresolvedTypeReference.ts] ////
+
 //// [declarationUnresolvedTypeReference.ts] ////
 import { type Type } from "./a";
 

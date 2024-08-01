@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumAssignmentCompat7.ts] ////
+
 enumAssignmentCompat7.ts(16,14): error TS2416: Property 'method' in type 'Derived' is not assignable to the same property in base type 'Base'.
   Type '(param: second.E) => void' is not assignable to type '(param: first.E) => void'.
     Types of parameters 'param' and 'param' are incompatible.

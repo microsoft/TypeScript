@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions18.ts] ////
+
 unicodeExtendedEscapesInRegularExpressions18.ts(1,24): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 
 

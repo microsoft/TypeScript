@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/documentHighlightMultilineTemplateStrings.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/documentHighlightMultilineTemplateStrings.ts ===
 // const foo = `

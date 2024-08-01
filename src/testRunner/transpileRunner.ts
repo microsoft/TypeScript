@@ -29,10 +29,10 @@ export class TranspileRunner extends RunnerBase {
         }
 
         describe(this.testSuiteName + " tests", () => {
-            this.tests.forEach(file => {
-                file = vpath.normalizeSeparators(file);
-                describe(file, () => {
-                    const tests = TranspileTestCase.getConfigurations(file);
+            this.tests.forEach(originalInputFileName => {
+                originalInputFileName = vpath.normalizeSeparators(originalInputFileName);
+                describe(originalInputFileName, () => {
+                    const tests = TranspileTestCase.getConfigurations(originalInputFileName);
                     for (const test of tests) {
                         test.run();
                     }
@@ -54,31 +54,33 @@ class TranspileTestCase {
         "inlineSourceMap",
     ];
 
-    static getConfigurations(file: string): TranspileTestCase[] {
-        const ext = vpath.extname(file);
-        const baseName = vpath.basename(file);
-        const justName = baseName.slice(0, baseName.length - ext.length);
-        const content = IO.readFile(file)!;
+    static getConfigurations(originalInputFileName: string): TranspileTestCase[] {
+        const content = IO.readFile(originalInputFileName)!;
         const settings = TestCaseParser.extractCompilerSettings(content);
         const settingConfigurations = getFileBasedTestConfigurations(settings, TranspileTestCase.varyBy);
         return settingConfigurations?.map(c => {
             const desc = Object.entries(c).map(([key, value]) => `${key}=${value}`).join(",");
-            return new TranspileTestCase(`${justName}(${desc})`, ext, content, { ...settings, ...c });
-        }) ?? [new TranspileTestCase(justName, ext, content, settings)];
+            return new TranspileTestCase(originalInputFileName, content, { ...settings, ...c }, desc);
+        }) ?? [new TranspileTestCase(originalInputFileName, content, settings)];
     }
 
+    private justName;
     private jsOutName;
     private dtsOutName;
     private units;
     constructor(
-        private justName: string,
-        private ext: string,
-        private content: string,
+        private originalInputFileName: string,
+        content: string,
         private settings: TestCaseParser.CompilerSettings,
+        desc?: string,
     ) {
-        this.jsOutName = justName + this.getJsOutputExtension(`${justName}${ext}`);
-        this.dtsOutName = justName + ts.getDeclarationEmitExtensionForPath(`${justName}${ext}`);
-        this.units = TestCaseParser.makeUnitsFromTest(content, `${justName}${ext}`, settings);
+        const ext = vpath.extname(originalInputFileName);
+        const baseName = vpath.basename(originalInputFileName);
+        this.justName = baseName.slice(0, baseName.length - ext.length) + (desc ? `(${desc})` : "");
+
+        this.jsOutName = this.justName + this.getJsOutputExtension(`${this.justName}${ext}`);
+        this.dtsOutName = this.justName + ts.getDeclarationEmitExtensionForPath(`${this.justName}${ext}`);
+        this.units = TestCaseParser.makeUnitsFromTest(content, `${this.justName}${ext}`, settings);
     }
 
     getJsOutputExtension(name: string) {
@@ -87,7 +89,7 @@ class TranspileTestCase {
 
     runKind(kind: TranspileKind) {
         it(`transpile test ${this.justName} has expected ${kind === TranspileKind.Module ? "js" : "declaration"} output`, () => {
-            let baselineText = "";
+            let baselineText = `//// [${this.originalInputFileName}] ////\r\n\r\n`;
 
             // include inputs in output so how the test is parsed and broken down is more obvious
             this.units.testUnitData.forEach(unit => {

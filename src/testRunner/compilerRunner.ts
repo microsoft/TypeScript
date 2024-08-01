@@ -270,6 +270,7 @@ class CompilerTest {
         // check errors
         Compiler.doErrorBaseline(
             this.configuredName,
+            this.fileName,
             this.tsConfigFiles.concat(this.toBeCompiled, this.otherFiles),
             this.result.diagnostics,
             !!this.options.pretty,
@@ -311,6 +312,7 @@ class CompilerTest {
     public verifySourceMapOutput() {
         Compiler.doSourcemapBaseline(
             this.configuredName,
+            this.fileName,
             this.options,
             this.result,
             this.harnessSettings,

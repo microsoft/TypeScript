@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/getFileReferences_server2.ts] ////
+
 // === getFileReferences ===
 // fileName: /packages/shared/src/referenced.ts
 

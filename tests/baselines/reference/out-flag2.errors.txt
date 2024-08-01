@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/out-flag2.ts] ////
+
 error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 
 

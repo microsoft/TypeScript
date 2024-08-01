@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/anonymousClassExpression2.ts] ////
+
 anonymousClassExpression2.ts(13,18): error TS2551: Property 'methodA' does not exist on type 'B'. Did you mean 'methodB'?
 
 

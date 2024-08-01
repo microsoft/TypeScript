@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/inlayHintsOverloadCall.ts] ////
+
 // === Inlay Hints ===
 call(1);
      ^

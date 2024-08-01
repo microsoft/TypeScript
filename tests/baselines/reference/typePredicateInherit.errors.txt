@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typePredicateInherit.ts] ////
+
 typePredicateInherit.ts(11,3): error TS2416: Property 'method1' in type 'B' is not assignable to the same property in base type 'A'.
   Type '() => void' is not assignable to type '() => this is { a: 1; }'.
     Signature '(): void' must be a type predicate.

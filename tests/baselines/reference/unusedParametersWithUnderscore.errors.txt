@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedParametersWithUnderscore.ts] ////
+
 unusedParametersWithUnderscore.ts(1,12): error TS6133: 'a' is declared but its value is never read.
 unusedParametersWithUnderscore.ts(1,19): error TS6133: 'c' is declared but its value is never read.
 unusedParametersWithUnderscore.ts(1,27): error TS6133: 'd' is declared but its value is never read.

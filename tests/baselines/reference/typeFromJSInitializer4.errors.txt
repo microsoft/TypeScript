@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromJSInitializer4.ts] ////
+
 a.js(5,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
 a.js(5,29): error TS7006: Parameter 'l' implicitly has an 'any[]' type.
 a.js(17,5): error TS2322: Type 'string' is not assignable to type 'number'.

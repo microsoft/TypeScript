@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty9.ts] ////
+
 typeGuardNarrowsIndexedAccessOfKnownProperty9.ts(5,13): error TS6133: 'c' is declared but its value is never read.
 typeGuardNarrowsIndexedAccessOfKnownProperty9.ts(6,13): error TS6133: 'd' is declared but its value is never read.
 

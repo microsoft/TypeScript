@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classFieldSuperAccessibleJs1.ts] ////
+
 index.js(9,23): error TS2565: Property 'blah2' is used before being assigned.
 
 

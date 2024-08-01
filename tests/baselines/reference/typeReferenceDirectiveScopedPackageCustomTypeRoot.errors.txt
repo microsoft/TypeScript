@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeReferenceDirectiveScopedPackageCustomTypeRoot.ts] ////
+
 error TS2688: Cannot find type definition file for '@mangled/nodemodulescache'.
   The file is in the program because:
     Entry point of type library '@mangled/nodemodulescache' specified in compilerOptions

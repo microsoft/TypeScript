@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/node10AlternateResult_noResolution.ts] ////
+
 /index.ts(1,21): error TS2307: Cannot find module 'pkg' or its corresponding type declarations.
   There are types at '/node_modules/pkg/definitely-not-index.d.ts', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.
 

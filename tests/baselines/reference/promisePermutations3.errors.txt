@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/promisePermutations3.ts] ////
+
 promisePermutations3.ts(68,69): error TS2345: Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
   Types of parameters 'x' and 'value' are incompatible.
     Type 'IPromise<number>' is not assignable to type 'number'.

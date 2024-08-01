@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/classWithTwoConstructorDefinitions.ts] ////
+
 classWithTwoConstructorDefinitions.ts(2,5): error TS2392: Multiple constructor implementations are not allowed.
 classWithTwoConstructorDefinitions.ts(3,5): error TS2392: Multiple constructor implementations are not allowed.
 classWithTwoConstructorDefinitions.ts(7,5): error TS2392: Multiple constructor implementations are not allowed.

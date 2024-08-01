@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requireOfJsonFileWithModuleNodeResolutionEmitUmd.ts] ////
+
 error TS5071: Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.
 
 

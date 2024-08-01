@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyDestructuringParameterDeclaration.ts] ////
+
 noImplicitAnyDestructuringParameterDeclaration.ts(1,14): error TS7031: Binding element 'a' implicitly has an 'any' type.
 noImplicitAnyDestructuringParameterDeclaration.ts(1,19): error TS7031: Binding element 'b' implicitly has an 'any' type.
 noImplicitAnyDestructuringParameterDeclaration.ts(1,23): error TS7006: Parameter 'c' implicitly has an 'any' type.

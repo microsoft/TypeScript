@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsCrossfileMerge.ts] ////
+
 index.js(4,1): error TS6232: Declaration augments declaration in another file. This cannot be serialized.
 
 

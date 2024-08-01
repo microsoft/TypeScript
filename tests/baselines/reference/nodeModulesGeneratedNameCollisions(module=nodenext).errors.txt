@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesGeneratedNameCollisions.ts] ////
+
 subfolder/index.ts(2,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 subfolder/index.ts(3,7): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 subfolder/index.ts(4,7): error TS2725: Class name cannot be 'Object' when targeting ES5 with module NodeNext.

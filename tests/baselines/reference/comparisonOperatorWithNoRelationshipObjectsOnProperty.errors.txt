@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnProperty.ts] ////
+
 comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(23,12): error TS2365: Operator '<' cannot be applied to types 'A1' and 'B1'.
 comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(24,12): error TS2365: Operator '<' cannot be applied to types 'A2' and 'B2'.
 comparisonOperatorWithNoRelationshipObjectsOnProperty.ts(26,12): error TS2365: Operator '<' cannot be applied to types 'B1' and 'A1'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxClassAttributeResolution.tsx] ////
+
 file.tsx(2,19): error TS2741: Property 'ref' is missing in type '{}' but required in type 'IntrinsicClassAttributesAlias<T>'.
 
 

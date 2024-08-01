@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks4.ts] ////
+
 reachabilityChecks4.ts(6,9): error TS7029: Fallthrough case in switch.
 reachabilityChecks4.ts(22,9): error TS7029: Fallthrough case in switch.
 

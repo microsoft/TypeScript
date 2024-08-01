@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringAssignmentWithExportedName.ts] ////
+
 destructuringAssignmentWithExportedName.ts(8,5): error TS2873: This kind of expression is always falsy.
 destructuringAssignmentWithExportedName.ts(11,10): error TS2873: This kind of expression is always falsy.
 destructuringAssignmentWithExportedName.ts(14,10): error TS2873: This kind of expression is always falsy.

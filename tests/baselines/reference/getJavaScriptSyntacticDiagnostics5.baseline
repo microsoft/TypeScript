@@ -1,5 +1,7 @@
+//// [/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics5.ts] ////
+
 // === Syntax Diagnostics ===
-Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics5.ts':
+Syntactic Diagnostics:
 /tests/cases/fourslash/a.js(1,9): error TS8005: 'implements' clauses can only be used in TypeScript files.
 
 

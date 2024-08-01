@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionsAndReadonlyProperties.ts] ////
+
 intersectionsAndReadonlyProperties.ts(17,4): error TS2540: Cannot assign to 'a' because it is a read-only property.
 
 

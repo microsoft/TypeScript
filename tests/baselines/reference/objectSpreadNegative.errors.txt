@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/objectSpreadNegative.ts] ////
+
 objectSpreadNegative.ts(13,21): error TS2339: Property 'x' does not exist on type '{}'.
 objectSpreadNegative.ts(16,5): error TS2322: Type '{ sn?: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
   Types of property 'sn' are incompatible.

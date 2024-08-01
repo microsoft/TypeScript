@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitReturnsWithoutReturnExpression.ts] ////
+
 noImplicitReturnsWithoutReturnExpression.ts(2,5): error TS7030: Not all code paths return a value.
 noImplicitReturnsWithoutReturnExpression.ts(22,9): error TS7030: Not all code paths return a value.
 

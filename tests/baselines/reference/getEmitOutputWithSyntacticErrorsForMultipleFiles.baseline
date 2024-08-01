@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getEmitOutputWithSyntacticErrorsForMultipleFiles.ts] ////
+
 // === EmitOutput ===
 EmitSkipped: false
 

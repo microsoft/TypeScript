@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/completionsCommentsFunctionExpression.ts] ////
+
 // === Completions ===
 === /tests/cases/fourslash/completionsCommentsFunctionExpression.ts ===
 // /** lambdaFoo var comment*/

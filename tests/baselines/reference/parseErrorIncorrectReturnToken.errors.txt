@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseErrorIncorrectReturnToken.ts] ////
+
 error TS-1: Pre-emit (7) and post-emit (8) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 parseErrorIncorrectReturnToken.ts(2,17): error TS1005: ':' expected.
 parseErrorIncorrectReturnToken.ts(4,22): error TS1005: '=>' expected.

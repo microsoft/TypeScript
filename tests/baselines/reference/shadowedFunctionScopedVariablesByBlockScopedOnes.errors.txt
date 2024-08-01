@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shadowedFunctionScopedVariablesByBlockScopedOnes.ts] ////
+
 shadowedFunctionScopedVariablesByBlockScopedOnes.ts(4,27): error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.
 shadowedFunctionScopedVariablesByBlockScopedOnes.ts(7,29): error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.
 shadowedFunctionScopedVariablesByBlockScopedOnes.ts(10,29): error TS2481: Cannot initialize outer scoped variable 'v' in the same scope as block scoped declaration 'v'.

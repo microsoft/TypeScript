@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/thisTag3.ts] ////
+
 /a.js(7,9): error TS2730: An arrow function cannot have a 'this' parameter.
 /a.js(10,21): error TS2339: Property 'fn' does not exist on type 'C'.
 

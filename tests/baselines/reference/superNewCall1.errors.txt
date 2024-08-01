@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superNewCall1.ts] ////
+
 superNewCall1.ts(8,5): error TS2377: Constructors for derived classes must contain a 'super' call.
 superNewCall1.ts(9,13): error TS2351: This expression is not constructable.
   Type 'A<number, string>' has no construct signatures.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts] ////
+
 excessPropertyCheckWithEmptyObject.ts(4,58): error TS2353: Object literal may only specify known properties, and 'readonly' does not exist in type 'PropertyDescriptor & ThisType<any>'.
 excessPropertyCheckWithEmptyObject.ts(9,30): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type 'A & ThisType<any>'.
 excessPropertyCheckWithEmptyObject.ts(14,34): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type 'Empty & { x: number; }'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance3.ts] ////
+
 callSignatureAssignabilityInInheritance3.ts(51,19): error TS2430: Interface 'I2<T, U>' incorrectly extends interface 'A'.
   Types of property 'a2' are incompatible.
     Type '(x: T) => U[]' is not assignable to type '(x: number) => string[]'.

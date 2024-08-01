@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/goToSource15_bundler.ts] ////
+
 // === goToSourceDefinition ===
 // === /node_modules/react/cjs/react.production.min.js ===
 // 'use strict';exports.[|{| defId: 0 |}useState|]=function(a){};exports.version='16.8.6';

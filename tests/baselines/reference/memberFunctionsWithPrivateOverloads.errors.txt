@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/memberFunctionsWithPrivateOverloads.ts] ////
+
 memberFunctionsWithPrivateOverloads.ts(43,11): error TS2341: Property 'foo' is private and only accessible within class 'C'.
 memberFunctionsWithPrivateOverloads.ts(46,12): error TS2341: Property 'foo' is private and only accessible within class 'D<T>'.
 memberFunctionsWithPrivateOverloads.ts(48,12): error TS2341: Property 'foo' is private and only accessible within class 'C'.

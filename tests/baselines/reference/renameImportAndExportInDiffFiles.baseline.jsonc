@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameImportAndExportInDiffFiles.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // <|export var /*FIND ALL REFS*/[|{| defId: 0, isDefinition: true |}a|];|>

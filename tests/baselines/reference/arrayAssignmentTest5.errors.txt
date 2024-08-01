@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayAssignmentTest5.ts] ////
+
 arrayAssignmentTest5.ts(23,17): error TS2322: Type 'IToken[]' is not assignable to type 'IStateToken[]'.
   Property 'state' is missing in type 'IToken' but required in type 'IStateToken'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitMappedTypeTemplateTypeofSymbol.ts] ////
+
 b.ts(2,14): error TS4118: The type of this node cannot be serialized because its property '[timestampSymbol]' cannot be serialized.
 c.ts(3,14): error TS4118: The type of this node cannot be serialized because its property '[timestampSymbol]' cannot be serialized.
 

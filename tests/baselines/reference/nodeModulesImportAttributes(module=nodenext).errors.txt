@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportAttributes.ts] ////
+
 otherc.cts(1,35): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 
 

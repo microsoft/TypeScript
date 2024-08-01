@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessImplicitlyAny.ts] ////
+
 indexedAccessImplicitlyAny.ts(3,3): error TS2551: Property 'foo' does not exist on type 'I'. Did you mean 'foof'?
 indexedAccessImplicitlyAny.ts(4,3): error TS2551: Property 'foo' does not exist on type 'I'. Did you mean 'foof'?
 

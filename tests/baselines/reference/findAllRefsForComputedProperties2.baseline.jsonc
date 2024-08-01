@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForComputedProperties2.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsForComputedProperties2.ts ===
 // interface I {

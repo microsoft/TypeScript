@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution10.tsx] ////
+
 file.tsx(13,2): error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
 file.tsx(13,2): error TS2786: 'Obj1' cannot be used as a JSX component.
   Its instance type '{ x: number; }' is not a valid JSX element.

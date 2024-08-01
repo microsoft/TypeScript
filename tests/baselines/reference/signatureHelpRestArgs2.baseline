@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/signatureHelpRestArgs2.ts] ////
+
 // === SignatureHelp ===
 === /tests/cases/fourslash/index.js ===
 // const promisify = function (thisArg, fnName) {

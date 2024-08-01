@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsFunctionDeclarations.ts] ////
+
 isolatedDeclarationErrorsFunctionDeclarations.ts(1,17): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsFunctionDeclarations.ts(3,35): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsFunctionDeclarations.ts(7,49): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.

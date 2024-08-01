@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts] ////
+
 assignmentCompatWithObjectMembersOptionality2.ts(33,5): error TS2559: Type 'D' has no properties in common with type 'C'.
 assignmentCompatWithObjectMembersOptionality2.ts(34,5): error TS2559: Type 'E' has no properties in common with type 'C'.
 assignmentCompatWithObjectMembersOptionality2.ts(35,5): error TS2559: Type 'F' has no properties in common with type 'C'.

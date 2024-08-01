@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression2.ts] ////
+
 parserErrorRecoveryArrayLiteralExpression2.ts(3,2): error TS1005: ',' expected.
 
 

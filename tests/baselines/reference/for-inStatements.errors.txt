@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatements.ts] ////
+
 for-inStatements.ts(21,15): error TS2872: This kind of expression is always truthy.
 for-inStatements.ts(22,15): error TS2873: This kind of expression is always falsy.
 for-inStatements.ts(23,15): error TS2872: This kind of expression is always truthy.

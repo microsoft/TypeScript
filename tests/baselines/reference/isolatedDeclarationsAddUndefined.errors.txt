@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedDeclarationsAddUndefined.ts] ////
+
 file2.ts(4,38): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 
 

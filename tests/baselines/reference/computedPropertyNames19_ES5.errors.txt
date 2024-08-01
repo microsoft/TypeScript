@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames19_ES5.ts] ////
+
 computedPropertyNames19_ES5.ts(3,10): error TS2331: 'this' cannot be referenced in a module or namespace body.
 
 

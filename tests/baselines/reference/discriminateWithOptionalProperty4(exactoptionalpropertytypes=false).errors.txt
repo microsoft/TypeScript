@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/discriminateWithOptionalProperty4.ts] ////
+
 discriminateWithOptionalProperty4.ts(16,14): error TS18048: 'z.a' is possibly 'undefined'.
 
 

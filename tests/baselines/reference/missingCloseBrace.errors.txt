@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingCloseBrace.ts] ////
+
 missingCloseBrace.ts(9,1): error TS1005: '}' expected.
 
 

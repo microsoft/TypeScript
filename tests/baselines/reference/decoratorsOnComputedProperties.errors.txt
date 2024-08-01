@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorsOnComputedProperties.ts] ////
+
 decoratorsOnComputedProperties.ts(18,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(19,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(20,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

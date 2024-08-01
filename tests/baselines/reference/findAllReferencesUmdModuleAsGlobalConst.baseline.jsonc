@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllReferencesUmdModuleAsGlobalConst.ts] ////
+
 // === findAllReferences ===
 // === /node_modules/@types/three/index.d.ts ===
 // export * from "./three-core";

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesModules.ts] ////
+
 augmentedTypesModules.ts(5,8): error TS2300: Duplicate identifier 'm1a'.
 augmentedTypesModules.ts(6,5): error TS2300: Duplicate identifier 'm1a'.
 augmentedTypesModules.ts(8,8): error TS2300: Duplicate identifier 'm1b'.

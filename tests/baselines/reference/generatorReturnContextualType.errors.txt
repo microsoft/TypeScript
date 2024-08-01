@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorReturnContextualType.ts] ////
+
 generatorReturnContextualType.ts(29,3): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: "x"; }'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '"x"'.

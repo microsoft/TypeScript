@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasInstantiationExpressionGenericIntersectionNoCrash1.ts] ////
+
 aliasInstantiationExpressionGenericIntersectionNoCrash1.ts(10,1): error TS2352: Conversion of type '{ new (): ErrImpl<number>; prototype: ErrImpl<any>; } & (() => number)' to type '{ new (): ErrImpl<string>; prototype: ErrImpl<any>; } & (() => string)' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type '{ new (): ErrImpl<number>; prototype: ErrImpl<any>; } & (() => number)' is not comparable to type '{ new (): ErrImpl<string>; prototype: ErrImpl<any>; }'.
     Type 'ErrImpl<number>' is not comparable to type 'ErrImpl<string>'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/jsContainerMergeTsDeclaration3.ts] ////
+
 b.js(1,7): error TS2739: Type '{}' is missing the following properties from type 'typeof A': prototype, d
 
 

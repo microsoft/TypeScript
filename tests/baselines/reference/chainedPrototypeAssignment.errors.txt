@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/chainedPrototypeAssignment.ts] ////
+
 use.js(5,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 use.js(6,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 

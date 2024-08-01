@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts] ////
+
 classImplementsMergedClassInterface.ts(9,7): error TS2720: Class 'C2' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?
   Type 'C2' is missing the following properties from type 'C1': x, y
 classImplementsMergedClassInterface.ts(12,7): error TS2720: Class 'C3' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?

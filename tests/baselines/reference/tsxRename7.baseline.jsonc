@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/tsxRename7.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/file.tsx ===
 // --- (line: 4) skipped ---

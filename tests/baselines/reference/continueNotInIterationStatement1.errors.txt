@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/continueNotInIterationStatement1.ts] ////
+
 continueNotInIterationStatement1.ts(1,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
 
 

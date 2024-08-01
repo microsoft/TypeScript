@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidOptionalChainFromNewExpression.ts] ////
+
 invalidOptionalChainFromNewExpression.ts(5,6): error TS1209: Invalid optional chain from new expression. Did you mean to call 'A()'?
 
 

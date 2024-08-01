@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForMergedDeclarations8.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations8.ts ===
 // interface Foo { }

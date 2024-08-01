@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override_js3.ts] ////
+
 a.js(7,5): error TS8009: The 'override' modifier can only be used in TypeScript files.
 
 

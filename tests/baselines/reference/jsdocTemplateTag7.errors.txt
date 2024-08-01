@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag7.ts] ////
+
 a.js(2,14): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
 a.js(12,14): error TS1273: 'private' modifier cannot appear on a type parameter
 

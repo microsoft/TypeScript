@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/documentHighlightInExport1.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/documentHighlightInExport1.ts ===
 // <|class /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}C|] {}|>

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/documentHighlightsTypeParameterInHeritageClause01.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/server/documentHighlightsTypeParameterInHeritageClause01.ts ===
 // interface I</*HIGHLIGHTS*/[|{| kind: "writtenReference" |}T|]> extends I<[|{| kind: "reference" |}T|]>, [|{| kind: "reference" |}T|] {

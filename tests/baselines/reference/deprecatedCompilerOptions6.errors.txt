@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deprecatedCompilerOptions6.ts] ////
+
 /foo/tsconfig.json(4,19): error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 /foo/tsconfig.json(5,9): error TS5101: Option 'noImplicitUseStrict' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 /foo/tsconfig.json(6,9): error TS5101: Option 'keyofStringsOnly' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.

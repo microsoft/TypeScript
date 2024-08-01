@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionInstanceof2.ts] ////
+
 // === goToDefinition ===
 // === /main.ts ===
 // class C {

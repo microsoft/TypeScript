@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesPackagePatternExportsExclude.ts] ////
+
 index.cts(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
 index.cts(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
 index.cts(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.

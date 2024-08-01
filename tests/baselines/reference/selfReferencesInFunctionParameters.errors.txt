@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/selfReferencesInFunctionParameters.ts] ////
+
 selfReferencesInFunctionParameters.ts(1,26): error TS2372: Parameter 'x' cannot reference itself.
 selfReferencesInFunctionParameters.ts(4,35): error TS2372: Parameter 'x' cannot reference itself.
 selfReferencesInFunctionParameters.ts(8,28): error TS2372: Parameter 'y' cannot reference itself.

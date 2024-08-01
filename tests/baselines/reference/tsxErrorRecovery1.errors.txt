@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxErrorRecovery1.tsx] ////
+
 file.tsx(4,19): error TS1109: Expression expected.
 
 

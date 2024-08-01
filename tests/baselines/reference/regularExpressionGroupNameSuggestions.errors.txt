@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/regularExpressionGroupNameSuggestions.ts] ////
+
 regularExpressionGroupNameSuggestions.ts(1,18): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
 regularExpressionGroupNameSuggestions.ts(1,27): error TS1532: There is no capturing group named 'Foo' in this regular expression.
 

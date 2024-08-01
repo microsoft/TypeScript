@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/exhaustiveCaseCompletions9.ts] ////
+
 // === Completions ===
 === /tests/cases/fourslash/exhaustiveCaseCompletions9.ts ===
 // switch (Math.random() ? 123 : 456) {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parametersSyntaxErrorNoCrash3.ts] ////
+
 parametersSyntaxErrorNoCrash3.ts(3,17): error TS2391: Function implementation is missing or not immediately following the declaration.
 parametersSyntaxErrorNoCrash3.ts(3,17): error TS7010: 'getHtml', which lacks return-type annotation, implicitly has an 'any' return type.
 parametersSyntaxErrorNoCrash3.ts(4,11): error TS2300: Duplicate identifier '(Missing)'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitedTypeNoLib.ts] ////
+
 error TS2318: Cannot find global type 'Array'.
 error TS2318: Cannot find global type 'Awaited'.
 error TS2318: Cannot find global type 'Boolean'.

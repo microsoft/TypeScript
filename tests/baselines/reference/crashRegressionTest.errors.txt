@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashRegressionTest.ts] ////
+
 crashRegressionTest.ts(16,56): error TS2339: Property '_name' does not exist on type 'StringTemplate'.
 
 

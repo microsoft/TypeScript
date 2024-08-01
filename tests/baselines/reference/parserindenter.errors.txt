@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts] ////
+
 parserindenter.ts(16,21): error TS6053: File 'formatting.ts' not found.
 parserindenter.ts(20,38): error TS2304: Cannot find name 'ILineIndenationResolver'.
 parserindenter.ts(22,33): error TS2304: Cannot find name 'IndentationBag'.

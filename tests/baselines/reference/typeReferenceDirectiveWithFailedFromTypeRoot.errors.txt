@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeReferenceDirectiveWithFailedFromTypeRoot.ts] ////
+
 error TS2688: Cannot find type definition file for 'phaser'.
   The file is in the program because:
     Entry point of type library 'phaser' specified in compilerOptions

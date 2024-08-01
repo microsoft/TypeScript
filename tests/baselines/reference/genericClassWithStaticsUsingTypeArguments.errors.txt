@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts] ////
+
 genericClassWithStaticsUsingTypeArguments.ts(3,20): error TS2302: Static members cannot reference class type parameters.
 genericClassWithStaticsUsingTypeArguments.ts(5,15): error TS2302: Static members cannot reference class type parameters.
 genericClassWithStaticsUsingTypeArguments.ts(7,15): error TS2302: Static members cannot reference class type parameters.

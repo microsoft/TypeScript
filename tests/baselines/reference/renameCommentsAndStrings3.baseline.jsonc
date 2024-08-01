@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameCommentsAndStrings3.ts] ////
+
 // === findRenameLocations ===
 // @findInComments: true
 

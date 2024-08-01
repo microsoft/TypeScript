@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts] ////
+
 contextuallyTypedClassExpressionMethodDeclaration02.ts(20,17): error TS7006: Parameter 'arg' implicitly has an 'any' type.
 contextuallyTypedClassExpressionMethodDeclaration02.ts(23,17): error TS7006: Parameter 'arg' implicitly has an 'any' type.
 contextuallyTypedClassExpressionMethodDeclaration02.ts(31,20): error TS7006: Parameter 'arg' implicitly has an 'any' type.

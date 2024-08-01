@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalParamAssignmentCompat.ts] ////
+
 optionalParamAssignmentCompat.ts(10,13): error TS2322: Type '(p1?: string) => I1' is not assignable to type 'I1'.
   Types of parameters 'p1' and 'p1' are incompatible.
     Type 'number' is not assignable to type 'string'.

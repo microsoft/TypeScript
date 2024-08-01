@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForTypeKeywords.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForTypeKeywords.ts ===
 // <|interface [|{| isWriteAccess: true |}I|] {}|>

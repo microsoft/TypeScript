@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes2.ts] ////
+
 templateLiteralTypes2.ts(23,11): error TS2322: Type 'string' is not assignable to type '`abc${string}`'.
 templateLiteralTypes2.ts(29,11): error TS2322: Type 'string' is not assignable to type '`foo${string}` | `bar${string}`'.
 templateLiteralTypes2.ts(32,11): error TS2322: Type 'string' is not assignable to type '`foo${string}` | `bar${string}` | `baz${string}`'.

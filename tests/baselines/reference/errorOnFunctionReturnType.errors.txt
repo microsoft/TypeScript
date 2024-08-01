@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/errorOnFunctionReturnType.ts] ////
+
 foo.js(7,10): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 foo.js(11,12): error TS2705: An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 foo.js(13,5): error TS2322: Type 'string' is not assignable to type 'number'.

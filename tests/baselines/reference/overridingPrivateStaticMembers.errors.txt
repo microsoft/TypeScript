@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overridingPrivateStaticMembers.ts] ////
+
 overridingPrivateStaticMembers.ts(5,7): error TS2417: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2'.
   Types have separate declarations of a private property 'y'.
 

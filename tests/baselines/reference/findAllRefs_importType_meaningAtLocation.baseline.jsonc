@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefs_importType_meaningAtLocation.ts] ////
+
 // === findAllReferences ===
 // === /a.ts ===
 // /*FIND ALL REFS*/<|export type [|{| isWriteAccess: true, isDefinition: true |}T|] = 0;|>

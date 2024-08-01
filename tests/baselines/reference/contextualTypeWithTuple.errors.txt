@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts] ////
+
 contextualTypeWithTuple.ts(3,5): error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
   Source has 3 element(s) but target allows only 2.
 contextualTypeWithTuple.ts(15,1): error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.

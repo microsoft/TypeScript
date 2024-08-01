@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/importStatementCompletions3.ts] ////
+
 // === Completions ===
 === /tests/cases/fourslash/./bar.ts ===
 // import f

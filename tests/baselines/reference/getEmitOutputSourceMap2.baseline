@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getEmitOutputSourceMap2.ts] ////
+
 // === EmitOutput ===
 EmitSkipped: false
 

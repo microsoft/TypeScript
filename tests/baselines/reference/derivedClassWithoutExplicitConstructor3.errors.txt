@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts] ////
+
 derivedClassWithoutExplicitConstructor3.ts(21,9): error TS2554: Expected 2 arguments, but got 0.
 derivedClassWithoutExplicitConstructor3.ts(22,10): error TS2554: Expected 2 arguments, but got 1.
 derivedClassWithoutExplicitConstructor3.ts(44,9): error TS2554: Expected 2 arguments, but got 0.

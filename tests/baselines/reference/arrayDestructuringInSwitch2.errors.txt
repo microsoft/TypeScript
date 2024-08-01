@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayDestructuringInSwitch2.ts] ////
+
 arrayDestructuringInSwitch2.ts(11,13): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 

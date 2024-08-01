@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modulePreserve3.ts] ////
+
 error TS2688: Cannot find type definition file for 'react'.
   The file is in the program because:
     Entry point for implicit type library 'react'

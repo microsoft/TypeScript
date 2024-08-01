@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkOtherObjectAssignProperty.ts] ////
+
 importer.js(3,5): error TS2339: Property 'other' does not exist on type 'typeof import("mod1")'.
 importer.js(4,5): error TS2339: Property 'prop' does not exist on type 'typeof import("mod1")'.
 importer.js(11,5): error TS2339: Property 'other' does not exist on type 'typeof import("mod1")'.

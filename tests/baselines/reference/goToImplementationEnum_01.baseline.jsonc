@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToImplementationEnum_01.ts] ////
+
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationEnum_01.ts ===
 // <|enum [|Foo|] {

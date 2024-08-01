@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncModule_es6.ts] ////
+
 asyncModule_es6.ts(1,1): error TS1042: 'async' modifier cannot be used here.
 
 

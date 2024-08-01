@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/initializerWithThisPropertyAccess.ts] ////
+
 initializerWithThisPropertyAccess.ts(3,14): error TS2729: Property 'a' is used before its initialization.
 initializerWithThisPropertyAccess.ts(24,29): error TS2729: Property 'bar' is used before its initialization.
 

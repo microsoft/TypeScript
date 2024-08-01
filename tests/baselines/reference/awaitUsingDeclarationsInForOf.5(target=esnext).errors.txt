@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarationsInForOf.5.ts] ////
+
 awaitUsingDeclarationsInForOf.5.ts(5,17): error TS1123: Variable declaration list cannot be empty.
 awaitUsingDeclarationsInForOf.5.ts(8,19): error TS1123: Variable declaration list cannot be empty.
 

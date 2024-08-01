@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/coAndContraVariantInferences6.ts] ////
+
 coAndContraVariantInferences6.ts(34,42): error TS2322: Type '"C"' is not assignable to type '"A" | "B"'.
 
 

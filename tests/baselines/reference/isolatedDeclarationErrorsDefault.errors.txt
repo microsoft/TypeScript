@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsDefault.ts] ////
+
 a.ts(1,16): error TS9037: Default exports can't be inferred with --isolatedDeclarations.
 b.ts(1,23): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 c.ts(1,16): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.

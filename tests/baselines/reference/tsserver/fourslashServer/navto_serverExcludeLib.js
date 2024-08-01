@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/navto_serverExcludeLib.ts] ////
+
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 //// [/index.ts]

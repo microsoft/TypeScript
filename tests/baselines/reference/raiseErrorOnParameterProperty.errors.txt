@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/raiseErrorOnParameterProperty.ts] ////
+
 raiseErrorOnParameterProperty.ts(2,25): error TS2304: Cannot find name 'X'.
 
 

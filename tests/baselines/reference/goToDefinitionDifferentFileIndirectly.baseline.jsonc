@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionDifferentFileIndirectly.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/Remote2.ts ===
 // <|var [|rem2Var|];|>

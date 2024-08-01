@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocDisallowedInTypescript.ts] ////
+
 jsdocDisallowedInTypescript.ts(2,15): error TS8020: JSDoc types can only be used inside documentation comments.
 jsdocDisallowedInTypescript.ts(4,15): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
 jsdocDisallowedInTypescript.ts(4,32): error TS8020: JSDoc types can only be used inside documentation comments.

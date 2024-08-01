@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/scanner/ecmascript5/scannerS7.8.3_A6.1_T1.ts] ////
+
 scannerS7.8.3_A6.1_T1.ts(13,3): error TS1125: Hexadecimal digit expected.
 
 

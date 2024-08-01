@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/pasteEdits_unknownSourceFile.ts] ////
+
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 //// [/file1.ts]

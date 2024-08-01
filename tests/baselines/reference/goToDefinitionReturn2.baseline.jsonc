@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionReturn2.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionReturn2.ts ===
 // function foo() {

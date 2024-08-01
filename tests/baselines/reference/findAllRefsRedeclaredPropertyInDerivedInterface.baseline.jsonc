@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsRedeclaredPropertyInDerivedInterface.ts ===
 // interface A {

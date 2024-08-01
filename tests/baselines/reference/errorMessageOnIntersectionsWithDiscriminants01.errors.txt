@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts] ////
+
 errorMessageOnIntersectionsWithDiscriminants01.ts(8,1): error TS2322: Type 'A' is not assignable to type 'B'.
   Type '{ test: true; } & { foo: 1; }' is not assignable to type 'B'.
     Type '{ test: true; } & { foo: 1; }' is not assignable to type '{ test: true; } & { bar: 1; }'.

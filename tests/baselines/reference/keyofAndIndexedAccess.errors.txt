@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts] ////
+
 keyofAndIndexedAccess.ts(205,24): error TS2322: Type 'T[keyof T]' is not assignable to type 'object'.
   Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'object'.
     Type 'T[string]' is not assignable to type 'object'.

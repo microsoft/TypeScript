@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/labeledStatements/labeledStatementDeclarationListInLoopNoCrash1.ts] ////
+
 labeledStatementDeclarationListInLoopNoCrash1.ts(3,11): error TS1123: Variable declaration list cannot be empty.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration3.ts] ////
+
 parserMemberFunctionDeclaration3.ts(2,12): error TS1029: 'public' modifier must precede 'static' modifier.
 
 

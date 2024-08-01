@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithSymlinks_preserveSymlinks.ts] ////
+
 /app/app.ts(9,1): error TS2322: Type 'import("/app/node_modules/linked2/index").C' is not assignable to type 'import("/app/node_modules/linked/index").C'.
   Types have separate declarations of a private property 'x'.
 

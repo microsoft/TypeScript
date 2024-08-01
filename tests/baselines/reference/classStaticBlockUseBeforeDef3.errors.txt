@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef3.ts] ////
+
 classStaticBlockUseBeforeDef3.ts(14,21): error TS2448: Block-scoped variable 'FOO' used before its declaration.
 classStaticBlockUseBeforeDef3.ts(14,21): error TS2454: Variable 'FOO' is used before being assigned.
 

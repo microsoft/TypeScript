@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts] ////
+
 interfaceExtendsClassWithPrivate2.ts(10,7): error TS2415: Class 'D' incorrectly extends base class 'C'.
   Types have separate declarations of a private property 'x'.
 interfaceExtendsClassWithPrivate2.ts(10,7): error TS2420: Class 'D' incorrectly implements interface 'I'.

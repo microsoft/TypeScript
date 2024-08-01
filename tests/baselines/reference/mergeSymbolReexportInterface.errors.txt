@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergeSymbolReexportInterface.ts] ////
+
 a.d.ts(3,8): error TS2300: Duplicate identifier 'Row2'.
 index.d.ts(1,14): error TS2300: Duplicate identifier 'Row2'.
 main.ts(2,7): error TS2741: Property 'a' is missing in type '{}' but required in type 'Row2'.

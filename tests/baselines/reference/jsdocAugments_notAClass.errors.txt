@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocAugments_notAClass.ts] ////
+
 /b.js(3,10): error TS8022: JSDoc '@augments' is not attached to a class.
 
 

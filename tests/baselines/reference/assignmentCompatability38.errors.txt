@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatability38.ts] ////
+
 assignmentCompatability38.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'new <Tstring>(param: Tstring) => any'.
   Type 'interfaceWithPublicAndOptional<number, string>' provides no match for the signature 'new <Tstring>(param: Tstring): any'.
 

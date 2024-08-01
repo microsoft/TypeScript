@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/expandoFunctionNestedAssigments.ts] ////
+
 expandoFunctionNestedAssigments.ts(7,23): error TS2339: Property 'inNestedFunction' does not exist on type 'typeof Foo'.
 
 

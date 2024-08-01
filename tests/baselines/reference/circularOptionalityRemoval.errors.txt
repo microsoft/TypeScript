@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularOptionalityRemoval.ts] ////
+
 circularOptionalityRemoval.ts(2,14): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 circularOptionalityRemoval.ts(2,38): error TS2372: Parameter 'x' cannot reference itself.
 circularOptionalityRemoval.ts(2,38): error TS18048: 'x' is possibly 'undefined'.

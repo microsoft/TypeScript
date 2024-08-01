@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts] ////
+
 assignmentCompatWithConstructSignatures2.ts(23,1): error TS2322: Type '() => number' is not assignable to type 'T'.
 assignmentCompatWithConstructSignatures2.ts(24,1): error TS2322: Type '(x: number) => string' is not assignable to type 'T'.
 assignmentCompatWithConstructSignatures2.ts(25,1): error TS2322: Type '() => number' is not assignable to type '{ f: new (x: number) => void; }'.

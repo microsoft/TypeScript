@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/TransportStream.ts] ////
+
 TransportStream.ts(1,1): error TS1490: File appears to be binary.
 TransportStream.ts(1,1): error TS1434: Unexpected keyword or identifier.
 TransportStream.ts(1,1): error TS2304: Cannot find name 'G'.

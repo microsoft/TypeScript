@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement8.ts] ////
+
 parserForInStatement8.ts(3,10): error TS2461: Type 'string' is not an array type.
 parserForInStatement8.ts(3,10): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
 parserForInStatement8.ts(4,10): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.

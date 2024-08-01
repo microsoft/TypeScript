@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts] ////
+
 typeUsedAsTypeLiteralIndex.ts(3,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
 typeUsedAsTypeLiteralIndex.ts(3,6): error TS2690: 'K' only refers to a type, but is being used as a value here. Did you mean to use 'P in K'?
 typeUsedAsTypeLiteralIndex.ts(13,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.

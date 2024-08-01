@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/ifDoWhileStatements/ifDoWhileStatements.ts] ////
+
 ifDoWhileStatements.ts(44,5): error TS2873: This kind of expression is always falsy.
 ifDoWhileStatements.ts(45,8): error TS2873: This kind of expression is always falsy.
 ifDoWhileStatements.ts(46,13): error TS2873: This kind of expression is always falsy.

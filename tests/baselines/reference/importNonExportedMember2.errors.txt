@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importNonExportedMember2.ts] ////
+
 b.ts(1,10): error TS2459: Module '"./a"' declares 'Foo' locally, but it is not exported.
 
 

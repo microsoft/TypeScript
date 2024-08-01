@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicatePropertiesInStrictMode.ts] ////
+
 duplicatePropertiesInStrictMode.ts(4,3): error TS1117: An object literal cannot have multiple properties with the same name.
 
 

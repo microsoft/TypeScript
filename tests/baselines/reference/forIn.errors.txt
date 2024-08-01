@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/forIn.ts] ////
+
 forIn.ts(2,10): error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
 forIn.ts(20,4): error TS2304: Cannot find name 'k'.
 

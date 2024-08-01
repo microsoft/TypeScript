@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/computedPropertyName.ts] ////
+
 component.ts(12,4): error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
 component.ts(16,4): error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.
 component.ts(20,4): error TS1361: 'onInit' cannot be used as a value because it was imported using 'import type'.

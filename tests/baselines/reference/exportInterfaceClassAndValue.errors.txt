@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportInterfaceClassAndValue.ts] ////
+
 exportInterfaceClassAndValue.ts(1,14): error TS2451: Cannot redeclare block-scoped variable 'foo'.
 exportInterfaceClassAndValue.ts(2,22): error TS2451: Cannot redeclare block-scoped variable 'foo'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendFromAny.ts] ////
+
 extendFromAny.ts(8,9): error TS2339: Property 'length' does not exist on type 'number'.
 extendFromAny.ts(9,10): error TS2339: Property 'length' does not exist on type 'number'.
 

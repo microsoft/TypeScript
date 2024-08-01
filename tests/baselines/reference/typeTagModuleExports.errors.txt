@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typeTagModuleExports.ts] ////
+
 bug27327.js(2,1): error TS2322: Type 'number' is not assignable to type 'string'.
 
 

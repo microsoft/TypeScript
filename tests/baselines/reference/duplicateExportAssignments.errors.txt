@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/duplicateExportAssignments.ts] ////
+
 foo1.ts(3,10): error TS2300: Duplicate identifier 'export='.
 foo1.ts(4,10): error TS2300: Duplicate identifier 'export='.
 foo2.ts(3,10): error TS2300: Duplicate identifier 'export='.

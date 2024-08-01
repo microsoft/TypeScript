@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getEmitOutputWithDeclarationFile2.ts] ////
+
 // === EmitOutput ===
 EmitSkipped: false
 

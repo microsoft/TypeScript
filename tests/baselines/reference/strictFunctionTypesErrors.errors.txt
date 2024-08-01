@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictFunctionTypesErrors.ts] ////
+
 strictFunctionTypesErrors.ts(10,1): error TS2322: Type '(x: string) => Object' is not assignable to type '(x: Object) => Object'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'Object' is not assignable to type 'string'.

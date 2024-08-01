@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts] ////
+
 objectTypeHidingMembersOfObjectAssignmentCompat.ts(7,1): error TS2322: Type 'I' is not assignable to type 'Object'.
   The types returned by 'toString()' are incompatible between these types.
     Type 'void' is not assignable to type 'string'.

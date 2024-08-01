@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spellingSuggestionGlobal2.ts] ////
+
 spellingSuggestionGlobal2.ts(4,1): error TS2552: Cannot find name 'global'. Did you mean 'globals'?
 
 

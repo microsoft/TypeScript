@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/mapCodeToplevelReplace.ts] ////
+
 // === mapCode ===
 
 // === ORIGINAL ===

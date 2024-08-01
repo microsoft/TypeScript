@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts] ////
+
 bestCommonTypeOfTuple2.ts(17,14): error TS2493: Tuple type '[C, base]' of length '2' has no element at index '4'.
 bestCommonTypeOfTuple2.ts(18,14): error TS2493: Tuple type '[C, D]' of length '2' has no element at index '4'.
 bestCommonTypeOfTuple2.ts(19,14): error TS2493: Tuple type '[C1, D1]' of length '2' has no element at index '4'.

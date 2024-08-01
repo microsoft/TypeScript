@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitUseStrict_amd.ts] ////
+
 error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
 
 

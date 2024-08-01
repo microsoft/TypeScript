@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocTypedefNoCrash2.ts] ////
+
 export.js(1,13): error TS2451: Cannot redeclare block-scoped variable 'foo'.
 export.js(1,13): error TS8008: Type aliases can only be used in TypeScript files.
 export.js(6,14): error TS2451: Cannot redeclare block-scoped variable 'foo'.

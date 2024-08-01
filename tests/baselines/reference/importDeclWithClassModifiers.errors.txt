@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importDeclWithClassModifiers.ts] ////
+
 importDeclWithClassModifiers.ts(5,8): error TS1044: 'public' modifier cannot appear on a module or namespace element.
 importDeclWithClassModifiers.ts(5,26): error TS2708: Cannot use namespace 'x' as a value.
 importDeclWithClassModifiers.ts(5,28): error TS2694: Namespace 'x' has no exported member 'c'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts] ////
+
 typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(13,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r1' must be of type 'string', but here has type 'number'.
 typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(20,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r2' must be of type 'boolean', but here has type 'string'.
 typeGuardOfFormTypeOfEqualEqualHasNoEffect.ts(27,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r3' must be of type 'number', but here has type 'boolean'.

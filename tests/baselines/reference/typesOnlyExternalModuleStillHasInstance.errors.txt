@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typesOnlyExternalModuleStillHasInstance.ts] ////
+
 foo_1.ts(5,5): error TS2741: Property 'M2' is missing in type 'typeof import("foo_0")' but required in type '{ M2: Object; }'.
 
 

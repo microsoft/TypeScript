@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralPropertyImplicitlyAny.ts] ////
+
 objectLiteralPropertyImplicitlyAny.ts(2,13): error TS7018: Object literal's property '[foo]' implicitly has an 'any' type.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incompatibleExports1.ts] ////
+
 incompatibleExports1.ts(4,5): error TS2309: An export assignment cannot be used in a module with other exported elements.
 incompatibleExports1.ts(16,5): error TS2309: An export assignment cannot be used in a module with other exported elements.
 

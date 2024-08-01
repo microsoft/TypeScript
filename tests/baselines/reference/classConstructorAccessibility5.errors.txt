@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility5.ts] ////
+
 classConstructorAccessibility5.ts(9,21): error TS2674: Constructor of class 'Base' is protected and only accessible within the class declaration.
 
 

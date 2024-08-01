@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indirectDiscriminantAndExcessProperty.ts] ////
+
 indirectDiscriminantAndExcessProperty.ts(9,5): error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
 indirectDiscriminantAndExcessProperty.ts(15,5): error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.
 indirectDiscriminantAndExcessProperty.ts(22,5): error TS2322: Type 'string' is not assignable to type '"foo" | "bar"'.

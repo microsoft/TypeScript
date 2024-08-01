@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classOverloadForFunction.ts] ////
+
 classOverloadForFunction.ts(1,7): error TS2813: Class declaration cannot implement overload list for 'foo'.
 classOverloadForFunction.ts(2,10): error TS2814: Function with bodies can only merge with classes that are ambient.
 

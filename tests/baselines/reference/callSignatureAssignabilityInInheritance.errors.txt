@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts] ////
+
 callSignatureAssignabilityInInheritance.ts(57,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
   The types returned by 'a(...)' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.

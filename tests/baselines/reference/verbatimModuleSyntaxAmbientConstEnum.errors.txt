@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxAmbientConstEnum.ts] ////
+
 /a.ts(1,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
 /a.ts(4,1): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
 /b.ts(1,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.

@@ -1,5 +1,7 @@
+//// [/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics15.ts] ////
+
 // === Syntax Diagnostics ===
-Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics15.ts':
+Syntactic Diagnostics:
 /tests/cases/fourslash/a.js(1,12): error TS8012: Parameter modifiers can only be used in TypeScript files.
 
 

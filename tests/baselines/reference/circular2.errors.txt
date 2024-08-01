@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/circular2.ts] ////
+
 /a.ts(2,13): error TS2456: Type alias 'A' circularly references itself.
 /b.ts(2,13): error TS2456: Type alias 'B' circularly references itself.
 

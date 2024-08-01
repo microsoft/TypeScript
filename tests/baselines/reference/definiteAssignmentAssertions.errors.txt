@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts] ////
+
 definiteAssignmentAssertions.ts(5,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
 definiteAssignmentAssertions.ts(20,6): error TS1263: Declarations with initializers cannot also have definite assignment assertions.
 definiteAssignmentAssertions.ts(21,6): error TS1263: Declarations with initializers cannot also have definite assignment assertions.

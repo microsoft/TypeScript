@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/restParameterNotLast.ts] ////
+
 restParameterNotLast.ts(1,12): error TS1014: A rest parameter must be last in a parameter list.
 
 

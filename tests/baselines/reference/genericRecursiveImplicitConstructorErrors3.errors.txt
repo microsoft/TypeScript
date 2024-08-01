@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors3.ts] ////
+
 genericRecursiveImplicitConstructorErrors3.ts(3,66): error TS2314: Generic type 'MemberName<A, B, C>' requires 3 type argument(s).
 genericRecursiveImplicitConstructorErrors3.ts(10,22): error TS2314: Generic type 'PullTypeSymbol<A, B, C>' requires 3 type argument(s).
 genericRecursiveImplicitConstructorErrors3.ts(12,48): error TS2314: Generic type 'PullSymbol<A, B, C>' requires 3 type argument(s).

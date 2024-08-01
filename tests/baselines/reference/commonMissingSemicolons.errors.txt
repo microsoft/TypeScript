@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commonMissingSemicolons.ts] ////
+
 commonMissingSemicolons.ts(2,1): error TS1435: Unknown keyword or identifier. Did you mean 'async'?
 commonMissingSemicolons.ts(2,1): error TS2304: Cannot find name 'asynd'.
 commonMissingSemicolons.ts(3,1): error TS1435: Unknown keyword or identifier. Did you mean 'async'?

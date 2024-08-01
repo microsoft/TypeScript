@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts] ////
+
 intersectionAndUnionTypes.ts(19,1): error TS2322: Type 'A' is not assignable to type 'A & B'.
   Property 'b' is missing in type 'A' but required in type 'B'.
 intersectionAndUnionTypes.ts(20,1): error TS2322: Type 'B' is not assignable to type 'A & B'.

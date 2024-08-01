@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignaturesWithOptionalParameters.ts] ////
+
 subtypingWithConstructSignaturesWithOptionalParameters.ts(19,11): error TS2430: Interface 'I3' incorrectly extends interface 'Base'.
   Types of property 'a' are incompatible.
     Type 'new (x: number) => number' is not assignable to type 'new () => number'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature2.ts] ////
+
 parserIndexSignature2.ts(2,4): error TS2369: A parameter property is only allowed in a constructor implementation.
 parserIndexSignature2.ts(2,11): error TS1018: An index signature parameter cannot have an accessibility modifier.
 

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToImplementationInterfaceProperty_01.ts] ////
+
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationInterfaceProperty_01.ts ===
 // interface Foo { hello: number }

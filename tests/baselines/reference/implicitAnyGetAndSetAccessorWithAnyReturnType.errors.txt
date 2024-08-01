@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyGetAndSetAccessorWithAnyReturnType.ts] ////
+
 implicitAnyGetAndSetAccessorWithAnyReturnType.ts(3,5): error TS7008: Member 'getAndSet' implicitly has an 'any' type.
 implicitAnyGetAndSetAccessorWithAnyReturnType.ts(15,16): error TS7032: Property 'haveOnlySet' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
 implicitAnyGetAndSetAccessorWithAnyReturnType.ts(15,28): error TS7006: Parameter 'newXValue' implicitly has an 'any' type.

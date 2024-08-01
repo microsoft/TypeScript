@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeIndexedAccessConstraint.ts] ////
+
 mappedTypeIndexedAccessConstraint.ts(12,5): error TS18048: 'm1' is possibly 'undefined'.
 mappedTypeIndexedAccessConstraint.ts(14,5): error TS18048: 'm2' is possibly 'undefined'.
 mappedTypeIndexedAccessConstraint.ts(16,5): error TS18048: 'm3' is possibly 'undefined'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericRestArgs.ts] ////
+
 genericRestArgs.ts(2,26): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 genericRestArgs.ts(5,34): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 genericRestArgs.ts(10,29): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.

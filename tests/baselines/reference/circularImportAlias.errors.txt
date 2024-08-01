@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/importDeclarations/circularImportAlias.ts] ////
+
 circularImportAlias.ts(5,30): error TS2449: Class 'C' used before its declaration.
 
 

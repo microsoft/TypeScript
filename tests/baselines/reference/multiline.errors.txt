@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/directives/multiline.tsx] ////
+
 a.ts(12,1): error TS2578: Unused '@ts-expect-error' directive.
 b.tsx(32,1): error TS2578: Unused '@ts-expect-error' directive.
 

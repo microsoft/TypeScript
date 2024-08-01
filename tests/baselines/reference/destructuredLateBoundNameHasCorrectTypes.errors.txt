@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts] ////
+
 destructuredLateBoundNameHasCorrectTypes.ts(11,8): error TS2339: Property 'prop2' does not exist on type '{ prop: string; }'.
 destructuredLateBoundNameHasCorrectTypes.ts(11,37): error TS2353: Object literal may only specify known properties, and 'prop' does not exist in type '{ prop2: any; }'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsReturnTypes.ts] ////
+
 isolatedDeclarationErrorsReturnTypes.ts(13,45): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsReturnTypes.ts(16,41): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsReturnTypes.ts(19,41): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.

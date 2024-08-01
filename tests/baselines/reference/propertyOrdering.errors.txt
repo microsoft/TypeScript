@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyOrdering.ts] ////
+
 propertyOrdering.ts(6,23): error TS2301: Initializer of instance member variable '_store' cannot reference identifier 'store' declared in the constructor.
 propertyOrdering.ts(9,34): error TS2551: Property 'store' does not exist on type 'Foo'. Did you mean '_store'?
 propertyOrdering.ts(16,25): error TS2339: Property '_store' does not exist on type 'Bar'.

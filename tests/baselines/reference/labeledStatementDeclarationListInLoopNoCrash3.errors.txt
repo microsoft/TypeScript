@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/labeledStatements/labeledStatementDeclarationListInLoopNoCrash3.ts] ////
+
 labeledStatementDeclarationListInLoopNoCrash3.ts(9,12): error TS2339: Property 'classFormat' does not exist on type 'ParseThemeData'.
 labeledStatementDeclarationListInLoopNoCrash3.ts(15,12): error TS1005: ',' expected.
 labeledStatementDeclarationListInLoopNoCrash3.ts(15,12): error TS2304: Cannot find name 'font'.

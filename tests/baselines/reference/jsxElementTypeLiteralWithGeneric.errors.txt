@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxElementTypeLiteralWithGeneric.tsx] ////
+
 jsxElementTypeLiteralWithGeneric.tsx(21,9): error TS2339: Property 'ruhroh' does not exist on type 'JSX.IntrinsicElements'.
 jsxElementTypeLiteralWithGeneric.tsx(21,10): error TS2786: 'ruhroh' cannot be used as a JSX component.
   Its type '"ruhroh"' is not a valid JSX element type.

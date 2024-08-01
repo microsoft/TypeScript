@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reverseMappedTypeLimitedConstraint.ts] ////
+
 reverseMappedTypeLimitedConstraint.ts(5,13): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: 1; }'.
 reverseMappedTypeLimitedConstraint.ts(14,3): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: "y"; }'.
 

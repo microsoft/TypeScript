@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameDestructuringAssignmentNestedInFor.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameDestructuringAssignmentNestedInFor.ts ===
 // interface MultiRobot {

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionShorthandProperty02.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionShorthandProperty02.ts ===
 // let x = {

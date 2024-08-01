@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ClassDeclarationWithInvalidConstOnPropertyDeclaration.ts] ////
+
 ClassDeclarationWithInvalidConstOnPropertyDeclaration.ts(2,16): error TS1248: A class member cannot have the 'const' keyword.
 
 

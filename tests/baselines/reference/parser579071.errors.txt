@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser579071.ts] ////
+
 parser579071.ts(1,14): error TS1005: ')' expected.
 
 

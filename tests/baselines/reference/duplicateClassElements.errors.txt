@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateClassElements.ts] ////
+
 duplicateClassElements.ts(3,12): error TS2300: Duplicate identifier 'a'.
 duplicateClassElements.ts(4,12): error TS2393: Duplicate function implementation.
 duplicateClassElements.ts(6,12): error TS2393: Duplicate function implementation.

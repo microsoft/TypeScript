@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classFieldsBrokenConstructorEmitNoCrash1.ts] ////
+
 classFieldsBrokenConstructorEmitNoCrash1.ts(3,3): error TS2390: Constructor implementation is missing.
 classFieldsBrokenConstructorEmitNoCrash1.ts(4,1): error TS1005: '(' expected.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportDeclaration.ts] ////
+
 /b.ts(3,5): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
 /d.ts(2,10): error TS1289: 'A' resolves to a type-only declaration and must be marked type-only in this file before re-exporting when 'isolatedModules' is enabled. Consider using 'import type' where 'A' is imported.
 

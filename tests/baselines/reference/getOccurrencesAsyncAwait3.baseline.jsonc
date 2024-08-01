@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesAsyncAwait3.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesAsyncAwait3.ts ===
 // a/*HIGHLIGHTS*/wait 100;

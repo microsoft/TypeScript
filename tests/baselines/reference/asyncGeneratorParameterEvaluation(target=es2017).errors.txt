@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/asyncGenerators/asyncGeneratorParameterEvaluation.ts] ////
+
 asyncGeneratorParameterEvaluation.ts(2,27): error TS2304: Cannot find name 'z'.
 asyncGeneratorParameterEvaluation.ts(3,22): error TS2304: Cannot find name 'z'.
 asyncGeneratorParameterEvaluation.ts(3,22): error TS2538: Type 'any' cannot be used as an index type.

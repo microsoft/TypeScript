@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2023.ts] ////
+
 doYouNeedToChangeYourTargetLibraryES2023.ts(7,31): error TS2550: Property 'findLastIndex' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.
 doYouNeedToChangeYourTargetLibraryES2023.ts(7,45): error TS7006: Parameter 'v' implicitly has an 'any' type.
 doYouNeedToChangeYourTargetLibraryES2023.ts(8,31): error TS2550: Property 'findLastIndex' does not exist on type 'number[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2023' or later.

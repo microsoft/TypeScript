@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalParamterAndVariableDeclaration2.ts] ////
+
 optionalParamterAndVariableDeclaration2.ts(3,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'options' must be of type 'number | undefined', but here has type 'number'.
 
 

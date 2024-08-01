@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/functionExpressionContextualTyping2.ts] ////
+
 functionExpressionContextualTyping2.ts(11,1): error TS2322: Type '(foo: number, bar: string) => boolean' is not assignable to type '((n: number, s: string) => number) | ((n: number, s: string) => string)'.
   Type '(foo: number, bar: string) => boolean' is not assignable to type '(n: number, s: string) => number'.
     Type 'boolean' is not assignable to type 'number'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pathsValidation1.ts] ////
+
 tsconfig.json(5,18): error TS5063: Substitutions for pattern '*' should be an array.
 
 

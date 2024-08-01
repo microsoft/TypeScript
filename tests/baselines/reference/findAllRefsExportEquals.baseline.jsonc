@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsExportEquals.ts] ////
+
 // === findAllReferences ===
 // === /a.ts ===
 // <|type /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}T|] = number;|>

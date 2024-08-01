@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/autoImportCrossProject_baseUrl_toDist.ts] ////
+
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 //// [/common/src/MyModule.ts]

@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/jsWithInlineSourceMapBasic.ts] ////
+
 //// [variables.ts] ////
 export const a = 1;
 export let b = 2;

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoJsDocTags15.ts] ////
+
 // === QuickInfo ===
 === /b.js ===
 // import * as _a from "./a.js";

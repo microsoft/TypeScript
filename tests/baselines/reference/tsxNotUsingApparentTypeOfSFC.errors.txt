@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx] ////
+
 tsxNotUsingApparentTypeOfSFC.tsx(14,14): error TS2322: Type '{}' is not assignable to type 'P'.
   'P' could be instantiated with an arbitrary type which could be unrelated to '{}'.
 tsxNotUsingApparentTypeOfSFC.tsx(15,14): error TS2769: No overload matches this call.

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameDefaultImportDifferentName.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/B.ts ===
 // <|export default class /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}C|] {

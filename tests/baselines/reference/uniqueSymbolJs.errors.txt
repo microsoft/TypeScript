@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uniqueSymbolJs.ts] ////
+
 a.js(5,18): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
 a.js(5,28): error TS1005: ';' expected.
 

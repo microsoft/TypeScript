@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedInterfaceinNamespace2.ts] ////
+
 unusedInterfaceinNamespace2.ts(2,15): error TS6196: 'i1' is declared but never used.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts] ////
+
 noUncheckedIndexedAccess.ts(3,32): error TS2344: Type 'boolean | undefined' does not satisfy the constraint 'boolean'.
   Type 'undefined' is not assignable to type 'boolean'.
 noUncheckedIndexedAccess.ts(12,7): error TS2322: Type 'boolean | undefined' is not assignable to type 'boolean'.

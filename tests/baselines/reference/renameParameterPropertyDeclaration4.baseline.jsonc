@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameParameterPropertyDeclaration4.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameParameterPropertyDeclaration4.ts ===
 // class Foo {

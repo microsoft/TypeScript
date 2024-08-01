@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImports3.ts] ////
+
 file2.ts(1,9): error TS6133: 'Calculator' is declared but its value is never read.
 
 

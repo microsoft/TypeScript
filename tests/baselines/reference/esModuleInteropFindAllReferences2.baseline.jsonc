@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/esModuleInteropFindAllReferences2.ts] ////
+
 // === findAllReferences ===
 // === /a.d.ts ===
 // export as namespace abc;

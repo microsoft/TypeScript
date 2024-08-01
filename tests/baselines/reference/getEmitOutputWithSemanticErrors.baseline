@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getEmitOutputWithSemanticErrors.ts] ////
+
 // === EmitOutput ===
 EmitSkipped: false
 

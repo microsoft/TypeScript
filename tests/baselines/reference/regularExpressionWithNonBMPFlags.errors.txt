@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/regularExpressionWithNonBMPFlags.ts] ////
+
 regularExpressionWithNonBMPFlags.ts(7,23): error TS1499: Unknown regular expression flag.
 regularExpressionWithNonBMPFlags.ts(7,25): error TS1499: Unknown regular expression flag.
 regularExpressionWithNonBMPFlags.ts(7,28): error TS1499: Unknown regular expression flag.

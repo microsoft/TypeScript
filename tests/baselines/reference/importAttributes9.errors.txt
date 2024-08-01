@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/importAttributes/importAttributes9.ts] ////
+
 b.ts(7,27): error TS2322: Type '{ type: "not-json"; }' is not assignable to type 'ImportAttributes'.
   Types of property 'type' are incompatible.
     Type '"not-json"' is not assignable to type '"json"'.

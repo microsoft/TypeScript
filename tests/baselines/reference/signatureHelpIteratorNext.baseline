@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/signatureHelpIteratorNext.ts] ////
+
 // === SignatureHelp ===
 === /tests/cases/fourslash/signatureHelpIteratorNext.ts ===
 // declare const iterator: Iterator<string, void, number>;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/typesWithPublicConstructor.ts] ////
+
 typesWithPublicConstructor.ts(8,5): error TS2322: Type 'Function' is not assignable to type '() => void'.
   Type 'Function' provides no match for the signature '(): void'.
 typesWithPublicConstructor.ts(15,10): error TS2554: Expected 1 arguments, but got 0.

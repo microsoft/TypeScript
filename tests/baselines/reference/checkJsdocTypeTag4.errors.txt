@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocTypeTag4.ts] ////
+
 test.js(5,14): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 test.js(7,14): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts] ////
+
 bestCommonTypeOfTuple.ts(22,13): error TS2493: Tuple type '[(x: number) => string, (x: number) => number]' of length '2' has no element at index '2'.
 bestCommonTypeOfTuple.ts(23,13): error TS2493: Tuple type '[E1, E2]' of length '2' has no element at index '2'.
 bestCommonTypeOfTuple.ts(24,13): error TS2493: Tuple type '[number, any]' of length '2' has no element at index '2'.

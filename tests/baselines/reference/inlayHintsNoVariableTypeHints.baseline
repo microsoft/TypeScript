@@ -1,2 +1,4 @@
+//// [/tests/cases/fourslash/inlayHintsNoVariableTypeHints.ts] ////
+
 // === Inlay Hints ===
 === No inlay hints ===

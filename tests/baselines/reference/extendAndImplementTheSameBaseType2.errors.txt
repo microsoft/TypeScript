@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendAndImplementTheSameBaseType2.ts] ////
+
 extendAndImplementTheSameBaseType2.ts(7,7): error TS2720: Class 'D' incorrectly implements class 'C<number>'. Did you mean to extend 'C<number>' and inherit its members as a subclass?
   The types returned by 'bar()' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.

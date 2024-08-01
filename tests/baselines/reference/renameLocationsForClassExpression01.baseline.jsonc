@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameLocationsForClassExpression01.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameLocationsForClassExpression01.ts ===
 // class Foo {

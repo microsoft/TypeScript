@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumErrorOnConstantBindingWithInitializer.ts] ////
+
 enumErrorOnConstantBindingWithInitializer.ts(9,10): error TS18033: Type 'string | number' is not assignable to type 'number' as required for computed enum member values.
   Type 'string' is not assignable to type 'number'.
 

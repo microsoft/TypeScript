@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedParametersInInitializers1.ts] ////
+
 capturedParametersInInitializers1.ts(18,20): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
 capturedParametersInInitializers1.ts(22,26): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
 capturedParametersInInitializers1.ts(38,21): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/autoImportProvider_referencesCrash.ts] ////
+
 // === findAllReferences ===
 // === /b/b.ts ===
 // /// <reference path="../a/index.d.ts" />

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/i3.ts] ////
+
 i3.ts(6,1): error TS2322: Type 'I3' is not assignable to type '{ one: number; }'.
   Property 'one' is optional in type 'I3' but required in type '{ one: number; }'.
 

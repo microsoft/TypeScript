@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/genericRestParameters3.ts] ////
+
 genericRestParameters3.ts(17,11): error TS2345: Argument of type '[10]' is not assignable to parameter of type '[string] | [number, boolean]'.
   Type '[10]' is not assignable to type '[string]'.
     Type 'number' is not assignable to type 'string'.

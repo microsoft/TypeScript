@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeIndexedAccess.ts] ////
+
 mappedTypeIndexedAccess.ts(18,5): error TS2322: Type '{ key: "foo"; value: number; }' is not assignable to type 'Pair<FooBar>'.
   Types of property 'value' are incompatible.
     Type 'number' is not assignable to type 'string'.

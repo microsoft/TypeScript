@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override5.ts] ////
+
 override5.ts(14,14): error TS1040: 'override' modifier cannot be used in an ambient context.
 override5.ts(16,14): error TS1029: 'override' modifier must precede 'readonly' modifier.
 override5.ts(20,21): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.

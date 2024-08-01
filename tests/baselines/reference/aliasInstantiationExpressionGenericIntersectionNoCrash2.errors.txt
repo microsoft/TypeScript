@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/aliasInstantiationExpressionGenericIntersectionNoCrash2.ts] ////
+
 aliasInstantiationExpressionGenericIntersectionNoCrash2.ts(15,1): error TS2352: Conversion of type 'Wat<number>' to type 'Wat<string>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'Wat<number>' is not comparable to type '{ new (): Class<string>; prototype: Class<any>; }'.
     Type 'Class<number>' is not comparable to type 'Class<string>'.

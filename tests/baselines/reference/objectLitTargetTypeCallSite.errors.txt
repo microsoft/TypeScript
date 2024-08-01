@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLitTargetTypeCallSite.ts] ////
+
 objectLitTargetTypeCallSite.ts(5,10): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 

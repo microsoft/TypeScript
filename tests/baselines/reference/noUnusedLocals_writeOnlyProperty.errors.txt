@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUnusedLocals_writeOnlyProperty.ts] ////
+
 noUnusedLocals_writeOnlyProperty.ts(2,13): error TS6133: 'x' is declared but its value is never read.
 
 

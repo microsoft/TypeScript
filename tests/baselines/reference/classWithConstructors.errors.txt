@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts] ////
+
 classWithConstructors.ts(6,13): error TS2554: Expected 1 arguments, but got 0.
 classWithConstructors.ts(15,14): error TS2554: Expected 1 arguments, but got 0.
 classWithConstructors.ts(21,13): error TS2554: Expected 1 arguments, but got 0.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parserTernaryAndCommaOperators1.ts] ////
+
 parserTernaryAndCommaOperators1.ts(1,1): error TS2304: Cannot find name 'b'.
 parserTernaryAndCommaOperators1.ts(1,1): error TS2695: Left side of comma operator is unused and has no side effects.
 parserTernaryAndCommaOperators1.ts(1,16): error TS2304: Cannot find name 'c'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorInvalidOperations.ts] ////
+
 deleteOperatorInvalidOperations.ts(5,20): error TS1005: ',' expected.
 deleteOperatorInvalidOperations.ts(5,26): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorInvalidOperations.ts(5,27): error TS1109: Expression expected.

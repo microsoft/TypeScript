@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Protected/Protected6.ts] ////
+
 Protected6.ts(2,10): error TS1029: 'protected' modifier must precede 'static' modifier.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts] ////
+
 functionConstraintSatisfaction2.ts(5,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Function'.
 functionConstraintSatisfaction2.ts(6,16): error TS2554: Expected 1 arguments, but got 2.
 functionConstraintSatisfaction2.ts(7,8): error TS2554: Expected 1 arguments, but got 2.

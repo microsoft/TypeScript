@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsOnImportAliases2.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // <|export class /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}Class|] {}|>

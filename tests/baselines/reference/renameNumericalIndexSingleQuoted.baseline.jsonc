@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameNumericalIndexSingleQuoted.ts] ////
+
 // === findRenameLocations ===
 // @quotePreference: single
 

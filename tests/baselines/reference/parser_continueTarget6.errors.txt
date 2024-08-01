@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueTarget6.ts] ////
+
 parser_continueTarget6.ts(2,3): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
 
 

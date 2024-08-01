@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionVariableAssignment2.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/foo.ts ===
 // const Bar;

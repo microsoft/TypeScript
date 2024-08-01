@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesUnique-1.ts] ////
+
 privateNamesUnique-1.ts(9,7): error TS2322: Type 'B' is not assignable to type 'A'.
   Property '#foo' in type 'B' refers to a different member that cannot be accessed from within type 'A'.
 

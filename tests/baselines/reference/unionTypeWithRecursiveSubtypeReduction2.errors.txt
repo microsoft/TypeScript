@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts] ////
+
 unionTypeWithRecursiveSubtypeReduction2.ts(19,1): error TS2322: Type 'Property' is not assignable to type 'Class'.
   Types of property 'parent' are incompatible.
     Type 'Module | Class' is not assignable to type 'Namespace'.

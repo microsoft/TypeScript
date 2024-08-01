@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/unicodeEscapesInJsxtags.tsx] ////
+
 file.tsx(15,4): error TS17021: Unicode escape sequence cannot appear here.
 file.tsx(16,4): error TS17021: Unicode escape sequence cannot appear here.
 file.tsx(17,4): error TS17021: Unicode escape sequence cannot appear here.

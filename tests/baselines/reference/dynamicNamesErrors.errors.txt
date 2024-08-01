@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/dynamicNamesErrors.ts] ////
+
 dynamicNamesErrors.ts(19,5): error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
 dynamicNamesErrors.ts(24,1): error TS2322: Type 'T2' is not assignable to type 'T1'.
   Types of property '[c0]' are incompatible.

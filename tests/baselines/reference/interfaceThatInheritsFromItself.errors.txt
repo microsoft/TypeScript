@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatInheritsFromItself.ts] ////
+
 interfaceThatInheritsFromItself.ts(1,11): error TS2310: Type 'Foo' recursively references itself as a base type.
 interfaceThatInheritsFromItself.ts(4,11): error TS2310: Type 'Foo2<T>' recursively references itself as a base type.
 interfaceThatInheritsFromItself.ts(7,11): error TS2310: Type 'Foo3<T>' recursively references itself as a base type.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedTypeParameterInFunction4.ts] ////
+
 unusedTypeParameterInFunction4.ts(1,13): error TS6133: 'X' is declared but its value is never read.
 
 

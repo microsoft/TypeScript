@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks1.ts] ////
+
 reachabilityChecks1.ts(2,1): error TS7027: Unreachable code detected.
 reachabilityChecks1.ts(6,5): error TS7027: Unreachable code detected.
 reachabilityChecks1.ts(18,5): error TS7027: Unreachable code detected.

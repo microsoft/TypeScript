@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callExpressionWithMissingTypeArgument1.ts] ////
+
 callExpressionWithMissingTypeArgument1.ts(1,1): error TS2304: Cannot find name 'Foo'.
 callExpressionWithMissingTypeArgument1.ts(1,5): error TS2304: Cannot find name 'a'.
 callExpressionWithMissingTypeArgument1.ts(1,7): error TS1110: Type expected.

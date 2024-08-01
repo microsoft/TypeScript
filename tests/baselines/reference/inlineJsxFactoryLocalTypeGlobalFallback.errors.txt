@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryLocalTypeGlobalFallback.tsx] ////
+
 index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
 
 

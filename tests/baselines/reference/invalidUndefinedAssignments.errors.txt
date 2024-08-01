@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/undefined/invalidUndefinedAssignments.ts] ////
+
 invalidUndefinedAssignments.ts(4,1): error TS2628: Cannot assign to 'E' because it is an enum.
 invalidUndefinedAssignments.ts(5,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
 invalidUndefinedAssignments.ts(9,1): error TS2629: Cannot assign to 'C' because it is a class.

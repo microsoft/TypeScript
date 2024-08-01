@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue7.ts] ////
+
 narrowByClauseExpressionInSwitchTrue7.ts(80,19): error TS2322: Type 'Derived2' is not assignable to type 'never'.
 
 

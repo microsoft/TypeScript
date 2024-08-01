@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyDeclareVariablesWithoutTypeAndInit.ts] ////
+
 implicitAnyDeclareVariablesWithoutTypeAndInit.ts(3,5): error TS7034: Variable 'y' implicitly has type 'any' in some locations where its type cannot be determined.
 implicitAnyDeclareVariablesWithoutTypeAndInit.ts(4,13): error TS7005: Variable 'foo' implicitly has an 'any' type.
 implicitAnyDeclareVariablesWithoutTypeAndInit.ts(5,15): error TS7006: Parameter 'k' implicitly has an 'any' type.

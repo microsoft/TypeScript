@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForIllegalAssignment.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForIllegalAssignment.ts ===
 // f/*FIND ALL REFS*/oo = foo;

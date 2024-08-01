@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unspecializedConstraints.ts] ////
+
 unspecializedConstraints.ts(84,44): error TS2552: Cannot find name 'TypeParameter'. Did you mean 'Parameter'?
 
 

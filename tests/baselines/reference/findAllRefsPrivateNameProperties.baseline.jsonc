@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsPrivateNameProperties.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsPrivateNameProperties.ts ===
 // class C {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts] ////
+
 objectLiteralErrors.ts(2,18): error TS1117: An object literal cannot have multiple properties with the same name.
 objectLiteralErrors.ts(3,19): error TS1117: An object literal cannot have multiple properties with the same name.
 objectLiteralErrors.ts(4,18): error TS1117: An object literal cannot have multiple properties with the same name.

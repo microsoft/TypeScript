@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts] ////
+
 subtypesOfTypeParameterWithConstraints4.ts(47,5): error TS2411: Property 'foo' of type 'V' is not assignable to 'string' index type 'Foo'.
 subtypesOfTypeParameterWithConstraints4.ts(47,5): error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'B1<Foo>'.
   Type 'V' is not assignable to type 'Foo'.

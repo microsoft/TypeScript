@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts] ////
+
 TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(2,18): error TS2300: Duplicate identifier 'Point'.
 TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(10,18): error TS2300: Duplicate identifier 'Point'.
 TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.ts(17,18): error TS2300: Duplicate identifier 'Line'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessivelyLargeTupleSpread.ts] ////
+
 excessivelyLargeTupleSpread.ts(6,10): error TS2799: Type produces a tuple type that is too large to represent.
 excessivelyLargeTupleSpread.ts(22,12): error TS2799: Type produces a tuple type that is too large to represent.
 excessivelyLargeTupleSpread.ts(38,13): error TS2800: Expression produces a tuple type that is too large to represent.

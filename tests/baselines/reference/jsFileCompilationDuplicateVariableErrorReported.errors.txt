@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationDuplicateVariableErrorReported.ts] ////
+
 a.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'number'.
 
 

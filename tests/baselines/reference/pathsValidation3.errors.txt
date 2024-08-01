@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/pathsValidation3.ts] ////
+
 tsconfig.json(5,20): error TS5066: Substitutions for pattern 'foo' shouldn't be an empty array.
 
 

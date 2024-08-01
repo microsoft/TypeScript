@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts] ////
+
 arrayLiterals3.ts(10,5): error TS2322: Type '[]' is not assignable to type '[any, any, any]'.
   Source has 0 element(s) but target requires 3.
 arrayLiterals3.ts(11,38): error TS2322: Type 'string' is not assignable to type 'boolean'.

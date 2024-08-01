@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/constructorNameInGenerator.ts] ////
+
 constructorNameInGenerator.ts(2,6): error TS1368: Class constructor may not be a generator.
 
 

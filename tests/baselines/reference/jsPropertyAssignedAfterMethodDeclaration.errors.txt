@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsPropertyAssignedAfterMethodDeclaration.ts] ////
+
 /a.js(4,9): error TS2322: Type 'number' is not assignable to type '() => void'.
 
 

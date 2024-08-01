@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerSyntaxRestrictions.ts] ////
+
 error TS2468: Cannot find global value 'Promise'.
 /mainJs.js(2,1): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 

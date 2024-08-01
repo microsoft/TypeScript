@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionSubtypeReductionErrors.ts] ////
+
 unionSubtypeReductionErrors.ts(5006,9): error TS2590: Expression produces a union type that is too complex to represent.
 
 

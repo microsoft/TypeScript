@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts] ////
+
 implicitAnyInAmbientDeclaration2.d.ts(1,18): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
 implicitAnyInAmbientDeclaration2.d.ts(1,22): error TS7006: Parameter 'x' implicitly has an 'any' type.
 implicitAnyInAmbientDeclaration2.d.ts(2,13): error TS7005: Variable 'bar' implicitly has an 'any' type.

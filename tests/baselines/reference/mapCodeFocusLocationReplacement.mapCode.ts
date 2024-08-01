@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/mapCodeFocusLocationReplacement.ts] ////
+
 // === mapCode ===
 
 // === ORIGINAL ===

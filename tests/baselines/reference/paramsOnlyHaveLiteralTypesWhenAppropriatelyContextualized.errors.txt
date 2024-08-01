@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts] ////
+
 paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts(27,23): error TS2345: Argument of type '{ x?: number[] | undefined; y?: string[] | undefined; }' is not assignable to parameter of type '{ y?: number[] | undefined; }'.
   Types of property 'y' are incompatible.
     Type 'string[] | undefined' is not assignable to type 'number[] | undefined'.

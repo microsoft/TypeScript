@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfBySymbolHasInstance.ts] ////
+
 typeGuardsWithInstanceOfBySymbolHasInstance.ts(13,10): error TS2339: Property 'bar' does not exist on type 'A'.
 typeGuardsWithInstanceOfBySymbolHasInstance.ts(19,10): error TS2339: Property 'bar' does not exist on type 'A'.
 typeGuardsWithInstanceOfBySymbolHasInstance.ts(35,5): error TS2322: Type 'string' is not assignable to type 'number'.

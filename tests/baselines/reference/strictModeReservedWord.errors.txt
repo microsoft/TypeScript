@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictModeReservedWord.ts] ////
+
 strictModeReservedWord.ts(1,5): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
 strictModeReservedWord.ts(5,9): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
 strictModeReservedWord.ts(6,9): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.

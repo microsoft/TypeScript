@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks02.ts] ////
+
 stringLiteralsWithEqualityChecks02.ts(8,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.
 stringLiteralsWithEqualityChecks02.ts(9,5): error TS2367: This comparison appears to be unintentional because the types '"bar"' and '"foo"' have no overlap.
 stringLiteralsWithEqualityChecks02.ts(10,5): error TS2367: This comparison appears to be unintentional because the types '"foo"' and '"bar"' have no overlap.

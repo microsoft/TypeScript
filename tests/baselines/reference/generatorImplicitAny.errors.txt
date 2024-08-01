@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorImplicitAny.ts] ////
+
 generatorImplicitAny.ts(8,19): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
 generatorImplicitAny.ts(26,7): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
 

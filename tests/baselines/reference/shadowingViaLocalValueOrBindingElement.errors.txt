@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shadowingViaLocalValueOrBindingElement.ts] ////
+
 shadowingViaLocalValueOrBindingElement.ts(4,13): error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
 shadowingViaLocalValueOrBindingElement.ts(5,15): error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.
 shadowingViaLocalValueOrBindingElement.ts(6,18): error TS2481: Cannot initialize outer scoped variable 'x' in the same scope as block scoped declaration 'x'.

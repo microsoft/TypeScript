@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Protected/Protected7.ts] ////
+
 Protected7.ts(2,13): error TS1028: Accessibility modifier already seen.
 
 

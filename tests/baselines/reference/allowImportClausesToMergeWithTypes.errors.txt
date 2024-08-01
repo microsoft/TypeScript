@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/allowImportClausesToMergeWithTypes.ts] ////
+
 index.ts(9,10): error TS2749: 'originalZZZ' refers to a value, but is being used as a type here. Did you mean 'typeof originalZZZ'?
 
 

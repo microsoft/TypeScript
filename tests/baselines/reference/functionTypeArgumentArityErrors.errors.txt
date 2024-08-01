@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionTypeArgumentArityErrors.ts] ////
+
 functionTypeArgumentArityErrors.ts(4,4): error TS2743: No overload expects 2 type arguments, but overloads do exist that expect either 1 or 3 type arguments.
 functionTypeArgumentArityErrors.ts(5,4): error TS2558: Expected 4 type arguments, but got 5.
 functionTypeArgumentArityErrors.ts(10,4): error TS2743: No overload expects 2 type arguments, but overloads do exist that expect either 1 or 3 type arguments.

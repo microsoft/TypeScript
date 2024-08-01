@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatability24.ts] ////
+
 assignmentCompatability24.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '<Tstring>(a: Tstring) => Tstring'.
   Type 'interfaceWithPublicAndOptional<number, string>' provides no match for the signature '<Tstring>(a: Tstring): Tstring'.
 

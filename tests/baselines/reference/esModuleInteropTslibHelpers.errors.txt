@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/esModuleInteropTslibHelpers.ts] ////
+
 file2.ts(1,1): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
 file3.ts(1,9): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
 file4.ts(1,14): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.

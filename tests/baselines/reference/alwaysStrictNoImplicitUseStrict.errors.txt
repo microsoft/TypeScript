@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/alwaysStrictNoImplicitUseStrict.ts] ////
+
 error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
 alwaysStrictNoImplicitUseStrict.ts(3,13): error TS1100: Invalid use of 'arguments' in strict mode.
 

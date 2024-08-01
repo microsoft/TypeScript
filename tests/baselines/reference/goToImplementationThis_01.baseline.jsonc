@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToImplementationThis_01.ts] ////
+
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationThis_01.ts ===
 // <|class [|Bar|] extends Foo {

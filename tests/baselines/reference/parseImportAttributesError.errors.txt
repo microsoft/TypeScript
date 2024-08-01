@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseImportAttributesError.ts] ////
+
 /index.ts(2,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /index.ts(2,30): error TS1478: Identifier or string literal expected.
 /index.ts(2,30): error TS2695: Left side of comma operator is unused and has no side effects.

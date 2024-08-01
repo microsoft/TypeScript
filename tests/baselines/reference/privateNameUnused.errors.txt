@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameUnused.ts] ////
+
 privateNameUnused.ts(3,5): error TS6133: '#unused' is declared but its value is never read.
 privateNameUnused.ts(11,5): error TS6133: '#unused' is declared but its value is never read.
 privateNameUnused.ts(21,9): error TS6133: '#unused' is declared but its value is never read.

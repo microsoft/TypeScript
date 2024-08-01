@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitDecoratorMetadata_isolatedModules.ts] ////
+
 index.ts(9,23): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
 index.ts(15,8): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
 index.ts(24,28): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.

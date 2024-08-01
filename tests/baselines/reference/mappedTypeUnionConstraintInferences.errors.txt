@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeUnionConstraintInferences.ts] ////
+
 error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
 
 

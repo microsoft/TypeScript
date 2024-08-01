@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator1.ts] ////
+
 nullishCoalescingOperator1.ts(59,5): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
 
 

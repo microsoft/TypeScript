@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractGeneric.ts] ////
+
 classAbstractGeneric.ts(10,7): error TS2654: Non-abstract class 'C<T>' is missing implementations for the following members of 'A<T>': 'foo', 'bar'.
 classAbstractGeneric.ts(12,7): error TS2654: Non-abstract class 'D' is missing implementations for the following members of 'A<number>': 'foo', 'bar'.
 classAbstractGeneric.ts(14,7): error TS2515: Non-abstract class 'E<T>' does not implement inherited abstract member bar from class 'A<T>'.

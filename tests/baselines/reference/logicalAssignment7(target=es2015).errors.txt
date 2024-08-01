@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment7.ts] ////
+
 logicalAssignment7.ts(10,5): error TS2532: Object is possibly 'undefined'.
 logicalAssignment7.ts(10,40): error TS2345: Argument of type 'number' is not assignable to parameter of type 'never'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedVariablesinBlocks1.ts] ////
+
 unusedVariablesinBlocks1.ts(2,9): error TS6133: 'x' is declared but its value is never read.
 unusedVariablesinBlocks1.ts(4,13): error TS6133: 'x' is declared but its value is never read.
 

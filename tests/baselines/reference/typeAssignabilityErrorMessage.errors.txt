@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAssignabilityErrorMessage.ts] ////
+
 typeAssignabilityErrorMessage.ts(14,5): error TS2739: Type 'ThroughStream' is missing the following properties from type 'ReadStream': f, g, h, i, j
 typeAssignabilityErrorMessage.ts(17,5): error TS2739: Type 'ThroughStream' is missing the following properties from type 'ReadStream': f, g, h, i, j
 typeAssignabilityErrorMessage.ts(40,5): error TS2322: Type 'Foo<string>' is not assignable to type 'Bar<number>'.

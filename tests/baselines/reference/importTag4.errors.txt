@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/importTag4.ts] ////
+
 /foo.js(2,14): error TS2300: Duplicate identifier 'Foo'.
 /foo.js(6,14): error TS2300: Duplicate identifier 'Foo'.
 

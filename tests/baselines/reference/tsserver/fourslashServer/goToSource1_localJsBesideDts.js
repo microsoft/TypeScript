@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/goToSource1_localJsBesideDts.ts] ////
+
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 //// [/a.d.ts]

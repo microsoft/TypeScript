@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.ts] ////
+
 blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.ts(2,12): error TS2450: Enum 'E' used before its declaration.
 blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.ts(7,12): error TS2450: Enum 'E' used before its declaration.
 blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.ts(12,8): error TS2450: Enum 'AfterObject' used before its declaration.

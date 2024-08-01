@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty2.tsx] ////
+
 file.tsx(14,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
 file.tsx(17,11): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
 file.tsx(31,6): error TS2746: This JSX tag's 'children' prop expects a single child of type 'string | Element', but multiple children were provided.

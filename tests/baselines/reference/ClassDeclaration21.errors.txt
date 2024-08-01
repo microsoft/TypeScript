@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ClassDeclaration21.ts] ////
+
 ClassDeclaration21.ts(3,5): error TS2389: Function implementation name must be '0'.
 
 

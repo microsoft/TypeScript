@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedImports12.ts] ////
+
 a.ts(1,1): error TS6133: 'Member' is declared but its value is never read.
 a.ts(2,1): error TS6192: All imports in import declaration are unused.
 a.ts(3,1): error TS6133: 'ns' is declared but its value is never read.

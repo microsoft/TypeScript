@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumAssignmentCompat6.ts] ////
+
 a.ts(36,5): error TS2322: Type 'strings.DiagnosticCategory' is not assignable to type 'numerics.DiagnosticCategory'.
   Each declaration of 'DiagnosticCategory.Warning' differs in its value, where '0' was expected but '"Warning"' was given.
 a.ts(37,5): error TS2322: Type 'numerics.DiagnosticCategory' is not assignable to type 'strings.DiagnosticCategory'.

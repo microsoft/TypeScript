@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarationsInForAwaitOf.2.ts] ////
+
 awaitUsingDeclarationsInForAwaitOf.2.ts(4,32): error TS2448: Block-scoped variable 'of' used before its declaration.
 
 

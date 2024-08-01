@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkJsFiles6.ts] ////
+
 error TS5052: Option 'checkJs' cannot be specified without specifying option 'allowJs'.
 error TS6504: File 'a.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
   The file is in the program because:

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts] ////
+
 interfaceWithMultipleBaseTypes.ts(21,11): error TS2430: Interface 'Derived2' incorrectly extends interface 'Base2'.
   The types of 'x.b' are incompatible between these types.
     Type 'number' is not assignable to type 'string'.

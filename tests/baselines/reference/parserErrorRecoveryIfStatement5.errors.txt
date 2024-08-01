@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement5.ts] ////
+
 parserErrorRecoveryIfStatement5.ts(3,9): error TS2304: Cannot find name 'a'.
 parserErrorRecoveryIfStatement5.ts(5,3): error TS2304: Cannot find name 'f2'.
 parserErrorRecoveryIfStatement5.ts(5,8): error TS1005: ';' expected.

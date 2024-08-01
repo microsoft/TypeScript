@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForStringLiteralPropertyNames2.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStringLiteralPropertyNames2.ts ===
 // class Foo {

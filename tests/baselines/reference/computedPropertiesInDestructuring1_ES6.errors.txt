@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts] ////
+
 computedPropertiesInDestructuring1_ES6.ts(3,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
 computedPropertiesInDestructuring1_ES6.ts(9,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
 computedPropertiesInDestructuring1_ES6.ts(11,8): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.

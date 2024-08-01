@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceofWithStructurallyIdenticalTypes.ts] ////
+
 instanceofWithStructurallyIdenticalTypes.ts(32,18): error TS2339: Property 'item' does not exist on type 'never'.
 
 

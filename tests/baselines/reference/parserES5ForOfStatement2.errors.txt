@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement2.ts] ////
+
 parserES5ForOfStatement2.ts(1,9): error TS1123: Variable declaration list cannot be empty.
 
 

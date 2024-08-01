@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypingOrOperator2.ts] ////
+
 contextuallyTypingOrOperator2.ts(1,39): error TS2872: This kind of expression is always truthy.
 
 

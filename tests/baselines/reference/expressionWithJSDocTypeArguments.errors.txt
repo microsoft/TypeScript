@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/expressionWithJSDocTypeArguments.ts] ////
+
 expressionWithJSDocTypeArguments.ts(9,21): error TS8020: JSDoc types can only be used inside documentation comments.
 expressionWithJSDocTypeArguments.ts(10,20): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
 expressionWithJSDocTypeArguments.ts(11,21): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?

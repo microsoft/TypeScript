@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/inlayHintsInteractiveParameterNamesInSpan2.ts] ////
+
 // === Inlay Hints ===
 foo2(1, 2);
      ^

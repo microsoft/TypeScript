@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/completionForStringLiteralImport3.ts] ////
+
 // === Completions ===
 === /a.ts ===
 // import * as foo from "";

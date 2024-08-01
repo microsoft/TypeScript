@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/abstractPropertyNegative.ts] ////
+
 abstractPropertyNegative.ts(13,7): error TS2654: Non-abstract class 'C' is missing implementations for the following members of 'B': 'prop', 'readonlyProp', 'm', 'mismatch'.
 abstractPropertyNegative.ts(15,5): error TS1253: Abstract properties can only appear within an abstract class.
 abstractPropertyNegative.ts(16,37): error TS1005: '{' expected.

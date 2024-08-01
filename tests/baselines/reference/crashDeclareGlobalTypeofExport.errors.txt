@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashDeclareGlobalTypeofExport.ts] ////
+
 bar.d.ts(2,21): error TS2451: Cannot redeclare block-scoped variable 'foo'.
 bar.d.ts(6,11): error TS2451: Cannot redeclare block-scoped variable 'foo'.
 bar.d.ts(6,11): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.

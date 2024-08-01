@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/goToSource13_nodenext.ts] ////
+
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 //// [/index.mts]

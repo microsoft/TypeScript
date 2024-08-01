@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions.ts] ////
+
 thisTypeInFunctions.ts(118,29): error TS2339: Property 'n' does not exist on type 'typeof globalThis'.
 thisTypeInFunctions.ts(119,32): error TS2339: Property 'n' does not exist on type 'typeof globalThis'.
 thisTypeInFunctions.ts(120,36): error TS2339: Property 'n' does not exist on type 'typeof globalThis'.

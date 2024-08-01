@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classUsedBeforeInitializedVariables.ts] ////
+
 classUsedBeforeInitializedVariables.ts(4,15): error TS2729: Property 'p4' is used before its initialization.
 classUsedBeforeInitializedVariables.ts(13,34): error TS2729: Property 'directlyAssigned' is used before its initialization.
 classUsedBeforeInitializedVariables.ts(22,15): error TS2729: Property 'withinObjectLiteral' is used before its initialization.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxComponentTypeErrors.tsx] ////
+
 jsxComponentTypeErrors.tsx(16,11): error TS2786: 'this' cannot be used as a JSX component.
   Its return type '{ type: "foo" | undefined; }' is not a valid JSX element.
     Types of property 'type' are incompatible.

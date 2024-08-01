@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts] ////
+
 error TS2318: Cannot find global type 'AsyncIterableIterator'.
 privateNamesIncompatibleModifiers.ts(2,5): error TS18010: An accessibility modifier cannot be used with a private identifier.
 privateNamesIncompatibleModifiers.ts(3,5): error TS18010: An accessibility modifier cannot be used with a private identifier.

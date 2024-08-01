@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts] ////
+
 excessPropertyCheckIntersectionWithRecursiveType.ts(13,9): error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema1<boolean>; }'.
 excessPropertyCheckIntersectionWithRecursiveType.ts(26,9): error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
 excessPropertyCheckIntersectionWithRecursiveType.ts(39,9): error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema3<boolean>; }'.

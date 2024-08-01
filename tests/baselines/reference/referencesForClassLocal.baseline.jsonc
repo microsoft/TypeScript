@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesForClassLocal.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForClassLocal.ts ===
 // var n = 14;

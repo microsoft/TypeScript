@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/modulePreserve4.ts] ////
+
 /a.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 /f.cts(1,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main1.ts(1,13): error TS2305: Module '"./a"' has no exported member 'y'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts] ////
+
 parserUsingConstructorAsIdentifier.ts(3,13): error TS2304: Cannot find name 'PluginUtilities'.
 parserUsingConstructorAsIdentifier.ts(5,17): error TS2304: Cannot find name 'initializeProperties'.
 parserUsingConstructorAsIdentifier.ts(8,17): error TS2304: Cannot find name 'initializeProperties'.

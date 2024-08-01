@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/giant.ts] ////
+
 giant.ts(23,12): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(24,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(24,20): error TS1005: '{' expected.

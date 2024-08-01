@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/checkJsxChildrenProperty14.tsx] ////
+
 file.tsx(42,11): error TS2746: This JSX tag's 'children' prop expects a single child of type 'Element', but multiple children were provided.
 
 

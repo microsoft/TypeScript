@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nodeNextModuleResolution1.ts] ////
+
 error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 /a/b/c/d/e/app.ts(1,17): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
 

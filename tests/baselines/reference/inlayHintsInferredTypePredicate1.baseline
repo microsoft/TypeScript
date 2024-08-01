@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/inlayHintsInferredTypePredicate1.ts] ////
+
 // === Inlay Hints ===
 function test(x: unknown) {
                          ^

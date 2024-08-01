@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForUMDModuleAlias1.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/0.d.ts ===
 // export function doThing(): string;

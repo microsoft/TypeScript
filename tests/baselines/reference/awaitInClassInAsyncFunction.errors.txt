@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/awaitInClassInAsyncFunction.ts] ////
+
 awaitInClassInAsyncFunction.ts(9,15): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 
 

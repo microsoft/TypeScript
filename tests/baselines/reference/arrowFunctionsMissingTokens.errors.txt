@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrowFunctionsMissingTokens.ts] ////
+
 arrowFunctionsMissingTokens.ts(2,16): error TS1005: '=>' expected.
 arrowFunctionsMissingTokens.ts(4,22): error TS1005: '=>' expected.
 arrowFunctionsMissingTokens.ts(6,17): error TS1005: '=>' expected.

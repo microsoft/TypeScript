@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/referencesBloomFilters3.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/declaration.ts ===
 // enum Test { /*FIND ALL REFS*/<|"[|{| isWriteAccess: true, isDefinition: true |}42|]" = 1|> };

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/partialDiscriminatedUnionMemberHasGoodError.ts] ////
+
 partialDiscriminatedUnionMemberHasGoodError.ts(20,13): error TS2322: Type '{ type: "A"; }' is not assignable to type 'ValidType'.
   Property 'param' is missing in type '{ type: "A"; }' but required in type 'TypeA'.
 

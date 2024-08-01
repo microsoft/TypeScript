@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergeSymbolRexportFunction.ts] ////
+
 a.d.ts(3,9): error TS2451: Cannot redeclare block-scoped variable 'Row'.
 index.d.ts(1,14): error TS2451: Cannot redeclare block-scoped variable 'Row'.
 

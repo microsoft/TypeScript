@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functionCalls/functionCalls.ts] ////
+
 functionCalls.ts(8,1): error TS2347: Untyped function calls may not accept type arguments.
 functionCalls.ts(9,1): error TS2347: Untyped function calls may not accept type arguments.
 functionCalls.ts(10,1): error TS2347: Untyped function calls may not accept type arguments.

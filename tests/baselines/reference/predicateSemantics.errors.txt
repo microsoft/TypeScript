@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/predicateSemantics.ts] ////
+
 predicateSemantics.ts(7,16): error TS2871: This expression is always nullish.
 predicateSemantics.ts(10,16): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
 predicateSemantics.ts(26,12): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.

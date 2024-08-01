@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/truthinessPromiseCoercion.ts] ////
+
 truthinessPromiseCoercion.ts(7,9): error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
 truthinessPromiseCoercion.ts(11,5): error TS2801: This condition will always return true since this 'Promise<number>' is always defined.
 truthinessPromiseCoercion.ts(32,9): error TS2801: This condition will always return true since this 'Promise<unknown>' is always defined.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesReExportType.ts] ////
+
 /user.ts(2,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
 /user.ts(3,1): error TS1269: Cannot use 'export import' on a type or type-only namespace when 'isolatedModules' is enabled.
 /user.ts(17,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2019/globalThisCollision.ts] ////
+
 globalThisCollision.js(1,5): error TS2397: Declaration name conflicts with built-in global identifier 'globalThis'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithStringNamedNumericProperty.ts] ////
+
 objectTypeWithStringNamedNumericProperty.ts(33,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
 objectTypeWithStringNamedNumericProperty.ts(34,13): error TS1121: Octal literals are not allowed. Use the syntax '-0o1'.
 objectTypeWithStringNamedNumericProperty.ts(64,13): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.

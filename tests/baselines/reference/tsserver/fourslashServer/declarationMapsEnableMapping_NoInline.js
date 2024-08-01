@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/declarationMapsEnableMapping_NoInline.ts] ////
+
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 //// [/dist/index.d.ts]

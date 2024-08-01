@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts] ////
+
 genericCallWithFunctionTypedArguments5.ts(10,16): error TS2322: Type '<T>(x: T, y: T) => string' is not assignable to type '(t: unknown) => string'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
 genericCallWithFunctionTypedArguments5.ts(11,16): error TS2322: Type '(x: string, y: number) => string' is not assignable to type '(t: string) => string'.

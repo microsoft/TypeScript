@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/allowsImportingTsExtension.ts] ////
+
 b.ts(2,16): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 b.ts(3,30): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 b.ts(5,25): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.

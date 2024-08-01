@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spreadInvalidArgumentType.ts] ////
+
 spreadInvalidArgumentType.ts(33,16): error TS2698: Spread types may only be created from object types.
 spreadInvalidArgumentType.ts(34,16): error TS2698: Spread types may only be created from object types.
 spreadInvalidArgumentType.ts(39,16): error TS2698: Spread types may only be created from object types.

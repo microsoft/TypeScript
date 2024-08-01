@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures4.ts] ////
+
 assignmentCompatWithConstructSignatures4.ts(45,9): error TS2322: Type 'new (x: number) => string[]' is not assignable to type 'new <T, U>(x: T) => U[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'T' is not assignable to type 'number'.

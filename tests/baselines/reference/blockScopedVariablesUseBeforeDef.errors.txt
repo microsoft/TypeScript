@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts] ////
+
 blockScopedVariablesUseBeforeDef.ts(2,13): error TS2448: Block-scoped variable 'x' used before its declaration.
 blockScopedVariablesUseBeforeDef.ts(58,20): error TS2448: Block-scoped variable 'x' used before its declaration.
 blockScopedVariablesUseBeforeDef.ts(65,20): error TS2448: Block-scoped variable 'x' used before its declaration.

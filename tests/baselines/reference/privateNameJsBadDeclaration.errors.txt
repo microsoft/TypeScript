@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameJsBadDeclaration.ts] ////
+
 privateNameJsPrototype.js(3,3): error TS18016: Private identifiers are not allowed outside class bodies.
 privateNameJsPrototype.js(4,3): error TS18016: Private identifiers are not allowed outside class bodies.
 privateNameJsPrototype.js(5,7): error TS18016: Private identifiers are not allowed outside class bodies.

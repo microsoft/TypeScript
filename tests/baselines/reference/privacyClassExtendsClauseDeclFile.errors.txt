@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyClassExtendsClauseDeclFile.ts] ////
+
 privacyClassExtendsClauseDeclFile_externalModule.ts(19,77): error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
 privacyClassExtendsClauseDeclFile_externalModule.ts(21,83): error TS2449: Class 'publicClassInPrivateModule' used before its declaration.
 

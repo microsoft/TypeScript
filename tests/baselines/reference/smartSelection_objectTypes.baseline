@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/smartSelection_objectTypes.ts] ////
+
 // === Smart Selection ===
 type X = {
   /**/foo?: string;

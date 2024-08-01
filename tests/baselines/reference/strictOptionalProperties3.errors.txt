@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictOptionalProperties3.ts] ////
+
 a.js(7,7): error TS2375: Type '{ value: undefined; }' is not assignable to type 'A' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
   Types of property 'value' are incompatible.
     Type 'undefined' is not assignable to type 'number'.

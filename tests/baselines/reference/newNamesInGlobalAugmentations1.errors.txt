@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newNamesInGlobalAugmentations1.ts] ////
+
 f1.d.ts(12,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 
 

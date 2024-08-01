@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedFunctionsinNamespaces6.ts] ////
+
 unusedFunctionsinNamespaces6.ts(13,14): error TS6133: 'function4' is declared but its value is never read.
 
 

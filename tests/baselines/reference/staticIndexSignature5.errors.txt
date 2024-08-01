@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature5.ts] ////
+
 staticIndexSignature5.ts(7,5): error TS1071: 'static' modifier cannot appear on an index signature.
 staticIndexSignature5.ts(8,5): error TS1071: 'static' modifier cannot appear on an index signature.
 

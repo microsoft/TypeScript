@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowIIFE.ts] ////
+
 controlFlowIIFE.ts(64,5): error TS2454: Variable 'v' is used before being assigned.
 controlFlowIIFE.ts(72,5): error TS2454: Variable 'v' is used before being assigned.
 

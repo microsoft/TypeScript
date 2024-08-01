@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty43.ts] ////
+
 symbolProperty43.ts(3,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 

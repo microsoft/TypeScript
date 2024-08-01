@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/quickIntersectionCheckCorrectlyCachesErrors.ts] ////
+
 quickIntersectionCheckCorrectlyCachesErrors.tsx(10,21): error TS2304: Cannot find name 'React'.
 
 

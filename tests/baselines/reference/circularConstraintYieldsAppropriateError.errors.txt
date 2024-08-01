@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularConstraintYieldsAppropriateError.ts] ////
+
 circularConstraintYieldsAppropriateError.ts(10,7): error TS2310: Type 'Foo' recursively references itself as a base type.
 
 

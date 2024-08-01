@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/multipleExportDefault4.ts] ////
+
 multipleExportDefault4.ts(1,22): error TS2528: A module cannot have multiple default exports.
 multipleExportDefault4.ts(3,1): error TS2528: A module cannot have multiple default exports.
 

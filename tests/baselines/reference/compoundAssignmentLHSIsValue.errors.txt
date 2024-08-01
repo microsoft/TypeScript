@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts] ////
+
 compoundAssignmentLHSIsValue.ts(7,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 compoundAssignmentLHSIsValue.ts(8,9): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 compoundAssignmentLHSIsValue.ts(11,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

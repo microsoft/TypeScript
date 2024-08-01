@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature3.ts] ////
+
 parserIndexSignature3.ts(2,5): error TS1019: An index signature parameter cannot have a question mark.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertiesAndIndexersForNumericNames.ts] ////
+
 propertiesAndIndexersForNumericNames.ts(6,12): error TS2411: Property '"1"' of type 'string' is not assignable to 'number' index type 'number'.
 propertiesAndIndexersForNumericNames.ts(7,12): error TS2411: Property '"-1"' of type 'string' is not assignable to 'number' index type 'number'.
 propertiesAndIndexersForNumericNames.ts(8,12): error TS2411: Property '"-2.5"' of type 'string' is not assignable to 'number' index type 'number'.

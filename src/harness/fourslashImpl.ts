@@ -505,11 +505,15 @@ export class TestState {
         else this.baselineFromTest.push({ command, actual, ext });
     }
 
+    private getBaselineHeader() {
+        return `//// [${this.originalInputFileName}] ////${Harness.IO.newLine()}${Harness.IO.newLine()}`;
+    }
+
     baselineTest() {
         if (this.baselineFromTest) {
             Harness.Baseline.runBaseline(
                 this.getBaselineFileNameForContainingTestFile(this.baselineFromTest[0].ext),
-                this.baselineFromTest.map(({ command, actual }) => `// === ${command} ===\n${actual}`).join("\n\n\n\n"),
+                this.getBaselineHeader() + this.baselineFromTest.map(({ command, actual }) => `// === ${command} ===\n${actual}`).join("\n\n\n\n"),
             );
         }
     }
@@ -518,7 +522,7 @@ export class TestState {
         if (this.logger) {
             Harness.Baseline.runBaseline(
                 `tsserver/fourslashServer/${ts.getBaseFileName(this.originalInputFileName).replace(".ts", ".js")}`,
-                this.logger.logs.join("\n"),
+                this.getBaselineHeader() + this.logger.logs.join("\n"),
             );
         }
     }
@@ -2409,7 +2413,7 @@ export class TestState {
 
     private getSyntacticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
         const diagnostics = ts.flatMap(files, file => this.languageService.getSyntacticDiagnostics(file.unitName));
-        const result = `Syntactic Diagnostics for file '${this.originalInputFileName}':`
+        const result = `Syntactic Diagnostics:`
             + Harness.IO.newLine()
             + Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
         return result;
@@ -2417,7 +2421,7 @@ export class TestState {
 
     private getSemanticDiagnosticBaselineText(files: Harness.Compiler.TestFile[]) {
         const diagnostics = ts.flatMap(files, file => this.languageService.getSemanticDiagnostics(file.unitName));
-        const result = `Semantic Diagnostics for file '${this.originalInputFileName}':`
+        const result = `Semantic Diagnostics:`
             + Harness.IO.newLine()
             + Harness.Compiler.getErrorBaseline(files, diagnostics, /*pretty*/ false);
         return result;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constraintWithIndexedAccess.ts] ////
+
 constraintWithIndexedAccess.ts(23,90): error TS2344: Type 'TypeHardcodedAsParameterWithoutReturnType<T, F>' does not satisfy the constraint '(...args: any) => any'.
   Type 'DataFetchFns[T][keyof DataFetchFns[T]]' is not assignable to type '(...args: any) => any'.
     Type 'DataFetchFns[T][string] | DataFetchFns[T][number] | DataFetchFns[T][symbol]' is not assignable to type '(...args: any) => any'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowIterationErrors.ts] ////
+
 controlFlowIterationErrors.ts(11,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
 controlFlowIterationErrors.ts(22,17): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.

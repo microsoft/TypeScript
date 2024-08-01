@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionInTypeArgument.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/goToDefinitionInTypeArgument.ts ===
 // class Foo<T> { }

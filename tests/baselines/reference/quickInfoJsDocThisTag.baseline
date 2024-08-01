@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoJsDocThisTag.ts] ////
+
 // === QuickInfo ===
 === /a.ts ===
 // /** @this {number} */

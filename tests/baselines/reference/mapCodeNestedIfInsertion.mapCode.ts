@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/mapCodeNestedIfInsertion.ts] ////
+
 // === mapCode ===
 
 // === ORIGINAL ===

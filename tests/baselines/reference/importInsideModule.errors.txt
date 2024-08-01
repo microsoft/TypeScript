@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importInsideModule.ts] ////
+
 importInsideModule_file2.ts(2,26): error TS1147: Import declarations in a namespace cannot reference a module.
 importInsideModule_file2.ts(2,26): error TS2307: Cannot find module 'importInsideModule_file1' or its corresponding type declarations.
 

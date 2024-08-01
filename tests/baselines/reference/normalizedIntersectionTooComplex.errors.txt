@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/normalizedIntersectionTooComplex.ts] ////
+
 normalizedIntersectionTooComplex.ts(36,40): error TS7006: Parameter 'x' implicitly has an 'any' type.
 normalizedIntersectionTooComplex.ts(36,40): error TS2590: Expression produces a union type that is too complex to represent.
 

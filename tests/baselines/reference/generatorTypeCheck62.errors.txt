@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck62.ts] ////
+
 generatorTypeCheck62.ts(24,62): error TS2345: Argument of type '(state: State) => Generator<never, State, any>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void>'.
   Call signature return types 'Generator<never, State, any>' and 'IterableIterator<State, void>' are incompatible.
     The types returned by 'next(...)' are incompatible between these types.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts] ////
+
 argumentExpressionContextualTyping.ts(16,5): error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type '[string, number, boolean]'.
   Target requires 3 element(s) but source may have fewer.
 argumentExpressionContextualTyping.ts(17,5): error TS2345: Argument of type '[string, number, true, ...(string | number | boolean)[]]' is not assignable to parameter of type '[string, number, boolean]'.

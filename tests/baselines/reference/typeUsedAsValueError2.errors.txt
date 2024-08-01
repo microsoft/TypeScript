@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeUsedAsValueError2.ts] ////
+
 world.ts(4,1): error TS2693: 'HelloInterface' only refers to a type, but is being used as a value here.
 world.ts(5,1): error TS2708: Cannot use namespace 'HelloNamespace' as a value.
 

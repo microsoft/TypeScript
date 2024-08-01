@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/spreadDuplicateExact.ts] ////
+
 spreadDuplicateExact.ts(10,12): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
 spreadDuplicateExact.ts(12,12): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
 

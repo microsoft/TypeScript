@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/transitiveExportImports2.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
 // <|namespace /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}A|] {

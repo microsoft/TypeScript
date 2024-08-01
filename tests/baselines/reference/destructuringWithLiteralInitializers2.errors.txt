@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringWithLiteralInitializers2.ts] ////
+
 destructuringWithLiteralInitializers2.ts(1,15): error TS7031: Binding element 'x' implicitly has an 'any' type.
 destructuringWithLiteralInitializers2.ts(1,18): error TS7031: Binding element 'y' implicitly has an 'any' type.
 destructuringWithLiteralInitializers2.ts(2,15): error TS7031: Binding element 'x' implicitly has an 'any' type.

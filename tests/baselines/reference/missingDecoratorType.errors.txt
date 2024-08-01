@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/missingDecoratorType.ts] ////
+
 error TS2318: Cannot find global type 'TypedPropertyDescriptor'.
 
 

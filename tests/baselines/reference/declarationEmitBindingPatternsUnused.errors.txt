@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitBindingPatternsUnused.ts] ////
+
 declarationEmitBindingPatternsUnused.ts(95,35): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
 declarationEmitBindingPatternsUnused.ts(99,41): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
 declarationEmitBindingPatternsUnused.ts(105,11): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?

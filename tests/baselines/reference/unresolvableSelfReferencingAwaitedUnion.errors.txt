@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts] ////
+
 unresolvableSelfReferencingAwaitedUnion.ts(9,32): error TS2322: Type 'SimpleType' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'SimpleType'.
 unresolvableSelfReferencingAwaitedUnion.ts(16,19): error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/conditionalTypes2.ts] ////
+
 conditionalTypes2.ts(15,5): error TS2322: Type 'Covariant<A>' is not assignable to type 'Covariant<B>'.
   Type 'A' is not assignable to type 'B'.
     'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericsWithoutTypeParameters1.ts] ////
+
 genericsWithoutTypeParameters1.ts(9,9): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericsWithoutTypeParameters1.ts(10,9): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 genericsWithoutTypeParameters1.ts(11,11): error TS2314: Generic type 'I<T>' requires 1 type argument(s).

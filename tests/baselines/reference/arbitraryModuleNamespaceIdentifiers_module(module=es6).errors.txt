@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2022/arbitraryModuleNamespaceIdentifiers/arbitraryModuleNamespaceIdentifiers_module.ts] ////
+
 arbitraryModuleNamespaceIdentifiers_module.ts(4,23): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 arbitraryModuleNamespaceIdentifiers_module.ts(5,10): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 arbitraryModuleNamespaceIdentifiers_module.ts(8,10): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.

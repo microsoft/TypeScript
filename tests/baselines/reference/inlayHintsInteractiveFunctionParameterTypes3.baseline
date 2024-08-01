@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes3.ts] ////
+
 // === Inlay Hints ===
     bar: function (x?): void {
                      ^

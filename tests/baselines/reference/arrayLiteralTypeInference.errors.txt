@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayLiteralTypeInference.ts] ////
+
 arrayLiteralTypeInference.ts(14,14): error TS2353: Object literal may only specify known properties, and 'trueness' does not exist in type 'Action'.
 arrayLiteralTypeInference.ts(15,14): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'Action'.
 arrayLiteralTypeInference.ts(31,18): error TS2353: Object literal may only specify known properties, and 'trueness' does not exist in type '{ id: number; }'.

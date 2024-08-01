@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode2.ts] ////
+
 parserStrictMode2.ts(2,1): error TS2304: Cannot find name 'foo1'.
 parserStrictMode2.ts(3,1): error TS2304: Cannot find name 'foo1'.
 parserStrictMode2.ts(4,1): error TS2304: Cannot find name 'foo1'.

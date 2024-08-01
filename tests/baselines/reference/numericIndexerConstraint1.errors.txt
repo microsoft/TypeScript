@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numericIndexerConstraint1.ts] ////
+
 numericIndexerConstraint1.ts(3,5): error TS2322: Type 'number' is not assignable to type 'Foo'.
 
 

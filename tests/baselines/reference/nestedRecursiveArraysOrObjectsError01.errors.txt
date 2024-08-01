@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts] ////
+
 nestedRecursiveArraysOrObjectsError01.ts(10,9): error TS2353: Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsReferenceInFunction1_Js.ts] ////
+
 index.js(1,25): error TS7006: Parameter 'f' implicitly has an 'any' type.
 index.js(13,29): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[f?: any, ...any[]]'.
 

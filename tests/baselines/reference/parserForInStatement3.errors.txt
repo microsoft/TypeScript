@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserForInStatement3.ts] ////
+
 parserForInStatement3.ts(1,13): error TS1091: Only a single variable declaration is allowed in a 'for...in' statement.
 parserForInStatement3.ts(1,18): error TS2304: Cannot find name 'X'.
 

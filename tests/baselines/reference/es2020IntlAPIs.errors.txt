@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2020/es2020IntlAPIs.ts] ////
+
 es2020IntlAPIs.ts(45,1): error TS2554: Expected 1-2 arguments, but got 0.
 es2020IntlAPIs.ts(48,1): error TS2554: Expected 2 arguments, but got 0.
 es2020IntlAPIs.ts(49,1): error TS2554: Expected 2 arguments, but got 1.

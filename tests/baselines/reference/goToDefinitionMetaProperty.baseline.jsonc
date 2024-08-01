@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionMetaProperty.ts] ////
+
 // === goToDefinition ===
 // === /a.ts ===
 // im/*GOTO DEF*/port.meta;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts] ////
+
 privateNamesInGenericClasses.ts(22,3): error TS18013: Property '#foo' is not accessible outside class 'C' because it has a private identifier.
 privateNamesInGenericClasses.ts(23,3): error TS18013: Property '#method' is not accessible outside class 'C' because it has a private identifier.
 privateNamesInGenericClasses.ts(24,3): error TS18013: Property '#prop' is not accessible outside class 'C' because it has a private identifier.

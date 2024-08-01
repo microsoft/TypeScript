@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.ts] ////
+
 genericTypeReferenceWithoutTypeArgument.ts(8,8): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(10,13): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(11,14): error TS2314: Generic type 'C<T>' requires 1 type argument(s).

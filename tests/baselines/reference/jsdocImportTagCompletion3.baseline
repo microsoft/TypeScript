@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/jsdocImportTagCompletion3.ts] ////
+
 // === Completions ===
 === /tests/cases/fourslash/./c.js ===
 // /**

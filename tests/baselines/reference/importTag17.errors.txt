@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/importTag17.ts] ////
+
 /a.js(8,5): error TS2322: Type '1' is not assignable to type '"module"'.
 /a.js(15,5): error TS2322: Type '1' is not assignable to type '"script"'.
 

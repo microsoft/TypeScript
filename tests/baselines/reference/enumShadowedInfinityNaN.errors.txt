@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/enums/enumShadowedInfinityNaN.ts] ////
+
 enumShadowedInfinityNaN.ts(6,9): error TS18033: Type '{}' is not assignable to type 'number' as required for computed enum member values.
 enumShadowedInfinityNaN.ts(13,9): error TS18033: Type '{}' is not assignable to type 'number' as required for computed enum member values.
 

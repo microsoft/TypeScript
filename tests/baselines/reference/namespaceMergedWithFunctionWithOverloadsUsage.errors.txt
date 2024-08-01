@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/namespaceMergedWithFunctionWithOverloadsUsage.ts] ////
+
 index.ts(3,3): error TS2769: No overload matches this call.
   Overload 1 of 2, '(opts?: Whatever): void', gave the following error.
     Argument of type 'number' is not assignable to parameter of type 'Whatever'.

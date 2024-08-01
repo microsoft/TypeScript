@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Expressions/parserConditionalExpression1.ts] ////
+
 parserConditionalExpression1.ts(1,2): error TS2304: Cannot find name 'a'.
 parserConditionalExpression1.ts(1,11): error TS2304: Cannot find name 'c'.
 parserConditionalExpression1.ts(1,15): error TS2304: Cannot find name 'a'.

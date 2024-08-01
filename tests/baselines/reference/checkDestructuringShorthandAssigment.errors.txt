@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkDestructuringShorthandAssigment.ts] ////
+
 bug25434.js(4,9): error TS18004: No value exists in scope for the shorthand property 'b'. Either declare one or provide an initializer.
 
 

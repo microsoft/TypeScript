@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/inlayHintsWithClosures.ts] ////
+
 // === Inlay Hints ===
 foo1(1)(2);
      ^

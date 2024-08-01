@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unclosedExportClause01.ts] ////
+
 t2.ts(1,13): error TS1005: '}' expected.
 t3.ts(1,10): error TS1005: '}' expected.
 t4.ts(1,17): error TS1005: ',' expected.

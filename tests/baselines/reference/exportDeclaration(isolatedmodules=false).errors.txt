@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportDeclaration.ts] ////
+
 /b.ts(3,5): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
 
 

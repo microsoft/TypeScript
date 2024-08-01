@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportAttributesModeDeclarationEmitErrors.ts] ////
+
 /index.ts(2,45): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
 /index.ts(2,71): error TS1453: `resolution-mode` should be either `require` or `import`.
 /index.ts(4,10): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.

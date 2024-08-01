@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryWithFragmentIsError.tsx] ////
+
 index.tsx(3,1): error TS2304: Cannot find name 'React'.
 index.tsx(3,1): error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.
 reacty.tsx(3,1): error TS17017: An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.

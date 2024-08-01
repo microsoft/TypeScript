@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/regularExpressionCharacterClassRangeOrder.ts] ////
+
 regularExpressionCharacterClassRangeOrder.ts(7,5): error TS1517: Range out of order in character class.
 regularExpressionCharacterClassRangeOrder.ts(7,12): error TS1517: Range out of order in character class.
 regularExpressionCharacterClassRangeOrder.ts(8,11): error TS1517: Range out of order in character class.

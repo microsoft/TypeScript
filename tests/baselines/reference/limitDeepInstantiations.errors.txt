@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/limitDeepInstantiations.ts] ////
+
 limitDeepInstantiations.ts(4,9): error TS2589: Type instantiation is excessively deep and possibly infinite.
 limitDeepInstantiations.ts(5,13): error TS2344: Type '"false"' does not satisfy the constraint '"true"'.
 

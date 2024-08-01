@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/inlayHintsInteractiveVariableTypes1.ts] ////
+
 // === Inlay Hints ===
  const m = () => 123;
         ^

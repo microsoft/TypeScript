@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-invalidContexts.ts] ////
+
 constDeclarations-invalidContexts.ts(3,5): error TS1156: 'const' declarations can only be declared inside a block.
 constDeclarations-invalidContexts.ts(5,5): error TS1156: 'const' declarations can only be declared inside a block.
 constDeclarations-invalidContexts.ts(8,5): error TS1156: 'const' declarations can only be declared inside a block.

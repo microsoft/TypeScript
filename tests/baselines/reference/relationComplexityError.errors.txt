@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/relationComplexityError.ts] ////
+
 relationComplexityError.ts(12,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
 relationComplexityError.ts(12,5): error TS2859: Excessive complexity comparing types 'T1 & T2' and 'T1 | null'.
 

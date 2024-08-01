@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts] ////
+
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(35,12): error TS2365: Operator '<' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(36,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(37,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.

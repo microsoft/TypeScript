@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefCrossModule5.ts] ////
+
 [96mmod1.js[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
 
 [7m1[0m /** @typedef {number} Foo */

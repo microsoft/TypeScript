@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameLabel1.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameLabel1.ts ===
 // <|[|fooRENAME|]: {

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameModuleExportsProperties1.ts] ////
+
 // === findRenameLocations ===
 // @providePrefixAndSuffixTextForRename: true
 

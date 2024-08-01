@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts] ////
+
 compoundExponentiationAssignmentLHSIsValue.ts(7,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 compoundExponentiationAssignmentLHSIsValue.ts(10,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 compoundExponentiationAssignmentLHSIsValue.ts(13,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.

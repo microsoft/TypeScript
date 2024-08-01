@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/directives/ts-expect-error-js.ts] ////
+
 a.js(3,1): error TS2578: Unused '@ts-expect-error' directive.
 
 

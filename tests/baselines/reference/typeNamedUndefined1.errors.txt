@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeNamedUndefined1.ts] ////
+
 typeNamedUndefined1.ts(3,17): error TS2457: Type alias name cannot be 'undefined'.
 typeNamedUndefined1.ts(13,13): error TS2457: Type alias name cannot be 'undefined'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/importAssertion/importAssertion1.ts] ////
+
 3.ts(8,11): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
 3.ts(9,11): message TS1450: Dynamic imports can only accept a module specifier and an optional set of attributes as arguments
 

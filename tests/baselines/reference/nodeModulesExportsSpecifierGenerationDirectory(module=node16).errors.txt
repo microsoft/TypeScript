@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesExportsSpecifierGenerationDirectory.ts] ////
+
 index.ts(2,23): error TS2307: Cannot find module 'inner/other' or its corresponding type declarations.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts] ////
+
 noImplicitAnyStringIndexerOnObject.ts(1,9): error TS2339: Property 'hello' does not exist on type '{}'.
 noImplicitAnyStringIndexerOnObject.ts(7,1): error TS7052: Element implicitly has an 'any' type because type '{ get: (key: string) => string; }' has no index signature. Did you mean to call 'c.get'?
 noImplicitAnyStringIndexerOnObject.ts(8,13): error TS7052: Element implicitly has an 'any' type because type '{ get: (key: string) => string; }' has no index signature. Did you mean to call 'c.get'?

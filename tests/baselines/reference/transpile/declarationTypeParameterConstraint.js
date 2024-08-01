@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationTypeParameterConstraint.ts] ////
+
 //// [declarationTypeParameterConstraint.ts] ////
 import { type In, type Out, type Base } from "./a";
 

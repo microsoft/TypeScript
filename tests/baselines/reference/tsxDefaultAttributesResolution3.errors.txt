@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxDefaultAttributesResolution3.tsx] ////
+
 file.tsx(13,19): error TS2322: Type 'true' is not assignable to type 'false'.
 
 

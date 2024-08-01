@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameJsExports01.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.js ===
 // <|exports.[|{| isWriteAccess: true |}area|] = function (r) { return r * r; }|>

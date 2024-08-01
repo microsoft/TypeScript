@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes5.ts] ////
+
 // === Inlay Hints ===
 export function fn(b = foo) {}
                     ^

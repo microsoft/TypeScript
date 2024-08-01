@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyNamelessParameter.ts] ////
+
 noImplicitAnyNamelessParameter.ts(2,20): error TS7051: Parameter has a name but no type. Did you mean 'arg0: string[]'?
 noImplicitAnyNamelessParameter.ts(3,17): error TS7051: Parameter has a name but no type. Did you mean 'arg0: string'?
 noImplicitAnyNamelessParameter.ts(3,25): error TS7051: Parameter has a name but no type. Did you mean 'arg1: C'?

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/quickInfoOnJsxNamespacedName.ts] ////
+
 // === QuickInfo ===
 === /a.tsx ===
 // <a:b a="accepted" b="rejected" />;

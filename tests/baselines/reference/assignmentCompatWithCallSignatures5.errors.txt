@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts] ////
+
 assignmentCompatWithCallSignatures5.ts(40,1): error TS2322: Type '<T>(x: T) => void' is not assignable to type '<T>(x: T) => T'.
   Type 'void' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples3.ts] ////
+
 variadicTuples3.ts(5,3): error TS2322: Type 'any[]' is not assignable to type '[...T, ...P]'.
   Source provides no match for variadic element at position 0 in target.
 variadicTuples3.ts(10,3): error TS2322: Type '[any, any]' is not assignable to type '[...T, ...P]'.

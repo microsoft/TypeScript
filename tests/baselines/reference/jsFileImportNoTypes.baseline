@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/jsFileImportNoTypes.ts] ////
+
 // === Completions ===
 === /a.js ===
 // import {  } from './declarations.ts'

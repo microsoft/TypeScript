@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bigintWithLib.ts] ////
+
 bigintWithLib.ts(4,1): error TS2350: Only a void function can be called with the 'new' keyword.
 bigintWithLib.ts(19,33): error TS2769: No overload matches this call.
   Overload 1 of 3, '(length?: number): BigInt64Array', gave the following error.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/filesEmittingIntoSameOutput.ts] ////
+
 error TS5056: Cannot write file 'a.js' because it would be overwritten by multiple input files.
 
 

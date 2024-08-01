@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/iterableTReturnTNext.ts] ////
+
 iterableTReturnTNext.ts(7,7): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 iterableTReturnTNext.ts(14,7): error TS2322: Type 'IteratorResult<number, undefined>' is not assignable to type 'Next<number>'.

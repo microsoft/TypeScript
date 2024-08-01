@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportAttributesTypeModeDeclarationEmitErrors.ts] ////
+
 /index.ts(2,49): error TS1453: `resolution-mode` should be either `require` or `import`.
 /index.ts(5,76): error TS1453: `resolution-mode` should be either `require` or `import`.
 /other.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?

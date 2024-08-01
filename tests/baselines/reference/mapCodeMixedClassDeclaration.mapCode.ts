@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/mapCodeMixedClassDeclaration.ts] ////
+
 // === mapCode ===
 
 // === ORIGINAL ===

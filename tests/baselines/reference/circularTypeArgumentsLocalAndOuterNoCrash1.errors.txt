@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularTypeArgumentsLocalAndOuterNoCrash1.ts] ////
+
 circularTypeArgumentsLocalAndOuterNoCrash1.ts(5,12): error TS4109: Type arguments for 'NumArray' circularly reference themselves.
 
 

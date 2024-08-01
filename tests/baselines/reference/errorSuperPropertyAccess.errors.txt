@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts] ////
+
 errorSuperPropertyAccess.ts(6,17): error TS2335: 'super' can only be referenced in a derived class.
 errorSuperPropertyAccess.ts(7,17): error TS2335: 'super' can only be referenced in a derived class.
 errorSuperPropertyAccess.ts(11,17): error TS2335: 'super' can only be referenced in a derived class.

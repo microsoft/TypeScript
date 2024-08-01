@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of14.ts] ////
+
 for-of14.ts(8,11): error TS2488: Type 'StringIterator' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 

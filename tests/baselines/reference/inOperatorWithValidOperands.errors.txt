@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts] ////
+
 inOperatorWithValidOperands.ts(26,20): error TS2322: Type 'T' is not assignable to type 'object'.
 inOperatorWithValidOperands.ts(30,20): error TS2322: Type 'T | U' is not assignable to type 'object'.
   Type 'T' is not assignable to type 'object'.

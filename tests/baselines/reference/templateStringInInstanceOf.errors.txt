@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringInInstanceOf.ts] ////
+
 templateStringInInstanceOf.ts(1,9): error TS2358: The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter.
 
 

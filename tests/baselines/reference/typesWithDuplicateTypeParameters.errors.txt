@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typesWithDuplicateTypeParameters.ts] ////
+
 typesWithDuplicateTypeParameters.ts(1,12): error TS2300: Duplicate identifier 'T'.
 typesWithDuplicateTypeParameters.ts(2,16): error TS2300: Duplicate identifier 'T'.
 typesWithDuplicateTypeParameters.ts(4,16): error TS2300: Duplicate identifier 'T'.

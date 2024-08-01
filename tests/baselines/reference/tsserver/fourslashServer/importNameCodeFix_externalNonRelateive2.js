@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/importNameCodeFix_externalNonRelateive2.ts] ////
+
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 //// [/apps/app1/src/app.ts]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericConstraint2.ts] ////
+
 genericConstraint2.ts(11,7): error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
   Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<string>'.
 genericConstraint2.ts(21,17): error TS2344: Type 'ComparableString' does not satisfy the constraint 'Comparable<ComparableString>'.

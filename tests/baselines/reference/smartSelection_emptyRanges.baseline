@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/smartSelection_emptyRanges.ts] ////
+
 // === Smart Selection ===
 class HomePage {
   componentDidMount(/**/) {

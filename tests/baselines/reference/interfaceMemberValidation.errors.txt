@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceMemberValidation.ts] ////
+
 interfaceMemberValidation.ts(2,11): error TS2430: Interface 'i2' incorrectly extends interface 'i1'.
   Types of property 'name' are incompatible.
     Type 'number' is not assignable to type 'string'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticAccessorsAccess.ts] ////
+
 privateNameStaticAccessorsAccess.ts(16,4): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
 privateNameStaticAccessorsAccess.ts(19,8): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.
 privateNameStaticAccessorsAccess.ts(24,12): error TS18013: Property '#prop' is not accessible outside class 'A2' because it has a private identifier.

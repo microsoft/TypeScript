@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getEmitOutputNoErrors.ts] ////
+
 // === EmitOutput ===
 EmitSkipped: false
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames32_ES5.ts] ////
+
 computedPropertyNames32_ES5.ts(6,10): error TS2467: A computed property name cannot reference a type parameter from its containing type.
 
 

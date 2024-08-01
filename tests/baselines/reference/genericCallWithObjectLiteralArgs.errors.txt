@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectLiteralArgs.ts] ////
+
 genericCallWithObjectLiteralArgs.ts(5,23): error TS2322: Type 'string' is not assignable to type 'number'.
 
 

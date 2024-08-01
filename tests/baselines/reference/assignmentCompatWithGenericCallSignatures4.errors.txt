@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts] ////
+
 assignmentCompatWithGenericCallSignatures4.ts(12,1): error TS2322: Type '<T extends I2<T>>(z: T) => void' is not assignable to type '<T extends I2<I2<T>>>(z: T) => void'.
   Types of parameters 'z' and 'z' are incompatible.
     Type 'T' is not assignable to type 'I2<T>'.

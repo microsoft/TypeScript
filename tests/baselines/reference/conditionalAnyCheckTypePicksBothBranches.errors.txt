@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalAnyCheckTypePicksBothBranches.ts] ////
+
 conditionalAnyCheckTypePicksBothBranches.ts(9,1): error TS2322: Type '0' is not assignable to type '1'.
 
 

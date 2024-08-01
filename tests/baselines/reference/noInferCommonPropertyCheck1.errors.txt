@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noInferCommonPropertyCheck1.ts] ////
+
 noInferCommonPropertyCheck1.ts(7,20): error TS2559: Type '{ x: string; }' has no properties in common with type 'NoInfer<Partial<{ a: unknown; b: unknown; }>> & { prop?: unknown; }'.
 noInferCommonPropertyCheck1.ts(15,33): error TS2559: Type '{ x: string; }' has no properties in common with type 'NoInfer<Partial<{ a: unknown; b: unknown; }>> & NoInfer<Partial<{ c: unknown; d: unknown; }>>'.
 noInferCommonPropertyCheck1.ts(23,33): error TS2559: Type '{ x: string; }' has no properties in common with type 'Partial<{ a: unknown; b: unknown; }> & Partial<{ c: unknown; d: unknown; }>'.

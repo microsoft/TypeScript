@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesThrow6.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesThrow6.ts ===
 // /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 100;

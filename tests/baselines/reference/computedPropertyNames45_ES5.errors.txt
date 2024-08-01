@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES5.ts] ////
+
 computedPropertyNames45_ES5.ts(10,5): error TS2411: Property '["get1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
 computedPropertyNames45_ES5.ts(11,9): error TS2411: Property '["set1"]' of type 'Foo' is not assignable to 'string' index type 'Foo2'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyCastedValue.ts] ////
+
 implicitAnyCastedValue.ts(10,5): error TS7008: Member 'bar' implicitly has an 'any' type.
 implicitAnyCastedValue.ts(11,5): error TS7008: Member 'foo' implicitly has an 'any' type.
 implicitAnyCastedValue.ts(26,5): error TS7008: Member 'getValue' implicitly has an 'any' type.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralExcessProperties.ts] ////
+
 objectLiteralExcessProperties.ts(9,18): error TS2561: Object literal may only specify known properties, but 'forword' does not exist in type 'Book'. Did you mean to write 'foreword'?
 objectLiteralExcessProperties.ts(11,27): error TS2561: Object literal may only specify known properties, but 'foreward' does not exist in type 'Book'. Did you mean to write 'foreword'?
 objectLiteralExcessProperties.ts(13,53): error TS2353: Object literal may only specify known properties, and 'forwards' does not exist in type 'Book'.

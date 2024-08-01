@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes5.ts] ////
+
 templateLiteralTypes5.ts(10,7): error TS2322: Type '<T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0]' is not assignable to type 'F2'.
   Type 'TypeMap[T2]' is not assignable to type 'TypeMap[`${T2}`]'.
     Type 'T2' is not assignable to type '`${T2}`'.

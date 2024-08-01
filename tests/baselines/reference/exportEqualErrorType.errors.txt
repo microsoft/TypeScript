@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportEqualErrorType.ts] ////
+
 exportEqualErrorType_1.ts(3,23): error TS2339: Property 'static' does not exist on type '{ (): connectExport; foo: Date; }'.
 
 

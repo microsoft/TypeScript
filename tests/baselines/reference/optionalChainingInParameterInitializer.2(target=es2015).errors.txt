@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/optionalChainingInParameterInitializer.2.ts] ////
+
 optionalChainingInParameterInitializer.2.ts(3,7): error TS2373: Parameter 'b' cannot reference identifier 'a' declared after it.
 optionalChainingInParameterInitializer.2.ts(6,19): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
 

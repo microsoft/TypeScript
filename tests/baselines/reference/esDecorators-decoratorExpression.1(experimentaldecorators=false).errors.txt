@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-decoratorExpression.1.ts] ////
+
 esDecorators-decoratorExpression.1.ts(3,4): error TS1497: Expression must be enclosed in parentheses to be used as a decorator.
 esDecorators-decoratorExpression.1.ts(5,4): error TS1497: Expression must be enclosed in parentheses to be used as a decorator.
 esDecorators-decoratorExpression.1.ts(7,4): error TS1497: Expression must be enclosed in parentheses to be used as a decorator.

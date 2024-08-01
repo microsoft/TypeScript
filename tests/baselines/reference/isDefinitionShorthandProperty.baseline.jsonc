@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/isDefinitionShorthandProperty.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/isDefinitionShorthandProperty.ts ===
 // <|const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|] = 1;|>

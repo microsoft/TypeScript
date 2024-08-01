@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/inlayHintsInteractiveVariableTypes2.ts] ////
+
 // === Inlay Hints ===
 const array = [1, 2]
            ^

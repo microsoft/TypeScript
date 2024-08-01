@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/mapCodeClassInvalidClassMember.ts] ////
+
 // === mapCode ===
 
 // === ORIGINAL ===

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parametersSyntaxErrorNoCrash1.ts] ////
+
 parametersSyntaxErrorNoCrash1.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 parametersSyntaxErrorNoCrash1.ts(3,10): error TS7010: 'identity', which lacks return-type annotation, implicitly has an 'any' return type.
 parametersSyntaxErrorNoCrash1.ts(3,22): error TS2300: Duplicate identifier 'arg'.

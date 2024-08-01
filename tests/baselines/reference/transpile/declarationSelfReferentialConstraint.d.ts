@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationSelfReferentialConstraint.ts] ////
+
 //// [declarationSelfReferentialConstraint.ts] ////
 export const object = {
     foo: <T extends Set<T> | []>(): void => { },

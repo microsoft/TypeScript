@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/renameStringLiteralOk1.ts] ////
+
 // === findRenameLocations ===
 // === /tests/cases/fourslash/renameStringLiteralOk1.ts ===
 // declare function f(): '/*RENAME*/[|fooRENAME|]' | 'bar'

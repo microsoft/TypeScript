@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsJsDocImportTag2.ts] ////
+
 // === findAllReferences ===
 // === /player.js ===
 // <|import [|{| defId: 0, isWriteAccess: true |}Component|] from './component.js';|>

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefMultipleTypeParameters.ts] ////
+
 a.js(12,23): error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: number; b: string; }'.
   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
 a.js(15,12): error TS2314: Generic type 'Everything' requires 5 type argument(s).

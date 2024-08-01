@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesLoopBreakContinue.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesLoopBreakContinue.ts ===
 // var arr = [1, 2, 3, 4];

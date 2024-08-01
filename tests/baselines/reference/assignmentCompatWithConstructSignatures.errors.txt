@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts] ////
+
 assignmentCompatWithConstructSignatures.ts(28,1): error TS2322: Type 'S2' is not assignable to type 'T'.
   Type 'S2' provides no match for the signature 'new (x: number): void'.
 assignmentCompatWithConstructSignatures.ts(29,1): error TS2322: Type '(x: string) => void' is not assignable to type 'T'.

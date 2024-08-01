@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts] ////
+
 arrayLiterals.ts(24,77): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type '{ a: string; b: number; }'.
 arrayLiterals.ts(24,101): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type '{ a: string; b: number; }'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts] ////
+
 assignmentCompatWithObjectMembers4.ts(24,5): error TS2322: Type 'T' is not assignable to type 'S'.
   Types of property 'foo' are incompatible.
     Property 'bar' is missing in type 'Derived2' but required in type 'Derived'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericSignatureIdentity.ts] ////
+
 genericSignatureIdentity.ts(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T extends number>(x: T) => T'.
 genericSignatureIdentity.ts(14,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T>(x: T) => T'.
 genericSignatureIdentity.ts(18,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '<T extends Date>(x: T) => T', but here has type '<T>(x: any) => any'.

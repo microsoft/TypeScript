@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationEmitPartialNodeReuse.ts] ////
+
 //// [a.ts] ////
 export type SpecialString = string;
 type PrivateSpecialString = string;

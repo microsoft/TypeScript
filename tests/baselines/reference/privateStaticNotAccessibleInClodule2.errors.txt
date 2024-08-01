@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/privateStaticNotAccessibleInClodule2.ts] ////
+
 privateStaticNotAccessibleInClodule2.ts(13,22): error TS2341: Property 'bar' is private and only accessible within class 'C'.
 
 

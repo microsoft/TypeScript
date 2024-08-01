@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shorthandPropertyAssignmentInES6Module.ts] ////
+
 test.ts(2,19): error TS2307: Cannot find module './missingModule' or its corresponding type declarations.
 
 

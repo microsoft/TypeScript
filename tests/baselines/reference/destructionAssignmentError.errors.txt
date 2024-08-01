@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructionAssignmentError.ts] ////
+
 destructionAssignmentError.ts(6,3): error TS2695: Left side of comma operator is unused and has no side effects.
 destructionAssignmentError.ts(6,10): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
 destructionAssignmentError.ts(11,3): error TS2695: Left side of comma operator is unused and has no side effects.

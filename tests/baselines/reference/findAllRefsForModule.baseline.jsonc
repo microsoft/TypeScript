@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsForModule.ts] ////
+
 // === findAllReferences ===
 // === /b.ts ===
 // <|import { x } from "/*FIND ALL REFS*/[|./a|]";|>

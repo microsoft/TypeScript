@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/regularExpressionAnnexB.ts] ////
+
 regularExpressionAnnexB.ts(2,8): error TS1125: Hexadecimal digit expected.
 regularExpressionAnnexB.ts(2,22): error TS1125: Hexadecimal digit expected.
 regularExpressionAnnexB.ts(2,28): error TS1125: Hexadecimal digit expected.

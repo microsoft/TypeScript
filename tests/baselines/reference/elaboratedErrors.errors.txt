@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/elaboratedErrors.ts] ////
+
 elaboratedErrors.ts(11,3): error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
   Type 'string' is not assignable to type 'number'.
 elaboratedErrors.ts(20,1): error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.

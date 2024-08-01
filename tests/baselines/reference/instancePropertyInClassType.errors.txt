@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts] ////
+
 instancePropertyInClassType.ts(17,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'Number' has no call signatures.
 instancePropertyInClassType.ts(37,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?

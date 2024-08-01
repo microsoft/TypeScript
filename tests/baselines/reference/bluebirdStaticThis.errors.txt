@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bluebirdStaticThis.ts] ////
+
 bluebirdStaticThis.ts(5,22): error TS2420: Class 'Promise<R>' incorrectly implements interface 'Thenable<R>'.
   Property 'then' is missing in type 'Promise<R>' but required in type 'Thenable<R>'.
 bluebirdStaticThis.ts(22,51): error TS2694: Namespace '"bluebirdStaticThis".Promise' has no exported member 'Resolver'.

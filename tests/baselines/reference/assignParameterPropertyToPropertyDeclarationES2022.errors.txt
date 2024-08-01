@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/assignParameterPropertyToPropertyDeclarationES2022.ts] ////
+
 assignParameterPropertyToPropertyDeclarationES2022.ts(2,16): error TS2729: Property 'bar' is used before its initialization.
 assignParameterPropertyToPropertyDeclarationES2022.ts(3,16): error TS2729: Property 'foo' is used before its initialization.
 assignParameterPropertyToPropertyDeclarationES2022.ts(6,19): error TS2729: Property 'm3' is used before its initialization.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsInterfaces.ts] ////
+
 index.js(4,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
 index.js(6,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
 index.js(10,18): error TS8006: 'interface' declarations can only be used in TypeScript files.

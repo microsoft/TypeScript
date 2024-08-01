@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionIndexSignature2.ts] ////
+
 // === goToDefinition ===
 // === /a.js ===
 // const o = {};

@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/completionsImportWithKeyword.ts] ////
+
 // === Completions ===
 === /tests/cases/fourslash/a.ts ===
 //  const f = {

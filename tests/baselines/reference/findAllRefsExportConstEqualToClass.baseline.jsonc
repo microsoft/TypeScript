@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsExportConstEqualToClass.ts] ////
+
 // === findAllReferences ===
 // === /a.ts ===
 // class C {}

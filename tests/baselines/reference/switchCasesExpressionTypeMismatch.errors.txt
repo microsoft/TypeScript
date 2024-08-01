@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/switchCasesExpressionTypeMismatch.ts] ////
+
 switchCasesExpressionTypeMismatch.ts(4,10): error TS2678: Type 'typeof Foo' is not comparable to type '0'.
 switchCasesExpressionTypeMismatch.ts(5,10): error TS2678: Type '"sss"' is not comparable to type '0'.
 switchCasesExpressionTypeMismatch.ts(6,10): error TS2678: Type '123' is not comparable to type '0'.

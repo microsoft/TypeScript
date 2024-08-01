@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesExportsBlocksTypesVersions.ts] ////
+
 error TS6504: File '/node_modules/exports-and-types-versions/dist/foo.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
   The file is in the program because:
     Root file specified for compilation

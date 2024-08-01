@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionImplicitConstructor.ts] ////
+
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/goToDefinitionImplicitConstructor.ts ===
 // <|class [|ImplicitConstructor|] {

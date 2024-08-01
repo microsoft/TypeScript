@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/recursiveIntersectionTypes.ts] ////
+
 recursiveIntersectionTypes.ts(19,1): error TS2322: Type 'LinkedList<Entity>' is not assignable to type 'LinkedList<Product>'.
   Property 'price' is missing in type 'LinkedList<Entity>' but required in type 'Product'.
 

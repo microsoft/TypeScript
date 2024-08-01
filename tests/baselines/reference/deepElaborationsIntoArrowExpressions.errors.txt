@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts] ////
+
 deepElaborationsIntoArrowExpressions.ts(4,14): error TS2322: Type '"b"' is not assignable to type '"a"'.
 deepElaborationsIntoArrowExpressions.ts(12,20): error TS2322: Type 'string' is not assignable to type 'number'.
 deepElaborationsIntoArrowExpressions.ts(16,14): error TS2322: Type 'string' is not assignable to type 'number'.

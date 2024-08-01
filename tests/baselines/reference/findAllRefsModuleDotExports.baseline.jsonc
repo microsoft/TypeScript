@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllRefsModuleDotExports.ts] ////
+
 // === findAllReferences ===
 // === /a.js ===
 // /*FIND ALL REFS*/<|const [|{| isWriteAccess: true, isDefinition: true |}b|] = require("./b");|>

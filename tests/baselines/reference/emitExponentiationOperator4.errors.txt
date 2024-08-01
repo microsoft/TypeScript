@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator4.ts] ////
+
 emitExponentiationOperator4.ts(14,1): error TS2532: Object is possibly 'undefined'.
 emitExponentiationOperator4.ts(15,1): error TS2532: Object is possibly 'undefined'.
 emitExponentiationOperator4.ts(16,1): error TS2532: Object is possibly 'undefined'.

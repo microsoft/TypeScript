@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts] ////
+
 reservedNamesInAliases.ts(2,6): error TS2457: Type alias name cannot be 'any'.
 reservedNamesInAliases.ts(3,6): error TS2457: Type alias name cannot be 'number'.
 reservedNamesInAliases.ts(4,6): error TS2457: Type alias name cannot be 'boolean'.

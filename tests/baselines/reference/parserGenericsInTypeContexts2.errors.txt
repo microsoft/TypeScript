@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts2.ts] ////
+
 parserGenericsInTypeContexts2.ts(1,17): error TS2304: Cannot find name 'A'.
 parserGenericsInTypeContexts2.ts(1,19): error TS2304: Cannot find name 'X'.
 parserGenericsInTypeContexts2.ts(1,21): error TS2304: Cannot find name 'T'.

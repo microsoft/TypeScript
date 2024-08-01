@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deeplyNestedMappedTypes.ts] ////
+
 deeplyNestedMappedTypes.ts(9,7): error TS2322: Type 'Id<{ x: { y: { z: { a: { b: { c: number; }; }; }; }; }; }>' is not assignable to type 'Id<{ x: { y: { z: { a: { b: { c: string; }; }; }; }; }; }>'.
   The types of 'x.y.z.a.b.c' are incompatible between these types.
     Type 'number' is not assignable to type 'string'.

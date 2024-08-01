@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxAttributeWithoutExpressionReact.tsx] ////
+
 jsxAttributeWithoutExpressionReact.tsx(2,2): error TS2304: Cannot find name 'View'.
 jsxAttributeWithoutExpressionReact.tsx(3,6): error TS2304: Cannot find name 'ListView'.
 jsxAttributeWithoutExpressionReact.tsx(4,10): error TS2304: Cannot find name 'RefreshControl'.

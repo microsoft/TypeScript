@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts] ////
+
 declarationsAndAssignments.ts(5,16): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
 declarationsAndAssignments.ts(23,25): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
 declarationsAndAssignments.ts(24,19): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.

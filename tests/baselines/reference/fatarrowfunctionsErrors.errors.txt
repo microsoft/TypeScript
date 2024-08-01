@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fatarrowfunctionsErrors.ts] ////
+
 fatarrowfunctionsErrors.ts(1,1): error TS2304: Cannot find name 'foo'.
 fatarrowfunctionsErrors.ts(2,1): error TS2304: Cannot find name 'foo'.
 fatarrowfunctionsErrors.ts(2,8): error TS1005: ',' expected.

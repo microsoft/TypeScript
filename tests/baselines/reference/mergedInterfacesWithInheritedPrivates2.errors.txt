@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts] ////
+
 mergedInterfacesWithInheritedPrivates2.ts(17,7): error TS2420: Class 'D' incorrectly implements interface 'A'.
   Types have separate declarations of a private property 'w'.
 mergedInterfacesWithInheritedPrivates2.ts(23,7): error TS2415: Class 'E' incorrectly extends base class 'C2'.

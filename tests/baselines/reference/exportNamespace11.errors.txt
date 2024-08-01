@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace11.ts] ////
+
 main.ts(2,52): error TS2339: Property 'Ghost' does not exist on type 'typeof import("intermediate")'.
 
 

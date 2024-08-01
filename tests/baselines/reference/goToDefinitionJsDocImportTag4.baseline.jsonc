@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionJsDocImportTag4.ts] ////
+
 // === goToDefinition ===
 // === /b.ts ===
 // <|export interface [|A|] { }|>

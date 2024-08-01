@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts] ////
+
 implicitAnyFunctionInvocationWithAnyArguements.ts(3,5): error TS7005: Variable 'anyArray' implicitly has an 'any[]' type.
 implicitAnyFunctionInvocationWithAnyArguements.ts(4,13): error TS7008: Member 'v' implicitly has an 'any' type.
 implicitAnyFunctionInvocationWithAnyArguements.ts(4,16): error TS7008: Member 'w' implicitly has an 'any' type.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unicodeIdentifierName2.ts] ////
+
 unicodeIdentifierName2.ts(1,6): error TS1127: Invalid character.
 unicodeIdentifierName2.ts(1,8): error TS1134: Variable declaration expected.
 unicodeIdentifierName2.ts(1,10): error TS1134: Variable declaration expected.

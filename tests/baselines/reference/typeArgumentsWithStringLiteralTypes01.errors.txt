@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts] ////
+
 typeArgumentsWithStringLiteralTypes01.ts(36,25): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
 typeArgumentsWithStringLiteralTypes01.ts(37,25): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
 typeArgumentsWithStringLiteralTypes01.ts(38,25): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.

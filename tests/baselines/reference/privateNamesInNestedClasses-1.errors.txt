@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-1.ts] ////
+
 privateNamesInNestedClasses-1.ts(11,18): error TS18014: The property '#foo' cannot be accessed on type 'A' within this class because it is shadowed by another private identifier with the same spelling.
 
 

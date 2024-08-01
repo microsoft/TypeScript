@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5ExportEquals.ts] ////
+
 es5ExportEquals.ts(3,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 

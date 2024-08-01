@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace2.ts] ////
+
 d.ts(2,5): error TS1361: 'a' cannot be used as a value because it was imported using 'import type'.
 
 

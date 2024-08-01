@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/readonlyPropertySubtypeRelationDirected.ts] ////
+
 four.ts(11,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
 four.ts(15,11): error TS2540: Cannot assign to 'a' because it is a read-only property.
 one.ts(11,11): error TS2540: Cannot assign to 'a' because it is a read-only property.

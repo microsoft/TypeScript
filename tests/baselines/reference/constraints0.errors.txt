@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constraints0.ts] ////
+
 constraints0.ts(14,11): error TS2344: Type 'B' does not satisfy the constraint 'A'.
   Property 'a' is missing in type 'B' but required in type 'A'.
 

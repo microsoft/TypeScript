@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionTypeOnlyImport.ts] ////
+
 // === goToDefinition ===
 // === /a.ts ===
 // <|enum [|SyntaxKind|] { SourceFile }|>

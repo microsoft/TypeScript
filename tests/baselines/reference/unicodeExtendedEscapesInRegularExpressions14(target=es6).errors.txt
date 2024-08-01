@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInRegularExpressions14.ts] ////
+
 unicodeExtendedEscapesInRegularExpressions14.ts(2,13): error TS1125: Hexadecimal digit expected.
 unicodeExtendedEscapesInRegularExpressions14.ts(2,18): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
 

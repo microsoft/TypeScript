@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceNaming1.ts] ////
+
 interfaceNaming1.ts(1,1): error TS2693: 'interface' only refers to a type, but is being used as a value here.
 interfaceNaming1.ts(1,11): error TS1438: Interface must be given a name.
 interfaceNaming1.ts(3,1): error TS2693: 'interface' only refers to a type, but is being used as a value here.

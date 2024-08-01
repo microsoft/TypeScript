@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInfer1.ts] ////
+
 typeInfer1.ts(12,5): error TS2353: Object literal may only specify known properties, and 'Moo' does not exist in type 'ITextWriter2'.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyMissingGetAccessor.ts] ////
+
 noImplicitAnyMissingGetAccessor.ts(3,25): error TS7032: Property 'message' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
 noImplicitAnyMissingGetAccessor.ts(3,33): error TS7006: Parameter 'str' implicitly has an 'any' type.
 noImplicitAnyMissingGetAccessor.ts(8,16): error TS7032: Property 'message' implicitly has type 'any', because its set accessor lacks a parameter type annotation.

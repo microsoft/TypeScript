@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes7.ts] ////
+
 templateLiteralTypes7.ts(16,7): error TS2322: Type '<T extends 1 | 2 | 3>(x: `${T}`) => NMap[T]' is not assignable to type 'G2'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '`${T}`' is not assignable to type '"1" | "2" | "3"'.

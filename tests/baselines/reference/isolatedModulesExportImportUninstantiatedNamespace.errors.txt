@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesExportImportUninstantiatedNamespace.ts] ////
+
 factory.ts(3,1): error TS1269: Cannot use 'export import' on a type or type-only namespace when 'isolatedModules' is enabled.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadingOnConstants2.ts] ////
+
 overloadingOnConstants2.ts(9,10): error TS2394: This overload signature is not compatible with its implementation signature.
 overloadingOnConstants2.ts(15,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(x: "hi", items: string[]): D', gave the following error.

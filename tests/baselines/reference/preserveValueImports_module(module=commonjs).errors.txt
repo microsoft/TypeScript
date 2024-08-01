@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/preserveValueImports_module.ts] ////
+
 error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
   Use 'verbatimModuleSyntax' instead.
 

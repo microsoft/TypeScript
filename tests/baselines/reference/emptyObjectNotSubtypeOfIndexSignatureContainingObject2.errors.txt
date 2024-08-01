@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts] ////
+
 emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts(42,3): error TS2322: Type 'Dictionary<string>' is not assignable to type 'Record<string, Bar>'.
   'string' index signatures are incompatible.
     Type 'string' is not assignable to type 'Bar'.

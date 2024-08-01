@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/moduleExportDuplicateAlias.ts] ////
+
 moduleExportAliasDuplicateAlias.js(3,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 
 

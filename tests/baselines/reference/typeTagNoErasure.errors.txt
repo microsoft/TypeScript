@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typeTagNoErasure.ts] ////
+
 typeTagNoErasure.js(7,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 

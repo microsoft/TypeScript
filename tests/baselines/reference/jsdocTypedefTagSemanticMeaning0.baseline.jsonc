@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/jsdocTypedefTagSemanticMeaning0.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/a.js ===
 // /** /*FIND ALL REFS*/@typedef {number} T */

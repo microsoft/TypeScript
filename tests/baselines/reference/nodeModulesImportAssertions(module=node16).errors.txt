@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportAssertions.ts] ////
+
 index.ts(1,35): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
 otherc.cts(1,35): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration10_es6.ts] ////
+
 FunctionDeclaration10_es6.ts(1,20): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
 FunctionDeclaration10_es6.ts(1,26): error TS1005: ',' expected.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance6.ts] ////
+
 callSignatureAssignabilityInInheritance6.ts(24,11): error TS2430: Interface 'I<T>' incorrectly extends interface 'A'.
   Types of property 'a' are incompatible.
     Type '(x: T) => T[]' is not assignable to type '<T>(x: T) => T[]'.

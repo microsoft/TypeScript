@@ -1,3 +1,5 @@
+//// [tests/cases/transpile/declarationSingleFileHasErrorsReported.ts] ////
+
 //// [declarationSingleFileHasErrorsReported.ts] ////
 export const a string = "missing colon";
 //// [declarationSingleFileHasErrorsReported.js] ////

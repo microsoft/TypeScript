@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveBaseCheck6.ts] ////
+
 recursiveBaseCheck6.ts(1,7): error TS2506: 'S18' is referenced directly or indirectly in its own base expression.
 recursiveBaseCheck6.ts(2,13): error TS2339: Property 'blah' does not exist on type 'S18<unknown>'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts] ////
+
 equalityWithEnumTypes.ts(14,9): error TS2367: This comparison appears to be unintentional because the types 'E1' and '0' have no overlap.
 equalityWithEnumTypes.ts(23,9): error TS2367: This comparison appears to be unintentional because the types 'E1' and '3' have no overlap.
 equalityWithEnumTypes.ts(29,9): error TS2367: This comparison appears to be unintentional because the types 'E2' and '0' have no overlap.

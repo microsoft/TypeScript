@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/completionsImport_satisfiesKeyword.ts] ////
+
 // === Completions ===
 === /b.ts ===
 // 1 sat

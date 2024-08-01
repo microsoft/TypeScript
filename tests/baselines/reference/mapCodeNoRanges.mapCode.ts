@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/mapCodeNoRanges.ts] ////
+
 // === mapCode ===
 
 // === ORIGINAL ===

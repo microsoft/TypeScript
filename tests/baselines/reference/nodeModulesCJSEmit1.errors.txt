@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesCJSEmit1.ts] ////
+
 /3.cjs(2,1): error TS2304: Cannot find name 'exports'.
 /5.cjs(2,8): error TS1192: Module '"/3"' has no default export.
 

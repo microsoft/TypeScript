@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nonIdenticalTypeConstraints.ts] ////
+
 nonIdenticalTypeConstraints.ts(7,7): error TS2428: All declarations of 'Foo' must have identical type parameters.
 nonIdenticalTypeConstraints.ts(10,11): error TS2428: All declarations of 'Foo' must have identical type parameters.
 nonIdenticalTypeConstraints.ts(13,11): error TS2428: All declarations of 'Qux' must have identical type parameters.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts] ////
+
 typeFromPropertyAssignment29.ts(60,14): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
 typeFromPropertyAssignment29.ts(61,14): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
 typeFromPropertyAssignment29.ts(64,22): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.

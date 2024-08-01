@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/invalidSyntaxNamespaceImportWithCommonjs.ts] ////
+
 1.ts(1,10): error TS1005: 'as' expected.
 1.ts(1,15): error TS1005: 'from' expected.
 1.ts(1,15): error TS1141: String literal expected.

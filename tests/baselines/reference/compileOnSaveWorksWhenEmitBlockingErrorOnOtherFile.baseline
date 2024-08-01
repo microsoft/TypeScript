@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/compileOnSaveWorksWhenEmitBlockingErrorOnOtherFile.ts] ////
+
 // === EmitOutput ===
 EmitSkipped: true
 Diagnostics:

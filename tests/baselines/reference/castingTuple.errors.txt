@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/castingTuple.ts] ////
+
 castingTuple.ts(13,23): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Source has 2 element(s) but target requires 3.
 castingTuple.ts(14,15): error TS2352: Conversion of type '[number, string, boolean]' to type '[number, string]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.

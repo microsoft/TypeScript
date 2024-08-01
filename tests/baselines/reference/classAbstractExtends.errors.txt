@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractExtends.ts] ////
+
 classAbstractExtends.ts(9,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member bar from class 'B'.
 
 

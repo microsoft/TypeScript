@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorsOnImportedSymbol.ts] ////
+
 errorsOnImportedSymbol_1.ts(2,13): error TS2693: 'Sammy' only refers to a type, but is being used as a value here.
 errorsOnImportedSymbol_1.ts(3,9): error TS2693: 'Sammy' only refers to a type, but is being used as a value here.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/errorForUsingPropertyOfTypeAsType01.ts] ////
+
 errorForUsingPropertyOfTypeAsType01.ts(6,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
 errorForUsingPropertyOfTypeAsType01.ts(7,22): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?
 errorForUsingPropertyOfTypeAsType01.ts(15,12): error TS2713: Cannot access 'Foo.bar' because 'Foo' is a type, but not a namespace. Did you mean to retrieve the type of the property 'bar' in 'Foo' with 'Foo["bar"]'?

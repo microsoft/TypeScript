@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/completionsServerCommitCharacters.ts] ////
+
 // === Completions ===
 === /src/index.ts ===
 // const a: "aa" | "bb" = "";

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/spreadNonObject1.ts] ////
+
 spreadNonObject1.ts(6,17): error TS2698: Spread types may only be created from object types.
 
 

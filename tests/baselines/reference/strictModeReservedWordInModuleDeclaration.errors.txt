@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictModeReservedWordInModuleDeclaration.ts] ////
+
 strictModeReservedWordInModuleDeclaration.ts(2,8): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
 strictModeReservedWordInModuleDeclaration.ts(3,8): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
 strictModeReservedWordInModuleDeclaration.ts(4,8): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.

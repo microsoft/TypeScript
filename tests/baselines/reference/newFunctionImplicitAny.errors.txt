@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/newFunctionImplicitAny.ts] ////
+
 newFunctionImplicitAny.ts(4,12): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 

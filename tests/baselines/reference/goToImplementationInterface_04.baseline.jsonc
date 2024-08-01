@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToImplementationInterface_04.ts] ////
+
 // === goToImplementation ===
 // === /tests/cases/fourslash/goToImplementationInterface_04.ts ===
 // interface Fo/*GOTO IMPL*/o {

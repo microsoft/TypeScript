@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/goToSource10_mapFromAtTypes3.ts] ////
+
 // === goToSourceDefinition ===
 // === /node_modules/lodash/lodash.js ===
 // --- (line: 13) skipped ---

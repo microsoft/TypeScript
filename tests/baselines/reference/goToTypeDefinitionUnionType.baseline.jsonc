@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToTypeDefinitionUnionType.ts] ////
+
 // === goToType ===
 // === /tests/cases/fourslash/goToTypeDefinitionUnionType.ts ===
 // <|class [|{| defId: 0 |}C|] {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx] ////
+
 tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be an array type.
 
 

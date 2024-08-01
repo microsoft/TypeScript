@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/Protected/Protected1.ts] ////
+
 Protected1.ts(1,1): error TS1044: 'protected' modifier cannot appear on a module or namespace element.
 
 

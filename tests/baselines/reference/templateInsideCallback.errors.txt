@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/templateInsideCallback.ts] ////
+
 error TS-1: Pre-emit (11) and post-emit (13) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 templateInsideCallback.js(2,13): error TS8021: JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.
 templateInsideCallback.js(9,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag

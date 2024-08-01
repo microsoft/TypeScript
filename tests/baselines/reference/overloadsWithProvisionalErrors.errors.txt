@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadsWithProvisionalErrors.ts] ////
+
 overloadsWithProvisionalErrors.ts(6,1): error TS2769: No overload matches this call.
   Overload 1 of 2, '(s: string): number', gave the following error.
     Argument of type '(s: string) => {}' is not assignable to parameter of type 'string'.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts] ////
+
 subtypingWithCallSignaturesWithRestParameters.ts(18,11): error TS2430: Interface 'I1C' incorrectly extends interface 'Base'.
   Types of property 'a' are incompatible.
     Type '(...args: string[]) => number' is not assignable to type '(...args: number[]) => number'.

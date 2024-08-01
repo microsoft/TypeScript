@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckWithMultipleDiscriminants.ts] ////
+
 excessPropertyCheckWithMultipleDiscriminants.ts(30,5): error TS2353: Object literal may only specify known properties, and 'multipleOf' does not exist in type 'Float'.
 excessPropertyCheckWithMultipleDiscriminants.ts(41,5): error TS2353: Object literal may only specify known properties, and 'p3' does not exist in type '{ p1: "left"; p2: boolean; }'.
 excessPropertyCheckWithMultipleDiscriminants.ts(50,5): error TS2353: Object literal may only specify known properties, and 'p4' does not exist in type '{ p1: "left"; p2: true; p3: number; } | { p1: "left"; p2: boolean; }'.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport.ts] ////
+
 privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(15,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
 privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(17,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importEquals3.ts] ////
+
 b.ts(2,12): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
 b.ts(3,13): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
 c.ts(2,12): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.

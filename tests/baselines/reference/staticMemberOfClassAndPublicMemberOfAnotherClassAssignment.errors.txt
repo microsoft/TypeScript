@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts] ////
+
 staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(12,1): error TS2741: Property 'prop' is missing in type 'C' but required in type 'A'.
 staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(13,5): error TS2741: Property 'prop' is missing in type 'typeof B' but required in type 'A'.
 staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts(16,5): error TS2741: Property 'prop' is missing in type 'C' but required in type 'B'.

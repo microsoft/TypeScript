@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/betterErrorForUnionCall.ts] ////
+
 betterErrorForUnionCall.ts(2,1): error TS2349: This expression is not callable.
   No constituent of type '{ a: string; } | { b: string; }' is callable.
 betterErrorForUnionCall.ts(5,1): error TS2349: This expression is not callable.

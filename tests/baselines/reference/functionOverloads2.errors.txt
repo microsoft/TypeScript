@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads2.ts] ////
+
 functionOverloads2.ts(4,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(bar: string): string', gave the following error.
     Argument of type 'boolean' is not assignable to parameter of type 'string'.

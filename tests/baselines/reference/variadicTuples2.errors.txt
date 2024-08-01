@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples2.ts] ////
+
 variadicTuples2.ts(7,34): error TS1265: A rest element cannot follow another rest element.
 variadicTuples2.ts(8,34): error TS1266: An optional element cannot follow a rest element.
 variadicTuples2.ts(9,30): error TS1257: A required element cannot follow an optional element.

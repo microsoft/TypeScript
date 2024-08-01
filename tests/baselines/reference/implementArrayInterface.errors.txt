@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implementArrayInterface.ts] ////
+
 implementArrayInterface.ts(19,5): error TS2416: Property 'every' in type 'MyArray<T>' is not assignable to the same property in base type 'T[]'.
   Type '(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => boolean' is not assignable to type '{ <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean; }'.
     Signature '(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean' must be a type predicate.

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/extendsTag2.ts] ////
+
 error TS8022: JSDoc '@extends' is not attached to a class.
 
 

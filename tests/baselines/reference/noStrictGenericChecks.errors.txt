@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noStrictGenericChecks.ts] ////
+
 error TS5102: Option 'noStrictGenericChecks' has been removed. Please remove it from your configuration.
 noStrictGenericChecks.ts(5,5): error TS2322: Type 'B' is not assignable to type 'A'.
   Types of parameters 'y' and 'y' are incompatible.

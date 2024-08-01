@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsObjects.ts] ////
+
 isolatedDeclarationErrorsObjects.ts(7,8): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsObjects.ts(12,12): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsObjects.ts(16,12): error TS9013: Expression type can't be inferred with --isolatedDeclarations.

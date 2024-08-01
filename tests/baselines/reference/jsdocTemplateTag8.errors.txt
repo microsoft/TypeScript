@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag8.ts] ////
+
 a.js(18,1): error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
   Type 'unknown' is not assignable to type 'string'.
 a.js(36,1): error TS2322: Type 'Contravariant<string>' is not assignable to type 'Contravariant<unknown>'.

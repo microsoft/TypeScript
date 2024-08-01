@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/goToSource3_nodeModulesAtTypes.ts] ////
+
 // === goToSourceDefinition ===
 // === /node_modules/foo/lib/main.js ===
 // export const [|a|] = "a";

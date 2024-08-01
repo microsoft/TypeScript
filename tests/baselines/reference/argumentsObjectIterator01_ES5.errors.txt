@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argumentsObjectIterator01_ES5.ts] ////
+
 argumentsObjectIterator01_ES5.ts(3,21): error TS2495: Type 'IArguments' is not an array type or a string type.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/varianceMeasurement.ts] ////
+
 varianceMeasurement.ts(10,7): error TS2322: Type 'Foo1<string>' is not assignable to type 'Foo1<"a">'.
   Type 'string' is not assignable to type '"a"'.
 varianceMeasurement.ts(21,7): error TS2322: Type 'Foo2<string>' is not assignable to type 'Foo2<"a">'.

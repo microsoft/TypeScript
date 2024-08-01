@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/qualifiedName_import-declaration-with-variable-entity-names.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/qualifiedName_import-declaration-with-variable-entity-names.ts ===
 // module Alpha {

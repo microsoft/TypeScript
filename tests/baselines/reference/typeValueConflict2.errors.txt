@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeValueConflict2.ts] ////
+
 typeValueConflict2.ts(10,24): error TS2339: Property 'A' does not exist on type 'number'.
 
 

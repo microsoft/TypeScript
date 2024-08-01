@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/discriminateWithMissingProperty.ts] ////
+
 discriminateWithMissingProperty.ts(12,5): error TS2345: Argument of type '{ mode: "numeric"; data: Uint8Array; }' is not assignable to parameter of type 'Arg'.
   Types of property 'data' are incompatible.
     Type 'Uint8Array' is not assignable to type 'number'.

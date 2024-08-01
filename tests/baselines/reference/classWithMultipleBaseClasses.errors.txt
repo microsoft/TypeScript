@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classWithMultipleBaseClasses.ts] ////
+
 classWithMultipleBaseClasses.ts(18,7): error TS2420: Class 'D' incorrectly implements interface 'I'.
   Type 'D' is missing the following properties from type 'I': foo, bar
 

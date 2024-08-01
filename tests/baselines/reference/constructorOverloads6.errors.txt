@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorOverloads6.ts] ////
+
 constructorOverloads6.ts(4,25): error TS1183: An implementation cannot be declared in ambient contexts.
 
 

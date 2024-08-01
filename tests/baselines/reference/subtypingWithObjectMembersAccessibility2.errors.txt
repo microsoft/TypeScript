@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts] ////
+
 subtypingWithObjectMembersAccessibility2.ts(16,11): error TS2415: Class 'B' incorrectly extends base class 'A'.
   Property 'foo' is private in type 'A' but not in type 'B'.
 subtypingWithObjectMembersAccessibility2.ts(24,11): error TS2415: Class 'B2' incorrectly extends base class 'A2'.

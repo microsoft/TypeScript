@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts] ////
+
 chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts(19,64): error TS2741: Property 'z' is missing in type 'B' but required in type 'C'.
 chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts(19,81): error TS2739: Type 'A' is missing the following properties from type 'C': z, y
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/constructorFunctions.ts] ////
+
 index.js(22,15): error TS2348: Value of type 'typeof C3' is not callable. Did you mean to include 'new'?
 index.js(30,15): error TS2348: Value of type 'typeof C4' is not callable. Did you mean to include 'new'?
 index.js(55,13): error TS2554: Expected 1 arguments, but got 0.

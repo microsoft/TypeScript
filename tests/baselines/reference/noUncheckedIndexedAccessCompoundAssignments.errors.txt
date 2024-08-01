@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noUncheckedIndexedAccessCompoundAssignments.ts] ////
+
 noUncheckedIndexedAccessCompoundAssignments.ts(3,1): error TS18048: 'stringMap.foo' is possibly 'undefined'.
 noUncheckedIndexedAccessCompoundAssignments.ts(4,3): error TS18048: 'stringMap.foo' is possibly 'undefined'.
 noUncheckedIndexedAccessCompoundAssignments.ts(5,1): error TS18048: 'stringMap.foo' is possibly 'undefined'.

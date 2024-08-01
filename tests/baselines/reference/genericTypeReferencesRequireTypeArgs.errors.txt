@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeReferencesRequireTypeArgs.ts] ////
+
 genericTypeReferencesRequireTypeArgs.ts(7,9): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferencesRequireTypeArgs.ts(8,9): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 genericTypeReferencesRequireTypeArgs.ts(9,11): error TS2314: Generic type 'I<T>' requires 1 type argument(s).

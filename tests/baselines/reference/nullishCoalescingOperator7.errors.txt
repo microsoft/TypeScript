@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator7.ts] ////
+
 nullishCoalescingOperator7.ts(6,19): error TS2872: This kind of expression is always truthy.
 nullishCoalescingOperator7.ts(7,19): error TS2872: This kind of expression is always truthy.
 nullishCoalescingOperator7.ts(10,23): error TS2872: This kind of expression is always truthy.

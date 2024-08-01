@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/variableDeclarations/VariableDeclaration4_es6.ts] ////
+
 VariableDeclaration4_es6.ts(1,7): error TS1155: 'const' declarations must be initialized.
 
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2022/arbitraryModuleNamespaceIdentifiers/arbitraryModuleNamespaceIdentifiers_syntax.ts] ////
+
 type-clause-bad-export.ts(1,15): error TS1003: Identifier expected.
 type-clause-bad-import.ts(1,22): error TS1003: Identifier expected.
 type-clause-no-as.ts(1,15): error TS1003: Identifier expected.

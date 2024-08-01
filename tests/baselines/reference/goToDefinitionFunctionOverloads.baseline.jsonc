@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/goToDefinitionFunctionOverloads.ts] ////
+
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionFunctionOverloads.ts ===
 // <|function [|functionOverload|](value: number);|>

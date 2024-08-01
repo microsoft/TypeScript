@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/server/occurrences01.ts] ////
+
 // === documentHighlights ===
 // === /tests/cases/fourslash/server/occurrences01.ts ===
 // foo: /*HIGHLIGHTS*/[|{| kind: "none" |}switch|] (10) {

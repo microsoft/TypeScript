@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/getOccurrencesIsDefinitionOfInterfaceClassMerge.ts] ////
+
 // === findAllReferences ===
 // === /tests/cases/fourslash/getOccurrencesIsDefinitionOfInterfaceClassMerge.ts ===
 // /*FIND ALL REFS*/<|interface [|{| isWriteAccess: true, isDefinition: true |}Numbers|] {

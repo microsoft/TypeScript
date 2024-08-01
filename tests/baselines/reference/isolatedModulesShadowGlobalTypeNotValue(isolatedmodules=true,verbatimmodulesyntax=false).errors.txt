@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesShadowGlobalTypeNotValue.ts] ////
+
 bad.ts(1,10): error TS2866: Import 'Date' conflicts with global value used in this file, so must be declared with a type-only import when 'isolatedModules' is enabled.
 bad.ts(1,16): error TS2866: Import 'Event' conflicts with global value used in this file, so must be declared with a type-only import when 'isolatedModules' is enabled.
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts] ////
+
 keyofAndIndexedAccessErrors.ts(10,18): error TS2304: Cannot find name 'K0'.
 keyofAndIndexedAccessErrors.ts(20,18): error TS2339: Property 'foo' does not exist on type 'Shape'.
 keyofAndIndexedAccessErrors.ts(21,18): error TS2339: Property 'foo' does not exist on type 'Shape'.

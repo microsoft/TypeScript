@@ -1,3 +1,5 @@
+//// [/tests/cases/fourslash/findAllReferencesTripleSlash.ts] ////
+
 // === findAllReferences ===
 // === /a.ts ===
 // /// <reference path="[|b.ts|]/*FIND ALL REFS*/" />

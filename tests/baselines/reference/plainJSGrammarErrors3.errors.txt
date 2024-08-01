@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors3.ts] ////
+
 /a.js(2,5): error TS1308: 'await' expressions are only allowed within async functions and at the top levels of modules.
 
 

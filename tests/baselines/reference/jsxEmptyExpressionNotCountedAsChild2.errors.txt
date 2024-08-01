@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild2.tsx] ////
+
 jsxEmptyExpressionNotCountedAsChild2.tsx(28,2): error TS2322: Type '{}' is not assignable to type '{ bar?: number | undefined; } & { __children__: () => number; }'.
   Property '__children__' is missing in type '{}' but required in type '{ __children__: () => number; }'.
 
