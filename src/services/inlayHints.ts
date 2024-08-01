@@ -106,7 +106,6 @@ import {
     PrefixUnaryExpression,
     PropertyDeclaration,
     QuotePreference,
-    Signature,
     SignatureDeclarationBase,
     skipParentheses,
     some,
