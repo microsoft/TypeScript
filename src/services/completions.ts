@@ -3701,7 +3701,10 @@ function getCompletionData(
         const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
         if (isEntityName(node) || isImportType || isPropertyAccessExpression(node)) {
             const isNamespaceName = isModuleDeclaration(node.parent);
-            if (isNamespaceName) isNewIdentifierLocation = true;
+            if (isNamespaceName) {
+                isNewIdentifierLocation = true;
+                defaultCommitCharacters = [];
+            }
             let symbol = typeChecker.getSymbolAtLocation(node);
             if (symbol) {
                 symbol = skipAlias(symbol, typeChecker);
@@ -3783,9 +3786,13 @@ function getCompletionData(
     }
 
     function addTypeProperties(type: Type, insertAwait: boolean, insertQuestionDot: boolean): void {
-        isNewIdentifierLocation = !!type.getStringIndexType();
+        if (type.getStringIndexType()) {
+            isNewIdentifierLocation = true;
+            defaultCommitCharacters = [];
+        }
         if (isRightOfQuestionDot && some(type.getCallSignatures())) {
             isNewIdentifierLocation = true;
+            defaultCommitCharacters ??= allCommitCharacters; // Only invalid commit character here would be `(`.
         }
 
         const propertyAccess = node.kind === SyntaxKind.ImportType ? node as ImportTypeNode : node.parent as PropertyAccessExpression | QualifiedName;
