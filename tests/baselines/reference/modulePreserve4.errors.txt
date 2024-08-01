@@ -1,12 +1,22 @@
 /a.js(2,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/f.cts(1,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main1.ts(1,13): error TS2305: Module '"./a"' has no exported member 'y'.
 /main1.ts(3,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 /main1.ts(19,4): error TS2339: Property 'default' does not exist on type '() => void'.
+/main1.ts(23,8): error TS1192: Module '"/e"' has no default export.
 /main2.mts(1,13): error TS2305: Module '"./a"' has no exported member 'y'.
 /main2.mts(4,4): error TS2339: Property 'default' does not exist on type 'typeof import("/a")'.
 /main2.mts(5,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main2.mts(14,8): error TS1192: Module '"/e"' has no default export.
+/main3.cjs(1,10): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
 /main3.cjs(1,13): error TS2305: Module '"./a"' has no exported member 'y'.
 /main3.cjs(2,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+/main3.cjs(5,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+/main3.cjs(8,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+/main3.cjs(10,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+/main3.cjs(12,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+/main3.cjs(14,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+/main3.cjs(17,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
 
 
 ==== /a.js (1 errors) ====
@@ -29,13 +39,15 @@
 ==== /e.mts (0 errors) ====
     export = 0;
     
-==== /f.cts (0 errors) ====
+==== /f.cts (1 errors) ====
     export default 0;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     
 ==== /g.js (0 errors) ====
     exports.default = 0;
     
-==== /main1.ts (3 errors) ====
+==== /main1.ts (4 errors) ====
     import { x, y } from "./a"; // No y
                 ~
 !!! error TS2305: Module '"./a"' has no exported member 'y'.
@@ -65,6 +77,8 @@
     d3.default();
     
     import e1 from "./e.mjs"; // 0
+           ~~
+!!! error TS1192: Module '"/e"' has no default export.
     import e2 = require("./e.mjs"); // 0
     import f1 from "./f.cjs"; // 0
     import f2 = require("./f.cjs"); // { default: 0 }
@@ -75,7 +89,7 @@
     import g2 = require("./g"); // { default: 0 }
     g2.default;
     
-==== /main2.mts (3 errors) ====
+==== /main2.mts (4 errors) ====
     import { x, y } from "./a"; // No y
                 ~
 !!! error TS2305: Module '"./a"' has no exported member 'y'.
@@ -96,6 +110,8 @@
     import d1 from "./d"; // [Function: default]
     import d2 = require("./d"); // [Function: default]
     import e1 from "./e.mjs"; // 0
+           ~~
+!!! error TS1192: Module '"/e"' has no default export.
     import e2 = require("./e.mjs"); // 0
     import f1 from "./f.cjs"; // 0
     import f2 = require("./f.cjs"); // { default: 0 }
@@ -103,8 +119,10 @@
     import g1 from "./g"; // { default: 0 }
     import g2 = require("./g"); // { default: 0 }
     
-==== /main3.cjs (2 errors) ====
+==== /main3.cjs (9 errors) ====
     import { x, y } from "./a"; // No y
+             ~
+!!! error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
                 ~
 !!! error TS2305: Module '"./a"' has no exported member 'y'.
     import a1 = require("./a"); // Error in JS
@@ -113,18 +131,30 @@
     const a2 = require("./a"); // { x: 0 }
     
     import b1 from "./b"; // 0
+           ~~
+!!! error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
     const b2 = require("./b"); // { default: 0 }
     
     import c1 from "./c"; // { default: [Function: default] }
+           ~~
+!!! error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
     const c2 = require("./c"); // { default: [Function: default] }
     import d1 from "./d"; // [Function: default]
+           ~~
+!!! error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
     const d2 = require("./d"); // [Function: default]
     import e1 from "./e.mjs"; // 0
+           ~~
+!!! error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
     const e2 = require("./e.mjs"); // 0
     import f1 from "./f.cjs"; // 0
+           ~~
+!!! error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
     const f2 = require("./f.cjs"); // { default: 0 }
     
     import g1 from "./g"; // { default: 0 }
+           ~~
+!!! error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
     const g2 = require("./g"); // { default: 0 }
     
 ==== /main4.cjs (0 errors) ====

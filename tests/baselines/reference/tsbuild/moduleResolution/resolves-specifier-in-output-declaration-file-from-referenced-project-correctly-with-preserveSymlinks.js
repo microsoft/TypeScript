@@ -96,6 +96,8 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does 
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
+File '/user/username/projects/myproject/node_modules/pkg2/build/package.json' does not exist.
+File '/user/username/projects/myproject/node_modules/pkg2/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'const' from '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'Node10'.

@@ -35,6 +35,7 @@
     "Exiting conditional exports.",
     "Resolving real path for '/node_modules/dep/require.d.ts', result '/node_modules/dep/require.d.ts'.",
     "======== Module name 'dep' was successfully resolved to '/node_modules/dep/require.d.ts'. ========",
+    "File '/node_modules/dep/package.json' exists according to earlier cached lookups.",
     "======== Resolving module '@typescript/lib-esnext' from '/.src/__lib_node_modules_lookup_lib.esnext.d.ts__.ts'. ========",
     "Explicitly specified module resolution kind: 'Node10'.",
     "Loading module '@typescript/lib-esnext' from 'node_modules' folder, target file types: TypeScript, Declaration.",
