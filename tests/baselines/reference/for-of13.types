@@ -8,14 +8,14 @@ var v: string;
 for (v of [""].values()) { }
 >v : string
 >  : ^^^^^^
->[""].values() : BuiltinIterator<string>
->              : ^^^^^^^^^^^^^^^^^^^^^^^
->[""].values : () => BuiltinIterator<string>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[""].values() : ArrayIterator<string>
+>              : ^^^^^^^^^^^^^^^^^^^^^
+>[""].values : () => ArrayIterator<string>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[""] : string[]
 >     : ^^^^^^^^
 >"" : ""
 >   : ^^
->values : () => BuiltinIterator<string>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>values : () => ArrayIterator<string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

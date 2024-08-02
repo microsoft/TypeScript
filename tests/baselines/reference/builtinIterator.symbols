@@ -182,9 +182,9 @@ const iter1 = Iterator.from(g1);
 >from : Symbol(IteratorConstructor.from, Decl(lib.esnext.iterator.d.ts, --, --))
 >g1 : Symbol(g1, Decl(builtinIterator.ts, 68, 13))
 
-declare const iter2: BuiltinIterator<string>;
+declare const iter2: IteratorObject<string>;
 >iter2 : Symbol(iter2, Decl(builtinIterator.ts, 71, 13))
->BuiltinIterator : Symbol(BuiltinIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>IteratorObject : Symbol(IteratorObject, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 
 const iter3 = iter2.flatMap(() => g1);
 >iter3 : Symbol(iter3, Decl(builtinIterator.ts, 72, 5))

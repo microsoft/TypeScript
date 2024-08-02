@@ -21,14 +21,14 @@ const r1: number = map.values().next().value; // error when strictBuiltinIterato
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map.values().next : (...[value]: [] | [unknown]) => IteratorResult<number, undefined>
 >                  : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->map.values() : BuiltinIterator<number>
->             : ^^^^^^^^^^^^^^^^^^^^^^^
->map.values : () => BuiltinIterator<number>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map.values() : MapIterator<number>
+>             : ^^^^^^^^^^^^^^^^^^^
+>map.values : () => MapIterator<number>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : Map<string, number>
 >    : ^^^^^^^^^^^^^^^^^^^
->values : () => BuiltinIterator<number>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>values : () => MapIterator<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >next : (...[value]: [] | [unknown]) => IteratorResult<number, undefined>
 >     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number | undefined
@@ -51,14 +51,14 @@ const r2: Next<number> = map.values().next(); // error when strictBuiltinIterato
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map.values().next : (...[value]: [] | [unknown]) => IteratorResult<number, undefined>
 >                  : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->map.values() : BuiltinIterator<number>
->             : ^^^^^^^^^^^^^^^^^^^^^^^
->map.values : () => BuiltinIterator<number>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map.values() : MapIterator<number>
+>             : ^^^^^^^^^^^^^^^^^^^
+>map.values : () => MapIterator<number>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : Map<string, number>
 >    : ^^^^^^^^^^^^^^^^^^^
->values : () => BuiltinIterator<number>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>values : () => MapIterator<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >next : (...[value]: [] | [unknown]) => IteratorResult<number, undefined>
 >     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -107,14 +107,14 @@ const r3: number | undefined = set.values().next().value;
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >set.values().next : (...[value]: [] | [unknown]) => IteratorResult<number, undefined>
 >                  : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->set.values() : BuiltinIterator<number>
->             : ^^^^^^^^^^^^^^^^^^^^^^^
->set.values : () => BuiltinIterator<number>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>set.values() : SetIterator<number>
+>             : ^^^^^^^^^^^^^^^^^^^
+>set.values : () => SetIterator<number>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >set : Set<number>
 >    : ^^^^^^^^^^^
->values : () => BuiltinIterator<number>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>values : () => SetIterator<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >next : (...[value]: [] | [unknown]) => IteratorResult<number, undefined>
 >     : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number | undefined
@@ -199,9 +199,9 @@ class MyMap implements Map<string, number> {
 >this : this
 >     : ^^^^
 
-    entries(): BuiltinIterator<[string, number]> { throw new Error("Method not implemented."); }
->entries : () => BuiltinIterator<[string, number]>
->        : ^^^^^^                                 
+    entries(): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
+>entries : () => MapIterator<[string, number]>
+>        : ^^^^^^                             
 >new Error("Method not implemented.") : Error
 >                                     : ^^^^^
 >Error : ErrorConstructor
@@ -209,9 +209,9 @@ class MyMap implements Map<string, number> {
 >"Method not implemented." : "Method not implemented."
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    keys(): BuiltinIterator<string> { throw new Error("Method not implemented."); }
->keys : () => BuiltinIterator<string>
->     : ^^^^^^                       
+    keys(): MapIterator<string> { throw new Error("Method not implemented."); }
+>keys : () => MapIterator<string>
+>     : ^^^^^^                   
 >new Error("Method not implemented.") : Error
 >                                     : ^^^^^
 >Error : ErrorConstructor
@@ -219,9 +219,9 @@ class MyMap implements Map<string, number> {
 >"Method not implemented." : "Method not implemented."
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    [Symbol.iterator](): BuiltinIterator<[string, number]> { throw new Error("Method not implemented."); }
->[Symbol.iterator] : () => BuiltinIterator<[string, number]>
->                  : ^^^^^^                                 
+    [Symbol.iterator](): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
+>[Symbol.iterator] : () => MapIterator<[string, number]>
+>                  : ^^^^^^                             
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor

@@ -1181,9 +1181,9 @@ interface IterationTypesResolver {
     getGlobalIteratorType: (reportErrors: boolean) => GenericType;
     getGlobalIterableType: (reportErrors: boolean) => GenericType;
     getGlobalIterableIteratorType: (reportErrors: boolean) => GenericType;
-    getGlobalBuiltinIteratorType: (reportErrors: boolean) => GenericType;
     getGlobalIteratorObjectType: (reportErrors: boolean) => GenericType;
     getGlobalGeneratorType: (reportErrors: boolean) => GenericType;
+    getGlobalBuiltinIteratorTypes: () => readonly GenericType[];
     resolveIterationType: (type: Type, errorNode: Node | undefined) => Type | undefined;
     mustHaveANextMethodDiagnostic: DiagnosticMessage;
     mustBeAMethodDiagnostic: DiagnosticMessage;
@@ -2168,9 +2168,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getGlobalIteratorType: getGlobalAsyncIteratorType,
         getGlobalIterableType: getGlobalAsyncIterableType,
         getGlobalIterableIteratorType: getGlobalAsyncIterableIteratorType,
-        getGlobalBuiltinIteratorType: getGlobalBuiltinAsyncIteratorType,
         getGlobalIteratorObjectType: getGlobalAsyncIteratorObjectType,
         getGlobalGeneratorType: getGlobalAsyncGeneratorType,
+        getGlobalBuiltinIteratorTypes: getGlobalBuiltinAsyncIteratorTypes,
         resolveIterationType: (type, errorNode) => getAwaitedType(type, errorNode, Diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member),
         mustHaveANextMethodDiagnostic: Diagnostics.An_async_iterator_must_have_a_next_method,
         mustBeAMethodDiagnostic: Diagnostics.The_0_property_of_an_async_iterator_must_be_a_method,
@@ -2184,9 +2184,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getGlobalIteratorType,
         getGlobalIterableType,
         getGlobalIterableIteratorType,
-        getGlobalBuiltinIteratorType,
         getGlobalIteratorObjectType,
         getGlobalGeneratorType,
+        getGlobalBuiltinIteratorTypes,
         resolveIterationType: (type, _errorNode) => type,
         mustHaveANextMethodDiagnostic: Diagnostics.An_iterator_must_have_a_next_method,
         mustBeAMethodDiagnostic: Diagnostics.The_0_property_of_an_iterator_must_be_a_method,
@@ -2247,7 +2247,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var deferredGlobalIterableType: GenericType | undefined;
     var deferredGlobalIteratorType: GenericType | undefined;
     var deferredGlobalIterableIteratorType: GenericType | undefined;
-    var deferredGlobalBuiltinIteratorType: GenericType | undefined;
     var deferredGlobalIteratorObjectType: GenericType | undefined;
     var deferredGlobalGeneratorType: GenericType | undefined;
     var deferredGlobalIteratorYieldResultType: GenericType | undefined;
@@ -2255,7 +2254,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var deferredGlobalAsyncIterableType: GenericType | undefined;
     var deferredGlobalAsyncIteratorType: GenericType | undefined;
     var deferredGlobalAsyncIterableIteratorType: GenericType | undefined;
-    var deferredGlobalBuiltinAsyncIteratorType: GenericType | undefined;
+    var deferredGlobalBuiltinIteratorTypes: readonly GenericType[] | undefined;
+    var deferredGlobalBuiltinAsyncIteratorTypes: readonly GenericType[] | undefined;
     var deferredGlobalAsyncIteratorObjectType: GenericType | undefined;
     var deferredGlobalAsyncGeneratorType: GenericType | undefined;
     var deferredGlobalTemplateStringsArrayType: ObjectType | undefined;
@@ -12493,6 +12493,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
     }
 
+    function isReferenceToSomeType(type: Type, targets: readonly Type[]) {
+        if (type === undefined || (getObjectFlags(type) & ObjectFlags.Reference) === 0) {
+            return false;
+        }
+        for (const target of targets) {
+            if ((type as TypeReference).target === target) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function isReferenceToType(type: Type, target: Type) {
         return type !== undefined
             && target !== undefined
@@ -16873,6 +16885,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return symbol || reportErrors ? getTypeOfGlobalSymbol(symbol, arity) : undefined;
     }
 
+    function getGlobalBuiltinTypes(typeNames: readonly string[], arity: 0): ObjectType[];
+    function getGlobalBuiltinTypes(typeNames: readonly string[], arity: number): GenericType[];
+    function getGlobalBuiltinTypes(typeNames: readonly string[], arity: number) {
+        let types: Type[] | undefined;
+        for (const typeName of typeNames) {
+            types = append(types, getGlobalType(typeName as __String, arity, /*reportErrors*/ false));
+        }
+        return types ?? emptyArray;
+    }
+
     function getGlobalTypedPropertyDescriptorType() {
         // We always report an error, so store a result in the event we could not resolve the symbol to prevent reporting it multiple times
         return deferredGlobalTypedPropertyDescriptorType ||= getGlobalType("TypedPropertyDescriptor" as __String, /*arity*/ 1, /*reportErrors*/ true) || emptyGenericType;
@@ -16954,8 +16976,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return (deferredGlobalAsyncIterableIteratorType ||= getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
     }
 
-    function getGlobalBuiltinAsyncIteratorType(reportErrors: boolean) {
-        return (deferredGlobalBuiltinAsyncIteratorType ||= getGlobalType("BuiltinAsyncIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+    function getGlobalBuiltinAsyncIteratorTypes() {
+        // NOTE: This list does not include all built-in async iterator types, only those that are likely to be encountered frequently.
+        return deferredGlobalBuiltinAsyncIteratorTypes ??= getGlobalBuiltinTypes(["ReadableStreamAsyncIterator"], 1);
     }
 
     function getGlobalAsyncIteratorObjectType(reportErrors: boolean) {
@@ -16982,8 +17005,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return strictBuiltinIteratorReturn ? undefinedType : anyType;
     }
 
-    function getGlobalBuiltinIteratorType(reportErrors: boolean) {
-        return (deferredGlobalBuiltinIteratorType ||= getGlobalType("BuiltinIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+    function getGlobalBuiltinIteratorTypes() {
+        // NOTE: This list does not include all built-in iterator types, only those that are likely to be encountered frequently.
+        return deferredGlobalBuiltinIteratorTypes ??= getGlobalBuiltinTypes(["ArrayIterator", "MapIterator", "SetIterator", "StringIterator"], 1);
     }
 
     function getGlobalIteratorObjectType(reportErrors: boolean) {
@@ -44962,7 +44986,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // - `IteratorObject<T, TReturn, TNext>` or `AsyncIteratorObject<T, TReturn, TNext>`
         // - `IterableIterator<T, TReturn, TNext>` or `AsyncIterableIterator<T, TReturn, TNext>`
         // - `Generator<T, TReturn, TNext>` or `AsyncGenerator<T, TReturn, TNext>`
-        // - `BuiltinIterator<T>` or `BuiltinAsyncIterator<T>`
         if (
             isReferenceToType(type, resolver.getGlobalIterableType(/*reportErrors*/ false)) ||
             isReferenceToType(type, resolver.getGlobalIteratorObjectType(/*reportErrors*/ false)) ||
@@ -44973,7 +44996,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return setCachedIterationTypes(type, resolver.iterableCacheKey, createIterationTypes(resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || yieldType, resolver.resolveIterationType(returnType, /*errorNode*/ undefined) || returnType, nextType));
         }
 
-        if (isReferenceToType(type, resolver.getGlobalBuiltinIteratorType(/*reportErrors*/ false))) {
+        // As an optimization, if the type is an instantiation of one of the following global types, then
+        // just grab the related type argument:
+        // - `ArrayIterator<T>`
+        // - `MapIterator<T>`
+        // - `SetIterator<T>`
+        // - `StringIterator<T>`
+        // - `ReadableStreamAsyncIterator<T>`
+        if (isReferenceToSomeType(type, resolver.getGlobalBuiltinIteratorTypes())) {
             const [yieldType] = getTypeArguments(type as GenericType);
             const returnType = getBuiltinIteratorReturnType();
             const nextType = unknownType;
@@ -45098,7 +45128,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // - `IteratorObject<T, TReturn, TNext>` or `AsyncIteratorObject<T, TReturn, TNext>`
         // - `Iterator<T, TReturn, TNext>` or `AsyncIterator<T, TReturn, TNext>`
         // - `Generator<T, TReturn, TNext>` or `AsyncGenerator<T, TReturn, TNext>`
-        // - `BuiltinIterator<T>` or `BuiltinAsyncIterator<T>`
         if (
             isReferenceToType(type, resolver.getGlobalIterableIteratorType(/*reportErrors*/ false)) ||
             isReferenceToType(type, resolver.getGlobalIteratorType(/*reportErrors*/ false)) ||
@@ -45109,7 +45138,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return setCachedIterationTypes(type, resolver.iteratorCacheKey, createIterationTypes(yieldType, returnType, nextType));
         }
 
-        if (isReferenceToType(type, resolver.getGlobalBuiltinIteratorType(/*reportErrors*/ false))) {
+        // As an optimization, if the type is an instantiation of one of the following global types, then
+        // just grab the related type argument:
+        // - `ArrayIterator<T>`
+        // - `MapIterator<T>`
+        // - `SetIterator<T>`
+        // - `StringIterator<T>`
+        // - `ReadableStreamAsyncIterator<T>`
+        if (isReferenceToSomeType(type, resolver.getGlobalBuiltinIteratorTypes())) {
             const [yieldType] = getTypeArguments(type as GenericType);
             const returnType = getBuiltinIteratorReturnType();
             const nextType = unknownType;

@@ -26,19 +26,20 @@ navigator.storage.getDirectory().then(async directory => {
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     for await (const [key, handle] of directory) {
->key : any
->    : ^^^
->handle : any
->       : ^^^
+>key : string
+>    : ^^^^^^
+>handle : FileSystemHandle
+>       : ^^^^^^^^^^^^^^^^
 >directory : FileSystemDirectoryHandle
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         handle.kind;
->handle.kind : any
->handle : any
->       : ^^^
->kind : any
->     : ^^^
+>handle.kind : FileSystemHandleKind
+>            : ^^^^^^^^^^^^^^^^^^^^
+>handle : FileSystemHandle
+>       : ^^^^^^^^^^^^^^^^
+>kind : FileSystemHandleKind
+>     : ^^^^^^^^^^^^^^^^^^^^
     }
 });
 

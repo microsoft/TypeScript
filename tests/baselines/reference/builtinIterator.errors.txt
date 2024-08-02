@@ -149,7 +149,7 @@ builtinIterator.ts(73,35): error TS2322: Type 'Generator<string, number, boolean
 !!! error TS2345:               Type '[undefined]' is not assignable to type '[boolean]'.
 !!! error TS2345:                 Type 'undefined' is not assignable to type 'boolean'.
     
-    declare const iter2: BuiltinIterator<string>;
+    declare const iter2: IteratorObject<string>;
     const iter3 = iter2.flatMap(() => g1);
                                       ~~
 !!! error TS2322: Type 'Generator<string, number, boolean>' is not assignable to type 'Iterator<string, unknown, undefined> | Iterable<string, unknown, undefined>'.
