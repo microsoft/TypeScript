@@ -39761,8 +39761,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
                                 const rhsEval = evaluate(right);
                                 if (typeof rhsEval.value === "number" && Math.abs(rhsEval.value) >= 32) {
-                                    errorOrSuggestion(
-                                        isEnumMember(walkUpParenthesizedExpressions(right.parent.parent)), // elevate from suggestion to error within an enum member
+                                    error(
                                         errorNode || operatorToken,
                                         Diagnostics.This_operation_can_be_simplified_This_shift_is_identical_to_0_1_2,
                                         getTextOfNode(left),
