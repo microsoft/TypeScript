@@ -341,6 +341,7 @@ import {
     getNamespaceDeclarationNode,
     getNewTargetContainer,
     getNonAugmentationDeclaration,
+    getNonModifierTokenPosOfNode,
     getNormalizedAbsolutePath,
     getObjectFlags,
     getOriginalNode,
@@ -1652,6 +1653,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getNonOptionalType: removeOptionalTypeMarker,
         getTypeArguments,
         typeToTypeNode: nodeBuilder.typeToTypeNode,
+        typePredicateToTypePredicateNode: nodeBuilder.typePredicateToTypePredicateNode,
         indexInfoToIndexSignatureDeclaration: nodeBuilder.indexInfoToIndexSignatureDeclaration,
         signatureToSignatureDeclaration: nodeBuilder.signatureToSignatureDeclaration,
         symbolToEntityName: nodeBuilder.symbolToEntityName,
@@ -8425,6 +8427,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     introducesError = true;
                     return { introducesError, node, sym };
+                }
+                else {
+                    sym = symAtLocation;
                 }
             }
 
@@ -27380,6 +27385,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isFunctionObjectType(type: ObjectType): boolean {
+        if (getObjectFlags(type) & ObjectFlags.EvolvingArray) {
+            return false;
+        }
         // We do a quick check for a "bind" property before performing the more expensive subtype
         // check. This gives us a quicker out in the common case where an object type is not a function.
         const resolved = resolveStructuredTypeMembers(type);
@@ -33659,10 +33667,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getEnclosingClassFromThisParameter(node: Node): InterfaceType | undefined {
+        // 'this' type for a node comes from, in priority order...
+        // 1. The type of a syntactic 'this' parameter in the enclosing function scope
         const thisParameter = getThisParameterFromNodeContext(node);
         let thisType = thisParameter?.type && getTypeFromTypeNode(thisParameter.type);
-        if (thisType && thisType.flags & TypeFlags.TypeParameter) {
-            thisType = getConstraintOfTypeParameter(thisType as TypeParameter);
+        if (thisType) {
+            // 2. The constraint of a type parameter used for an explicit 'this' parameter
+            if (thisType.flags & TypeFlags.TypeParameter) {
+                thisType = getConstraintOfTypeParameter(thisType as TypeParameter);
+            }
+        }
+        else {
+            // 3. The 'this' parameter of a contextual type
+            const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
+            if (isFunctionLike(thisContainer)) {
+                thisType = getContextualThisParameterType(thisContainer);
+            }
         }
         if (thisType && getObjectFlags(thisType) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) {
             return getTargetType(thisType) as InterfaceType;
@@ -40705,7 +40725,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
         }
 
-        if (getIsolatedModules(compilerOptions)) {
+        // --verbatimModuleSyntax only gets checked here when the enum usage does not
+        // resolve to an import, because imports of ambient const enums get checked
+        // separately in `checkAliasSymbol`.
+        if (
+            compilerOptions.isolatedModules
+            || compilerOptions.verbatimModuleSyntax
+                && ok
+                && !resolveName(
+                    node,
+                    getFirstIdentifier(node as EntityNameOrEntityNameExpression),
+                    SymbolFlags.Alias,
+                    /*nameNotFoundMessage*/ undefined,
+                    /*isUse*/ false,
+                    /*excludeGlobals*/ true,
+                )
+        ) {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
             const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
@@ -40957,10 +40992,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkSourceElement(node.type);
 
         const { parameterName } = node;
-        if (typePredicate.kind === TypePredicateKind.This || typePredicate.kind === TypePredicateKind.AssertsThis) {
-            getTypeFromThisTypeNode(parameterName as ThisTypeNode);
-        }
-        else {
+        if (typePredicate.kind !== TypePredicateKind.This && typePredicate.kind !== TypePredicateKind.AssertsThis) {
             if (typePredicate.parameterIndex >= 0) {
                 if (signatureHasRestParameter(signature) && typePredicate.parameterIndex === signature.parameters.length - 1) {
                     error(parameterName, Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
@@ -41901,7 +41933,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkFunctionOrConstructorSymbolWorker(symbol: Symbol): void {
-        function getCanonicalOverload(overloads: Declaration[], implementation: FunctionLikeDeclaration | undefined): Declaration {
+        function getCanonicalOverload(overloads: readonly Declaration[], implementation: FunctionLikeDeclaration | undefined): Declaration {
             // Consider the canonical set of flags to be the flags of the bodyDeclaration or the first declaration
             // Error on all deviations from this canonical set of flags
             // The caveat is that if some overloads are defined in lib.d.ts, we don't want to
@@ -41917,19 +41949,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const someButNotAllOverloadFlags = someOverloadFlags ^ allOverloadFlags;
             if (someButNotAllOverloadFlags !== 0) {
                 const canonicalFlags = getEffectiveDeclarationFlags(getCanonicalOverload(overloads, implementation), flagsToCheck);
-                forEach(overloads, o => {
-                    const deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
-                    if (deviation & ModifierFlags.Export) {
-                        error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_exported_or_non_exported);
-                    }
-                    else if (deviation & ModifierFlags.Ambient) {
-                        error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
-                    }
-                    else if (deviation & (ModifierFlags.Private | ModifierFlags.Protected)) {
-                        error(getNameOfDeclaration(o) || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
-                    }
-                    else if (deviation & ModifierFlags.Abstract) {
-                        error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
+                group(overloads, o => getSourceFileOfNode(o).fileName).forEach(overloadsInFile => {
+                    const canonicalFlagsForFile = getEffectiveDeclarationFlags(getCanonicalOverload(overloadsInFile, implementation), flagsToCheck);
+                    for (const o of overloadsInFile) {
+                        const deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
+                        const deviationInFile = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlagsForFile;
+                        if (deviationInFile & ModifierFlags.Export) {
+                            // Overloads in different files need not all have export modifiers. This is ok:
+                            //   // lib.d.ts
+                            //   declare function foo(s: number): string;
+                            //   declare function foo(s: string): number;
+                            //   export { foo };
+                            //
+                            //   // app.ts
+                            //   declare module "lib" {
+                            //     export function foo(s: boolean): boolean;
+                            //   }
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_exported_or_non_exported);
+                        }
+                        else if (deviationInFile & ModifierFlags.Ambient) {
+                            // Though rare, a module augmentation (necessarily ambient) is allowed to add overloads
+                            // to a non-ambient function in an implementation file.
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
+                        }
+                        else if (deviation & (ModifierFlags.Private | ModifierFlags.Protected)) {
+                            error(getNameOfDeclaration(o) || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
+                        }
+                        else if (deviation & ModifierFlags.Abstract) {
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
+                        }
                     }
                 });
             }
@@ -43531,7 +43579,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // entire parameter does not have type annotation, suggest adding an annotation
                     addRelatedInfo(
                         diagnostic,
-                        createFileDiagnostic(getSourceFileOfNode(wrappingDeclaration), wrappingDeclaration.end, 1, Diagnostics.We_can_only_write_a_type_for_0_by_adding_a_type_for_the_entire_parameter_here, declarationNameToString(node.propertyName)),
+                        createFileDiagnostic(getSourceFileOfNode(wrappingDeclaration), wrappingDeclaration.end, 0, Diagnostics.We_can_only_write_a_type_for_0_by_adding_a_type_for_the_entire_parameter_here, declarationNameToString(node.propertyName)),
                     );
                 }
                 diagnostics.add(diagnostic);
@@ -44150,7 +44198,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 bothHelper(location, body);
                 return;
             }
-            const type = location === condExpr ? condType : checkTruthinessExpression(location);
+            const type = location === condExpr ? condType : checkExpression(location);
             if (type.flags & TypeFlags.EnumLiteral && isPropertyAccessExpression(location) && (getNodeLinks(location.expression).resolvedSymbol ?? unknownSymbol).flags & SymbolFlags.Enum) {
                 // EnumLiteral type at condition with known value is always truthy or always falsy, likely an error
                 error(location, Diagnostics.This_condition_will_always_return_0, !!(type as LiteralType).value ? "true" : "false");
@@ -46886,6 +46934,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (isIdentifier(node.name)) {
                 checkCollisionsForDeclarationName(node, node.name);
+                if (!(node.flags & (NodeFlags.Namespace | NodeFlags.GlobalAugmentation))) {
+                    const sourceFile = getSourceFileOfNode(node);
+                    const pos = getNonModifierTokenPosOfNode(node);
+                    const span = getSpanOfTokenAtPosition(sourceFile, pos);
+                    suggestionDiagnostics.add(
+                        createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.A_namespace_declaration_should_not_be_declared_using_the_module_keyword_Please_use_the_namespace_keyword_instead),
+                    );
+                }
             }
 
             checkExportsOnMergedDeclarations(node);
@@ -46985,6 +47041,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 grammarErrorOnFirstToken(node, Diagnostics.Exports_and_export_assignments_are_not_permitted_in_module_augmentations);
                 break;
             case SyntaxKind.ImportEqualsDeclaration:
+                // import a = e.x; in module augmentation is ok, but not import a = require('fs)
+                if (isInternalModuleImportEqualsDeclaration(node)) break;
+                // falls through
             case SyntaxKind.ImportDeclaration:
                 grammarErrorOnFirstToken(node, Diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module);
                 break;
@@ -47234,6 +47293,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // only if the file extension is .cjs/.cts). To avoid that inconsistency, we disallow ESM syntax
                     // in files that are unambiguously CommonJS in this mode.
                     error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_module_is_set_to_preserve);
+                }
+
+                if (
+                    compilerOptions.verbatimModuleSyntax &&
+                    !isTypeOnlyImportOrExportDeclaration(node) &&
+                    !(node.flags & NodeFlags.Ambient) &&
+                    targetFlags & SymbolFlags.ConstEnum
+                ) {
+                    const constEnumDeclaration = target.valueDeclaration as EnumDeclaration;
+                    const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
+                    if (constEnumDeclaration.flags & NodeFlags.Ambient && (!redirect || !shouldPreserveConstEnums(redirect.commandLine.options))) {
+                        error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
+                    }
                 }
             }
 
@@ -49579,11 +49651,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function checkSingleIdentifier(node: Node) {
             const nodeLinks = getNodeLinks(node);
-            nodeLinks.calculatedFlags |= NodeCheckFlags.ConstructorReference | NodeCheckFlags.CapturedBlockScopedBinding | NodeCheckFlags.BlockScopedBindingInLoop;
-            if (isIdentifier(node) && isExpressionNodeOrShorthandPropertyAssignmentName(node) && !(isPropertyAccessExpression(node.parent) && node.parent.name === node)) {
-                const s = getResolvedSymbol(node);
-                if (s && s !== unknownSymbol) {
-                    checkIdentifierCalculateNodeCheckFlags(node, s);
+            nodeLinks.calculatedFlags |= NodeCheckFlags.ConstructorReference;
+            if (isIdentifier(node)) {
+                nodeLinks.calculatedFlags |= NodeCheckFlags.BlockScopedBindingInLoop | NodeCheckFlags.CapturedBlockScopedBinding; // Can't set on all arbitrary nodes (these nodes have this flag set by `checkSingleBlockScopeBinding` only)
+                if (isExpressionNodeOrShorthandPropertyAssignmentName(node) && !(isPropertyAccessExpression(node.parent) && node.parent.name === node)) {
+                    const s = getResolvedSymbol(node);
+                    if (s && s !== unknownSymbol) {
+                        checkIdentifierCalculateNodeCheckFlags(node, s);
+                    }
                 }
             }
         }

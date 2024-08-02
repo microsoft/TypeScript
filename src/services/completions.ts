@@ -354,7 +354,6 @@ import {
     SortedArray,
     SourceFile,
     SpreadAssignment,
-    stableSort,
     startsWith,
     stringToToken,
     stripQuotes,
@@ -376,6 +375,7 @@ import {
     Token,
     TokenSyntaxKind,
     tokenToString,
+    toSorted,
     tryCast,
     tryGetImportFromModuleSpecifier,
     tryGetTextOfPropertyName,
@@ -2468,7 +2468,7 @@ function createSnippetPrinter(
         });
 
         const allChanges = escapes
-            ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+            ? toSorted(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
             : changes;
         return textChanges.applyChanges(syntheticFile.text, allChanges);
     }
@@ -2515,7 +2515,7 @@ function createSnippetPrinter(
         );
 
         const allChanges = escapes
-            ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+            ? toSorted(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
             : changes;
         return textChanges.applyChanges(syntheticFile.text, allChanges);
     }

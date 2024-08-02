@@ -200,8 +200,8 @@ d3.default();
 >        : ^^^^^^^^^^
 
 import e1 from "./e.mjs"; // 0
->e1 : 0
->   : ^
+>e1 : any
+>   : ^^^
 
 import e2 = require("./e.mjs"); // 0
 >e2 : 0
@@ -313,8 +313,8 @@ import d2 = require("./d"); // [Function: default]
 >   : ^^^^^^^^^^
 
 import e1 from "./e.mjs"; // 0
->e1 : 0
->   : ^
+>e1 : any
+>   : ^^^
 
 import e2 = require("./e.mjs"); // 0
 >e2 : 0

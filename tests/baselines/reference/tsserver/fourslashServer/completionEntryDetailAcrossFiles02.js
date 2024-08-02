@@ -719,13 +719,17 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "exports",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "p1",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "escape",

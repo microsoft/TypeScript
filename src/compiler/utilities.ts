@@ -510,7 +510,6 @@ import {
     skipTrivia,
     SnippetKind,
     some,
-    sort,
     SortedArray,
     SourceFile,
     SourceFileLike,
@@ -545,6 +544,7 @@ import {
     TokenFlags,
     tokenToString,
     toPath,
+    toSorted,
     tracing,
     TransformFlags,
     TransientSymbol,
@@ -1257,6 +1257,16 @@ export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFil
     }
 
     return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastDecorator.end);
+}
+
+/** @internal */
+export function getNonModifierTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
+    const lastModifier = !nodeIsMissing(node) && canHaveModifiers(node) && node.modifiers ? last(node.modifiers) : undefined;
+    if (!lastModifier) {
+        return getTokenPosOfNode(node, sourceFile);
+    }
+
+    return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastModifier.end);
 }
 
 /** @internal */
@@ -9154,10 +9164,16 @@ export function getJSXTransformEnabled(options: CompilerOptions): boolean {
 export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?: SourceFile): string | undefined {
     const jsxImportSourcePragmas = file?.pragmas.get("jsximportsource");
     const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[jsxImportSourcePragmas.length - 1] : jsxImportSourcePragmas;
+    const jsxRuntimePragmas = file?.pragmas.get("jsxruntime");
+    const jsxRuntimePragma = isArray(jsxRuntimePragmas) ? jsxRuntimePragmas[jsxRuntimePragmas.length - 1] : jsxRuntimePragmas;
+    if (jsxRuntimePragma?.arguments.factory === "classic") {
+        return undefined;
+    }
     return compilerOptions.jsx === JsxEmit.ReactJSX ||
             compilerOptions.jsx === JsxEmit.ReactJSXDev ||
             compilerOptions.jsxImportSource ||
-            jsxImportSourcePragma ?
+            jsxImportSourcePragma ||
+            jsxRuntimePragma?.arguments.factory === "automatic" ?
         jsxImportSourcePragma?.arguments.factory || compilerOptions.jsxImportSource || "react" :
         undefined;
 }
@@ -9586,7 +9602,7 @@ export function matchFiles(path: string, extensions: readonly string[] | undefin
         visited.set(canonicalPath, true);
         const { files, directories } = getFileSystemEntries(path);
 
-        for (const current of sort<string>(files, compareStringsCaseSensitive)) {
+        for (const current of toSorted<string>(files, compareStringsCaseSensitive)) {
             const name = combinePaths(path, current);
             const absoluteName = combinePaths(absolutePath, current);
             if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
@@ -9609,7 +9625,7 @@ export function matchFiles(path: string, extensions: readonly string[] | undefin
             }
         }
 
-        for (const current of sort<string>(directories, compareStringsCaseSensitive)) {
+        for (const current of toSorted<string>(directories, compareStringsCaseSensitive)) {
             const name = combinePaths(path, current);
             const absoluteName = combinePaths(absolutePath, current);
             if (

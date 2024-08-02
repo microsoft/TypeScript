@@ -383,11 +383,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "method",
             "kindModifiers": "abstract",
             "sortText": "11",
+            "source": "ClassMemberSnippet/",
+            "hasAction": true,
             "insertText": "render(): Element {\r\n    $0\r\n}",
             "filterText": "render",
-            "isSnippet": true,
-            "hasAction": true,
-            "source": "ClassMemberSnippet/"
+            "isSnippet": true
           },
           {
             "name": "abstract",
@@ -728,11 +728,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "method",
             "kindModifiers": "abstract",
             "sortText": "11",
+            "source": "ClassMemberSnippet/",
+            "hasAction": true,
             "insertText": "render(): Element {\r\n    $0\r\n}",
             "filterText": "render",
-            "isSnippet": true,
-            "hasAction": true,
-            "source": "ClassMemberSnippet/"
+            "isSnippet": true
           },
           {
             "name": "abstract",

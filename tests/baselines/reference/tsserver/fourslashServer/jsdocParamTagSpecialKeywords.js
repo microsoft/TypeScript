@@ -296,13 +296,17 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "test",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "type",
             "kind": "warning",
             "kindModifiers": "",
-            "sortText": "18"
+            "sortText": "18",
+            "isFromUncheckedFile": true,
+            "commitCharacters": []
           },
           {
             "name": "substr",

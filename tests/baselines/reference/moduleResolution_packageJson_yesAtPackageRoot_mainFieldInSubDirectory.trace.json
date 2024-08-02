@@ -1,9 +1,11 @@
 [
+    "File '/node_modules/foo/src/package.json' does not exist.",
+    "Found 'package.json' at '/node_modules/foo/package.json'.",
     "======== Resolving module 'foo' from '/index.ts'. ========",
     "Module resolution kind is not specified, using 'Node10'.",
     "Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.",
-    "Found 'package.json' at '/node_modules/foo/package.json'.",
+    "File '/node_modules/foo/package.json' exists according to earlier cached lookups.",
     "File '/node_modules/foo.ts' does not exist.",
     "File '/node_modules/foo.tsx' does not exist.",
     "File '/node_modules/foo.d.ts' does not exist.",
