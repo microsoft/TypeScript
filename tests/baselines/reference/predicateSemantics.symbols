@@ -61,3 +61,12 @@ while ({} satisfies unknown) { }
 while ((<any>({}))) { }
 while ((({}))) { }
 
+// Should be OK
+console.log((cond || undefined) && 1 / cond);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>cond : Symbol(cond, Decl(predicateSemantics.ts, 0, 11))
+>undefined : Symbol(undefined)
+>cond : Symbol(cond, Decl(predicateSemantics.ts, 0, 11))
+
