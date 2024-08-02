@@ -2,10 +2,12 @@ const { RuleTester } = require("./support/RuleTester.cjs");
 const rule = require("../rules/js-extensions.cjs");
 
 const ruleTester = new RuleTester({
-    parserOptions: {
-        warnOnUnsupportedTypeScriptVersion: false,
+    languageOptions: {
+        parserOptions: {
+            warnOnUnsupportedTypeScriptVersion: false,
+        },
+        parser: require("@typescript-eslint/parser"),
     },
-    parser: require.resolve("@typescript-eslint/parser"),
 });
 
 ruleTester.run("js-extensions", rule, {
