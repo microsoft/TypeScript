@@ -33678,7 +33678,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         else {
-            // 3. This 'this' parameter of a contextual type
+            // 3. The 'this' parameter of a contextual type
             const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
             if (isFunctionLike(thisContainer)) {
                 thisType = getContextualThisParameterType(thisContainer);
