@@ -71,3 +71,6 @@ predicateSemantics.ts(36,8): error TS2872: This kind of expression is always tru
            ~~~~~~
 !!! error TS2872: This kind of expression is always truthy.
     
+    // Should be OK
+    console.log((cond || undefined) && 1 / cond);
+    
