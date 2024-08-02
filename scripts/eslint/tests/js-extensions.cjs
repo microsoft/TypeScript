@@ -6,7 +6,6 @@ const ruleTester = new RuleTester({
         parserOptions: {
             warnOnUnsupportedTypeScriptVersion: false,
         },
-        parser: require("@typescript-eslint/parser"),
     },
 });
 
