@@ -1037,8 +1037,8 @@ export class TestState {
 
         if (ts.hasProperty(options, "defaultCommitCharacters")) {
             assert.deepEqual(
-                actualCompletions.defaultCommitCharacters?.sort(),
-                options.defaultCommitCharacters?.sort(),
+                actualCompletions.defaultCommitCharacters?.slice().sort(),
+                options.defaultCommitCharacters?.slice().sort(),
                 "Expected 'defaultCommitCharacters' properties to match",
             );
         }
@@ -1191,8 +1191,8 @@ export class TestState {
         assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, `At entry ${actual.name}: Expected 'sortText' properties to match`);
         if (ts.hasProperty(expected, "commitCharacters")) {
             assert.deepEqual(
-                actual.commitCharacters?.sort(),
-                expected.commitCharacters?.sort(),
+                actual.commitCharacters?.slice().sort(),
+                expected.commitCharacters?.slice().sort(),
                 `At entry ${actual.name}: Expected 'commitCharacters' values to match`,
             );
         }
