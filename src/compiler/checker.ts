@@ -40980,10 +40980,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkSourceElement(node.type);
 
         const { parameterName } = node;
-        if (typePredicate.kind === TypePredicateKind.This || typePredicate.kind === TypePredicateKind.AssertsThis) {
-            getTypeFromThisTypeNode(parameterName as ThisTypeNode);
-        }
-        else {
+        if (typePredicate.kind !== TypePredicateKind.This && typePredicate.kind !== TypePredicateKind.AssertsThis) {
             if (typePredicate.parameterIndex >= 0) {
                 if (signatureHasRestParameter(signature) && typePredicate.parameterIndex === signature.parameters.length - 1) {
                     error(parameterName, Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
