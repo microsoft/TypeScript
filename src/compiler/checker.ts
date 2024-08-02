@@ -39846,7 +39846,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                         Diagnostics.This_operation_can_be_simplified_This_shift_is_identical_to_0_1_2,
                                         getTextOfNode(left),
                                         tokenToString(operator),
-                                        rhsEval.value % 32
+                                        rhsEval.value % 32,
                                     );
                                 }
                                 break;
