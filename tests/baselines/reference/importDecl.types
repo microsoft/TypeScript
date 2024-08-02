@@ -208,11 +208,11 @@ export var d = m5.foo2();
 >m5.foo2() : m4.d
 >          : ^^^^
 >m5.foo2 : () => m4.d
->        : ^^^^^^^^^^
+>        : ^^^^^^    
 >m5 : typeof m5
 >   : ^^^^^^^^^
 >foo2 : () => m4.d
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 
 // Do not emit multiple used import statements
 import multiImport_m4 = require("./importDecl_require"); // Emit used

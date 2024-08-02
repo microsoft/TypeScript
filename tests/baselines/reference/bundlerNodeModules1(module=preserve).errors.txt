@@ -4,7 +4,7 @@ error TS6504: File '/node_modules/dual/index.cjs' is a JavaScript file. Did you 
 error TS6504: File '/node_modules/dual/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
   The file is in the program because:
     Root file specified for compilation
-/main.cts(1,15): error TS2305: Module '"dual"' has no exported member 'cjs'.
+/main.cts(1,10): error TS2305: Module '"dual"' has no exported member 'esm'.
 /main.mts(1,15): error TS2305: Module '"dual"' has no exported member 'cjs'.
 /main.ts(1,15): error TS2305: Module '"dual"' has no exported member 'cjs'.
 
@@ -54,6 +54,6 @@ error TS6504: File '/node_modules/dual/index.js' is a JavaScript file. Did you m
     
 ==== /main.cts (1 errors) ====
     import { esm, cjs } from "dual";
-                  ~~~
-!!! error TS2305: Module '"dual"' has no exported member 'cjs'.
+             ~~~
+!!! error TS2305: Module '"dual"' has no exported member 'esm'.
     

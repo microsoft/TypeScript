@@ -88,6 +88,7 @@ Found 'package.json' at '/src/projects/node_modules/@types/pg/package.json'.
 File '/src/projects/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', result '/src/projects/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts', primary: true. ========
+File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
 lib/lib.d.ts
   Default library for target 'es5'
 src/projects/a/src/index.ts
