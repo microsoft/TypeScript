@@ -84,7 +84,7 @@ describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
         ]);
     });
     it("Supports global `AsyncIterator.prototype` if present", () => {
-        class AsyncIterator { }
+        class AsyncIterator {}
         const { gen } = evaluator.evaluateTypeScript(
             `
             export async function * gen() {}

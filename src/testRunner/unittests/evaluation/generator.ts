@@ -40,7 +40,7 @@ describe("unittests:: evaluation:: generatorEvaluation", () => {
         assert.deepEqual(output, []);
     });
     it("Supports global `Iterator.prototype` if present", () => {
-        class Iterator { }
+        class Iterator {}
         const { gen } = evaluator.evaluateTypeScript(
             `
             export function * gen() {}
