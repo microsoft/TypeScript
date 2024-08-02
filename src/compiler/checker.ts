@@ -31574,70 +31574,70 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(getCheckFlags(symbol) & CheckFlags.Mapped && !(symbol as MappedSymbol).links.type && findResolutionCycleStartIndex(symbol, TypeSystemPropertyName.Type) >= 0);
     }
 
+    function isFilteredOutMappedPropertyName(constraint: Type, propertyNameType: Type): boolean {
+        if (constraint.flags & TypeFlags.Conditional) {
+            return !!(getReducedType(getTrueTypeFromConditionalType(constraint as ConditionalType)).flags & TypeFlags.Never) && isTypeAssignableTo(propertyNameType, (constraint as ConditionalType).extendsType);
+        }
+        if (constraint.flags & TypeFlags.Intersection) {
+            return some((constraint as IntersectionType).types, t => isFilteredOutMappedPropertyName(t, propertyNameType));
+        }
+        return false;
+    }
+
     function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
         return mapType(type, t => {
             if (!(t.flags & TypeFlags.StructuredType)) {
                 return undefined;
             }
             if (t.flags & TypeFlags.Intersection) {
-                const intersection = t as IntersectionType;
-                let applicableIndexedMappedTypeSubstitions: Type[] | undefined;
-                let concretePropertyTypes: Type[] | undefined;
-                let applicableIndexInfoCandidates: Type[] | undefined;
-                for (const t of intersection.types) {
-                    if (isGenericMappedType(t) && !t.declaration.nameType) {
-                        applicableIndexedMappedTypeSubstitions = append(applicableIndexedMappedTypeSubstitions, getTypeOfApplicableIndexedMappedTypeSubstitutionOfContextualType(t));
+                let types: Type[] | undefined;
+                for (const constituentType of (t as IntersectionType).types) {
+                    const propertyType = getTypeOfPropertyOfContextualTypeWorker(constituentType);
+                    // any doesn't provide any contextual information but could spoil the overall result by nullifying contextual information provided by other intersection constituents
+                    // at the same time, all types computed based on the contextual information provided by other consistuents are still assignable to any
+                    if (isTypeAny(propertyType)) {
                         continue;
                     }
-                    const typeOfConcreteProperty = getTypeOfConcretePropertyOfContextualType(t);
-                    if (typeOfConcreteProperty) {
-                        concretePropertyTypes = append(concretePropertyTypes, typeOfConcreteProperty);
-                        continue;
-                    }
-                    applicableIndexInfoCandidates = append(applicableIndexInfoCandidates, t);
+                    types = append(types, propertyType);
                 }
-                if (concretePropertyTypes) {
-                    return getIntersectionType(concatenate(concretePropertyTypes, applicableIndexedMappedTypeSubstitions));
+                if (!types) {
+                    return undefined;
                 }
-                const types = concatenate(mapDefined(applicableIndexInfoCandidates, getTypeOfApplicableIndexInfoOfContextualType), applicableIndexedMappedTypeSubstitions);
-                if (types.length > 0) {
+                if (types.length > 1) {
                     return getIntersectionType(types);
                 }
-                return undefined;
+                return types[0];
             }
-            return isGenericMappedType(t) && !t.declaration.nameType
-                ? getTypeOfApplicableIndexedMappedTypeSubstitutionOfContextualType(t)
-                : getTypeOfConcretePropertyOfContextualType(t) || getTypeOfApplicableIndexInfoOfContextualType(t);
+            return getTypeOfPropertyOfContextualTypeWorker(t);
         }, /*noReductions*/ true);
 
-        function getTypeOfApplicableIndexedMappedTypeSubstitutionOfContextualType(t: MappedType) {
-            const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
-            const constraint = getConstraintTypeFromMappedType(t);
-            // special case for conditional types pretending to be negated types
-            if (constraint.flags & TypeFlags.Conditional && getReducedType(getTrueTypeFromConditionalType(constraint as ConditionalType)).flags & TypeFlags.Never && isTypeAssignableTo(propertyNameType, (constraint as ConditionalType).extendsType)) {
-                return undefined;
-            }
-            const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
-            if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
-                return substituteIndexedMappedType(t, propertyNameType);
-            }
-            return undefined;
-        }
-        function getTypeOfConcretePropertyOfContextualType(t: Type) {
-            const prop = getPropertyOfType(t, name);
-            if (prop) {
-                return isCircularMappedProperty(prop) ? undefined : removeMissingType(getTypeOfSymbol(prop), !!(prop.flags & SymbolFlags.Optional));
-            }
-            if (isTupleType(t) && isNumericLiteralName(name) && +name >= 0) {
-                const restType = getElementTypeOfSliceOfTupleType(t, t.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
-                if (restType) {
-                    return restType;
+        function getTypeOfPropertyOfContextualTypeWorker(t: Type) {
+            if (isGenericMappedType(t) && !t.declaration.nameType) {
+                const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
+                const constraint = getConstraintTypeFromMappedType(t);
+                // special case for conditional types pretending to be negated types
+                if (isFilteredOutMappedPropertyName(constraint, propertyNameType)) {
+                    return undefined;
+                }
+                const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
+                if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
+                    return substituteIndexedMappedType(t, propertyNameType);
                 }
             }
+            else if (t.flags & TypeFlags.StructuredType) {
+                const prop = getPropertyOfType(t, name);
+                if (prop) {
+                    return isCircularMappedProperty(prop) ? undefined : removeMissingType(getTypeOfSymbol(prop), !!(prop.flags & SymbolFlags.Optional));
+                }
+                if (isTupleType(t) && isNumericLiteralName(name) && +name >= 0) {
+                    const restType = getElementTypeOfSliceOfTupleType(t, t.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
+                    if (restType) {
+                        return restType;
+                    }
+                }
+                return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType || getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
+            }
             return undefined;
-        }
-        function getTypeOfApplicableIndexInfoOfContextualType(t: Type) {
-            return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType || getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
         }
     }
 
