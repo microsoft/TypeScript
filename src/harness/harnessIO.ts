@@ -282,6 +282,7 @@ export namespace Compiler {
         baselineFile?: string;
         libFiles?: string;
         noTypesAndSymbols?: boolean;
+        captureSuggestions?: boolean;
     }
 
     // Additional options not already in ts.optionDeclarations
@@ -303,6 +304,7 @@ export namespace Compiler {
         { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false },
         { name: "noCheck", type: "boolean", defaultValueDescription: false },
         { name: "reportDiagnostics", type: "boolean", defaultValueDescription: false }, // used to enable error collection in `transpile` baselines
+        { name: "captureSuggestions", type: "boolean", defaultValueDescription: false }, // Adds suggestion diagnostics to error baselines
     ];
 
     let optionsIndex: Map<string, ts.CommandLineOption>;
@@ -428,7 +430,7 @@ export namespace Compiler {
 
         ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)));
         const host = new fakes.CompilerHost(fs, options);
-        const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
+        const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion, harnessSettings?.captureSuggestions === "true");
         result.symlinks = symlinks;
         (result as CompileFilesResult).repeat = newOptions => compileFiles(inputFiles, otherFiles, { ...harnessSettings, ...newOptions }, compilerOptions, originalCurrentDirectory, symlinks);
         return result as CompileFilesResult;
