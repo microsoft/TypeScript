@@ -810,3 +810,21 @@ const filtered2: { type: 'A'; a: string }[] = xs.filter(x => x.type === 'A');
 >x : Symbol(x, Decl(inferTypePredicates.ts, 282, 56))
 >type : Symbol(type, Decl(inferTypePredicates.ts, 279, 10), Decl(inferTypePredicates.ts, 279, 37))
 
+function isA1({ type }: X) {
+>isA1 : Symbol(isA1, Decl(inferTypePredicates.ts, 282, 77))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 284, 15))
+>X : Symbol(X, Decl(inferTypePredicates.ts, 277, 1))
+
+  return type === 'A';
+>type : Symbol(type, Decl(inferTypePredicates.ts, 284, 15))
+}
+function isA2(x: X) {
+>isA2 : Symbol(isA2, Decl(inferTypePredicates.ts, 286, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 287, 14))
+>X : Symbol(X, Decl(inferTypePredicates.ts, 277, 1))
+
+  return x.type === 'A';
+>x.type : Symbol(type, Decl(inferTypePredicates.ts, 279, 10), Decl(inferTypePredicates.ts, 279, 37))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 287, 14))
+>type : Symbol(type, Decl(inferTypePredicates.ts, 279, 10), Decl(inferTypePredicates.ts, 279, 37))
+}

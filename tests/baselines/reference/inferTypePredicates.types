@@ -1723,3 +1723,35 @@ const filtered2: { type: 'A'; a: string }[] = xs.filter(x => x.type === 'A');
 >'A' : "A"
 >    : ^^^
 
+function isA1({ type }: X) {
+>isA1 : ({ type }: X) => arg_0 is { type: "A"; a: string; }
+>     : ^        ^^ ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+
+  return type === 'A';
+>type === 'A' : boolean
+>             : ^^^^^^^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+}
+function isA2(x: X) {
+>isA2 : (x: X) => x is { type: "A"; a: string; }
+>     : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^^^^      ^^^
+>x : X
+>  : ^
+
+  return x.type === 'A';
+>x.type === 'A' : boolean
+>               : ^^^^^^^
+>x.type : "A" | "B"
+>       : ^^^^^^^^^
+>x : X
+>  : ^
+>type : "A" | "B"
+>     : ^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+}

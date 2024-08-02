@@ -285,6 +285,12 @@ let xs: X[] = [];
 const filtered1: { type: 'A'; a: string }[] = xs.filter(({ type }) => type === 'A');
 const filtered2: { type: 'A'; a: string }[] = xs.filter(x => x.type === 'A');
 
+function isA1({ type }: X) {
+  return type === 'A';
+}
+function isA2(x: X) {
+  return x.type === 'A';
+}
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -549,6 +555,13 @@ var filtered1 = xs.filter(function (_a) {
     return type === 'A';
 });
 var filtered2 = xs.filter(function (x) { return x.type === 'A'; });
+function isA1(_a) {
+    var type = _a.type;
+    return type === 'A';
+}
+function isA2(x) {
+    return x.type === 'A';
+}
 
 
 //// [inferTypePredicates.d.ts]
@@ -657,3 +670,11 @@ declare const filtered2: {
     type: 'A';
     a: string;
 }[];
+declare function isA1({ type }: X): arg_0 is {
+    type: "A";
+    a: string;
+};
+declare function isA2(x: X): x is {
+    type: "A";
+    a: string;
+};
