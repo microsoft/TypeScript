@@ -1,0 +1,172 @@
+//// [tests/cases/compiler/contextualIntersectionTypes.ts] ////
+
+=== contextualIntersectionTypes.ts ===
+// https://github.com/microsoft/TypeScript/issues/59473
+
+const a: [any] & [1] = [1];
+>a : [any] & [1]
+>  : ^^^^^^^^^^^
+>[1] : [1]
+>    : ^^^
+>1 : 1
+>  : ^
+
+const b: { ml: any } & { ml: 'edge' } = { ml: 'edge' };
+>b : { ml: any; } & { ml: "edge"; }
+>  : ^^^^^^   ^^^^^^^^^^^^      ^^^
+>ml : any
+>ml : "edge"
+>   : ^^^^^^
+>{ ml: 'edge' } : { ml: "edge"; }
+>               : ^^^^^^^^^^^^^^^
+>ml : "edge"
+>   : ^^^^^^
+>'edge' : "edge"
+>       : ^^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/48812
+
+type Action<TEvent extends { type: string }> = (ev: TEvent) => void;
+>Action : Action<TEvent>
+>       : ^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>ev : TEvent
+>   : ^^^^^^
+
+interface MachineConfig<TEvent extends { type: string }> {
+>type : string
+>     : ^^^^^^
+
+  schema: {
+>schema : { events: TEvent; }
+>       : ^^^^^^^^^^      ^^^
+
+    events: TEvent;
+>events : TEvent
+>       : ^^^^^^
+
+  };
+  on?: {
+>on : ({ [K in TEvent["type"]]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent>; }) | undefined
+>   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^
+
+    [K in TEvent["type"]]?: Action<TEvent extends { type: K } ? TEvent : never>;
+>type : K
+>     : ^
+
+  } & {
+    "*"?: Action<TEvent>;
+>"*" : Action<TEvent> | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  };
+}
+
+declare function createMachine<TEvent extends { type: string }>(
+>createMachine : <TEvent extends { type: string; }>(config: MachineConfig<TEvent>) => void
+>              : ^      ^^^^^^^^^                 ^^      ^^                     ^^^^^    
+>type : string
+>     : ^^^^^^
+
+  config: MachineConfig<TEvent>
+>config : MachineConfig<TEvent>
+>       : ^^^^^^^^^^^^^^^^^^^^^
+
+): void;
+
+createMachine({
+>createMachine({  schema: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    FOO: (ev) => {      ev.type;    },  },}) : void
+>                                                                                                                                      : ^^^^
+>createMachine : <TEvent extends { type: string; }>(config: MachineConfig<TEvent>) => void
+>              : ^      ^^^^^^^^^                 ^^      ^^                     ^^^^^    
+>{  schema: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    FOO: (ev) => {      ev.type;    },  },} : { schema: { events: { type: "FOO"; } | { type: "BAR"; }; }; on: { FOO: (ev: { type: "FOO"; }) => void; }; }
+>                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^                                   ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+
+  schema: {
+>schema : { events: { type: "FOO"; } | { type: "BAR"; }; }
+>       : ^^^^^^^^^^                                   ^^^
+>{    events: {} as { type: "FOO" } | { type: "BAR" },  } : { events: { type: "FOO"; } | { type: "BAR"; }; }
+>                                                         : ^^^^^^^^^^                                   ^^^
+
+    events: {} as { type: "FOO" } | { type: "BAR" },
+>events : { type: "FOO"; } | { type: "BAR"; }
+>       : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} as { type: "FOO" } | { type: "BAR" } : { type: "FOO"; } | { type: "BAR"; }
+>                                        : ^^^^^^^^     ^^^^^^^^^^^^^^     ^^^
+>{} : {}
+>   : ^^
+>type : "FOO"
+>     : ^^^^^
+>type : "BAR"
+>     : ^^^^^
+
+  },
+  on: {
+>on : { FOO: (ev: { type: "FOO"; }) => void; }
+>   : ^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^^
+>{    FOO: (ev) => {      ev.type;    },  } : { FOO: (ev: { type: "FOO"; }) => void; }
+>                                           : ^^^^^^^^  ^^^^^^^^^^     ^^^^^^^^^^^^^^^
+
+    FOO: (ev) => {
+>FOO : (ev: { type: "FOO"; }) => void
+>    : ^  ^^^^^^^^^^     ^^^^^^^^^^^^
+>(ev) => {      ev.type;    } : (ev: { type: "FOO"; }) => void
+>                             : ^  ^^^^^^^^^^     ^^^^^^^^^^^^
+>ev : { type: "FOO"; }
+>   : ^^^^^^^^     ^^^
+
+      ev.type;
+>ev.type : "FOO"
+>        : ^^^^^
+>ev : { type: "FOO"; }
+>   : ^^^^^^^^     ^^^
+>type : "FOO"
+>     : ^^^^^
+
+    },
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/49307#issuecomment-1196014488
+
+type Validate<T> = T & { [K in keyof T]: object }
+>Validate : Validate<T>
+>         : ^^^^^^^^^^^
+
+declare function f<S, T extends Record<string, (state: S) => any>>(s: S, x: Validate<T>): void;
+>f : <S, T extends Record<string, (state: S) => any>>(s: S, x: Validate<T>) => void
+>  : ^ ^^ ^^^^^^^^^                                 ^^ ^^ ^^ ^^           ^^^^^    
+>state : S
+>      : ^
+>s : S
+>  : ^
+>x : Validate<T>
+>  : ^^^^^^^^^^^
+
+f(0, {
+>f(0, {  foo: s => s + 1,}) : void
+>                           : ^^^^
+>f : <S, T extends Record<string, (state: S) => any>>(s: S, x: Validate<T>) => void
+>  : ^ ^^ ^^^^^^^^^                                 ^^ ^^ ^^ ^^           ^^^^^    
+>0 : 0
+>  : ^
+>{  foo: s => s + 1,} : { foo: (s: number) => number; }
+>                     : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+
+  foo: s => s + 1,
+>foo : (s: number) => number
+>    : ^ ^^^^^^^^^^^^^^^^^^^
+>s => s + 1 : (s: number) => number
+>           : ^ ^^^^^^^^^^^^^^^^^^^
+>s : number
+>  : ^^^^^^
+>s + 1 : number
+>      : ^^^^^^
+>s : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+})
+

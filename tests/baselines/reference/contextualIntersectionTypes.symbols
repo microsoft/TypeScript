@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/contextualIntersectionTypes.ts] ////
+
+=== contextualIntersectionTypes.ts ===
+// https://github.com/microsoft/TypeScript/issues/59473
+
+const a: [any] & [1] = [1];
+>a : Symbol(a, Decl(contextualIntersectionTypes.ts, 2, 5))
+
+const b: { ml: any } & { ml: 'edge' } = { ml: 'edge' };
+>b : Symbol(b, Decl(contextualIntersectionTypes.ts, 3, 5))
+>ml : Symbol(ml, Decl(contextualIntersectionTypes.ts, 3, 10))
+>ml : Symbol(ml, Decl(contextualIntersectionTypes.ts, 3, 24))
+>ml : Symbol(ml, Decl(contextualIntersectionTypes.ts, 3, 41))
+
+// https://github.com/microsoft/TypeScript/issues/48812
+
+type Action<TEvent extends { type: string }> = (ev: TEvent) => void;
+>Action : Symbol(Action, Decl(contextualIntersectionTypes.ts, 3, 55))
+>TEvent : Symbol(TEvent, Decl(contextualIntersectionTypes.ts, 7, 12))
+>type : Symbol(type, Decl(contextualIntersectionTypes.ts, 7, 28))
+>ev : Symbol(ev, Decl(contextualIntersectionTypes.ts, 7, 48))
+>TEvent : Symbol(TEvent, Decl(contextualIntersectionTypes.ts, 7, 12))
+
+interface MachineConfig<TEvent extends { type: string }> {
+>MachineConfig : Symbol(MachineConfig, Decl(contextualIntersectionTypes.ts, 7, 68))
+>TEvent : Symbol(TEvent, Decl(contextualIntersectionTypes.ts, 9, 24))
+>type : Symbol(type, Decl(contextualIntersectionTypes.ts, 9, 40))
+
+  schema: {
+>schema : Symbol(MachineConfig.schema, Decl(contextualIntersectionTypes.ts, 9, 58))
+
+    events: TEvent;
+>events : Symbol(events, Decl(contextualIntersectionTypes.ts, 10, 11))
+>TEvent : Symbol(TEvent, Decl(contextualIntersectionTypes.ts, 9, 24))
+
+  };
+  on?: {
+>on : Symbol(MachineConfig.on, Decl(contextualIntersectionTypes.ts, 12, 4))
+
+    [K in TEvent["type"]]?: Action<TEvent extends { type: K } ? TEvent : never>;
+>K : Symbol(K, Decl(contextualIntersectionTypes.ts, 14, 5))
+>TEvent : Symbol(TEvent, Decl(contextualIntersectionTypes.ts, 9, 24))
+>Action : Symbol(Action, Decl(contextualIntersectionTypes.ts, 3, 55))
+>TEvent : Symbol(TEvent, Decl(contextualIntersectionTypes.ts, 9, 24))
+>type : Symbol(type, Decl(contextualIntersectionTypes.ts, 14, 51))
+>K : Symbol(K, Decl(contextualIntersectionTypes.ts, 14, 5))
+>TEvent : Symbol(TEvent, Decl(contextualIntersectionTypes.ts, 9, 24))
+
+  } & {
+    "*"?: Action<TEvent>;
+>"*" : Symbol("*", Decl(contextualIntersectionTypes.ts, 15, 7))
+>Action : Symbol(Action, Decl(contextualIntersectionTypes.ts, 3, 55))
+>TEvent : Symbol(TEvent, Decl(contextualIntersectionTypes.ts, 9, 24))
+
+  };
+}
+
+declare function createMachine<TEvent extends { type: string }>(
+>createMachine : Symbol(createMachine, Decl(contextualIntersectionTypes.ts, 18, 1))
+>TEvent : Symbol(TEvent, Decl(contextualIntersectionTypes.ts, 20, 31))
+>type : Symbol(type, Decl(contextualIntersectionTypes.ts, 20, 47))
+
+  config: MachineConfig<TEvent>
+>config : Symbol(config, Decl(contextualIntersectionTypes.ts, 20, 64))
+>MachineConfig : Symbol(MachineConfig, Decl(contextualIntersectionTypes.ts, 7, 68))
+>TEvent : Symbol(TEvent, Decl(contextualIntersectionTypes.ts, 20, 31))
+
+): void;
+
+createMachine({
+>createMachine : Symbol(createMachine, Decl(contextualIntersectionTypes.ts, 18, 1))
+
+  schema: {
+>schema : Symbol(schema, Decl(contextualIntersectionTypes.ts, 24, 15))
+
+    events: {} as { type: "FOO" } | { type: "BAR" },
+>events : Symbol(events, Decl(contextualIntersectionTypes.ts, 25, 11))
+>type : Symbol(type, Decl(contextualIntersectionTypes.ts, 26, 19))
+>type : Symbol(type, Decl(contextualIntersectionTypes.ts, 26, 37))
+
+  },
+  on: {
+>on : Symbol(on, Decl(contextualIntersectionTypes.ts, 27, 4))
+
+    FOO: (ev) => {
+>FOO : Symbol(FOO, Decl(contextualIntersectionTypes.ts, 28, 7))
+>ev : Symbol(ev, Decl(contextualIntersectionTypes.ts, 29, 10))
+
+      ev.type;
+>ev.type : Symbol(type, Decl(contextualIntersectionTypes.ts, 26, 19))
+>ev : Symbol(ev, Decl(contextualIntersectionTypes.ts, 29, 10))
+>type : Symbol(type, Decl(contextualIntersectionTypes.ts, 26, 19))
+
+    },
+  },
+});
+
+// https://github.com/microsoft/TypeScript/issues/49307#issuecomment-1196014488
+
+type Validate<T> = T & { [K in keyof T]: object }
+>Validate : Symbol(Validate, Decl(contextualIntersectionTypes.ts, 33, 3))
+>T : Symbol(T, Decl(contextualIntersectionTypes.ts, 37, 14))
+>T : Symbol(T, Decl(contextualIntersectionTypes.ts, 37, 14))
+>K : Symbol(K, Decl(contextualIntersectionTypes.ts, 37, 26))
+>T : Symbol(T, Decl(contextualIntersectionTypes.ts, 37, 14))
+
+declare function f<S, T extends Record<string, (state: S) => any>>(s: S, x: Validate<T>): void;
+>f : Symbol(f, Decl(contextualIntersectionTypes.ts, 37, 49))
+>S : Symbol(S, Decl(contextualIntersectionTypes.ts, 38, 19))
+>T : Symbol(T, Decl(contextualIntersectionTypes.ts, 38, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>state : Symbol(state, Decl(contextualIntersectionTypes.ts, 38, 48))
+>S : Symbol(S, Decl(contextualIntersectionTypes.ts, 38, 19))
+>s : Symbol(s, Decl(contextualIntersectionTypes.ts, 38, 67))
+>S : Symbol(S, Decl(contextualIntersectionTypes.ts, 38, 19))
+>x : Symbol(x, Decl(contextualIntersectionTypes.ts, 38, 72))
+>Validate : Symbol(Validate, Decl(contextualIntersectionTypes.ts, 33, 3))
+>T : Symbol(T, Decl(contextualIntersectionTypes.ts, 38, 21))
+
+f(0, {
+>f : Symbol(f, Decl(contextualIntersectionTypes.ts, 37, 49))
+
+  foo: s => s + 1,
+>foo : Symbol(foo, Decl(contextualIntersectionTypes.ts, 40, 6))
+>s : Symbol(s, Decl(contextualIntersectionTypes.ts, 41, 6))
+>s : Symbol(s, Decl(contextualIntersectionTypes.ts, 41, 6))
+
+})
+
