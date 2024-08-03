@@ -22,4 +22,10 @@ test2({ type: "foo" });
 
 // https://github.com/microsoft/TypeScript/issues/59473
 
-const x: { ml: any } & { ml: 'edge' } = { ml: 'edge' }
+const x: { ml: any } & { ml: 'edge' } = { ml: 'edge' };
+const a: [any] & [1] = [1];
+const b: any[] & 1[] = [1, 1];
+const c: { a: any } & { a: 1 } = { a: 1 };
+const d: (() => { a: 1 }) & (() => { a: any }) = () => ({
+  a: 1,
+});

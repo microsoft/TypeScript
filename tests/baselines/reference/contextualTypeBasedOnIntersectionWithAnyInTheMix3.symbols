@@ -55,9 +55,31 @@ test2({ type: "foo" });
 
 // https://github.com/microsoft/TypeScript/issues/59473
 
-const x: { ml: any } & { ml: 'edge' } = { ml: 'edge' }
+const x: { ml: any } & { ml: 'edge' } = { ml: 'edge' };
 >x : Symbol(x, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 5))
 >ml : Symbol(ml, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 10))
 >ml : Symbol(ml, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 24))
 >ml : Symbol(ml, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 41))
+
+const a: [any] & [1] = [1];
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 22, 5))
+
+const b: any[] & 1[] = [1, 1];
+>b : Symbol(b, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 23, 5))
+
+const c: { a: any } & { a: 1 } = { a: 1 };
+>c : Symbol(c, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 24, 5))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 24, 10))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 24, 23))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 24, 34))
+
+const d: (() => { a: 1 }) & (() => { a: any }) = () => ({
+>d : Symbol(d, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 25, 5))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 25, 17))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 25, 36))
+
+  a: 1,
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 25, 57))
+
+});
 
