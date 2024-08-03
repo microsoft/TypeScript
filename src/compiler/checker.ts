@@ -31578,30 +31578,40 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
-        return mapType(type, t => {
-            if (isGenericMappedType(t) && !t.declaration.nameType) {
-                const constraint = getConstraintTypeFromMappedType(t);
+        return mapType(type, getTypeOfProperty, /*noReductions*/ true);
+        function getTypeOfProperty(type: Type): Type | undefined {
+            if (type.flags & TypeFlags.Intersection) {
+                // Intersections that include `any` resolve to `any`. This loses potentially useful type
+                // information contributed by other types in the intersection, so we map `any` to `unknown`
+                // when we intersect the contextual property types.
+                return getIntersectionType(map((type as IntersectionType).types, t => {
+                    const propType = getTypeOfProperty(t);
+                    return !propType || propType.flags & TypeFlags.Any ? unknownType : propType;
+                }));
+            }
+            else if (isGenericMappedType(type) && !type.declaration.nameType) {
+                const constraint = getConstraintTypeFromMappedType(type);
                 const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
                 const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
                 if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
-                    return substituteIndexedMappedType(t, propertyNameType);
+                    return substituteIndexedMappedType(type, propertyNameType);
                 }
             }
-            else if (t.flags & TypeFlags.StructuredType) {
-                const prop = getPropertyOfType(t, name);
+            else if (type.flags & TypeFlags.Object) {
+                const prop = getPropertyOfType(type, name);
                 if (prop) {
                     return isCircularMappedProperty(prop) ? undefined : removeMissingType(getTypeOfSymbol(prop), !!(prop.flags & SymbolFlags.Optional));
                 }
-                if (isTupleType(t) && isNumericLiteralName(name) && +name >= 0) {
-                    const restType = getElementTypeOfSliceOfTupleType(t, t.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
+                if (isTupleType(type) && isNumericLiteralName(name) && +name >= 0) {
+                    const restType = getElementTypeOfSliceOfTupleType(type, type.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
                     if (restType) {
                         return restType;
                     }
                 }
-                return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType || getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
+                return findApplicableIndexInfo(getIndexInfosOfStructuredType(type), nameType || getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
             }
             return undefined;
-        }, /*noReductions*/ true);
+        }
     }
 
     // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
