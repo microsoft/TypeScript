@@ -2324,7 +2324,7 @@ function createObjectLiteralMethod(
                 // We don't support overloads in object literals.
                 return undefined;
             }
-            const typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
+            const typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, /*internalFlags*/ undefined, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
             if (!typeNode || !isFunctionTypeNode(typeNode)) {
                 return undefined;
             }

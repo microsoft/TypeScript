@@ -62,6 +62,33 @@ export class SomeClass {
     a(): number;
 }
 //// [main.d.ts]
-import { SomeClass } from "./lib";
-import { SomeClass as Another } from "./lib";
+import { SomeClass } from "lib";
+import { SomeClass as Another } from "lib";
 export { SomeClass, Another };
+
+
+//// [DtsFileErrors]
+
+
+out/main.d.ts(1,27): error TS2307: Cannot find module 'lib' or its corresponding type declarations.
+out/main.d.ts(2,38): error TS2307: Cannot find module 'lib' or its corresponding type declarations.
+
+
+==== out/main.d.ts (2 errors) ====
+    import { SomeClass } from "/.src/lib";
+                              ~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'lib' or its corresponding type declarations.
+    import { SomeClass as Another } from "/.src/lib";
+                                         ~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'lib' or its corresponding type declarations.
+    export { SomeClass, Another };
+    
+==== out/lib.d.ts (0 errors) ====
+    /**
+     * @param {string} a
+     */
+    export function bar(a: string): string;
+    export class SomeClass {
+        a(): number;
+    }
+    

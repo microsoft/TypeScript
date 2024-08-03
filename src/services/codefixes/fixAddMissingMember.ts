@@ -55,6 +55,7 @@ import {
     Identifier,
     idText,
     InterfaceDeclaration,
+    InternalNodeBuilderFlags,
     isCallExpression,
     isClassLike,
     isComputedPropertyName,
@@ -775,7 +776,7 @@ function tryGetContainingMethodDeclaration(node: ClassLikeDeclaration | Interfac
 
 function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quotePreference: QuotePreference, checker: TypeChecker) {
     if (isTransientSymbol(symbol)) {
-        const prop = checker.symbolToNode(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.WriteComputedProps);
+        const prop = checker.symbolToNode(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, InternalNodeBuilderFlags.WriteComputedProps);
         if (prop && isComputedPropertyName(prop)) return prop;
     }
     // We're using these nodes as property names in an object literal; no need to quote names when not needed.

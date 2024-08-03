@@ -165,7 +165,7 @@ declare class Cls {
 export function g(a: {
     x: string;
 }, b: {
-    y: typeof import(".").b;
+    y: typeof import("index").b;
 }): void;
 /**
  * @param {{x: string}} a
@@ -174,6 +174,74 @@ export function g(a: {
 declare function hh(a: {
     x: string;
 }, b: {
-    y: typeof import(".").b;
+    y: typeof import("index").b;
 }): void;
 export { hh as h, i as ii, j as jj };
+
+
+//// [DtsFileErrors]
+
+
+out/index.d.ts(42,22): error TS2307: Cannot find module 'index' or its corresponding type declarations.
+out/index.d.ts(51,22): error TS2307: Cannot find module 'index' or its corresponding type declarations.
+
+
+==== out/index.d.ts (2 errors) ====
+    export function a(): void;
+    export function b(): void;
+    export namespace b {
+        let cat: string;
+    }
+    export function c(): void;
+    export namespace c {
+        export { Cls };
+    }
+    /**
+     * @param {number} a
+     * @param {number} b
+     * @return {string}
+     */
+    export function d(a: number, b: number): string;
+    /**
+     * @template T,U
+     * @param {T} a
+     * @param {U} b
+     * @return {T & U}
+     */
+    export function e<T, U>(a: T, b: U): T & U;
+    /**
+     * @template T
+     * @param {T} a
+     */
+    export function f<T>(a: T): T;
+    export namespace f {
+        export { f as self };
+    }
+    export function i(): void;
+    export function j(): void;
+    declare class Cls {
+    }
+    /**
+     * @param {{x: string}} a
+     * @param {{y: typeof b}} b
+     */
+    export function g(a: {
+        x: string;
+    }, b: {
+        y: typeof import("index").b;
+                         ~~~~~~~
+!!! error TS2307: Cannot find module 'index' or its corresponding type declarations.
+    }): void;
+    /**
+     * @param {{x: string}} a
+     * @param {{y: typeof b}} b
+     */
+    declare function hh(a: {
+        x: string;
+    }, b: {
+        y: typeof import("index").b;
+                         ~~~~~~~
+!!! error TS2307: Cannot find module 'index' or its corresponding type declarations.
+    }): void;
+    export { hh as h, i as ii, j as jj };
+    

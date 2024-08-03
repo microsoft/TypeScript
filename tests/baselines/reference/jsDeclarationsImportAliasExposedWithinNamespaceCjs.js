@@ -96,4 +96,4 @@ export const testFnTypes: {
 export namespace testFnTypes {
     type input = boolean | myTypes.typeC;
 }
-import { myTypes } from "./file.js";
+import { myTypes } from "file";

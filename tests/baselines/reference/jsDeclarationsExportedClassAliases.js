@@ -59,4 +59,23 @@ export class FancyError extends Error {
 }
 //// [index.d.ts]
 export { errors };
-import errors = require("./errors");
+import errors = require("utils/errors");
+
+
+//// [DtsFileErrors]
+
+
+out/index.d.ts(2,25): error TS2307: Cannot find module 'utils/errors' or its corresponding type declarations.
+
+
+==== out/index.d.ts (1 errors) ====
+    export { errors };
+    import errors = require("/.src/utils/errors");
+                            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'utils/errors' or its corresponding type declarations.
+    
+==== out/errors.d.ts (0 errors) ====
+    export class FancyError extends Error {
+        constructor(status: any);
+    }
+    

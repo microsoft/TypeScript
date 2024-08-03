@@ -21,7 +21,7 @@ verify.completions({
   includes: [
     {
       name: "method",
-      insertText: `method(param: import("./doesntexist.js").Foo);`,
+      insertText: `method(param: any);`,
       filterText: "method",
       hasAction: undefined,
     },

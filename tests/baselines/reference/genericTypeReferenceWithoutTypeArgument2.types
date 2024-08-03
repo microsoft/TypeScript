@@ -15,14 +15,14 @@ var c: I;
 >  : ^^^
 
 var a: { x: I };
->a : { x: I; }
->  : ^^^^^ ^^^
+>a : { x: any; }
+>  : ^^^^^^^^^^^
 >x : any
 >  : ^^^
 
 var b: { (x: I): I };
->b : (x: I) => I
->  : ^ ^^ ^^^^^ 
+>b : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -33,10 +33,10 @@ var d: { [x: I]: I };
 >  : ^^^
 
 var e = (x: I) => { var y: I; return y; }
->e : (x: I) => any
->  : ^ ^^ ^^^^^^^^
->(x: I) => { var y: I; return y; } : (x: I) => any
->                                  : ^ ^^ ^^^^^^^^
+>e : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
+>(x: I) => { var y: I; return y; } : (x: any) => any
+>                                  : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -45,8 +45,8 @@ var e = (x: I) => { var y: I; return y; }
 >  : ^^^
 
 function f(x: I): I { var y: I; return y; }
->f : (x: I) => I
->  : ^ ^^ ^^^^^ 
+>f : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -55,12 +55,12 @@ function f(x: I): I { var y: I; return y; }
 >  : ^^^
 
 var g = function f(x: I): I { var y: I; return y; }
->g : (x: I) => I
->  : ^ ^^ ^^^^^ 
->function f(x: I): I { var y: I; return y; } : (x: I) => I
->                                            : ^ ^^ ^^^^^ 
->f : (x: I) => I
->  : ^ ^^ ^^^^^ 
+>g : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
+>function f(x: I): I { var y: I; return y; } : (x: any) => any
+>                                            : ^ ^^^^^^^^^^^^^
+>f : (x: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any

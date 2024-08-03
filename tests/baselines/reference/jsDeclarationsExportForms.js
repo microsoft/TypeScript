@@ -166,10 +166,10 @@ export class Foo {
 //// [func.d.ts]
 export function func(): void;
 //// [bar.d.ts]
-export * from "./cls";
+export * from "cls";
 //// [bar2.d.ts]
-export * from "./func";
-export * from "./cls";
+export * from "func";
+export * from "cls";
 //// [baz.d.ts]
 export { Foo };
 import { Foo } from "./cls";
@@ -184,15 +184,92 @@ export { ns as classContainer };
 import * as ns from "./cls";
 //// [cjs.d.ts]
 export { ns };
-import ns = require("./cls");
+import ns = require("cls");
 //// [cjs2.d.ts]
 export = ns;
-import ns = require("./cls");
+import ns = require("cls");
 //// [cjs3.d.ts]
 export { ns };
-import ns = require("./cls");
+import ns = require("cls");
 //// [cjs4.d.ts]
 export { ns as names };
-import ns = require("./cls");
+import ns = require("cls");
 //// [includeAll.d.ts]
 export {};
+
+
+//// [DtsFileErrors]
+
+
+out/bar.d.ts(1,15): error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+out/bar2.d.ts(1,15): error TS2307: Cannot find module 'func' or its corresponding type declarations.
+out/bar2.d.ts(2,15): error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+out/cjs.d.ts(2,21): error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+out/cjs2.d.ts(2,21): error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+out/cjs3.d.ts(2,21): error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+out/cjs4.d.ts(2,21): error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+
+
+==== out/cls.d.ts (0 errors) ====
+    export class Foo {
+    }
+    
+==== out/func.d.ts (0 errors) ====
+    export function func(): void;
+    
+==== out/bar.d.ts (1 errors) ====
+    export * from "cls";
+                  ~~~~~
+!!! error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+    
+==== out/bar2.d.ts (2 errors) ====
+    export * from "func";
+                  ~~~~~~
+!!! error TS2307: Cannot find module 'func' or its corresponding type declarations.
+    export * from "cls";
+                  ~~~~~
+!!! error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+    
+==== out/baz.d.ts (0 errors) ====
+    export { Foo };
+    import { Foo } from "./cls";
+    
+==== out/bat.d.ts (0 errors) ====
+    export default ns;
+    import * as ns from "./cls";
+    
+==== out/ban.d.ts (0 errors) ====
+    export { ns };
+    import * as ns from "./cls";
+    
+==== out/bol.d.ts (0 errors) ====
+    export { ns as classContainer };
+    import * as ns from "./cls";
+    
+==== out/cjs.d.ts (1 errors) ====
+    export { ns };
+    import ns = require("cls");
+                        ~~~~~
+!!! error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+    
+==== out/cjs2.d.ts (1 errors) ====
+    export = ns;
+    import ns = require("cls");
+                        ~~~~~
+!!! error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+    
+==== out/cjs3.d.ts (1 errors) ====
+    export { ns };
+    import ns = require("cls");
+                        ~~~~~
+!!! error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+    
+==== out/cjs4.d.ts (1 errors) ====
+    export { ns as names };
+    import ns = require("cls");
+                        ~~~~~
+!!! error TS2307: Cannot find module 'cls' or its corresponding type declarations.
+    
+==== out/includeAll.d.ts (0 errors) ====
+    export {};
+    

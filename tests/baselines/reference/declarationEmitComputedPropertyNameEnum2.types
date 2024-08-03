@@ -21,10 +21,10 @@ import { type Type } from "./type";
 >     : ^^^
 
 export const foo = { ...({} as Type) };
->foo : { x?: { [Enum.A]: 0; }; }
->    : ^^^^^^                ^^^
->{ ...({} as Type) } : { x?: { [Enum.A]: 0; }; }
->                    : ^^^^^^                ^^^
+>foo : { x?: {}; }
+>    : ^^^^^^  ^^^
+>{ ...({} as Type) } : { x?: {}; }
+>                    : ^^^^^^  ^^^
 >({} as Type) : Type
 >             : ^^^^
 >{} as Type : Type

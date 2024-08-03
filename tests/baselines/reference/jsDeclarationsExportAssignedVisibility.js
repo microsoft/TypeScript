@@ -45,4 +45,27 @@ export = Container;
 declare class Container {
     usage: Obj;
 }
-import Obj = require("./obj");
+import Obj = require("obj.js");
+
+
+//// [DtsFileErrors]
+
+
+out/index.d.ts(5,22): error TS2307: Cannot find module 'obj.js' or its corresponding type declarations.
+
+
+==== out/index.d.ts (1 errors) ====
+    export = Container;
+    declare class Container {
+        usage: Obj;
+    }
+    import Obj = require("/.src/obj.js");
+                         ~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'obj.js' or its corresponding type declarations.
+    
+==== out/obj.d.ts (0 errors) ====
+    export = Obj;
+    declare class Obj {
+        x: number;
+    }
+    

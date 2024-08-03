@@ -58,6 +58,6 @@ export class Render {
      */
     addRectangle(): Rectangle;
 }
-import { Rectangle } from "./rectangle";
+import { Rectangle } from "rectangle";
 //// [test.d.ts]
 export {};

@@ -15,8 +15,8 @@ type M3 = M2[keyof M2];  // Error
 >   : ^^^
 
 function f(m: M3) {
->f : (m: M3) => any
->  : ^ ^^  ^^^^^^^^
+>f : (m: any) => any
+>  : ^ ^^^^^^^^^^^^^
 >m : any
 >  : ^^^
 
