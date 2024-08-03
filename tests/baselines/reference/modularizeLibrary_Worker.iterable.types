@@ -8,8 +8,8 @@ for (const [key, entry] of new FormData()) {
 >      : ^^^^^^^^^^^^^^^^^^
 >new FormData() : FormData
 >               : ^^^^^^^^
->FormData : { new (): FormData; prototype: FormData; }
->         : ^^^^^^^^^^        ^^^^^^^^^^^^^        ^^^
+>FormData : { new (): FormData; readonly prototype: FormData; }
+>         : ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^        ^^^
 
     entry;
 >entry : FormDataEntryValue

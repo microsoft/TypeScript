@@ -8,8 +8,8 @@ Element.prototype.remove ??= function () {
 >                         : ^^^^^^    
 >Element.prototype : Element
 >                  : ^^^^^^^
->Element : { new (): Element; prototype: Element; }
->        : ^^^^^^^^^^       ^^^^^^^^^^^^^       ^^^
+>Element : { new (): Element; readonly prototype: Element; }
+>        : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >prototype : Element
 >          : ^^^^^^^
 >remove : () => void
@@ -45,8 +45,8 @@ Element.prototype.remove ??= function () {
 >                         : ^^^^^^    
 >Element.prototype : Element
 >                  : ^^^^^^^
->Element : { new (): Element; prototype: Element; }
->        : ^^^^^^^^^^       ^^^^^^^^^^^^^       ^^^
+>Element : { new (): Element; readonly prototype: Element; }
+>        : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >prototype : Element
 >          : ^^^^^^^
 >remove : () => void

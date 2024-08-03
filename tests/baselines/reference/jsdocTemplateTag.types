@@ -68,8 +68,8 @@ Element.prototype.animate = function(keyframes) {};
 >                          : ^         ^^                                            ^^       ^^^                                 ^^^^^         
 >Element.prototype : Element
 >                  : ^^^^^^^
->Element : { new (): Element; prototype: Element; }
->        : ^^^^^^^^^^       ^^^^^^^^^^^^^       ^^^
+>Element : { new (): Element; readonly prototype: Element; }
+>        : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^       ^^^
 >prototype : Element
 >          : ^^^^^^^
 >animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes | null, options?: number | KeyframeAnimationOptions) => Animation

@@ -96,8 +96,8 @@ const nodeList = new NodeList();
 >         : ^^^^^^^^
 >new NodeList() : NodeList
 >               : ^^^^^^^^
->NodeList : { new (): NodeList; prototype: NodeList; }
->         : ^^^^^^^^^^        ^^^^^^^^^^^^^        ^^^
+>NodeList : { new (): NodeList; readonly prototype: NodeList; }
+>         : ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^        ^^^
 
 [...nodeList];
 >[...nodeList] : any[]

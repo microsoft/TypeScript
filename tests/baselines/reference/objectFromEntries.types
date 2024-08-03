@@ -46,8 +46,8 @@ const o2 = Object.fromEntries(new URLSearchParams());
 >            : ^^^ ^^^^^^^^       ^^                                   ^^^                   ^^^       ^^                        ^^^   ^^^
 >new URLSearchParams() : URLSearchParams
 >                      : ^^^^^^^^^^^^^^^
->URLSearchParams : { new (init?: string[][] | Record<string, string> | string | URLSearchParams): URLSearchParams; prototype: URLSearchParams; }
->                : ^^^^^^^    ^^^                                                              ^^^               ^^^^^^^^^^^^^               ^^^
+>URLSearchParams : { new (init?: string[][] | Record<string, string> | string | URLSearchParams): URLSearchParams; readonly prototype: URLSearchParams; }
+>                : ^^^^^^^    ^^^                                                              ^^^               ^^^^^^^^^^^^^^^^^^^^^^               ^^^
 
 const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
 >o3 : { [k: string]: string; }
