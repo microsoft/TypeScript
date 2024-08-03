@@ -7,6 +7,7 @@ const m = require("./exporter");
 >require("./exporter") : typeof m
 >                      : ^^^^^^^^
 >require : any
+>        : ^^^
 >"./exporter" : "./exporter"
 >             : ^^^^^^^^^^^^
 

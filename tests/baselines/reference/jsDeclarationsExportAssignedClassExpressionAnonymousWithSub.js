@@ -47,31 +47,5 @@ declare namespace exports {
     export { Sub };
 }
 declare class Sub {
-    instance: import("index");
+    instance: import(".");
 }
-
-
-//// [DtsFileErrors]
-
-
-out/index.d.ts(13,22): error TS2307: Cannot find module 'index' or its corresponding type declarations.
-
-
-==== out/index.d.ts (1 errors) ====
-    export = exports;
-    declare class exports {
-        /**
-         * @param {number} p
-         */
-        constructor(p: number);
-        t: number;
-    }
-    declare namespace exports {
-        export { Sub };
-    }
-    declare class Sub {
-        instance: import("index");
-                         ~~~~~~~
-!!! error TS2307: Cannot find module 'index' or its corresponding type declarations.
-    }
-    

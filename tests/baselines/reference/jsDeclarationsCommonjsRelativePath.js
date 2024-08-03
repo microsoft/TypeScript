@@ -18,5 +18,5 @@ export class Thing {
 }
 //// [reexport.d.ts]
 export { Thing };
-import Thing_1 = require("thing.js");
+import Thing_1 = require("./thing");
 import Thing = Thing_1.Thing;

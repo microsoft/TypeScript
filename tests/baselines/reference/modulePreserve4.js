@@ -223,6 +223,6 @@ export {};
 //// [main3.d.cts]
 export {};
 //// [main4.d.cts]
-export const x: typeof import("/g");
+export const x: typeof import("./g");
 //// [dummy.d.ts]
 export {};

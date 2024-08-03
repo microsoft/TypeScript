@@ -9,6 +9,7 @@ const items = require("./some-mod")();
 >require("./some-mod") : () => Item[]
 >                      : ^^^^^^^^^^  
 >require : any
+>        : ^^^
 >"./some-mod" : "./some-mod"
 >             : ^^^^^^^^^^^^
 

@@ -63,36 +63,8 @@ declare class Foo extends Bar {
 declare namespace Foo {
     export { Strings };
 }
-import Bar = require("bar.js");
+import Bar = require("./bar");
 declare namespace Strings {
     let a: string;
     let b: string;
 }
-
-
-//// [DtsFileErrors]
-
-
-out/cls.d.ts(7,22): error TS2307: Cannot find module 'bar.js' or its corresponding type declarations.
-
-
-==== out/cls.d.ts (1 errors) ====
-    export = Foo;
-    declare class Foo extends Bar {
-    }
-    declare namespace Foo {
-        export { Strings };
-    }
-    import Bar = require("/.src/bar.js");
-                         ~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'bar.js' or its corresponding type declarations.
-    declare namespace Strings {
-        let a: string;
-        let b: string;
-    }
-    
-==== out/bar.d.ts (0 errors) ====
-    export = Bar;
-    declare class Bar {
-    }
-    

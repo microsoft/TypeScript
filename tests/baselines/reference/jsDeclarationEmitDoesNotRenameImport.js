@@ -46,7 +46,7 @@ declare class Test {
 //// [index.d.ts]
 export default X;
 export type Options = {
-    test?: typeof import("Test").default | undefined;
+    test?: typeof import("./Test.js").default | undefined;
 };
 /**
  * @typedef {Object} Options
@@ -57,49 +57,6 @@ declare class X extends Test {
      * @param {Options} options
      */
     constructor(options: Options);
-    test: import("Test").default | undefined;
+    test: import("./Test.js").default | undefined;
 }
 import Test from './test/Test.js';
-
-
-//// [DtsFileErrors]
-
-
-index.d.ts(3,26): error TS2307: Cannot find module 'Test' or its corresponding type declarations.
-index.d.ts(14,18): error TS2307: Cannot find module 'Test' or its corresponding type declarations.
-
-
-==== test/Test.d.ts (0 errors) ====
-    export default Test;
-    /** @module test/Test */
-    declare class Test {
-    }
-    
-==== Test.d.ts (0 errors) ====
-    export default Test;
-    /** @module Test */
-    declare class Test {
-    }
-    
-==== index.d.ts (2 errors) ====
-    export default X;
-    export type Options = {
-        test?: typeof import("Test").default | undefined;
-                             ~~~~~~
-!!! error TS2307: Cannot find module 'Test' or its corresponding type declarations.
-    };
-    /**
-     * @typedef {Object} Options
-     * @property {typeof import("./Test.js").default} [test]
-     */
-    declare class X extends Test {
-        /**
-         * @param {Options} options
-         */
-        constructor(options: Options);
-        test: import("Test").default | undefined;
-                     ~~~~~~
-!!! error TS2307: Cannot find module 'Test' or its corresponding type declarations.
-    }
-    import Test from './test/Test.js';
-    
