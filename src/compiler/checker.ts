@@ -31620,7 +31620,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 if (!types) {
-                    return;
+                    return unknownType;
                 }
                 if (types.length === 1) {
                     return types[0];
