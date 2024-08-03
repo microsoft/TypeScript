@@ -1,0 +1,218 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/intraExpressionInferencesInContextSensitive1.ts] ////
+
+=== intraExpressionInferencesInContextSensitive1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60720
+
+type Options<TContext> = {
+>Options : Symbol(Options, Decl(intraExpressionInferencesInContextSensitive1.ts, 0, 0))
+>TContext : Symbol(TContext, Decl(intraExpressionInferencesInContextSensitive1.ts, 2, 13))
+
+  onStart?: () => TContext;
+>onStart : Symbol(onStart, Decl(intraExpressionInferencesInContextSensitive1.ts, 2, 26))
+>TContext : Symbol(TContext, Decl(intraExpressionInferencesInContextSensitive1.ts, 2, 13))
+
+  onEnd?: (context: TContext) => void;
+>onEnd : Symbol(onEnd, Decl(intraExpressionInferencesInContextSensitive1.ts, 3, 27))
+>context : Symbol(context, Decl(intraExpressionInferencesInContextSensitive1.ts, 4, 11))
+>TContext : Symbol(TContext, Decl(intraExpressionInferencesInContextSensitive1.ts, 2, 13))
+
+};
+
+function create<TContext>(builder: (arg: boolean) => Options<TContext>) {
+>create : Symbol(create, Decl(intraExpressionInferencesInContextSensitive1.ts, 5, 2))
+>TContext : Symbol(TContext, Decl(intraExpressionInferencesInContextSensitive1.ts, 7, 16))
+>builder : Symbol(builder, Decl(intraExpressionInferencesInContextSensitive1.ts, 7, 26))
+>arg : Symbol(arg, Decl(intraExpressionInferencesInContextSensitive1.ts, 7, 36))
+>Options : Symbol(Options, Decl(intraExpressionInferencesInContextSensitive1.ts, 0, 0))
+>TContext : Symbol(TContext, Decl(intraExpressionInferencesInContextSensitive1.ts, 7, 16))
+
+  return builder(true);
+>builder : Symbol(builder, Decl(intraExpressionInferencesInContextSensitive1.ts, 7, 26))
+}
+
+create((arg: boolean) => ({
+>create : Symbol(create, Decl(intraExpressionInferencesInContextSensitive1.ts, 5, 2))
+>arg : Symbol(arg, Decl(intraExpressionInferencesInContextSensitive1.ts, 11, 8))
+
+  onStart: () => ({ time: new Date() }),
+>onStart : Symbol(onStart, Decl(intraExpressionInferencesInContextSensitive1.ts, 11, 27))
+>time : Symbol(time, Decl(intraExpressionInferencesInContextSensitive1.ts, 12, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  onEnd: (context) => {},
+>onEnd : Symbol(onEnd, Decl(intraExpressionInferencesInContextSensitive1.ts, 12, 40))
+>context : Symbol(context, Decl(intraExpressionInferencesInContextSensitive1.ts, 13, 10))
+
+}));
+
+create(() => ({
+>create : Symbol(create, Decl(intraExpressionInferencesInContextSensitive1.ts, 5, 2))
+
+  onStart: () => ({ time: new Date() }),
+>onStart : Symbol(onStart, Decl(intraExpressionInferencesInContextSensitive1.ts, 16, 15))
+>time : Symbol(time, Decl(intraExpressionInferencesInContextSensitive1.ts, 17, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  onEnd: (context) => {},
+>onEnd : Symbol(onEnd, Decl(intraExpressionInferencesInContextSensitive1.ts, 17, 40))
+>context : Symbol(context, Decl(intraExpressionInferencesInContextSensitive1.ts, 18, 10))
+
+}));
+
+create((arg) => ({
+>create : Symbol(create, Decl(intraExpressionInferencesInContextSensitive1.ts, 5, 2))
+>arg : Symbol(arg, Decl(intraExpressionInferencesInContextSensitive1.ts, 21, 8))
+
+  onStart: () => ({ time: new Date() }),
+>onStart : Symbol(onStart, Decl(intraExpressionInferencesInContextSensitive1.ts, 21, 18))
+>time : Symbol(time, Decl(intraExpressionInferencesInContextSensitive1.ts, 22, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  onEnd: (context) => {},
+>onEnd : Symbol(onEnd, Decl(intraExpressionInferencesInContextSensitive1.ts, 22, 40))
+>context : Symbol(context, Decl(intraExpressionInferencesInContextSensitive1.ts, 23, 10))
+
+}));
+
+// https://github.com/microsoft/TypeScript/issues/57021
+
+type Schema = Record<string, unknown>;
+>Schema : Symbol(Schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 24, 4))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type StepFunction<TSchema extends Schema = Schema> = (anything: unknown) => {
+>StepFunction : Symbol(StepFunction, Decl(intraExpressionInferencesInContextSensitive1.ts, 28, 38))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 30, 18))
+>Schema : Symbol(Schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 24, 4))
+>Schema : Symbol(Schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 24, 4))
+>anything : Symbol(anything, Decl(intraExpressionInferencesInContextSensitive1.ts, 30, 54))
+
+  readonly schema: TSchema;
+>schema : Symbol(schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 30, 77))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 30, 18))
+
+  readonly toAnswers?: (keys: keyof TSchema) => unknown;
+>toAnswers : Symbol(toAnswers, Decl(intraExpressionInferencesInContextSensitive1.ts, 31, 27))
+>keys : Symbol(keys, Decl(intraExpressionInferencesInContextSensitive1.ts, 32, 24))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 30, 18))
+
+};
+
+function step1<TSchema extends Schema = Schema>(
+>step1 : Symbol(step1, Decl(intraExpressionInferencesInContextSensitive1.ts, 33, 2))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 35, 15))
+>Schema : Symbol(Schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 24, 4))
+>Schema : Symbol(Schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 24, 4))
+
+  stepVal: StepFunction<TSchema>,
+>stepVal : Symbol(stepVal, Decl(intraExpressionInferencesInContextSensitive1.ts, 35, 48))
+>StepFunction : Symbol(StepFunction, Decl(intraExpressionInferencesInContextSensitive1.ts, 28, 38))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 35, 15))
+
+): StepFunction<TSchema> {
+>StepFunction : Symbol(StepFunction, Decl(intraExpressionInferencesInContextSensitive1.ts, 28, 38))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 35, 15))
+
+  return stepVal;
+>stepVal : Symbol(stepVal, Decl(intraExpressionInferencesInContextSensitive1.ts, 35, 48))
+}
+
+const stepResult1 = step1((_something) => ({
+>stepResult1 : Symbol(stepResult1, Decl(intraExpressionInferencesInContextSensitive1.ts, 41, 5))
+>step1 : Symbol(step1, Decl(intraExpressionInferencesInContextSensitive1.ts, 33, 2))
+>_something : Symbol(_something, Decl(intraExpressionInferencesInContextSensitive1.ts, 41, 27))
+
+  schema: {
+>schema : Symbol(schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 41, 44))
+
+    attribute: "anything",
+>attribute : Symbol(attribute, Decl(intraExpressionInferencesInContextSensitive1.ts, 42, 11))
+
+  },
+  toAnswers: (keys) => {
+>toAnswers : Symbol(toAnswers, Decl(intraExpressionInferencesInContextSensitive1.ts, 44, 4))
+>keys : Symbol(keys, Decl(intraExpressionInferencesInContextSensitive1.ts, 45, 14))
+
+    type Test = string extends typeof keys ? never : "true";
+>Test : Symbol(Test, Decl(intraExpressionInferencesInContextSensitive1.ts, 45, 24))
+>keys : Symbol(keys, Decl(intraExpressionInferencesInContextSensitive1.ts, 45, 14))
+
+    const test: Test = "true"; // ok
+>test : Symbol(test, Decl(intraExpressionInferencesInContextSensitive1.ts, 47, 9))
+>Test : Symbol(Test, Decl(intraExpressionInferencesInContextSensitive1.ts, 45, 24))
+
+    return { test };
+>test : Symbol(test, Decl(intraExpressionInferencesInContextSensitive1.ts, 48, 12))
+
+  },
+}));
+
+type StepFunction2<TSchema extends Schema = Schema> = (anything: unknown) => {
+>StepFunction2 : Symbol(StepFunction2, Decl(intraExpressionInferencesInContextSensitive1.ts, 50, 4))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 52, 19))
+>Schema : Symbol(Schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 24, 4))
+>Schema : Symbol(Schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 24, 4))
+>anything : Symbol(anything, Decl(intraExpressionInferencesInContextSensitive1.ts, 52, 55))
+
+  readonly schema: (thing: number) => TSchema;
+>schema : Symbol(schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 52, 78))
+>thing : Symbol(thing, Decl(intraExpressionInferencesInContextSensitive1.ts, 53, 20))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 52, 19))
+
+  readonly toAnswers?: (keys: keyof TSchema) => unknown;
+>toAnswers : Symbol(toAnswers, Decl(intraExpressionInferencesInContextSensitive1.ts, 53, 46))
+>keys : Symbol(keys, Decl(intraExpressionInferencesInContextSensitive1.ts, 54, 24))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 52, 19))
+
+};
+
+function step2<TSchema extends Schema = Schema>(
+>step2 : Symbol(step2, Decl(intraExpressionInferencesInContextSensitive1.ts, 55, 2))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 57, 15))
+>Schema : Symbol(Schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 24, 4))
+>Schema : Symbol(Schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 24, 4))
+
+  stepVal: StepFunction2<TSchema>,
+>stepVal : Symbol(stepVal, Decl(intraExpressionInferencesInContextSensitive1.ts, 57, 48))
+>StepFunction2 : Symbol(StepFunction2, Decl(intraExpressionInferencesInContextSensitive1.ts, 50, 4))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 57, 15))
+
+): StepFunction2<TSchema> {
+>StepFunction2 : Symbol(StepFunction2, Decl(intraExpressionInferencesInContextSensitive1.ts, 50, 4))
+>TSchema : Symbol(TSchema, Decl(intraExpressionInferencesInContextSensitive1.ts, 57, 15))
+
+  return stepVal;
+>stepVal : Symbol(stepVal, Decl(intraExpressionInferencesInContextSensitive1.ts, 57, 48))
+}
+
+const stepResult2 = step2((_something) => ({
+>stepResult2 : Symbol(stepResult2, Decl(intraExpressionInferencesInContextSensitive1.ts, 63, 5))
+>step2 : Symbol(step2, Decl(intraExpressionInferencesInContextSensitive1.ts, 55, 2))
+>_something : Symbol(_something, Decl(intraExpressionInferencesInContextSensitive1.ts, 63, 27))
+
+  schema: (thing) => ({
+>schema : Symbol(schema, Decl(intraExpressionInferencesInContextSensitive1.ts, 63, 44))
+>thing : Symbol(thing, Decl(intraExpressionInferencesInContextSensitive1.ts, 64, 11))
+
+    attribute: "anything",
+>attribute : Symbol(attribute, Decl(intraExpressionInferencesInContextSensitive1.ts, 64, 23))
+
+  }),
+  toAnswers: (keys) => {
+>toAnswers : Symbol(toAnswers, Decl(intraExpressionInferencesInContextSensitive1.ts, 66, 5))
+>keys : Symbol(keys, Decl(intraExpressionInferencesInContextSensitive1.ts, 67, 14))
+
+    type Test = string extends typeof keys ? never : "true";
+>Test : Symbol(Test, Decl(intraExpressionInferencesInContextSensitive1.ts, 67, 24))
+>keys : Symbol(keys, Decl(intraExpressionInferencesInContextSensitive1.ts, 67, 14))
+
+    const test: Test = "true"; // ok
+>test : Symbol(test, Decl(intraExpressionInferencesInContextSensitive1.ts, 69, 9))
+>Test : Symbol(Test, Decl(intraExpressionInferencesInContextSensitive1.ts, 67, 24))
+
+    return { test };
+>test : Symbol(test, Decl(intraExpressionInferencesInContextSensitive1.ts, 70, 12))
+
+  },
+}));
+

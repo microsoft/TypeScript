@@ -38938,7 +38938,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getTypeOfSymbol(getSymbolOfDeclaration(node));
     }
 
-    function contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | ArrowFunction | MethodDeclaration, checkMode?: CheckMode) {
+    function contextuallyCheckFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | ArrowFunction | MethodDeclaration, checkMode = CheckMode.Normal) {
         const links = getNodeLinks(node);
         // Check if function expression is contextually typed and assign parameter types if so.
         if (!(links.flags & NodeCheckFlags.ContextChecked)) {
@@ -38956,7 +38956,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (contextualSignature) {
                         const inferenceContext = getInferenceContext(node);
                         let instantiatedContextualSignature: Signature | undefined;
-                        if (checkMode && checkMode & CheckMode.Inferential) {
+                        if (checkMode & CheckMode.Inferential) {
                             inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
                             const restType = getEffectiveRestType(contextualSignature);
                             if (restType && restType.flags & TypeFlags.TypeParameter) {
@@ -38974,12 +38974,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 else if (contextualSignature && !node.typeParameters && contextualSignature.parameters.length > node.parameters.length) {
                     const inferenceContext = getInferenceContext(node);
-                    if (checkMode && checkMode & CheckMode.Inferential) {
+                    if (checkMode & CheckMode.Inferential) {
                         inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
                     }
                 }
                 if (contextualSignature && !getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
-                    const returnType = getReturnTypeFromBody(node, checkMode);
+                    let contextualReturnType: Type;
+                    let returnType: Type;
+                    
+                    if (checkMode & CheckMode.Inferential && couldContainTypeVariables(contextualReturnType = getReturnTypeOfSignature(contextualSignature))) {
+                        const inferenceContext = getInferenceContext(node);
+                        const isReturnContextSensitive = !!node.body && (node.body.kind === SyntaxKind.Block ? forEachReturnStatement(node.body as Block, statement => !!statement.expression && isContextSensitive(statement.expression)) : isContextSensitive(node.body));
+                        returnType = getReturnTypeFromBody(node, checkMode | (isReturnContextSensitive ? CheckMode.SkipContextSensitive : 0));
+                        inferTypes(inferenceContext!.inferences, returnType, contextualReturnType);
+                        if (isReturnContextSensitive) {
+                            returnType = getReturnTypeFromBody(node, checkMode);
+                        }
+                    } else {
+                        returnType = getReturnTypeFromBody(node, checkMode);
+                    }
+                    
                     if (!signature.resolvedReturnType) {
                         signature.resolvedReturnType = returnType;
                     }
