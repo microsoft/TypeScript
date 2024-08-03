@@ -19,3 +19,7 @@ const result = test1({
 declare function test2(a: { type: "foo" | "bar" } & { type: any }): void;
 
 test2({ type: "foo" });
+
+// https://github.com/microsoft/TypeScript/issues/59473
+
+const x: { ml: any } & { ml: 'edge' } = { ml: 'edge' }

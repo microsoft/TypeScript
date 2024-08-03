@@ -53,3 +53,11 @@ test2({ type: "foo" });
 >test2 : Symbol(test2, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 13, 3))
 >type : Symbol(type, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 17, 7))
 
+// https://github.com/microsoft/TypeScript/issues/59473
+
+const x: { ml: any } & { ml: 'edge' } = { ml: 'edge' }
+>x : Symbol(x, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 5))
+>ml : Symbol(ml, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 10))
+>ml : Symbol(ml, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 24))
+>ml : Symbol(ml, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix3.ts, 21, 41))
+

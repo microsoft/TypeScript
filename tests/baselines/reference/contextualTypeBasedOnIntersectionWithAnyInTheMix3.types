@@ -90,3 +90,18 @@ test2({ type: "foo" });
 >"foo" : "foo"
 >      : ^^^^^
 
+// https://github.com/microsoft/TypeScript/issues/59473
+
+const x: { ml: any } & { ml: 'edge' } = { ml: 'edge' }
+>x : { ml: any; } & { ml: "edge"; }
+>  : ^^^^^^   ^^^^^^^^^^^^      ^^^
+>ml : any
+>ml : "edge"
+>   : ^^^^^^
+>{ ml: 'edge' } : { ml: "edge"; }
+>               : ^^^^^^^^^^^^^^^
+>ml : "edge"
+>   : ^^^^^^
+>'edge' : "edge"
+>       : ^^^^^^
+
