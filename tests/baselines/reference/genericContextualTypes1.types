@@ -249,11 +249,11 @@ const arrayMap = <T, U>(f: (x: T) => U) => (a: T[]) => a.map(f);
 >a.map(f) : U[]
 >         : ^^^
 >a.map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
->      : ^^^^^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^  
+>      : ^^^^^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
 >a : T[]
 >  : ^^^
 >map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
->    : ^^^^^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^  
+>    : ^^^^^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
 >f : (x: T) => U
 >  : ^ ^^ ^^^^^ 
 
@@ -273,11 +273,11 @@ const arrayFilter = <T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f);
 >a.filter(f) : T[]
 >            : ^^^
 >a.filter : { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[]; }
->         : ^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^^  ^^^
+>         : ^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^
 >a : T[]
 >  : ^^^
 >filter : { <S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; (predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[]; }
->       : ^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^  ^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^^  ^^^
+>       : ^^^ ^^^^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^
 >f : (x: T) => boolean
 >  : ^ ^^ ^^^^^       
 

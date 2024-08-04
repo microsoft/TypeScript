@@ -59,7 +59,7 @@ declare const test: TestInterface;
 
 const { prepare, ...rest } = setupImages(test, ["image"]);
 >prepare : () => { type: "image"; }
->        : ^^^^^^        ^^^^^^^   
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >rest : { image: File; }
 >     : ^^^^^^^^^^^^^^^^
 >setupImages(test, ["image"]) : SetupImages<"image">

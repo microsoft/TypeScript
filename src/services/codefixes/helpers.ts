@@ -105,6 +105,7 @@ import {
     TypeFlags,
     TypeNode,
     TypeParameterDeclaration,
+    TypePredicate,
     unescapeLeadingUnderscores,
     UnionType,
     UserPreferences,
@@ -602,6 +603,20 @@ export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: 
     return getSynthesizedDeepClone(typeNode);
 }
 
+/** @internal */
+export function typePredicateToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, typePredicate: TypePredicate, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+    let typePredicateNode = checker.typePredicateToTypePredicateNode(typePredicate, contextNode, flags, tracker);
+    if (typePredicateNode?.type && isImportTypeNode(typePredicateNode.type)) {
+        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typePredicateNode.type, scriptTarget);
+        if (importableReference) {
+            importSymbols(importAdder, importableReference.symbols);
+            typePredicateNode = factory.updateTypePredicateNode(typePredicateNode, typePredicateNode.assertsModifier, typePredicateNode.parameterName, importableReference.typeNode);
+        }
+    }
+    // Ensure nodes are fresh so they can have different positions when going through formatting.
+    return getSynthesizedDeepClone(typePredicateNode);
+}
+
 function typeContainsTypeParameter(type: Type) {
     if (type.isUnionOrIntersection()) {
         return type.types.some(typeContainsTypeParameter);
@@ -899,6 +914,12 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
         if (isLiteralImportTypeNode(node) && node.qualifier) {
             // Symbol for the left-most thing after the dot
             const firstIdentifier = getFirstIdentifier(node.qualifier);
+            if (!firstIdentifier.symbol) {
+                // if symbol is missing then this doesn't come from a synthesized import type node
+                // it has to be an import type node authored by the user and thus it has to be valid
+                // it can't refer to reserved internal symbol names and such
+                return visitEachChild(node, visit, /*context*/ undefined);
+            }
             const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
             const qualifier = name !== firstIdentifier.text
                 ? replaceFirstIdentifierOfEntityName(node.qualifier, factory.createIdentifier(name))

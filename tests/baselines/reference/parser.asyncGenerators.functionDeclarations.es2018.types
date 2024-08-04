@@ -142,8 +142,8 @@ async function * f15() {
 }
 === yieldStarWithValueIsOk.ts ===
 async function * f16() {
->f16 : () => AsyncGenerator<any, void, undefined>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f16 : () => AsyncGenerator<any, void, any>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield * [];
 >yield * [] : any
