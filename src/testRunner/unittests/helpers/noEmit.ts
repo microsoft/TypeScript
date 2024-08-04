@@ -373,7 +373,7 @@ export function forEachNoEmitTsc(commandType: string[]) {
                 {
                     caption: "Introduce error",
                     edit: fs => fs.writeFileSync("/home/src/projects/project/a.ts", aTsContent),
-                    discrepancyExplanation: compilerOptions.incremental && subScenario.indexOf("multiFile/syntax") !== -1 ? () => [
+                    discrepancyExplanation: compilerOptions.incremental && subScenario.includes("multiFile/syntax") ? () => [
                         "DtsSignature of ts files: Incremental build have dts signature for ts files from emit so its not d.ts or same as file version",
                     ] : undefined,
                 },
@@ -382,7 +382,7 @@ export function forEachNoEmitTsc(commandType: string[]) {
                     edit: noop,
                     commandLineArgs: [...commandType, "/home/src/projects/project"],
                 },
-                compilerOptions.incremental && subScenario.indexOf("multiFile/syntax") !== -1 ? {
+                compilerOptions.incremental && subScenario.includes("multiFile/syntax") ? {
                     ...noChangeRun,
                     discrepancyExplanation: () => [
                         "DtsSignature of files: Incremental build have dts signature for ts files from emit so its not d.ts or same as file version",

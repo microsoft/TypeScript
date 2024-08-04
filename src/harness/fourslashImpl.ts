@@ -5208,7 +5208,7 @@ function highlightDifferenceBetweenStrings(source: string, target: string) {
             range.start + 1 + additionalOffset,
             range.start + range.length + 1 + additionalOffset,
         );
-        const after = emTarget.slice(range.start + range.length + 1 + additionalOffset, emTarget.length);
+        const after = emTarget.slice(range.start + range.length + 1 + additionalOffset);
         emTarget = before + lhs + between + rhs + after;
     });
     return emTarget;

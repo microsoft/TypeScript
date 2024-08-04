@@ -321,7 +321,7 @@ function verifyTscEditDiscrepancies({
                 incrementalReadableBuildInfo.affectedFilesPendingEmit?.forEach(([actualFileOrArray]) => {
                     const actualFile = ts.isString(actualFileOrArray) ? actualFileOrArray : actualFileOrArray[0];
                     if (
-                        !ts.find(
+                        !ts.some(
                             (cleanReadableBuildInfo as ReadableIncrementalMultiFileEmitBuildInfo)?.affectedFilesPendingEmit,
                             ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
                         )
@@ -351,7 +351,7 @@ function verifyTscEditDiscrepancies({
             const readableCleanBuildInfo = cleanReadableBuildInfo as ReadableIncrementalBuildInfo | undefined;
             readableIncrementalBuildInfo?.changeFileSet?.forEach(actualFile => {
                 if (
-                    !ts.find(
+                    !ts.some(
                         readableCleanBuildInfo?.changeFileSet,
                         expectedFile => actualFile === expectedFile,
                     )
