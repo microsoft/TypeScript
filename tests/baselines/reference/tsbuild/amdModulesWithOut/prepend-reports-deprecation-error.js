@@ -294,19 +294,19 @@ sourceFile:file4.ts
   "semanticDiagnosticsPerFile": [
     [
       "../../lib/lib.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "../lib/module.d.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./file3.ts",
-      "not cached"
+      "not cached or not changed"
     ],
     [
       "./file4.ts",
-      "not cached"
+      "not cached or not changed"
     ]
   ],
   "outSignature": "-23302177839-declare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n",

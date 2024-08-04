@@ -166,6 +166,7 @@
           "kind": "string",
           "kindModifiers": "",
           "sortText": "11",
+          "commitCharacters": [],
           "displayParts": [
             {
               "text": "123",
@@ -178,6 +179,7 @@
           "kind": "string",
           "kindModifiers": "",
           "sortText": "11",
+          "commitCharacters": [],
           "displayParts": [
             {
               "text": "456",
@@ -3558,6 +3560,11 @@
           "kindModifiers": "",
           "displayParts": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

@@ -486,8 +486,8 @@ export function updateMissingFilePathsWatch(
 }
 
 /** @internal */
-export interface WildcardDirectoryWatcher {
-    watcher: FileWatcher;
+export interface WildcardDirectoryWatcher<T extends FileWatcher = FileWatcher> {
+    watcher: T;
     flags: WatchDirectoryFlags;
 }
 
@@ -499,10 +499,10 @@ export interface WildcardDirectoryWatcher {
  *
  * @internal
  */
-export function updateWatchingWildcardDirectories(
-    existingWatchedForWildcards: Map<string, WildcardDirectoryWatcher>,
+export function updateWatchingWildcardDirectories<T extends FileWatcher>(
+    existingWatchedForWildcards: Map<string, WildcardDirectoryWatcher<T>>,
     wildcardDirectories: MapLike<WatchDirectoryFlags> | undefined,
-    watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher,
+    watchDirectory: (directory: string, flags: WatchDirectoryFlags) => T,
 ) {
     if (wildcardDirectories) {
         mutateMap(
@@ -522,7 +522,7 @@ export function updateWatchingWildcardDirectories(
         clearMap(existingWatchedForWildcards, closeFileWatcherOf);
     }
 
-    function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatcher {
+    function createWildcardDirectoryWatcher(directory: string, flags: WatchDirectoryFlags): WildcardDirectoryWatcher<T> {
         // Create new watch and recursive info
         return {
             watcher: watchDirectory(directory, flags),
@@ -530,7 +530,7 @@ export function updateWatchingWildcardDirectories(
         };
     }
 
-    function updateWildcardDirectoryWatcher(existingWatcher: WildcardDirectoryWatcher, flags: WatchDirectoryFlags, directory: string) {
+    function updateWildcardDirectoryWatcher(existingWatcher: WildcardDirectoryWatcher<T>, flags: WatchDirectoryFlags, directory: string) {
         // Watcher needs to be updated if the recursive flags dont match
         if (existingWatcher.flags === flags) {
             return;

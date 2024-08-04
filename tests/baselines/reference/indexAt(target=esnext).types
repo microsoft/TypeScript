@@ -4,14 +4,14 @@
 [0].at(0);
 >[0].at(0) : number
 >          : ^^^^^^
->[0].at : (index: number) => number | undefined
->       : ^     ^^      ^^^^^^^^^^^            
+>[0].at : (index: number) => number
+>       : ^     ^^      ^^^^^^^^^^^
 >[0] : number[]
 >    : ^^^^^^^^
 >0 : 0
 >  : ^
->at : (index: number) => number | undefined
->   : ^     ^^      ^^^^^^^^^^^            
+>at : (index: number) => number
+>   : ^     ^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 

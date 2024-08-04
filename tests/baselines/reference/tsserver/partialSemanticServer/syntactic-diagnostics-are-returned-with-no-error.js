@@ -191,8 +191,7 @@ Info seq  [hh:mm:ss:mss] event:
               }
             ]
           }
-        ],
-        "duration": *
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -201,7 +200,15 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 3
+        "request_seq": 3,
+        "performanceData": {
+          "diagnosticsDuration": [
+            {
+              "syntaxDiag": *,
+              "file": "/user/username/projects/myproject/a.ts"
+            }
+          ]
+        }
       }
     }
 After running Timeout callback:: count: 0

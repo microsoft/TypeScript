@@ -218,7 +218,7 @@ No shapes updated in the builder::
 
 
 
-Change:: incremental-declaration-doesnt-change
+Change:: Fix error
 Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";

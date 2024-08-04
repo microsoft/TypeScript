@@ -117,7 +117,7 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
 
         const declarationPath = outPath ?
             removeFileExtension(outPath) + Extension.Dts :
-            getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
+            getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), program);
         if (declarationPath === undefined) return undefined;
 
         const newLoc = getDocumentPositionMapper(declarationPath, info.fileName).getGeneratedPosition(info);
