@@ -37,7 +37,7 @@ export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
-    /** @type {any} */ (eslintPluginUnicorn.configs["flat/recommended"]),
+    eslintPluginUnicorn.configs["flat/recommended"],
     {
         plugins: {
             local: {
