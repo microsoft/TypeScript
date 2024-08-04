@@ -12224,13 +12224,8 @@ interface Performance {
     clearResourceTimings(): void;
     getEntries(): any;
     getEntriesByName(name: string, entryType?: string): any;
-    getEntriesByType(entryType: 'element'): PerformanceElementTiming;
-    getEntriesByType(entryType: 'event'): PerformanceEventTiming;
     getEntriesByType(entryType: 'first-input'): PerformanceEventTiming;
-    getEntriesByType(entryType: 'largest-contentful-paint'): LargestContentfulPaint;
-    getEntriesByType(entryType: 'layout-shift'): LayoutShift;
     getEntriesByType(entryType: 'long-animation-frame'): PerformanceLongAnimationFrameTiming;
-    getEntriesByType(entryType: 'longtask'): PerformanceLongTaskTiming;
     getEntriesByType(entryType: 'mark'): PerformanceMark;
     getEntriesByType(entryType: 'measure'): PerformanceMeasure;
     getEntriesByType(entryType: 'navigation'): PerformanceNavigationTiming;
