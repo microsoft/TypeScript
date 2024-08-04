@@ -1,16 +1,36 @@
 logicalOrOperatorWithEveryType.ts(21,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(25,11): error TS2873: This kind of expression is always falsy.
+logicalOrOperatorWithEveryType.ts(26,12): error TS2873: This kind of expression is always falsy.
 logicalOrOperatorWithEveryType.ts(32,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(36,11): error TS2873: This kind of expression is always falsy.
+logicalOrOperatorWithEveryType.ts(37,11): error TS2873: This kind of expression is always falsy.
 logicalOrOperatorWithEveryType.ts(43,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(47,11): error TS2873: This kind of expression is always falsy.
+logicalOrOperatorWithEveryType.ts(48,12): error TS2873: This kind of expression is always falsy.
 logicalOrOperatorWithEveryType.ts(54,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(58,11): error TS2873: This kind of expression is always falsy.
+logicalOrOperatorWithEveryType.ts(59,12): error TS2873: This kind of expression is always falsy.
 logicalOrOperatorWithEveryType.ts(65,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(69,11): error TS2873: This kind of expression is always falsy.
+logicalOrOperatorWithEveryType.ts(70,12): error TS2873: This kind of expression is always falsy.
 logicalOrOperatorWithEveryType.ts(76,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(80,11): error TS2873: This kind of expression is always falsy.
+logicalOrOperatorWithEveryType.ts(81,12): error TS2873: This kind of expression is always falsy.
 logicalOrOperatorWithEveryType.ts(87,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(91,11): error TS2873: This kind of expression is always falsy.
+logicalOrOperatorWithEveryType.ts(92,12): error TS2873: This kind of expression is always falsy.
 logicalOrOperatorWithEveryType.ts(98,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(102,11): error TS2873: This kind of expression is always falsy.
+logicalOrOperatorWithEveryType.ts(103,12): error TS2873: This kind of expression is always falsy.
 logicalOrOperatorWithEveryType.ts(109,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(113,11): error TS2873: This kind of expression is always falsy.
+logicalOrOperatorWithEveryType.ts(114,12): error TS2873: This kind of expression is always falsy.
 logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+logicalOrOperatorWithEveryType.ts(124,11): error TS2873: This kind of expression is always falsy.
+logicalOrOperatorWithEveryType.ts(125,12): error TS2873: This kind of expression is always falsy.
 
 
-==== logicalOrOperatorWithEveryType.ts (10 errors) ====
+==== logicalOrOperatorWithEveryType.ts (30 errors) ====
     // The || operator permits the operands to be of any type.
     // If the || expression is not contextually typed, the right operand is contextually typed
     // by the type of the left operand and the result is of the best common type of the two
@@ -38,7 +58,11 @@ logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type '
     var ra7 = a7 || a1;         // object    || any is any
     var ra8 = a8 || a1;         // array     || any is any
     var ra9 = null || a1;       // null      || any is any
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var ra10 = undefined || a1; // undefined || any is any
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rb1 = a1 || a2;         // any       || boolean is any
     var rb2 = a2 || a2;         // boolean   || boolean is boolean
@@ -51,7 +75,11 @@ logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type '
     var rb7 = a7 || a2;         // object    || boolean is object | boolean
     var rb8 = a8 || a2;         // array     || boolean is array | boolean
     var rb9 = null || a2;       // null      || boolean is boolean
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rb10= undefined || a2;  // undefined || boolean is boolean
+              ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rc1 = a1 || a3;         // any       || number is any
     var rc2 = a2 || a3;         // boolean   || number is boolean | number
@@ -64,7 +92,11 @@ logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type '
     var rc7 = a7 || a3;         // object    || number is object | number
     var rc8 = a8 || a3;         // array     || number is array | number
     var rc9 = null || a3;       // null      || number is number
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rc10 = undefined || a3; // undefined || number is number
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rd1 = a1 || a4;         // any       || string is any
     var rd2 = a2 || a4;         // boolean   || string is boolean | string
@@ -77,7 +109,11 @@ logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type '
     var rd7 = a7 || a4;         // object    || string is object | string
     var rd8 = a8 || a4;         // array     || string is array | string
     var rd9 = null || a4;       // null      || string is string
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rd10 = undefined || a4; // undefined || string is string
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var re1 = a1 || a5;         // any       || void is any
     var re2 = a2 || a5;         // boolean   || void is boolean | void
@@ -90,7 +126,11 @@ logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type '
     var re7 = a7 || a5;         // object    || void is object | void
     var re8 = a8 || a5;         // array     || void is array | void
     var re9 = null || a5;       // null      || void is void
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var re10 = undefined || a5; // undefined || void is void
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rg1 = a1 || a6;         // any       || enum is any
     var rg2 = a2 || a6;         // boolean   || enum is boolean | enum
@@ -103,7 +143,11 @@ logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type '
     var rg7 = a7 || a6;         // object    || enum is object | enum
     var rg8 = a8 || a6;         // array     || enum is array | enum
     var rg9 = null || a6;       // null      || enum is E
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rg10 = undefined || a6; // undefined || enum is E
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rh1 = a1 || a7;         // any       || object is any
     var rh2 = a2 || a7;         // boolean   || object is boolean | object
@@ -116,7 +160,11 @@ logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type '
     var rh7 = a7 || a7;         // object    || object is object
     var rh8 = a8 || a7;         // array     || object is array | object
     var rh9 = null || a7;       // null      || object is object
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rh10 = undefined || a7; // undefined || object is object
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var ri1 = a1 || a8;         // any       || array is any
     var ri2 = a2 || a8;         // boolean   || array is boolean | array
@@ -129,7 +177,11 @@ logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type '
     var ri7 = a7 || a8;         // object    || array is object | array
     var ri8 = a8 || a8;         // array     || array is array
     var ri9 = null || a8;       // null      || array is array
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var ri10 = undefined || a8; // undefined || array is array
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rj1 = a1 || null;         // any       || null is any
     var rj2 = a2 || null;         // boolean   || null is boolean
@@ -142,7 +194,11 @@ logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type '
     var rj7 = a7 || null;         // object    || null is object
     var rj8 = a8 || null;         // array     || null is array
     var rj9 = null || null;       // null      || null is any
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rj10 = undefined || null; // undefined || null is any
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.
     
     var rf1 = a1 || undefined;         // any       || undefined is any
     var rf2 = a2 || undefined;         // boolean   || undefined is boolean
@@ -155,4 +211,8 @@ logicalOrOperatorWithEveryType.ts(120,11): error TS1345: An expression of type '
     var rf7 = a7 || undefined;         // object    || undefined is object
     var rf8 = a8 || undefined;         // array     || undefined is array
     var rf9 = null || undefined;       // null      || undefined is any
+              ~~~~
+!!! error TS2873: This kind of expression is always falsy.
     var rf10 = undefined || undefined; // undefined || undefined is any
+               ~~~~~~~~~
+!!! error TS2873: This kind of expression is always falsy.

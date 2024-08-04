@@ -1103,8 +1103,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "dependency",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "dependency",
@@ -1123,8 +1123,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "dependency/lol",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "dependency/lol",
@@ -1152,6 +1152,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

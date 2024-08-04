@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/capturedShorthandPropertyAssignmentNoCheck.ts] ////
+
+=== capturedShorthandPropertyAssignmentNoCheck.ts ===
+const fns = [];
+>fns : Symbol(fns, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 0, 5))
+
+for (const value of [1, 2, 3]) {
+>value : Symbol(value, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 1, 10))
+
+    fns.push(() => ({ value }));
+>fns.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>fns : Symbol(fns, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 0, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 2, 21))
+}
+const result = fns.map(fn => fn());
+>result : Symbol(result, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 4, 5))
+>fns.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>fns : Symbol(fns, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 0, 5))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 4, 23))
+>fn : Symbol(fn, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 4, 23))
+
+console.log(result)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>result : Symbol(result, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 4, 5))
+

@@ -50,10 +50,10 @@ const y = x.method(); // usage flags `method` in `B` as circular and marks `y` a
 >  : ^^^^^^^^^^^^^^^^^^
 >x.method() : string | undefined
 >           : ^^^^^^^^^^^^^^^^^^
->x.method : () => string | (C<{}> extends C ? undefined : null)
->         : ^^^^^^          ^^^^^                              
+>x.method : () => string | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : C<{}>
 >  : ^^^^^
->method : () => string | (C<{}> extends C ? undefined : null)
->       : ^^^^^^          ^^^^^                              
+>method : () => string | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
 

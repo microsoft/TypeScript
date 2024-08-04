@@ -358,6 +358,9 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Invoking /users/username/projects/project/tsconfig.json:: wildcard for open scriptInfo:: /users/username/projects/project/a.ts
+Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/a.ts ProjectRootPath: /users/username/projects/project:: Result: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -398,6 +401,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 2
+5: /users/username/projects/project/tsconfig.json *deleted*
+6: *ensureProjectForOpenFiles* *deleted*
+7: /users/username/projects/project/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
+
 Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
@@ -419,8 +428,8 @@ ScriptInfos::
         /users/username/projects/project/tsconfig.json *default*
 
 Before running Timeout callback:: count: 2
-5: /users/username/projects/project/tsconfig.json
-6: *ensureProjectForOpenFiles*
+7: /users/username/projects/project/tsconfig.json
+8: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
@@ -490,8 +499,8 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 2
-7: /users/username/projects/project/tsconfig.json *new*
-8: *ensureProjectForOpenFiles* *new*
+9: /users/username/projects/project/tsconfig.json *new*
+10: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
@@ -526,9 +535,11 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 6,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Invoking /users/username/projects/project/tsconfig.json:: wildcard for open scriptInfo:: /users/username/projects/project/sub/a.ts
+Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/sub/a.ts ProjectRootPath: /users/username/projects/project:: Result: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/a.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -542,6 +553,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/tsconfig.json ProjectRootPath: /users/username/projects/project:: Result: undefined
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -550,16 +562,9 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/users/username/projects/project/sub/a.ts",
         "configFile": "/users/username/projects/project/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/users/username/projects/project/a.ts' not found.\n  The file is in the program because:\n    Matched by default include pattern '**/*'",
-            "code": 6053,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/project/tsconfig.json ProjectRootPath: /users/username/projects/project:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/sub/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/sub/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -612,8 +617,6 @@ After request
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/a.ts: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
@@ -634,6 +637,12 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project:
   {}
+
+Timeout callback:: count: 2
+9: /users/username/projects/project/tsconfig.json *deleted*
+10: *ensureProjectForOpenFiles* *deleted*
+11: /users/username/projects/project/tsconfig.json *new*
+12: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
@@ -660,8 +669,8 @@ ScriptInfos::
         /dev/null/inferredProject1* *default*
 
 Before running Timeout callback:: count: 2
-7: /users/username/projects/project/tsconfig.json
-8: *ensureProjectForOpenFiles*
+11: /users/username/projects/project/tsconfig.json
+12: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
@@ -727,8 +736,8 @@ export const a = 10;
 //// [/users/username/projects/project/a.ts] deleted
 
 Timeout callback:: count: 2
-13: /users/username/projects/project/tsconfig.json *new*
-14: *ensureProjectForOpenFiles* *new*
+17: /users/username/projects/project/tsconfig.json *new*
+18: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -755,21 +764,20 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 3
-13: /users/username/projects/project/tsconfig.json
-14: *ensureProjectForOpenFiles*
-15: checkOne *new*
+17: /users/username/projects/project/tsconfig.json
+18: *ensureProjectForOpenFiles*
+19: checkOne *new*
 
 Before running Timeout callback:: count: 3
-13: /users/username/projects/project/tsconfig.json
-14: *ensureProjectForOpenFiles*
-15: checkOne
+17: /users/username/projects/project/tsconfig.json
+18: *ensureProjectForOpenFiles*
+19: checkOne
 
-Invoking Timeout callback:: timeoutId:: 15:: checkOne
+Invoking Timeout callback:: timeoutId:: 19:: checkOne
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/sub/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/sub/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /users/username/projects/project/a.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/project/tsconfig.json projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -786,17 +794,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/users/username/projects/project/tsconfig.json",
-        "configFile": "/users/username/projects/project/tsconfig.json",
-        "diagnostics": []
-      }
-    }
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -818,8 +815,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/users/username/projects/project/a.ts:
-  {"pollingInterval":500}
 /users/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
 /users/username/projects/project/sub/jsconfig.json:
@@ -901,16 +896,16 @@ Info seq  [hh:mm:ss:mss] event:
 After running Immedidate callback:: count: 0
 
 Timeout callback:: count: 3
-13: /users/username/projects/project/tsconfig.json
-14: *ensureProjectForOpenFiles*
-16: checkOne *new*
+17: /users/username/projects/project/tsconfig.json
+18: *ensureProjectForOpenFiles*
+20: checkOne *new*
 
 Before running Timeout callback:: count: 3
-13: /users/username/projects/project/tsconfig.json
-14: *ensureProjectForOpenFiles*
-16: checkOne
+17: /users/username/projects/project/tsconfig.json
+18: *ensureProjectForOpenFiles*
+20: checkOne
 
-Invoking Timeout callback:: timeoutId:: 16:: checkOne
+Invoking Timeout callback:: timeoutId:: 20:: checkOne
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

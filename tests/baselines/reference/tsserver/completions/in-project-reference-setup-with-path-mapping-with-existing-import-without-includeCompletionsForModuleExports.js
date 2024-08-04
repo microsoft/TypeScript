@@ -835,14 +835,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true
@@ -1313,14 +1318,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -1802,14 +1812,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,
@@ -2304,14 +2319,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/user/username/projects/shared/src/index",
+            "hasAction": true,
             "data": {
               "exportName": "MyClass",
               "exportMapKey": "7 * MyClass ",
               "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       },
       "responseRequired": true,

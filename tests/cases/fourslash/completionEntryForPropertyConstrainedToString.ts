@@ -4,4 +4,4 @@
 ////
 //// test({ type: /*ts*/ })
 
-verify.completions({ marker: ["ts"], includes: ['"a"', '"b"'], isNewIdentifierLocation: false });
+verify.completions({ marker: ["ts"], includes: ['"a"', '"b"'], isNewIdentifierLocation: false, defaultCommitCharacters: [".", ",", ";"] });

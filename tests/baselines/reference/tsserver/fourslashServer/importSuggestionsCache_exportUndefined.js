@@ -1020,8 +1020,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/undefinedAlias",
+            "hasAction": true,
             "data": {
               "exportName": "export=",
               "exportMapKey": "1 * x ",
@@ -1040,6 +1040,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1743,8 +1748,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "",
             "sortText": "16",
-            "hasAction": true,
             "source": "/undefinedAlias",
+            "hasAction": true,
             "data": {
               "exportName": "export=",
               "exportMapKey": "1 * x ",
@@ -1763,6 +1768,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

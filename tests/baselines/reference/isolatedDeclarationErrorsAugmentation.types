@@ -52,7 +52,7 @@ export function child1(prototype: ParentThing) {
 === parent.ts ===
 import { child1 } from './child1'; // this import should still exist in some form in the output, since it augments this module
 >child1 : (prototype: ParentThing) => void
->       : ^         ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^         ^^           ^^^^^^^^^
 
 export class ParentThing implements ParentThing {}
 >ParentThing : ParentThing
@@ -62,7 +62,7 @@ child1(ParentThing.prototype);
 >child1(ParentThing.prototype) : void
 >                              : ^^^^
 >child1 : (prototype: ParentThing) => void
->       : ^         ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^         ^^           ^^^^^^^^^
 >ParentThing.prototype : ParentThing
 >                      : ^^^^^^^^^^^
 >ParentThing : typeof ParentThing

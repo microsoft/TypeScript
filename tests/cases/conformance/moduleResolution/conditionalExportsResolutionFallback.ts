@@ -1,3 +1,4 @@
+// @module: esnext
 // @moduleResolution: node16,nodenext,bundler
 // @traceResolution: true
 // @allowJs: true

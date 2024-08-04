@@ -34,17 +34,22 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
+
+  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+    Add a type annotation to the variable a.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","7752727223-const a = class { private p = 10; };"],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"pendingEmit":17,"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","7752727223-const a = class { private p = 10; };"],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"pendingEmit":17,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -73,9 +78,18 @@ Output::
         {
           "start": 6,
           "length": 1,
-          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "messageText": "Property 'p' of exported anonymous class type may not be private or protected.",
           "category": 1,
-          "code": 4094
+          "code": 4094,
+          "relatedInformation": [
+            {
+              "start": 6,
+              "length": 1,
+              "messageText": "Add a type annotation to the variable a.",
+              "category": 1,
+              "code": 9027
+            }
+          ]
         }
       ]
     ]
@@ -85,7 +99,7 @@ Output::
     17
   ],
   "version": "FakeTSVersion",
-  "size": 845
+  "size": 977
 }
 
 
@@ -375,17 +389,22 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
+
+  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+    Add a type annotation to the variable a.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","7752727223-const a = class { private p = 10; };"],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"pendingEmit":17,"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","7752727223-const a = class { private p = 10; };"],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"pendingEmit":17,"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -414,9 +433,18 @@ Output::
         {
           "start": 6,
           "length": 1,
-          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "messageText": "Property 'p' of exported anonymous class type may not be private or protected.",
           "category": 1,
-          "code": 4094
+          "code": 4094,
+          "relatedInformation": [
+            {
+              "start": 6,
+              "length": 1,
+              "messageText": "Add a type annotation to the variable a.",
+              "category": 1,
+              "code": 9027
+            }
+          ]
         }
       ]
     ]
@@ -426,7 +454,7 @@ Output::
     17
   ],
   "version": "FakeTSVersion",
-  "size": 845
+  "size": 977
 }
 
 
@@ -481,17 +509,22 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
+
+  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+    Add a type annotation to the variable a.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/home/src/projects/outFile.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","7752727223-const a = class { private p = 10; };"],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported class expression may not be private or protected.","category":1,"code":4094}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../../a/lib/lib.d.ts","./project/a.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","7752727223-const a = class { private p = 10; };"],"root":[2],"options":{"declaration":true,"outFile":"./outFile.js"},"emitDiagnosticsPerFile":[[2,[{"start":6,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":6,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -520,15 +553,24 @@ Output::
         {
           "start": 6,
           "length": 1,
-          "messageText": "Property 'p' of exported class expression may not be private or protected.",
+          "messageText": "Property 'p' of exported anonymous class type may not be private or protected.",
           "category": 1,
-          "code": 4094
+          "code": 4094,
+          "relatedInformation": [
+            {
+              "start": 6,
+              "length": 1,
+              "messageText": "Add a type annotation to the variable a.",
+              "category": 1,
+              "code": 9027
+            }
+          ]
         }
       ]
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 828
+  "size": 960
 }
 
 //// [/home/src/projects/outFile.js]
@@ -590,10 +632,15 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported class expression may not be private or protected.
+[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m const a = class { private p = 10; };
 [7m [0m [91m      ~[0m
+
+  [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m7[0m
+    [7m1[0m const a = class { private p = 10; };
+    [7m [0m [96m      ~[0m
+    Add a type annotation to the variable a.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 

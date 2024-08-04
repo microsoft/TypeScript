@@ -188,6 +188,15 @@ export default tseslint.config(
         },
     },
     {
+        files: ["scripts/**"],
+        languageOptions: {
+            parserOptions: {
+                tsconfigRootDir: __dirname,
+                project: "./scripts/tsconfig.json",
+            },
+        },
+    },
+    {
         files: ["src/**"],
         rules: {
             "@typescript-eslint/no-unnecessary-type-assertion": "error",

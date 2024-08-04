@@ -66,6 +66,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 5
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/react/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/react/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -113,6 +114,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -169,6 +171,9 @@ watchedFiles::
   {"pollingInterval":500}
 /node_modules/@types/react/index.d.ts: *new*
   {"pollingInterval":500}
+/node_modules/@types/react/package.json: *new*
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
 /tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -257,6 +262,9 @@ watchedFiles::
   {"pollingInterval":500}
 /node_modules/@types/react/index.d.ts:
   {"pollingInterval":500}
+/node_modules/@types/react/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
 /tsconfig.json:
   {"pollingInterval":2000}
 
@@ -1020,8 +1028,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@types/react/index",
+            "hasAction": true,
             "data": {
               "exportName": "useBlah",
               "exportMapKey": "7 * useBlah ",
@@ -1033,8 +1041,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@types/react/index",
+            "hasAction": true,
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
@@ -1053,6 +1061,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -1767,8 +1780,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@types/react/index",
+            "hasAction": true,
             "data": {
               "exportName": "useBlah",
               "exportMapKey": "7 * useBlah ",
@@ -1780,8 +1793,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@types/react/index",
+            "hasAction": true,
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
@@ -1800,6 +1813,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -4989,8 +5007,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@types/react/index",
+            "hasAction": true,
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
@@ -5002,8 +5020,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@types/react/index",
+            "hasAction": true,
             "data": {
               "exportName": "useYes",
               "exportMapKey": "6 * useYes ",
@@ -5022,6 +5040,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
@@ -5746,8 +5769,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@types/react/index",
+            "hasAction": true,
             "data": {
               "exportName": "useState",
               "exportMapKey": "8 * useState ",
@@ -5759,8 +5782,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "function",
             "kindModifiers": "export,declare",
             "sortText": "16",
-            "hasAction": true,
             "source": "/node_modules/@types/react/index",
+            "hasAction": true,
             "data": {
               "exportName": "useYes",
               "exportMapKey": "6 * useYes ",
@@ -5779,6 +5802,11 @@ Info seq  [hh:mm:ss:mss] response:
             "kindModifiers": "deprecated,declare",
             "sortText": "z15"
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }
