@@ -33667,10 +33667,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getEnclosingClassFromThisParameter(node: Node): InterfaceType | undefined {
+        // 'this' type for a node comes from, in priority order...
+        // 1. The type of a syntactic 'this' parameter in the enclosing function scope
         const thisParameter = getThisParameterFromNodeContext(node);
         let thisType = thisParameter?.type && getTypeFromTypeNode(thisParameter.type);
-        if (thisType && thisType.flags & TypeFlags.TypeParameter) {
-            thisType = getConstraintOfTypeParameter(thisType as TypeParameter);
+        if (thisType) {
+            // 2. The constraint of a type parameter used for an explicit 'this' parameter
+            if (thisType.flags & TypeFlags.TypeParameter) {
+                thisType = getConstraintOfTypeParameter(thisType as TypeParameter);
+            }
+        }
+        else {
+            // 3. The 'this' parameter of a contextual type
+            const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
+            if (isFunctionLike(thisContainer)) {
+                thisType = getContextualThisParameterType(thisContainer);
+            }
         }
         if (thisType && getObjectFlags(thisType) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) {
             return getTargetType(thisType) as InterfaceType;
@@ -44186,7 +44198,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 bothHelper(location, body);
                 return;
             }
-            const type = location === condExpr ? condType : checkTruthinessExpression(location);
+            const type = location === condExpr ? condType : checkExpression(location);
             if (type.flags & TypeFlags.EnumLiteral && isPropertyAccessExpression(location) && (getNodeLinks(location.expression).resolvedSymbol ?? unknownSymbol).flags & SymbolFlags.Enum) {
                 // EnumLiteral type at condition with known value is always truthy or always falsy, likely an error
                 error(location, Diagnostics.This_condition_will_always_return_0, !!(type as LiteralType).value ? "true" : "false");
@@ -47029,6 +47041,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 grammarErrorOnFirstToken(node, Diagnostics.Exports_and_export_assignments_are_not_permitted_in_module_augmentations);
                 break;
             case SyntaxKind.ImportEqualsDeclaration:
+                // import a = e.x; in module augmentation is ok, but not import a = require('fs)
+                if (isInternalModuleImportEqualsDeclaration(node)) break;
+                // falls through
             case SyntaxKind.ImportDeclaration:
                 grammarErrorOnFirstToken(node, Diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module);
                 break;
