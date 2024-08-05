@@ -8481,7 +8481,7 @@ export const enum OuterExpressionKinds {
     Assertions = TypeAssertions | NonNullAssertions,
     All = Parentheses | Assertions | PartiallyEmittedExpressions | ExpressionsWithTypeArguments,
 
-    ExcludeJSDocTypeAssertion = 1 << 5,
+    ExcludeJSDocTypeAssertion = 1 << 31,
 }
 
 /** @internal */
