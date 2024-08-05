@@ -6068,13 +6068,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * Same as expressionOrTypeToTypeNodeHelper, but also checks if the expression can be syntactically typed.
          */
         function expressionOrTypeToTypeNode(context: NodeBuilderContext, expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean) {
-            const oldFlags = saveFlags(context);
+            const restoreFlags = saveRestoreFlags(context);
             if (expr && !(context.internalFlags & InternalNodeBuilderFlags.NoSyntacticPrinter)) {
                 syntacticNodeBuilder.serializeTypeOfExpression(expr, context, addUndefined);
             }
             context.internalFlags |= InternalNodeBuilderFlags.NoSyntacticPrinter;
             const result = expressionOrTypeToTypeNodeHelper(context, expr, type, addUndefined);
-            oldFlags.restore();
+            restoreFlags();
             return result;
         }
         function expressionOrTypeToTypeNodeHelper(context: NodeBuilderContext, expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean) {
@@ -6195,11 +6195,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return context.encounteredError ? undefined : resultingNode;
         }
 
-        function saveFlags(context: NodeBuilderContext) {
+        function saveRestoreFlags(context: NodeBuilderContext) {
             const flags = context.flags;
             const internalFlags = context.internalFlags;
 
-            return { restore };
+            return restore;
 
             function restore() {
                 context.flags = flags;
@@ -6213,9 +6213,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
-            const savedFlags = saveFlags(context);
+            const restoreFlags = saveRestoreFlags(context);
             const typeNode = typeToTypeNodeWorker(type, context);
-            savedFlags.restore();
+            restoreFlags();
             return typeNode;
         }
 
@@ -6813,10 +6813,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return typeToTypeNodeHelper(getIntersectionType(types), context);
                 }
 
-                const savedFlags = saveFlags(context);
+                const restoreFlags = saveRestoreFlags(context);
                 context.flags |= NodeBuilderFlags.InObjectTypeLiteral;
                 const members = createTypeNodesFromResolvedType(resolved);
-                savedFlags.restore();
+                restoreFlags();
                 const typeLiteralNode = factory.createTypeLiteralNode(members);
                 context.approximateLength += 2;
                 setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
@@ -6897,10 +6897,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // the default outer type arguments), we don't show the group.
                             if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
                                 const typeArgumentSlice = mapToTypeNodes(typeArguments.slice(start, i), context);
-                                const flags = saveFlags(context);
+                                const restoreFlags = saveRestoreFlags(context);
                                 context.flags |= NodeBuilderFlags.ForbidIndexedAccessSymbolReferences;
                                 const ref = symbolToTypeNode(parent, context, SymbolFlags.Type, typeArgumentSlice) as TypeReferenceNode | ImportTypeNode;
-                                flags.restore();
+                                restoreFlags();
                                 resultType = !resultType ? ref : appendReferenceToType(resultType, ref as TypeReferenceNode);
                             }
                         }
@@ -6940,10 +6940,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                         typeArgumentNodes = mapToTypeNodes(typeArguments.slice(i, typeParameterCount), context);
                     }
-                    const flags = saveFlags(context);
+                    const restoreFlags = saveRestoreFlags(context);
                     context.flags |= NodeBuilderFlags.ForbidIndexedAccessSymbolReferences;
                     const finalRef = symbolToTypeNode(type.symbol, context, SymbolFlags.Type, typeArgumentNodes);
-                    flags.restore();
+                    restoreFlags();
                     return !resultType ? finalRef : appendReferenceToType(resultType, finalRef as TypeReferenceNode);
                 }
             }
@@ -7270,7 +7270,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // once while referring to different types. If so, regenerate the
                     // type node for each entry by that name with the
                     // `UseFullyQualifiedType` flag enabled.
-                    const savedContextFlags = saveFlags(context);
+                    const restoreFlags = saveRestoreFlags(context);
                     context.flags |= NodeBuilderFlags.UseFullyQualifiedType;
                     seenNames.forEach(types => {
                         if (!arrayIsHomogeneous(types, ([a], [b]) => typesAreSameReference(a, b))) {
@@ -7279,7 +7279,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                     });
-                    savedContextFlags.restore();
+                    restoreFlags();
                 }
 
                 return result;
@@ -7339,7 +7339,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
             }
 
-            const flags = saveFlags(context);
+            const restoreFlags = saveRestoreFlags(context);
             context.flags &= ~NodeBuilderFlags.SuppressAnyReturnType; // SuppressAnyReturnType should only apply to the signature `return` position
             // If the expanded parameter list had a variadic in a non-trailing position, don't expand it
             const parameters = (some(expandedParams, p => p !== expandedParams[expandedParams.length - 1] && !!(getCheckFlags(p) & CheckFlags.RestParameter)) ? signature.parameters : expandedParams).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor));
@@ -7347,7 +7347,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (thisParameter) {
                 parameters.unshift(thisParameter);
             }
-            flags.restore();
+            restoreFlags();
 
             const returnTypeNode = serializeReturnTypeForSignature(context, signature);
 
@@ -7586,13 +7586,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode | undefined): TypeParameterDeclaration {
-            const savedContextFlags = saveFlags(context);
+            const restoreFlags = saveRestoreFlags(context);
             context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a claimspace with a generic
             const modifiers = factory.createModifiersFromModifierFlags(getTypeParameterModifiers(type));
             const name = typeParameterToName(type, context);
             const defaultParameter = getDefaultFromTypeParameter(type);
             const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
-            savedContextFlags.restore();
+            restoreFlags();
             return factory.createTypeParameterDeclaration(modifiers, name, constraintNode, defaultParameterNode);
         }
 
@@ -8313,7 +8313,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function serializeTypeForDeclaration(context: NodeBuilderContext, declaration: Declaration | undefined, type: Type, symbol: Symbol) {
             const addUndefinedForParameter = declaration && (isParameter(declaration) || isJSDocParameterTag(declaration)) && requiresAddingImplicitUndefined(declaration);
             const enclosingDeclaration = context.enclosingDeclaration;
-            const oldFlags = saveFlags(context);
+            const restoreFlags = saveRestoreFlags(context);
             if (declaration && hasInferredType(declaration) && !(context.internalFlags & InternalNodeBuilderFlags.NoSyntacticPrinter)) {
                 syntacticNodeBuilder.serializeTypeOfDeclaration(declaration, context);
             }
@@ -8329,7 +8329,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const addUndefined = addUndefinedForParameter || !!(symbol.flags & SymbolFlags.Property && symbol.flags & SymbolFlags.Optional && isOptionalDeclaration(declWithExistingAnnotation) && (symbol as MappedSymbol).links?.mappedType && containsNonMissingUndefinedType(type));
                     const result = !isTypePredicateNode(existing) && tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndefined);
                     if (result) {
-                        oldFlags.restore();
+                        restoreFlags();
                         return result;
                     }
                 }
@@ -8345,7 +8345,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const expr = decl && isDeclarationWithPossibleInnerTypeNodeReuse(decl) ? getPossibleTypeNodeReuseExpression(decl) : undefined;
 
             const result = expressionOrTypeToTypeNode(context, expr, type, addUndefinedForParameter);
-            oldFlags.restore();
+            restoreFlags();
             return result;
         }
 
@@ -8361,7 +8361,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function serializeReturnTypeForSignature(context: NodeBuilderContext, signature: Signature) {
             const suppressAny = context.flags & NodeBuilderFlags.SuppressAnyReturnType;
-            const flags = saveFlags(context);
+            const restoreFlags = saveRestoreFlags(context);
             if (suppressAny) context.flags &= ~NodeBuilderFlags.SuppressAnyReturnType; // suppress only toplevel `any`s
             let returnTypeNode: TypeNode | undefined;
             const returnType = getReturnTypeOfSignature(signature);
@@ -8375,7 +8375,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (!suppressAny) {
                 returnTypeNode = factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
             }
-            flags.restore();
+            restoreFlags();
             return returnTypeNode;
         }
 
@@ -9630,7 +9630,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const typeParamDecls = map(typeParams, p => typeParameterToDeclaration(p, context));
                 const jsdocAliasDecl = symbol.declarations?.find(isJSDocTypeAlias);
                 const commentText = getTextOfJSDocComment(jsdocAliasDecl ? jsdocAliasDecl.comment || jsdocAliasDecl.parent.comment : undefined);
-                const oldFlags = saveFlags(context);
+                const restoreFlags = saveRestoreFlags(context);
                 context.flags |= NodeBuilderFlags.InTypeAlias;
                 const oldEnclosingDecl = context.enclosingDeclaration;
                 context.enclosingDeclaration = jsdocAliasDecl;
@@ -9645,7 +9645,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     ),
                     modifierFlags,
                 );
-                oldFlags.restore();
+                restoreFlags();
                 context.enclosingDeclaration = oldEnclosingDecl;
             }
 
@@ -10658,10 +10658,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             function getNameCandidateWorker(symbol: Symbol, localName: string) {
                 if (localName === InternalSymbolName.Default || localName === InternalSymbolName.Class || localName === InternalSymbolName.Function) {
-                    const flags = saveFlags(context);
+                    const restoreFlags = saveRestoreFlags(context);
                     context.flags |= NodeBuilderFlags.InInitialEntityName;
                     const nameCandidate = getNameOfSymbolAsWritten(symbol, context);
-                    flags.restore();
+                    restoreFlags();
                     localName = nameCandidate.length > 0 && isSingleOrDoubleQuote(nameCandidate.charCodeAt(0)) ? stripQuotes(nameCandidate) : nameCandidate;
                 }
                 if (localName === InternalSymbolName.Default) {

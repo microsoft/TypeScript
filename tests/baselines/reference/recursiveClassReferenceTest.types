@@ -34,7 +34,7 @@ declare module Sample.Thing {
   
   		getDomNode(): Element;
 >getDomNode : () => Element
->           : ^^^^^^^^^^^^^
+>           : ^^^^^^       
 		
 		addWidget(widgetId:string, widget:IWidget);
 >addWidget : (widgetId: string, widget: IWidget) => any

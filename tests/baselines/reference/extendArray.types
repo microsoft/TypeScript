@@ -36,7 +36,7 @@ declare module _Core {
 >collect : (fn: (e: _element) => _element[]) => any[]
 >        : ^  ^^                           ^^^^^     
 >fn : (e: _element) => _element[]
->   : ^ ^^^^^^^^^^^^^^^          
+>   : ^ ^^        ^^^^^          
 >e : _element
 >  : ^^^^^^^^
   }

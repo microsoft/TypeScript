@@ -11,7 +11,7 @@ function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean
 >path : string
 >     : ^^^^^^
 >accept : (stat: fs.Stats, name: string) => boolean
->       : ^    ^^^^^^^^^^^^    ^^      ^^^^^       
+>       : ^    ^^        ^^    ^^      ^^^^^       
 >stat : fs.Stats
 >     : ^^^^^^^^
 >fs : any
@@ -23,7 +23,7 @@ function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean
 >error : Error
 >      : ^^^^^
 >results : { name: string; stat: fs.Stats; }[]
->        : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^      ^^^^^^^^        ^^^^^
 >name : string
 >     : ^^^^^^
 >stat : fs.Stats

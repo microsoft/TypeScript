@@ -19,7 +19,7 @@ interface Query<T> {
 >item : T
 >     : ^
 >resultSelector : (outer: T, inner: U) => R
->               : ^     ^^ ^^     ^^ ^^^^^^
+>               : ^     ^^ ^^     ^^ ^^^^^ 
 >outer : T
 >      : ^
 >inner : U

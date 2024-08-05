@@ -31,7 +31,7 @@ declare module "m2" {
 
     function Z2(): X.I;
 >Z2 : () => X.I
->   : ^^^^^^^^^
+>   : ^^^^^^   
 >X : any
 >  : ^^^
 }

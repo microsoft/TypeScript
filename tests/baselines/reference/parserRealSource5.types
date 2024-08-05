@@ -285,7 +285,7 @@ module TypeScript {
 
     export function prePrintAST(ast: AST, parent: AST, walker: IAstWalker) {
 >prePrintAST : (ast: AST, parent: AST, walker: IAstWalker) => AST
->            : ^   ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^      ^^   ^^      ^^          ^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -335,7 +335,7 @@ module TypeScript {
 
     export function postPrintAST(ast: AST, parent: AST, walker: IAstWalker) {
 >postPrintAST : (ast: AST, parent: AST, walker: IAstWalker) => AST
->             : ^   ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^   ^^      ^^   ^^      ^^          ^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
