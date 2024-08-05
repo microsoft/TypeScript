@@ -8491,6 +8491,7 @@ export type OuterExpression =
     | SatisfiesExpression
     | AsExpression
     | NonNullExpression
+    | ExpressionWithTypeArguments
     | PartiallyEmittedExpression;
 
 /** @internal */
