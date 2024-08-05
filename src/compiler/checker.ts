@@ -31577,12 +31577,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(getCheckFlags(symbol) & CheckFlags.Mapped && !(symbol as MappedSymbol).links.type && findResolutionCycleStartIndex(symbol, TypeSystemPropertyName.Type) >= 0);
     }
 
-    function isFilteredOutMappedPropertyName(constraint: Type, propertyNameType: Type): boolean {
+    function isExcludedMappedPropertyName(constraint: Type, propertyNameType: Type): boolean {
         if (constraint.flags & TypeFlags.Conditional) {
             return !!(getReducedType(getTrueTypeFromConditionalType(constraint as ConditionalType)).flags & TypeFlags.Never) && isTypeAssignableTo(propertyNameType, (constraint as ConditionalType).extendsType);
         }
         if (constraint.flags & TypeFlags.Intersection) {
-            return some((constraint as IntersectionType).types, t => isFilteredOutMappedPropertyName(t, propertyNameType));
+            return some((constraint as IntersectionType).types, t => isExcludedMappedPropertyName(t, propertyNameType));
         }
         return false;
     }
@@ -31620,7 +31620,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 if (!types) {
-                    return unknownType;
+                    return;
                 }
                 if (types.length === 1) {
                     return types[0];
@@ -31638,15 +31638,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function appendContextualPropertyTypeConsitutent(types: Type[] | undefined, type: Type | undefined) {
         // any doesn't provide any contextual information but could spoil the overall result by nullifying contextual information provided by other intersection constituents
-        // at the same time, all types computed based on the contextual information provided by other consistuents are still assignable to any
-        return isTypeAny(type) ? types : append(types, type);
+        // so it gets replaced with `unknown` as `T & unknown` is just `T` and all types computed based on the contextual information provided by other consistuents are still assignable to any
+        return type ? append(types, type.flags & TypeFlags.Any ? unknownType : type) : types;
     }
 
     function getIndexedMappedTypeSubstitutedTypeOfContextualType(type: MappedType, name: __String, nameType: Type | undefined) {
         const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
         const constraint = getConstraintTypeFromMappedType(type);
         // special case for conditional types pretending to be negated types
-        if (isFilteredOutMappedPropertyName(constraint, propertyNameType)) {
+        if (isExcludedMappedPropertyName(constraint, propertyNameType)) {
             return;
         }
         const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
