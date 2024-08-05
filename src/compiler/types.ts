@@ -8476,11 +8476,12 @@ export const enum OuterExpressionKinds {
     TypeAssertions = 1 << 1,
     NonNullAssertions = 1 << 2,
     PartiallyEmittedExpressions = 1 << 3,
+    ExpressionsWithTypeArguments = 1 << 4,
 
     Assertions = TypeAssertions | NonNullAssertions,
-    All = Parentheses | Assertions | PartiallyEmittedExpressions,
+    All = Parentheses | Assertions | PartiallyEmittedExpressions | ExpressionsWithTypeArguments,
 
-    ExcludeJSDocTypeAssertion = 1 << 4,
+    ExcludeJSDocTypeAssertion = 1 << 5,
 }
 
 /** @internal */
