@@ -1,0 +1,17 @@
+assignmentToInstantiationExpression.ts(6,1): error TS2454: Variable 'getValue' is used before being assigned.
+
+
+==== assignmentToInstantiationExpression.ts (1 errors) ====
+    let obj: { fn?: <T>() => T } = {};
+    obj.fn<number> = () => 1234;
+    
+    
+    let getValue: <T>() => T;
+    getValue<number> = () => 1234;
+    ~~~~~~~~
+!!! error TS2454: Variable 'getValue' is used before being assigned.
+    
+    
+    let getValue2!: <T>() => T;
+    getValue2<number> = () => 1234;
+    
