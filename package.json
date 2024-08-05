@@ -52,8 +52,8 @@
         "@types/node": "latest",
         "@types/source-map-support": "^0.5.10",
         "@types/which": "^3.0.4",
-        "@typescript-eslint/rule-tester": "^8.0.0",
-        "@typescript-eslint/utils": "^8.0.0",
+        "@typescript-eslint/rule-tester": "^8.0.1",
+        "@typescript-eslint/utils": "^8.0.1",
         "azure-devops-node-api": "^14.0.1",
         "c8": "^10.1.2",
         "chai": "^4.5.0",
@@ -80,7 +80,7 @@
         "source-map-support": "^0.5.21",
         "tslib": "^2.6.3",
         "typescript": "^5.5.4",
-        "typescript-eslint": "^8.0.0",
+        "typescript-eslint": "^8.0.1",
         "which": "^3.0.1"
     },
     "overrides": {
