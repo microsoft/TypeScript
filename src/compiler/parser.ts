@@ -8801,7 +8801,6 @@ namespace Parser {
 
             const comment = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
             setParent(comment, parent);
-            setParentRecursive(comment, /*incremental*/ false);
 
             if (contextFlags & NodeFlags.JavaScriptFile) {
                 if (!jsDocDiagnostics) {
