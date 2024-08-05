@@ -1585,7 +1585,7 @@ type Pick<T, K extends keyof T> = {
 /**
  * Construct a type with a set of properties K of type T
  */
-type Record<K extends keyof any, T> = {
+type Record<K extends PropertyKey, T> = {
     [P in K]: T;
 };
 
@@ -1602,7 +1602,7 @@ type Extract<T, U> = T extends U ? T : never;
 /**
  * Construct a type with the properties of T except for those in type K.
  */
-type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+type Omit<T, K extends PropertyKey> = Pick<T, Exclude<keyof T, K>>;
 
 /**
  * Exclude null and undefined from T
