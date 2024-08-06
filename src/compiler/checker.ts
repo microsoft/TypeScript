@@ -31581,7 +31581,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (constraint.flags & TypeFlags.Conditional) {
             const type = constraint as ConditionalType;
             return !!(getReducedType(getTrueTypeFromConditionalType(type)).flags & TypeFlags.Never) &&
-                isTypeAssignableTo(getFalseTypeFromConditionalType(type), type.checkType) &&
+                getActualTypeVariable(getFalseTypeFromConditionalType(type)) === getActualTypeVariable(type.checkType) &&
                 isTypeAssignableTo(propertyNameType, type.extendsType);
         }
         if (constraint.flags & TypeFlags.Intersection) {
