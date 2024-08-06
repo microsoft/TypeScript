@@ -738,8 +738,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "property",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/someModule",
+            "hasAction": true,
             "data": {
               "exportName": "default",
               "exportMapKey": "10 * someModule ",
@@ -751,14 +751,19 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "/someModule",
+            "hasAction": true,
             "data": {
               "exportName": "someModule",
               "exportMapKey": "10 * someModule ",
               "fileName": "/someModule.ts"
             }
           }
+        ],
+        "defaultCommitCharacters": [
+          ".",
+          ",",
+          ";"
         ]
       }
     }

@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/impliedNodeFormatInterop1.ts] ////
+
+=== /node_modules/highlight.js/index.d.ts ===
+declare module "highlight.js" {
+>"highlight.js" : Symbol("highlight.js", Decl(index.d.ts, 0, 0))
+
+  export interface HighlightAPI {
+>HighlightAPI : Symbol(HighlightAPI, Decl(index.d.ts, 0, 31))
+
+    highlight(code: string): string;
+>highlight : Symbol(HighlightAPI.highlight, Decl(index.d.ts, 1, 33))
+>code : Symbol(code, Decl(index.d.ts, 2, 14))
+  }
+  const hljs: HighlightAPI;
+>hljs : Symbol(hljs, Decl(index.d.ts, 4, 7))
+>HighlightAPI : Symbol(HighlightAPI, Decl(index.d.ts, 0, 31))
+
+  export default hljs;
+>hljs : Symbol(hljs, Decl(index.d.ts, 4, 7))
+}
+
+=== /node_modules/highlight.js/lib/core.d.ts ===
+import hljs from "highlight.js";
+>hljs : Symbol(hljs, Decl(core.d.ts, 0, 6))
+
+export default hljs;
+>hljs : Symbol(hljs, Decl(core.d.ts, 0, 6))
+
+=== /index.ts ===
+import hljs from "highlight.js/lib/core";
+>hljs : Symbol(hljs, Decl(index.ts, 0, 6))
+
+hljs.highlight("code");
+>hljs.highlight : Symbol(HighlightAPI.highlight, Decl(index.d.ts, 1, 33))
+>hljs : Symbol(hljs, Decl(index.ts, 0, 6))
+>highlight : Symbol(HighlightAPI.highlight, Decl(index.d.ts, 1, 33))
+

@@ -486,7 +486,7 @@ type Projects = readonly Project[] | {
 /**
  * This helper function processes a list of projects and return the concatenated, sortd and deduplicated output of processing each project.
  */
-function combineProjectOutput<T, U>(
+function combineProjectOutput<T, U extends {}>(
     defaultValue: T,
     getValue: (path: Path) => T,
     projects: Projects,
@@ -1712,7 +1712,7 @@ export class Session<TMessage = string> implements EventSender {
                 const packageDirectory = fileName.substring(0, nodeModulesPathParts.packageRootIndex);
                 const packageJsonCache = project.getModuleResolutionCache()?.getPackageJsonInfoCache();
                 const compilerOptions = project.getCompilationSettings();
-                const packageJson = getPackageScopeForPath(getNormalizedAbsolutePath(packageDirectory + "/package.json", project.getCurrentDirectory()), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
+                const packageJson = getPackageScopeForPath(getNormalizedAbsolutePath(packageDirectory, project.getCurrentDirectory()), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
                 if (!packageJson) return undefined;
                 // Use fake options instead of actual compiler options to avoid following export map if the project uses node16 or nodenext -
                 // Mapping from an export map entry across packages is out of scope for now. Returned entrypoints will only be what can be
@@ -2452,43 +2452,13 @@ export class Session<TMessage = string> implements EventSender {
         const prefix = args.prefix || "";
         const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
             if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                const {
-                    name,
-                    kind,
-                    kindModifiers,
-                    sortText,
-                    insertText,
-                    filterText,
-                    replacementSpan,
-                    hasAction,
-                    source,
-                    sourceDisplay,
-                    labelDetails,
-                    isSnippet,
-                    isRecommended,
-                    isPackageJsonImport,
-                    isImportStatementCompletion,
-                    data,
-                } = entry;
-                const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
+                const convertedSpan = entry.replacementSpan ? toProtocolTextSpan(entry.replacementSpan, scriptInfo) : undefined;
                 // Use `hasAction || undefined` to avoid serializing `false`.
                 return {
-                    name,
-                    kind,
-                    kindModifiers,
-                    sortText,
-                    insertText,
-                    filterText,
+                    ...entry,
                     replacementSpan: convertedSpan,
-                    isSnippet,
-                    hasAction: hasAction || undefined,
-                    source,
-                    sourceDisplay,
-                    labelDetails,
-                    isRecommended,
-                    isPackageJsonImport,
-                    isImportStatementCompletion,
-                    data,
+                    hasAction: entry.hasAction || undefined,
+                    symbol: undefined,
                 };
             }
         });

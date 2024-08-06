@@ -47,6 +47,7 @@ import {
     isClassStaticBlockDeclaration,
     isDefaultImport,
     isExpressionStatement,
+    isFunctionDeclaration,
     isGeneratedIdentifier,
     isGeneratedPrivateIdentifier,
     isIdentifier,
@@ -321,7 +322,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 
     function addExportedFunctionDeclaration(node: FunctionDeclaration, name: ModuleExportName | undefined, isDefault: boolean) {
-        exportedFunctions.add(node);
+        exportedFunctions.add(getOriginalNode(node, isFunctionDeclaration));
         if (isDefault) {
             // export default function() { }
             // function x() { } + export { x as default };
