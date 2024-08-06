@@ -1,7 +1,8 @@
-import { findIndex, forEach } from "../compiler/core.js";
+import {
+    findIndex,
+} from "../compiler/core.js";
 import {
     CancellationToken,
-    Node,
     Program,
     SourceFile,
     Statement,
@@ -13,6 +14,7 @@ import {
     codefix,
     Debug,
     fileShouldUseJavaScriptRequire,
+    findAncestor,
     forEachChild,
     formatting,
     getQuotePreference,
@@ -67,8 +69,6 @@ function pasteEdits(
     }
 
     const statements: Statement[] = [];
-    const newStatements: Statement[] = [];
-
     let newText = targetFile.text;
     for (let i = pasteLocations.length - 1; i >= 0; i--) {
         const { pos, end } = pasteLocations[i];
@@ -111,38 +111,32 @@ function pasteEdits(
                 formatContext,
             };
 
-            for (const location of pasteLocations) {
-                const statementsInSourceFile = updatedFile.statements;
-                const startNodeIndex = findIndex(statementsInSourceFile, s => s.end > location.pos);
-                if (startNodeIndex === -1) return undefined;
-                const endNodeIndex = findIndex(statementsInSourceFile, s => s.end >= ( actualPastedText ? actualPastedText[0].length + location.pos : location.end ), startNodeIndex);
-                newStatements.push(...statementsInSourceFile.slice(startNodeIndex, endNodeIndex === -1 ? statementsInSourceFile.length : endNodeIndex + 1));
-                // if (actualPastedText) {
-                //     break;
-                // }
-            }
-            newStatements.forEach((statement, i) => {
-                forEachChild(statement, function cb(node) {
-                    if (isIdentifier(node) && !originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
-                        if (!actualPastedText && rangeContainsPosition({pos: pasteLocations[i].pos, end: pasteLocations[i].pos + pastedText[i].length}, node.getStart())) {
-                            importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
-                        }
-                        else if(actualPastedText && rangeContainsPosition({pos: pasteLocations[i].pos, end: pasteLocations[i].pos + actualPastedText[0].length}, node.getStart())) {
-                            /**
-                             * If actualPastedText is added at a position like, const t = 1;[||]
-                             * This can be true only for the first statement in `pastedText` because the rest will be added to newStatements as separate statements.
-                             */
-                            // if (i === 0 && statement.getStart() !== pasteLocations[0].pos) {
-                            //     if (rangeContainsPosition({pos: pasteLocations[0].pos, end: pasteLocations[0].pos + pastedText[0].length}, node.getStart())) {
-                            //         importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
-                            //     }
-                            // }
-                            // else {
-                                importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
-                            // }
-                        }
+            /**
+             * `updatedRanges` represent the new ranges that account for the offset changes caused by pasting new text and
+             * `offset` represents by how much the starting position of `pasteLocations` needs to be changed.
+             *
+             * We iterate over each updated range to get the node that wholly encloses the updated range. For each child of that node, it is checked if the
+             * identifier lies within the updated range and if it is not resolved, we try resolving it.
+             */
+            const updatedRanges: TextRange[] = [];
+            let offset = 0;
+            pasteLocations.forEach((location, i) => {
+                const deletionNeeded = location.pos === location.end ? 0 : location.end - location.pos + 1;
+                const textToBePasted = actualPastedText ? actualPastedText[0] : pastedText[i];
+                const startPos = location.pos - offset;
+                const endPos = startPos + textToBePasted.length - 1;
+                updatedRanges.push({ pos: startPos, end: endPos });
+                offset += deletionNeeded - textToBePasted.length;
+            });
+
+            updatedRanges.forEach(range => {
+                const enclosingNode = findAncestor(getTokenAtPosition(context.sourceFile, range.pos), cb => rangeContainsPosition({ pos: cb.pos, end: cb.end }, range.end));
+                if (!enclosingNode) return;
+                forEachChild(enclosingNode, function cb(node) {
+                    if (isIdentifier(node) && rangeContainsPosition(range, node.getStart()) && !originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
+                        importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
                     }
-                    node.forEachChild(cb);  
+                    node.forEachChild(cb);
                 });
             });
         }
