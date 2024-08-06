@@ -83,6 +83,7 @@ import {
     mapDefined,
     MapLike,
     matchPatternOrExact,
+    memoizeOne,
     min,
     ModuleDeclaration,
     ModuleKind,
@@ -127,6 +128,13 @@ import {
     UserPreferences,
 } from "./_namespaces/ts.js";
 
+const stringToRegex = memoizeOne((pattern: string) => {
+    try {
+        return new RegExp(pattern);
+    }
+    catch {}
+});
+
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 
 /** @internal */
@@ -144,11 +152,12 @@ export interface ModuleSpecifierPreferences {
      * @param syntaxImpliedNodeFormat Used when the import syntax implies ESM or CJS irrespective of the mode of the file.
      */
     getAllowedEndingsInPreferredOrder(syntaxImpliedNodeFormat?: ResolutionMode): ModuleSpecifierEnding[];
+    readonly excludeRegexes?: readonly string[];
 }
 
 /** @internal */
 export function getModuleSpecifierPreferences(
-    { importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences,
+    { importModuleSpecifierPreference, importModuleSpecifierEnding, autoImportSpecifierExcludeRegexes }: UserPreferences,
     host: Pick<ModuleSpecifierResolutionHost, "getDefaultResolutionModeForFile">,
     compilerOptions: CompilerOptions,
     importingSourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat">,
@@ -156,6 +165,7 @@ export function getModuleSpecifierPreferences(
 ): ModuleSpecifierPreferences {
     const filePreferredEnding = getPreferredEnding();
     return {
+        excludeRegexes: autoImportSpecifierExcludeRegexes,
         relativePreference: oldImportSpecifier !== undefined ? (isExternalModuleNameRelative(oldImportSpecifier) ?
             RelativePreference.Relative :
             RelativePreference.NonRelative) :
@@ -362,7 +372,13 @@ export function getModuleSpecifiersWithCacheInfo(
 ): ModuleSpecifierResult {
     let computedWithoutCache = false;
     const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol, checker);
-    if (ambient) return { kind: "ambient", moduleSpecifiers: [ambient], computedWithoutCache };
+    if (ambient) {
+        return {
+            kind: "ambient",
+            moduleSpecifiers: !(forAutoImport && isExcludedByRegex(ambient, userPreferences.autoImportSpecifierExcludeRegexes)) ? [ambient] : emptyArray,
+            computedWithoutCache,
+        };
+    }
 
     // eslint-disable-next-line prefer-const
     let [kind, specifiers, moduleSourceFile, modulePaths, cache] = tryGetModuleSpecifiersFromCacheWorker(
@@ -459,11 +475,13 @@ function computeModuleSpecifiers(
         const specifier = modulePath.isInNodeModules
             ? tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)
             : undefined;
-        nodeModulesSpecifiers = append(nodeModulesSpecifiers, specifier);
-        if (specifier && modulePath.isRedirect) {
-            // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
-            // not "@foo/bar/path/to/file"). No other specifier will be this good, so stop looking.
-            return { kind: "node_modules", moduleSpecifiers: nodeModulesSpecifiers!, computedWithoutCache: true };
+        if (specifier && !(forAutoImport && isExcludedByRegex(specifier, preferences.excludeRegexes))) {
+            nodeModulesSpecifiers = append(nodeModulesSpecifiers, specifier);
+            if (modulePath.isRedirect) {
+                // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
+                // not "@foo/bar/path/to/file"). No other specifier will be this good, so stop looking.
+                return { kind: "node_modules", moduleSpecifiers: nodeModulesSpecifiers, computedWithoutCache: true };
+            }
         }
 
         if (!specifier) {
@@ -476,7 +494,7 @@ function computeModuleSpecifiers(
                 preferences,
                 /*pathsOnly*/ modulePath.isRedirect,
             );
-            if (!local) {
+            if (!local || forAutoImport && isExcludedByRegex(local, preferences.excludeRegexes)) {
                 continue;
             }
             if (modulePath.isRedirect) {
@@ -512,7 +530,11 @@ function computeModuleSpecifiers(
     return pathsSpecifiers?.length ? { kind: "paths", moduleSpecifiers: pathsSpecifiers, computedWithoutCache: true } :
         redirectPathsSpecifiers?.length ? { kind: "redirect", moduleSpecifiers: redirectPathsSpecifiers, computedWithoutCache: true } :
         nodeModulesSpecifiers?.length ? { kind: "node_modules", moduleSpecifiers: nodeModulesSpecifiers, computedWithoutCache: true } :
-        { kind: "relative", moduleSpecifiers: Debug.checkDefined(relativeSpecifiers), computedWithoutCache: true };
+        { kind: "relative", moduleSpecifiers: relativeSpecifiers ?? emptyArray, computedWithoutCache: true };
+}
+
+function isExcludedByRegex(moduleSpecifier: string, excludeRegexes: readonly string[] | undefined): boolean {
+    return some(excludeRegexes, pattern => !!stringToRegex(pattern)?.test(moduleSpecifier));
 }
 
 interface Info {
@@ -536,7 +558,7 @@ function getInfo(importingSourceFileName: string, host: ModuleSpecifierResolutio
 
 function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: ModuleSpecifierPreferences): string;
 function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: ModuleSpecifierPreferences, pathsOnly?: boolean): string | undefined;
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { getAllowedEndingsInPreferredOrder: getAllowedEndingsInPrefererredOrder, relativePreference }: ModuleSpecifierPreferences, pathsOnly?: boolean): string | undefined {
+function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { getAllowedEndingsInPreferredOrder: getAllowedEndingsInPrefererredOrder, relativePreference, excludeRegexes }: ModuleSpecifierPreferences, pathsOnly?: boolean): string | undefined {
     const { baseUrl, paths, rootDirs } = compilerOptions;
     if (pathsOnly && !paths) {
         return undefined;
@@ -566,6 +588,15 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
     const maybeNonRelative = fromPackageJsonImports ?? (fromPaths === undefined && baseUrl !== undefined ? processEnding(relativeToBaseUrl, allowedEndings, compilerOptions) : fromPaths);
     if (!maybeNonRelative) {
         return relativePath;
+    }
+
+    const relativeIsExcluded = isExcludedByRegex(relativePath, excludeRegexes);
+    const nonRelativeIsExcluded = isExcludedByRegex(maybeNonRelative, excludeRegexes);
+    if (!relativeIsExcluded && nonRelativeIsExcluded) {
+        return relativePath;
+    }
+    if (relativeIsExcluded && !nonRelativeIsExcluded) {
+        return maybeNonRelative;
     }
 
     if (relativePreference === RelativePreference.NonRelative && !pathIsRelative(maybeNonRelative)) {
