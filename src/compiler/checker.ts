@@ -31579,7 +31579,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isExcludedMappedPropertyName(constraint: Type, propertyNameType: Type): boolean {
         if (constraint.flags & TypeFlags.Conditional) {
-            return !!(getReducedType(getTrueTypeFromConditionalType(constraint as ConditionalType)).flags & TypeFlags.Never) && isTypeAssignableTo(propertyNameType, (constraint as ConditionalType).extendsType);
+            const type = constraint as ConditionalType;
+            return !!(getReducedType(getTrueTypeFromConditionalType(type)).flags & TypeFlags.Never) &&
+                isTypeAssignableTo(getFalseTypeFromConditionalType(type), type.checkType) &&
+                isTypeAssignableTo(propertyNameType, type.extendsType);
         }
         if (constraint.flags & TypeFlags.Intersection) {
             return some((constraint as IntersectionType).types, t => isExcludedMappedPropertyName(t, propertyNameType));
