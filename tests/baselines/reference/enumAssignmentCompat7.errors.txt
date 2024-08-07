@@ -1,0 +1,42 @@
+enumAssignmentCompat7.ts(16,14): error TS2416: Property 'method' in type 'Derived' is not assignable to the same property in base type 'Base'.
+  Type '(param: second.E) => void' is not assignable to type '(param: first.E) => void'.
+    Types of parameters 'param' and 'param' are incompatible.
+      Type 'first.E' is not assignable to type 'second.E'.
+enumAssignmentCompat7.ts(20,10): error TS2394: This overload signature is not compatible with its implementation signature.
+enumAssignmentCompat7.ts(22,21): error TS2339: Property 'B' does not exist on type 'typeof E'.
+
+
+==== enumAssignmentCompat7.ts (3 errors) ====
+    namespace first {
+        export enum E { A = 1 }
+    }
+    
+    namespace second {
+        export enum E { A = 2 }
+    }
+    
+    class Base {
+        method(param: first.E) {
+    
+        }
+    }
+    
+    class Derived extends Base {
+        override method(param: second.E) {
+                 ~~~~~~
+!!! error TS2416: Property 'method' in type 'Derived' is not assignable to the same property in base type 'Base'.
+!!! error TS2416:   Type '(param: second.E) => void' is not assignable to type '(param: first.E) => void'.
+!!! error TS2416:     Types of parameters 'param' and 'param' are incompatible.
+!!! error TS2416:       Type 'first.E' is not assignable to type 'second.E'.
+        }
+    }
+    
+    function overloadingFunction(): first.E
+             ~~~~~~~~~~~~~~~~~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 enumAssignmentCompat7.ts:21:10: The implementation signature is declared here.
+    function overloadingFunction(): second.E {
+        return second.E.B
+                        ~
+!!! error TS2339: Property 'B' does not exist on type 'typeof E'.
+    }

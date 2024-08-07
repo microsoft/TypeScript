@@ -1,0 +1,74 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/./a.js ===
+// /** @type {unique symbol} */
+// const foo = Symbol();
+// foo
+// ^^^
+// | ----------------------------------------------------------------------
+// | const foo: typeof foo
+// | @type {unique symbol}
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/./a.js",
+      "position": 54,
+      "name": ""
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 51,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "typeof",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "localName"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "type",
+          "text": [
+            {
+              "text": "{unique symbol}",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,17 +1,15 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../../harness/tsserverLogger";
-import * as ts from "../../../_namespaces/ts";
+import * as ts from "../../../_namespaces/ts.js";
+import { jsonToReadableText } from "../../helpers.js";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
-} from "../../helpers/tsserver";
+    TestSession,
+} from "../../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../../helpers/virtualFileSystemWithWatch";
+} from "../../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large file", () => {
     function getFileType(useLargeTsFile: boolean) {
@@ -29,8 +27,7 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
         };
         files.push(largeFile);
         const host = createServerHost(files);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
-
+        const session = new TestSession(host);
         return session;
     }
 
@@ -42,7 +39,7 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
             };
             const tsconfig: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ files: ["src/file.ts", getLargeFile(useLargeTsFile)], compilerOptions: { target: 1, allowJs: true } }),
+                content: jsonToReadableText({ files: ["src/file.ts", getLargeFile(useLargeTsFile)], compilerOptions: { target: 1, allowJs: true } }),
             };
             const files = [file, libFile, tsconfig];
             const session = createSessionWithEventHandler(files, useLargeTsFile);

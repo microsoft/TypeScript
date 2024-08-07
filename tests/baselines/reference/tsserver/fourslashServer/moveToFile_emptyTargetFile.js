@@ -30,8 +30,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /source.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /source.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -64,7 +63,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 5
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /target.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
@@ -144,6 +143,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /source.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "open",
+      "request_seq": 0,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      }
+    }
 After Request
 watchedFiles::
 /lib.d.ts: *new*
@@ -160,6 +170,33 @@ watchedFiles::
 watchedDirectoriesRecursive::
 : *new*
   {}
+
+Projects::
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/source.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/target.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -215,24 +252,44 @@ Info seq  [hh:mm:ss:mss] response:
           ]
         },
         {
-          "name": "Move to a new file",
-          "description": "Move to a new file",
-          "actions": [
-            {
-              "name": "Move to a new file",
-              "description": "Move to a new file",
-              "kind": "refactor.move.newFile"
-            }
-          ]
-        },
-        {
           "name": "Move to file",
           "description": "Move to file",
           "actions": [
             {
               "name": "Move to file",
               "description": "Move to file",
-              "kind": "refactor.move.file"
+              "kind": "refactor.move.file",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 20
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Move to a new file",
+          "description": "Move to a new file",
+          "actions": [
+            {
+              "name": "Move to a new file",
+              "description": "Move to a new file",
+              "kind": "refactor.move.newFile",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 20
+                }
+              }
             }
           ]
         },
@@ -243,7 +300,17 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to function in module scope",
               "name": "function_scope_0",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 17
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 19
+                }
+              }
             }
           ]
         },
@@ -254,7 +321,17 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to constant in enclosing scope",
               "name": "constant_scope_0",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 17
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 19
+                }
+              }
             }
           ]
         }

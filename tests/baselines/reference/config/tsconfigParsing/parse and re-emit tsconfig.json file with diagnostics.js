@@ -9,13 +9,13 @@ Initial::
             }
 Result::
 {
- "compilerOptions": {
-  "allowJs": true,
-  "outDir": "bin"
- },
- "files": [
-  "file1.ts"
- ]
+  "compilerOptions": {
+    "allowJs": true,
+    "outDir": "bin"
+  },
+  "files": [
+    "file1.ts"
+  ]
 }
 Errors::
 [96mconfig.json[0m:[93m5[0m:[93m21[0m - [91merror[0m[90m TS1005: [0m',' expected.

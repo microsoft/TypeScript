@@ -1,0 +1,16 @@
+type.ts(1,28): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+type.ts(1,29): error TS2304: Cannot find name 'Enum'.
+
+
+==== type.ts (2 errors) ====
+    export type Type = { x?: { [Enum.A]: 0 } };
+                               ~~~~~~~~
+!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
+                                ~~~~
+!!! error TS2304: Cannot find name 'Enum'.
+    
+==== index.ts (0 errors) ====
+    import { type Type } from "./type";
+    
+    export const foo = { ...({} as Type) };
+    

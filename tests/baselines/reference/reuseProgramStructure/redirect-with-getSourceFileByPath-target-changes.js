@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /node_modules/a/node_modules/x/index.d.ts
 
 
@@ -106,12 +106,14 @@ b: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: Not
+Program 2 Reused:: Not
 File: /node_modules/a/node_modules/x/index.d.ts
 
 
@@ -214,9 +216,11 @@ b: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
-/a.ts(3,3): error TS2345: Argument of type 'import("/node_modules/b/node_modules/x/index").default' is not assignable to parameter of type 'import("/node_modules/a/node_modules/x/index").default'.
+a.ts(3,3): error TS2345: Argument of type 'import("/node_modules/b/node_modules/x/index").default' is not assignable to parameter of type 'import("/node_modules/a/node_modules/x/index").default'.
   Property 'y' is missing in type 'import("/node_modules/b/node_modules/x/index").default' but required in type 'import("/node_modules/a/node_modules/x/index").default'.
 
 

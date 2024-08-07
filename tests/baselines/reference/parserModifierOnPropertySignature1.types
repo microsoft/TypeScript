@@ -4,5 +4,6 @@
 interface Foo{
     public biz;
 >biz : any
+>    : ^^^
 }
 

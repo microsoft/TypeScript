@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/modulePreserveTopLevelAwait1.ts] ////
+
+=== modulePreserveTopLevelAwait1.ts ===
+for await (const x of []) {}
+>x : Symbol(x, Decl(modulePreserveTopLevelAwait1.ts, 0, 16))
+
+await Promise.resolve();
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+export {};
+

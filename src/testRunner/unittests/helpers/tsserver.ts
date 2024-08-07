@@ -1,41 +1,34 @@
+import path from "path";
+import { incrementalVerifier } from "../../../harness/incrementalUtils.js";
+import { patchServiceForStateBaseline } from "../../../harness/projectServiceStateLogger.js";
 import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
-import {
-    createHasErrorMessageLogger,
     createLoggerWithInMemoryLogs,
-    Logger,
-} from "../../../harness/tsserverLogger";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import {
-    ensureErrorFreeBuild,
-} from "./solutionBuilder";
+    LoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger.js";
+import { FileRangesRequestArgs } from "../../../server/protocol.js";
+import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { ensureErrorFreeBuild } from "./solutionBuilder.js";
+import { TscWatchCompileChange } from "./tscWatch.js";
 import {
     customTypesMap,
-    TestTypingsInstaller,
+    TestTypingsInstallerAdapter,
     TestTypingsInstallerOptions,
-} from "./typingsInstaller";
+} from "./typingsInstaller.js";
 import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
     File,
     FileOrFolderOrSymLink,
     libFile,
+    SerializeOutputOrder,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
-export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: Logger; }) {
-    ts.Debug.assert(sessionOrService.logger.logs?.length); // Ensure caller used in memory logger
+export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: LoggerWithInMemoryLogs; }) {
     Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
-}
-
-export function appendAllScriptInfos(session: TestSession) {
-    session.logger.log("");
-    session.logger.log(`ScriptInfos:`);
-    session.getProjectService().filenameToScriptInfo.forEach(info => session.logger.log(`path: ${info.path} fileName: ${info.fileName}`));
-    session.logger.log("");
 }
 
 export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
@@ -49,87 +42,217 @@ export function toExternalFiles(fileNames: string[]) {
 export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
     patched: boolean;
     baselineHost(title: string): void;
-    logTimeoutQueueLength(): void;
 };
 export function patchHostTimeouts(
     inputHost: TestServerHostTrackingWrittenFiles,
-    logger: Logger,
+    session: TestSession | undefined,
+    logger: LoggerWithInMemoryLogs,
 ) {
     const host = inputHost as TestSessionAndServiceHost;
+    host.service = session?.getProjectService();
+    if (session) patchServiceForStateBaseline(session.getProjectService());
     if (host.patched) return host;
     host.patched = true;
     if (!logger.hasLevel(ts.server.LogLevel.verbose)) {
-        host.logTimeoutQueueLength = ts.notImplemented;
         host.baselineHost = ts.notImplemented;
         return host;
     }
 
-    const originalRunQueuedTimeoutCallbacks = host.runQueuedTimeoutCallbacks;
-    const originalRunQueuedImmediateCallbacks = host.runQueuedImmediateCallbacks;
-    const originalSetTime = host.setTime;
-    let hostDiff: ReturnType<TestServerHost["snap"]> | undefined;
-
-    host.runQueuedTimeoutCallbacks = runQueuedTimeoutCallbacks;
-    host.runQueuedImmediateCallbacks = runQueuedImmediateCallbacks;
-    host.logTimeoutQueueLength = logTimeoutQueueLength;
-    host.setTime = setTime;
+    host.switchToBaseliningInvoke(logger, SerializeOutputOrder.None);
     host.baselineHost = baselineHost;
     host.patched = true;
     return host;
 
-    function setTime(time: number) {
-        logger.log(`Host is moving to new time`);
-        return originalSetTime.call(host, time);
-    }
-
-    function logTimeoutQueueLength() {
-        logger.log(host.timeoutCallbacks.log());
-        host.baselineHost(host.immediateCallbacks.log());
-    }
-
-    function runQueuedTimeoutCallbacks(timeoutId?: number) {
-        host.baselineHost(`Before running ${host.timeoutCallbacks.log()}`);
-        if (timeoutId !== undefined) logger.log(`Invoking ${host.timeoutCallbacks.callbackType} callback:: timeoutId:: ${timeoutId}:: ${host.timeoutCallbacks.map[timeoutId].args[0]}`);
-        originalRunQueuedTimeoutCallbacks.call(host, timeoutId);
-        host.baselineHost(`After running ${host.timeoutCallbacks.log()}`);
-    }
-
-    function runQueuedImmediateCallbacks() {
-        host.baselineHost(`Before running ${host.immediateCallbacks.log()}`);
-        originalRunQueuedImmediateCallbacks.call(host);
-        host.baselineHost(`After running ${host.immediateCallbacks.log()}`);
-    }
-
     function baselineHost(title: string) {
         logger.log(title);
-        ts.Debug.assertIsDefined(logger.logs);
-        host.diff(logger.logs, hostDiff);
-        host.serializeWatches(logger.logs);
-        hostDiff = host.snap();
-        host.writtenFiles.clear();
+        host.serializeState(logger.logs, SerializeOutputOrder.None);
+    }
+}
+
+function patchSessionToHandleWatchEvents(session: TestSession) {
+    const event = session.event;
+    const idToClose = new Map<number, () => void>();
+    session.event = (data, eventName) => {
+        event.call(session, data, eventName);
+        switch (eventName) {
+            case ts.server.CreateFileWatcherEvent:
+                watchFile(data as ts.server.protocol.CreateFileWatcherEventBody);
+                break;
+            case ts.server.CreateDirectoryWatcherEvent:
+                watchDirectory(data as ts.server.protocol.CreateDirectoryWatcherEventBody);
+                break;
+            case ts.server.CloseFileWatcherEvent:
+                closeWatcher(data as ts.server.protocol.CloseFileWatcherEventBody);
+                break;
+            default:
+                break;
+        }
+    };
+
+    function watchFile(event: ts.server.protocol.CreateFileWatcherEventBody) {
+        createWatcher(
+            "watchFile",
+            event,
+            recordChange =>
+                session.host.watchUtils.pollingWatch(
+                    session.host.toNormalizedAbsolutePath(event.path),
+                    {
+                        cb: (fileName, eventKind) =>
+                            recordChange(
+                                event.id,
+                                session.host.windowsStyleRoot ?
+                                    path.win32.resolve(fileName) :
+                                    path.posix.resolve(fileName),
+                                eventKind === ts.FileWatcherEventKind.Created ?
+                                    "created" :
+                                    eventKind === ts.FileWatcherEventKind.Deleted ? "deleted" : "updated",
+                                /*ignoreUpdate*/ false,
+                            ),
+                        pollingInterval: undefined!,
+                        event,
+                    },
+                ),
+        );
+    }
+
+    function watchDirectory(event: ts.server.protocol.CreateDirectoryWatcherEventBody) {
+        createWatcher(
+            "watchDirectory",
+            event,
+            recordChange =>
+                session.host.watchUtils.fsWatch(
+                    session.host.toNormalizedAbsolutePath(event.path),
+                    event.recursive,
+                    {
+                        cb: (eventName, relativeFileName) => {
+                            if (!relativeFileName) return;
+                            const fileName = session.host.windowsStyleRoot ?
+                                path.win32.join(event.path, relativeFileName) :
+                                path.posix.join(event.path, relativeFileName);
+                            if (eventName === "change") {
+                                recordChange(
+                                    event.id,
+                                    fileName,
+                                    "updated",
+                                    !!event.ignoreUpdate,
+                                );
+                            }
+                            else {
+                                recordChange(
+                                    event.id,
+                                    fileName,
+                                    session.host.fileExists(fileName) || session.host.directoryExists(fileName) ?
+                                        "created" :
+                                        "deleted",
+                                    !!event.ignoreUpdate,
+                                );
+                            }
+                        },
+                        inode: undefined,
+                        event,
+                    },
+                ),
+        );
+    }
+
+    function createWatcher(
+        watchType: string,
+        event: ts.server.protocol.CreateFileWatcherEventBody | ts.server.protocol.CreateDirectoryWatcherEventBody,
+        create: (
+            recordChange: (
+                id: number,
+                file: string,
+                eventType: "created" | "deleted" | "updated",
+                ignoreUpdate: boolean,
+            ) => void,
+        ) => ts.FileWatcher,
+    ) {
+        session.logger.log(`Custom ${watchType}:: Added:: ${JSON.stringify(event)}`);
+        ts.Debug.assert(!idToClose.has(event.id));
+        const result = create((id, file, eventType, ignoreUpdate) => {
+            const ignored = eventType === "updated" && ignoreUpdate;
+            session.logger.log(`Custom ${watchType}:: Triggered${ignoreUpdate ? " Ignored" : ""}:: ${JSON.stringify(event)}:: ${file} ${eventType}`);
+            if (!ignored) {
+                let watchChange = session.watchChanges.get(id);
+                if (!watchChange) session.watchChanges.set(id, watchChange = { id });
+                (watchChange[eventType] ??= []).push(file);
+            }
+        });
+        idToClose.set(event.id, () => {
+            session.logger.log(`Custom ${watchType}:: Close:: ${JSON.stringify(event)}`);
+            result.close();
+        });
+    }
+
+    function closeWatcher(data: ts.server.protocol.CloseFileWatcherEventBody) {
+        const close = idToClose.get(data.id);
+        if (close) {
+            idToClose.delete(data.id);
+            close();
+        }
     }
 }
 
 export interface TestSessionOptions extends ts.server.SessionOptions, TestTypingsInstallerOptions {
-    logger: Logger;
-    allowNonBaseliningLogger?: boolean;
+    host: TestServerHost;
+    logger: LoggerWithInMemoryLogs;
     disableAutomaticTypingAcquisition?: boolean;
+    useCancellationToken?: boolean | number;
+    regionDiagLineCountThreshold?: number;
 }
-
+export type TestSessionPartialOptionsAndHost = Partial<Omit<TestSessionOptions, "typingsInstaller" | "cancellationToken">> & Pick<TestSessionOptions, "host">;
+export type TestSessionConstructorOptions = TestServerHost | TestSessionPartialOptionsAndHost;
 export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
+
+function getTestSessionPartialOptionsAndHost(optsOrHost: TestSessionConstructorOptions): TestSessionPartialOptionsAndHost {
+    // eslint-disable-next-line local/no-in-operator
+    return "host" in optsOrHost ?
+        optsOrHost :
+        { host: optsOrHost };
+}
 export class TestSession extends ts.server.Session {
     private seq = 0;
-    public testhost: TestSessionAndServiceHost;
-    public override logger: Logger;
+    public override host!: TestSessionAndServiceHost;
+    public override logger!: LoggerWithInMemoryLogs;
+    public override readonly typingsInstaller!: TestTypingsInstallerAdapter;
+    public serverCancellationToken: TestServerCancellationToken;
+    public watchChanges = new Map<number, ts.server.protocol.WatchChangeRequestArgs>();
 
-    constructor(opts: TestSessionOptions) {
-        super(opts);
-        this.logger = opts.logger;
-        ts.Debug.assert(opts.allowNonBaseliningLogger || this.logger.hasLevel(ts.server.LogLevel.verbose), "Use Baselining logger and baseline tsserver log or create using allowNonBaseliningLogger");
-        this.testhost = patchHostTimeouts(
-            changeToHostTrackingWrittenFiles(this.host as TestServerHost),
+    constructor(optsOrHost: TestSessionConstructorOptions) {
+        const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
+        opts.logger = opts.logger || createLoggerWithInMemoryLogs(opts.host);
+        const typingsInstaller = !opts.disableAutomaticTypingAcquisition ? new TestTypingsInstallerAdapter(opts) : undefined;
+        const cancellationToken = opts.useCancellationToken ?
+            new TestServerCancellationToken(
+                opts.logger,
+                ts.isNumber(opts.useCancellationToken) ? opts.useCancellationToken : undefined,
+            ) :
+            ts.server.nullCancellationToken;
+        super({
+            cancellationToken,
+            useSingleInferredProject: false,
+            useInferredProjectPerProjectRoot: false,
+            noGetErrOnBackgroundUpdate: true,
+            byteLength: Buffer.byteLength,
+            hrtime: process.hrtime,
+            logger: opts.logger,
+            canUseEvents: true,
+            incrementalVerifier,
+            typesMapLocation: customTypesMap.path,
+            typingsInstaller,
+            ...opts,
+        });
+        if (typingsInstaller) typingsInstaller.session = this;
+        this.serverCancellationToken = cancellationToken as TestServerCancellationToken;
+        patchHostTimeouts(
+            changeToHostTrackingWrittenFiles(patchHostForBuildInfoReadWrite(this.host)),
+            this,
             this.logger,
         );
+        if (opts.regionDiagLineCountThreshold !== undefined) {
+            this.regionDiagLineCountThreshold = opts.regionDiagLineCountThreshold;
+        }
+        if (opts.canUseWatchEvents) patchSessionToHandleWatchEvents(this);
     }
 
     getProjectService() {
@@ -146,13 +269,13 @@ export class TestSession extends ts.server.Session {
 
     public override executeCommand(request: ts.server.protocol.Request) {
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-            this.testhost.baselineHost("Before request");
+            this.host.baselineHost("Before request");
             this.logger.info(`request:${ts.server.stringifyIndented(request)}`);
         }
         const response = super.executeCommand(request);
         if (this.logger.hasLevel(ts.server.LogLevel.verbose)) {
-            this.logger.info(`response:${ts.server.stringifyIndented(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response)}`);
-            this.testhost.baselineHost("After request");
+            if (response.responseRequired) this.logger.info(`response:${ts.server.stringifyIndented(response.response === ts.getSupportedCodeFixes() ? { ...response, response: "ts.getSupportedCodeFixes()" } : response)}`);
+            this.host.baselineHost("After request");
         }
         return response;
     }
@@ -164,39 +287,24 @@ export class TestSession extends ts.server.Session {
         request.type = "request";
         return this.executeCommand(request);
     }
+
+    public invokeWatchChanges() {
+        const changes = ts.singleOrMany(ts.arrayFrom(this.watchChanges.values()));
+        this.watchChanges.clear();
+        this.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
+            command: ts.server.protocol.CommandTypes.WatchChange,
+            arguments: changes,
+        });
+    }
 }
 
-export function createSession(host: TestServerHost, opts: Partial<TestSessionOptions> = {}) {
-    const logger = opts.logger || createHasErrorMessageLogger();
-    if (!opts.disableAutomaticTypingAcquisition && opts.typingsInstaller === undefined) {
-        opts.typingsInstaller = new TestTypingsInstaller(
-            host,
-            logger,
-            opts,
-        );
-    }
-
-    if (opts.eventHandler !== undefined) {
-        opts.canUseEvents = true;
-    }
-
-    const sessionOptions: TestSessionOptions = {
-        host,
-        cancellationToken: ts.server.nullCancellationToken,
-        useSingleInferredProject: false,
-        useInferredProjectPerProjectRoot: false,
-        byteLength: Buffer.byteLength,
-        hrtime: process.hrtime,
-        logger,
-        canUseEvents: false,
-        incrementalVerifier,
-    };
-
-    return new TestSession({ ...sessionOptions, ...opts });
-}
-
-export function createSessionWithCustomEventHandler(host: TestServerHost, opts?: Partial<TestSessionOptions>, customAction?: (event: ts.server.ProjectServiceEvent) => void) {
-    const session = createSession(host, { eventHandler, logger: createLoggerWithInMemoryLogs(host), ...opts });
+export function createSessionWithCustomEventHandler(
+    optsOrHost: TestSessionConstructorOptions,
+    customAction?: (event: ts.server.ProjectServiceEvent) => void,
+) {
+    const opts = getTestSessionPartialOptionsAndHost(optsOrHost);
+    opts.eventHandler = eventHandler;
+    const session = new TestSession(opts);
     return session;
     function eventHandler(event: ts.server.ProjectServiceEvent) {
         let data = event.data as any;
@@ -228,42 +336,6 @@ export function createSessionWithCustomEventHandler(host: TestServerHost, opts?:
     }
 }
 
-export interface TestProjectServiceOptions extends ts.server.ProjectServiceOptions {
-    logger: Logger;
-    allowNonBaseliningLogger?: boolean;
-}
-
-export class TestProjectService extends ts.server.ProjectService {
-    public testhost: TestSessionAndServiceHost;
-    constructor(host: TestServerHost, public override logger: Logger, cancellationToken: ts.HostCancellationToken, useSingleInferredProject: boolean, typingsInstaller: ts.server.ITypingsInstaller, opts: Partial<TestProjectServiceOptions> = {}) {
-        super({
-            host,
-            logger,
-            session: undefined,
-            cancellationToken,
-            useSingleInferredProject,
-            useInferredProjectPerProjectRoot: false,
-            typingsInstaller,
-            typesMapLocation: customTypesMap.path,
-            incrementalVerifier,
-            ...opts,
-        });
-        ts.Debug.assert(opts.allowNonBaseliningLogger || this.logger.hasLevel(ts.server.LogLevel.verbose), "Use Baselining logger and baseline tsserver log or create using allowNonBaseliningLogger");
-        this.testhost = patchHostTimeouts(
-            changeToHostTrackingWrittenFiles(this.host as TestServerHost),
-            this.logger,
-        );
-        if (logger.hasLevel(ts.server.LogLevel.verbose)) this.testhost.baselineHost("Creating project service");
-    }
-}
-
-export function createProjectService(host: TestServerHost, options?: Partial<TestProjectServiceOptions>) {
-    const cancellationToken = options?.cancellationToken || ts.server.nullCancellationToken;
-    const logger = options?.logger || createHasErrorMessageLogger();
-    const useSingleInferredProject = options?.useSingleInferredProject !== undefined ? options.useSingleInferredProject : false;
-    return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller || ts.server.nullTypingsInstaller, options);
-}
-
 export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.Location {
     const start = nthIndexOf(str, substring, options ? options.index : 0);
     ts.Debug.assert(start !== -1);
@@ -288,6 +360,15 @@ export function textSpanFromSubstring(str: string, substring: string, options?: 
     const start = nthIndexOf(str, substring, options ? options.index : 0);
     ts.Debug.assert(start !== -1);
     return ts.createTextSpan(start, substring.length);
+}
+
+export function protocolTextSpanToFileRange(span: ts.server.protocol.TextSpan): ts.server.protocol.FileRange {
+    return {
+        startLine: span.start.line,
+        startOffset: span.start.offset,
+        endLine: span.end.line,
+        endOffset: span.end.offset,
+    };
 }
 
 export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.FileLocationRequestArgs {
@@ -318,11 +399,12 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     private requestToCancel = -1;
     private isCancellationRequestedCount = 0;
 
-    constructor(private logger: Logger, private cancelAfterRequest = 0) {
+    constructor(private logger: LoggerWithInMemoryLogs, private cancelAfterRequest = 0) {
     }
 
     setRequest(requestId: number) {
         this.currentId = requestId;
+        this.logger.log(`TestServerCancellationToken:: Cancellation Request id:: ${requestId}`);
     }
 
     setRequestToCancel(requestId: number) {
@@ -415,7 +497,7 @@ export function setCompilerOptionsForInferredProjectsRequestForSession(
     });
 }
 
-export function logDiagnostics(sessionOrService: TestSession | TestProjectService, diagnosticsType: string, project: ts.server.Project, diagnostics: readonly ts.Diagnostic[]) {
+export function logDiagnostics(sessionOrService: TestSession, diagnosticsType: string, project: ts.server.Project, diagnostics: readonly ts.Diagnostic[]) {
     sessionOrService.logger.info(`${diagnosticsType}:: ${diagnostics.length}`);
     diagnostics.forEach(d => sessionOrService.logger.info(ts.formatDiagnostic(d, project)));
 }
@@ -424,14 +506,22 @@ export interface VerifyGetErrRequestBase {
     existingTimeouts?: boolean;
 }
 export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
-    files: readonly (string | File)[];
+    files: readonly (string | File | FileRangesRequestArgs)[];
     skip?: CheckAllErrors["skip"];
 }
 export function verifyGetErrRequest(request: VerifyGetErrRequest) {
     const { session, files } = request;
     session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
         command: ts.server.protocol.CommandTypes.Geterr,
-        arguments: { delay: 0, files: files.map(filePath) },
+        arguments: {
+            delay: 0,
+            files: files.map(file => {
+                if (typeof file !== "string" && !(file as FileRangesRequestArgs).ranges) {
+                    return filePath(file as File);
+                }
+                return file as string | FileRangesRequestArgs;
+            }),
+        },
     });
     checkAllErrors(request);
 }
@@ -439,17 +529,19 @@ export function verifyGetErrRequest(request: VerifyGetErrRequest) {
 interface SkipErrors {
     semantic?: true;
     suggestion?: true;
+    /** Region semantic checking will only happen if this is */
+    regionSemantic?: false;
 }
 export interface CheckAllErrors extends VerifyGetErrRequestBase {
     files: readonly any[];
     skip?: readonly (SkipErrors | undefined)[];
 }
 function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErrors) {
-    ts.Debug.assert(session.logger.logs?.length);
     for (let i = 0; i < files.length; i++) {
-        session.testhost.runQueuedTimeoutCallbacks(existingTimeouts ? session.testhost.getNextTimeoutId() - 1 : undefined);
-        if (!skip?.[i]?.semantic) session.testhost.runQueuedImmediateCallbacks();
-        if (!skip?.[i]?.suggestion) session.testhost.runQueuedImmediateCallbacks();
+        session.host.runQueuedTimeoutCallbacks(existingTimeouts ? session.host.getNextTimeoutId() - 1 : undefined);
+        if (skip?.[i]?.regionSemantic === false) session.host.runQueuedImmediateCallbacks();
+        if (!skip?.[i]?.semantic) session.host.runQueuedImmediateCallbacks();
+        if (!skip?.[i]?.suggestion) session.host.runQueuedImmediateCallbacks();
     }
 }
 
@@ -460,7 +552,7 @@ function filePath(file: string | File) {
 function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, getErrRequest }: VerifyGetErrScenario) {
     it("verifies the errors in open file", () => {
         const host = createServerHost([...allFiles(), libFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
 
         verifyGetErrRequest({ session, files: getErrRequest() });
@@ -471,7 +563,7 @@ function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, g
 function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario) {
     it("verifies the errors in projects", () => {
         const host = createServerHost([...allFiles(), libFile]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
 
         for (const expected of getErrForProjectRequest()) {
@@ -488,7 +580,7 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
 function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario) {
     it("verifies the errors using sync commands", () => {
         const host = createServerHost([...allFiles(), libFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
         for (const { file, project } of syncDiagnostics()) {
             const reqArgs = { file: filePath(file), projectFileName: project && filePath(project) };
@@ -533,10 +625,6 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
     verifyErrorsUsingSyncMethods(scenario);
 }
 
-export function verifyDynamic(service: ts.server.ProjectService, path: string) {
-    (service.logger as Logger).log(`${path} isDynamic:: ${service.filenameToScriptInfo.get(path)!.isDynamic}`);
-}
-
 export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
     const host = createServerHost(files);
     // ts build should succeed
@@ -544,10 +632,16 @@ export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLin
     return host;
 }
 
-export function logInferredProjectsOrphanStatus(projectService: ts.server.ProjectService) {
-    projectService.inferredProjects.forEach(inferredProject => (projectService.logger as Logger).log(`Inferred project: ${inferredProject.projectName} isOrphan:: ${inferredProject.isOrphan()} isClosed: ${inferredProject.isClosed()}`));
-}
-
-export function logConfiguredProjectsHasOpenRefStatus(projectService: ts.server.ProjectService) {
-    projectService.configuredProjects.forEach(configuredProject => (projectService.logger as Logger).log(`Configured project: ${configuredProject.projectName} hasOpenRef:: ${configuredProject.hasOpenRef()} isClosed: ${configuredProject.isClosed()}`));
+export function forEachTscWatchEdit(
+    session: TestSession,
+    edits: readonly TscWatchCompileChange[],
+    action: () => void,
+) {
+    edits.forEach(edit => {
+        session.logger.log(edit.caption);
+        edit.edit(session.host);
+        if (session.watchChanges.size) session.invokeWatchChanges();
+        edit.timeouts(session.host, undefined!, undefined!);
+        action();
+    });
 }

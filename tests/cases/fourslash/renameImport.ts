@@ -24,9 +24,10 @@
 verify.noErrors();
 goTo.eachRange(range => {
     const target = range.marker && range.marker.data && range.marker.data.target;
-    const name = target === "dir" ? "/dir" : target === "dir/index" ? "/dir/index.ts" : "/a.ts";
+    const displayName = target === "dir" ? "./dir" : target === "dir/index" ? "./dir/index" : "./a";
+    const fileName = target === "dir" ? "/dir" : target === "dir/index" ? "/dir/index.ts" : "/a.ts";
     const kind = target === "dir" ? "directory" : "module";
-    verify.renameInfoSucceeded(/*displayName*/ name, /*fullDisplayName*/ name, /*kind*/ kind, /*kindModifiers*/ "", /*fileToRename*/ name, range);
+    verify.renameInfoSucceeded(/*displayName*/ fileName, /*fullDisplayName*/ displayName, /*kind*/ kind, /*kindModifiers*/ "", /*fileToRename*/ fileName, range);
     verify.renameInfoFailed("You cannot rename this element.", { allowRenameOfImportPath: false });
 });
 

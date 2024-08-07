@@ -3,10 +3,14 @@
 === callOnClass.ts ===
 class C { }
 >C : C
+>  : ^
 
 var c = C();
 >c : any
+>  : ^^^
 >C() : any
+>    : ^^^
 >C : typeof C
+>  : ^^^^^^^^
  
 

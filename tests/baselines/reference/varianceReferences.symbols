@@ -1,0 +1,92 @@
+//// [tests/cases/compiler/varianceReferences.ts] ////
+
+=== varianceReferences.ts ===
+type NumericConstraint<Value extends number> = Value;
+>NumericConstraint : Symbol(NumericConstraint, Decl(varianceReferences.ts, 0, 0))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 0, 23))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 0, 23))
+
+type VarianceConstrainedNumber<in out Value extends number> =
+>VarianceConstrainedNumber : Symbol(VarianceConstrainedNumber, Decl(varianceReferences.ts, 0, 53))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 2, 31))
+
+  NumericConstraint<Value>;
+>NumericConstraint : Symbol(NumericConstraint, Decl(varianceReferences.ts, 0, 0))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 2, 31))
+
+type Unconstrained<Value> = Value;
+>Unconstrained : Symbol(Unconstrained, Decl(varianceReferences.ts, 3, 27))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 5, 19))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 5, 19))
+
+type VarianceUnconstrained<in out Value> = Unconstrained<Value>;
+>VarianceUnconstrained : Symbol(VarianceUnconstrained, Decl(varianceReferences.ts, 5, 34))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 7, 27))
+>Unconstrained : Symbol(Unconstrained, Decl(varianceReferences.ts, 3, 27))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 7, 27))
+
+type Level3of3Unconstrained<Value> = Value;
+>Level3of3Unconstrained : Symbol(Level3of3Unconstrained, Decl(varianceReferences.ts, 7, 64))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 9, 28))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 9, 28))
+
+type Level2of3Unconstrained<Value> = Level3of3Unconstrained<Value>;
+>Level2of3Unconstrained : Symbol(Level2of3Unconstrained, Decl(varianceReferences.ts, 9, 43))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 10, 28))
+>Level3of3Unconstrained : Symbol(Level3of3Unconstrained, Decl(varianceReferences.ts, 7, 64))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 10, 28))
+
+type Level1of3Unconstrained<Value> = Level2of3Unconstrained<Value>;
+>Level1of3Unconstrained : Symbol(Level1of3Unconstrained, Decl(varianceReferences.ts, 10, 67))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 11, 28))
+>Level2of3Unconstrained : Symbol(Level2of3Unconstrained, Decl(varianceReferences.ts, 9, 43))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 11, 28))
+
+type VarianceDeepUnconstrained<in out Value> = Level1of3Unconstrained<Value>;
+>VarianceDeepUnconstrained : Symbol(VarianceDeepUnconstrained, Decl(varianceReferences.ts, 11, 67))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 13, 31))
+>Level1of3Unconstrained : Symbol(Level1of3Unconstrained, Decl(varianceReferences.ts, 10, 67))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 13, 31))
+
+interface Shape<Value> {
+>Shape : Symbol(Shape, Decl(varianceReferences.ts, 13, 77))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 15, 16))
+
+  value: Value;
+>value : Symbol(Shape.value, Decl(varianceReferences.ts, 15, 24))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 15, 16))
+}
+
+type VarianceShape<in out Value> = Shape<Value>;
+>VarianceShape : Symbol(VarianceShape, Decl(varianceReferences.ts, 17, 1))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 19, 19))
+>Shape : Symbol(Shape, Decl(varianceReferences.ts, 13, 77))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 19, 19))
+
+interface Level3of3Shape<Value> {
+>Level3of3Shape : Symbol(Level3of3Shape, Decl(varianceReferences.ts, 19, 48))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 21, 25))
+
+  value: Value;
+>value : Symbol(Level3of3Shape.value, Decl(varianceReferences.ts, 21, 33))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 21, 25))
+}
+
+type Level2of3Shape<Value> = Level3of3Shape<Value>;
+>Level2of3Shape : Symbol(Level2of3Shape, Decl(varianceReferences.ts, 23, 1))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 25, 20))
+>Level3of3Shape : Symbol(Level3of3Shape, Decl(varianceReferences.ts, 19, 48))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 25, 20))
+
+type Level1of3Shape<Value> = Level2of3Shape<Value>;
+>Level1of3Shape : Symbol(Level1of3Shape, Decl(varianceReferences.ts, 25, 51))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 26, 20))
+>Level2of3Shape : Symbol(Level2of3Shape, Decl(varianceReferences.ts, 23, 1))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 26, 20))
+
+type VarianceDeepShape<in out Value> = Level1of3Shape<Value>;
+>VarianceDeepShape : Symbol(VarianceDeepShape, Decl(varianceReferences.ts, 26, 51))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 28, 23))
+>Level1of3Shape : Symbol(Level1of3Shape, Decl(varianceReferences.ts, 25, 51))
+>Value : Symbol(Value, Decl(varianceReferences.ts, 28, 23))
+

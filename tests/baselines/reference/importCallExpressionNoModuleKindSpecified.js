@@ -29,7 +29,8 @@ class C {
 //// [0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = exports.B = void 0;
+exports.B = void 0;
+exports.foo = foo;
 var B = /** @class */ (function () {
     function B() {
     }
@@ -38,13 +39,11 @@ var B = /** @class */ (function () {
 }());
 exports.B = B;
 function foo() { return "foo"; }
-exports.foo = foo;
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.backup = void 0;
-function backup() { return "backup"; }
 exports.backup = backup;
+function backup() { return "backup"; }
 //// [2.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }

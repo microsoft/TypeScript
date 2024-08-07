@@ -3,4 +3,5 @@
 === parserES5ForOfStatement21.ts ===
 for (var of of) { }
 >of : any
+>   : ^^^
 

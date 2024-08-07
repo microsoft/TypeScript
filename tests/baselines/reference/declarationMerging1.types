@@ -3,19 +3,26 @@
 === file1.ts ===
 class A {
 >A : A
+>  : ^
 
     protected _f: number;
 >_f : number
+>   : ^^^^^^
 
     getF() { return this._f; }
 >getF : () => number
+>     : ^^^^^^^^^^^^
 >this._f : number
+>        : ^^^^^^
 >this : this
+>     : ^^^^
 >_f : number
+>   : ^^^^^^
 }
 
 === file2.ts ===
 interface A {
     run();
 >run : () => any
+>    : ^^^^^^^^^
 }

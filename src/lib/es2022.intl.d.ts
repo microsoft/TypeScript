@@ -28,6 +28,10 @@ declare namespace Intl {
         granularity: "grapheme" | "word" | "sentence";
     }
 
+    interface SegmentIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknown> {
+        [Symbol.iterator](): SegmentIterator<T>;
+    }
+
     interface Segments {
         /**
          * Returns an object describing the segment in the original string that includes the code unit at a specified index.
@@ -37,7 +41,7 @@ declare namespace Intl {
         containing(codeUnitIndex?: number): SegmentData;
 
         /** Returns an iterator to iterate over the segments. */
-        [Symbol.iterator](): IterableIterator<SegmentData>;
+        [Symbol.iterator](): SegmentIterator<SegmentData>;
     }
 
     interface SegmentData {
@@ -71,7 +75,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter).
          */
-        new (locales?: BCP47LanguageTag | BCP47LanguageTag[], options?: SegmenterOptions): Segmenter;
+        new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter;
 
         /**
          * Returns an array containing those of the provided locales that are supported without having to fall back to the runtime's default locale.
@@ -85,7 +89,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/supportedLocalesOf)
          */
-        supportedLocalesOf(locales: BCP47LanguageTag | BCP47LanguageTag[], options?: Pick<SegmenterOptions, "localeMatcher">): BCP47LanguageTag[];
+        supportedLocalesOf(locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">): UnicodeBCP47LocaleIdentifier[];
     };
 
     /**

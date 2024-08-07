@@ -3,17 +3,23 @@
 === override14.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     property = 1
 >property : number
+>         : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 class SubFoo extends Foo {
 >SubFoo : SubFoo
+>       : ^^^^^^
 >Foo : Foo
+>    : ^^^
 
     declare property: number
 >property : number
+>         : ^^^^^^
 }
 

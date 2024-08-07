@@ -1,9 +1,6 @@
 //// [tests/cases/conformance/moduleResolution/untypedModuleImport.ts] ////
 
 //// [index.js]
-// This tests that importing from a JS file globally works in an untyped way.
-// (Assuming we don't have `--noImplicitAny` or `--allowJs`.)
-
 This file is not processed.
 
 //// [a.ts]

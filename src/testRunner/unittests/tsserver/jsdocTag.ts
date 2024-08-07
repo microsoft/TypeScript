@@ -1,16 +1,13 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
     const config: File = {
@@ -31,7 +28,7 @@ describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
         it(subScenario, () => {
             const { command, displayPartsForJSDoc } = options;
             const host = createServerHost([file, config]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
                 arguments: { preferences: { displayPartsForJSDoc } },
@@ -118,7 +115,7 @@ x(1)`,
 
             const { command, displayPartsForJSDoc } = options;
             const host = createServerHost([linkInParamTag, config]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
                 arguments: { preferences: { displayPartsForJSDoc } },
@@ -171,7 +168,7 @@ foo`,
             };
             const { command, displayPartsForJSDoc } = options;
             const host = createServerHost([linkInParamJSDoc, config]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
                 arguments: { preferences: { displayPartsForJSDoc } },

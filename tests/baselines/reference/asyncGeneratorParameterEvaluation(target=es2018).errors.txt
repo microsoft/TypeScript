@@ -1,0 +1,24 @@
+asyncGeneratorParameterEvaluation.ts(2,27): error TS2304: Cannot find name 'z'.
+asyncGeneratorParameterEvaluation.ts(3,22): error TS2304: Cannot find name 'z'.
+asyncGeneratorParameterEvaluation.ts(3,22): error TS2538: Type 'any' cannot be used as an index type.
+asyncGeneratorParameterEvaluation.ts(7,22): error TS2304: Cannot find name 'z'.
+
+
+==== asyncGeneratorParameterEvaluation.ts (4 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/40410
+    async function* f1(x, y = z) {}
+                              ~
+!!! error TS2304: Cannot find name 'z'.
+    async function* f2({[z]: x}) {}
+                         ~
+!!! error TS2304: Cannot find name 'z'.
+                         ~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+    
+    declare class Super { foo(): void; }
+    class Sub extends Super {
+        async * m(x, y = z, { ...w }) { super.foo(); }
+                         ~
+!!! error TS2304: Cannot find name 'z'.
+    }
+    

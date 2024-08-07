@@ -30,10 +30,9 @@ module m4 {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.foo = void 0;
+    exports.foo = foo;
     function foo() {
     }
-    exports.foo = foo;
     var exports = 1;
     var require = "require";
     var m1;

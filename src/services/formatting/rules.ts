@@ -1,4 +1,15 @@
 import {
+    anyContext,
+    ContextPredicate,
+    FormattingContext,
+    FormattingRequestKind,
+    Rule,
+    RuleAction,
+    RuleFlags,
+    TextRangeWithKind,
+    TokenRange,
+} from "../_namespaces/ts.formatting.js";
+import {
     BinaryExpression,
     contains,
     findAncestor,
@@ -20,18 +31,7 @@ import {
     SyntaxKind,
     typeKeywords,
     YieldExpression,
-} from "../_namespaces/ts";
-import {
-    anyContext,
-    ContextPredicate,
-    FormattingContext,
-    FormattingRequestKind,
-    Rule,
-    RuleAction,
-    RuleFlags,
-    TextRangeWithKind,
-    TokenRange,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export interface RuleSpec {
@@ -88,10 +88,10 @@ export function getAllRules(): RuleSpec[] {
     const functionOpenBraceLeftTokenRange = anyTokenIncludingMultilineComments;
 
     // Place a space before open brace in a TypeScript declaration that has braces as children (class, module, enum, etc)
-    const typeScriptOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.Identifier, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.ClassKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ImportKeyword]);
+    const typeScriptOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.Identifier, SyntaxKind.GreaterThanToken, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.ClassKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ImportKeyword]);
 
     // Place a space before open brace in a control flow construct
-    const controlOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.CloseParenToken, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.DoKeyword, SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword, SyntaxKind.ElseKeyword]);
+    const controlOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.CloseParenToken, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.DoKeyword, SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CatchKeyword]);
 
     // These rules are higher in priority than user-configurable
     const highPriorityCommonRules = [
@@ -397,6 +397,9 @@ export function getAllRules(): RuleSpec[] {
 
         // Remove extra space between for and await
         rule("SpaceBetweenForAndAwaitKeyword", SyntaxKind.ForKeyword, SyntaxKind.AwaitKeyword, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+
+        // Remove extra spaces between ... and type name in tuple spread
+        rule("SpaceBetweenDotDotDotAndTypeName", SyntaxKind.DotDotDotToken, typeNames, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
         // Add a space between statements. All keywords except (do,else,case) has open/close parens after them.
         // So, we have a rule to add a space for [),Any], [do,Any], [else,Any], and [case,Any]

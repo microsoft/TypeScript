@@ -9,10 +9,15 @@ module X {
 }
 var z: X.Y.Z = null;
 >z : X.Y.Z
+>  : ^^^^^
 >X : any
+>  : ^^^
 >Y : any
+>  : ^^^
 
 var z2: X.Y;
 >z2 : X.Y
+>   : ^^^
 >X : any
+>  : ^^^
 

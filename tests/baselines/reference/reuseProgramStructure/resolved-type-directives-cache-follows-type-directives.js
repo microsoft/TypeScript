@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /types/typedefs/index.d.ts
 
 
@@ -22,12 +22,14 @@ typedefs: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: /types/typedefs/index.d.ts
 
 
@@ -51,24 +53,28 @@ typedefs: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: SafeModules
+Program 3 Reused:: SafeModules
 File: /a.ts
 
 
 var x = 2
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: SafeModules
+Program 4 Reused:: SafeModules
 File: /types/typedefs/index.d.ts
 
 
@@ -107,8 +113,10 @@ typedefs2: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
-/a.ts(2,39): error TS2688: Cannot find type definition file for 'typedefs2'.
+a.ts(2,39): error TS2688: Cannot find type definition file for 'typedefs2'.
 
 

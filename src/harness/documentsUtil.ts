@@ -1,5 +1,5 @@
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
 
 // NOTE: The contents of this file are all exported from the namespace 'documents'. This is to
 //       support the eventual conversion of harness into a modular system.
@@ -98,7 +98,7 @@ export class SourceMap {
         let sourceLine = 0;
         let sourceColumn = 0;
         let nameIndex = 0;
-        let match: RegExpExecArray | null;
+        let match: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
         while (match = SourceMap._mappingRegExp.exec(this.raw.mappings)) {
             if (match[1]) {
                 const segment = SourceMap._decodeVLQ(match[1]);
@@ -141,7 +141,7 @@ export class SourceMap {
     }
 
     public static getUrl(text: string) {
-        let match: RegExpExecArray | null;
+        let match: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
         let lastMatch: RegExpExecArray | undefined;
         while (match = SourceMap._sourceMappingURLRegExp.exec(text)) {
             lastMatch = match;

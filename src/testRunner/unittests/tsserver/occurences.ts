@@ -1,16 +1,13 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: occurrence highlight on string", () => {
     it("should be marked if only on string values", () => {
@@ -20,7 +17,7 @@ describe("unittests:: tsserver:: occurrence highlight on string", () => {
         };
 
         const host = createServerHost([file1]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.DocumentHighlightsRequest>({
             command: ts.server.protocol.CommandTypes.DocumentHighlights,

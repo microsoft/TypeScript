@@ -1,4 +1,13 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createImportAdder,
+    createMissingMemberNodes,
+    getNoopSymbolTrackerWithResolver,
+    registerCodeFix,
+    TypeConstructionContext,
+} from "../_namespaces/ts.codefix.js";
+import {
     addToSeen,
     and,
     ClassElement,
@@ -27,16 +36,7 @@ import {
     textChanges,
     TypeChecker,
     UserPreferences,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    createImportAdder,
-    createMissingMemberNodes,
-    getNoopSymbolTrackerWithResolver,
-    registerCodeFix,
-    TypeConstructionContext,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const errorCodes = [
     Diagnostics.Class_0_incorrectly_implements_interface_1.code,

@@ -1,0 +1,1467 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsReturnTypes.ts] ////
+
+=== isolatedDeclarationErrorsReturnTypes.ts ===
+// Function Variables
+export const fnExpressionConstVariable = function foo() { return 0;}
+>fnExpressionConstVariable : () => number
+>                          : ^^^^^^^^^^^^
+>function foo() { return 0;} : () => number
+>                            : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export const fnArrowConstVariable = () => "S";
+>fnArrowConstVariable : () => string
+>                     : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+export let fnExpressionLetVariable = function foo() { return 0;}
+>fnExpressionLetVariable : () => number
+>                        : ^^^^^^^^^^^^
+>function foo() { return 0;} : () => number
+>                            : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export let fnArrowLetVariable = () => "S";
+>fnArrowLetVariable : () => string
+>                   : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+export var fnExpressionVarVariable = function foo() { return 0;}
+>fnExpressionVarVariable : () => number
+>                        : ^^^^^^^^^^^^
+>function foo() { return 0;} : () => number
+>                            : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export var fnArrowVarVariable = () => "S";
+>fnArrowVarVariable : () => string
+>                   : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+// No Errors
+export const fnExpressionConstVariableOk = function foo(): number { return 0;}
+>fnExpressionConstVariableOk : () => number
+>                            : ^^^^^^      
+>function foo(): number { return 0;} : () => number
+>                                    : ^^^^^^      
+>foo : () => number
+>    : ^^^^^^      
+>0 : 0
+>  : ^
+
+export const fnArrowConstVariableOk = (cb = function(){ }): string => "S";
+>fnArrowConstVariableOk : (cb?: () => void) => string
+>                       : ^  ^^^^^^^^^^^^^^^^^^      
+>(cb = function(){ }): string => "S" : (cb?: () => void) => string
+>                                    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+export let fnExpressionLetVariableOk = function foo(): number { return 0;}
+>fnExpressionLetVariableOk : () => number
+>                          : ^^^^^^      
+>function foo(): number { return 0;} : () => number
+>                                    : ^^^^^^      
+>foo : () => number
+>    : ^^^^^^      
+>0 : 0
+>  : ^
+
+export let fnArrowLetVariableOk = (cb = function(){ }): string => "S";
+>fnArrowLetVariableOk : (cb?: () => void) => string
+>                     : ^  ^^^^^^^^^^^^^^^^^^      
+>(cb = function(){ }): string => "S" : (cb?: () => void) => string
+>                                    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+export var fnExpressionVarVariableOk = function foo(): number { return 0;}
+>fnExpressionVarVariableOk : () => number
+>                          : ^^^^^^      
+>function foo(): number { return 0;} : () => number
+>                                    : ^^^^^^      
+>foo : () => number
+>    : ^^^^^^      
+>0 : 0
+>  : ^
+
+export var fnArrowVarVariableOk = (cb = function(){ }): string => "S";
+>fnArrowVarVariableOk : (cb?: () => void) => string
+>                     : ^  ^^^^^^^^^^^^^^^^^^      
+>(cb = function(){ }): string => "S" : (cb?: () => void) => string
+>                                    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+// Not exported
+const fnExpressionConstVariableInternal = function foo() { return 0;}
+>fnExpressionConstVariableInternal : () => number
+>                                  : ^^^^^^^^^^^^
+>function foo() { return 0;} : () => number
+>                            : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+const fnArrowConstVariableInternal = () => "S";
+>fnArrowConstVariableInternal : () => string
+>                             : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+let fnExpressionLetVariableInternal = function foo() { return 0;}
+>fnExpressionLetVariableInternal : () => number
+>                                : ^^^^^^^^^^^^
+>function foo() { return 0;} : () => number
+>                            : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+let fnArrowLetVariableInternal = () => "S";
+>fnArrowLetVariableInternal : () => string
+>                           : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+var fnExpressionVarVariableInternal = function foo() { return 0;}
+>fnExpressionVarVariableInternal : () => number
+>                                : ^^^^^^^^^^^^
+>function foo() { return 0;} : () => number
+>                            : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+var fnArrowVarVariableInternal = () => "S";
+>fnArrowVarVariableInternal : () => string
+>                           : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+// Function Fields
+export class ExportedClass { 
+>ExportedClass : ExportedClass
+>              : ^^^^^^^^^^^^^
+
+    // Should Error
+    fnExpression = function foo() { return 0; }
+>fnExpression : () => number
+>             : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    fnArrow = () => "S";    
+>fnArrow : () => string
+>        : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    protected fnExpressionProtected = function foo() { return 0; }
+>fnExpressionProtected : () => number
+>                      : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    protected fnArrowProtected = () => "S";
+>fnArrowProtected : () => string
+>                 : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    static fnStaticExpression = function foo() { return 0; }
+>fnStaticExpression : () => number
+>                   : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    static fnStaticArrow = () => "S";
+>fnStaticArrow : () => string
+>              : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    protected static fnStaticExpressionProtected = function foo() { return 0; }    
+>fnStaticExpressionProtected : () => number
+>                            : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    protected static fnStaticArrowProtected = () => "S";
+>fnStaticArrowProtected : () => string
+>                       : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    // Have annotation, so ok 
+    fnExpressionOk = function foo(): number { return 0; }
+>fnExpressionOk : () => number
+>               : ^^^^^^      
+>function foo(): number { return 0; } : () => number
+>                                     : ^^^^^^      
+>foo : () => number
+>    : ^^^^^^      
+>0 : 0
+>  : ^
+
+    fnArrowOK = (): string => "S";
+>fnArrowOK : () => string
+>          : ^^^^^^      
+>(): string => "S" : () => string
+>                  : ^^^^^^      
+>"S" : "S"
+>    : ^^^
+
+    protected fnExpressionProtectedOk = function foo(): number { return 0; }
+>fnExpressionProtectedOk : () => number
+>                        : ^^^^^^      
+>function foo(): number { return 0; } : () => number
+>                                     : ^^^^^^      
+>foo : () => number
+>    : ^^^^^^      
+>0 : 0
+>  : ^
+
+    protected fnArrowProtectedOK = (): string => "S";
+>fnArrowProtectedOK : () => string
+>                   : ^^^^^^      
+>(): string => "S" : () => string
+>                  : ^^^^^^      
+>"S" : "S"
+>    : ^^^
+
+    static fnStaticExpressionOk = function foo(): number { return 0; }
+>fnStaticExpressionOk : () => number
+>                     : ^^^^^^      
+>function foo(): number { return 0; } : () => number
+>                                     : ^^^^^^      
+>foo : () => number
+>    : ^^^^^^      
+>0 : 0
+>  : ^
+
+    static fnStaticArrowOk = (): string => "S";
+>fnStaticArrowOk : () => string
+>                : ^^^^^^      
+>(): string => "S" : () => string
+>                  : ^^^^^^      
+>"S" : "S"
+>    : ^^^
+
+    protected static fnStaticExpressionProtectedOk = function foo(): number { return 0; }    
+>fnStaticExpressionProtectedOk : () => number
+>                              : ^^^^^^      
+>function foo(): number { return 0; } : () => number
+>                                     : ^^^^^^      
+>foo : () => number
+>    : ^^^^^^      
+>0 : 0
+>  : ^
+
+    protected static fnStaticArrowProtectedOk = (): string => "S";
+>fnStaticArrowProtectedOk : () => string
+>                         : ^^^^^^      
+>(): string => "S" : () => string
+>                  : ^^^^^^      
+>"S" : "S"
+>    : ^^^
+    
+
+    // No Error not in declarations
+    private fnExpressionPrivate = function foo() { return 0; }
+>fnExpressionPrivate : () => number
+>                    : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private fnArrowPrivate = () => "S";
+>fnArrowPrivate : () => string
+>               : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    #fnArrow = () => "S";
+>#fnArrow : () => string
+>         : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    #fnExpression = function foo() { return 0;}
+>#fnExpression : () => number
+>              : ^^^^^^^^^^^^
+>function foo() { return 0;} : () => number
+>                            : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private static fnStaticExpressionPrivate = function foo() { return 0; }
+>fnStaticExpressionPrivate : () => number
+>                          : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private static fnStaticArrowPrivate = () => "S";
+>fnStaticArrowPrivate : () => string
+>                     : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+}
+
+// Should error
+class IndirectlyExportedClass { 
+>IndirectlyExportedClass : IndirectlyExportedClass
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    fnExpression = function foo() { return 0; }
+>fnExpression : () => number
+>             : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    fnArrow = () => "S";
+>fnArrow : () => string
+>        : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    static fnStaticExpression = function foo() { return 0; }
+>fnStaticExpression : () => number
+>                   : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    static fnStaticArrow = () => "S";
+>fnStaticArrow : () => string
+>              : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+    
+    protected static fnStaticExpressionProtected = function foo() { return 0; }    
+>fnStaticExpressionProtected : () => number
+>                            : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    protected static fnStaticArrowProtected = () => "S";
+>fnStaticArrowProtected : () => string
+>                       : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    private fnExpressionPrivate = function foo() { return 0; }
+>fnExpressionPrivate : () => number
+>                    : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private fnArrowPrivate = () => "S";
+>fnArrowPrivate : () => string
+>               : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    #fnArrow = () => "S";
+>#fnArrow : () => string
+>         : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    #fnExpression = function foo() { return 0;}
+>#fnExpression : () => number
+>              : ^^^^^^^^^^^^
+>function foo() { return 0;} : () => number
+>                            : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private static fnStaticExpressionPrivate = function foo() { return 0; }
+>fnStaticExpressionPrivate : () => number
+>                          : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private static fnStaticArrowPrivate = () => "S";
+>fnStaticArrowPrivate : () => string
+>                     : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+}
+export const instance: IndirectlyExportedClass = new IndirectlyExportedClass();
+>instance : IndirectlyExportedClass
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
+>new IndirectlyExportedClass() : IndirectlyExportedClass
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^
+>IndirectlyExportedClass : typeof IndirectlyExportedClass
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// No Errors
+class InternalClass { 
+>InternalClass : InternalClass
+>              : ^^^^^^^^^^^^^
+
+    fnExpression = function foo() { return 0; }
+>fnExpression : () => number
+>             : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    fnArrow = () => "S";
+>fnArrow : () => string
+>        : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    static fnStaticExpression = function foo() { return 0; }
+>fnStaticExpression : () => number
+>                   : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    static fnStaticArrow = () => "S";
+>fnStaticArrow : () => string
+>              : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+    
+    protected static fnStaticExpressionProtected = function foo() { return 0; }    
+>fnStaticExpressionProtected : () => number
+>                            : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    protected static fnStaticArrowProtected = () => "S";
+>fnStaticArrowProtected : () => string
+>                       : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    private fnExpressionPrivate = function foo() { return 0; }
+>fnExpressionPrivate : () => number
+>                    : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private fnArrowPrivate = () => "S";
+>fnArrowPrivate : () => string
+>               : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    #fnArrow = () => "S";
+>#fnArrow : () => string
+>         : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    #fnExpression = function foo() { return 0;}
+>#fnExpression : () => number
+>              : ^^^^^^^^^^^^
+>function foo() { return 0;} : () => number
+>                            : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private static fnStaticExpressionPrivate = function foo() { return 0; }
+>fnStaticExpressionPrivate : () => number
+>                          : ^^^^^^^^^^^^
+>function foo() { return 0; } : () => number
+>                             : ^^^^^^^^^^^^
+>foo : () => number
+>    : ^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private static fnStaticArrowPrivate = () => "S";
+>fnStaticArrowPrivate : () => string
+>                     : ^^^^^^^^^^^^
+>() => "S" : () => string
+>          : ^^^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+}
+const internalInstance: InternalClass = new InternalClass();
+>internalInstance : InternalClass
+>                 : ^^^^^^^^^^^^^
+>new InternalClass() : InternalClass
+>                    : ^^^^^^^^^^^^^
+>InternalClass : typeof InternalClass
+>              : ^^^^^^^^^^^^^^^^^^^^
+
+
+// Function parameters
+
+// In Function Variables - No annotations
+export const fnParamExpressionConstVariable = function foo(cb = function(){ }) { return 0;}
+>fnParamExpressionConstVariable : (cb?: () => void) => number
+>                               : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0;} : (cb?: () => void) => number
+>                                              : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export const fnParamArrowConstVariable = (cb = () => 1) => "S";
+>fnParamArrowConstVariable : (cb?: () => number) => string
+>                          : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = () => 1) => "S" : (cb?: () => number) => string
+>                      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => number
+>   : ^^^^^^^^^^^^
+>() => 1 : () => number
+>        : ^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+export let fnParamExpressionLetVariable = function foo(cb = function(){ }) { return 0;}
+>fnParamExpressionLetVariable : (cb?: () => void) => number
+>                             : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0;} : (cb?: () => void) => number
+>                                              : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export let fnParamArrowLetVariable = (cb = () => 1) => "S";
+>fnParamArrowLetVariable : (cb?: () => number) => string
+>                        : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = () => 1) => "S" : (cb?: () => number) => string
+>                      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => number
+>   : ^^^^^^^^^^^^
+>() => 1 : () => number
+>        : ^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+export var fnParamExpressionVarVariable = function foo(cb = function(){ }) { return 0;}
+>fnParamExpressionVarVariable : (cb?: () => void) => number
+>                             : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0;} : (cb?: () => void) => number
+>                                              : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export var fnParamArrowVarVariable = (cb = () => 1) => "S";
+>fnParamArrowVarVariable : (cb?: () => number) => string
+>                        : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = () => 1) => "S" : (cb?: () => number) => string
+>                      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => number
+>   : ^^^^^^^^^^^^
+>() => 1 : () => number
+>        : ^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+// In Function Variables - No annotations on parameter
+export const fnParamExpressionConstVariableOwnerHasReturnType = function foo(cb = function(){ }): number { return 0;}
+>fnParamExpressionConstVariableOwnerHasReturnType : (cb?: () => void) => number
+>                                                 : ^  ^^^^^^^^^^^^^^^^^^      
+>function foo(cb = function(){ }): number { return 0;} : (cb?: () => void) => number
+>                                                      : ^  ^^^^^^^^^^^^^^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export const fnParamArrowConstVariableOwnerHasReturnType = (cb = function(){ }): string => "S";
+>fnParamArrowConstVariableOwnerHasReturnType : (cb?: () => void) => string
+>                                            : ^  ^^^^^^^^^^^^^^^^^^      
+>(cb = function(){ }): string => "S" : (cb?: () => void) => string
+>                                    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+export let fnParamExpressionLetVariableOwnerHasReturnType = function foo(cb = function(){ }): number { return 0;}
+>fnParamExpressionLetVariableOwnerHasReturnType : (cb?: () => void) => number
+>                                               : ^  ^^^^^^^^^^^^^^^^^^      
+>function foo(cb = function(){ }): number { return 0;} : (cb?: () => void) => number
+>                                                      : ^  ^^^^^^^^^^^^^^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export let fnParamArrowLetVariableOwnerHasReturnType = (cb = function(){ }): string => "S";
+>fnParamArrowLetVariableOwnerHasReturnType : (cb?: () => void) => string
+>                                          : ^  ^^^^^^^^^^^^^^^^^^      
+>(cb = function(){ }): string => "S" : (cb?: () => void) => string
+>                                    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+export var fnParamExpressionVarVariableOwnerHasReturnType = function foo(cb = function(){ }): number { return 0;}
+>fnParamExpressionVarVariableOwnerHasReturnType : (cb?: () => void) => number
+>                                               : ^  ^^^^^^^^^^^^^^^^^^      
+>function foo(cb = function(){ }): number { return 0;} : (cb?: () => void) => number
+>                                                      : ^  ^^^^^^^^^^^^^^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export var fnParamArrowVarVariableOwnerHasReturnType = (cb = function(){ }): string => "S";
+>fnParamArrowVarVariableOwnerHasReturnType : (cb?: () => void) => string
+>                                          : ^  ^^^^^^^^^^^^^^^^^^      
+>(cb = function(){ }): string => "S" : (cb?: () => void) => string
+>                                    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+// No Errors
+export const fnParamExpressionConstVariableOk = function foo(cb = function(): void{ }): number { return 0;}
+>fnParamExpressionConstVariableOk : (cb?: () => void) => number
+>                                 : ^  ^^^^^^^^^    ^^^^^      
+>function foo(cb = function(): void{ }): number { return 0;} : (cb?: () => void) => number
+>                                                            : ^  ^^^^^^^^^    ^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>0 : 0
+>  : ^
+
+export const fnParamArrowConstVariableOk = (cb = function(): void{ }): string => "S";
+>fnParamArrowConstVariableOk : (cb?: () => void) => string
+>                            : ^  ^^^^^^^^^    ^^^^^      
+>(cb = function(): void{ }): string => "S" : (cb?: () => void) => string
+>                                          : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>"S" : "S"
+>    : ^^^
+
+export let fnParamExpressionLetVariableOk = function foo(cb = function(): void{ }): number { return 0;}
+>fnParamExpressionLetVariableOk : (cb?: () => void) => number
+>                               : ^  ^^^^^^^^^    ^^^^^      
+>function foo(cb = function(): void{ }): number { return 0;} : (cb?: () => void) => number
+>                                                            : ^  ^^^^^^^^^    ^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>0 : 0
+>  : ^
+
+export let fnParamArrowLetVariableOk = (cb = function(): void{ }): string => "S";
+>fnParamArrowLetVariableOk : (cb?: () => void) => string
+>                          : ^  ^^^^^^^^^    ^^^^^      
+>(cb = function(): void{ }): string => "S" : (cb?: () => void) => string
+>                                          : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>"S" : "S"
+>    : ^^^
+
+export var fnParamExpressionVarVariableOk = function foo(cb = function(): void{ }): number { return 0;}
+>fnParamExpressionVarVariableOk : (cb?: () => void) => number
+>                               : ^  ^^^^^^^^^    ^^^^^      
+>function foo(cb = function(): void{ }): number { return 0;} : (cb?: () => void) => number
+>                                                            : ^  ^^^^^^^^^    ^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>0 : 0
+>  : ^
+
+export var fnParamArrowVarVariableOk = (cb = function(): void{ }): string => "S";
+>fnParamArrowVarVariableOk : (cb?: () => void) => string
+>                          : ^  ^^^^^^^^^    ^^^^^      
+>(cb = function(): void{ }): string => "S" : (cb?: () => void) => string
+>                                          : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>"S" : "S"
+>    : ^^^
+
+export const fnParamExpressionConstVariableInternal = function foo(cb = function(){ }) { return 0;}
+>fnParamExpressionConstVariableInternal : (cb?: () => void) => number
+>                                       : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0;} : (cb?: () => void) => number
+>                                              : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export const fnParamArrowConstVariableInternal = (cb = () => 1) => "S";
+>fnParamArrowConstVariableInternal : (cb?: () => number) => string
+>                                  : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = () => 1) => "S" : (cb?: () => number) => string
+>                      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => number
+>   : ^^^^^^^^^^^^
+>() => 1 : () => number
+>        : ^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+export let fnParamExpressionLetVariableInternal = function foo(cb = function(){ }) { return 0;}
+>fnParamExpressionLetVariableInternal : (cb?: () => void) => number
+>                                     : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0;} : (cb?: () => void) => number
+>                                              : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export let fnParamArrowLetVariableInternal = (cb = () => 1) => "S";
+>fnParamArrowLetVariableInternal : (cb?: () => number) => string
+>                                : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = () => 1) => "S" : (cb?: () => number) => string
+>                      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => number
+>   : ^^^^^^^^^^^^
+>() => 1 : () => number
+>        : ^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+export var fnParamExpressionVarVariableInternal = function foo(cb = function(){ }) { return 0;}
+>fnParamExpressionVarVariableInternal : (cb?: () => void) => number
+>                                     : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0;} : (cb?: () => void) => number
+>                                              : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+export var fnParamArrowVarVariableInternal = (cb = () => 1) => "S";
+>fnParamArrowVarVariableInternal : (cb?: () => number) => string
+>                                : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = () => 1) => "S" : (cb?: () => number) => string
+>                      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => number
+>   : ^^^^^^^^^^^^
+>() => 1 : () => number
+>        : ^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"S" : "S"
+>    : ^^^
+
+
+// In Function Fields
+export class FnParamsExportedClass { 
+>FnParamsExportedClass : FnParamsExportedClass
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+
+    // Should Error
+    fnExpression = function foo(cb = function(){ }) { return 0; }
+>fnExpression : (cb?: () => void) => number
+>             : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0; } : (cb?: () => void) => number
+>                                               : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    fnArrow = (cb = function(){ }) => "S";
+>fnArrow : (cb?: () => void) => string
+>        : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = function(){ }) => "S" : (cb?: () => void) => string
+>                            : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    protected fnExpressionProtected = function foo(cb = function(){ }) { return 0; }
+>fnExpressionProtected : (cb?: () => void) => number
+>                      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0; } : (cb?: () => void) => number
+>                                               : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    protected fnArrowProtected = (cb = function(){ }) => "S";
+>fnArrowProtected : (cb?: () => void) => string
+>                 : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = function(){ }) => "S" : (cb?: () => void) => string
+>                            : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    static fnStaticExpression = function foo(cb = function(){ }) { return 0; }
+>fnStaticExpression : (cb?: () => void) => number
+>                   : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0; } : (cb?: () => void) => number
+>                                               : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    static fnStaticArrow = (cb = function(){ }) => "S";
+>fnStaticArrow : (cb?: () => void) => string
+>              : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = function(){ }) => "S" : (cb?: () => void) => string
+>                            : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    protected static fnStaticExpressionProtected = function foo(cb = function(){ }) { return 0; }    
+>fnStaticExpressionProtected : (cb?: () => void) => number
+>                            : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0; } : (cb?: () => void) => number
+>                                               : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    protected static fnStaticArrowProtected = (cb = function(){ }) => "S";
+>fnStaticArrowProtected : (cb?: () => void) => string
+>                       : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = function(){ }) => "S" : (cb?: () => void) => string
+>                            : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    // Have annotation on owner
+    fnExpressionMethodHasReturn = function foo(cb = function(){ }): number { return 0; }
+>fnExpressionMethodHasReturn : (cb?: () => void) => number
+>                            : ^  ^^^^^^^^^^^^^^^^^^      
+>function foo(cb = function(){ }): number { return 0; } : (cb?: () => void) => number
+>                                                       : ^  ^^^^^^^^^^^^^^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    fnArrowMethodHasReturn = (cb = function(){ }): string => "S";
+>fnArrowMethodHasReturn : (cb?: () => void) => string
+>                       : ^  ^^^^^^^^^^^^^^^^^^      
+>(cb = function(){ }): string => "S" : (cb?: () => void) => string
+>                                    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    protected fnExpressionProtectedMethodHasReturn = function foo(cb = function(){ }): number { return 0; }
+>fnExpressionProtectedMethodHasReturn : (cb?: () => void) => number
+>                                     : ^  ^^^^^^^^^^^^^^^^^^      
+>function foo(cb = function(){ }): number { return 0; } : (cb?: () => void) => number
+>                                                       : ^  ^^^^^^^^^^^^^^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    protected fnArrowProtectedMethodHasReturn = (cb = function(){ }): string => "S";
+>fnArrowProtectedMethodHasReturn : (cb?: () => void) => string
+>                                : ^  ^^^^^^^^^^^^^^^^^^      
+>(cb = function(){ }): string => "S" : (cb?: () => void) => string
+>                                    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    static fnStaticExpressionMethodHasReturn = function foo(cb = function(){ }): number { return 0; }
+>fnStaticExpressionMethodHasReturn : (cb?: () => void) => number
+>                                  : ^  ^^^^^^^^^^^^^^^^^^      
+>function foo(cb = function(){ }): number { return 0; } : (cb?: () => void) => number
+>                                                       : ^  ^^^^^^^^^^^^^^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    static fnStaticArrowMethodHasReturn = (cb = function(){ }): string => "S";
+>fnStaticArrowMethodHasReturn : (cb?: () => void) => string
+>                             : ^  ^^^^^^^^^^^^^^^^^^      
+>(cb = function(){ }): string => "S" : (cb?: () => void) => string
+>                                    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    protected static fnStaticExpressionProtectedMethodHasReturn = function foo(cb = function(){ }): number { return 0; }    
+>fnStaticExpressionProtectedMethodHasReturn : (cb?: () => void) => number
+>                                           : ^  ^^^^^^^^^^^^^^^^^^      
+>function foo(cb = function(){ }): number { return 0; } : (cb?: () => void) => number
+>                                                       : ^  ^^^^^^^^^^^^^^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    protected static fnStaticArrowProtectedMethodHasReturn = (cb = function(){ }): string => "S";
+>fnStaticArrowProtectedMethodHasReturn : (cb?: () => void) => string
+>                                      : ^  ^^^^^^^^^^^^^^^^^^      
+>(cb = function(){ }): string => "S" : (cb?: () => void) => string
+>                                    : ^  ^^^^^^^^^^^^^^^^^^      
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    // Have annotation only on parameter
+    fnExpressionOnlyOnParam = function foo(cb = function(): void { }) { return 0; }
+>fnExpressionOnlyOnParam : (cb?: () => void) => number
+>                        : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>function foo(cb = function(): void { }) { return 0; } : (cb?: () => void) => number
+>                                                      : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^    
+>function(): void { } : () => void
+>                     : ^^^^^^    
+>0 : 0
+>  : ^
+
+    fnArrowOnlyOnParam = (cb = function(): void { }) => "S";
+>fnArrowOnlyOnParam : (cb?: () => void) => string
+>                   : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>(cb = function(): void { }) => "S" : (cb?: () => void) => string
+>                                   : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^    
+>function(): void { } : () => void
+>                     : ^^^^^^    
+>"S" : "S"
+>    : ^^^
+
+    protected fnExpressionProtectedOnlyOnParam = function foo(cb = function(): void { }) { return 0; }
+>fnExpressionProtectedOnlyOnParam : (cb?: () => void) => number
+>                                 : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>function foo(cb = function(): void { }) { return 0; } : (cb?: () => void) => number
+>                                                      : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^    
+>function(): void { } : () => void
+>                     : ^^^^^^    
+>0 : 0
+>  : ^
+
+    protected fnArrowProtectedOnlyOnParam = (cb = function(): void { }) => "S";
+>fnArrowProtectedOnlyOnParam : (cb?: () => void) => string
+>                            : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>(cb = function(): void { }) => "S" : (cb?: () => void) => string
+>                                   : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^    
+>function(): void { } : () => void
+>                     : ^^^^^^    
+>"S" : "S"
+>    : ^^^
+
+    static fnStaticExpressionOnlyOnParam = function foo(cb = function(): void{ }) { return 0; }
+>fnStaticExpressionOnlyOnParam : (cb?: () => void) => number
+>                              : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>function foo(cb = function(): void{ }) { return 0; } : (cb?: () => void) => number
+>                                                     : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>0 : 0
+>  : ^
+
+    static fnStaticArrowOnlyOnParam = (cb = function(): void{ }) => "S";
+>fnStaticArrowOnlyOnParam : (cb?: () => void) => string
+>                         : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>(cb = function(): void{ }) => "S" : (cb?: () => void) => string
+>                                  : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>"S" : "S"
+>    : ^^^
+
+    protected static fnStaticExpressionProtectedOnlyOnParam = function foo(cb = function(): void{ }) { return 0; }    
+>fnStaticExpressionProtectedOnlyOnParam : (cb?: () => void) => number
+>                                       : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>function foo(cb = function(): void{ }) { return 0; } : (cb?: () => void) => number
+>                                                     : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>0 : 0
+>  : ^
+
+    protected static fnStaticArrowProtectedOnlyOnParam = (cb = function(): void{ }) => "S";
+>fnStaticArrowProtectedOnlyOnParam : (cb?: () => void) => string
+>                                  : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>(cb = function(): void{ }) => "S" : (cb?: () => void) => string
+>                                  : ^  ^^^^^^^^^    ^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>"S" : "S"
+>    : ^^^
+
+    // Have annotation, so ok 
+    fnExpressionOk = function foo(cb = function(): void { }): number { return 0; }
+>fnExpressionOk : (cb?: () => void) => number
+>               : ^  ^^^^^^^^^    ^^^^^      
+>function foo(cb = function(): void { }): number { return 0; } : (cb?: () => void) => number
+>                                                              : ^  ^^^^^^^^^    ^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void { } : () => void
+>                     : ^^^^^^    
+>0 : 0
+>  : ^
+
+    fnArrowOK = (cb = function(): void { }): string => "S";
+>fnArrowOK : (cb?: () => void) => string
+>          : ^  ^^^^^^^^^    ^^^^^      
+>(cb = function(): void { }): string => "S" : (cb?: () => void) => string
+>                                           : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void { } : () => void
+>                     : ^^^^^^    
+>"S" : "S"
+>    : ^^^
+
+    protected fnExpressionProtectedOk = function foo(cb = function(): void { }): number { return 0; }
+>fnExpressionProtectedOk : (cb?: () => void) => number
+>                        : ^  ^^^^^^^^^    ^^^^^      
+>function foo(cb = function(): void { }): number { return 0; } : (cb?: () => void) => number
+>                                                              : ^  ^^^^^^^^^    ^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void { } : () => void
+>                     : ^^^^^^    
+>0 : 0
+>  : ^
+
+    protected fnArrowProtectedOK = (cb = function(): void { }): string => "S";
+>fnArrowProtectedOK : (cb?: () => void) => string
+>                   : ^  ^^^^^^^^^    ^^^^^      
+>(cb = function(): void { }): string => "S" : (cb?: () => void) => string
+>                                           : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void { } : () => void
+>                     : ^^^^^^    
+>"S" : "S"
+>    : ^^^
+
+    static fnStaticExpressionOk = function foo(cb = function(): void{ }): number { return 0; }
+>fnStaticExpressionOk : (cb?: () => void) => number
+>                     : ^  ^^^^^^^^^    ^^^^^      
+>function foo(cb = function(): void{ }): number { return 0; } : (cb?: () => void) => number
+>                                                             : ^  ^^^^^^^^^    ^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>0 : 0
+>  : ^
+
+    static fnStaticArrowOk = (cb = function(): void{ }): string => "S";
+>fnStaticArrowOk : (cb?: () => void) => string
+>                : ^  ^^^^^^^^^    ^^^^^      
+>(cb = function(): void{ }): string => "S" : (cb?: () => void) => string
+>                                          : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>"S" : "S"
+>    : ^^^
+
+    protected static fnStaticExpressionProtectedOk = function foo(cb = function(): void{ }): number { return 0; }    
+>fnStaticExpressionProtectedOk : (cb?: () => void) => number
+>                              : ^  ^^^^^^^^^    ^^^^^      
+>function foo(cb = function(): void{ }): number { return 0; } : (cb?: () => void) => number
+>                                                             : ^  ^^^^^^^^^    ^^^^^      
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>0 : 0
+>  : ^
+
+    protected static fnStaticArrowProtectedOk = (cb = function(): void{ }): string => "S";
+>fnStaticArrowProtectedOk : (cb?: () => void) => string
+>                         : ^  ^^^^^^^^^    ^^^^^      
+>(cb = function(): void{ }): string => "S" : (cb?: () => void) => string
+>                                          : ^  ^^^^^^^^^    ^^^^^      
+>cb : () => void
+>   : ^^^^^^    
+>function(): void{ } : () => void
+>                    : ^^^^^^    
+>"S" : "S"
+>    : ^^^
+    
+
+    // No Error, not in declarations
+    private fnExpressionPrivate = function foo(cb = function(){ }) { return 0; }
+>fnExpressionPrivate : (cb?: () => void) => number
+>                    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0; } : (cb?: () => void) => number
+>                                               : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private fnArrowPrivate = (cb = function(){ }) => "S";
+>fnArrowPrivate : (cb?: () => void) => string
+>               : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = function(){ }) => "S" : (cb?: () => void) => string
+>                            : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    #fnArrow = (cb = function(){ }) => "S";
+>#fnArrow : (cb?: () => void) => string
+>         : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = function(){ }) => "S" : (cb?: () => void) => string
+>                            : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+
+    #fnExpression = function foo(cb = function(){ }) { return 0;}
+>#fnExpression : (cb?: () => void) => number
+>              : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0;} : (cb?: () => void) => number
+>                                              : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private static fnStaticExpressionPrivate = function foo(cb = function(){ }) { return 0; }
+>fnStaticExpressionPrivate : (cb?: () => void) => number
+>                          : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(cb = function(){ }) { return 0; } : (cb?: () => void) => number
+>                                               : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (cb?: () => void) => number
+>    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>0 : 0
+>  : ^
+
+    private static fnStaticArrowPrivate = (cb = function(){ }) => "S";
+>fnStaticArrowPrivate : (cb?: () => void) => string
+>                     : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>(cb = function(){ }) => "S" : (cb?: () => void) => string
+>                            : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
+>cb : () => void
+>   : ^^^^^^^^^^
+>function(){ } : () => void
+>              : ^^^^^^^^^^
+>"S" : "S"
+>    : ^^^
+}
+

@@ -1,0 +1,126 @@
+//// [tests/cases/compiler/narrowingInCaseClauseAfterCaseClauseWithReturn.ts] ////
+
+=== narrowingInCaseClauseAfterCaseClauseWithReturn.ts ===
+// https://github.com/microsoft/TypeScript/issues/56352
+
+function test1(arg: string | undefined) {
+>test1 : Symbol(test1, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 0, 0))
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 2, 15))
+
+  if (!arg) throw new Error();
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 2, 15))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  switch (true) {
+    case arg.toUpperCase() === "A":
+>arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 2, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+      return "A";
+
+    case arg.toUpperCase() === "B":
+>arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 2, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+    case arg.toUpperCase() === "C":
+>arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 2, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+    case arg.toUpperCase() === "D":
+>arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 2, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+      return "B, C or D";
+  }
+
+  return "Not A, B, C or D";
+}
+
+function test2(arg: string | undefined) {
+>test2 : Symbol(test2, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 16, 1))
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 18, 15))
+
+  if (!arg) throw new Error();
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 18, 15))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  switch (true) {
+    case arg.toUpperCase() === "A":
+>arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 18, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+    case arg.toUpperCase() === "B":
+>arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 18, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+    case arg.toUpperCase() === "C":
+>arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 18, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+      return "A, B or C";
+    case arg.toUpperCase() === "D":
+>arg.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 18, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+      return "D";
+  }
+
+  return "Not A, B, C or D";
+}
+
+function test3(
+>test3 : Symbol(test3, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 31, 1))
+
+  foo:
+>foo : Symbol(foo, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 33, 15))
+
+    | { kind: "a"; prop: string }
+>kind : Symbol(kind, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 35, 7))
+>prop : Symbol(prop, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 35, 18))
+
+    | { kind: "b"; prop: number }
+>kind : Symbol(kind, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 36, 7))
+>prop : Symbol(prop, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 36, 18))
+
+    | { kind: "c"; prop: boolean },
+>kind : Symbol(kind, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 37, 7))
+>prop : Symbol(prop, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 37, 18))
+
+  bar?: {
+>bar : Symbol(bar, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 37, 35))
+
+    type: "b";
+>type : Symbol(type, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 38, 9))
+
+  },
+) {
+  if (!bar) {
+>bar : Symbol(bar, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 37, 35))
+
+    return;
+  }
+
+  switch (foo.kind) {
+>foo.kind : Symbol(kind, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 35, 7), Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 36, 7), Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 37, 7))
+>foo : Symbol(foo, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 33, 15))
+>kind : Symbol(kind, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 35, 7), Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 36, 7), Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 37, 7))
+
+    case "a":
+      return;
+    case bar.type:
+>bar.type : Symbol(type, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 38, 9))
+>bar : Symbol(bar, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 37, 35))
+>type : Symbol(type, Decl(narrowingInCaseClauseAfterCaseClauseWithReturn.ts, 38, 9))
+
+    case "c":
+      return;
+  }
+}
