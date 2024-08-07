@@ -718,8 +718,8 @@ let x2: Partial<T2> = { a: 'no' }; // Error
 >     : ^^^^
 
 let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
->x3 : { [x: string]: any; a?: number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>x3 : { [x: string]: any; a?: number | undefined; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >{ a: 'no' } : { a: string; }
 >            : ^^^^^^^^^^^^^^
 >a : string

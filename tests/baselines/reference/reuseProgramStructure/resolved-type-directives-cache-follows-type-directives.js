@@ -117,6 +117,6 @@ MissingPaths:: [
   "lib.d.ts"
 ]
 
-/a.ts(2,39): error TS2688: Cannot find type definition file for 'typedefs2'.
+a.ts(2,39): error TS2688: Cannot find type definition file for 'typedefs2'.
 
 

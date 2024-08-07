@@ -6,7 +6,6 @@ import {
     CompilerOptions,
     createModeAwareCache,
     createModuleResolutionCache,
-    createMultiMap,
     createTypeReferenceDirectiveResolutionCache,
     createTypeReferenceResolutionLoader,
     Debug,
@@ -39,7 +38,6 @@ import {
     isDiskPathRoot,
     isEmittedFileOfProgram,
     isExternalModuleNameRelative,
-    isExternalOrCommonJsModule,
     isNodeModulesDirectory,
     isRootedDiskPath,
     isTraceEnabled,
@@ -572,7 +570,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
     let filesWithInvalidatedResolutions: Set<Path> | undefined;
     let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<Path, readonly string[]> | undefined;
-    const nonRelativeExternalModuleResolutions = createMultiMap<string, ResolutionWithFailedLookupLocations>();
+    const nonRelativeExternalModuleResolutions = new Set<ResolutionWithFailedLookupLocations>();
 
     const resolutionsWithFailedLookups = new Set<ResolutionWithFailedLookupLocations>();
     const resolutionsWithOnlyAffectingLocations = new Set<ResolutionWithFailedLookupLocations>();
@@ -755,8 +753,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         libraryResolutionCache.clearAllExceptPackageJsonInfoCache();
         // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
         // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
-        nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfNonRelativeModuleResolutions);
-        nonRelativeExternalModuleResolutions.clear();
+        watchFailedLookupLocationOfNonRelativeModuleResolutions();
         isSymlinkCache.clear();
     }
 
@@ -776,13 +773,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     function finishCachingPerDirectoryResolution(newProgram: Program | undefined, oldProgram: Program | undefined) {
         filesWithInvalidatedNonRelativeUnresolvedImports = undefined;
         allModuleAndTypeResolutionsAreInvalidated = false;
-        nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfNonRelativeModuleResolutions);
-        nonRelativeExternalModuleResolutions.clear();
+        watchFailedLookupLocationOfNonRelativeModuleResolutions();
         // Update file watches
         if (newProgram !== oldProgram) {
             cleanupLibResolutionWatching(newProgram);
             newProgram?.getSourceFiles().forEach(newFile => {
-                const expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations?.length ?? 0 : 0;
+                const expected = newFile.packageJsonLocations?.length ?? 0;
                 const existing = impliedFormatPackageJsons.get(newFile.resolvedPath) ?? emptyArray;
                 for (let i = existing.length; i < expected; i++) {
                     createFileWatcherOfAffectingLocation(newFile.packageJsonLocations![i], /*forResolution*/ false);
@@ -1103,7 +1099,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             watchFailedLookupLocationOfResolution(resolution);
         }
         else {
-            nonRelativeExternalModuleResolutions.add(name, resolution);
+            nonRelativeExternalModuleResolutions.add(resolution);
         }
         const resolved = getResolutionWithResolvedFileName(resolution);
         if (resolved && resolved.resolvedFileName) {
@@ -1236,14 +1232,9 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         packageJsonMap?.delete(resolutionHost.toPath(path));
     }
 
-    function watchFailedLookupLocationOfNonRelativeModuleResolutions(resolutions: ResolutionWithFailedLookupLocations[], name: string) {
-        const program = resolutionHost.getCurrentProgram();
-        if (!program || !program.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(name)) {
-            resolutions.forEach(watchFailedLookupLocationOfResolution);
-        }
-        else {
-            resolutions.forEach(resolution => watchAffectingLocationsOfResolution(resolution, /*addToResolutionsWithOnlyAffectingLocations*/ true));
-        }
+    function watchFailedLookupLocationOfNonRelativeModuleResolutions() {
+        nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfResolution);
+        nonRelativeExternalModuleResolutions.clear();
     }
 
     function createDirectoryWatcherForPackageDir(

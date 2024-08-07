@@ -1,9 +1,9 @@
-deferredCallbacks.ts(119,22): error TS2869: A 'deferred' parameter must have a type that permits functions.
-deferredCallbacks.ts(120,22): error TS2869: A 'deferred' parameter must have a type that permits functions.
-deferredCallbacks.ts(121,22): error TS2869: A 'deferred' parameter must have a type that permits functions.
-deferredCallbacks.ts(128,13): error TS2869: A 'deferred' parameter must have a type that permits functions.
-deferredCallbacks.ts(129,13): error TS2869: A 'deferred' parameter must have a type that permits functions.
-deferredCallbacks.ts(130,13): error TS2869: A 'deferred' parameter must have a type that permits functions.
+deferredCallbacks.ts(119,22): error TS2874: A 'deferred' parameter must have a type that permits functions.
+deferredCallbacks.ts(120,22): error TS2874: A 'deferred' parameter must have a type that permits functions.
+deferredCallbacks.ts(121,22): error TS2874: A 'deferred' parameter must have a type that permits functions.
+deferredCallbacks.ts(128,13): error TS2874: A 'deferred' parameter must have a type that permits functions.
+deferredCallbacks.ts(129,13): error TS2874: A 'deferred' parameter must have a type that permits functions.
+deferredCallbacks.ts(130,13): error TS2874: A 'deferred' parameter must have a type that permits functions.
 deferredCallbacks.ts(131,14): error TS1070: 'deferred' modifier cannot appear on a type member.
 
 
@@ -128,13 +128,13 @@ deferredCallbacks.ts(131,14): error TS1070: 'deferred' modifier cannot appear on
     
     declare function f30(deferred f: { foo(): void }): void;
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2869: A 'deferred' parameter must have a type that permits functions.
+!!! error TS2874: A 'deferred' parameter must have a type that permits functions.
     declare function f31(deferred f: number): void;
                          ~~~~~~~~~~~~~~~~~~
-!!! error TS2869: A 'deferred' parameter must have a type that permits functions.
+!!! error TS2874: A 'deferred' parameter must have a type that permits functions.
     declare function f32(deferred ...funcs: number[]): void;
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2869: A 'deferred' parameter must have a type that permits functions.
+!!! error TS2874: A 'deferred' parameter must have a type that permits functions.
     
     type T10 = (deferred f: () => void) => void;
     type T11 = (deferred f: { (): void }) => void;
@@ -143,13 +143,13 @@ deferredCallbacks.ts(131,14): error TS1070: 'deferred' modifier cannot appear on
     
     type T20 = (deferred f: { foo(): void }) => void;
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2869: A 'deferred' parameter must have a type that permits functions.
+!!! error TS2874: A 'deferred' parameter must have a type that permits functions.
     type T21 = (deferred f: number) => void;
                 ~~~~~~~~~~~~~~~~~~
-!!! error TS2869: A 'deferred' parameter must have a type that permits functions.
+!!! error TS2874: A 'deferred' parameter must have a type that permits functions.
     type T22 = (deferred ...funcs: number[]) => void;
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2869: A 'deferred' parameter must have a type that permits functions.
+!!! error TS2874: A 'deferred' parameter must have a type that permits functions.
     type T23 = { deferred x: () => void };
                  ~~~~~~~~
 !!! error TS1070: 'deferred' modifier cannot appear on a type member.

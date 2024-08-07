@@ -549,6 +549,8 @@ export const x = 10;`,
                 const host = createServerHost(files);
                 const session = new TestSession(host);
                 openFilesForSession([{ file: srcFile.path, content: srcFile.content, scriptKindName: "TS", projectRootPath: "/user/username/projects/myproject" }], session);
+                host.writeFile("/user/username/projects/myproject/src/somefolder/module1.js", "export const x = 10;");
+                host.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("resolutionCache", scenario, session);
             });
         }

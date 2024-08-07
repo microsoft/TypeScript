@@ -31,11 +31,14 @@ function tryGetPerformance() {
     if (isNodeLikeSystem()) {
         try {
             // By default, only write native events when generating a cpu profile or using the v8 profiler.
-            const { performance } = require("perf_hooks") as typeof import("perf_hooks");
-            return {
-                shouldWriteNativeEvents: false,
-                performance,
-            };
+            // Some environments may polyfill this module with an empty object; verify the object has the expected shape.
+            const { performance } = require("perf_hooks") as Partial<typeof import("perf_hooks")>;
+            if (performance) {
+                return {
+                    shouldWriteNativeEvents: false,
+                    performance,
+                };
+            }
         }
         catch {
             // ignore errors

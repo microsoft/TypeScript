@@ -1,5 +1,5 @@
 {
-    "reporter": ["lcovonly", "cobertura"],
+    "reporter": ["lcovonly", "cobertura", "v8", "codecov"],
     "src": "src",
     "include": ["src/**", "built/local/**"],
     "exclude": ["**/node_modules/**"],

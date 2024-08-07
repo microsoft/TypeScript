@@ -6562,6 +6562,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 return updateSatisfiesExpression(outerExpression, expression, outerExpression.type);
             case SyntaxKind.NonNullExpression:
                 return updateNonNullExpression(outerExpression, expression);
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return updateExpressionWithTypeArguments(outerExpression, expression, outerExpression.typeArguments);
             case SyntaxKind.PartiallyEmittedExpression:
                 return updatePartiallyEmittedExpression(outerExpression, expression);
         }

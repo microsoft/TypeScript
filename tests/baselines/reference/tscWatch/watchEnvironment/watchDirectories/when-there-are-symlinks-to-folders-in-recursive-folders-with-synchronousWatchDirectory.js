@@ -63,6 +63,13 @@ File '/home/user/projects/myproject/node_modules/a/index.tsx' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/user/projects/myproject/node_modules/a/index.d.ts', result '/home/user/projects/myproject/node_modules/reala/index.d.ts'.
 ======== Module name 'a' was successfully resolved to '/home/user/projects/myproject/node_modules/reala/index.d.ts'. ========
+File '/home/user/projects/myproject/node_modules/reala/package.json' does not exist.
+File '/home/user/projects/myproject/node_modules/package.json' does not exist.
+File '/home/user/projects/myproject/package.json' does not exist.
+File '/home/user/projects/package.json' does not exist.
+File '/home/user/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"synchronousWatchDirectory":true} Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
@@ -71,6 +78,10 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /home/user/projects/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
@@ -92,8 +103,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 PolledWatches::
 /home/user/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/user/projects/myproject/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/home/user/projects/myproject/node_modules/reala/package.json: *new*
+  {"pollingInterval":2000}
+/home/user/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /home/user/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/home/user/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -178,10 +197,18 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/no
 PolledWatches::
 /home/user/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/home/user/projects/myproject/node_modules/package.json:
+  {"pollingInterval":2000}
 /home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
   {"pollingInterval":250}
+/home/user/projects/myproject/node_modules/reala/package.json:
+  {"pollingInterval":2000}
+/home/user/projects/myproject/package.json:
+  {"pollingInterval":2000}
 /home/user/projects/node_modules/@types:
   {"pollingInterval":500}
+/home/user/projects/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -229,6 +256,13 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/user/projects/myproject/src/file.ts"]
   options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
+File '/home/user/projects/myproject/node_modules/reala/package.json' does not exist.
+File '/home/user/projects/myproject/node_modules/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/user/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
@@ -262,6 +296,10 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'a' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/node_modules/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /home/user/projects/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
 [96msrc/file.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
 
 [7m1[0m import * as a from "a"
@@ -282,8 +320,16 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
+/home/user/projects/myproject/node_modules/package.json:
+  {"pollingInterval":2000}
 /home/user/projects/myproject/node_modules/reala/index.d.ts:
   {"pollingInterval":250}
+/home/user/projects/myproject/node_modules/reala/package.json:
+  {"pollingInterval":2000}
+/home/user/projects/myproject/package.json:
+  {"pollingInterval":2000}
+/home/user/projects/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:

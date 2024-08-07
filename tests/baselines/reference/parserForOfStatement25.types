@@ -28,8 +28,8 @@ for (let [x = 'a' in {}] of [[]]) console.log(x)
 >  : ^^^^^^^
 
 for (let {x = 'a' in {}} of [{}]) console.log(x)
->x : any
->  : ^^^
+>x : boolean
+>  : ^^^^^^^
 >'a' in {} : boolean
 >          : ^^^^^^^
 >'a' : "a"
@@ -48,6 +48,6 @@ for (let {x = 'a' in {}} of [{}]) console.log(x)
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->x : any
->  : ^^^
+>x : boolean
+>  : ^^^^^^^
 
