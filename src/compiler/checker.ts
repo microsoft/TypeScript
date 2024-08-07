@@ -1181,8 +1181,9 @@ interface IterationTypesResolver {
     getGlobalIteratorType: (reportErrors: boolean) => GenericType;
     getGlobalIterableType: (reportErrors: boolean) => GenericType;
     getGlobalIterableIteratorType: (reportErrors: boolean) => GenericType;
-    getGlobalBuiltinIteratorType: (reportErrors: boolean) => GenericType;
+    getGlobalIteratorObjectType: (reportErrors: boolean) => GenericType;
     getGlobalGeneratorType: (reportErrors: boolean) => GenericType;
+    getGlobalBuiltinIteratorTypes: () => readonly GenericType[];
     resolveIterationType: (type: Type, errorNode: Node | undefined) => Type | undefined;
     mustHaveANextMethodDiagnostic: DiagnosticMessage;
     mustBeAMethodDiagnostic: DiagnosticMessage;
@@ -2167,8 +2168,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getGlobalIteratorType: getGlobalAsyncIteratorType,
         getGlobalIterableType: getGlobalAsyncIterableType,
         getGlobalIterableIteratorType: getGlobalAsyncIterableIteratorType,
-        getGlobalBuiltinIteratorType: getGlobalBuiltinAsyncIteratorType,
+        getGlobalIteratorObjectType: getGlobalAsyncIteratorObjectType,
         getGlobalGeneratorType: getGlobalAsyncGeneratorType,
+        getGlobalBuiltinIteratorTypes: getGlobalBuiltinAsyncIteratorTypes,
         resolveIterationType: (type, errorNode) => getAwaitedType(type, errorNode, Diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member),
         mustHaveANextMethodDiagnostic: Diagnostics.An_async_iterator_must_have_a_next_method,
         mustBeAMethodDiagnostic: Diagnostics.The_0_property_of_an_async_iterator_must_be_a_method,
@@ -2182,8 +2184,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getGlobalIteratorType,
         getGlobalIterableType,
         getGlobalIterableIteratorType,
-        getGlobalBuiltinIteratorType,
+        getGlobalIteratorObjectType,
         getGlobalGeneratorType,
+        getGlobalBuiltinIteratorTypes,
         resolveIterationType: (type, _errorNode) => type,
         mustHaveANextMethodDiagnostic: Diagnostics.An_iterator_must_have_a_next_method,
         mustBeAMethodDiagnostic: Diagnostics.The_0_property_of_an_iterator_must_be_a_method,
@@ -2244,14 +2247,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var deferredGlobalIterableType: GenericType | undefined;
     var deferredGlobalIteratorType: GenericType | undefined;
     var deferredGlobalIterableIteratorType: GenericType | undefined;
-    var deferredGlobalBuiltinIteratorType: GenericType | undefined;
+    var deferredGlobalIteratorObjectType: GenericType | undefined;
     var deferredGlobalGeneratorType: GenericType | undefined;
     var deferredGlobalIteratorYieldResultType: GenericType | undefined;
     var deferredGlobalIteratorReturnResultType: GenericType | undefined;
     var deferredGlobalAsyncIterableType: GenericType | undefined;
     var deferredGlobalAsyncIteratorType: GenericType | undefined;
     var deferredGlobalAsyncIterableIteratorType: GenericType | undefined;
-    var deferredGlobalBuiltinAsyncIteratorType: GenericType | undefined;
+    var deferredGlobalBuiltinIteratorTypes: readonly GenericType[] | undefined;
+    var deferredGlobalBuiltinAsyncIteratorTypes: readonly GenericType[] | undefined;
+    var deferredGlobalAsyncIteratorObjectType: GenericType | undefined;
     var deferredGlobalAsyncGeneratorType: GenericType | undefined;
     var deferredGlobalTemplateStringsArrayType: ObjectType | undefined;
     var deferredGlobalImportMetaType: ObjectType;
@@ -12488,6 +12493,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return removeMissingType(getTypeOfSymbol(symbol), !!(symbol.flags & SymbolFlags.Optional));
     }
 
+    function isReferenceToSomeType(type: Type, targets: readonly Type[]) {
+        if (type === undefined || (getObjectFlags(type) & ObjectFlags.Reference) === 0) {
+            return false;
+        }
+        for (const target of targets) {
+            if ((type as TypeReference).target === target) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function isReferenceToType(type: Type, target: Type) {
         return type !== undefined
             && target !== undefined
@@ -13001,7 +13018,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     links.instantiations.set(getTypeListId(typeParameters), type);
                 }
                 if (type === intrinsicMarkerType && symbol.escapedName === "BuiltinIteratorReturn") {
-                    type = strictBuiltinIteratorReturn ? undefinedType : anyType;
+                    type = getBuiltinIteratorReturnType();
                 }
             }
             else {
@@ -16868,6 +16885,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return symbol || reportErrors ? getTypeOfGlobalSymbol(symbol, arity) : undefined;
     }
 
+    function getGlobalBuiltinTypes(typeNames: readonly string[], arity: 0): ObjectType[];
+    function getGlobalBuiltinTypes(typeNames: readonly string[], arity: number): GenericType[];
+    function getGlobalBuiltinTypes(typeNames: readonly string[], arity: number) {
+        let types: Type[] | undefined;
+        for (const typeName of typeNames) {
+            types = append(types, getGlobalType(typeName as __String, arity, /*reportErrors*/ false));
+        }
+        return types ?? emptyArray;
+    }
+
     function getGlobalTypedPropertyDescriptorType() {
         // We always report an error, so store a result in the event we could not resolve the symbol to prevent reporting it multiple times
         return deferredGlobalTypedPropertyDescriptorType ||= getGlobalType("TypedPropertyDescriptor" as __String, /*arity*/ 1, /*reportErrors*/ true) || emptyGenericType;
@@ -16949,8 +16976,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return (deferredGlobalAsyncIterableIteratorType ||= getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
     }
 
-    function getGlobalBuiltinAsyncIteratorType(reportErrors: boolean) {
-        return (deferredGlobalBuiltinAsyncIteratorType ||= getGlobalType("BuiltinAsyncIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
+    function getGlobalBuiltinAsyncIteratorTypes() {
+        // NOTE: This list does not include all built-in async iterator types, only those that are likely to be encountered frequently.
+        return deferredGlobalBuiltinAsyncIteratorTypes ??= getGlobalBuiltinTypes(["ReadableStreamAsyncIterator"], 1);
+    }
+
+    function getGlobalAsyncIteratorObjectType(reportErrors: boolean) {
+        return (deferredGlobalAsyncIteratorObjectType ||= getGlobalType("AsyncIteratorObject" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
     }
 
     function getGlobalAsyncGeneratorType(reportErrors: boolean) {
@@ -16969,8 +17001,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return (deferredGlobalIterableIteratorType ||= getGlobalType("IterableIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
     }
 
-    function getGlobalBuiltinIteratorType(reportErrors: boolean) {
-        return (deferredGlobalBuiltinIteratorType ||= getGlobalType("BuiltinIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
+    function getBuiltinIteratorReturnType() {
+        return strictBuiltinIteratorReturn ? undefinedType : anyType;
+    }
+
+    function getGlobalBuiltinIteratorTypes() {
+        // NOTE: This list does not include all built-in iterator types, only those that are likely to be encountered frequently.
+        return deferredGlobalBuiltinIteratorTypes ??= getGlobalBuiltinTypes(["ArrayIterator", "MapIterator", "SetIterator", "StringIterator"], 1);
+    }
+
+    function getGlobalIteratorObjectType(reportErrors: boolean) {
+        return (deferredGlobalIteratorObjectType ||= getGlobalType("IteratorObject" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
     }
 
     function getGlobalGeneratorType(reportErrors: boolean) {
@@ -33667,10 +33708,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getEnclosingClassFromThisParameter(node: Node): InterfaceType | undefined {
+        // 'this' type for a node comes from, in priority order...
+        // 1. The type of a syntactic 'this' parameter in the enclosing function scope
         const thisParameter = getThisParameterFromNodeContext(node);
         let thisType = thisParameter?.type && getTypeFromTypeNode(thisParameter.type);
-        if (thisType && thisType.flags & TypeFlags.TypeParameter) {
-            thisType = getConstraintOfTypeParameter(thisType as TypeParameter);
+        if (thisType) {
+            // 2. The constraint of a type parameter used for an explicit 'this' parameter
+            if (thisType.flags & TypeFlags.TypeParameter) {
+                thisType = getConstraintOfTypeParameter(thisType as TypeParameter);
+            }
+        }
+        else {
+            // 3. The 'this' parameter of a contextual type
+            const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
+            if (isFunctionLike(thisContainer)) {
+                thisType = getContextualThisParameterType(thisContainer);
+            }
         }
         if (thisType && getObjectFlags(thisType) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference)) {
             return getTargetType(thisType) as InterfaceType;
@@ -40980,10 +41033,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkSourceElement(node.type);
 
         const { parameterName } = node;
-        if (typePredicate.kind === TypePredicateKind.This || typePredicate.kind === TypePredicateKind.AssertsThis) {
-            getTypeFromThisTypeNode(parameterName as ThisTypeNode);
-        }
-        else {
+        if (typePredicate.kind !== TypePredicateKind.This && typePredicate.kind !== TypePredicateKind.AssertsThis) {
             if (typePredicate.parameterIndex >= 0) {
                 if (signatureHasRestParameter(signature) && typePredicate.parameterIndex === signature.parameters.length - 1) {
                     error(parameterName, Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
@@ -44189,7 +44239,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 bothHelper(location, body);
                 return;
             }
-            const type = location === condExpr ? condType : checkTruthinessExpression(location);
+            const type = location === condExpr ? condType : checkExpression(location);
             if (type.flags & TypeFlags.EnumLiteral && isPropertyAccessExpression(location) && (getNodeLinks(location.expression).resolvedSymbol ?? unknownSymbol).flags & SymbolFlags.Enum) {
                 // EnumLiteral type at condition with known value is always truthy or always falsy, likely an error
                 error(location, Diagnostics.This_condition_will_always_return_0, !!(type as LiteralType).value ? "true" : "false");
@@ -44942,16 +44992,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // As an optimization, if the type is an instantiation of the following global type, then
         // just grab its related type arguments:
         // - `Iterable<T, TReturn, TNext>` or `AsyncIterable<T, TReturn, TNext>`
-        // - `BuiltinIterator<T, TReturn, TNext>` or `BuiltinAsyncIterator<T, TReturn, TNext>`
+        // - `IteratorObject<T, TReturn, TNext>` or `AsyncIteratorObject<T, TReturn, TNext>`
         // - `IterableIterator<T, TReturn, TNext>` or `AsyncIterableIterator<T, TReturn, TNext>`
         // - `Generator<T, TReturn, TNext>` or `AsyncGenerator<T, TReturn, TNext>`
         if (
             isReferenceToType(type, resolver.getGlobalIterableType(/*reportErrors*/ false)) ||
-            isReferenceToType(type, resolver.getGlobalBuiltinIteratorType(/*reportErrors*/ false)) ||
+            isReferenceToType(type, resolver.getGlobalIteratorObjectType(/*reportErrors*/ false)) ||
             isReferenceToType(type, resolver.getGlobalIterableIteratorType(/*reportErrors*/ false)) ||
             isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))
         ) {
             const [yieldType, returnType, nextType] = getTypeArguments(type as GenericType);
+            return setCachedIterationTypes(type, resolver.iterableCacheKey, createIterationTypes(resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || yieldType, resolver.resolveIterationType(returnType, /*errorNode*/ undefined) || returnType, nextType));
+        }
+
+        // As an optimization, if the type is an instantiation of one of the following global types, then
+        // just grab the related type argument:
+        // - `ArrayIterator<T>`
+        // - `MapIterator<T>`
+        // - `SetIterator<T>`
+        // - `StringIterator<T>`
+        // - `ReadableStreamAsyncIterator<T>`
+        if (isReferenceToSomeType(type, resolver.getGlobalBuiltinIteratorTypes())) {
+            const [yieldType] = getTypeArguments(type as GenericType);
+            const returnType = getBuiltinIteratorReturnType();
+            const nextType = unknownType;
             return setCachedIterationTypes(type, resolver.iterableCacheKey, createIterationTypes(resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || yieldType, resolver.resolveIterationType(returnType, /*errorNode*/ undefined) || returnType, nextType));
         }
     }
@@ -45070,16 +45134,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // As an optimization, if the type is an instantiation of one of the following global types,
         // then just grab its related type arguments:
         // - `IterableIterator<T, TReturn, TNext>` or `AsyncIterableIterator<T, TReturn, TNext>`
-        // - `BuiltinIterator<T, TReturn, TNext>` or `BuiltinAsyncIterator<T, TReturn, TNext>`
+        // - `IteratorObject<T, TReturn, TNext>` or `AsyncIteratorObject<T, TReturn, TNext>`
         // - `Iterator<T, TReturn, TNext>` or `AsyncIterator<T, TReturn, TNext>`
         // - `Generator<T, TReturn, TNext>` or `AsyncGenerator<T, TReturn, TNext>`
         if (
-            isReferenceToType(type, resolver.getGlobalBuiltinIteratorType(/*reportErrors*/ false)) ||
             isReferenceToType(type, resolver.getGlobalIterableIteratorType(/*reportErrors*/ false)) ||
             isReferenceToType(type, resolver.getGlobalIteratorType(/*reportErrors*/ false)) ||
+            isReferenceToType(type, resolver.getGlobalIteratorObjectType(/*reportErrors*/ false)) ||
             isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))
         ) {
             const [yieldType, returnType, nextType] = getTypeArguments(type as GenericType);
+            return setCachedIterationTypes(type, resolver.iteratorCacheKey, createIterationTypes(yieldType, returnType, nextType));
+        }
+
+        // As an optimization, if the type is an instantiation of one of the following global types, then
+        // just grab the related type argument:
+        // - `ArrayIterator<T>`
+        // - `MapIterator<T>`
+        // - `SetIterator<T>`
+        // - `StringIterator<T>`
+        // - `ReadableStreamAsyncIterator<T>`
+        if (isReferenceToSomeType(type, resolver.getGlobalBuiltinIteratorTypes())) {
+            const [yieldType] = getTypeArguments(type as GenericType);
+            const returnType = getBuiltinIteratorReturnType();
+            const nextType = unknownType;
             return setCachedIterationTypes(type, resolver.iteratorCacheKey, createIterationTypes(yieldType, returnType, nextType));
         }
     }
@@ -47032,6 +47110,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 grammarErrorOnFirstToken(node, Diagnostics.Exports_and_export_assignments_are_not_permitted_in_module_augmentations);
                 break;
             case SyntaxKind.ImportEqualsDeclaration:
+                // import a = e.x; in module augmentation is ok, but not import a = require('fs)
+                if (isInternalModuleImportEqualsDeclaration(node)) break;
+                // falls through
             case SyntaxKind.ImportDeclaration:
                 grammarErrorOnFirstToken(node, Diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module);
                 break;

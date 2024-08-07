@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/conditionalTypeDoesntSpinForever.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000 -> 2,500
-Instantiation count: 5,000
+Type Count: 1,000
+Instantiation count: 2,500 -> 5,000
 
 === conditionalTypeDoesntSpinForever.ts ===
 // A *self-contained* demonstration of the problem follows...

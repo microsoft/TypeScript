@@ -38,9 +38,9 @@ class MyMap implements Map<string, number> {
     get(key: string): number | undefined { return undefined; }
     has(key: string): boolean { return false; }
     set(key: string, value: number): this { return this; }
-    entries(): BuiltinIterator<[string, number], BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
-    keys(): BuiltinIterator<string, BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
-    [Symbol.iterator](): BuiltinIterator<[string, number], BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
+    entries(): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
+    keys(): MapIterator<string> { throw new Error("Method not implemented."); }
+    [Symbol.iterator](): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
 
     // error when strictBuiltinIteratorReturn is true because values() has implicit `void` return, which isn't assignable to `undefined`
     * values() {
