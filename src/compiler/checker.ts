@@ -31602,7 +31602,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     if (isGenericMappedType(constituentType) && !constituentType.declaration.nameType) {
                         const substitutedType = getIndexedMappedTypeSubstitutedTypeOfContextualType(constituentType, name, nameType);
-                        types = appendContextualPropertyTypeConsitutent(types, substitutedType);
+                        types = appendContextualPropertyTypeConstituent(types, substitutedType);
                         continue;
                     }
                     const propertyType = getTypeOfConcretePropertyOfContextualType(constituentType, name);
@@ -31614,12 +31614,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     ignoreIndexInfos = true;
                     indexInfoCandidates = undefined;
-                    types = appendContextualPropertyTypeConsitutent(types, propertyType);
+                    types = appendContextualPropertyTypeConstituent(types, propertyType);
                 }
                 if (indexInfoCandidates) {
                     for (const candidate of indexInfoCandidates) {
                         const indexInfoType = getTypeFromIndexInfosOfContextualType(candidate, name, nameType);
-                        types = appendContextualPropertyTypeConsitutent(types, indexInfoType);
+                        types = appendContextualPropertyTypeConstituent(types, indexInfoType);
                     }
                 }
                 if (!types) {
@@ -31639,9 +31639,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }, /*noReductions*/ true);
     }
 
-    function appendContextualPropertyTypeConsitutent(types: Type[] | undefined, type: Type | undefined) {
+    function appendContextualPropertyTypeConstituent(types: Type[] | undefined, type: Type | undefined) {
         // any doesn't provide any contextual information but could spoil the overall result by nullifying contextual information provided by other intersection constituents
-        // so it gets replaced with `unknown` as `T & unknown` is just `T` and all types computed based on the contextual information provided by other consistuents are still assignable to any
+        // so it gets replaced with `unknown` as `T & unknown` is just `T` and all types computed based on the contextual information provided by other constituens are still assignable to any
         return type ? append(types, type.flags & TypeFlags.Any ? unknownType : type) : types;
     }
 
