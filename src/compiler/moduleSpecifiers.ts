@@ -132,7 +132,9 @@ const stringToRegex = memoizeOne((pattern: string) => {
     try {
         return new RegExp(pattern);
     }
-    catch {}
+    catch {
+        return undefined;
+    }
 });
 
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
