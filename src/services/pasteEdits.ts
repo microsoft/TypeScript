@@ -1,22 +1,20 @@
-import { findIndex } from "../compiler/core.js";
 import {
     CancellationToken,
-    Program,
-    SourceFile,
-    Statement,
-    SymbolFlags,
-    TextRange,
-    UserPreferences,
-} from "../compiler/types.js";
-import {
     codefix,
     Debug,
     fileShouldUseJavaScriptRequire,
+    findIndex,
     forEachChild,
     formatting,
     getQuotePreference,
     isIdentifier,
+    Program,
+    SourceFile,
+    Statement,
+    SymbolFlags,
     textChanges,
+    TextRange,
+    UserPreferences,
 } from "./_namespaces/ts.js";
 import { addTargetFileImports } from "./refactors/helpers.js";
 import {
