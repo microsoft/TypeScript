@@ -19,3 +19,34 @@ verify.importFixModuleSpecifiers("", ["ambient"], { autoImportSpecifierExcludeRe
 verify.importFixModuleSpecifiers("", ["ambient"], { autoImportSpecifierExcludeRegexes: ["^ambient/"] });
 verify.importFixModuleSpecifiers("", ["ambient/utils"], { autoImportSpecifierExcludeRegexes: ["ambient$"] });
 verify.importFixModuleSpecifiers("", ["ambient", "ambient/utils"], { autoImportSpecifierExcludeRegexes: ["oops("] });
+
+verify.completions({
+  marker: "",
+  includes: [{
+    name: "x",
+    source: "ambient",
+    sourceDisplay: "ambient",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions
+  }, {
+    name: "x",
+    source: "ambient/utils",
+    sourceDisplay: "ambient/utils",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions
+  }],
+  preferences: {
+    includeCompletionsForModuleExports: true,
+    allowIncompleteCompletions: true
+  }
+});
+
+verify.completions({
+    marker: "",
+    excludes: ["ambient/utils"],
+    preferences: {
+      includeCompletionsForModuleExports: true,
+      allowIncompleteCompletions: true,
+      autoImportSpecifierExcludeRegexes: ["utils"]
+    },
+})
