@@ -1,7 +1,4 @@
 import {
-    findIndex,
-} from "../compiler/core.js";
-import {
     CancellationToken,
     Program,
     SourceFile,
@@ -15,6 +12,7 @@ import {
     Debug,
     fileShouldUseJavaScriptRequire,
     findAncestor,
+    findIndex,
     forEachChild,
     formatting,
     getQuotePreference,
