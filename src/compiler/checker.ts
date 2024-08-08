@@ -12573,7 +12573,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!node) {
                 return undefined;
             }
-            switch (node.kind) {
+            const kind = node.kind;
+            switch (kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
@@ -12595,15 +12596,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.MappedType:
                 case SyntaxKind.ConditionalType: {
                     const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
-                    if (node.kind === SyntaxKind.MappedType) {
+                    if ((kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction || isObjectLiteralMethod(node)) && isContextSensitive(node as Expression | MethodDeclaration)) {
+                        const signature = firstOrUndefined(getSignaturesOfType(getTypeOfSymbol(getSymbolOfDeclaration(node as FunctionLikeDeclaration)), SignatureKind.Call));
+                        if (signature && signature.typeParameters) {
+                            return [...(outerTypeParameters || emptyArray), ...signature.typeParameters];
+                        }
+                    }
+                    if (kind === SyntaxKind.MappedType) {
                         return append(outerTypeParameters, getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration((node as MappedTypeNode).typeParameter)));
                     }
-                    else if (node.kind === SyntaxKind.ConditionalType) {
+                    else if (kind === SyntaxKind.ConditionalType) {
                         return concatenate(outerTypeParameters, getInferTypeParameters(node as ConditionalTypeNode));
                     }
                     const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(node as DeclarationWithTypeParameters));
                     const thisType = includeThisTypes &&
-                        (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.InterfaceDeclaration || isJSConstructor(node)) &&
+                        (kind === SyntaxKind.ClassDeclaration || kind === SyntaxKind.ClassExpression || kind === SyntaxKind.InterfaceDeclaration || isJSConstructor(node)) &&
                         getDeclaredTypeOfClassOrInterface(getSymbolOfDeclaration(node as ClassLikeDeclaration | InterfaceDeclaration)).thisType;
                     return thisType ? append(outerAndOwnTypeParameters, thisType) : outerAndOwnTypeParameters;
                 }
