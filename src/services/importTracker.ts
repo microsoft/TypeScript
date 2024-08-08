@@ -530,7 +530,7 @@ function forEachPossibleImportOrExportStatement<T>(sourceFileLike: SourceFileLik
 
 /** Calls `action` for each import, re-export, or require() in a file. */
 function forEachImport(sourceFile: SourceFile, action: (importStatement: ImporterOrCallExpression, imported: StringLiteralLike) => void): void {
-    if (sourceFile.externalModuleIndicator || sourceFile.imports !== undefined) {
+    if (sourceFile.externalModuleIndicator || sourceFile.imports) {
         for (const i of sourceFile.imports) {
             action(importFromModuleSpecifier(i), i);
         }

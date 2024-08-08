@@ -102,7 +102,7 @@ function convertGlobalOptionsToCompilerOptions(globalOptions: Harness.TestCasePa
 }
 
 function isMarker(x: Marker | Range): x is Marker {
-    return (x as Marker).position !== undefined;
+    return typeof (x as Marker).position === "number";
 }
 
 function convertDocumentSpanToString<T extends ts.DocumentSpan>(span: T, prefix?: string, ignoredProperties?: readonly string[]) {
@@ -3490,6 +3490,7 @@ export class TestState {
             }
             else {
                 for (const fileName in newFileContent) {
+                    assert.isDefined(newFileContent[fileName]);
                     this.verifyFileContent(fileName, newFileContent[fileName]);
                 }
             }
@@ -3609,7 +3610,7 @@ export class TestState {
 
     public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined, options?: ts.DocCommentTemplateOptions) {
         const name = "verifyDocCommentTemplate";
-        const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition, options || { generateReturnInDocTemplate: true }, this.formatCodeSettings)!;
+        const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition, options || { generateReturnInDocTemplate: true }, this.formatCodeSettings);
 
         if (expected === undefined) {
             if (actual) {
@@ -4106,6 +4107,7 @@ export class TestState {
 
         const newFileContents = typeof newContentWithRenameMarker === "string" ? { [this.activeFile.fileName]: newContentWithRenameMarker } : newContentWithRenameMarker;
         for (const fileName in newFileContents) {
+            assert.isDefined(newFileContents[fileName]);
             const { renamePosition: rp, newContent } = TestState.parseNewContent(newFileContents[fileName]);
             if (renamePosition === undefined) {
                 renameFilename = fileName;
@@ -4177,7 +4179,7 @@ export class TestState {
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 
-    private testNewFileContents(edits: readonly ts.FileTextChanges[], newFileContents: { [fileName: string]: string; }, description: string): void {
+    private testNewFileContents(edits: readonly ts.FileTextChanges[], newFileContents: { [fileName: string]: string | undefined; }, description: string): void {
         for (const { fileName, textChanges } of edits) {
             const newContent = newFileContents[fileName];
             if (newContent === undefined) {
@@ -4787,9 +4789,7 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
                     const value = match[2];
                     if (!ts.contains(fileMetadataNames, key)) {
                         // Check if the match is already existed in the global options
-                        if (globalOptions[key] !== undefined) {
-                            throw new Error(`Global option '${key}' already exists`);
-                        }
+                        assert.isUndefined(globalOptions[key], `Global option '${key}' already exists`);
                         globalOptions[key] = value;
                     }
                     else {
@@ -4849,7 +4849,7 @@ function getNonFileNameOptionInFileList(files: FourSlashFile[]): string | undefi
     return ts.forEach(files, f => getNonFileNameOptionInObject(f.fileOptions));
 }
 
-function getNonFileNameOptionInObject(optionObject: { [s: string]: string; }): string | undefined {
+function getNonFileNameOptionInObject(optionObject: { [s: string]: string | undefined; }): string | undefined {
     for (const option in optionObject) {
         switch (option) {
             case MetadataOptionNames.fileName:
@@ -4875,17 +4875,13 @@ function reportError(fileName: string, line: number, col: number, message: strin
 }
 
 function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: Map<string, Marker>, markers: Marker[]): Marker | undefined {
-    let markerValue;
+    let markerValue: { name?: unknown; } | undefined;
     try {
         // Attempt to parse the marker value as JSON
         markerValue = JSON.parse("{ " + text + " }") as { name?: unknown; };
     }
     catch (e) {
         reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text " + e.message);
-    }
-
-    if (markerValue === undefined) {
-        reportError(fileName, location.sourceLine, location.sourceColumn, "Object markers can not be empty");
     }
 
     const marker: Marker = {

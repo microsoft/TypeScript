@@ -783,8 +783,6 @@ const relativePathSegmentRegExp = /(?:\/\/)|(?:^|\/)\.\.?(?:$|\/)/;
 
 function comparePathsWorker(a: string, b: string, componentComparer: (a: string, b: string) => Comparison) {
     if (a === b) return Comparison.EqualTo;
-    if (a === undefined) return Comparison.LessThan;
-    if (b === undefined) return Comparison.GreaterThan;
 
     // NOTE: Performance optimization - shortcut if the root segments differ as there would be no
     //       need to perform path reduction.
@@ -872,7 +870,6 @@ export function containsPath(parent: string, child: string, currentDirectory?: s
     else if (typeof currentDirectory === "boolean") {
         ignoreCase = currentDirectory;
     }
-    if (parent === undefined || child === undefined) return false;
     if (parent === child) return true;
     const parentComponents = reducePathComponents(getPathComponents(parent));
     const childComponents = reducePathComponents(getPathComponents(child));

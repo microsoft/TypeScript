@@ -1510,8 +1510,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             pos++;
         }
 
-        Debug.assert(resultingToken !== undefined);
-
         tokenValue = contents;
         return resultingToken;
     }

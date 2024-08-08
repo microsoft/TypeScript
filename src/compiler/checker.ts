@@ -12509,7 +12509,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isReferenceToSomeType(type: Type, targets: readonly Type[]) {
-        if (type === undefined || (getObjectFlags(type) & ObjectFlags.Reference) === 0) {
+        if ((getObjectFlags(type) & ObjectFlags.Reference) === 0) {
             return false;
         }
         for (const target of targets) {
@@ -12521,9 +12521,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isReferenceToType(type: Type, target: Type) {
-        return type !== undefined
-            && target !== undefined
-            && (getObjectFlags(type) & ObjectFlags.Reference) !== 0
+        return (getObjectFlags(type) & ObjectFlags.Reference) !== 0
             && (type as TypeReference).target === target;
     }
 
@@ -18797,9 +18795,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else {
                         let suggestion: string | undefined;
                         if (propName !== undefined && (suggestion = getSuggestionForNonexistentProperty(propName as string, objectType))) {
-                            if (suggestion !== undefined) {
-                                error(accessExpression.argumentExpression, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName as string, typeToString(objectType), suggestion);
-                            }
+                            error(accessExpression.argumentExpression, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName as string, typeToString(objectType), suggestion);
                         }
                         else {
                             const suggestion = getSuggestionForNonexistentIndexSignature(objectType, accessExpression, indexType);
@@ -29794,7 +29790,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isExportOrExportExpression(location: Node) {
         return !!findAncestor(location, n => {
-            const parent = n.parent;
+            const parent = n.parent as Node | undefined;
             if (parent === undefined) {
                 return "quit";
             }
@@ -35130,7 +35126,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeArgumentTypes = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
         let mapper: TypeMapper | undefined;
         for (let i = 0; i < typeArgumentNodes.length; i++) {
-            Debug.assert(typeParameters[i] !== undefined, "Should not call checkTypeArguments with too many type arguments");
+            Debug.assertIsDefined(typeParameters[i], "Should not call checkTypeArguments with too many type arguments");
             const constraint = getConstraintOfTypeParameter(typeParameters[i]);
             if (constraint) {
                 const errorInfo = reportErrors && headMessage ? (() => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1)) : undefined;
@@ -45510,7 +45506,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Grammar checking
         checkGrammarStatementInAmbientContext(node);
 
-        let firstDefaultClause: CaseOrDefaultClause;
+        let firstDefaultClause: CaseOrDefaultClause | undefined;
         let hasDuplicateDefaultClause = false;
 
         const expressionType = checkExpression(node.expression);

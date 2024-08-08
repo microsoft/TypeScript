@@ -1224,7 +1224,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         for (let i = 0; i < length; i++) {
             const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, escapeLeadingUnderscores(`arg${i}`));
             symbol.links.type = combineTypes(calls.map(call => call.argumentTypes[i] || checker.getUndefinedType()));
-            if (calls.some(call => call.argumentTypes[i] === undefined)) {
+            if (calls.some(call => call.argumentTypes.length <= i)) {
                 symbol.flags |= SymbolFlags.Optional;
             }
             parameters.push(symbol);

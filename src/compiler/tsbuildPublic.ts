@@ -1704,7 +1704,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             }
 
             // We have an output older than an upstream output - we are out of date
-            Debug.assert(oldestOutputFileName !== undefined, "Should have an oldest output filename here");
+            Debug.assertIsDefined(oldestOutputFileName, "Should have an oldest output filename here");
             return {
                 type: UpToDateStatusType.OutOfDateWithUpstream,
                 outOfDateOutputFileName: oldestOutputFileName,

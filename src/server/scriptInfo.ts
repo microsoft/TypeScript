@@ -145,8 +145,6 @@ export class TextStorage {
      * returns true if text changed
      */
     public reload(newText: string): boolean {
-        Debug.assert(newText !== undefined);
-
         // Reload always has fresh content
         this.pendingReloadFromDisk = false;
 
@@ -273,9 +271,9 @@ export class TextStorage {
     }
 
     private getFileTextAndSize(tempFileName?: string): { text: string; fileSize?: number; } {
-        let text: string;
+        let text: string | undefined;
         const fileName = tempFileName || this.info.fileName;
-        const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
+        const getText = () => (text ??= this.host.readFile(fileName) ?? "");
         // Only non typescript files have size limitation
         if (!hasTSFileExtension(this.info.fileName)) {
             const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;

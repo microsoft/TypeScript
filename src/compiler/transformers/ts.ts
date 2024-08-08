@@ -261,7 +261,7 @@ export function transformTypeScript(context: TransformationContext) {
 
     // These variables contain state that changes as we descend into the tree.
     let currentSourceFile: SourceFile;
-    let currentNamespace: ModuleDeclaration;
+    let currentNamespace: ModuleDeclaration | undefined;
     let currentNamespaceContainerName: Identifier;
     let currentLexicalScope: SourceFile | Block | ModuleBlock | CaseBlock;
     let currentScopeFirstDeclarationsOfName: Map<__String, Node> | undefined;

@@ -36,9 +36,6 @@ export class SourceText implements ts.IScriptSnapshot {
     }
 
     static New(references: string, importsAndExports: string, program: string): SourceText {
-        ts.Debug.assert(references !== undefined);
-        ts.Debug.assert(importsAndExports !== undefined);
-        ts.Debug.assert(program !== undefined);
         return new SourceText(references + newLine, importsAndExports + newLine, program || "");
     }
 
@@ -47,15 +44,12 @@ export class SourceText implements ts.IScriptSnapshot {
     }
 
     public updateReferences(newReferences: string): SourceText {
-        ts.Debug.assert(newReferences !== undefined);
         return new SourceText(newReferences + newLine, this.importsAndExports, this.program, this.changedPart | ChangedPart.references, this.version + 1);
     }
     public updateImportsAndExports(newImportsAndExports: string): SourceText {
-        ts.Debug.assert(newImportsAndExports !== undefined);
         return new SourceText(this.references, newImportsAndExports + newLine, this.program, this.changedPart | ChangedPart.importsAndExports, this.version + 1);
     }
     public updateProgram(newProgram: string): SourceText {
-        ts.Debug.assert(newProgram !== undefined);
         return new SourceText(this.references, this.importsAndExports, newProgram, this.changedPart | ChangedPart.program, this.version + 1);
     }
 

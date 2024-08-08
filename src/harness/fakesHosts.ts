@@ -56,7 +56,7 @@ export class System implements ts.System {
     public readFile(path: string) {
         try {
             const content = this.vfs.readFileSync(path, "utf8");
-            return content === undefined ? undefined : Utils.removeByteOrderMark(content);
+            return Utils.removeByteOrderMark(content);
         }
         catch {
             return undefined;

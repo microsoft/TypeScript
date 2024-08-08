@@ -35,7 +35,7 @@ export interface RefactorErrorInfo {
  * @internal
  */
 export function isRefactorErrorInfo(info: unknown): info is RefactorErrorInfo {
-    return (info as RefactorErrorInfo).error !== undefined;
+    return !!(info as RefactorErrorInfo).error;
 }
 
 /**

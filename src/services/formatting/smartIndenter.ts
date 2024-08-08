@@ -405,8 +405,8 @@ export namespace SmartIndenter {
 
     export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
         if (parent.kind === SyntaxKind.IfStatement && (parent as IfStatement).elseStatement === child) {
-            const elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile)!;
-            Debug.assert(elseKeyword !== undefined);
+            const elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
+            Debug.assertIsDefined(elseKeyword);
 
             const elseKeywordStartLine = getStartLineAndCharacterForNode(elseKeyword, sourceFile).line;
             return elseKeywordStartLine === childStartLine;

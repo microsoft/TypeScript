@@ -85,7 +85,7 @@ function buildMap(rules: readonly RuleSpec[]): readonly (readonly Rule[])[] {
             for (const right of rule.rightTokenRange.tokens) {
                 const index = getRuleBucketIndex(left, right);
                 let rulesBucket = map[index];
-                if (rulesBucket === undefined) {
+                if (!Array.isArray(rulesBucket)) {
                     rulesBucket = map[index] = [];
                 }
                 addRule(rulesBucket, rule.rule, specificRule, rulesBucketConstructionStateList, index);

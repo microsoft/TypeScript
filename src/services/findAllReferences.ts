@@ -332,7 +332,7 @@ function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry 
 
 /** @internal */
 export function isContextWithStartAndEndNode(node: ContextNode): node is ContextWithStartAndEndNode {
-    return node && (node as Node).kind === undefined;
+    return node && (node as { kind?: SyntaxKind; }).kind === undefined;
 }
 
 function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {

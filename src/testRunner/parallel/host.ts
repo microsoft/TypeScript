@@ -200,7 +200,7 @@ export function start(importTests: () => Promise<unknown>) {
         return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
     }
 
-    function readSavedPerfData(target?: string): { [testHash: string]: number; } | undefined {
+    function readSavedPerfData(target?: string): { [testHash: string]: number | undefined; } | undefined {
         const perfDataContents = IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
@@ -212,7 +212,7 @@ export function start(importTests: () => Promise<unknown>) {
         return `tsrunner-${runner}://${test}`;
     }
 
-    function startDelayed(perfData: { [testHash: string]: number; } | undefined, totalCost: number) {
+    function startDelayed(perfData: { [testHash: string]: number | undefined; } | undefined, totalCost: number) {
         console.log(`Discovered ${tasks.length} unittest suites` + (newTasks.length ? ` and ${newTasks.length} new suites.` : "."));
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
@@ -236,13 +236,13 @@ export function start(importTests: () => Promise<unknown>) {
                 }
                 else {
                     const hashedName = hashName(runner.kind(), file);
-                    size = perfData[hashedName];
-                    if (size === undefined) {
+                    if (perfData[hashedName] === undefined) {
                         size = 0;
                         unknownValue = hashedName;
                         newTasks.push({ runner: runner.kind(), file, size });
                         continue;
                     }
+                    size = perfData[hashedName];
                 }
                 tasks.push({ runner: runner.kind(), file, size });
                 totalCost += size;
@@ -637,12 +637,13 @@ export function start(importTests: () => Promise<unknown>) {
             // Note, sub-suites are not indexed (we assume such granularity is not required)
             let size = 0;
             if (perfData) {
-                size = perfData[hashName("unittest", title)];
-                if (size === undefined) {
+                const savedData = perfData[hashName("unittest", title)];
+                if (savedData === undefined) {
                     newTasks.push({ runner: "unittest", file: title, size: 0 });
                     unknownValue = title;
                     return;
                 }
+                size = savedData;
             }
             tasks.push({ runner: "unittest", file: title, size });
             totalCost += size;

@@ -53,7 +53,7 @@ import {
 /** @internal */
 export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRules {
     interface BinaryPlusExpression extends BinaryExpression {
-        cachedLiteralKind: SyntaxKind;
+        cachedLiteralKind: SyntaxKind | undefined;
     }
 
     let binaryLeftOperandParenthesizerCache: Map<BinaryOperator, (node: Expression) => Expression> | undefined;
@@ -257,8 +257,9 @@ export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRul
         }
 
         if (node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken) {
-            if ((node as BinaryPlusExpression).cachedLiteralKind !== undefined) {
-                return (node as BinaryPlusExpression).cachedLiteralKind;
+            const n = node as BinaryPlusExpression;
+            if (n.cachedLiteralKind !== undefined) {
+                return n.cachedLiteralKind;
             }
 
             const leftKind = getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).left);

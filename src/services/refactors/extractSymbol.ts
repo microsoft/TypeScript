@@ -16,6 +16,7 @@ import {
     compareProperties,
     compareStringsCaseSensitive,
     compareValues,
+    concatenate,
     contains,
     ContinueStatement,
     createDiagnosticForNode,
@@ -1552,7 +1553,7 @@ function extractConstantInScope(
     }
 }
 
-function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
+function getContainingVariableDeclarationIfInList(node: Node | undefined, scope: Scope) {
     let prevNode;
     while (node !== undefined && node !== scope) {
         if (
@@ -1769,12 +1770,7 @@ function getPropertyAssignmentsForWritesAndVariableDeclarations(
     const variableAssignments = map(exposedVariableDeclarations, v => factory.createShorthandPropertyAssignment(v.symbol.name));
     const writeAssignments = map(writes, w => factory.createShorthandPropertyAssignment(w.symbol.name));
 
-    // TODO: GH#18217 `variableAssignments` not possibly undefined!
-    return variableAssignments === undefined
-        ? writeAssignments!
-        : writeAssignments === undefined
-        ? variableAssignments
-        : variableAssignments.concat(writeAssignments);
+    return concatenate(variableAssignments, writeAssignments);
 }
 
 function isReadonlyArray(v: any): v is readonly any[] {
@@ -1898,7 +1894,7 @@ function collectReadsAndWrites(
         const seenTypeParameterUsages = new Map<string, TypeParameter>(); // Key is type ID
 
         let i = 0;
-        for (let curr: Node = unmodifiedNode; curr !== undefined && i < scopes.length; curr = curr.parent) {
+        for (let curr: Node | undefined = unmodifiedNode; curr !== undefined && i < scopes.length; curr = curr.parent as Node | undefined) {
             if (curr === scopes[i]) {
                 // Copy current contents of seenTypeParameterUsages into scope.
                 seenTypeParameterUsages.forEach((typeParameter, id) => {

@@ -146,7 +146,7 @@ export function visitNode<TIn extends Node | undefined, TVisited extends Node | 
     lift?: (node: readonly Node[]) => Node,
 ): Node | (TIn & undefined) | (TVisited & undefined);
 export function visitNode(
-    node: Node,
+    node: Node | undefined,
     visitor: Visitor,
     test?: (node: Node) => boolean,
     lift?: (node: readonly Node[]) => Node,
@@ -343,7 +343,7 @@ function visitArrayWorker(
     // Visit each original node.
     for (let i = 0; i < count; i++) {
         const node = nodes[i + start];
-        const visited = node !== undefined ? (visitor ? visitor(node) : node) : undefined;
+        const visited = visitor ? visitor(node) : node;
         if (updated !== undefined || visited === undefined || visited !== node) {
             if (updated === undefined) {
                 // Ensure we have a copy of `nodes`, up to the current index.

@@ -6,7 +6,7 @@ import * as ts from "./_namespaces/ts.js";
 
 const testPathPrefixRegExp = /(?:(file:\/{3})|\/)\.(ts|lib|src)\//g;
 export function removeTestPathPrefixes(text: string, retainTrailingDirectorySeparator?: boolean): string {
-    return text !== undefined ? text.replace(testPathPrefixRegExp, (_, scheme) => scheme || (retainTrailingDirectorySeparator ? "/" : "")) : undefined!; // TODO: GH#18217
+    return text.replace(testPathPrefixRegExp, (_, scheme) => scheme || (retainTrailingDirectorySeparator ? "/" : ""));
 }
 
 function createDiagnosticMessageReplacer<R extends (messageArgs: string[], ...args: string[]) => string[]>(diagnosticMessage: ts.DiagnosticMessage, replacer: R) {

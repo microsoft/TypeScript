@@ -331,7 +331,7 @@ function parseHyphen(left: string, right: string, comparators: Comparator[]) {
     return true;
 }
 
-function parseComparator(operator: string, text: string, comparators: Comparator[]) {
+function parseComparator(operator: string | undefined, text: string, comparators: Comparator[]) {
     const result = parsePartial(text);
     if (!result) return false;
 

@@ -1885,7 +1885,7 @@ export interface VerifyDocumentHighlightsOptions {
     filesToSearch: readonly string[];
 }
 
-export type NewFileContent = string | { readonly [filename: string]: string; };
+export type NewFileContent = string | { readonly [filename: string]: string | undefined; };
 
 export interface NewContentOptions {
     // Exactly one of these should be defined.

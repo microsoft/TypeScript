@@ -184,7 +184,7 @@ export namespace Compiler {
      */
     export class WriterAggregator {
         public lines: string[] = [];
-        public currentLine: string = undefined!;
+        public currentLine: string | undefined = undefined;
 
         public Write(str: string) {
             // out of memory usage concerns avoid using + or += if we're going to do any manipulation of this string later
@@ -194,12 +194,12 @@ export namespace Compiler {
         public WriteLine(str: string) {
             // out of memory usage concerns avoid using + or += if we're going to do any manipulation of this string later
             this.lines.push([this.currentLine || "", str].join(""));
-            this.currentLine = undefined!;
+            this.currentLine = undefined;
         }
 
         public Close() {
             if (this.currentLine !== undefined) this.lines.push(this.currentLine);
-            this.currentLine = undefined!;
+            this.currentLine = undefined;
         }
 
         public reset() {
@@ -282,6 +282,7 @@ export namespace Compiler {
         baselineFile?: string;
         libFiles?: string;
         noTypesAndSymbols?: boolean;
+        currentDirectory?: string;
     }
 
     // Additional options not already in ts.optionDeclarations
@@ -321,9 +322,7 @@ export namespace Compiler {
         for (const name in settings) {
             if (ts.hasProperty(settings, name)) {
                 const value = settings[name];
-                if (value === undefined) {
-                    throw new Error(`Cannot have undefined value for compiler option '${name}'.`);
-                }
+                assert.isDefined(value, `Cannot have undefined value for compiler option '${name}'.`);
                 if (name === "typeScriptVersion") {
                     continue;
                 }
@@ -439,7 +438,7 @@ export namespace Compiler {
         declOtherFiles: TestFile[];
         harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions | undefined;
         options: ts.CompilerOptions;
-        currentDirectory: string;
+        currentDirectory: string | undefined;
     }
 
     export function prepareDeclarationCompilationContext(
@@ -448,8 +447,6 @@ export namespace Compiler {
         result: compiler.CompilationResult,
         harnessSettings: TestCaseParser.CompilerSettings & HarnessOptions,
         options: ts.CompilerOptions,
-        // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
-        currentDirectory: string | undefined,
     ): DeclarationCompilationContext | undefined {
         if (options.declaration && result.diagnostics.length === 0) {
             if (options.emitDeclarationOnly) {
@@ -469,7 +466,7 @@ export namespace Compiler {
         if (options.declaration && result.diagnostics.length === 0 && result.dts.size > 0) {
             ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
             ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
-            return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: currentDirectory || harnessSettings.currentDirectory };
+            return { declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory: harnessSettings.currentDirectory };
         }
 
         function addDtsFile(file: TestFile, dtsFiles: TestFile[]) {
@@ -616,7 +613,7 @@ export namespace Compiler {
 
         // 'merge' the lines of each input file with any errors associated with it
         const dupeCase = new Map<string, number>();
-        for (const inputFile of inputFiles.filter(f => f.content !== undefined)) {
+        for (const inputFile of inputFiles.filter(f => typeof f.content === "string")) {
             // Filter down to the errors in the file
             const fileErrors = diagnostics.filter((e): e is ts.DiagnosticWithLocation => {
                 const errFn = e.file;
@@ -990,7 +987,6 @@ export namespace Compiler {
             result,
             harnessSettings,
             options,
-            /*currentDirectory*/ undefined,
         );
         const declFileCompilationResult = compileDeclarationFiles(declFileContext, result.symlinks);
 
@@ -1199,7 +1195,7 @@ export function getFileBasedTestConfigurations(settings: TestCaseParser.Compiler
     for (const varyByKey of varyBy) {
         if (ts.hasProperty(settings, varyByKey)) {
             // we only consider variations when there are 2 or more variable entries.
-            const entries = splitVaryBySettingValue(settings[varyByKey], varyByKey);
+            const entries = splitVaryBySettingValue(settings[varyByKey]!, varyByKey);
             if (entries) {
                 if (!varyByEntries) varyByEntries = [];
                 variationCount *= entries.length;
@@ -1234,7 +1230,7 @@ export function getFileBasedTestConfigurationDescription(configuration: FileBase
 export namespace TestCaseParser {
     /** all the necessary information to set the right compiler settings */
     export interface CompilerSettings {
-        [name: string]: string;
+        [name: string]: string | undefined;
     }
 
     /** All the necessary information to turn a multi file test into useful units for later compilation */
@@ -1399,7 +1395,7 @@ export namespace TestCaseParser {
             const data = testUnitData[i];
             if (getConfigNameFromFileName(data.name)) {
                 const configJson = ts.parseJsonText(data.name, data.content);
-                assert.isTrue(configJson.endOfFileToken !== undefined);
+                assert.isDefined(configJson.endOfFileToken);
                 const configFileName = ts.getNormalizedAbsolutePath(data.name, vfs.srcFolder);
                 const configDir = ts.getDirectoryPath(configFileName);
                 tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, configDir, /*existingOptions*/ undefined, configFileName);
@@ -1454,7 +1450,7 @@ export namespace Baseline {
 
     const fileCache: { [idx: string]: boolean; } = {};
 
-    function compareToBaseline(actual: string | null, relativeFileName: string, opts: BaselineOptions | undefined) { // eslint-disable-line no-restricted-syntax
+    function compareToBaseline(actual: string | undefined | null, relativeFileName: string, opts: BaselineOptions | undefined) { // eslint-disable-line no-restricted-syntax
         // actual is now either undefined (the generator had an error), null (no file requested),
         // or some real output of the function
         if (actual === undefined) {
@@ -1533,9 +1529,6 @@ export namespace Baseline {
 
     export function runBaseline(relativeFileName: string, actual: string | null, opts?: BaselineOptions): void { // eslint-disable-line no-restricted-syntax
         const actualFileName = localPath(relativeFileName, opts && opts.Baselinefolder, opts && opts.Subfolder);
-        if (actual === undefined) {
-            throw new Error('The generated content was "undefined". Return "null" if no baselining is required."');
-        }
         const comparison = compareToBaseline(actual, relativeFileName, opts);
         writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, opts);
     }

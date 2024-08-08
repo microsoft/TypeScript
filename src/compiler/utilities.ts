@@ -6151,7 +6151,7 @@ export function createTextWriter(newLine: string): EmitTextWriter {
     }
 
     function writeText(s: string) {
-        if (s && s.length) {
+        if (s.length) {
             if (lineStart) {
                 s = getIndentString(indent) + s;
                 lineStart = false;
@@ -6181,15 +6181,13 @@ export function createTextWriter(newLine: string): EmitTextWriter {
     }
 
     function rawWrite(s: string) {
-        if (s !== undefined) {
-            output += s;
-            updateLineCountAndPosFor(s);
-            hasTrailingComment = false;
-        }
+        output += s;
+        updateLineCountAndPosFor(s);
+        hasTrailingComment = false;
     }
 
     function writeLiteral(s: string) {
-        if (s && s.length) {
+        if (s.length) {
             write(s);
         }
     }

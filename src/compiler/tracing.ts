@@ -58,7 +58,7 @@ export namespace tracingEnabled {
     export function startTracing(tracingMode: Mode, traceDir: string, configFilePath?: string) {
         Debug.assert(!tracing, "Tracing already started");
 
-        if (fs === undefined) {
+        if (typeof fs === "undefined") {
             try {
                 fs = require("fs");
             }

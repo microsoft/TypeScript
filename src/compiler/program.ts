@@ -1239,7 +1239,7 @@ export interface SyntheticReferenceFileLocation {
 
 /** @internal */
 export function isReferenceFileLocation(location: ReferenceFileLocation | SyntheticReferenceFileLocation): location is ReferenceFileLocation {
-    return (location as ReferenceFileLocation).pos !== undefined;
+    return typeof (location as ReferenceFileLocation).pos === "number";
 }
 
 /** @internal */
@@ -1584,7 +1584,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let processingOtherFiles: SourceFile[] | undefined;
     let files: SourceFile[];
     let symlinks: SymlinkCache | undefined;
-    let commonSourceDirectory: string;
+    let commonSourceDirectory: string | undefined;
     let typeChecker: TypeChecker;
     let classifiableNames: Set<__String>;
     let fileReasons = createMultiMap<Path, FileIncludeReason>();
@@ -1675,7 +1675,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 containingSourceFile,
             ).map(resolved =>
                 resolved ?
-                    ((resolved as ResolvedModuleFull).extension !== undefined) ?
+                    (typeof (resolved as ResolvedModuleFull).extension === "string") ?
                         { resolvedModule: resolved as ResolvedModuleFull } :
                         // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
                         { resolvedModule: { ...resolved, extension: extensionFromPath(resolved.resolvedFileName) } } :

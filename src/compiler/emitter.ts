@@ -4973,7 +4973,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function getSeparatingLineTerminatorCount(previousNode: Node | undefined, nextNode: Node, format: ListFormat): number {
         if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
-            if (previousNode === undefined || nextNode === undefined) {
+            if (previousNode === undefined) {
                 return 0;
             }
             if (nextNode.kind === SyntaxKind.JsxText) {
