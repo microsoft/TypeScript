@@ -257,6 +257,7 @@ import {
     JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocSignature,
+    JSDocSpecializeTag,
     JSDocTag,
     JSDocTemplateTag,
     JSDocThisTag,
@@ -1876,6 +1877,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitJSDocSeeTag(node as JSDocSeeTag);
                 case SyntaxKind.JSDocImportTag:
                     return emitJSDocImportTag(node as JSDocImportTag);
+                case SyntaxKind.JSDocSpecializeTag:
+                    return emitJSDocSpecializeTag(node as JSDocSpecializeTag);
                 // SyntaxKind.JSDocPropertyTag (see JSDocParameterTag, above)
 
                 // Transformation nodes
@@ -4056,6 +4059,15 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (tag.attributes) {
             emitWithLeadingSpace(tag.attributes);
         }
+        emitJSDocComment(tag.comment);
+    }
+
+    function emitJSDocSpecializeTag(tag: JSDocSpecializeTag) {
+        emitJSDocTagName(tag.tagName);
+        writeSpace();
+        writePunctuation("<");
+        emitList(tag, tag.typeArguments, ListFormat.CommaListElements);
+        writePunctuation(">");
         emitJSDocComment(tag.comment);
     }
 

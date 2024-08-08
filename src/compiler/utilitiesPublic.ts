@@ -151,6 +151,7 @@ import {
     isJSDocReturnTag,
     isJSDocSatisfiesTag,
     isJSDocSignature,
+    isJSDocSpecializeTag,
     isJSDocTemplateTag,
     isJSDocThisTag,
     isJSDocTypeAlias,
@@ -198,6 +199,7 @@ import {
     JSDocReturnTag,
     JSDocSatisfiesTag,
     JSDocSignature,
+    JSDocSpecializeTag,
     JSDocTag,
     JSDocTemplateTag,
     JSDocThisTag,
@@ -1183,6 +1185,10 @@ export function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined {
 
 export function getJSDocSatisfiesTag(node: Node): JSDocSatisfiesTag | undefined {
     return getFirstJSDocTag(node, isJSDocSatisfiesTag);
+}
+
+export function getJSDocSpecializeTag(node: Node): JSDocSpecializeTag | undefined {
+    return getFirstJSDocTag(node, isJSDocSpecializeTag);
 }
 
 /** Gets the JSDoc type tag for the node if present and valid */

@@ -148,6 +148,7 @@ import {
     isJSDocFunctionType,
     isJSDocNullableType,
     isJSDocReturnTag,
+    isJSDocSpecializeTag,
     isJSDocTypeTag,
     isJsxNamespacedName,
     isJsxOpeningElement,
@@ -201,6 +202,7 @@ import {
     JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocSignature,
+    JSDocSpecializeTag,
     JSDocSyntaxKind,
     JSDocTag,
     JSDocTemplateTag,
@@ -1131,6 +1133,9 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.JSDocDeprecatedTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocOverrideTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocImportTag]: forEachChildInJSDocImportTag,
+    [SyntaxKind.JSDocSpecializeTag]: function forEachChildInJSDocSpecializeTag<T>(node: JSDocSpecializeTag, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return forEach(node.typeArguments, cbNode);
+    },
     [SyntaxKind.PartiallyEmittedExpression]: forEachChildInPartiallyEmittedExpression,
 };
 
@@ -9122,6 +9127,9 @@ namespace Parser {
                     case "import":
                         tag = parseImportTag(start, tagName, margin, indentText);
                         break;
+                    case "specialize":
+                        tag = parseSpecializeTag(start, tagName, margin, indentText);
+                        break;
                     default:
                         tag = parseUnknownTag(start, tagName, margin, indentText);
                         break;
@@ -9508,6 +9516,24 @@ namespace Parser {
 
                 const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
                 return finishNode(factory.createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comments), start);
+            }
+
+            function parseSpecializeTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocSpecializeTag {
+                if (some(tags, isJSDocSpecializeTag)) {
+                    parseErrorAt(tagName.pos, scanner.getTokenStart(), Diagnostics._0_tag_already_specified, unescapeLeadingUnderscores(tagName.escapedText));
+                }
+                const pos = getNodePos();
+                scanner.setSkipJsDocLeadingAsterisks(true);
+                let typeArguments: NodeArray<TypeNode>;
+                if (token() === SyntaxKind.LessThanToken) {
+                    typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseJSDocType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+                }
+                else {
+                    typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseJSDocType, SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken);
+                }
+                scanner.setSkipJsDocLeadingAsterisks(false);
+                const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
+                return finishNode(factory.createJSDocSpecializeTag(tagName, typeArguments, comments), pos);
             }
 
             function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; } {

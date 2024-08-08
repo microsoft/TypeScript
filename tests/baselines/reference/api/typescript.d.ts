@@ -3981,12 +3981,13 @@ declare namespace ts {
         JSDocThrowsTag = 349,
         JSDocSatisfiesTag = 350,
         JSDocImportTag = 351,
-        SyntaxList = 352,
-        NotEmittedStatement = 353,
-        PartiallyEmittedExpression = 354,
-        CommaListExpression = 355,
-        SyntheticReferenceExpression = 356,
-        Count = 357,
+        JSDocSpecializeTag = 352,
+        SyntaxList = 353,
+        NotEmittedStatement = 354,
+        PartiallyEmittedExpression = 355,
+        CommaListExpression = 356,
+        SyntheticReferenceExpression = 357,
+        Count = 358,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -5825,6 +5826,10 @@ declare namespace ts {
         readonly importClause?: ImportClause;
         readonly moduleSpecifier: Expression;
         readonly attributes?: ImportAttributes;
+    }
+    interface JSDocSpecializeTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocSpecializeTag;
+        readonly typeArguments: NodeArray<TypeNode>;
     }
     type FlowType = Type | IncompleteType;
     interface IncompleteType {
@@ -7745,6 +7750,8 @@ declare namespace ts {
         updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
         createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes, comment?: string | NodeArray<JSDocComment>): JSDocImportTag;
         updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag;
+        createJSDocSpecializeTag(tagName: Identifier | undefined, typeArguments: readonly TypeNode[], comment: string | NodeArray<JSDocComment> | undefined): JSDocSpecializeTag;
+        updateJSDocSpecializeTag(node: JSDocSpecializeTag, tagName: Identifier | undefined, typeArguments: readonly TypeNode[], comment: string | NodeArray<JSDocComment> | undefined): JSDocSpecializeTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -8600,6 +8607,7 @@ declare namespace ts {
     /** Gets the JSDoc template tag for the node if present */
     function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined;
     function getJSDocSatisfiesTag(node: Node): JSDocSatisfiesTag | undefined;
+    function getJSDocSpecializeTag(node: Node): JSDocSpecializeTag | undefined;
     /** Gets the JSDoc type tag for the node if present and valid */
     function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined;
     /**
@@ -9049,6 +9057,7 @@ declare namespace ts {
     function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
     function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
     function isJSDocImportTag(node: Node): node is JSDocImportTag;
+    function isJSDocSpecializeTag(node: Node): node is JSDocSpecializeTag;
     function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken;
     function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode;
     function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken;

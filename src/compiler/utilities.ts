@@ -305,6 +305,7 @@ import {
     isJSDocReturnTag,
     isJSDocSatisfiesTag,
     isJSDocSignature,
+    isJSDocSpecializeTag,
     isJSDocTag,
     isJSDocTemplateTag,
     isJSDocTypeExpression,
@@ -4530,7 +4531,7 @@ function filterOwnedJSDocTags(hostNode: Node, comments: JSDocArray) {
  * a ParenthesizedExpression belongs only to the ParenthesizedExpression.
  */
 function ownsJSDocTag(hostNode: Node, tag: JSDocTag) {
-    return !(isJSDocTypeTag(tag) || isJSDocSatisfiesTag(tag))
+    return !(isJSDocTypeTag(tag) || isJSDocSatisfiesTag(tag) || isJSDocSpecializeTag(tag))
         || !tag.parent
         || !isJSDoc(tag.parent)
         || !isParenthesizedExpression(tag.parent.parent)
