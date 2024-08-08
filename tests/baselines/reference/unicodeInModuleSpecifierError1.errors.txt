@@ -1,0 +1,24 @@
+main.ts(1,10): error TS2305: Module '"./🦁.ts"' has no exported member 'bar'.
+main.ts(1,15): error TS2459: Module '"./🦁.ts"' declares 'baz' locally, but it is not exported.
+main.ts(2,10): error TS2305: Module '"./🦁.ts"' has no exported member 'bar'.
+main.ts(2,15): error TS2459: Module '"./🦁.ts"' declares 'baz' locally, but it is not exported.
+
+
+==== 🦁.ts (0 errors) ====
+    export const foo = "bar";
+    const baz = "baz";
+    
+==== main.ts (4 errors) ====
+    import { bar, baz } from './🦁.ts';
+             ~~~
+!!! error TS2305: Module '"./🦁.ts"' has no exported member 'bar'.
+                  ~~~
+!!! error TS2459: Module '"./🦁.ts"' declares 'baz' locally, but it is not exported.
+!!! related TS2728 🦁.ts:2:7: 'baz' is declared here.
+    export { bar, baz } from './🦁.ts';
+             ~~~
+!!! error TS2305: Module '"./🦁.ts"' has no exported member 'bar'.
+                  ~~~
+!!! error TS2459: Module '"./🦁.ts"' declares 'baz' locally, but it is not exported.
+!!! related TS2728 🦁.ts:2:7: 'baz' is declared here.
+    

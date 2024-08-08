@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/unicodeInModuleSpecifierError1.ts] ////
+
+=== 🦁.ts ===
+export const foo = "bar";
+>foo : Symbol(foo, Decl(🦁.ts, 0, 12))
+
+const baz = "baz";
+>baz : Symbol(baz, Decl(🦁.ts, 1, 5))
+
+=== main.ts ===
+import { bar, baz } from './🦁.ts';
+>bar : Symbol(bar, Decl(main.ts, 0, 8))
+>baz : Symbol(baz, Decl(main.ts, 0, 13))
+
+export { bar, baz } from './🦁.ts';
+>bar : Symbol(bar, Decl(main.ts, 1, 8))
+>baz : Symbol(baz, Decl(main.ts, 1, 13))
+
