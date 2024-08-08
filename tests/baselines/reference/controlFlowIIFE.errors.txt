@@ -1,8 +1,9 @@
+controlFlowIIFE.ts(36,5): error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
 controlFlowIIFE.ts(64,5): error TS2454: Variable 'v' is used before being assigned.
 controlFlowIIFE.ts(72,5): error TS2454: Variable 'v' is used before being assigned.
 
 
-==== controlFlowIIFE.ts (2 errors) ====
+==== controlFlowIIFE.ts (3 errors) ====
     declare function getStringOrNumber(): string | number;
     
     function f1() {
@@ -39,6 +40,8 @@ controlFlowIIFE.ts(72,5): error TS2454: Variable 'v' is used before being assign
     })();
     maybeNumber++;
     if (maybeNumber !== undefined) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number' and 'undefined' have no overlap.
         maybeNumber++;
     }
     

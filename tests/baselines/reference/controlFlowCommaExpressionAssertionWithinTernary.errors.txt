@@ -1,0 +1,13 @@
+controlFlowCommaExpressionAssertionWithinTernary.ts(5,26): error TS2367: This comparison appears to be unintentional because the types 'number | null' and 'undefined' have no overlap.
+
+
+==== controlFlowCommaExpressionAssertionWithinTernary.ts (1 errors) ====
+    declare function assert(value: any): asserts value;
+    
+    function foo2(param: number | null | undefined): number | null {
+        const val = param !== undefined;
+        return val ? (assert(param !== undefined), param) : null;
+                             ~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'number | null' and 'undefined' have no overlap.
+        // ^^^^^ Still typed as number | null | undefined
+    }

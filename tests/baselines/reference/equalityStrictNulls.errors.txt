@@ -1,42 +1,68 @@
+equalityStrictNulls.ts(6,9): error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+equalityStrictNulls.ts(8,9): error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+equalityStrictNulls.ts(14,9): error TS2367: This comparison appears to be unintentional because the types 'string' and 'null' have no overlap.
+equalityStrictNulls.ts(16,9): error TS2367: This comparison appears to be unintentional because the types 'string' and 'null' have no overlap.
+equalityStrictNulls.ts(22,9): error TS2367: This comparison appears to be unintentional because the types 'undefined' and 'string' have no overlap.
+equalityStrictNulls.ts(24,9): error TS2367: This comparison appears to be unintentional because the types 'undefined' and 'string' have no overlap.
+equalityStrictNulls.ts(30,9): error TS2367: This comparison appears to be unintentional because the types 'null' and 'string' have no overlap.
+equalityStrictNulls.ts(32,9): error TS2367: This comparison appears to be unintentional because the types 'null' and 'string' have no overlap.
 equalityStrictNulls.ts(59,13): error TS18050: The value 'undefined' cannot be used here.
 equalityStrictNulls.ts(61,13): error TS18050: The value 'undefined' cannot be used here.
 equalityStrictNulls.ts(63,14): error TS18050: The value 'undefined' cannot be used here.
 equalityStrictNulls.ts(65,14): error TS18050: The value 'undefined' cannot be used here.
+equalityStrictNulls.ts(70,14): error TS2678: Type 'null' is not comparable to type 'string'.
+equalityStrictNulls.ts(72,14): error TS2678: Type 'undefined' is not comparable to type 'string'.
 
 
-==== equalityStrictNulls.ts (4 errors) ====
+==== equalityStrictNulls.ts (14 errors) ====
     function f1(x: string) {
         if (x == undefined) {
         }
         if (x != undefined) {
         }
         if (x === undefined) {
+            ~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
         }
         if (x !== undefined) {
+            ~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
         }
         if (x == null) {
         }
         if (x != null) {
         }
         if (x === null) {
+            ~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'null' have no overlap.
         }
         if (x !== null) {
+            ~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'null' have no overlap.
         }
         if (undefined == x) {
         }
         if (undefined != x) {
         }
         if (undefined === x) {
+            ~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'undefined' and 'string' have no overlap.
         }
         if (undefined !== x) {
+            ~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'undefined' and 'string' have no overlap.
         }
         if (null == x) {
         }
         if (null != x) {
         }
         if (null === x) {
+            ~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'null' and 'string' have no overlap.
         }
         if (null !== x) {
+            ~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'null' and 'string' have no overlap.
         }
     }
     
@@ -83,8 +109,12 @@ equalityStrictNulls.ts(65,14): error TS18050: The value 'undefined' cannot be us
     function f5(x: string) {
         switch(x) {
             case null:
+                 ~~~~
+!!! error TS2678: Type 'null' is not comparable to type 'string'.
                 break;
             case undefined:
+                 ~~~~~~~~~
+!!! error TS2678: Type 'undefined' is not comparable to type 'string'.
                 break;
             default:
                 return;
