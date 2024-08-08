@@ -1,0 +1,625 @@
+//// [tests/cases/compiler/immediateCallbacks.ts] ////
+
+=== immediateCallbacks.ts ===
+declare function deferred(cb: () => void): void;
+>deferred : Symbol(deferred, Decl(immediateCallbacks.ts, 0, 0))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 0, 26))
+
+declare function immediate1(immediate cb: () => void): void;
+>immediate1 : Symbol(immediate1, Decl(immediateCallbacks.ts, 0, 48))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 1, 28))
+
+declare function immediate2(/** @immediate */ cb: () => void): void;
+>immediate2 : Symbol(immediate2, Decl(immediateCallbacks.ts, 1, 60))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 2, 28))
+
+declare function immediate3(/** @immediate */ immediate cb: () => void): void;
+>immediate3 : Symbol(immediate3, Decl(immediateCallbacks.ts, 2, 68))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 3, 28))
+
+function f01() {
+>f01 : Symbol(f01, Decl(immediateCallbacks.ts, 3, 78))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(immediateCallbacks.ts, 6, 7))
+
+    deferred(() => {
+>deferred : Symbol(deferred, Decl(immediateCallbacks.ts, 0, 0))
+
+        x = 42;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 6, 7))
+
+    });
+    x;  // string
+>x : Symbol(x, Decl(immediateCallbacks.ts, 6, 7))
+}
+
+function f02() {
+>f02 : Symbol(f02, Decl(immediateCallbacks.ts, 11, 1))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(immediateCallbacks.ts, 14, 7))
+
+    immediate1(() => {
+>immediate1 : Symbol(immediate1, Decl(immediateCallbacks.ts, 0, 48))
+
+        x = 42;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 14, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(immediateCallbacks.ts, 14, 7))
+}
+
+function f03() {
+>f03 : Symbol(f03, Decl(immediateCallbacks.ts, 19, 1))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(immediateCallbacks.ts, 22, 7))
+
+    immediate2(() => {
+>immediate2 : Symbol(immediate2, Decl(immediateCallbacks.ts, 1, 60))
+
+        x = 42;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 22, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(immediateCallbacks.ts, 22, 7))
+}
+
+function f04() {
+>f04 : Symbol(f04, Decl(immediateCallbacks.ts, 27, 1))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(immediateCallbacks.ts, 30, 7))
+
+    immediate3(() => {
+>immediate3 : Symbol(immediate3, Decl(immediateCallbacks.ts, 2, 68))
+
+        x = 42;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 30, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(immediateCallbacks.ts, 30, 7))
+}
+
+// Parameter is considered immediate if one or more overloads include the modifier in that parameter position
+
+declare function overloaded<T>(cb: (x: T) => T): void;
+>overloaded : Symbol(overloaded, Decl(immediateCallbacks.ts, 35, 1), Decl(immediateCallbacks.ts, 39, 54), Decl(immediateCallbacks.ts, 40, 60))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 39, 28))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 39, 31))
+>x : Symbol(x, Decl(immediateCallbacks.ts, 39, 36))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 39, 28))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 39, 28))
+
+declare function overloaded<T>(cb: (x: T, y: T) => T): void;
+>overloaded : Symbol(overloaded, Decl(immediateCallbacks.ts, 35, 1), Decl(immediateCallbacks.ts, 39, 54), Decl(immediateCallbacks.ts, 40, 60))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 40, 28))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 40, 31))
+>x : Symbol(x, Decl(immediateCallbacks.ts, 40, 36))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 40, 28))
+>y : Symbol(y, Decl(immediateCallbacks.ts, 40, 41))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 40, 28))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 40, 28))
+
+declare function overloaded(immediate cb: (...args: any) => any): void;
+>overloaded : Symbol(overloaded, Decl(immediateCallbacks.ts, 35, 1), Decl(immediateCallbacks.ts, 39, 54), Decl(immediateCallbacks.ts, 40, 60))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 41, 28))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 41, 43))
+
+function f05() {
+>f05 : Symbol(f05, Decl(immediateCallbacks.ts, 41, 71))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(immediateCallbacks.ts, 44, 7))
+
+    overloaded(() => {
+>overloaded : Symbol(overloaded, Decl(immediateCallbacks.ts, 35, 1), Decl(immediateCallbacks.ts, 39, 54), Decl(immediateCallbacks.ts, 40, 60))
+
+        x = 42;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 44, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(immediateCallbacks.ts, 44, 7))
+}
+
+// immediate is permitted on a rest parameter
+
+declare function invokeDeferred(...args: ((...args: any) => any)[]): void;
+>invokeDeferred : Symbol(invokeDeferred, Decl(immediateCallbacks.ts, 49, 1))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 53, 32))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 53, 43))
+
+declare function invokeImmediate(immediate ...args: ((...args: any) => any)[]): void;
+>invokeImmediate : Symbol(invokeImmediate, Decl(immediateCallbacks.ts, 53, 74))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 54, 33))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 54, 54))
+
+function f06() {
+>f06 : Symbol(f06, Decl(immediateCallbacks.ts, 54, 85))
+
+    let a = [];
+>a : Symbol(a, Decl(immediateCallbacks.ts, 57, 7))
+
+    a.push("abc");
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 57, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    a;  // string[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 57, 7))
+
+    invokeImmediate(
+>invokeImmediate : Symbol(invokeImmediate, Decl(immediateCallbacks.ts, 53, 74))
+
+        () => {
+            a;  // string[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 57, 7))
+
+            a.push(42);
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 57, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+            a;  // (string | number)[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 57, 7))
+
+        },
+        () => {
+            a;  // string[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 57, 7))
+
+            a.push(true);
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 57, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+            a;  // (string | boolean)[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 57, 7))
+        }
+    );
+    a;  // (string | number | boolean)[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 57, 7))
+}
+
+function f07() {
+>f07 : Symbol(f07, Decl(immediateCallbacks.ts, 73, 1))
+
+    let a = [];
+>a : Symbol(a, Decl(immediateCallbacks.ts, 76, 7))
+
+    a.push("abc");
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 76, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+    a;  // string[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 76, 7))
+
+    invokeDeferred(
+>invokeDeferred : Symbol(invokeDeferred, Decl(immediateCallbacks.ts, 49, 1))
+
+        () => {
+            a;  // string[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 76, 7))
+
+            a.push(42);
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 76, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+            a;  // (string | number)[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 76, 7))
+
+        },
+        () => {
+            a;  // string[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 76, 7))
+
+            a.push(true);
+>a.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 76, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+            a;  // (string | boolean)[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 76, 7))
+        }
+    );
+    a;  // string[]
+>a : Symbol(a, Decl(immediateCallbacks.ts, 76, 7))
+}
+
+// immediate modifier must precede public/private/protected/readonly
+
+class CC {
+>CC : Symbol(CC, Decl(immediateCallbacks.ts, 92, 1))
+
+    constructor(immediate public readonly x: () => void) {}
+>x : Symbol(CC.x, Decl(immediateCallbacks.ts, 97, 16))
+}
+
+// immediate requires parameter to have type that permits functions
+
+declare function f10(immediate f: () => void): void;
+>f10 : Symbol(f10, Decl(immediateCallbacks.ts, 98, 1))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 102, 21))
+
+declare function f11(immediate f: Function): void;
+>f11 : Symbol(f11, Decl(immediateCallbacks.ts, 102, 52))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 103, 21))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+declare function f12(immediate f: any): void;
+>f12 : Symbol(f12, Decl(immediateCallbacks.ts, 103, 50))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 104, 21))
+
+declare function f13(immediate f: object): void;
+>f13 : Symbol(f13, Decl(immediateCallbacks.ts, 104, 45))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 105, 21))
+
+declare function f14(immediate f: {}): void;
+>f14 : Symbol(f14, Decl(immediateCallbacks.ts, 105, 48))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 106, 21))
+
+declare function f15(immediate f: unknown): void;
+>f15 : Symbol(f15, Decl(immediateCallbacks.ts, 106, 44))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 107, 21))
+
+declare function f16<T extends Function>(immediate f: T): void;
+>f16 : Symbol(f16, Decl(immediateCallbacks.ts, 107, 49))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 108, 21))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 108, 41))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 108, 21))
+
+declare function f17<T extends (...args: any) => any>(immediate f: T): void;
+>f17 : Symbol(f17, Decl(immediateCallbacks.ts, 108, 63))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 109, 21))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 109, 32))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 109, 54))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 109, 21))
+
+declare function f18<T extends string | (() => void)>(immediate f: T): void;
+>f18 : Symbol(f18, Decl(immediateCallbacks.ts, 109, 76))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 110, 21))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 110, 54))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 110, 21))
+
+declare function f20(immediate ...funcs: Function[]): void;
+>f20 : Symbol(f20, Decl(immediateCallbacks.ts, 110, 76))
+>funcs : Symbol(funcs, Decl(immediateCallbacks.ts, 112, 21))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+declare function f21<T extends ((...args: any) => any)[]>(immediate ...funcs: T): void;
+>f21 : Symbol(f21, Decl(immediateCallbacks.ts, 112, 59))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 113, 21))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 113, 33))
+>funcs : Symbol(funcs, Decl(immediateCallbacks.ts, 113, 58))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 113, 21))
+
+declare function f22<T extends (string | (() => void))[]>(immediate ...funcs: T): void;
+>f22 : Symbol(f22, Decl(immediateCallbacks.ts, 113, 87))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 114, 21))
+>funcs : Symbol(funcs, Decl(immediateCallbacks.ts, 114, 58))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 114, 21))
+
+declare function f23<T extends string[] | (() => void)[]>(immediate ...funcs: T): void;
+>f23 : Symbol(f23, Decl(immediateCallbacks.ts, 114, 87))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 115, 21))
+>funcs : Symbol(funcs, Decl(immediateCallbacks.ts, 115, 58))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 115, 21))
+
+declare function f24<T extends (() => void)[]>(immediate ...funcs: T | string[]): void;
+>f24 : Symbol(f24, Decl(immediateCallbacks.ts, 115, 87))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 116, 21))
+>funcs : Symbol(funcs, Decl(immediateCallbacks.ts, 116, 47))
+>T : Symbol(T, Decl(immediateCallbacks.ts, 116, 21))
+
+declare function f30(immediate f: { foo(): void }): void;
+>f30 : Symbol(f30, Decl(immediateCallbacks.ts, 116, 87))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 118, 21))
+>foo : Symbol(foo, Decl(immediateCallbacks.ts, 118, 35))
+
+declare function f31(immediate f: number): void;
+>f31 : Symbol(f31, Decl(immediateCallbacks.ts, 118, 57))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 119, 21))
+
+declare function f32(immediate ...funcs: number[]): void;
+>f32 : Symbol(f32, Decl(immediateCallbacks.ts, 119, 48))
+>funcs : Symbol(funcs, Decl(immediateCallbacks.ts, 120, 21))
+
+type T10 = (immediate f: () => void) => void;
+>T10 : Symbol(T10, Decl(immediateCallbacks.ts, 120, 57))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 122, 12))
+
+type T11 = (immediate f: { (): void }) => void;
+>T11 : Symbol(T11, Decl(immediateCallbacks.ts, 122, 45))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 123, 12))
+
+type T12 = (immediate f: Function) => void;
+>T12 : Symbol(T12, Decl(immediateCallbacks.ts, 123, 47))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 124, 12))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+type T13 = (immediate f: any) => void;
+>T13 : Symbol(T13, Decl(immediateCallbacks.ts, 124, 43))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 125, 12))
+
+type T20 = (immediate f: { foo(): void }) => void;
+>T20 : Symbol(T20, Decl(immediateCallbacks.ts, 125, 38))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 127, 12))
+>foo : Symbol(foo, Decl(immediateCallbacks.ts, 127, 26))
+
+type T21 = (immediate f: number) => void;
+>T21 : Symbol(T21, Decl(immediateCallbacks.ts, 127, 50))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 128, 12))
+
+type T22 = (immediate ...funcs: number[]) => void;
+>T22 : Symbol(T22, Decl(immediateCallbacks.ts, 128, 41))
+>funcs : Symbol(funcs, Decl(immediateCallbacks.ts, 129, 12))
+
+type T23 = { immediate x: () => void };
+>T23 : Symbol(T23, Decl(immediateCallbacks.ts, 129, 50))
+>x : Symbol(x, Decl(immediateCallbacks.ts, 130, 12))
+
+// immediate modifier is not captured in argument list tuples
+
+declare function doStuff(immediate f: () => void): void;
+>doStuff : Symbol(doStuff, Decl(immediateCallbacks.ts, 130, 39))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 134, 25))
+
+declare function recreate<A extends unknown[], R>(f: (...args: A) => R): (...args: A) => R;
+>recreate : Symbol(recreate, Decl(immediateCallbacks.ts, 134, 56))
+>A : Symbol(A, Decl(immediateCallbacks.ts, 136, 26))
+>R : Symbol(R, Decl(immediateCallbacks.ts, 136, 46))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 136, 50))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 136, 54))
+>A : Symbol(A, Decl(immediateCallbacks.ts, 136, 26))
+>R : Symbol(R, Decl(immediateCallbacks.ts, 136, 46))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 136, 74))
+>A : Symbol(A, Decl(immediateCallbacks.ts, 136, 26))
+>R : Symbol(R, Decl(immediateCallbacks.ts, 136, 46))
+
+declare function recreateImmediate1<A extends unknown[], R>(f: (immediate ...args: A) => R): (...args: A) => R;
+>recreateImmediate1 : Symbol(recreateImmediate1, Decl(immediateCallbacks.ts, 136, 91))
+>A : Symbol(A, Decl(immediateCallbacks.ts, 137, 36))
+>R : Symbol(R, Decl(immediateCallbacks.ts, 137, 56))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 137, 60))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 137, 64))
+>A : Symbol(A, Decl(immediateCallbacks.ts, 137, 36))
+>R : Symbol(R, Decl(immediateCallbacks.ts, 137, 56))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 137, 94))
+>A : Symbol(A, Decl(immediateCallbacks.ts, 137, 36))
+>R : Symbol(R, Decl(immediateCallbacks.ts, 137, 56))
+
+declare function recreateImmediate2<A extends unknown[], R>(f: (...args: A) => R): (immediate ...args: A) => R;
+>recreateImmediate2 : Symbol(recreateImmediate2, Decl(immediateCallbacks.ts, 137, 111))
+>A : Symbol(A, Decl(immediateCallbacks.ts, 138, 36))
+>R : Symbol(R, Decl(immediateCallbacks.ts, 138, 56))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 138, 60))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 138, 64))
+>A : Symbol(A, Decl(immediateCallbacks.ts, 138, 36))
+>R : Symbol(R, Decl(immediateCallbacks.ts, 138, 56))
+>args : Symbol(args, Decl(immediateCallbacks.ts, 138, 84))
+>A : Symbol(A, Decl(immediateCallbacks.ts, 138, 36))
+>R : Symbol(R, Decl(immediateCallbacks.ts, 138, 56))
+
+function ff1() {
+>ff1 : Symbol(ff1, Decl(immediateCallbacks.ts, 138, 111))
+
+    let x: string | number;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 141, 7))
+
+    x = 123;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 141, 7))
+
+    doStuff(() => {
+>doStuff : Symbol(doStuff, Decl(immediateCallbacks.ts, 130, 39))
+
+        x = "hi";
+>x : Symbol(x, Decl(immediateCallbacks.ts, 141, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(immediateCallbacks.ts, 141, 7))
+}
+
+function ff2() {
+>ff2 : Symbol(ff2, Decl(immediateCallbacks.ts, 147, 1))
+
+    let y: string | number;
+>y : Symbol(y, Decl(immediateCallbacks.ts, 150, 7))
+
+    y = 123;
+>y : Symbol(y, Decl(immediateCallbacks.ts, 150, 7))
+
+    recreate(doStuff)(() => {
+>recreate : Symbol(recreate, Decl(immediateCallbacks.ts, 134, 56))
+>doStuff : Symbol(doStuff, Decl(immediateCallbacks.ts, 130, 39))
+
+        y = "hi";
+>y : Symbol(y, Decl(immediateCallbacks.ts, 150, 7))
+
+    });
+    y;  // number
+>y : Symbol(y, Decl(immediateCallbacks.ts, 150, 7))
+}
+
+function ff3() {
+>ff3 : Symbol(ff3, Decl(immediateCallbacks.ts, 156, 1))
+
+    let z: string | number;
+>z : Symbol(z, Decl(immediateCallbacks.ts, 159, 7))
+
+    z = 123;
+>z : Symbol(z, Decl(immediateCallbacks.ts, 159, 7))
+
+    recreateImmediate1(doStuff)(() => {
+>recreateImmediate1 : Symbol(recreateImmediate1, Decl(immediateCallbacks.ts, 136, 91))
+>doStuff : Symbol(doStuff, Decl(immediateCallbacks.ts, 130, 39))
+
+        z = "hi";
+>z : Symbol(z, Decl(immediateCallbacks.ts, 159, 7))
+
+    });
+    z;  // number
+>z : Symbol(z, Decl(immediateCallbacks.ts, 159, 7))
+}
+
+function ff4() {
+>ff4 : Symbol(ff4, Decl(immediateCallbacks.ts, 165, 1))
+
+    let z: string | number;
+>z : Symbol(z, Decl(immediateCallbacks.ts, 168, 7))
+
+    z = 123;
+>z : Symbol(z, Decl(immediateCallbacks.ts, 168, 7))
+
+    recreateImmediate2(doStuff)(() => {
+>recreateImmediate2 : Symbol(recreateImmediate2, Decl(immediateCallbacks.ts, 137, 111))
+>doStuff : Symbol(doStuff, Decl(immediateCallbacks.ts, 130, 39))
+
+        z = "hi";
+>z : Symbol(z, Decl(immediateCallbacks.ts, 168, 7))
+
+    });
+    z;  // string | number
+>z : Symbol(z, Decl(immediateCallbacks.ts, 168, 7))
+}
+
+// https://github.com/microsoft/TypeScript/issues/11498
+
+declare function mystery(immediate cb: () => void): void;
+>mystery : Symbol(mystery, Decl(immediateCallbacks.ts, 174, 1))
+>cb : Symbol(cb, Decl(immediateCallbacks.ts, 178, 25))
+
+function fx1() {
+>fx1 : Symbol(fx1, Decl(immediateCallbacks.ts, 178, 57))
+
+    let x: string | number = "OK";
+>x : Symbol(x, Decl(immediateCallbacks.ts, 181, 7))
+
+    x;  // string
+>x : Symbol(x, Decl(immediateCallbacks.ts, 181, 7))
+
+    mystery(() => {
+>mystery : Symbol(mystery, Decl(immediateCallbacks.ts, 174, 1))
+
+        x = 10;
+>x : Symbol(x, Decl(immediateCallbacks.ts, 181, 7))
+
+    });
+    x;  // string | number
+>x : Symbol(x, Decl(immediateCallbacks.ts, 181, 7))
+
+    if (x === 10) {}
+>x : Symbol(x, Decl(immediateCallbacks.ts, 181, 7))
+}
+
+// https://github.com/microsoft/TypeScript/issues/15380
+
+class Foo {
+>Foo : Symbol(Foo, Decl(immediateCallbacks.ts, 188, 1))
+
+  public bar: string = "";
+>bar : Symbol(Foo.bar, Decl(immediateCallbacks.ts, 192, 11))
+}
+
+function fx2() {
+>fx2 : Symbol(fx2, Decl(immediateCallbacks.ts, 194, 1))
+
+  let foo: Foo | null = null;
+>foo : Symbol(foo, Decl(immediateCallbacks.ts, 197, 5))
+>Foo : Symbol(Foo, Decl(immediateCallbacks.ts, 188, 1))
+
+  [1].forEach((item) => {
+>[1].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(immediateCallbacks.ts, 198, 15))
+
+      foo = new Foo();
+>foo : Symbol(foo, Decl(immediateCallbacks.ts, 197, 5))
+>Foo : Symbol(Foo, Decl(immediateCallbacks.ts, 188, 1))
+
+  });
+  if (foo) {
+>foo : Symbol(foo, Decl(immediateCallbacks.ts, 197, 5))
+
+      foo.bar;
+>foo.bar : Symbol(Foo.bar, Decl(immediateCallbacks.ts, 192, 11))
+>foo : Symbol(foo, Decl(immediateCallbacks.ts, 197, 5))
+>bar : Symbol(Foo.bar, Decl(immediateCallbacks.ts, 192, 11))
+  }
+}
+
+// https://github.com/microsoft/TypeScript/issues/57880
+
+const call = (immediate f: () => void) => f();
+>call : Symbol(call, Decl(immediateCallbacks.ts, 208, 5))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 208, 14))
+>f : Symbol(f, Decl(immediateCallbacks.ts, 208, 14))
+
+const fx3 = () => {
+>fx3 : Symbol(fx3, Decl(immediateCallbacks.ts, 210, 5))
+
+    let a: undefined | number = undefined;
+>a : Symbol(a, Decl(immediateCallbacks.ts, 211, 7))
+>undefined : Symbol(undefined)
+
+    call(() => { a = 1; });
+>call : Symbol(call, Decl(immediateCallbacks.ts, 208, 5))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 211, 7))
+
+    if (a !== undefined) {
+>a : Symbol(a, Decl(immediateCallbacks.ts, 211, 7))
+>undefined : Symbol(undefined)
+
+        a.toString();
+>a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(immediateCallbacks.ts, 211, 7))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+    }
+};
+
+// https://github.com/microsoft/TypeScript/issues/58291
+
+async function execute(immediate onError: (_err: Error | undefined) => void) {
+>execute : Symbol(execute, Decl(immediateCallbacks.ts, 216, 2))
+>onError : Symbol(onError, Decl(immediateCallbacks.ts, 220, 23))
+>_err : Symbol(_err, Decl(immediateCallbacks.ts, 220, 43))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+    onError(new Error("a"));
+>onError : Symbol(onError, Decl(immediateCallbacks.ts, 220, 23))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+async function run() {
+>run : Symbol(run, Decl(immediateCallbacks.ts, 222, 1))
+
+    let result: boolean = true;
+>result : Symbol(result, Decl(immediateCallbacks.ts, 225, 7))
+
+    await execute(() => {
+>execute : Symbol(execute, Decl(immediateCallbacks.ts, 216, 2))
+
+        result = false;
+>result : Symbol(result, Decl(immediateCallbacks.ts, 225, 7))
+
+    });
+    if (result === false) {
+>result : Symbol(result, Decl(immediateCallbacks.ts, 225, 7))
+
+        console.log("error");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+    }
+    return result;
+>result : Symbol(result, Decl(immediateCallbacks.ts, 225, 7))
+}
+

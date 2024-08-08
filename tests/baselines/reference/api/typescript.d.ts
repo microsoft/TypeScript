@@ -3763,8 +3763,8 @@ declare namespace ts {
         BooleanKeyword = 136,
         ConstructorKeyword = 137,
         DeclareKeyword = 138,
-        DeferredKeyword = 139,
-        GetKeyword = 140,
+        GetKeyword = 139,
+        ImmediateKeyword = 140,
         InferKeyword = 141,
         IntrinsicKeyword = 142,
         IsKeyword = 143,
@@ -3961,7 +3961,7 @@ declare namespace ts {
         JSDocImplementsTag = 330,
         JSDocAuthorTag = 331,
         JSDocDeprecatedTag = 332,
-        JSDocDeferredTag = 333,
+        JSDocImmediateTag = 333,
         JSDocClassTag = 334,
         JSDocPublicTag = 335,
         JSDocPrivateTag = 336,
@@ -4106,7 +4106,6 @@ declare namespace ts {
         | SyntaxKind.DebuggerKeyword
         | SyntaxKind.DeclareKeyword
         | SyntaxKind.DefaultKeyword
-        | SyntaxKind.DeferredKeyword
         | SyntaxKind.DeleteKeyword
         | SyntaxKind.DoKeyword
         | SyntaxKind.ElseKeyword
@@ -4121,6 +4120,7 @@ declare namespace ts {
         | SyntaxKind.GetKeyword
         | SyntaxKind.GlobalKeyword
         | SyntaxKind.IfKeyword
+        | SyntaxKind.ImmediateKeyword
         | SyntaxKind.ImplementsKeyword
         | SyntaxKind.ImportKeyword
         | SyntaxKind.InferKeyword
@@ -4170,7 +4170,7 @@ declare namespace ts {
         | SyntaxKind.WhileKeyword
         | SyntaxKind.WithKeyword
         | SyntaxKind.YieldKeyword;
-    type ModifierSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeferredKeyword | SyntaxKind.ExportKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword;
+    type ModifierSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ImmediateKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword;
     type KeywordTypeSyntaxKind = SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword;
     type TokenSyntaxKind = SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | TriviaSyntaxKind | LiteralSyntaxKind | PseudoLiteralSyntaxKind | PunctuationSyntaxKind | SyntaxKind.Identifier | KeywordSyntaxKind;
     type JsxTokenSyntaxKind = SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFileToken | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken;
@@ -4227,9 +4227,9 @@ declare namespace ts {
         In = 8192,
         Out = 16384,
         Decorator = 32768,
-        Deferred = 65536,
+        Immediate = 65536,
         Deprecated = 131072,
-        JSDocDeferred = 262144,
+        JSDocImmediate = 262144,
         HasComputedJSDocModifiers = 268435456,
         HasComputedFlags = 536870912,
         AccessibilityModifier = 7,
@@ -4387,8 +4387,8 @@ declare namespace ts {
     type ConstKeyword = ModifierToken<SyntaxKind.ConstKeyword>;
     type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
     type DefaultKeyword = ModifierToken<SyntaxKind.DefaultKeyword>;
-    type DeferredKeyword = ModifierToken<SyntaxKind.DeferredKeyword>;
     type ExportKeyword = ModifierToken<SyntaxKind.ExportKeyword>;
+    type ImmediateKeyword = ModifierToken<SyntaxKind.ImmediateKeyword>;
     type InKeyword = ModifierToken<SyntaxKind.InKeyword>;
     type PrivateKeyword = ModifierToken<SyntaxKind.PrivateKeyword>;
     type ProtectedKeyword = ModifierToken<SyntaxKind.ProtectedKeyword>;
@@ -4397,7 +4397,7 @@ declare namespace ts {
     type OutKeyword = ModifierToken<SyntaxKind.OutKeyword>;
     type OverrideKeyword = ModifierToken<SyntaxKind.OverrideKeyword>;
     type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
-    type Modifier = AbstractKeyword | AccessorKeyword | AsyncKeyword | ConstKeyword | DeclareKeyword | DefaultKeyword | DeferredKeyword | ExportKeyword | InKeyword | PrivateKeyword | ProtectedKeyword | PublicKeyword | OutKeyword | OverrideKeyword | ReadonlyKeyword | StaticKeyword;
+    type Modifier = AbstractKeyword | AccessorKeyword | AsyncKeyword | ConstKeyword | DeclareKeyword | DefaultKeyword | ExportKeyword | ImmediateKeyword | InKeyword | PrivateKeyword | ProtectedKeyword | PublicKeyword | OutKeyword | OverrideKeyword | ReadonlyKeyword | StaticKeyword;
     type ModifierLike = Modifier | Decorator;
     type AccessibilityModifier = PublicKeyword | PrivateKeyword | ProtectedKeyword;
     type ParameterPropertyModifier = AccessibilityModifier | ReadonlyKeyword;
@@ -5727,8 +5727,8 @@ declare namespace ts {
     interface JSDocDeprecatedTag extends JSDocTag {
         kind: SyntaxKind.JSDocDeprecatedTag;
     }
-    interface JSDocDeferredTag extends JSDocTag {
-        kind: SyntaxKind.JSDocDeferredTag;
+    interface JSDocImmediateTag extends JSDocTag {
+        kind: SyntaxKind.JSDocImmediateTag;
     }
     interface JSDocClassTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocClassTag;
@@ -7745,8 +7745,8 @@ declare namespace ts {
         updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined): JSDocUnknownTag;
         createJSDocDeprecatedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
         updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
-        createJSDocDeferredTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeferredTag;
-        updateJSDocDeferredTag(node: JSDocDeferredTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeferredTag;
+        createJSDocImmediateTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocImmediateTag;
+        updateJSDocImmediateTag(node: JSDocImmediateTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocImmediateTag;
         createJSDocOverrideTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
         updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
         createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
@@ -8600,8 +8600,8 @@ declare namespace ts {
     function getJSDocOverrideTagNoCache(node: Node): JSDocOverrideTag | undefined;
     /** Gets the JSDoc deprecated tag for the node if present */
     function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined;
-    /** Gets the JSDoc deferred tag for the node if present */
-    function getJSDocDeferredTag(node: Node): JSDocDeferredTag | undefined;
+    /** Gets the JSDoc immediate tag for the node if present */
+    function getJSDocImmediateTag(node: Node): JSDocImmediateTag | undefined;
     /** Gets the JSDoc enum tag for the node if present */
     function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined;
     /** Gets the JSDoc this tag for the node if present */
@@ -9046,7 +9046,7 @@ declare namespace ts {
     function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag;
     function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag;
     function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag;
-    function isJSDocDeferredTag(node: Node): node is JSDocDeferredTag;
+    function isJSDocImmediateTag(node: Node): node is JSDocImmediateTag;
     function isJSDocSeeTag(node: Node): node is JSDocSeeTag;
     function isJSDocEnumTag(node: Node): node is JSDocEnumTag;
     function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
