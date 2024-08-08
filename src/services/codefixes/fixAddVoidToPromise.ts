@@ -7,6 +7,7 @@ import {
     CodeFixAllContext,
     Diagnostics,
     factory,
+    getJSDocSpecializeTag,
     getJSDocTypeTag,
     getTokenAtPosition,
     idText,
@@ -101,6 +102,10 @@ function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, 
 function getEffectiveTypeArguments(node: NewExpression) {
     if (isInJSFile(node)) {
         if (isParenthesizedExpression(node.parent)) {
+            const specializeTag = getJSDocSpecializeTag(node.parent);
+            if (specializeTag) {
+                return specializeTag.typeArguments;
+            }
             const jsDocType = getJSDocTypeTag(node.parent)?.typeExpression.type;
             if (jsDocType && isTypeReferenceNode(jsDocType) && isIdentifier(jsDocType.typeName) && idText(jsDocType.typeName) === "Promise") {
                 return jsDocType.typeArguments;

@@ -58,6 +58,7 @@ import {
     JSDocPropertyTag,
     JSDocSatisfiesTag,
     JSDocSeeTag,
+    JSDocSpecializeTag,
     JSDocTag,
     JSDocTagInfo,
     JSDocTemplateTag,
@@ -165,6 +166,7 @@ const jsDocTagNames = [
     "satisfies",
     "see",
     "since",
+    "specialize",
     "static",
     "summary",
     "template",
@@ -297,7 +299,7 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
             return withNode((tag as JSDocImplementsTag).class);
         case SyntaxKind.JSDocAugmentsTag:
             return withNode((tag as JSDocAugmentsTag).class);
-        case SyntaxKind.JSDocTemplateTag:
+        case SyntaxKind.JSDocTemplateTag: {
             const templateTag = tag as JSDocTemplateTag;
             const displayParts: SymbolDisplayPart[] = [];
             if (templateTag.constraint) {
@@ -319,6 +321,21 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
                 displayParts.push(...[spacePart(), ...getDisplayPartsFromComment(comment, checker)]);
             }
             return displayParts;
+        }
+        case SyntaxKind.JSDocSpecializeTag: {
+            const specializeTag = tag as JSDocSpecializeTag;
+            const displayParts: SymbolDisplayPart[] = [];
+            if (specializeTag.typeArguments.length > 0) {
+                const lastTypeArgument = specializeTag.typeArguments[specializeTag.typeArguments.length - 1];
+                forEach(specializeTag.typeArguments, typeArg => {
+                    displayParts.push(textPart(typeArg.getText()));
+                    if (lastTypeArgument !== typeArg) {
+                        displayParts.push(...[punctuationPart(SyntaxKind.CommaToken), spacePart()]);
+                    }
+                });
+            }
+            return displayParts;
+        }
         case SyntaxKind.JSDocTypeTag:
         case SyntaxKind.JSDocSatisfiesTag:
             return withNode((tag as JSDocTypeTag | JSDocSatisfiesTag).typeExpression);
