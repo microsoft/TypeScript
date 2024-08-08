@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/jsdoc/specializeTag1.ts] ////
+
+=== specializeTag1.js ===
+/**
+ * @template T
+ * @param {object} _jsonSchema
+ * @returns {(x: unknown) => x is T}
+ */
+function createValidator(_jsonSchema) {
+>createValidator : Symbol(createValidator, Decl(specializeTag1.js, 0, 0))
+>_jsonSchema : Symbol(_jsonSchema, Decl(specializeTag1.js, 5, 25))
+
+    /**
+     * @param {unknown} _x
+     * @returns {_x is T}
+     */
+    return (_x) => true;
+>_x : Symbol(_x, Decl(specializeTag1.js, 10, 12))
+}
+
+/** @specialize <number> */
+const isNumber = createValidator({ type: 'number' });
+>isNumber : Symbol(isNumber, Decl(specializeTag1.js, 14, 5))
+>createValidator : Symbol(createValidator, Decl(specializeTag1.js, 0, 0))
+>type : Symbol(type, Decl(specializeTag1.js, 14, 34))
+
+const isString = /** @specialize <string> */(createValidator({ type: 'string' }));
+>isString : Symbol(isString, Decl(specializeTag1.js, 16, 5))
+>createValidator : Symbol(createValidator, Decl(specializeTag1.js, 0, 0))
+>type : Symbol(type, Decl(specializeTag1.js, 16, 62))
+

@@ -1,0 +1,79 @@
+//// [tests/cases/conformance/jsdoc/specializeTag4.ts] ////
+
+=== specializeTag4.js ===
+/**
+ * @template {{ id: string }} T
+ */
+class Collection {
+>Collection : Collection<T>
+>           : ^^^^^^^^^^^^^
+
+    /**
+     * @param {string} name
+     */
+    constructor(name) {
+>name : string
+>     : ^^^^^^
+
+        /** @type {string} */
+        this.name = name;
+>this.name = name : string
+>                 : ^^^^^^
+>this.name : string
+>          : ^^^^^^
+>this : this
+>     : ^^^^
+>name : string
+>     : ^^^^^^
+>name : string
+>     : ^^^^^^
+    }
+
+    /**
+     * @param {string} id
+     * @returns {T}
+     */
+    getById(id) {
+>getById : (id: string) => T
+>        : ^  ^^      ^^^^^ 
+>id : string
+>   : ^^^^^^
+
+        return /** @type {T} */({ id });
+>({ id }) : T
+>         : ^
+>{ id } : { id: string; }
+>       : ^^^^^^^^^^^^^^^
+>id : string
+>   : ^^^^^^
+    }
+}
+
+/**
+ * @typedef {object} UserData
+ * @property {string} id
+ * @property {string} name
+ */
+
+/** @specialize <UserData> */
+const users = new Collection('users');
+>users : Collection<UserData>
+>      : ^^^^^^^^^^^^^^^^^^^^
+>new Collection('users') : Collection<UserData>
+>                        : ^^^^^^^^^^^^^^^^^^^^
+>Collection : typeof Collection
+>           : ^^^^^^^^^^^^^^^^^
+>'users' : "users"
+>        : ^^^^^^^
+
+/** @specialize <number> */
+const numbers = new Collection('numbers');
+>numbers : Collection<number>
+>        : ^^^^^^^^^^^^^^^^^^
+>new Collection('numbers') : Collection<number>
+>                          : ^^^^^^^^^^^^^^^^^^
+>Collection : typeof Collection
+>           : ^^^^^^^^^^^^^^^^^
+>'numbers' : "numbers"
+>          : ^^^^^^^^^
+

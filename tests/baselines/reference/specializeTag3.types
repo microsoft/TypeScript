@@ -1,0 +1,92 @@
+//// [tests/cases/conformance/jsdoc/specializeTag3.ts] ////
+
+=== specializeTag3.js ===
+/**
+ * @template T
+ */
+class JsonSchemaValidator {
+>JsonSchemaValidator : JsonSchemaValidator<T>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+
+    /**
+     * @param {object} jsonSchema
+     */
+    constructor(jsonSchema) {
+>jsonSchema : any
+
+        /** @type {object} */
+        this.jsonSchema = jsonSchema;
+>this.jsonSchema = jsonSchema : any
+>this.jsonSchema : any
+>this : this
+>     : ^^^^
+>jsonSchema : any
+>           : ^^^
+>jsonSchema : any
+    }
+
+    /**
+     * @param {unknown} _value 
+     * @returns {_value is T}
+     */
+    isValid(_value) {
+>isValid : (_value: unknown) => _value is T
+>        : ^      ^^       ^^^^^           
+>_value : unknown
+>       : ^^^^^^^
+
+        return true;
+>true : true
+>     : ^^^^
+    }
+}
+
+const number = /** @specialize {number} */(
+>number : JsonSchemaValidator<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(    new JsonSchemaValidator({ type: 'number' })) : JsonSchemaValidator<number>
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    new JsonSchemaValidator({ type: 'number' })
+>new JsonSchemaValidator({ type: 'number' }) : JsonSchemaValidator<number>
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>JsonSchemaValidator : typeof JsonSchemaValidator
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ type: 'number' } : { type: string; }
+>                   : ^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+
+);
+
+/** @specialize {number[]} */
+const arrayOfNumbers = new JsonSchemaValidator({
+>arrayOfNumbers : JsonSchemaValidator<number[]>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new JsonSchemaValidator({    type: 'array',    items: { type: 'number' },}) : JsonSchemaValidator<number[]>
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>JsonSchemaValidator : typeof JsonSchemaValidator
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    type: 'array',    items: { type: 'number' },} : { type: string; items: { type: string; }; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: 'array',
+>type : string
+>     : ^^^^^^
+>'array' : "array"
+>        : ^^^^^^^
+
+    items: { type: 'number' },
+>items : { type: string; }
+>      : ^^^^^^^^^^^^^^^^^
+>{ type: 'number' } : { type: string; }
+>                   : ^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+
+});
+

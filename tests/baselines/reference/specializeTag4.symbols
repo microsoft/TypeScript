@@ -1,0 +1,52 @@
+//// [tests/cases/conformance/jsdoc/specializeTag4.ts] ////
+
+=== specializeTag4.js ===
+/**
+ * @template {{ id: string }} T
+ */
+class Collection {
+>Collection : Symbol(Collection, Decl(specializeTag4.js, 0, 0))
+
+    /**
+     * @param {string} name
+     */
+    constructor(name) {
+>name : Symbol(name, Decl(specializeTag4.js, 7, 16))
+
+        /** @type {string} */
+        this.name = name;
+>this.name : Symbol(Collection.name, Decl(specializeTag4.js, 7, 23))
+>this : Symbol(Collection, Decl(specializeTag4.js, 0, 0))
+>name : Symbol(Collection.name, Decl(specializeTag4.js, 7, 23))
+>name : Symbol(name, Decl(specializeTag4.js, 7, 16))
+    }
+
+    /**
+     * @param {string} id
+     * @returns {T}
+     */
+    getById(id) {
+>getById : Symbol(Collection.getById, Decl(specializeTag4.js, 10, 5))
+>id : Symbol(id, Decl(specializeTag4.js, 16, 12))
+
+        return /** @type {T} */({ id });
+>id : Symbol(id, Decl(specializeTag4.js, 17, 33))
+    }
+}
+
+/**
+ * @typedef {object} UserData
+ * @property {string} id
+ * @property {string} name
+ */
+
+/** @specialize <UserData> */
+const users = new Collection('users');
+>users : Symbol(users, Decl(specializeTag4.js, 28, 5))
+>Collection : Symbol(Collection, Decl(specializeTag4.js, 0, 0))
+
+/** @specialize <number> */
+const numbers = new Collection('numbers');
+>numbers : Symbol(numbers, Decl(specializeTag4.js, 31, 5))
+>Collection : Symbol(Collection, Decl(specializeTag4.js, 0, 0))
+

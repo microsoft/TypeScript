@@ -1,0 +1,124 @@
+//// [tests/cases/conformance/jsdoc/specializeTag2.ts] ////
+
+=== specializeTag2.js ===
+/**
+ * @template T
+ * @param {TemplateStringsArray} strings 
+ * @param  {...T} values 
+ * @returns {Record<string, T>}
+ */
+function parse(strings, ...values) {
+>parse : <T>(strings: TemplateStringsArray, ...values: T[]) => Record<string, T>
+>      : ^ ^^       ^^                    ^^^^^      ^^   ^^^^^                 
+>strings : TemplateStringsArray
+>        : ^^^^^^^^^^^^^^^^^^^^
+>values : T[]
+>       : ^^^
+
+    /** @type {Record<string, T>} */
+    const result = {};
+>result : Record<string, T>
+>       : ^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+    strings.forEach((key, i) => {
+>strings.forEach((key, i) => {        if (i < values.length) {            result[key] = values[i];        }    }) : void
+>                                                                                                                 : ^^^^
+>strings.forEach : (callbackfn: (value: string, index: number, array: readonly string[]) => void, thisArg?: any) => void
+>                : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>strings : TemplateStringsArray
+>        : ^^^^^^^^^^^^^^^^^^^^
+>forEach : (callbackfn: (value: string, index: number, array: readonly string[]) => void, thisArg?: any) => void
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
+>(key, i) => {        if (i < values.length) {            result[key] = values[i];        }    } : (key: string, i: number) => void
+>                                                                                                : ^   ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>i : number
+>  : ^^^^^^
+
+        if (i < values.length) {
+>i < values.length : boolean
+>                  : ^^^^^^^
+>i : number
+>  : ^^^^^^
+>values.length : number
+>              : ^^^^^^
+>values : T[]
+>       : ^^^
+>length : number
+>       : ^^^^^^
+
+            result[key] = values[i];
+>result[key] = values[i] : T
+>                        : ^
+>result[key] : T
+>            : ^
+>result : Record<string, T>
+>       : ^^^^^^^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>values[i] : T
+>          : ^
+>values : T[]
+>       : ^^^
+>i : number
+>  : ^^^^^^
+        }
+    })
+    return result;
+>result : Record<string, T>
+>       : ^^^^^^^^^^^^^^^^^
+}
+
+const query1 = /** @specialize {string} */(
+>query1 : Record<string, string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>(    parse`a=${1}b=${2}`) : Record<string, string>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^
+
+    parse`a=${1}b=${2}`
+>parse`a=${1}b=${2}` : Record<string, string>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+>parse : <T>(strings: TemplateStringsArray, ...values: T[]) => Record<string, T>
+>      : ^ ^^       ^^                    ^^^^^      ^^   ^^^^^                 
+>`a=${1}b=${2}` : string
+>               : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+)
+
+/** @specialize {string} */
+const query2 = parse`a=${1}b=${2}`; // Type error
+>query2 : Record<string, string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>parse`a=${1}b=${2}` : Record<string, string>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+>parse : <T>(strings: TemplateStringsArray, ...values: T[]) => Record<string, T>
+>      : ^ ^^       ^^                    ^^^^^      ^^   ^^^^^                 
+>`a=${1}b=${2}` : string
+>               : ^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+
+/** @specialize <`${number}`> */
+const query3 = parse`a=${"1"}b=${"2"}`;
+>query3 : Record<string, `${number}`>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>parse`a=${"1"}b=${"2"}` : Record<string, `${number}`>
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>parse : <T>(strings: TemplateStringsArray, ...values: T[]) => Record<string, T>
+>      : ^ ^^       ^^                    ^^^^^      ^^   ^^^^^                 
+>`a=${"1"}b=${"2"}` : string
+>                   : ^^^^^^
+>"1" : "1"
+>    : ^^^
+>"2" : "2"
+>    : ^^^
+

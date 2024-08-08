@@ -1,0 +1,79 @@
+//// [tests/cases/conformance/jsdoc/specializeTag6.ts] ////
+
+=== Performance Stats ===
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
+
+=== specializeTag6.jsx ===
+/// <reference path="react16.d.ts" />
+import React from 'react'
+>React : typeof React
+>      : ^^^^^^^^^^^^
+
+/**
+ * @template T
+ * @param {object} props
+ * @param {T} props.value
+ * @returns {React.ReactElement}
+ */
+function Input(props) {
+>Input : <T>(props: {    value: T;}) => React.ReactElement<any>
+>      : ^ ^^     ^^          ^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : { value: T; }
+>      : ^^^^^^^^^ ^^^
+
+    return null;
+}
+
+/** @specialize {number} */
+const el1 = <Input value={1} />;
+>el1 : JSX.Element
+>    : ^^^^^^^^^^^
+><Input value={1} /> : JSX.Element
+>                    : ^^^^^^^^^^^
+>Input : <T>(props: {    value: T;}) => React.ReactElement<any>
+>      : ^ ^^     ^^          ^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+
+const el2 = /** @specialize {number} */(<Input value={2} />);
+>el2 : JSX.Element
+>    : ^^^^^^^^^^^
+>(<Input value={2} />) : JSX.Element
+>                      : ^^^^^^^^^^^
+><Input value={2} /> : JSX.Element
+>                    : ^^^^^^^^^^^
+>Input : <T>(props: {    value: T;}) => React.ReactElement<any>
+>      : ^ ^^     ^^          ^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>2 : 2
+>  : ^
+
+/** @specialize {number} */
+const el3 = <Input value="abc" />; // Type error
+>el3 : JSX.Element
+>    : ^^^^^^^^^^^
+><Input value="abc" /> : JSX.Element
+>                      : ^^^^^^^^^^^
+>Input : <T>(props: {    value: T;}) => React.ReactElement<any>
+>      : ^ ^^     ^^          ^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+
+const el4 = /** @specialize {number} */(<Input value="abc" />); // Type error
+>el4 : JSX.Element
+>    : ^^^^^^^^^^^
+>(<Input value="abc" />) : JSX.Element
+>                        : ^^^^^^^^^^^
+><Input value="abc" /> : JSX.Element
+>                      : ^^^^^^^^^^^
+>Input : <T>(props: {    value: T;}) => React.ReactElement<any>
+>      : ^ ^^     ^^          ^^ ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+

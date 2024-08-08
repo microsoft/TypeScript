@@ -1,0 +1,36 @@
+specializeTag2.js(19,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+specializeTag2.js(23,26): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+
+
+==== specializeTag2.js (2 errors) ====
+    /**
+     * @template T
+     * @param {TemplateStringsArray} strings 
+     * @param  {...T} values 
+     * @returns {Record<string, T>}
+     */
+    function parse(strings, ...values) {
+        /** @type {Record<string, T>} */
+        const result = {};
+        strings.forEach((key, i) => {
+            if (i < values.length) {
+                result[key] = values[i];
+            }
+        })
+        return result;
+    }
+    
+    const query1 = /** @specialize {string} */(
+        parse`a=${1}b=${2}`
+                  ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    )
+    
+    /** @specialize {string} */
+    const query2 = parse`a=${1}b=${2}`; // Type error
+                             ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    
+    /** @specialize <`${number}`> */
+    const query3 = parse`a=${"1"}b=${"2"}`;
+    

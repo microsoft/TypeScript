@@ -1,0 +1,57 @@
+//// [tests/cases/conformance/jsdoc/specializeTag1.ts] ////
+
+=== specializeTag1.js ===
+/**
+ * @template T
+ * @param {object} _jsonSchema
+ * @returns {(x: unknown) => x is T}
+ */
+function createValidator(_jsonSchema) {
+>createValidator : <T>(_jsonSchema: object) => (x: unknown) => x is T
+>                : ^ ^^           ^^      ^^^^^                      
+>_jsonSchema : any
+
+    /**
+     * @param {unknown} _x
+     * @returns {_x is T}
+     */
+    return (_x) => true;
+>(_x) => true : (_x: unknown) => _x is T
+>             : ^  ^^       ^^^^^       
+>_x : unknown
+>   : ^^^^^^^
+>true : true
+>     : ^^^^
+}
+
+/** @specialize <number> */
+const isNumber = createValidator({ type: 'number' });
+>isNumber : (x: unknown) => x is number
+>         : ^ ^^       ^^^^^     ^^^^^^
+>createValidator({ type: 'number' }) : (x: unknown) => x is number
+>                                    : ^ ^^       ^^^^^     ^^^^^^
+>createValidator : <T>(_jsonSchema: object) => (x: unknown) => x is T
+>                : ^ ^^           ^^      ^^^^^                      
+>{ type: 'number' } : { type: string; }
+>                   : ^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+
+const isString = /** @specialize <string> */(createValidator({ type: 'string' }));
+>isString : (x: unknown) => x is string
+>         : ^ ^^       ^^^^^     ^^^^^^
+>(createValidator({ type: 'string' })) : (x: unknown) => x is string
+>                                      : ^ ^^       ^^^^^     ^^^^^^
+>createValidator({ type: 'string' }) : (x: unknown) => x is string
+>                                    : ^ ^^       ^^^^^     ^^^^^^
+>createValidator : <T>(_jsonSchema: object) => (x: unknown) => x is T
+>                : ^ ^^           ^^      ^^^^^                      
+>{ type: 'string' } : { type: string; }
+>                   : ^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+

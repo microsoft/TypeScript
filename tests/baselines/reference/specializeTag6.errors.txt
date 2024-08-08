@@ -1,0 +1,34 @@
+specializeTag6.jsx(20,20): error TS2322: Type 'string' is not assignable to type 'number'.
+specializeTag6.jsx(22,48): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== specializeTag6.jsx (2 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import React from 'react'
+    
+    /**
+     * @template T
+     * @param {object} props
+     * @param {T} props.value
+     * @returns {React.ReactElement}
+     */
+    function Input(props) {
+        return null;
+    }
+    
+    /** @specialize {number} */
+    const el1 = <Input value={1} />;
+    
+    const el2 = /** @specialize {number} */(<Input value={2} />);
+    
+    /** @specialize {number} */
+    const el3 = <Input value="abc" />; // Type error
+                       ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 specializeTag6.jsx:7:4: The expected type comes from property 'value' which is declared here on type 'IntrinsicAttributes & { value: number; }'
+    
+    const el4 = /** @specialize {number} */(<Input value="abc" />); // Type error
+                                                   ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 specializeTag6.jsx:7:4: The expected type comes from property 'value' which is declared here on type 'IntrinsicAttributes & { value: number; }'
+    

@@ -1,0 +1,60 @@
+//// [tests/cases/conformance/jsdoc/specializeTag2.ts] ////
+
+=== specializeTag2.js ===
+/**
+ * @template T
+ * @param {TemplateStringsArray} strings 
+ * @param  {...T} values 
+ * @returns {Record<string, T>}
+ */
+function parse(strings, ...values) {
+>parse : Symbol(parse, Decl(specializeTag2.js, 0, 0))
+>strings : Symbol(strings, Decl(specializeTag2.js, 6, 15))
+>values : Symbol(values, Decl(specializeTag2.js, 6, 23))
+
+    /** @type {Record<string, T>} */
+    const result = {};
+>result : Symbol(result, Decl(specializeTag2.js, 8, 9))
+
+    strings.forEach((key, i) => {
+>strings.forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
+>strings : Symbol(strings, Decl(specializeTag2.js, 6, 15))
+>forEach : Symbol(ReadonlyArray.forEach, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(specializeTag2.js, 9, 21))
+>i : Symbol(i, Decl(specializeTag2.js, 9, 25))
+
+        if (i < values.length) {
+>i : Symbol(i, Decl(specializeTag2.js, 9, 25))
+>values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(specializeTag2.js, 6, 23))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+            result[key] = values[i];
+>result : Symbol(result, Decl(specializeTag2.js, 8, 9))
+>key : Symbol(key, Decl(specializeTag2.js, 9, 21))
+>values : Symbol(values, Decl(specializeTag2.js, 6, 23))
+>i : Symbol(i, Decl(specializeTag2.js, 9, 25))
+        }
+    })
+    return result;
+>result : Symbol(result, Decl(specializeTag2.js, 8, 9))
+}
+
+const query1 = /** @specialize {string} */(
+>query1 : Symbol(query1, Decl(specializeTag2.js, 17, 5))
+
+    parse`a=${1}b=${2}`
+>parse : Symbol(parse, Decl(specializeTag2.js, 0, 0))
+
+)
+
+/** @specialize {string} */
+const query2 = parse`a=${1}b=${2}`; // Type error
+>query2 : Symbol(query2, Decl(specializeTag2.js, 22, 5))
+>parse : Symbol(parse, Decl(specializeTag2.js, 0, 0))
+
+/** @specialize <`${number}`> */
+const query3 = parse`a=${"1"}b=${"2"}`;
+>query3 : Symbol(query3, Decl(specializeTag2.js, 25, 5))
+>parse : Symbol(parse, Decl(specializeTag2.js, 0, 0))
+
