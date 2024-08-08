@@ -130,7 +130,26 @@ import {
 
 const stringToRegex = memoizeOne((pattern: string) => {
     try {
-        return new RegExp(pattern);
+        let slash = pattern.indexOf("/");
+        if (slash !== 0) {
+            // No leading slash, treat as a pattern
+            return new RegExp(pattern);
+        }
+        const lastSlash = pattern.lastIndexOf("/");
+        if (slash === lastSlash) {
+            // Only one slash, treat as a pattern
+            return new RegExp(pattern);
+        }
+        while ((slash = pattern.indexOf("/", slash + 1)) !== lastSlash) {
+            if (pattern[slash - 1] !== "\\") {
+                // Unescaped middle slash, treat as a pattern
+                return new RegExp(pattern);
+            }
+        }
+        // Only case-insensitive and unicode flags make sense
+        const flags = pattern.substring(lastSlash + 1).replace(/[^iu]/g, "");
+        pattern = pattern.substring(1, lastSlash);
+        return new RegExp(pattern, flags);
     }
     catch {
         return undefined;
