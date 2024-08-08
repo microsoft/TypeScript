@@ -26,6 +26,7 @@ import {
     getNameOfDeclaration,
     getSourceFileOfNode,
     getTokenAtPosition,
+    InternalNodeBuilderFlags,
     isAccessExpression,
     isCallExpression,
     isIdentifier,
@@ -221,7 +222,7 @@ function tryGetName(node: FunctionLikeDeclaration) {
 }
 
 function typeToTypeNode(checker: TypeChecker, type: Type, enclosingDeclaration: Node) {
-    return checker.typeToTypeNode(checker.getWidenedType(type), enclosingDeclaration, NodeBuilderFlags.NoTruncation)
+    return checker.typeToTypeNode(checker.getWidenedType(type), enclosingDeclaration, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames)
         ?? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
 }
 
