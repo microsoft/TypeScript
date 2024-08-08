@@ -1,0 +1,91 @@
+=== tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassComputedMethodParameter1.ts ===
+// https://github.com/microsoft/TypeScript/issues/50305
+
+declare function dec(target: Object, propertyKey: PropertyKey, parameterIndex: number): void;
+>dec : Symbol(dec, Decl(decoratorOnClassComputedMethodParameter1.ts, 0, 0))
+>target : Symbol(target, Decl(decoratorOnClassComputedMethodParameter1.ts, 2, 21))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>propertyKey : Symbol(propertyKey, Decl(decoratorOnClassComputedMethodParameter1.ts, 2, 36))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>parameterIndex : Symbol(parameterIndex, Decl(decoratorOnClassComputedMethodParameter1.ts, 2, 62))
+
+const s = Symbol();
+>s : Symbol(s, Decl(decoratorOnClassComputedMethodParameter1.ts, 4, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+function f() { return s };
+>f : Symbol(f, Decl(decoratorOnClassComputedMethodParameter1.ts, 4, 19))
+>s : Symbol(s, Decl(decoratorOnClassComputedMethodParameter1.ts, 4, 5))
+
+function add(a: number, b: number) { return a + b }
+>add : Symbol(add, Decl(decoratorOnClassComputedMethodParameter1.ts, 5, 26))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 6, 13))
+>b : Symbol(b, Decl(decoratorOnClassComputedMethodParameter1.ts, 6, 23))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 6, 13))
+>b : Symbol(b, Decl(decoratorOnClassComputedMethodParameter1.ts, 6, 23))
+
+function concat(a: string, b: string) { return a + b }
+>concat : Symbol(concat, Decl(decoratorOnClassComputedMethodParameter1.ts, 6, 51))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 7, 16))
+>b : Symbol(b, Decl(decoratorOnClassComputedMethodParameter1.ts, 7, 26))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 7, 16))
+>b : Symbol(b, Decl(decoratorOnClassComputedMethodParameter1.ts, 7, 26))
+
+class C {
+>C : Symbol(C, Decl(decoratorOnClassComputedMethodParameter1.ts, 7, 54))
+
+    [s](@dec a: any) {}
+>[s] : Symbol(C[s], Decl(decoratorOnClassComputedMethodParameter1.ts, 9, 9))
+>s : Symbol(s, Decl(decoratorOnClassComputedMethodParameter1.ts, 4, 5))
+>dec : Symbol(dec, Decl(decoratorOnClassComputedMethodParameter1.ts, 0, 0))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 10, 8))
+
+    [f()](@dec a: any) {}
+>[f()] : Symbol(C[f()], Decl(decoratorOnClassComputedMethodParameter1.ts, 10, 23))
+>f : Symbol(f, Decl(decoratorOnClassComputedMethodParameter1.ts, 4, 19))
+>dec : Symbol(dec, Decl(decoratorOnClassComputedMethodParameter1.ts, 0, 0))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 11, 10))
+
+    ['method'](@dec a: any) {}
+>['method'] : Symbol(C['method'], Decl(decoratorOnClassComputedMethodParameter1.ts, 11, 25))
+>'method' : Symbol(C['method'], Decl(decoratorOnClassComputedMethodParameter1.ts, 11, 25))
+>dec : Symbol(dec, Decl(decoratorOnClassComputedMethodParameter1.ts, 0, 0))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 12, 15))
+
+    ['some' + 'method'](@dec a: any) {}
+>['some' + 'method'] : Symbol(C['some\' + \'method'], Decl(decoratorOnClassComputedMethodParameter1.ts, 12, 30))
+>dec : Symbol(dec, Decl(decoratorOnClassComputedMethodParameter1.ts, 0, 0))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 13, 24))
+
+    [concat('hello', 'world')](@dec a: any) {}
+>[concat('hello', 'world')] : Symbol(C[concat('hello', 'world')], Decl(decoratorOnClassComputedMethodParameter1.ts, 13, 39))
+>concat : Symbol(concat, Decl(decoratorOnClassComputedMethodParameter1.ts, 6, 51))
+>dec : Symbol(dec, Decl(decoratorOnClassComputedMethodParameter1.ts, 0, 0))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 14, 31))
+
+    [1](@dec a: any) {}
+>[1] : Symbol(C[1], Decl(decoratorOnClassComputedMethodParameter1.ts, 14, 46))
+>1 : Symbol(C[1], Decl(decoratorOnClassComputedMethodParameter1.ts, 14, 46))
+>dec : Symbol(dec, Decl(decoratorOnClassComputedMethodParameter1.ts, 0, 0))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 15, 8))
+
+    [Math.PI](@dec a: any) {}
+>[Math.PI] : Symbol(C[Math.PI], Decl(decoratorOnClassComputedMethodParameter1.ts, 15, 23))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>dec : Symbol(dec, Decl(decoratorOnClassComputedMethodParameter1.ts, 0, 0))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 16, 14))
+
+    [1 + 1](@dec a: any) {}
+>[1 + 1] : Symbol(C[1 + 1], Decl(decoratorOnClassComputedMethodParameter1.ts, 16, 29))
+>dec : Symbol(dec, Decl(decoratorOnClassComputedMethodParameter1.ts, 0, 0))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 17, 12))
+
+    [add(1, 2)](@dec a: any) {}
+>[add(1, 2)] : Symbol(C[add(1, 2)], Decl(decoratorOnClassComputedMethodParameter1.ts, 17, 27))
+>add : Symbol(add, Decl(decoratorOnClassComputedMethodParameter1.ts, 5, 26))
+>dec : Symbol(dec, Decl(decoratorOnClassComputedMethodParameter1.ts, 0, 0))
+>a : Symbol(a, Decl(decoratorOnClassComputedMethodParameter1.ts, 18, 16))
+}
+

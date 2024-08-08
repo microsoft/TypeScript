@@ -1,0 +1,105 @@
+=== tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassComputedMethodParameter1.ts ===
+// https://github.com/microsoft/TypeScript/issues/50305
+
+declare function dec(target: Object, propertyKey: PropertyKey, parameterIndex: number): void;
+>dec : (target: Object, propertyKey: PropertyKey, parameterIndex: number) => void
+>target : Object
+>propertyKey : PropertyKey
+>parameterIndex : number
+
+const s = Symbol();
+>s : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+function f() { return s };
+>f : () => symbol
+>s : unique symbol
+
+function add(a: number, b: number) { return a + b }
+>add : (a: number, b: number) => number
+>a : number
+>b : number
+>a + b : number
+>a : number
+>b : number
+
+function concat(a: string, b: string) { return a + b }
+>concat : (a: string, b: string) => string
+>a : string
+>b : string
+>a + b : string
+>a : string
+>b : string
+
+class C {
+>C : C
+
+    [s](@dec a: any) {}
+>[s] : (a: any) => void
+>s : unique symbol
+>dec : (target: Object, propertyKey: PropertyKey, parameterIndex: number) => void
+>a : any
+
+    [f()](@dec a: any) {}
+>[f()] : (a: any) => void
+>f() : symbol
+>f : () => symbol
+>dec : (target: Object, propertyKey: PropertyKey, parameterIndex: number) => void
+>a : any
+
+    ['method'](@dec a: any) {}
+>['method'] : (a: any) => void
+>'method' : "method"
+>dec : (target: Object, propertyKey: PropertyKey, parameterIndex: number) => void
+>a : any
+
+    ['some' + 'method'](@dec a: any) {}
+>['some' + 'method'] : (a: any) => void
+>'some' + 'method' : string
+>'some' : "some"
+>'method' : "method"
+>dec : (target: Object, propertyKey: PropertyKey, parameterIndex: number) => void
+>a : any
+
+    [concat('hello', 'world')](@dec a: any) {}
+>[concat('hello', 'world')] : (a: any) => void
+>concat('hello', 'world') : string
+>concat : (a: string, b: string) => string
+>'hello' : "hello"
+>'world' : "world"
+>dec : (target: Object, propertyKey: PropertyKey, parameterIndex: number) => void
+>a : any
+
+    [1](@dec a: any) {}
+>[1] : (a: any) => void
+>1 : 1
+>dec : (target: Object, propertyKey: PropertyKey, parameterIndex: number) => void
+>a : any
+
+    [Math.PI](@dec a: any) {}
+>[Math.PI] : (a: any) => void
+>Math.PI : number
+>Math : Math
+>PI : number
+>dec : (target: Object, propertyKey: PropertyKey, parameterIndex: number) => void
+>a : any
+
+    [1 + 1](@dec a: any) {}
+>[1 + 1] : (a: any) => void
+>1 + 1 : number
+>1 : 1
+>1 : 1
+>dec : (target: Object, propertyKey: PropertyKey, parameterIndex: number) => void
+>a : any
+
+    [add(1, 2)](@dec a: any) {}
+>[add(1, 2)] : (a: any) => void
+>add(1, 2) : number
+>add : (a: number, b: number) => number
+>1 : 1
+>2 : 2
+>dec : (target: Object, propertyKey: PropertyKey, parameterIndex: number) => void
+>a : any
+}
+
