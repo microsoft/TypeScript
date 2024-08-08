@@ -8387,6 +8387,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     introducesError = true;
                     return { introducesError, node, sym };
                 }
+                else {
+                    sym = symAtLocation;
+                }
             }
 
             if (sym) {
