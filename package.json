@@ -69,7 +69,7 @@
         "globals": "^15.9.0",
         "hereby": "^1.9.0",
         "jsonc-parser": "^3.3.1",
-        "knip": "^5.27.0",
+        "knip": "^5.27.2",
         "minimist": "^1.2.8",
         "mocha": "^10.7.0",
         "mocha-fivemat-progress-reporter": "^0.1.0",
