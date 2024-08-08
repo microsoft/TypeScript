@@ -1,0 +1,42 @@
+//// [tests/cases/conformance/jsdoc/specializeTag6.ts] ////
+
+=== specializeTag6.jsx ===
+/// <reference path="react16.d.ts" />
+import React from 'react'
+>React : Symbol(React, Decl(specializeTag6.jsx, 1, 6))
+
+/**
+ * @template T
+ * @param {object} props
+ * @param {T} props.value
+ * @returns {React.ReactElement}
+ */
+function Input(props) {
+>Input : Symbol(Input, Decl(specializeTag6.jsx, 1, 25))
+>props : Symbol(props, Decl(specializeTag6.jsx, 9, 15))
+
+    return null;
+}
+
+/** @specialize {number} */
+const el1 = <Input value={1} />;
+>el1 : Symbol(el1, Decl(specializeTag6.jsx, 14, 5))
+>Input : Symbol(Input, Decl(specializeTag6.jsx, 1, 25))
+>value : Symbol(value, Decl(specializeTag6.jsx, 14, 18))
+
+const el2 = /** @specialize {number} */(<Input value={2} />);
+>el2 : Symbol(el2, Decl(specializeTag6.jsx, 16, 5))
+>Input : Symbol(Input, Decl(specializeTag6.jsx, 1, 25))
+>value : Symbol(value, Decl(specializeTag6.jsx, 16, 46))
+
+/** @specialize {number} */
+const el3 = <Input value="abc" />; // Type error
+>el3 : Symbol(el3, Decl(specializeTag6.jsx, 19, 5))
+>Input : Symbol(Input, Decl(specializeTag6.jsx, 1, 25))
+>value : Symbol(value, Decl(specializeTag6.jsx, 19, 18))
+
+const el4 = /** @specialize {number} */(<Input value="abc" />); // Type error
+>el4 : Symbol(el4, Decl(specializeTag6.jsx, 21, 5))
+>Input : Symbol(Input, Decl(specializeTag6.jsx, 1, 25))
+>value : Symbol(value, Decl(specializeTag6.jsx, 21, 46))
+
