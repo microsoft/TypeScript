@@ -93,20 +93,23 @@ function buildInfoFileOutput(messageTable, inputFilePathRel) {
         "}",
         "",
         "/** @internal */",
-        "export const Diagnostics = {",
+        "export const Diagnostics: Diagnostics = {",
     ];
+    const interfaceResult = ["\r\ninterface Diagnostics {"];
     messageTable.forEach(({ code, category, reportsUnnecessary, elidedInCompatabilityPyramid, reportsDeprecated }, name) => {
         const propName = convertPropertyName(name);
         const argReportsUnnecessary = reportsUnnecessary ? `, /*reportsUnnecessary*/ ${reportsUnnecessary}` : "";
         const argElidedInCompatabilityPyramid = elidedInCompatabilityPyramid ? `${!reportsUnnecessary ? ", /*reportsUnnecessary*/ undefined" : ""}, /*elidedInCompatabilityPyramid*/ ${elidedInCompatabilityPyramid}` : "";
         const argReportsDeprecated = reportsDeprecated ? `${!argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""}, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
 
+        interfaceResult.push(`    ${propName}: DiagnosticMessage;`);
         result.push(`    ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}${argReportsUnnecessary}${argElidedInCompatabilityPyramid}${argReportsDeprecated}),`);
     });
 
+    interfaceResult.push("}");
     result.push("};");
 
-    return result.join("\r\n");
+    return result.join("\r\n") + interfaceResult.join("\r\n");
 }
 
 /**
