@@ -6181,6 +6181,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 enclosingFile: enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration),
                 flags: flags || NodeBuilderFlags.None,
                 tracker: undefined!,
+                unfoldDepth: verbosityLevel ?? 0,
                 encounteredError: false,
                 reportedDiagnostic: false,
                 visitedTypes: undefined,
@@ -6201,7 +6202,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeParameterNamesByText: undefined,
                 typeParameterNamesByTextNextNameCount: undefined,
                 mapper: undefined,
-                unfoldCount: verbosityLevel ?? 0,
+                depth: 0,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -6218,8 +6219,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
             const savedFlags = context.flags;
+            const savedDepth = context.depth;
             const typeNode = typeToTypeNodeWorker(type, context);
             context.flags = savedFlags;
+            context.depth = savedDepth;
             return typeNode;
         }
 
@@ -6365,7 +6368,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
-                if (context.unfoldCount === 0) {
+                if (context.depth >= context.unfoldDepth) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return factory.createTypeReferenceNode(factory.createIdentifier(""), typeArgumentNodes);
                     if (length(typeArgumentNodes) === 1 && type.aliasSymbol === globalArrayType.symbol) {
@@ -6373,7 +6376,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
                 }
-                context.unfoldCount -= 1;
+                context.depth += 1;
             }
 
             const objectFlags = getObjectFlags(type);
@@ -52448,6 +52451,7 @@ interface NodeBuilderContext {
     enclosingFile: SourceFile | undefined;
     flags: NodeBuilderFlags;
     tracker: SymbolTrackerImpl;
+    readonly unfoldDepth: number;
 
     // State
     encounteredError: boolean;
@@ -52470,7 +52474,7 @@ interface NodeBuilderContext {
     reverseMappedStack: ReverseMappedSymbol[] | undefined;
     bundled: boolean;
     mapper: TypeMapper | undefined;
-    unfoldCount: number;
+    depth: number; // How many levels of nested type aliases we have unfolded so far
 }
 
 class SymbolTrackerImpl implements SymbolTracker {
