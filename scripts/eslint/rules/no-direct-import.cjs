@@ -39,41 +39,36 @@ module.exports = createRule({
                 source = node.source;
             }
 
-            if (!source) {
-                return;
-            }
+            if (!source) return;
 
             const p = source.value;
 
-            if (p.endsWith("../typescript/typescript.js")) {
-                // These appear in place of public API imports.
-                return;
-            }
+            // These appear in place of public API imports.
+            if (p.endsWith("../typescript/typescript.js")) return;
 
             // The below is similar to https://github.com/microsoft/DefinitelyTyped-tools/blob/main/packages/eslint-plugin/src/rules/no-bad-reference.ts
 
-            // Perf trick; if a path doesn't have ".." anywhere, then it can't have resolved
-            // up and out of a package dir so we can skip this work.
-            if (p.includes("..")) {
-                const parts = p.split("/");
-                let cwd = containingDirectory;
-                for (const part of parts) {
-                    if (part === "" || part === ".") {
-                        continue;
-                    }
-                    if (part === "..") {
-                        cwd = path.dirname(cwd);
-                    }
-                    else {
-                        cwd = path.join(cwd, part);
-                    }
+            // Any relative path that goes to the wrong place will contain "..".
+            if (!p.includes("..")) return;
 
-                    if (path.basename(cwd) === "src") {
-                        context.report({
-                            messageId: "noDirectImport",
-                            node: source,
-                        });
-                    }
+            const parts = p.split("/");
+            let cwd = containingDirectory;
+            for (const part of parts) {
+                if (part === "" || part === ".") {
+                    continue;
+                }
+                if (part === "..") {
+                    cwd = path.dirname(cwd);
+                }
+                else {
+                    cwd = path.join(cwd, part);
+                }
+
+                if (path.basename(cwd) === "src") {
+                    context.report({
+                        messageId: "noDirectImport",
+                        node: source,
+                    });
                 }
             }
         };
