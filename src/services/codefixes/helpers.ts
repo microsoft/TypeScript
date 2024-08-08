@@ -223,7 +223,7 @@ export function addNewNodeForMemberSymbol(
         case SyntaxKind.PropertyDeclaration:
             let flags = NodeBuilderFlags.NoTruncation;
             flags |= quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0;
-            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, /*internalFlags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, InternalNodeBuilderFlags.AllowUnresolvedNames, getNoopSymbolTrackerWithResolver(context));
             if (importAdder) {
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
                 if (importableReference) {
@@ -507,7 +507,7 @@ export function createSignatureDeclarationFromCallExpression(
         contextNode,
         scriptTarget,
         NodeBuilderFlags.NoTruncation,
-        /*internalFlags*/ undefined,
+        InternalNodeBuilderFlags.AllowUnresolvedNames,
         tracker,
     );
 
@@ -797,7 +797,7 @@ function createMethodImplementingSignatures(
 function getReturnTypeFromSignatures(signatures: readonly Signature[], checker: TypeChecker, context: TypeConstructionContext, enclosingDeclaration: ClassLikeDeclaration): TypeNode | undefined {
     if (length(signatures)) {
         const type = checker.getUnionType(map(signatures, checker.getReturnTypeOfSignature));
-        return checker.typeToTypeNode(type, enclosingDeclaration, NodeBuilderFlags.NoTruncation, /*internalFlags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+        return checker.typeToTypeNode(type, enclosingDeclaration, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames, getNoopSymbolTrackerWithResolver(context));
     }
 }
 

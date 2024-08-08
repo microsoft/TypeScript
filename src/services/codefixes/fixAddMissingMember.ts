@@ -494,11 +494,11 @@ function getTypeNode(checker: TypeChecker, node: ClassLikeDeclaration | Interfac
         const binaryExpression = token.parent.parent as BinaryExpression;
         const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
         const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
-        typeNode = checker.typeToTypeNode(widenedType, node, NodeBuilderFlags.NoTruncation);
+        typeNode = checker.typeToTypeNode(widenedType, node, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames);
     }
     else {
         const contextualType = checker.getContextualType(token.parent as Expression);
-        typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.NoTruncation) : undefined;
+        typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames) : undefined;
     }
     return typeNode || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
 }
