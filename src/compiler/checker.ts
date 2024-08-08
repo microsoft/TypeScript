@@ -29568,14 +29568,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const assigmentTarget = getAssignmentTargetKind(node);
                 if (assigmentTarget !== AssignmentKind.None) {
                     const symbol = getResolvedSymbol(node as Identifier);
-                    const isDefiniteAssignment = assigmentTarget === AssignmentKind.Definite || (symbol.lastAssignmentPos !== undefined && symbol.lastAssignmentPos < 0);
+                    const hasDefiniteAssignment = assigmentTarget === AssignmentKind.Definite || (symbol.lastAssignmentPos !== undefined && symbol.lastAssignmentPos < 0);
                     if (isParameterOrMutableLocalVariable(symbol)) {
                         if (symbol.lastAssignmentPos === undefined || Math.abs(symbol.lastAssignmentPos) !== Number.MAX_VALUE) {
                             const referencingFunction = findAncestor(node, isFunctionOrSourceFile);
                             const declaringFunction = findAncestor(symbol.valueDeclaration, isFunctionOrSourceFile);
                             symbol.lastAssignmentPos = referencingFunction === declaringFunction ? extendAssignmentPosition(node, symbol.valueDeclaration!) : Number.MAX_VALUE;
                         }
-                        if (isDefiniteAssignment && symbol.lastAssignmentPos > 0) {
+                        if (hasDefiniteAssignment && symbol.lastAssignmentPos > 0) {
                             symbol.lastAssignmentPos = -symbol.lastAssignmentPos;
                         }
                     }
@@ -29638,13 +29638,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
         return !!declaration && (
             isParameter(declaration) ||
-            isVariableDeclaration(declaration) && (isCatchClause(declaration.parent) || isMutableLocalVariableDeclaration(symbol, declaration))
+            isVariableDeclaration(declaration) && (isCatchClause(declaration.parent) || isMutableLocalVariableDeclaration(declaration))
         );
     }
 
-    function isMutableLocalVariableDeclaration(symbol: Symbol, declaration: VariableDeclaration) {
+    function isMutableLocalVariableDeclaration(declaration: VariableDeclaration) {
         // Return true if symbol is a non-exported and non-global `let` variable
-        return !!(symbol.flags & SymbolFlags.FunctionScopedVariable || (declaration.parent.flags & NodeFlags.Let)) && !(
+        return !!(declaration.parent.flags & NodeFlags.Let) && !(
             getCombinedModifierFlags(declaration) & ModifierFlags.Export ||
             declaration.parent.parent.kind === SyntaxKind.VariableStatement && isGlobalSourceFile(declaration.parent.parent.parent)
         );
@@ -30422,8 +30422,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
         // the entire control flow graph from the variable's declaration (i.e. when the flow container and
         // declaration container are the same).
+        const isNeverInitialized = immediateDeclaration && isVariableDeclaration(immediateDeclaration) && !immediateDeclaration.initializer && !immediateDeclaration.exclamationToken && isMutableLocalVariableDeclaration(immediateDeclaration) && !isSymbolAssignedDefinitely(symbol);
         const assumeInitialized = isParameter || isAlias ||
-            (isOuterVariable && !((immediateDeclaration && isVariableDeclaration(immediateDeclaration) && !immediateDeclaration.initializer && !immediateDeclaration.exclamationToken && isMutableLocalVariableDeclaration(symbol, immediateDeclaration)) && !isSymbolAssignedDefinitely(symbol))) ||
+            (isOuterVariable && !isNeverInitialized) ||
             isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
             type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
                     isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||

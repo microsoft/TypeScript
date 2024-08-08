@@ -756,8 +756,8 @@ function f13() {
 >                        : ^^^^^^
 >foo.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
 >                      : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
->foo : string
->    : ^^^^^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
 >                  : ^^^       ^^^                 ^^^      ^^^       ^^^                    ^^^      ^^^
     }
