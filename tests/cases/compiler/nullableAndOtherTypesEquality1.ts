@@ -77,3 +77,12 @@ switch (strOrNullUndef) {
   case "a":
   default:
 }
+
+if (typeof str === undefined) {
+}
+if (typeof strOrNull === undefined) {
+}
+if (typeof strOrUndef === undefined) {
+}
+if (typeof strOrNullUndef === undefined) {
+}

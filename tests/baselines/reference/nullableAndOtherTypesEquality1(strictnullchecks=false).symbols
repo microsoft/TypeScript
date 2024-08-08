@@ -126,3 +126,20 @@ switch (strOrNullUndef) {
   default:
 }
 
+if (typeof str === undefined) {
+>str : Symbol(str, Decl(nullableAndOtherTypesEquality1.ts, 7, 13))
+>undefined : Symbol(undefined)
+}
+if (typeof strOrNull === undefined) {
+>strOrNull : Symbol(strOrNull, Decl(nullableAndOtherTypesEquality1.ts, 8, 13))
+>undefined : Symbol(undefined)
+}
+if (typeof strOrUndef === undefined) {
+>strOrUndef : Symbol(strOrUndef, Decl(nullableAndOtherTypesEquality1.ts, 9, 13))
+>undefined : Symbol(undefined)
+}
+if (typeof strOrNullUndef === undefined) {
+>strOrNullUndef : Symbol(strOrNullUndef, Decl(nullableAndOtherTypesEquality1.ts, 10, 13))
+>undefined : Symbol(undefined)
+}
+

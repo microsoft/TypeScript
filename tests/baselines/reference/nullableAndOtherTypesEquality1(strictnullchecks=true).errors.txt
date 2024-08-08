@@ -7,9 +7,13 @@ nullableAndOtherTypesEquality1.ts(31,5): error TS2367: This comparison appears t
 nullableAndOtherTypesEquality1.ts(40,8): error TS2678: Type 'undefined' is not comparable to type 'string | null'.
 nullableAndOtherTypesEquality1.ts(45,5): error TS2367: This comparison appears to be unintentional because the types 'string | undefined' and 'null' have no overlap.
 nullableAndOtherTypesEquality1.ts(55,8): error TS2678: Type 'null' is not comparable to type 'string | undefined'.
+nullableAndOtherTypesEquality1.ts(77,5): error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+nullableAndOtherTypesEquality1.ts(79,5): error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+nullableAndOtherTypesEquality1.ts(81,5): error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+nullableAndOtherTypesEquality1.ts(83,5): error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
 
 
-==== nullableAndOtherTypesEquality1.ts (9 errors) ====
+==== nullableAndOtherTypesEquality1.ts (13 errors) ====
     // https://github.com/microsoft/TypeScript/issues/11920
     
     if (null === undefined) {
@@ -102,5 +106,22 @@ nullableAndOtherTypesEquality1.ts(55,8): error TS2678: Type 'null' is not compar
       case undefined:
       case "a":
       default:
+    }
+    
+    if (typeof str === undefined) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+    }
+    if (typeof strOrNull === undefined) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+    }
+    if (typeof strOrUndef === undefined) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
+    }
+    if (typeof strOrNullUndef === undefined) {
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types 'string' and 'undefined' have no overlap.
     }
     
