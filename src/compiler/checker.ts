@@ -1640,6 +1640,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getBaseTypeOfLiteralType,
         getWidenedType,
         getWidenedLiteralType,
+        fillMissingTypeArguments,
         getTypeFromTypeNode: nodeIn => {
             const node = getParseTreeNode(nodeIn, isTypeNode);
             return node ? getTypeFromTypeNode(node) : errorType;

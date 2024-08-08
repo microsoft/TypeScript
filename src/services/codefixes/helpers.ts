@@ -23,6 +23,7 @@ import {
     flatMap,
     FunctionDeclaration,
     FunctionExpression,
+    GenericType,
     GetAccessorDeclaration,
     getAllAccessorDeclarations,
     getCheckFlags,
@@ -59,6 +60,8 @@ import {
     isSetAccessorDeclaration,
     isStringLiteral,
     isTypeNode,
+    isTypeReferenceNode,
+    TypeReferenceNode,
     isTypeUsableAsPropertyName,
     isYieldExpression,
     LanguageServiceHost,
@@ -595,7 +598,15 @@ function createTypeParameterName(index: number) {
 
 /** @internal */
 export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
-    let typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
+    const typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
+    if (!typeNode) {
+        return undefined;
+    }
+    return typeNodeToAutoImportableTypeNode(typeNode, importAdder, scriptTarget);
+}
+
+/** @internal */
+export function typeNodeToAutoImportableTypeNode(typeNode: TypeNode, importAdder: ImportAdder, scriptTarget: ScriptTarget): TypeNode | undefined {
     if (typeNode && isImportTypeNode(typeNode)) {
         const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
         if (importableReference) {
@@ -606,6 +617,43 @@ export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: 
 
     // Ensure nodes are fresh so they can have different positions when going through formatting.
     return getSynthesizedDeepClone(typeNode);
+}
+
+function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType, fullTypeArguments: readonly Type[]) : number {
+    if (fullTypeArguments !== type.typeArguments!) {
+        throw new Error('fullTypeArguments should be set')
+    }
+    const target = type.target;
+    next_cutoff: for (let cutoff = 0; cutoff < fullTypeArguments.length; cutoff++) {
+        const typeArguments = fullTypeArguments.slice(0, cutoff);
+        const filledIn = checker.fillMissingTypeArguments(typeArguments, target.typeParameters, cutoff, /*isJavaScriptImplicitAny*/ false);
+        for (let i = 0; i < filledIn.length; i++) {
+            // If they don't match, then we haven't yet reached the right cutoff
+            if (filledIn[i] !== fullTypeArguments[i]) continue next_cutoff;
+        }
+        return cutoff;
+    }
+    // If we make it all the way here, all the type arguments are required.
+    return fullTypeArguments.length;
+    }
+
+export function typeToMinimizedReferenceType(checker: TypeChecker, type: Type, contextNode: Node | undefined, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+    const typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
+    if (!typeNode) {
+        return undefined;
+    }
+    if (isTypeReferenceNode(typeNode)) {
+        const genericType = type as GenericType;
+        if (genericType.typeArguments) {
+            const cutoff = endOfRequiredTypeParameters(checker, genericType, genericType.typeArguments);
+            if (cutoff !== undefined && typeNode.typeArguments) {
+                // Looks like the wrong way to do this. What APIs should I use here?
+                (typeNode as any).typeArguments = typeNode.typeArguments.slice(0, cutoff);
+            }
+        }
+
+    }
+    return typeNode;
 }
 
 /** @internal */
