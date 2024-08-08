@@ -28554,7 +28554,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // circularities. Instead, we simply check if any signature has a deferred callback marker in the
                         // particular argument position.
                         signatures ??= getSignaturesOfType(getTypeOfExpression(flow.node.expression), SignatureKind.Call);
-                        if (!some(signatures, sig => !!(getModifiersAtPosition(sig, i) & (ModifierFlags.Deferred | ModifierFlags.JSDocDeferred)))) {
+                        if (some(signatures, sig => !!(getModifiersAtPosition(sig, i) & (ModifierFlags.Immediate | ModifierFlags.JSDocImmediate)))) {
                             const lambdaType = getTypeFromFlowType(getTypeAtFlowNode(lambda.returnFlowNode));
                             if (lambdaType !== initialType) {
                                 lambdaTypes ??= [initialType];
@@ -41140,10 +41140,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node.dotDotDotToken && !isBindingPattern(node.name) && !isTypeAssignableTo(getReducedType(getTypeOfSymbol(node.symbol)), anyReadonlyArrayType)) {
             error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
         }
-        if (hasEffectiveModifier(node, ModifierFlags.Deferred | ModifierFlags.JSDocDeferred)) {
+        if (hasEffectiveModifier(node, ModifierFlags.Immediate | ModifierFlags.JSDocImmediate)) {
             const funcType = node.dotDotDotToken ? createArrayType(globalFunctionType, /*readonly*/ true) : globalFunctionType;
             if (!areTypesComparable(getTypeOfSymbol(node.symbol), funcType)) {
-                error(node, Diagnostics.A_deferred_parameter_must_have_a_type_that_permits_functions);
+                error(node, Diagnostics.An_immediate_parameter_must_have_a_type_that_permits_functions);
             }
         }
     }
@@ -51025,26 +51025,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         break;
                     }
 
-                    case SyntaxKind.DeferredKeyword:
+                    case SyntaxKind.ImmediateKeyword:
                         if (node.kind !== SyntaxKind.Parameter) {
-                            return grammarErrorOnNode(modifier, Diagnostics.deferred_modifier_can_only_appear_on_a_parameter_declaration);
+                            return grammarErrorOnNode(modifier, Diagnostics.immediate_modifier_can_only_appear_on_a_parameter_declaration);
                         }
-                        if (flags & ModifierFlags.Deferred) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "deferred");
+                        if (flags & ModifierFlags.Immediate) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "immediate");
                         }
                         if (flags & ModifierFlags.Public) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "deferred", "public");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "immediate", "public");
                         }
                         if (flags & ModifierFlags.Protected) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "deferred", "protected");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "immediate", "protected");
                         }
                         if (flags & ModifierFlags.Private) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "deferred", "private");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "immediate", "private");
                         }
                         if (flags & ModifierFlags.Readonly) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "deferred", "readonly");
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "immediate", "readonly");
                         }
-                        flags |= ModifierFlags.Deferred;
+                        flags |= ModifierFlags.Immediate;
                         break;
                 }
             }

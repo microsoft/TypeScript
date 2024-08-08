@@ -195,8 +195,8 @@ export const enum SyntaxKind {
     BooleanKeyword,
     ConstructorKeyword,
     DeclareKeyword,
-    DeferredKeyword,
     GetKeyword,
+    ImmediateKeyword,
     InferKeyword,
     IntrinsicKeyword,
     IsKeyword,
@@ -420,7 +420,7 @@ export const enum SyntaxKind {
     JSDocImplementsTag,
     JSDocAuthorTag,
     JSDocDeprecatedTag,
-    JSDocDeferredTag,
+    JSDocImmediateTag,
     JSDocClassTag,
     JSDocPublicTag,
     JSDocPrivateTag,
@@ -599,7 +599,6 @@ export type KeywordSyntaxKind =
     | SyntaxKind.DebuggerKeyword
     | SyntaxKind.DeclareKeyword
     | SyntaxKind.DefaultKeyword
-    | SyntaxKind.DeferredKeyword
     | SyntaxKind.DeleteKeyword
     | SyntaxKind.DoKeyword
     | SyntaxKind.ElseKeyword
@@ -614,6 +613,7 @@ export type KeywordSyntaxKind =
     | SyntaxKind.GetKeyword
     | SyntaxKind.GlobalKeyword
     | SyntaxKind.IfKeyword
+    | SyntaxKind.ImmediateKeyword
     | SyntaxKind.ImplementsKeyword
     | SyntaxKind.ImportKeyword
     | SyntaxKind.InferKeyword
@@ -671,8 +671,8 @@ export type ModifierSyntaxKind =
     | SyntaxKind.ConstKeyword
     | SyntaxKind.DeclareKeyword
     | SyntaxKind.DefaultKeyword
-    | SyntaxKind.DeferredKeyword
     | SyntaxKind.ExportKeyword
+    | SyntaxKind.ImmediateKeyword
     | SyntaxKind.InKeyword
     | SyntaxKind.PrivateKeyword
     | SyntaxKind.ProtectedKeyword
@@ -869,11 +869,11 @@ export const enum ModifierFlags {
     In =                 1 << 13, // Contravariance modifier
     Out =                1 << 14, // Covariance modifier
     Decorator =          1 << 15, // Contains a decorator.
-    Deferred =           1 << 16, // Parameter
+    Immediate =          1 << 16, // Parameter
 
     // JSDoc-only modifiers
     Deprecated =         1 << 17, // Deprecated tag.
-    JSDocDeferred =      1 << 18, // Parameter
+    JSDocImmediate =     1 << 18, // Parameter
 
     // Cache-only JSDoc-modifiers. Should match order of Syntactic/JSDoc modifiers, above.
     /** @internal */ JSDocPublic = 1 << 23, // if this value changes, `selectEffectiveModifierFlags` must change accordingly
@@ -883,10 +883,10 @@ export const enum ModifierFlags {
     /** @internal */ JSDocOverride = 1 << 27,
     
     /** @internal */ SyntacticOrJSDocModifiers = Public | Private | Protected | Readonly | Override,
-    /** @internal */ SyntacticOnlyModifiers = Export | Ambient | Abstract | Static | Accessor | Async | Default | Const | In | Out | Decorator | Deferred,
+    /** @internal */ SyntacticOnlyModifiers = Export | Ambient | Abstract | Static | Accessor | Async | Default | Const | In | Out | Decorator | Immediate,
     /** @internal */ SyntacticModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers,
     /** @internal */ JSDocCacheOnlyModifiers = JSDocPublic | JSDocPrivate | JSDocProtected | JSDocReadonly | JSDocOverride,
-    /** @internal */ JSDocOnlyModifiers = Deprecated | JSDocDeferred,
+    /** @internal */ JSDocOnlyModifiers = Deprecated | JSDocImmediate,
     /** @internal */ NonCacheOnlyModifiers = SyntacticOrJSDocModifiers | SyntacticOnlyModifiers | JSDocOnlyModifiers,
 
     HasComputedJSDocModifiers = 1 << 28, // Indicates the computed modifier flags include modifiers from JSDoc.
@@ -897,9 +897,9 @@ export const enum ModifierFlags {
     ParameterPropertyModifier = AccessibilityModifier | Readonly | Override,
     NonPublicAccessibilityModifier = Private | Protected,
 
-    TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out | Deferred,
+    TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out | Immediate,
     ExportDefault = Export | Default,
-    All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Override | In | Out | Deferred | Decorator,
+    All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Override | In | Out | Immediate | Decorator,
     Modifier = All & ~Decorator,
 }
 
@@ -1636,8 +1636,8 @@ export type AsyncKeyword = ModifierToken<SyntaxKind.AsyncKeyword>;
 export type ConstKeyword = ModifierToken<SyntaxKind.ConstKeyword>;
 export type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
 export type DefaultKeyword = ModifierToken<SyntaxKind.DefaultKeyword>;
-export type DeferredKeyword = ModifierToken<SyntaxKind.DeferredKeyword>;
 export type ExportKeyword = ModifierToken<SyntaxKind.ExportKeyword>;
+export type ImmediateKeyword = ModifierToken<SyntaxKind.ImmediateKeyword>;
 export type InKeyword = ModifierToken<SyntaxKind.InKeyword>;
 export type PrivateKeyword = ModifierToken<SyntaxKind.PrivateKeyword>;
 export type ProtectedKeyword = ModifierToken<SyntaxKind.ProtectedKeyword>;
@@ -1654,8 +1654,8 @@ export type Modifier =
     | ConstKeyword
     | DeclareKeyword
     | DefaultKeyword
-    | DeferredKeyword
     | ExportKeyword
+    | ImmediateKeyword
     | InKeyword
     | PrivateKeyword
     | ProtectedKeyword
@@ -3994,8 +3994,8 @@ export interface JSDocDeprecatedTag extends JSDocTag {
     kind: SyntaxKind.JSDocDeprecatedTag;
 }
 
-export interface JSDocDeferredTag extends JSDocTag {
-    kind: SyntaxKind.JSDocDeferredTag;
+export interface JSDocImmediateTag extends JSDocTag {
+    kind: SyntaxKind.JSDocImmediateTag;
 }
 
 export interface JSDocClassTag extends JSDocTag {
@@ -9057,8 +9057,8 @@ export interface NodeFactory {
     updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined): JSDocUnknownTag;
     createJSDocDeprecatedTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
     updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
-    createJSDocDeferredTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeferredTag;
-    updateJSDocDeferredTag(node: JSDocDeferredTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocDeferredTag;
+    createJSDocImmediateTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocImmediateTag;
+    updateJSDocImmediateTag(node: JSDocImmediateTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocImmediateTag;
     createJSDocOverrideTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;

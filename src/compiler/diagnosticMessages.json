@@ -971,7 +971,7 @@
         "category": "Error",
         "code": 1293
     },
-    "'deferred' modifier can only appear on a parameter declaration.": {
+    "'immediate' modifier can only appear on a parameter declaration.": {
         "category": "Error",
         "code": 1294
     },
@@ -3944,7 +3944,7 @@
         "category": "Error",
         "code": 2873
     },
-    "A 'deferred' parameter must have a type that permits functions.": {
+    "An 'immediate' parameter must have a type that permits functions.": {
         "category": "Error",
         "code": 2874
     },

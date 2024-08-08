@@ -87,10 +87,10 @@ import {
     JSDocAuthorTag,
     JSDocCallbackTag,
     JSDocClassTag,
-    JSDocDeferredTag,
     JSDocDeprecatedTag,
     JSDocEnumTag,
     JSDocFunctionType,
+    JSDocImmediateTag,
     JSDocImplementsTag,
     JSDocImportTag,
     JSDocLink,
@@ -1138,8 +1138,8 @@ export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
     return node.kind === SyntaxKind.JSDocDeprecatedTag;
 }
 
-export function isJSDocDeferredTag(node: Node): node is JSDocDeferredTag {
-    return node.kind === SyntaxKind.JSDocDeferredTag;
+export function isJSDocImmediateTag(node: Node): node is JSDocImmediateTag {
+    return node.kind === SyntaxKind.JSDocImmediateTag;
 }
 
 export function isJSDocSeeTag(node: Node): node is JSDocSeeTag {

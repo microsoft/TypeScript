@@ -169,8 +169,8 @@ import {
     getDirectoryPath,
     getImpliedNodeFormatForEmitWorker,
     getJSDocAugmentsTag,
-    getJSDocDeferredTagNoCache,
     getJSDocDeprecatedTagNoCache,
+    getJSDocImmediateTagNoCache,
     getJSDocImplementsTags,
     getJSDocOverrideTagNoCache,
     getJSDocParameterTags,
@@ -7108,7 +7108,7 @@ function getRawJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
             }
         }
         if (!isParameter(node) && getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
-        if (getJSDocDeferredTagNoCache(node)) flags |= ModifierFlags.JSDocDeferred;
+        if (getJSDocImmediateTagNoCache(node)) flags |= ModifierFlags.JSDocImmediate;
     }
 
     return flags;
@@ -7198,8 +7198,8 @@ export function modifierToFlag(token: SyntaxKind): ModifierFlags {
             return ModifierFlags.In;
         case SyntaxKind.OutKeyword:
             return ModifierFlags.Out;
-        case SyntaxKind.DeferredKeyword:
-            return ModifierFlags.Deferred;
+        case SyntaxKind.ImmediateKeyword:
+            return ModifierFlags.Immediate;
         case SyntaxKind.Decorator:
             return ModifierFlags.Decorator;
     }

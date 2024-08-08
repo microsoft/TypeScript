@@ -137,10 +137,10 @@ import {
     isJSDoc,
     isJSDocAugmentsTag,
     isJSDocClassTag,
-    isJSDocDeferredTag,
     isJSDocDeprecatedTag,
     isJSDocEnumTag,
     isJSDocFunctionType,
+    isJSDocImmediateTag,
     isJSDocImplementsTag,
     isJSDocOverloadTag,
     isJSDocOverrideTag,
@@ -182,9 +182,9 @@ import {
     JSDocClassTag,
     JSDocComment,
     JSDocContainer,
-    JSDocDeferredTag,
     JSDocDeprecatedTag,
     JSDocEnumTag,
+    JSDocImmediateTag,
     JSDocImplementsTag,
     JSDocLink,
     JSDocLinkCode,
@@ -1163,14 +1163,14 @@ export function getJSDocDeprecatedTagNoCache(node: Node): JSDocDeprecatedTag | u
     return getFirstJSDocTag(node, isJSDocDeprecatedTag, /*noCache*/ true);
 }
 
-/** Gets the JSDoc deferred tag for the node if present */
-export function getJSDocDeferredTag(node: Node): JSDocDeferredTag | undefined {
-    return getFirstJSDocTag(node, isJSDocDeferredTag);
+/** Gets the JSDoc immediate tag for the node if present */
+export function getJSDocImmediateTag(node: Node): JSDocImmediateTag | undefined {
+    return getFirstJSDocTag(node, isJSDocImmediateTag);
 }
 
 /** @internal */
-export function getJSDocDeferredTagNoCache(node: Node): JSDocDeferredTag | undefined {
-    return getFirstJSDocTag(node, isJSDocDeferredTag, /*noCache*/ true);
+export function getJSDocImmediateTagNoCache(node: Node): JSDocImmediateTag | undefined {
+    return getFirstJSDocTag(node, isJSDocImmediateTag, /*noCache*/ true);
 }
 
 /** Gets the JSDoc enum tag for the node if present */
@@ -1609,8 +1609,8 @@ export function isModifierKind(token: SyntaxKind): token is Modifier["kind"] {
         case SyntaxKind.ConstKeyword:
         case SyntaxKind.DeclareKeyword:
         case SyntaxKind.DefaultKeyword:
-        case SyntaxKind.DeferredKeyword:
         case SyntaxKind.ExportKeyword:
+        case SyntaxKind.ImmediateKeyword:
         case SyntaxKind.InKeyword:
         case SyntaxKind.PublicKeyword:
         case SyntaxKind.PrivateKeyword:
