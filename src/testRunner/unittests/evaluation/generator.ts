@@ -39,4 +39,26 @@ describe("unittests:: evaluation:: generatorEvaluation", () => {
         assert.deepEqual(g.next(), { value: undefined, done: true });
         assert.deepEqual(output, []);
     });
+    it("Supports global `Iterator.prototype` if present", () => {
+        class Iterator {}
+        const { gen } = evaluator.evaluateTypeScript(
+            `
+            export function * gen() {}
+            `,
+            { target: ts.ScriptTarget.ES5 },
+            { Iterator },
+        );
+        const g = gen();
+        assert.instanceOf(g, Iterator);
+    });
+    it("Ignores global `Iterator.prototype` if missing", () => {
+        const { gen } = evaluator.evaluateTypeScript(
+            `
+            export function * gen() {}
+            `,
+            { target: ts.ScriptTarget.ES5 },
+            { Iterator: undefined },
+        );
+        gen();
+    });
 });
