@@ -1,4 +1,13 @@
 import {
+    createCodeFixAction,
+    createCombinedCodeActions,
+    createImportAdder,
+    eachDiagnostic,
+    registerCodeFix,
+    typePredicateToAutoImportableTypeNode,
+    typeToAutoImportableTypeNode,
+} from "../_namespaces/ts.codefix.js";
+import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     AssertionExpression,
@@ -97,17 +106,7 @@ import {
     VariableStatement,
     walkUpParenthesizedExpressions,
 } from "../_namespaces/ts.js";
-
-import {
-    createCodeFixAction,
-    createCombinedCodeActions,
-    createImportAdder,
-    eachDiagnostic,
-    registerCodeFix,
-    typePredicateToAutoImportableTypeNode,
-    typeToAutoImportableTypeNode,
-} from "../_namespaces/ts.codefix.js";
-import { getIdentifierForNode } from "../refactors/helpers.js";
+import { getIdentifierForNode } from "../_namespaces/ts.refactor.js";
 
 const fixId = "fixMissingTypeAnnotationOnExports";
 
