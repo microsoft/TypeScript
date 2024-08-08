@@ -217,12 +217,12 @@ export function addNewNodeForMemberSymbol(
     const optional = !!(symbol.flags & SymbolFlags.Optional);
     const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
     const quotePreference = getQuotePreference(sourceFile, preferences);
+    const flags = NodeBuilderFlags.NoTruncation
+        | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
 
     switch (kind) {
         case SyntaxKind.PropertySignature:
         case SyntaxKind.PropertyDeclaration:
-            let flags = NodeBuilderFlags.NoTruncation;
-            flags |= quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0;
             let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, InternalNodeBuilderFlags.AllowUnresolvedNames, getNoopSymbolTrackerWithResolver(context));
             if (importAdder) {
                 const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
@@ -242,7 +242,7 @@ export function addNewNodeForMemberSymbol(
         case SyntaxKind.GetAccessor:
         case SyntaxKind.SetAccessor: {
             Debug.assertIsDefined(declarations);
-            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, /*internalFlags*/ undefined, getNoopSymbolTrackerWithResolver(context));
+            let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, /*internalFlags*/ undefined, getNoopSymbolTrackerWithResolver(context));
             const allAccessors = getAllAccessorDeclarations(declarations, declaration as AccessorDeclaration);
             const orderedAccessors = allAccessors.secondAccessor
                 ? [allAccessors.firstAccessor, allAccessors.secondAccessor]

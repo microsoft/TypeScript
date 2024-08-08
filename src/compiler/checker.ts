@@ -7100,7 +7100,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
                 return factory.createTypeReferenceNode(factory.createIdentifier("..."), /*typeArguments*/ undefined);
             }
-            return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+            return addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided");
         }
 
         function shouldUsePlaceholderForProperty(propertySymbol: Symbol, context: NodeBuilderContext) {
@@ -7259,7 +7259,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function mapToTypeNodes(types: readonly Type[] | undefined, context: NodeBuilderContext, isBareList?: boolean): TypeNode[] | undefined {
             if (some(types)) {
                 if (checkTruncationLength(context)) {
-                    if (!isBareList) {
+                    if (context.flags & NodeBuilderFlags.NoTruncation) {
+                        return [addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided")];
+                    }
+                    else if (!isBareList) {
                         return [factory.createTypeReferenceNode("...", /*typeArguments*/ undefined)];
                     }
                     else if (types.length > 2) {
@@ -7278,6 +7281,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 for (const type of types) {
                     i++;
                     if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
+                        if (context.flags & NodeBuilderFlags.NoTruncation) {
+                            return [addSyntheticLeadingComment(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), SyntaxKind.MultiLineCommentTrivia, "elided")];
+                        }
                         result.push(factory.createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
                         const typeNode = typeToTypeNodeHelper(types[types.length - 1], context);
                         if (typeNode) {
