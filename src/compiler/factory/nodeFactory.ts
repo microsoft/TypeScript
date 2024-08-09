@@ -1,7 +1,6 @@
 import {
     __String,
     AccessorDeclaration,
-    addRange,
     append,
     appendIfUnique,
     ArrayBindingElement,
@@ -7449,13 +7448,17 @@ function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefi
     // `leadingComments` are concatenated with any existing leading comments on the destination
     if (leadingComments) {
         // We use `.slice()` in case `destEmitNode.leadingComments` is pushed to later
-        destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
+        for (const comment of leadingComments.slice()) {
+            destEmitNode.leadingComments = appendIfUnique(destEmitNode.leadingComments, comment);
+        }
     }
 
     // `trailingComments` are concatenated with any existing trailing comments on the destination
     if (trailingComments) {
         // We use `.slice()` in case `destEmitNode.trailingComments` is pushed to later
-        destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
+        for (const comment of trailingComments) {
+            destEmitNode.trailingComments = appendIfUnique(destEmitNode.trailingComments, comment);
+        }
     }
 
     // `commentRange` overwrites the destination
