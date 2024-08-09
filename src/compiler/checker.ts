@@ -16040,8 +16040,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return instantiateSignature(signature, createSignatureTypeMapper(signature, typeArguments), /*eraseTypeParameters*/ true);
     }
 
+    function getTypeParametersForMapper(signature: Signature) {
+        return sameMap(signature.typeParameters, tp => tp.mapper ? instantiateType(tp, tp.mapper) : tp);
+    }
+
     function createSignatureTypeMapper(signature: Signature, typeArguments: readonly Type[] | undefined): TypeMapper {
-        return createTypeMapper(sameMap(signature.typeParameters!, tp => tp.mapper ? instantiateType(tp, tp.mapper) : tp), typeArguments);
+        return createTypeMapper(getTypeParametersForMapper(signature)!, typeArguments);
     }
 
     function getErasedSignature(signature: Signature): Signature {
@@ -34930,7 +34934,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
     function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, inferenceContext?: InferenceContext, compareTypes?: TypeComparer): Signature {
-        const context = createInferenceContext(signature.typeParameters!, signature, InferenceFlags.None, compareTypes);
+        const context = createInferenceContext(getTypeParametersForMapper(signature)!, signature, InferenceFlags.None, compareTypes);
         // We clone the inferenceContext to avoid fixing. For example, when the source signature is <T>(x: T) => T[] and
         // the contextual signature is (...args: A) => B, we want to infer the element type of A's constraint (say 'any')
         // for T but leave it possible to later infer '[any]' back to A.
