@@ -16,6 +16,11 @@ namespace JSX {
 >key : string
 >    : ^^^^^^
   }
+  export interface Element<P, T> { props: P; type: T; }
+>props : P
+>      : ^
+>type : T
+>     : ^
 }
 
 export { createElement, JSX };
@@ -30,8 +35,10 @@ import * as MyLib from "./library";
 >      : ^^^^^^^^^^^^
 
 const content = <my-element/>;
->content : error
-><my-element/> : error
+>content : MyLib.JSX.Element<P, T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+><my-element/> : MyLib.JSX.Element<P, T>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^
 >my-element : any
 >           : ^^^
 

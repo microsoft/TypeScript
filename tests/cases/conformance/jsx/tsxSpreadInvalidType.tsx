@@ -3,6 +3,7 @@
 // @filename: a.tsx
 namespace JSX {
     export interface IntrinsicElements { [key: string]: any }
+    export interface Element<P, T> { props: P; type: T; }
 }
 
 const a = {} as never;

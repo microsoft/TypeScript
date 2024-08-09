@@ -10,14 +10,22 @@ declare namespace JSX {
 >k : string
 >  : ^^^^^^
     }
+    interface Element<P, T> { props: P; type: T; }
+>props : P
+>      : ^
+>type : T
+>     : ^
 }
 
 const a = (
->a : error
->(  <public-foo></public-foo>) : error
+>a : JSX.Element<P, T>
+>  : ^^^^^^^^^^^^^^^^^
+>(  <public-foo></public-foo>) : JSX.Element<P, T>
+>                              : ^^^^^^^^^^^^^^^^^
 
   <public-foo></public-foo>
-><public-foo></public-foo> : error
+><public-foo></public-foo> : JSX.Element<P, T>
+>                          : ^^^^^^^^^^^^^^^^^
 >public-foo : any
 >           : ^^^
 >public-foo : any
@@ -26,11 +34,14 @@ const a = (
 );
 
 const b = (
->b : error
->(  <public></public>) : error
+>b : JSX.Element<P, T>
+>  : ^^^^^^^^^^^^^^^^^
+>(  <public></public>) : JSX.Element<P, T>
+>                      : ^^^^^^^^^^^^^^^^^
 
   <public></public>
-><public></public> : error
+><public></public> : JSX.Element<P, T>
+>                  : ^^^^^^^^^^^^^^^^^
 >public : any
 >       : ^^^
 >public : any

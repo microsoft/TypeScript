@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution22.tsx] ////
+
+=== tsxElementResolution22.tsx ===
+function createElement(name: string) {
+>createElement : Symbol(createElement, Decl(tsxElementResolution22.tsx, 0, 0), Decl(tsxElementResolution22.tsx, 2, 1))
+>name : Symbol(name, Decl(tsxElementResolution22.tsx, 0, 23))
+
+    return name;
+>name : Symbol(name, Decl(tsxElementResolution22.tsx, 0, 23))
+}
+namespace createElement.JSX {
+>createElement : Symbol(createElement, Decl(tsxElementResolution22.tsx, 0, 0), Decl(tsxElementResolution22.tsx, 2, 1))
+>JSX : Symbol(JSX, Decl(tsxElementResolution22.tsx, 3, 24))
+
+    type Element = string;
+>Element : Symbol(Element, Decl(tsxElementResolution22.tsx, 3, 29))
+
+    type ElementType = string;
+>ElementType : Symbol(ElementType, Decl(tsxElementResolution22.tsx, 4, 26))
+
+    type IntrinsicElements = { div: {} };
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxElementResolution22.tsx, 5, 30))
+>div : Symbol(div, Decl(tsxElementResolution22.tsx, 6, 30))
+}
+
+const d = <div/> // JSX namespace is not correctly defined here
+>d : Symbol(d, Decl(tsxElementResolution22.tsx, 9, 5))
+

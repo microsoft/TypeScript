@@ -3,6 +3,14 @@
 === discriminatedUnionJsxElement.tsx ===
 // Repro from #46021
 
+declare namespace JSX {
+  interface Element<P, T> { props: P; type: T; }
+>props : P
+>      : ^
+>type : T
+>     : ^
+}
+
 interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
 >ListItemVariant : any
 >                : ^^^
@@ -13,8 +21,8 @@ interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLin
 }
 
 function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) {
->Menu : <MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) => any
->     : ^               ^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                      ^^^^^^^^
+>Menu : <MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) => JSX.Element<P, T>
+>     : ^               ^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                      ^^^^^^^^^^^^^^^^^^^^^^
 >ListItemVariant : any
 >                : ^^^
 >data : IData<MenuItemVariant>
@@ -39,7 +47,8 @@ function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^
 
     return <ListItem variant={listItemVariant} />;
-><ListItem variant={listItemVariant} /> : error
+><ListItem variant={listItemVariant} /> : JSX.Element<P, T>
+>                                       : ^^^^^^^^^^^^^^^^^
 >ListItem : (_data: IListItemData) => null
 >         : ^     ^^             ^^^^^^^^^
 >variant : ListItemVariant

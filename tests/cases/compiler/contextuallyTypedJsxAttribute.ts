@@ -2,6 +2,10 @@
 // @noImplicitAny: true
 
 // @filename: index.tsx
+declare namespace JSX {
+  interface Element<P, T> { props: P; type: T; }
+}
+
 interface Elements {
   foo: { callback?: (value: number) => void };
   bar: { callback?: (value: string) => void };

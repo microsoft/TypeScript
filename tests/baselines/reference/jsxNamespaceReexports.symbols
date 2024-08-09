@@ -17,11 +17,19 @@ namespace JSX {
 >key : Symbol(key, Decl(library.ts, 4, 5))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
   }
+  export interface Element<P, T> { props: P; type: T; }
+>Element : Symbol(Element, Decl(library.ts, 5, 3))
+>P : Symbol(P, Decl(library.ts, 6, 27))
+>T : Symbol(T, Decl(library.ts, 6, 29))
+>props : Symbol(Element.props, Decl(library.ts, 6, 34))
+>P : Symbol(P, Decl(library.ts, 6, 27))
+>type : Symbol(Element.type, Decl(library.ts, 6, 44))
+>T : Symbol(T, Decl(library.ts, 6, 29))
 }
 
 export { createElement, JSX };
->createElement : Symbol(createElement, Decl(library.ts, 8, 8))
->JSX : Symbol(JSX, Decl(library.ts, 8, 23))
+>createElement : Symbol(createElement, Decl(library.ts, 9, 8))
+>JSX : Symbol(JSX, Decl(library.ts, 9, 23))
 
 === index.tsx ===
 import * as MyLib from "./library";

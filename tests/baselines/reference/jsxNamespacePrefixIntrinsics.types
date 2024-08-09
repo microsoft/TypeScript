@@ -20,13 +20,18 @@ declare namespace JSX {
 >"NS:NamespacedUpcaseAlsoIntrinsic" : any
 >                                   : ^^^
   }
+  interface Element<P, T> { props: P; type: T; }
+>props : P
+>      : ^
+>type : T
+>     : ^
 }
 
 const valid = <ns:element ns:attribute="yep" />;
->valid : any
->      : ^^^
-><ns:element ns:attribute="yep" /> : any
->                                  : ^^^
+>valid : JSX.Element<P, T>
+>      : ^^^^^^^^^^^^^^^^^
+><ns:element ns:attribute="yep" /> : JSX.Element<P, T>
+>                                  : ^^^^^^^^^^^^^^^^^
 >ns : any
 >   : ^^^
 >element : any
@@ -39,38 +44,38 @@ const valid = <ns:element ns:attribute="yep" />;
 >          : ^^^
 
 const validUpcase1 = <ns:NamespacedUpcaseAlsoIntrinsic />;
->validUpcase1 : any
->             : ^^^
-><ns:NamespacedUpcaseAlsoIntrinsic /> : any
->                                     : ^^^
+>validUpcase1 : JSX.Element<P, T>
+>             : ^^^^^^^^^^^^^^^^^
+><ns:NamespacedUpcaseAlsoIntrinsic /> : JSX.Element<P, T>
+>                                     : ^^^^^^^^^^^^^^^^^
 >ns : any
 >   : ^^^
 >NamespacedUpcaseAlsoIntrinsic : any
 >                              : ^^^
 
 const validUpcase2 = <NS:NamespacedUpcaseAlsoIntrinsic />;
->validUpcase2 : any
->             : ^^^
-><NS:NamespacedUpcaseAlsoIntrinsic /> : any
->                                     : ^^^
+>validUpcase2 : JSX.Element<P, T>
+>             : ^^^^^^^^^^^^^^^^^
+><NS:NamespacedUpcaseAlsoIntrinsic /> : JSX.Element<P, T>
+>                                     : ^^^^^^^^^^^^^^^^^
 >NS : any
 >   : ^^^
 >NamespacedUpcaseAlsoIntrinsic : any
 >                              : ^^^
 
 const invalid1 = <element />;
->invalid1 : any
->         : ^^^
-><element /> : any
->            : ^^^
+>invalid1 : JSX.Element<P, T>
+>         : ^^^^^^^^^^^^^^^^^
+><element /> : JSX.Element<P, T>
+>            : ^^^^^^^^^^^^^^^^^
 >element : any
 >        : ^^^
 
 const invalid2 = <ns:element attribute="nope" />;
->invalid2 : any
->         : ^^^
-><ns:element attribute="nope" /> : any
->                                : ^^^
+>invalid2 : JSX.Element<P, T>
+>         : ^^^^^^^^^^^^^^^^^
+><ns:element attribute="nope" /> : JSX.Element<P, T>
+>                                : ^^^^^^^^^^^^^^^^^
 >ns : any
 >   : ^^^
 >element : any
@@ -79,10 +84,10 @@ const invalid2 = <ns:element attribute="nope" />;
 >          : ^^^^^^
 
 const invalid3 = <ns:element ns:invalid="nope" />;
->invalid3 : any
->         : ^^^
-><ns:element ns:invalid="nope" /> : any
->                                 : ^^^
+>invalid3 : JSX.Element<P, T>
+>         : ^^^^^^^^^^^^^^^^^
+><ns:element ns:invalid="nope" /> : JSX.Element<P, T>
+>                                 : ^^^^^^^^^^^^^^^^^
 >ns : any
 >   : ^^^
 >element : any

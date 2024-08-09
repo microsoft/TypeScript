@@ -9,6 +9,7 @@ namespace JSX {
   export interface IntrinsicElements {
     [key: string]: Record<string, any>;
   }
+  export interface Element<P, T> { props: P; type: T; }
 }
 
 export { createElement, JSX };

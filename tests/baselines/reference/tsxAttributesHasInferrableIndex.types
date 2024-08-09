@@ -24,10 +24,12 @@ function createElement(name: string, attributes: Attributes | undefined, ...cont
 >name : string
 >     : ^^^^^^
 }
-namespace createElement.JSX {
-    type Element = string;
+namespace createElement {
+    export namespace JSX {
+        export type Element = string;
 >Element : string
 >        : ^^^^^^
+    }
 }
 
 function Button(attributes: Attributes | undefined, contents: string[]) {
@@ -43,10 +45,24 @@ function Button(attributes: Attributes | undefined, contents: string[]) {
 >   : ^^
 }
 const b = <Button></Button>
->b : error
-><Button></Button> : error
+>b : string
+>  : ^^^^^^
+><Button></Button> : string
+>                  : ^^^^^^
 >Button : (attributes: Attributes | undefined, contents: string[]) => string
 >       : ^          ^^                      ^^        ^^        ^^^^^^^^^^^
+>Button : (attributes: Attributes | undefined, contents: string[]) => string
+>       : ^          ^^                      ^^        ^^        ^^^^^^^^^^^
+
+const b2 = <Button someProp=""></Button>
+>b2 : string
+>   : ^^^^^^
+><Button someProp=""></Button> : string
+>                              : ^^^^^^
+>Button : (attributes: Attributes | undefined, contents: string[]) => string
+>       : ^          ^^                      ^^        ^^        ^^^^^^^^^^^
+>someProp : string
+>         : ^^^^^^
 >Button : (attributes: Attributes | undefined, contents: string[]) => string
 >       : ^          ^^                      ^^        ^^        ^^^^^^^^^^^
 

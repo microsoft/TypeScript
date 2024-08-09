@@ -11,24 +11,31 @@ declare module JSX {
 >"package" : "package"
 >          : ^^^^^^^^^
     }
+    interface Element<P, T> { props: P; type: T; }
+>props : P
+>      : ^
+>type : T
+>     : ^
 }
 
 function A() {
->A : () => any
->  : ^^^^^^^^^
+>A : () => JSX.Element<P, T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
     return <package />
-><package /> : error
+><package /> : JSX.Element<P, T>
+>            : ^^^^^^^^^^^^^^^^^
 >package : any
 >        : ^^^
 }
 
 function B() {
->B : () => any
->  : ^^^^^^^^^
+>B : () => JSX.Element<P, T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 
     return <package></package>
-><package></package> : error
+><package></package> : JSX.Element<P, T>
+>                    : ^^^^^^^^^^^^^^^^^
 >package : any
 >        : ^^^
 >package : any

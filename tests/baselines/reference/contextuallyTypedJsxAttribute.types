@@ -1,6 +1,14 @@
 //// [tests/cases/compiler/contextuallyTypedJsxAttribute.ts] ////
 
 === index.tsx ===
+declare namespace JSX {
+  interface Element<P, T> { props: P; type: T; }
+>props : P
+>      : ^
+>type : T
+>     : ^
+}
+
 interface Elements {
   foo: { callback?: (value: number) => void };
 >foo : { callback?: (value: number) => void; }
@@ -32,7 +40,8 @@ declare function Test<C extends keyof Elements>(props: Props<C>): null;
 >      : ^^^^^^^^
 
 <Test
-><Test  as="bar"  callback={(value) => {}}/> : error
+><Test  as="bar"  callback={(value) => {}}/> : JSX.Element<P, T>
+>                                            : ^^^^^^^^^^^^^^^^^
 >Test : <C extends keyof Elements>(props: Props<C>) => null
 >     : ^ ^^^^^^^^^              ^^     ^^        ^^^^^    
 
@@ -75,7 +84,8 @@ Test({
 });
 
 <Test<'bar'>
-><Test<'bar'>  as="bar"  callback={(value) => {}}/> : error
+><Test<'bar'>  as="bar"  callback={(value) => {}}/> : JSX.Element<P, T>
+>                                                   : ^^^^^^^^^^^^^^^^^
 >Test : <C extends keyof Elements>(props: Props<C>) => null
 >     : ^ ^^^^^^^^^              ^^     ^^        ^^^^^    
 
