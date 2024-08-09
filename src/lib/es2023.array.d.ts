@@ -8,8 +8,8 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findLast<S extends T>(/** @immediate */ predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S | undefined;
-    findLast(/** @immediate */ predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T | undefined;
+    findLast<S extends T>(immediate predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S | undefined;
+    findLast(immediate predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the last element in the array where predicate is true, and -1
@@ -20,7 +20,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findLastIndex(/** @immediate */ predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): number;
+    findLastIndex(immediate predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): number;
 
     /**
      * Returns a copy of an array with its elements reversed.
@@ -36,7 +36,7 @@ interface Array<T> {
      * [11, 2, 22, 1].toSorted((a, b) => a - b) // [1, 2, 11, 22]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: T, b: T) => number): T[];
+    toSorted(immediate compareFn?: (a: T, b: T) => number): T[];
 
     /**
      * Copies an array and removes elements and, if necessary, inserts new elements in their place. Returns the copied array.
@@ -78,11 +78,11 @@ interface ReadonlyArray<T> {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends T>(
-        /** @immediate */ predicate: (value: T, index: number, array: readonly T[]) => value is S,
+        immediate predicate: (value: T, index: number, array: readonly T[]) => value is S,
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (value: T, index: number, array: readonly T[]) => unknown,
+        immediate predicate: (value: T, index: number, array: readonly T[]) => unknown,
         thisArg?: any,
     ): T | undefined;
 
@@ -96,7 +96,7 @@ interface ReadonlyArray<T> {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (value: T, index: number, array: readonly T[]) => unknown,
+        immediate predicate: (value: T, index: number, array: readonly T[]) => unknown,
         thisArg?: any,
     ): number;
 
@@ -114,7 +114,7 @@ interface ReadonlyArray<T> {
      * [11, 2, 22, 1].toSorted((a, b) => a - b) // [1, 2, 11, 22]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: T, b: T) => number): T[];
+    toSorted(immediate compareFn?: (a: T, b: T) => number): T[];
 
     /**
      * Copies an array and removes elements while, if necessary, inserting new elements in their place, returning the remaining elements.
@@ -156,7 +156,7 @@ interface Int8Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends number>(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Int8Array,
@@ -164,7 +164,7 @@ interface Int8Array {
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (value: number, index: number, array: Int8Array) => unknown,
+        immediate predicate: (value: number, index: number, array: Int8Array) => unknown,
         thisArg?: any,
     ): number | undefined;
 
@@ -178,7 +178,7 @@ interface Int8Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (value: number, index: number, array: Int8Array) => unknown,
+        immediate predicate: (value: number, index: number, array: Int8Array) => unknown,
         thisArg?: any,
     ): number;
 
@@ -197,7 +197,7 @@ interface Int8Array {
      * myNums.toSorted((a, b) => a - b) // Int8Array(4) [1, 2, 11, 22]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: number, b: number) => number): Int8Array;
+    toSorted(immediate compareFn?: (a: number, b: number) => number): Int8Array;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -220,7 +220,7 @@ interface Uint8Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends number>(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Uint8Array,
@@ -228,7 +228,7 @@ interface Uint8Array {
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (value: number, index: number, array: Uint8Array) => unknown,
+        immediate predicate: (value: number, index: number, array: Uint8Array) => unknown,
         thisArg?: any,
     ): number | undefined;
 
@@ -242,7 +242,7 @@ interface Uint8Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (value: number, index: number, array: Uint8Array) => unknown,
+        immediate predicate: (value: number, index: number, array: Uint8Array) => unknown,
         thisArg?: any,
     ): number;
 
@@ -261,7 +261,7 @@ interface Uint8Array {
      * myNums.toSorted((a, b) => a - b) // Uint8Array(4) [1, 2, 11, 22]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: number, b: number) => number): Uint8Array;
+    toSorted(immediate compareFn?: (a: number, b: number) => number): Uint8Array;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -284,7 +284,7 @@ interface Uint8ClampedArray {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends number>(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Uint8ClampedArray,
@@ -292,7 +292,7 @@ interface Uint8ClampedArray {
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Uint8ClampedArray,
@@ -310,7 +310,7 @@ interface Uint8ClampedArray {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Uint8ClampedArray,
@@ -333,7 +333,7 @@ interface Uint8ClampedArray {
      * myNums.toSorted((a, b) => a - b) // Uint8ClampedArray(4) [1, 2, 11, 22]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: number, b: number) => number): Uint8ClampedArray;
+    toSorted(immediate compareFn?: (a: number, b: number) => number): Uint8ClampedArray;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -356,7 +356,7 @@ interface Int16Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends number>(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Int16Array,
@@ -364,7 +364,7 @@ interface Int16Array {
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (value: number, index: number, array: Int16Array) => unknown,
+        immediate predicate: (value: number, index: number, array: Int16Array) => unknown,
         thisArg?: any,
     ): number | undefined;
 
@@ -378,7 +378,7 @@ interface Int16Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (value: number, index: number, array: Int16Array) => unknown,
+        immediate predicate: (value: number, index: number, array: Int16Array) => unknown,
         thisArg?: any,
     ): number;
 
@@ -397,7 +397,7 @@ interface Int16Array {
      * myNums.toSorted((a, b) => a - b) // Int16Array(4) [-22, 1, 2, 11]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: number, b: number) => number): Int16Array;
+    toSorted(immediate compareFn?: (a: number, b: number) => number): Int16Array;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -420,7 +420,7 @@ interface Uint16Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends number>(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Uint16Array,
@@ -428,7 +428,7 @@ interface Uint16Array {
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Uint16Array,
@@ -446,7 +446,7 @@ interface Uint16Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Uint16Array,
@@ -469,7 +469,7 @@ interface Uint16Array {
      * myNums.toSorted((a, b) => a - b) // Uint16Array(4) [1, 2, 11, 22]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: number, b: number) => number): Uint16Array;
+    toSorted(immediate compareFn?: (a: number, b: number) => number): Uint16Array;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -492,7 +492,7 @@ interface Int32Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends number>(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Int32Array,
@@ -500,7 +500,7 @@ interface Int32Array {
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (value: number, index: number, array: Int32Array) => unknown,
+        immediate predicate: (value: number, index: number, array: Int32Array) => unknown,
         thisArg?: any,
     ): number | undefined;
 
@@ -514,7 +514,7 @@ interface Int32Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (value: number, index: number, array: Int32Array) => unknown,
+        immediate predicate: (value: number, index: number, array: Int32Array) => unknown,
         thisArg?: any,
     ): number;
 
@@ -533,7 +533,7 @@ interface Int32Array {
      * myNums.toSorted((a, b) => a - b) // Int32Array(4) [-22, 1, 2, 11]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: number, b: number) => number): Int32Array;
+    toSorted(immediate compareFn?: (a: number, b: number) => number): Int32Array;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -556,7 +556,7 @@ interface Uint32Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends number>(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Uint32Array,
@@ -564,7 +564,7 @@ interface Uint32Array {
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Uint32Array,
@@ -582,7 +582,7 @@ interface Uint32Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Uint32Array,
@@ -605,7 +605,7 @@ interface Uint32Array {
      * myNums.toSorted((a, b) => a - b) // Uint32Array(4) [1, 2, 11, 22]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: number, b: number) => number): Uint32Array;
+    toSorted(immediate compareFn?: (a: number, b: number) => number): Uint32Array;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -628,7 +628,7 @@ interface Float32Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends number>(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Float32Array,
@@ -636,7 +636,7 @@ interface Float32Array {
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Float32Array,
@@ -654,7 +654,7 @@ interface Float32Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Float32Array,
@@ -677,7 +677,7 @@ interface Float32Array {
      * myNums.toSorted((a, b) => a - b) // Float32Array(4) [-22.5, 1, 2, 11.5]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: number, b: number) => number): Float32Array;
+    toSorted(immediate compareFn?: (a: number, b: number) => number): Float32Array;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -700,7 +700,7 @@ interface Float64Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends number>(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Float64Array,
@@ -708,7 +708,7 @@ interface Float64Array {
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Float64Array,
@@ -726,7 +726,7 @@ interface Float64Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: number,
             index: number,
             array: Float64Array,
@@ -749,7 +749,7 @@ interface Float64Array {
      * myNums.toSorted((a, b) => a - b) // Float64Array(4) [-22.5, 1, 2, 11.5]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: number, b: number) => number): Float64Array;
+    toSorted(immediate compareFn?: (a: number, b: number) => number): Float64Array;
 
     /**
      * Copies the array and inserts the given number at the provided index.
@@ -772,7 +772,7 @@ interface BigInt64Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends bigint>(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: bigint,
             index: number,
             array: BigInt64Array,
@@ -780,7 +780,7 @@ interface BigInt64Array {
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: bigint,
             index: number,
             array: BigInt64Array,
@@ -798,7 +798,7 @@ interface BigInt64Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: bigint,
             index: number,
             array: BigInt64Array,
@@ -821,7 +821,7 @@ interface BigInt64Array {
      * myNums.toSorted((a, b) => Number(a - b)) // BigInt64Array(4) [-22n, 1n, 2n, 11n]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: bigint, b: bigint) => number): BigInt64Array;
+    toSorted(immediate compareFn?: (a: bigint, b: bigint) => number): BigInt64Array;
 
     /**
      * Copies the array and inserts the given bigint at the provided index.
@@ -844,7 +844,7 @@ interface BigUint64Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLast<S extends bigint>(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: bigint,
             index: number,
             array: BigUint64Array,
@@ -852,7 +852,7 @@ interface BigUint64Array {
         thisArg?: any,
     ): S | undefined;
     findLast(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: bigint,
             index: number,
             array: BigUint64Array,
@@ -870,7 +870,7 @@ interface BigUint64Array {
      * predicate. If it is not provided, undefined is used instead.
      */
     findLastIndex(
-        /** @immediate */ predicate: (
+        immediate predicate: (
             value: bigint,
             index: number,
             array: BigUint64Array,
@@ -893,7 +893,7 @@ interface BigUint64Array {
      * myNums.toSorted((a, b) => Number(a - b)) // BigUint64Array(4) [1n, 2n, 11n, 22n]
      * ```
      */
-    toSorted(/** @immediate */ compareFn?: (a: bigint, b: bigint) => number): BigUint64Array;
+    toSorted(immediate compareFn?: (a: bigint, b: bigint) => number): BigUint64Array;
 
     /**
      * Copies the array and inserts the given bigint at the provided index.

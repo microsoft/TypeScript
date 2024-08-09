@@ -48,6 +48,7 @@
         "**/node_modules",
         "**/*-lock.json",
         "coverage/**",
+        "src/lib/**",
         "lib/**",
         "built/**",
         "tests/**",

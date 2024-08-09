@@ -8,8 +8,8 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T>(/** @immediate */ predicate: (value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
-    find(/** @immediate */ predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): T | undefined;
+    find<S extends T>(immediate predicate: (value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
+    find(immediate predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -20,7 +20,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(/** @immediate */ predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): number;
+    findIndex(immediate predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): number;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
@@ -59,7 +59,7 @@ interface ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T, U>(arrayLike: ArrayLike<T>, /** @immediate */ mapfn: (v: T, k: number) => U, thisArg?: any): U[];
+    from<T, U>(arrayLike: ArrayLike<T>, immediate mapfn: (v: T, k: number) => U, thisArg?: any): U[];
 
     /**
      * Returns a new array from a set of elements.
@@ -331,8 +331,8 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T>(/** @immediate */ predicate: (value: T, index: number, obj: readonly T[]) => value is S, thisArg?: any): S | undefined;
-    find(/** @immediate */ predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): T | undefined;
+    find<S extends T>(immediate predicate: (value: T, index: number, obj: readonly T[]) => value is S, thisArg?: any): S | undefined;
+    find(immediate predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -343,7 +343,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(/** @immediate */ predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): number;
+    findIndex(immediate predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): number;
 
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string;
 }
