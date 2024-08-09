@@ -210,12 +210,20 @@ export default tseslint.config(
                 { name: "clearImmediate" },
                 { name: "performance" },
             ],
+            "local/no-direct-import": "error",
         },
     },
     {
         files: ["src/harness/**", "src/testRunner/**"],
         rules: {
             "no-restricted-globals": "off",
+            "local/no-direct-import": "off",
+        },
+    },
+    {
+        files: ["src/**/_namespaces/**"],
+        rules: {
+            "local/no-direct-import": "off",
         },
     },
     {

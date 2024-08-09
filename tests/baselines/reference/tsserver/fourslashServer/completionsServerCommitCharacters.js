@@ -131,8 +131,8 @@ Info seq  [hh:mm:ss:mss] response:
         "entries": [
           {
             "name": "aa",
-            "kind": "string",
             "kindModifiers": "",
+            "kind": "string",
             "sortText": "11",
             "replacementSpan": {
               "start": {
@@ -148,8 +148,8 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "bb",
-            "kind": "string",
             "kindModifiers": "",
+            "kind": "string",
             "sortText": "11",
             "replacementSpan": {
               "start": {

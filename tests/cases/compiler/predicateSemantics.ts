@@ -34,3 +34,6 @@ while ({} as any) { }
 while ({} satisfies unknown) { }
 while ((<any>({}))) { }
 while ((({}))) { }
+
+// Should be OK
+console.log((cond || undefined) && 1 / cond);

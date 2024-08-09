@@ -84,7 +84,6 @@ import {
     getEffectiveBaseTypeNode,
     getEffectiveModifierFlags,
     getEffectiveTypeAnnotationNode,
-    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEscapedTextOfIdentifierOrLiteral,
     getEscapedTextOfJsxAttributeName,
@@ -106,6 +105,7 @@ import {
     getPropertyNameForPropertyNameNode,
     getQuotePreference,
     getReplacementSpanForContextToken,
+    getResolvePackageJsonExports,
     getRootDeclaration,
     getSourceFileOfModule,
     getSwitchedType,
@@ -301,7 +301,6 @@ import {
     ModuleDeclaration,
     moduleExportNameTextEscaped,
     ModuleReference,
-    moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
     newCaseClauseTracker,
     Node,
@@ -629,12 +628,16 @@ function resolvingModuleSpecifiers<TReturn>(
     cb: (context: ModuleSpecifierResolutionContext) => TReturn,
 ): TReturn {
     const start = timestamp();
-    // Under `--moduleResolution nodenext`, we have to resolve module specifiers up front, because
+    // Under `--moduleResolution nodenext` or `bundler`, we have to resolve module specifiers up front, because
     // package.json exports can mean we *can't* resolve a module specifier (that doesn't include a
     // relative path into node_modules), and we want to filter those completions out entirely.
     // Import statement completions always need specifier resolution because the module specifier is
     // part of their `insertText`, not the `codeActions` creating edits away from the cursor.
-    const needsFullResolution = isForImportStatementCompletion || moduleResolutionSupportsPackageJsonExportsAndImports(getEmitModuleResolutionKind(program.getCompilerOptions()));
+    // Finally, `autoImportSpecifierExcludeRegexes` necessitates eagerly resolving module specifiers
+    // because completion items are being explcitly filtered out by module specifier.
+    const needsFullResolution = isForImportStatementCompletion
+        || getResolvePackageJsonExports(program.getCompilerOptions())
+        || preferences.autoImportSpecifierExcludeRegexes?.length;
     let skippedAny = false;
     let ambientCount = 0;
     let resolvedCount = 0;
@@ -2324,7 +2327,7 @@ function createObjectLiteralMethod(
                 // We don't support overloads in object literals.
                 return undefined;
             }
-            const typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
+            const typeNode = checker.typeToTypeNode(effectiveType, enclosingDeclaration, builderFlags, /*internalFlags*/ undefined, codefix.getNoopSymbolTrackerWithResolver({ program, host }));
             if (!typeNode || !isFunctionTypeNode(typeNode)) {
                 return undefined;
             }

@@ -5,8 +5,8 @@ iterableTReturnTNext.ts(14,7): error TS2322: Type 'IteratorResult<number, undefi
     Types of property 'value' are incompatible.
       Type 'undefined' is not assignable to type 'number'.
 iterableTReturnTNext.ts(42,7): error TS2416: Property 'values' in type 'MyMap' is not assignable to the same property in base type 'Map<string, number>'.
-  Type '() => Generator<number, void, any>' is not assignable to type '() => BuiltinIterator<number, undefined, any>'.
-    Call signature return types 'Generator<number, void, any>' and 'BuiltinIterator<number, undefined, any>' are incompatible.
+  Type '() => Generator<number, void, unknown>' is not assignable to type '() => MapIterator<number>'.
+    Call signature return types 'Generator<number, void, unknown>' and 'MapIterator<number>' are incompatible.
       The types returned by 'next(...)' are incompatible between these types.
         Type 'IteratorResult<number, void>' is not assignable to type 'IteratorResult<number, undefined>'.
           Type 'IteratorReturnResult<void>' is not assignable to type 'IteratorResult<number, undefined>'.
@@ -59,16 +59,16 @@ iterableTReturnTNext.ts(42,7): error TS2416: Property 'values' in type 'MyMap' i
         get(key: string): number | undefined { return undefined; }
         has(key: string): boolean { return false; }
         set(key: string, value: number): this { return this; }
-        entries(): BuiltinIterator<[string, number], BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
-        keys(): BuiltinIterator<string, BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
-        [Symbol.iterator](): BuiltinIterator<[string, number], BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
+        entries(): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
+        keys(): MapIterator<string> { throw new Error("Method not implemented."); }
+        [Symbol.iterator](): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
     
         // error when strictBuiltinIteratorReturn is true because values() has implicit `void` return, which isn't assignable to `undefined`
         * values() {
           ~~~~~~
 !!! error TS2416: Property 'values' in type 'MyMap' is not assignable to the same property in base type 'Map<string, number>'.
-!!! error TS2416:   Type '() => Generator<number, void, any>' is not assignable to type '() => BuiltinIterator<number, undefined, any>'.
-!!! error TS2416:     Call signature return types 'Generator<number, void, any>' and 'BuiltinIterator<number, undefined, any>' are incompatible.
+!!! error TS2416:   Type '() => Generator<number, void, unknown>' is not assignable to type '() => MapIterator<number>'.
+!!! error TS2416:     Call signature return types 'Generator<number, void, unknown>' and 'MapIterator<number>' are incompatible.
 !!! error TS2416:       The types returned by 'next(...)' are incompatible between these types.
 !!! error TS2416:         Type 'IteratorResult<number, void>' is not assignable to type 'IteratorResult<number, undefined>'.
 !!! error TS2416:           Type 'IteratorReturnResult<void>' is not assignable to type 'IteratorResult<number, undefined>'.

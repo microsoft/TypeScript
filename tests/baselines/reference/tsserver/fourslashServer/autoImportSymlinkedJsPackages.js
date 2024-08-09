@@ -882,8 +882,8 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "const",
             "kindModifiers": "export",
             "sortText": "16",
-            "hasAction": true,
             "source": "package-b",
+            "hasAction": true,
             "sourceDisplay": [
               {
                 "text": "package-b",
