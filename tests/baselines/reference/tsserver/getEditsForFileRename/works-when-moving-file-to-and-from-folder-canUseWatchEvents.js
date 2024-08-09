@@ -32,7 +32,7 @@ export function alert(message: string) {
 //// [/home/src/myprojects/project/functions/whatever/placeholder.txt]
 
 
-//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -278,6 +278,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/myprojects/project/components/whatever/alert.ts: *new*

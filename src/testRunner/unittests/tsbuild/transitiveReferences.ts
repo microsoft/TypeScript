@@ -3,17 +3,13 @@ import { jsonToReadableText } from "../helpers.js";
 import { getFsContentsForTransitiveReferences } from "../helpers/transitiveReferences.js";
 import { verifyTsc } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
-import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: when project reference is referenced transitively", () => {
     let projFs: vfs.FileSystem;
     before(() => {
         projFs = loadProjectFromFiles(
             getFsContentsForTransitiveReferences(),
-            {
-                cwd: "/user/username/projects/transitiveReferences",
-                executingFilePath: libFile.path,
-            },
+            { currentDirectory: "/user/username/projects/transitiveReferences" },
         );
     });
     after(() => {

@@ -4,6 +4,15 @@ Before request
 //// [/user/username/projects/myproject/app.ts]
 const app = 20;
 
+//// [/user/username/projects/myproject/tsconfig.json]
+{}
+
+//// [/user/username/projects/myproject/jsFile1.js]
+const jsFile1 = 10;
+
+//// [/user/username/projects/myproject/jsFile2.js]
+const jsFile2 = 10;
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -18,15 +27,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{}
-
-//// [/user/username/projects/myproject/jsFile1.js]
-const jsFile1 = 10;
-
-//// [/user/username/projects/myproject/jsFile2.js]
-const jsFile2 = 10;
 
 
 Info seq  [hh:mm:ss:mss] request:

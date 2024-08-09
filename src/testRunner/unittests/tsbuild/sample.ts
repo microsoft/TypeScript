@@ -25,7 +25,6 @@ import {
 } from "../helpers/vfs.js";
 import {
     changeToHostTrackingWrittenFiles,
-    getTypeScriptLibTestLocation,
     libFile,
     SerializeOutputOrder,
 } from "../helpers/virtualFileSystemWithWatch.js";
@@ -45,7 +44,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
     function getSampleFsAfterBuild() {
         if (projFsWithBuild) return projFsWithBuild;
         const fs = projFs.shadow();
-        const sys = new fakes.System(fs, { executingFilePath: libFile.path });
+        const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc.js" });
         const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
         const builder = ts.createSolutionBuilder(host, ["tests"], {});
         builder.build();
@@ -167,7 +166,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                     caption: "rebuilds when tsconfig changes",
                     edit: fs => {
                         replaceText(fs, "tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es2020"`);
-                        fs.writeFileSync(getTypeScriptLibTestLocation("es2020.full"), libFile.content);
+                        fs.writeFileSync("/lib/lib.es2020.full.d.ts", libFile.content);
                     },
                 },
             ],
@@ -538,13 +537,13 @@ class someClass2 { }`,
             commandLineArgs: ["--b", "core", "--verbose"],
             modifyFs: fs => {
                 fs.writeFileSync(
-                    getTypeScriptLibTestLocation("esnext.full"),
+                    "/lib/lib.esnext.full.d.ts",
                     `/// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />`,
                 );
-                fs.writeFileSync(getTypeScriptLibTestLocation("esnext"), libFile.content);
+                fs.writeFileSync("/lib/lib.esnext.d.ts", libFile.content);
                 fs.writeFileSync(
-                    libFile.path,
+                    "/lib/lib.d.ts",
                     `/// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />`,
                 );

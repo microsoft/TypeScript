@@ -84,6 +84,7 @@ export declare function actionCreatorFactory(prefix?: string | null): ActionCrea
 export default actionCreatorFactory;
 
 //// [/user/username/projects/myProject/plugin-one/node_modules/plugin-two] symlink(/user/username/projects/myProject/plugin-two)
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}

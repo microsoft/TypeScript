@@ -7,6 +7,13 @@ import a from "file2"
 //// [/user/username/rootfolder/otherfolder/a/b/project/file3.ts]
 export class c { }
 
+//// [/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "typeRoots": []
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -21,13 +28,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "typeRoots": []
-  }
-}
 
 
 Info seq  [hh:mm:ss:mss] request:

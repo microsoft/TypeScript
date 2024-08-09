@@ -10,7 +10,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: auxiliaryProject::", () => {
@@ -96,7 +95,6 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 export function command(cmd, cb) { cb(Yargs) }
             `,
             [indexFile.path]: indexFile.content,
-            [libFile.path]: libFile.content,
         });
         const session = new TestSession(host);
         openFilesForSession([indexFile], session);
@@ -155,7 +153,6 @@ describe("unittests:: tsserver:: auxiliaryProject::", () => {
                 import { Yargs } from "yargs/callback";
             `,
             [indexFile.path]: indexFile.content,
-            [libFile.path]: libFile.content,
         });
         const session = new TestSession(host);
         openFilesForSession([indexFile], session);

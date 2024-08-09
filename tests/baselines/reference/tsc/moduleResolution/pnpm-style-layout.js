@@ -41,6 +41,7 @@ export function createButton(): Button {
 }
 
 //// [/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button] symlink(/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button)
+
 //// [/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts]
 export { createButton, Button } from "@component-type-checker/button";
 
@@ -59,6 +60,7 @@ export { createButton, Button } from "@component-type-checker/button";
 }
 
 //// [/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button] symlink(/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button)
+
 //// [/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts]
 export { createButton, Button } from "@component-type-checker/button";
 
@@ -93,7 +95,9 @@ export const VERSION = "0.0.2";
 }
 
 //// [/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/button] symlink(/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button)
+
 //// [/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/components] symlink(/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components)
+
 //// [/home/src/projects/component-type-checker/packages/app/src/app.tsx]
 import { VERSION } from "@component-type-checker/sdk";
 import { Button } from "@component-type-checker/components";
@@ -130,9 +134,12 @@ const button: Button = createButton();
 }
 
 //// [/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/button] symlink(/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button)
+
 //// [/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components] symlink(/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components)
+
 //// [/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/sdk] symlink(/home/src/projects/component-type-checker/packages/sdk)
-//// [/home/src/tslibs/ts/lib/lib.es5.d.ts]
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -340,6 +347,8 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 src/app.tsx
   Matched by include pattern 'src' in 'tsconfig.json'
 
+
+//// [/home/src/tslibs/ts/lib/lib.es5.d.ts] *Lib*
 
 //// [/home/src/projects/component-type-checker/packages/app/dist/app.js]
 import { createButton } from "@component-type-checker/button";

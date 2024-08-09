@@ -10,7 +10,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: rename::", () => {
@@ -176,7 +175,6 @@ describe("unittests:: tsserver:: rename::", () => {
                 include: [],
             }),
             "C:/temp/test/node_modules/project1": { symLink: "c:/temp/test/project1" },
-            [libFile.path]: libFile.content,
         }, { windowsStyleRoot: "C:/" });
         const session = new TestSession(host);
         openFilesForSession([file.path.toLowerCase()], session);

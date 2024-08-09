@@ -1,7 +1,6 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { FsContents } from "./contents.js";
-import { libFile } from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForMultipleErrorsForceConsistentCasingInFileNames(): FsContents {
     return {
@@ -25,6 +24,5 @@ export function getFsContentsForMultipleErrorsForceConsistentCasingInFileNames()
         `,
         "/home/src/projects/project/tsconfig.json": jsonToReadableText({}),
         "/home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts": `export function foo(): void`,
-        [libFile.path]: libFile.content,
     };
 }

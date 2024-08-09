@@ -13,6 +13,21 @@ let x = 3;
 //// [/user/username/projects/project/c/file3.ts]
 let z = 4;
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -73,7 +88,7 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/a/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.esnext.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -82,19 +97,22 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/ts/lib/lib.esnext.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/a/file1.ts SVC-1-0 "let x = 1;"
 
 
+	../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts
+	  Default library for target 'esnext'
 	file1.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts] *Lib*
+
 
 PolledWatches::
-/home/src/tslibs/ts/lib/lib.esnext.full.d.ts: *new*
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/project/a/jsconfig.json: *new*
@@ -106,12 +124,20 @@ PolledWatches::
 /user/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
+FsWatches::
+/home/src/tslibs/ts/lib/lib.esnext.full.d.ts: *new*
+  {}
+
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
 
 ScriptInfos::
+/home/src/tslibs/ts/lib/lib.esnext.full.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /user/username/projects/project/a/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -140,6 +166,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.esnext.full.d.ts",
         "/user/username/projects/project/a/file1.ts"
       ],
       "compilerOptions": {
@@ -228,7 +255,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -248,8 +275,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/home/src/tslibs/ts/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/a/bower_components: *new*
@@ -264,6 +289,10 @@ PolledWatches::
   {"pollingInterval":2000}
 /user/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+
+FsWatches::
+/home/src/tslibs/ts/lib/lib.esnext.full.d.ts:
+  {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
@@ -289,11 +318,14 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/project
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/ts/lib/lib.esnext.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/a/file1.ts SVC-1-0 "let x = 1;"
 	/user/username/projects/project/a/file2.ts SVC-1-0 "let y = 2;"
 
 
+	../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts
+	  Default library for target 'esnext'
 	file1.ts
 	  Root file specified for compilation
 	file2.ts
@@ -304,6 +336,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.esnext.full.d.ts",
         "/user/username/projects/project/a/file1.ts",
         "/user/username/projects/project/a/file2.ts"
       ],
@@ -384,7 +417,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -412,6 +445,10 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
+/home/src/tslibs/ts/lib/lib.esnext.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /user/username/projects/project/a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -439,7 +476,7 @@ Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/b/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/b/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es6.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es6.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
@@ -448,10 +485,13 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/ts/lib/lib.es6.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/b/file2.ts SVC-1-0 "let x = 3;"
 
 
+	../../../../../home/src/tslibs/ts/lib/lib.es6.d.ts
+	  Default library for target 'es6'
 	file2.ts
 	  Root file specified for compilation
 
@@ -460,6 +500,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject2*",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.es6.d.ts",
         "/user/username/projects/project/b/file2.ts"
       ],
       "compilerOptions": {
@@ -547,11 +588,11 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -573,12 +614,10 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/ts/lib/lib.es6.d.ts] *Lib*
+
 
 PolledWatches::
-/home/src/tslibs/ts/lib/lib.es6.d.ts: *new*
-  {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/project/a/bower_components:
@@ -604,6 +643,12 @@ PolledWatches::
 /user/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
+FsWatches::
+/home/src/tslibs/ts/lib/lib.es6.d.ts: *new*
+  {}
+/home/src/tslibs/ts/lib/lib.esnext.full.d.ts:
+  {}
+
 Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 2
@@ -614,6 +659,14 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
+/home/src/tslibs/ts/lib/lib.es6.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/home/src/tslibs/ts/lib/lib.esnext.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /user/username/projects/project/a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -646,7 +699,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject3*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject3* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
@@ -655,10 +707,13 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/ts/lib/lib.esnext.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/c/file3.ts SVC-1-0 "let z = 4;"
 
 
+	../../../tslibs/ts/lib/lib.esnext.full.d.ts
+	  Default library for target 'esnext'
 	../../../../../user/username/projects/project/c/file3.ts
 	  Root file specified for compilation
 
@@ -667,6 +722,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject3*",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.esnext.full.d.ts",
         "/user/username/projects/project/c/file3.ts"
       ],
       "compilerOptions": {
@@ -754,15 +810,15 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -788,10 +844,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/home/src/tslibs/ts/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.esnext.full.d.ts:
-  {"pollingInterval":500}
 /home/src/vscode/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/vscode/projects/bin/bower_components: *new*
@@ -835,6 +887,12 @@ PolledWatches::
 /user/username/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
+FsWatches::
+/home/src/tslibs/ts/lib/lib.es6.d.ts:
+  {}
+/home/src/tslibs/ts/lib/lib.esnext.full.d.ts:
+  {}
+
 Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 2
@@ -849,6 +907,15 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
+/home/src/tslibs/ts/lib/lib.es6.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/home/src/tslibs/ts/lib/lib.esnext.full.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject3* *new*
 /user/username/projects/project/a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1

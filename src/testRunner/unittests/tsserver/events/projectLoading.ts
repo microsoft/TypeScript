@@ -12,7 +12,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
     TestServerHost,
 } from "../../helpers/virtualFileSystemWithWatch.js";
 
@@ -27,7 +26,7 @@ describe("unittests:: tsserver:: events:: projectLoading::", () => {
     };
     const bTsPath = `/user/username/projects/b/b.ts`;
     const configBPath = `/user/username/projects/b/tsconfig.json`;
-    const files = [libFile, aTs, configA];
+    const files = [aTs, configA];
 
     function verifyProjectLoadingStartAndFinish(sessionType: string, createSession: (host: TestServerHost) => TestSession) {
         describe(sessionType, () => {

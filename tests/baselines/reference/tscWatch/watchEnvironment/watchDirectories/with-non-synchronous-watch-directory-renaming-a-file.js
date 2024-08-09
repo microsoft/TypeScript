@@ -1,6 +1,19 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 6
+//// [/user/username/projects/myproject/src/file1.ts] Inode:: 6
+import { x } from "./file2";
+
+//// [/user/username/projects/myproject/src/file2.ts] Inode:: 7
+export const x = 10;
+
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 8
+{
+  "compilerOptions": {
+    "outDir": "dist"
+  }
+}
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 14
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,19 +28,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/user/username/projects/myproject/src/file1.ts] Inode:: 12
-import { x } from "./file2";
-
-//// [/user/username/projects/myproject/src/file2.ts] Inode:: 13
-export const x = 10;
-
-//// [/user/username/projects/myproject/tsconfig.json] Inode:: 14
-{
-  "compilerOptions": {
-    "outDir": "dist"
-  }
-}
-
 
 /home/src/tslibs/ts/lib/tsc.js --w
 Output::
@@ -38,14 +38,14 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/file2.js] Inode:: 16
+//// [/user/username/projects/myproject/dist/file2.js] Inode:: 106
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
-//// [/user/username/projects/myproject/dist/file1.js] Inode:: 17
+//// [/user/username/projects/myproject/dist/file1.js] Inode:: 107
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -59,19 +59,19 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"inode":6}
-/user/username/projects/myproject: *new*
-  {"inode":10}
-/user/username/projects/myproject/dist: *new*
-  {"inode":15}
-/user/username/projects/myproject/src: *new*
-  {"inode":11}
-/user/username/projects/myproject/src/file1.ts: *new*
-  {"inode":12}
-/user/username/projects/myproject/src/file2.ts: *new*
-  {"inode":13}
-/user/username/projects/myproject/tsconfig.json: *new*
   {"inode":14}
+/user/username/projects/myproject: *new*
+  {"inode":4}
+/user/username/projects/myproject/dist: *new*
+  {"inode":105}
+/user/username/projects/myproject/src: *new*
+  {"inode":5}
+/user/username/projects/myproject/src/file1.ts: *new*
+  {"inode":6}
+/user/username/projects/myproject/src/file2.ts: *new*
+  {"inode":7}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"inode":8}
 
 Program root files: [
   "/user/username/projects/myproject/src/file1.ts",
@@ -110,7 +110,7 @@ exitCode:: ExitStatus.undefined
 Change:: rename the file
 
 Input::
-//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 18
+//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 108
 export const x = 10;
 
 //// [/user/username/projects/myproject/src/file2.ts] deleted
@@ -129,21 +129,21 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
-  {"inode":6}
-/user/username/projects/myproject:
-  {"inode":10}
-/user/username/projects/myproject/dist:
-  {"inode":15}
-/user/username/projects/myproject/src:
-  {"inode":11}
-/user/username/projects/myproject/src/file1.ts:
-  {"inode":12}
-/user/username/projects/myproject/tsconfig.json:
   {"inode":14}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/dist:
+  {"inode":105}
+/user/username/projects/myproject/src:
+  {"inode":5}
+/user/username/projects/myproject/src/file1.ts:
+  {"inode":6}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":8}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/src/file2.ts:
-  {"inode":13}
+  {"inode":7}
 
 Timeout callback:: count: 2
 1: timerToUpdateProgram *new*
@@ -167,7 +167,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/file1.js] file written with same contents Inode:: 17
+//// [/user/username/projects/myproject/dist/file1.js] file written with same contents Inode:: 107
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -183,17 +183,17 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
-  {"inode":6}
-/user/username/projects/myproject:
-  {"inode":10}
-/user/username/projects/myproject/dist:
-  {"inode":15}
-/user/username/projects/myproject/src:
-  {"inode":11}
-/user/username/projects/myproject/src/file1.ts:
-  {"inode":12}
-/user/username/projects/myproject/tsconfig.json:
   {"inode":14}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/dist:
+  {"inode":105}
+/user/username/projects/myproject/src:
+  {"inode":5}
+/user/username/projects/myproject/src/file1.ts:
+  {"inode":6}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":8}
 
 
 Program root files: [
@@ -250,7 +250,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/renamed.js] Inode:: 19
+//// [/user/username/projects/myproject/dist/renamed.js] Inode:: 109
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -270,19 +270,19 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
-  {"inode":6}
-/user/username/projects/myproject:
-  {"inode":10}
-/user/username/projects/myproject/dist:
-  {"inode":15}
-/user/username/projects/myproject/src:
-  {"inode":11}
-/user/username/projects/myproject/src/file1.ts:
-  {"inode":12}
-/user/username/projects/myproject/src/renamed.ts: *new*
-  {"inode":18}
-/user/username/projects/myproject/tsconfig.json:
   {"inode":14}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/dist:
+  {"inode":105}
+/user/username/projects/myproject/src:
+  {"inode":5}
+/user/username/projects/myproject/src/file1.ts:
+  {"inode":6}
+/user/username/projects/myproject/src/renamed.ts: *new*
+  {"inode":108}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":8}
 
 Timeout callback:: count: 1
 7: timerToInvalidateFailedLookupResolutions *deleted*

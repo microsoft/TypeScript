@@ -13,8 +13,6 @@ import {
 import {
     createServerHost,
     File,
-    getTypeScriptLibTestLocation,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: getEditsForFileRename::", () => {
@@ -132,7 +130,6 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
                                 },
                             },
                         }),
-                        [libFile.path]: libFile.content,
                     });
                     const session = new TestSession({ host, canUseWatchEvents: true, canUseEvents: true });
                     if (withUpdateOpen) {
@@ -245,7 +242,6 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
                 [indexTs]: indexFileText,
                 [`${componentsWhatever}/alert.ts`]: alertText,
                 [`${functionsWhatever}/placeholder.txt`]: "",
-                [getTypeScriptLibTestLocation("es2016.full")]: libFile.content,
             });
             const session = new TestSession({ host, canUseWatchEvents, canUseEvents: true });
             openFilesForSession([{ file: indexTs, projectRootPath }], session);

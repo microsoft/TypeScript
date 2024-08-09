@@ -25,7 +25,7 @@ export function foo() {
   "version": "1.0.0"
 }
 
-//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -106,6 +106,8 @@ src/fileA.ts
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 
+
+//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/out/fileA.js]
 "use strict";

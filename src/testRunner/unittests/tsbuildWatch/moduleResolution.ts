@@ -1,11 +1,7 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
-import {
-    createWatchedSystem,
-    getTypeScriptLibTestLocation,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution::", () => {
     verifyTscWatch({
@@ -44,7 +40,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution::", () => {
                             ],
                         }),
                     },
-                    libFile,
                 ],
                 { currentDirectory: "/user/username/projects/myproject" },
             ),
@@ -119,7 +114,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution::", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg2`,
                     symLink: `/user/username/projects/myproject/packages/pkg2`,
                 },
-                { ...libFile, path: getTypeScriptLibTestLocation("es2022.full") },
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"],
         edits: [
@@ -214,7 +208,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution::", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg2`,
                     symLink: `/user/username/projects/myproject/packages/pkg2`,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "-w", "--traceResolution"],
         edits: [

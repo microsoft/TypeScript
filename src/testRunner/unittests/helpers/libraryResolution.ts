@@ -60,7 +60,7 @@ export function getFsForLibResolution(libRedirection: true | undefined) {
     return loadProjectFromFiles(
         getFsContentsForLibResolution(libRedirection),
         {
-            cwd: "/home/src/workspace/projects",
+            currentDirectory: "/home/src/workspace/projects",
             executingFilePath: getPathForTypeScriptTestLocation("tsc.js"),
         },
     );
@@ -112,7 +112,7 @@ export function getFsForLibResolutionUnknown() {
     return loadProjectFromFiles(
         getFsContentsForLibResolutionUnknown(),
         {
-            cwd: "/home/src/workspace/projects",
+            currentDirectory: "/home/src/workspace/projects",
             executingFilePath: getPathForTypeScriptTestLocation("tsc.js"),
         },
     );

@@ -16,8 +16,6 @@ import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
-    getTypeScriptLibTestLocation,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: moduleResolution::", () => {
@@ -72,7 +70,6 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg2`,
                     symLink: `/user/username/projects/myproject/packages/pkg2`,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["--project", "./packages/pkg1/tsconfig.json", "-w", "--traceResolution"],
         edits: [
@@ -138,7 +135,6 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                         export function thing(): void {}
                     `,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [{
@@ -179,7 +175,7 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                     `,
             };
             return createWatchedSystem(
-                [configFile, fileA, fileB, packageFile, { ...libFile, path: getTypeScriptLibTestLocation("es2016.full") }],
+                [configFile, fileA, fileB, packageFile],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
         }
@@ -370,7 +366,6 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg1/import.d.ts`,
                     content: `export interface ImportInterface {}`,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [
@@ -441,7 +436,6 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg1/import.d.ts`,
                     content: `export interface ImportInterface {}`,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [
@@ -531,7 +525,6 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                     path: `/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts`,
                     content: `export const x = 10;`,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [
@@ -695,7 +688,6 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                     promisify();
                     promisify2();
                 `,
-                [libFile.path]: libFile.content,
             }, { currentDirectory: "/home/src/project" }),
         edits: [
             {
@@ -766,8 +758,6 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                         interface RequireInterface {}
                     }
                 `,
-                [libFile.path]: libFile.content,
-                [getTypeScriptLibTestLocation("es2022.full")]: libFile.content,
             }, { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution", "--explainFiles"],
         edits: [
@@ -795,35 +785,35 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
         sys: () =>
             createWatchedSystem({
                 "/home/src/workspace/packageA/index.d.ts": dedent`
-            export declare class Foo {
-                private f: any;
-            }`,
-                "/home/src/workspace/packageB/package.json": dedent`
-            {
-                "private": true,
-                "dependencies": {
-                    "package-a": "file:../packageA"
-                }
-            }`,
+                    export declare class Foo {
+                        private f: any;
+                    }
+                `,
+                "/home/src/workspace/packageB/package.json": jsonToReadableText({
+                    private: true,
+                    dependencies: {
+                        "package-a": "file:../packageA",
+                    },
+                }),
                 "/home/src/workspace/packageB/index.d.ts": dedent`
-            import { Foo } from "package-a";
-            export declare function invoke(): Foo;`,
-                "/home/src/workspace/packageC/package.json": dedent`
-            {
-                "private": true,
-                "dependencies": {
-                    "package-b": "file:../packageB",
-                    "package-a": "file:../packageA"
-                }
-            }`,
+                    import { Foo } from "package-a";
+                    export declare function invoke(): Foo;
+                `,
+                "/home/src/workspace/packageC/package.json": jsonToReadableText({
+                    private: true,
+                    dependencies: {
+                        "package-b": "file:../packageB",
+                        "package-a": "file:../packageA",
+                    },
+                }),
                 "/home/src/workspace/packageC/index.ts": dedent`
-            import * as pkg from "package-b";
+                    import * as pkg from "package-b";
 
-            export const a = pkg.invoke();`,
+                    export const a = pkg.invoke();
+                `,
                 "/home/src/workspace/packageC/node_modules/package-a": { symLink: "/home/src/workspace/packageA" },
                 "/home/src/workspace/packageB/node_modules/package-a": { symLink: "/home/src/workspace/packageA" },
                 "/home/src/workspace/packageC/node_modules/package-b": { symLink: "/home/src/workspace/packageB" },
-                [libFile.path]: libFile.content,
                 "/home/src/workspace/packageC/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         declaration: true,
@@ -838,9 +828,9 @@ describe("unittests:: tscWatch:: moduleResolution::", () => {
                     fs.writeFile(
                         "/home/src/workspace/packageC/index.ts",
                         dedent`
-                import * as pkg from "package-b";
-    
-                export const aa = pkg.invoke();`,
+                            import * as pkg from "package-b";
+                
+                            export const aa = pkg.invoke();`,
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },

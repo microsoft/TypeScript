@@ -1,5 +1,16 @@
 currentDirectory:: /user/username/workspace/projects useCaseSensitiveFileNames: false
 Input::
+//// [/user/username/workspace/projects/project/f1.ts]
+
+                export * from "../projectc/f2";
+                export * from "../projectd/f3";
+
+//// [/user/username/workspace/projects/projectc/f2.ts]
+export let x = 1;
+
+//// [/user/username/workspace/projects/projectd/f3.ts]
+export let y = 1;
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,17 +25,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/workspace/projects/project/f1.ts]
-
-                export * from "../projectc/f2";
-                export * from "../projectd/f3";
-
-//// [/user/username/workspace/projects/projectc/f2.ts]
-export let x = 1;
-
-//// [/user/username/workspace/projects/projectd/f3.ts]
-export let y = 1;
 
 
 /home/src/tslibs/ts/lib/tsc.js --w /user/username/workspace/projects/projectc/f2.ts /user/username/workspace/projects/projectd/f3.ts

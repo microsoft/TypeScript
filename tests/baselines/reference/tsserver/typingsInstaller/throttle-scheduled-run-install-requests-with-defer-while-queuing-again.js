@@ -31,6 +31,21 @@ Before request
             }
         }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -61,17 +76,20 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Excluded '/user/username/projects/project/commander.js' because it matched commander from the legacy safelist
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/file3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/test1.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /user/username/projects/app/test1.csproj WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test1.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test1.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/file3.d.ts Text-1 ""
 
 
+	../../../../home/src/tslibs/ts/lib/lib.d.ts
+	  Default library for target 'es5'
 	../project/file3.d.ts
 	  Root file specified for compilation
 
@@ -80,6 +98,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
     {
       "projectName": "/user/username/projects/app/test1.csproj",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/commander.js"
       ],
@@ -120,8 +139,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 0,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 0,
+            "dts": 2,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -143,7 +162,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -158,14 +177,14 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /user/username/projects/app/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
+  {}
 /user/username/projects/project/file3.d.ts: *new*
   {}
 
@@ -178,6 +197,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/home/src/tslibs/ts/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/app/test1.csproj
 /user/username/projects/project/file3.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -210,17 +233,19 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/test2.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /user/username/projects/app/test2.csproj WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test2.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test2.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test2.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/file3.d.ts Text-1 ""
 
 
+	../../../../home/src/tslibs/ts/lib/lib.d.ts
+	  Default library for target 'es5'
 	../project/file3.d.ts
 	  Root file specified for compilation
 
@@ -229,6 +254,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
     {
       "projectName": "/user/username/projects/app/test2.csproj",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts"
       ],
       "compilerOptions": {
@@ -268,8 +294,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 0,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 0,
+            "dts": 2,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -291,11 +317,11 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test2.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -318,6 +344,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/home/src/tslibs/ts/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/app/test1.csproj
+        /user/username/projects/app/test2.csproj *new*
 /user/username/projects/project/file3.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -354,17 +385,19 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Excluded '/user/username/projects/project/lodash.js' because it matched lodash from the legacy safelist
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/test3.csproj
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /user/username/projects/app/test3.csproj WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/test3.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/test3.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test3.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/file3.d.ts Text-1 ""
 
 
+	../../../../home/src/tslibs/ts/lib/lib.d.ts
+	  Default library for target 'es5'
 	../project/file3.d.ts
 	  Root file specified for compilation
 
@@ -373,6 +406,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
     {
       "projectName": "/user/username/projects/app/test3.csproj",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/lodash.js"
       ],
@@ -413,8 +447,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 0,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 0,
+            "dts": 2,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -436,15 +470,15 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test1.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test2.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/test3.csproj' (External)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -470,6 +504,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/home/src/tslibs/ts/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /user/username/projects/app/test1.csproj
+        /user/username/projects/app/test2.csproj
+        /user/username/projects/app/test3.csproj *new*
 /user/username/projects/project/file3.d.ts *changed*
     version: Text-1
     containingProjects: 3 *changed*
@@ -484,6 +524,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
     {
       "projectName": "/user/username/projects/app/test1.csproj",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/commander.js"
       ],
@@ -597,6 +638,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/app/test1.csproj",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/commander.js"
       ],
@@ -698,8 +740,6 @@ TI:: [hh:mm:ss:mss] #1 with cwd: /home/src/typinginstaller/globalcache/data argu
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/app/bower_components: *new*
   {"pollingInterval":500}
 /user/username/projects/app/node_modules: *new*
@@ -714,6 +754,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {}
 /user/username/projects/project/file3.d.ts:
   {}
 
@@ -886,6 +928,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
     {
       "projectName": "/user/username/projects/app/test2.csproj",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts"
       ],
       "compilerOptions": {
@@ -910,6 +953,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/app/test2.csproj",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts"
       ],
       "compilerOptions": {
@@ -1169,6 +1213,7 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
     {
       "projectName": "/user/username/projects/app/test3.csproj",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/lodash.js"
       ],
@@ -1194,6 +1239,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/app/test3.csproj",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.d.ts",
         "/user/username/projects/project/file3.d.ts",
         "/user/username/projects/project/lodash.js"
       ],

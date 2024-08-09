@@ -7,21 +7,6 @@ export class SomeClass { };
 //// [/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts]
 export class configureStore { }
 
-//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/Users/someuser/work/applications/frontend/tsconfig.json]
 {
   "compilerOptions": {
@@ -59,6 +44,21 @@ declare const console: { log(msg: any): void; };
     "compiled"
   ]
 }
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -292,6 +292,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] *Lib*
+
 
 PolledWatches::
 /Users/someuser/work/applications/frontend/node_modules: *new*

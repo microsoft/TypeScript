@@ -11,7 +11,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projectReferenceErrors:: with project references and error reporting", () => {
@@ -173,7 +172,6 @@ fnErr();
                 references: [{ path: "../a/" }],
                 include: ["."],
             }),
-            [libFile.path]: libFile.content,
         });
         const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project/b/index.ts"], session);

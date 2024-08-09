@@ -5,25 +5,27 @@ export declare class Foo {
     private f: any;
 }
 
+
 //// [/home/src/workspace/packageB/package.json]
 {
-    "private": true,
-    "dependencies": {
-        "package-a": "file:../packageA"
-    }
+  "private": true,
+  "dependencies": {
+    "package-a": "file:../packageA"
+  }
 }
 
 //// [/home/src/workspace/packageB/index.d.ts]
 import { Foo } from "package-a";
 export declare function invoke(): Foo;
 
+
 //// [/home/src/workspace/packageC/package.json]
 {
-    "private": true,
-    "dependencies": {
-        "package-b": "file:../packageB",
-        "package-a": "file:../packageA"
-    }
+  "private": true,
+  "dependencies": {
+    "package-b": "file:../packageB",
+    "package-a": "file:../packageA"
+  }
 }
 
 //// [/home/src/workspace/packageC/index.ts]
@@ -31,9 +33,20 @@ import * as pkg from "package-b";
 
 export const a = pkg.invoke();
 
+
 //// [/home/src/workspace/packageC/node_modules/package-a] symlink(/home/src/workspace/packageA)
+
 //// [/home/src/workspace/packageB/node_modules/package-a] symlink(/home/src/workspace/packageA)
+
 //// [/home/src/workspace/packageC/node_modules/package-b] symlink(/home/src/workspace/packageB)
+
+//// [/home/src/workspace/packageC/tsconfig.json]
+{
+  "compilerOptions": {
+    "declaration": true
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -48,13 +61,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/home/src/workspace/packageC/tsconfig.json]
-{
-  "compilerOptions": {
-    "declaration": true
-  }
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js --traceResolution --explainFiles --watch

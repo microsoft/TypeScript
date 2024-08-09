@@ -20,6 +20,21 @@ export let y: number
   ]
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 //// [/home/src/typinginstaller/globalcache/data/package.json]
 { "private": true }
 
@@ -67,6 +82,7 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/jsconfig.json :
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/jsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Failed Lookup Locations
@@ -77,18 +93,20 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstal
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/@types/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/node_modules/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/typinginstaller/globalcache/data/package.json 2000 undefined Project: /user/username/projects/project/jsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/typinginstaller/globalcache/data/node_modules/@types/bar/index.d.ts Text-1 "export let y: number"
 	/user/username/projects/project/app.js SVC-1-0 "var x = require('bar')"
 
 
+	../../../../home/src/tslibs/ts/lib/lib.d.ts
+	  Default library for target 'es5'
 	../../../../home/src/typinginstaller/globalcache/data/node_modules/@types/bar/index.d.ts
 	  Imported via 'bar' from file 'app.js'
 	app.js
@@ -98,8 +116,6 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /home/src/typinginstaller/globalcache/data/node_modules/@types/bar/package.json: *new*
   {"pollingInterval":2000}
 /home/src/typinginstaller/globalcache/data/node_modules/@types/package.json: *new*
@@ -114,6 +130,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
+  {}
 /home/src/typinginstaller/globalcache/data/package.json: *new*
   {}
 /user/username/projects/project/jsconfig.json: *new*
@@ -133,6 +151,10 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
+/home/src/tslibs/ts/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/jsconfig.json
 /home/src/typinginstaller/globalcache/data/node_modules/@types/bar/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -156,6 +178,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/project/jsconfig.json",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.d.ts",
         "/user/username/projects/project/app.js"
       ],
       "compilerOptions": {
@@ -278,8 +301,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 0,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 20,
+            "dts": 2,
+            "dtsSize": 433,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -315,57 +338,11 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/project/app.js",
         "configFile": "/user/username/projects/project/jsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/home/src/tslibs/ts/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/jsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -385,8 +362,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/home/src/tslibs/ts/lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/typinginstaller/globalcache/data/node_modules/@types/bar/package.json:
   {"pollingInterval":2000}
 /home/src/typinginstaller/globalcache/data/node_modules/@types/package.json:
@@ -403,6 +378,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/home/src/tslibs/ts/lib/lib.d.ts:
+  {}
 /home/src/typinginstaller/globalcache/data/package.json:
   {}
 /user/username/projects/project/jsconfig.json:

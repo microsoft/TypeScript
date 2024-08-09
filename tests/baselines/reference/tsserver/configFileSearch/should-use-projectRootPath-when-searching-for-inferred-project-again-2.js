@@ -4,6 +4,12 @@ Before request
 //// [/a/b/projects/project/src/file1.ts]
 
 
+//// [/a/b/projects/project/src/tsconfig.json]
+{}
+
+//// [/a/b/projects/tsconfig.json]
+{}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -18,12 +24,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/a/b/projects/project/src/tsconfig.json]
-{}
-
-//// [/a/b/projects/tsconfig.json]
-{}
 
 
 Info seq  [hh:mm:ss:mss] request:

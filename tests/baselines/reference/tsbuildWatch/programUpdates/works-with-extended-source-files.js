@@ -1,20 +1,5 @@
 currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/user/username/projects/project/alpha.tsconfig.json]
 {}
 
@@ -93,6 +78,21 @@ let k = 0;
     "/user/username/projects/project/other2.ts"
   ]
 }
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -b -w -v project1.tsconfig.json project2.tsconfig.json project3.tsconfig.json

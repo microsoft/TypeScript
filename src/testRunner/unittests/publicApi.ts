@@ -289,7 +289,7 @@ describe("unittests:: Public APIs:: createProgram", () => {
                 },
             }),
             "/lib/lib.esnext.full.d.ts": libFile.content,
-        }, { cwd: "/src/projects/project", executingFilePath: "/lib/tsc.js" });
+        }, { currentDirectory: "/src/projects/project", executingFilePath: "/lib/tsc.js" });
         const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc.js" });
         const commandLine = ts.getParsedCommandLineOfConfigFile(
             "/src/projects/project/packages/a/tsconfig.json",

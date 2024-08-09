@@ -7,7 +7,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: syntaxOperations::", () => {
@@ -35,7 +34,7 @@ describe("Test Suite 1", () => {
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const files = [app, libFile, tsconfig];
+        const files = [app, tsconfig];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([{ file: app.path, content: app.content }], session);

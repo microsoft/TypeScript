@@ -1,10 +1,7 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports syntax errors in config file", () => {
     function verify(outFile?: object) {
@@ -29,7 +26,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
     ]
 }`,
                         },
-                        libFile,
                     ],
                     { currentDirectory: "/user/username/projects/myproject" },
                 ),

@@ -1,21 +1,6 @@
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/user/username/projects/container/lib/tsconfig.json]
 {
   "compilerOptions": {
@@ -96,6 +81,21 @@ namespace container {
     }
   ]
 }
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 //// [/user/username/projects/container/built/local/lib.js]
 var container;
@@ -225,9 +225,6 @@ Info seq  [hh:mm:ss:mss] request:
           {
             "projectFileName": "/user/username/projects/container/container",
             "rootFiles": [
-              {
-                "fileName": "/home/src/tslibs/ts/lib/lib.d.ts"
-              },
               {
                 "fileName": "/user/username/projects/container/lib/tsconfig.json"
               },
@@ -797,7 +794,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/home/src/tslibs/ts/lib/lib.d.ts"
+        "file": "/user/username/projects/container/lib/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/lib/tsconfig.json"
       },
       "seq": 2,
       "type": "request"
@@ -815,7 +813,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/home/src/tslibs/ts/lib/lib.d.ts"
+        "file": "/user/username/projects/container/lib/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/lib/tsconfig.json"
       },
       "seq": 3,
       "type": "request"
@@ -833,8 +832,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/lib/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/lib/tsconfig.json"
+        "file": "/user/username/projects/container/lib/index.ts"
       },
       "seq": 4,
       "type": "request"
@@ -852,8 +850,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/lib/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/lib/tsconfig.json"
+        "file": "/user/username/projects/container/lib/index.ts"
       },
       "seq": 5,
       "type": "request"
@@ -871,7 +868,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/lib/index.ts"
+        "file": "/user/username/projects/container/exec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/exec/tsconfig.json"
       },
       "seq": 6,
       "type": "request"
@@ -889,7 +887,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/lib/index.ts"
+        "file": "/user/username/projects/container/exec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/exec/tsconfig.json"
       },
       "seq": 7,
       "type": "request"
@@ -907,8 +906,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/exec/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/exec/tsconfig.json"
+        "file": "/user/username/projects/container/exec/index.ts"
       },
       "seq": 8,
       "type": "request"
@@ -926,8 +924,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/exec/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/exec/tsconfig.json"
+        "file": "/user/username/projects/container/exec/index.ts"
       },
       "seq": 9,
       "type": "request"
@@ -945,7 +942,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/exec/index.ts"
+        "file": "/user/username/projects/container/compositeExec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/compositeExec/tsconfig.json"
       },
       "seq": 10,
       "type": "request"
@@ -963,7 +961,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/exec/index.ts"
+        "file": "/user/username/projects/container/compositeExec/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/compositeExec/tsconfig.json"
       },
       "seq": 11,
       "type": "request"
@@ -981,8 +980,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/compositeExec/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/compositeExec/tsconfig.json"
+        "file": "/user/username/projects/container/compositeExec/index.ts"
       },
       "seq": 12,
       "type": "request"
@@ -1000,8 +998,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/compositeExec/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/compositeExec/tsconfig.json"
+        "file": "/user/username/projects/container/compositeExec/index.ts"
       },
       "seq": 13,
       "type": "request"
@@ -1019,7 +1016,8 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "syntacticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/compositeExec/index.ts"
+        "file": "/user/username/projects/container/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/tsconfig.json"
       },
       "seq": 14,
       "type": "request"
@@ -1037,47 +1035,10 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "semanticDiagnosticsSync",
       "arguments": {
-        "file": "/user/username/projects/container/compositeExec/index.ts"
+        "file": "/user/username/projects/container/tsconfig.json",
+        "projectFileName": "/user/username/projects/container/tsconfig.json"
       },
       "seq": 15,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "response": [],
-      "responseRequired": true
-    }
-After request
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "syntacticDiagnosticsSync",
-      "arguments": {
-        "file": "/user/username/projects/container/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/tsconfig.json"
-      },
-      "seq": 16,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "response": [],
-      "responseRequired": true
-    }
-After request
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "semanticDiagnosticsSync",
-      "arguments": {
-        "file": "/user/username/projects/container/tsconfig.json",
-        "projectFileName": "/user/username/projects/container/tsconfig.json"
-      },
-      "seq": 17,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
@@ -1095,7 +1056,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "projectFileName": "/user/username/projects/container/tsconfig.json"
       },
-      "seq": 18,
+      "seq": 16,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:

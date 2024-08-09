@@ -30,6 +30,9 @@ class class1 {}
 //// [/user/username/projects/myproject/projects/project2/class2.ts]
 class class2 {}
 
+//// [/user/username/projects/myproject/projects/project1/class1.d.ts]
+declare class class1 {}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -44,9 +47,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/projects/project1/class1.d.ts]
-declare class class1 {}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w -p project2/tsconfig.json --extendedDiagnostics

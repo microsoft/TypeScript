@@ -7,12 +7,22 @@ export const b = 2;
 
 
 //// [/user/username/projects/myproject/link] symlink(/user/username/projects/myproject/Xy)
+
 //// [/user/username/projects/myproject/b.ts]
 import { a } from "./XY/a";
 import { b } from "./link/a";
 
 a;b;
 
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "outFile": "out.js",
+    "module": "system"
+  }
+}
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -28,15 +38,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "compilerOptions": {
-    "forceConsistentCasingInFileNames": true,
-    "outFile": "out.js",
-    "module": "system"
-  }
-}
 
 
 Info seq  [hh:mm:ss:mss] request:

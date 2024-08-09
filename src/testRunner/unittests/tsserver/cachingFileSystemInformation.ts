@@ -13,8 +13,6 @@ import {
     createServerHost,
     File,
     Folder,
-    getTypeScriptLibTestLocation,
-    libFile,
     SymLink,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
@@ -281,10 +279,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
                     path: `${frontendDir}/src/app/utils/Cookie.ts`,
                     content: "export class Cookie { }",
                 };
-                const es2016LibFile: File = {
-                    path: getTypeScriptLibTestLocation("es2016.full"),
-                    content: libFile.content,
-                };
+
                 const typeRoots = ["types", "node_modules/@types"];
                 const types = ["node", "jest"];
                 const tsconfigFile: File = {
@@ -320,7 +315,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
                         ],
                     }),
                 };
-                const projectFiles = [file1, file2, es2016LibFile, tsconfigFile];
+                const projectFiles = [file1, file2, tsconfigFile];
                 const host = createServerHost(projectFiles, { useCaseSensitiveFileNames });
                 const session = new TestSession(host);
                 openFilesForSession([file1], session);
@@ -360,7 +355,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
                 }),
             };
 
-            const files = [file1, file2, tsconfig, libFile];
+            const files = [file1, file2, tsconfig];
             const host = createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
@@ -430,7 +425,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
 }
 `,
             });
-            const host = createServerHost([app, libFile, tsconfigJson, packageJson]);
+            const host = createServerHost([app, tsconfigJson, packageJson]);
             const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -572,7 +567,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
             content: "",
         };
 
-        const files = [app, tsconfig, libFile];
+        const files = [app, tsconfig];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([app], session);
@@ -620,7 +615,7 @@ describe("unittests:: tsserver:: cachingFileSystemInformation:: tsserverProjectS
                 include: ["client/**/*", "folder2"],
             }),
         };
-        const host = createServerHost([module1, module2, symlink, config, libFile]);
+        const host = createServerHost([module1, module2, symlink, config]);
         const session = new TestSession(host);
         openFilesForSession([`${symlink.path}/module2.ts`], session);
         host.writeFile(`${symlink.path}/module3.ts`, `import * as M from "folder1/module1";`);

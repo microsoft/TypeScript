@@ -98,8 +98,10 @@ console.log(FOO);
 
 
 //// [/home/src/projects/project/node_modules/package-a] symlink(/home/src/projects/project/packages/package-a)
+
 //// [/home/src/projects/project/node_modules/package-b] symlink(/home/src/projects/project/packages/package-b)
-//// [/home/src/tslibs/ts/lib/lib.es2021.d.ts]
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -412,6 +414,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/ts/lib/lib.es2021.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/projects/node_modules: *new*

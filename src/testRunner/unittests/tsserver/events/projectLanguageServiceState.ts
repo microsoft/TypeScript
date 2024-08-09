@@ -8,7 +8,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: events:: projectLanguageServiceState::", () => {
@@ -62,7 +61,7 @@ describe("unittests:: tsserver:: events:: projectLanguageServiceState::", () => 
             path: "/user/username/projects/project/jsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, f2, f3, libFile, config]);
+        const host = createServerHost([f1, f2, f3, config]);
         const session = new TestSession(host);
         openFilesForSession([f1], session);
         const project = session.getProjectService().configuredProjects.get(config.path)!;

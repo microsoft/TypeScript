@@ -27,7 +27,7 @@ export function foo() {
   "version": "1.0.0"
 }
 
-//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -213,6 +213,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/tslibs/package.json: *new*

@@ -16,7 +16,6 @@ import {
     createServerHost,
     File,
     Folder,
-    libFile,
     TestServerHostOsFlavor,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -30,7 +29,7 @@ describe("unittests:: tsserver:: projectErrors::", () => {
             path: "/home/src/projects/project/a/b/applib.ts",
             content: "",
         };
-        const host = createServerHost([file1, libFile]);
+        const host = createServerHost([file1]);
         const session = new TestSession(host);
         const projectFileName = "/home/src/projects/project/a/b/test.csproj";
         const compilerOptionsRequest: TestSessionRequest<ts.server.protocol.CompilerOptionsDiagnosticsRequest> = {
@@ -75,7 +74,7 @@ describe("unittests:: tsserver:: projectErrors::", () => {
             path: "/home/src/projects/project/a/b/tsconfig.json",
             content: jsonToReadableText({ files: [file1, file2].map(f => ts.getBaseFileName(f.path)) }),
         };
-        const host = createServerHost([file1, config, libFile]);
+        const host = createServerHost([file1, config]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         const compilerOptionsRequest: TestSessionRequest<ts.server.protocol.CompilerOptionsDiagnosticsRequest> = {
@@ -222,7 +221,7 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
                 path: `${folderPath}/src/somefile.d.ts`,
                 content: "class c { }",
             };
-            const host = createServerHost([libFile, fileInRoot, fileInProjectRoot]);
+            const host = createServerHost([fileInRoot, fileInProjectRoot]);
             const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
 
             const untitledFile = "untitled:Untitled-1";
@@ -289,7 +288,7 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
             path: "/home/src/projects/project/a/b/project/file.ts",
             content: "let x: number = false;",
         };
-        const host = createServerHost([file, libFile]);
+        const host = createServerHost([file]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
             command: ts.server.protocol.CommandTypes.Geterr,
@@ -316,7 +315,7 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
             path: `/user/username/projects/myproject/test/backend/index.js`,
             content: `import { getHostName } from '../../src/server/utilities';export default getHostName;`,
         };
-        const files = [libFile, app, serverUtilities, backendTest];
+        const files = [app, serverUtilities, backendTest];
         const host = createServerHost(files);
         const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
         openFilesForSession([{ file: app, projectRootPath: "/user/username/projects/myproject" }], session);
@@ -354,7 +353,7 @@ declare module '@custom/plugin' {
     export const bar = 10;
 }`,
         };
-        const files = [libFile, aFile, config, plugin, pluginProposed];
+        const files = [aFile, config, plugin, pluginProposed];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([aFile], session);
@@ -389,7 +388,7 @@ declare module '@custom/plugin' {
         verifyGetErrScenario({
             scenario: "projectErrors",
             subScenario: "when semantic error returns includes global error",
-            allFiles: () => [libFile, file, config],
+            allFiles: () => [file, config],
             openFiles: () => [file],
             getErrRequest: () => [file],
             getErrForProjectRequest: () => [{ project: file, files: [file] }],
@@ -413,7 +412,7 @@ describe("unittests:: tsserver:: projectErrors:: for Configure file diagnostics 
                     }
                 }`,
         };
-        const host = createServerHost([file, libFile, configFile]);
+        const host = createServerHost([file, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file has errors", session);
@@ -430,7 +429,7 @@ describe("unittests:: tsserver:: projectErrors:: for Configure file diagnostics 
                     "compilerOptions": {}
                 }`,
         };
-        const host = createServerHost([file, libFile, configFile]);
+        const host = createServerHost([file, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file doesnt have errors", session);
@@ -448,7 +447,7 @@ describe("unittests:: tsserver:: projectErrors:: for Configure file diagnostics 
                 }`,
         };
 
-        const host = createServerHost([file, libFile, configFile]);
+        const host = createServerHost([file, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
 
@@ -491,7 +490,7 @@ describe("unittests:: tsserver:: projectErrors:: for Configure file diagnostics 
                     "files": ["app.ts"]
                 }`,
         };
-        const host = createServerHost([file, libFile, configFile]);
+        const host = createServerHost([file, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file2], session);
         openFilesForSession([file], session);
@@ -514,7 +513,7 @@ describe("unittests:: tsserver:: projectErrors:: for Configure file diagnostics 
                     }
                 }`,
         };
-        const host = createServerHost([file, libFile, configFile]);
+        const host = createServerHost([file, configFile]);
         const session = new TestSession({ host, suppressDiagnosticEvents: true });
         openFilesForSession([file], session);
         baselineTsserverLogs("projectErrors", "configFileDiagnostic events are not generated when the config file has errors but suppressDiagnosticEvents is true", session);
@@ -540,7 +539,7 @@ describe("unittests:: tsserver:: projectErrors:: for Configure file diagnostics 
                 }`,
         };
 
-        const host = createServerHost([file, file2, file3, libFile, configFile]);
+        const host = createServerHost([file, file2, file3, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file2], session);
         openFilesForSession([file], session);
@@ -563,7 +562,7 @@ describe("unittests:: tsserver:: projectErrors:: for Configure file diagnostics 
                 }`,
         };
 
-        const host = createServerHost([file, libFile, configFile]);
+        const host = createServerHost([file, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("projectErrors", "configFileDiagnostic events contains the project reference errors", session);
@@ -576,7 +575,7 @@ describe("unittests:: tsserver:: projectErrors:: dont include overwrite emit err
             path: "/home/src/projects/project/a/b/f1.js",
             content: "function test1() { }",
         };
-        const host = createServerHost([f1, libFile]);
+        const host = createServerHost([f1]);
         const session = new TestSession(host);
         openFilesForSession([f1], session);
 
@@ -599,7 +598,7 @@ describe("unittests:: tsserver:: projectErrors:: dont include overwrite emit err
             path: "/home/src/projects/project/a/b/f1.js",
             content: "function test1() { }",
         };
-        const host = createServerHost([f1, libFile]);
+        const host = createServerHost([f1]);
         const session = new TestSession(host);
         const projectFileName = "/home/src/projects/project/a/b/project.csproj";
         const externalFiles = toExternalFiles([f1.path]);
@@ -649,7 +648,7 @@ describe("unittests:: tsserver:: projectErrors:: reports Options Diagnostic loca
             path: "/home/src/projects/project/a/b/tsconfig.json",
             content: configFileContentWithComment,
         };
-        const host = createServerHost([file, libFile, configFile]);
+        const host = createServerHost([file, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
 
@@ -713,7 +712,7 @@ console.log(blabla);`,
             }),
         };
 
-        const host = createServerHost([test, blabla, libFile, tsconfig]);
+        const host = createServerHost([test, blabla, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([test], session);
         return { host, session, test, blabla, tsconfig };
@@ -751,7 +750,7 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
             path: `/user/username/projects/myproject/node_modules/@angular/core/index.d.ts`,
             content: `export const y = 10;`,
         };
-        const projectFiles = [main, libFile, config];
+        const projectFiles = [main, config];
         const host = createServerHost(projectFiles);
         const session = new TestSession(host);
         openFilesForSession([{ file: main, projectRootPath: "/user/username/projects/myproject" }], session);
@@ -821,7 +820,6 @@ describe("unittests:: tsserver:: projectErrors:: with file rename on wsl2::", ()
                 },
                 include: ["src/**/*.ts"],
             }),
-            [libFile.path]: libFile.content,
         }, { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
         openFilesForSession([{ file: "/home/username/project/src/a.ts", projectRootPath: "/home/username/project" }], session);
@@ -847,7 +845,6 @@ describe("unittests:: tsserver:: projectErrors:: dts errors when files dont belo
                         declarationDir,
                     },
                 }),
-                [libFile.path]: libFile.content,
             });
             const session = new TestSession(host);
             openFilesForSession(["/home/src/projects/project/src/file.ts"], session);

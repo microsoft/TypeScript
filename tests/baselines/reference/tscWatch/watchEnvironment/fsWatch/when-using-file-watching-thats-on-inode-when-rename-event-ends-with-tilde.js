@@ -1,6 +1,23 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 6
+//// [/user/username/projects/myproject/main.ts] Inode:: 5
+import { foo } from "./foo"; foo();
+
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 6
+export function foo(): string;
+
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 7
+{
+  "watchOptions": {
+    "watchFile": "useFsEvents"
+  },
+  "files": [
+    "foo.d.ts",
+    "main.ts"
+  ]
+}
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 13
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -14,23 +31,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/main.ts] Inode:: 11
-import { foo } from "./foo"; foo();
-
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 12
-export function foo(): string;
-
-//// [/user/username/projects/myproject/tsconfig.json] Inode:: 13
-{
-  "watchOptions": {
-    "watchFile": "useFsEvents"
-  },
-  "files": [
-    "foo.d.ts",
-    "main.ts"
-  ]
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w --extendedDiagnostics
@@ -58,7 +58,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 
-//// [/user/username/projects/myproject/main.js] Inode:: 14
+//// [/user/username/projects/myproject/main.js] Inode:: 104
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("./foo");
@@ -74,15 +74,15 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"inode":6}
-/user/username/projects/myproject: *new*
-  {"inode":10}
-/user/username/projects/myproject/foo.d.ts: *new*
-  {"inode":12}
-/user/username/projects/myproject/main.ts: *new*
-  {"inode":11}
-/user/username/projects/myproject/tsconfig.json: *new*
   {"inode":13}
+/user/username/projects/myproject: *new*
+  {"inode":4}
+/user/username/projects/myproject/foo.d.ts: *new*
+  {"inode":6}
+/user/username/projects/myproject/main.ts: *new*
+  {"inode":5}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"inode":7}
 
 Program root files: [
   "/user/username/projects/myproject/foo.d.ts",
@@ -114,7 +114,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that introduces error
 
 Input::
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 15
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 105
 export function foo2(): string;
 
 
@@ -159,19 +159,19 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
-  {"inode":6}
-/user/username/projects/myproject:
-  {"inode":10}
-/user/username/projects/myproject/foo.d.ts:
-  {"inode":15} *new*
-/user/username/projects/myproject/main.ts:
-  {"inode":11}
-/user/username/projects/myproject/tsconfig.json:
   {"inode":13}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/foo.d.ts:
+  {"inode":105} *new*
+/user/username/projects/myproject/main.ts:
+  {"inode":5}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":7}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
-  {"inode":12}
+  {"inode":6}
 
 Timeout callback:: count: 2
 7: timerToUpdateProgram *new*
@@ -204,7 +204,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 14
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 104
 
 Timeout callback:: count: 0
 9: timerToInvalidateFailedLookupResolutions *deleted*
@@ -238,7 +238,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that fixes error
 
 Input::
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 16
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 106
 export function foo(): string;
 
 
@@ -283,19 +283,19 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
-  {"inode":6}
-/user/username/projects/myproject:
-  {"inode":10}
-/user/username/projects/myproject/foo.d.ts:
-  {"inode":16} *new*
-/user/username/projects/myproject/main.ts:
-  {"inode":11}
-/user/username/projects/myproject/tsconfig.json:
   {"inode":13}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/foo.d.ts:
+  {"inode":106} *new*
+/user/username/projects/myproject/main.ts:
+  {"inode":5}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":7}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
-  {"inode":15}
+  {"inode":105}
 
 Timeout callback:: count: 2
 16: timerToUpdateProgram *new*
@@ -318,7 +318,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 14
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 104
 
 Timeout callback:: count: 0
 18: timerToInvalidateFailedLookupResolutions *deleted*

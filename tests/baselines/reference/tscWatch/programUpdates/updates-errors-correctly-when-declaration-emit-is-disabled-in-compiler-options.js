@@ -10,6 +10,15 @@ function test(x: number, y: number) {
 }
 export default test;
 
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noEmit": true,
+    "strict": true
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -24,15 +33,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "compilerOptions": {
-    "module": "commonjs",
-    "noEmit": true,
-    "strict": true
-  }
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w

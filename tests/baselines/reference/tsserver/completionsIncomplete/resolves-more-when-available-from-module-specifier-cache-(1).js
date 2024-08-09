@@ -2607,6 +2607,21 @@ export const aa_49__47 = 47;
 export const aa_49__48 = 48;
 export const aa_49__49 = 49;
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2769,14 +2784,15 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/proj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_8.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_9.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/project/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/project/project/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/project/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (51)
+Info seq  [hh:mm:ss:mss] 	Files (52)
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/project/project/index.ts SVC-1-0 ""
 	/home/src/project/project/lib/a_0.ts Text-1 "export const aa_0__0 = 0;\nexport const aa_0__1 = 1;\nexport const aa_0__2 = 2;\nexport const aa_0__3 = 3;\nexport const aa_0__4 = 4;\nexport const aa_0__5 = 5;\nexport const aa_0__6 = 6;\nexport const aa_0__7 = 7;\nexport const aa_0__8 = 8;\nexport const aa_0__9 = 9;\nexport const aa_0__10 = 10;\nexport const aa_0__11 = 11;\nexport const aa_0__12 = 12;\nexport const aa_0__13 = 13;\nexport const aa_0__14 = 14;\nexport const aa_0__15 = 15;\nexport const aa_0__16 = 16;\nexport const aa_0__17 = 17;\nexport const aa_0__18 = 18;\nexport const aa_0__19 = 19;\nexport const aa_0__20 = 20;\nexport const aa_0__21 = 21;\nexport const aa_0__22 = 22;\nexport const aa_0__23 = 23;\nexport const aa_0__24 = 24;\nexport const aa_0__25 = 25;\nexport const aa_0__26 = 26;\nexport const aa_0__27 = 27;\nexport const aa_0__28 = 28;\nexport const aa_0__29 = 29;\nexport const aa_0__30 = 30;\nexport const aa_0__31 = 31;\nexport const aa_0__32 = 32;\nexport const aa_0__33 = 33;\nexport const aa_0__34 = 34;\nexport const aa_0__35 = 35;\nexport const aa_0__36 = 36;\nexport const aa_0__37 = 37;\nexport const aa_0__38 = 38;\nexport const aa_0__39 = 39;\nexport const aa_0__40 = 40;\nexport const aa_0__41 = 41;\nexport const aa_0__42 = 42;\nexport const aa_0__43 = 43;\nexport const aa_0__44 = 44;\nexport const aa_0__45 = 45;\nexport const aa_0__46 = 46;\nexport const aa_0__47 = 47;\nexport const aa_0__48 = 48;\nexport const aa_0__49 = 49;"
 	/home/src/project/project/lib/a_1.ts Text-1 "export const aa_1__0 = 0;\nexport const aa_1__1 = 1;\nexport const aa_1__2 = 2;\nexport const aa_1__3 = 3;\nexport const aa_1__4 = 4;\nexport const aa_1__5 = 5;\nexport const aa_1__6 = 6;\nexport const aa_1__7 = 7;\nexport const aa_1__8 = 8;\nexport const aa_1__9 = 9;\nexport const aa_1__10 = 10;\nexport const aa_1__11 = 11;\nexport const aa_1__12 = 12;\nexport const aa_1__13 = 13;\nexport const aa_1__14 = 14;\nexport const aa_1__15 = 15;\nexport const aa_1__16 = 16;\nexport const aa_1__17 = 17;\nexport const aa_1__18 = 18;\nexport const aa_1__19 = 19;\nexport const aa_1__20 = 20;\nexport const aa_1__21 = 21;\nexport const aa_1__22 = 22;\nexport const aa_1__23 = 23;\nexport const aa_1__24 = 24;\nexport const aa_1__25 = 25;\nexport const aa_1__26 = 26;\nexport const aa_1__27 = 27;\nexport const aa_1__28 = 28;\nexport const aa_1__29 = 29;\nexport const aa_1__30 = 30;\nexport const aa_1__31 = 31;\nexport const aa_1__32 = 32;\nexport const aa_1__33 = 33;\nexport const aa_1__34 = 34;\nexport const aa_1__35 = 35;\nexport const aa_1__36 = 36;\nexport const aa_1__37 = 37;\nexport const aa_1__38 = 38;\nexport const aa_1__39 = 39;\nexport const aa_1__40 = 40;\nexport const aa_1__41 = 41;\nexport const aa_1__42 = 42;\nexport const aa_1__43 = 43;\nexport const aa_1__44 = 44;\nexport const aa_1__45 = 45;\nexport const aa_1__46 = 46;\nexport const aa_1__47 = 47;\nexport const aa_1__48 = 48;\nexport const aa_1__49 = 49;"
@@ -2830,6 +2846,8 @@ Info seq  [hh:mm:ss:mss] 	Files (51)
 	/home/src/project/project/lib/a_9.ts Text-1 "export const aa_9__0 = 0;\nexport const aa_9__1 = 1;\nexport const aa_9__2 = 2;\nexport const aa_9__3 = 3;\nexport const aa_9__4 = 4;\nexport const aa_9__5 = 5;\nexport const aa_9__6 = 6;\nexport const aa_9__7 = 7;\nexport const aa_9__8 = 8;\nexport const aa_9__9 = 9;\nexport const aa_9__10 = 10;\nexport const aa_9__11 = 11;\nexport const aa_9__12 = 12;\nexport const aa_9__13 = 13;\nexport const aa_9__14 = 14;\nexport const aa_9__15 = 15;\nexport const aa_9__16 = 16;\nexport const aa_9__17 = 17;\nexport const aa_9__18 = 18;\nexport const aa_9__19 = 19;\nexport const aa_9__20 = 20;\nexport const aa_9__21 = 21;\nexport const aa_9__22 = 22;\nexport const aa_9__23 = 23;\nexport const aa_9__24 = 24;\nexport const aa_9__25 = 25;\nexport const aa_9__26 = 26;\nexport const aa_9__27 = 27;\nexport const aa_9__28 = 28;\nexport const aa_9__29 = 29;\nexport const aa_9__30 = 30;\nexport const aa_9__31 = 31;\nexport const aa_9__32 = 32;\nexport const aa_9__33 = 33;\nexport const aa_9__34 = 34;\nexport const aa_9__35 = 35;\nexport const aa_9__36 = 36;\nexport const aa_9__37 = 37;\nexport const aa_9__38 = 38;\nexport const aa_9__39 = 39;\nexport const aa_9__40 = 40;\nexport const aa_9__41 = 41;\nexport const aa_9__42 = 42;\nexport const aa_9__43 = 43;\nexport const aa_9__44 = 44;\nexport const aa_9__45 = 45;\nexport const aa_9__46 = 46;\nexport const aa_9__47 = 47;\nexport const aa_9__48 = 48;\nexport const aa_9__49 = 49;"
 
 
+	../../tslibs/ts/lib/lib.d.ts
+	  Default library for target 'es5'
 	index.ts
 	  Matched by default include pattern '**/*'
 	lib/a_0.ts
@@ -2961,8 +2979,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 70950,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 0,
-            "dtsSize": 0,
+            "dts": 1,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -2994,57 +3012,11 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/project/project/index.ts",
         "configFile": "/home/src/project/project/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/home/src/tslibs/ts/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (51)
+Info seq  [hh:mm:ss:mss] 	Files (52)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -3067,8 +3039,6 @@ PolledWatches::
 /home/src/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/project/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -3173,6 +3143,8 @@ FsWatches::
 /home/src/project/project/lib/a_9.ts: *new*
   {}
 /home/src/project/project/tsconfig.json: *new*
+  {}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -3387,6 +3359,10 @@ ScriptInfos::
     containingProjects: 1
         /home/src/project/project/tsconfig.json
 /home/src/project/project/lib/a_9.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/project/project/tsconfig.json
+/home/src/tslibs/ts/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/project/project/tsconfig.json
@@ -3638,6 +3614,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/project/project/tsconfig.json
+/home/src/tslibs/ts/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/project/project/tsconfig.json
 
 Before request
 
@@ -3655,7 +3635,8 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/project/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/project/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (51)
+Info seq  [hh:mm:ss:mss] 	Files (52)
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/project/project/index.ts SVC-1-1 "a"
 	/home/src/project/project/lib/a_0.ts Text-1 "export const aa_0__0 = 0;\nexport const aa_0__1 = 1;\nexport const aa_0__2 = 2;\nexport const aa_0__3 = 3;\nexport const aa_0__4 = 4;\nexport const aa_0__5 = 5;\nexport const aa_0__6 = 6;\nexport const aa_0__7 = 7;\nexport const aa_0__8 = 8;\nexport const aa_0__9 = 9;\nexport const aa_0__10 = 10;\nexport const aa_0__11 = 11;\nexport const aa_0__12 = 12;\nexport const aa_0__13 = 13;\nexport const aa_0__14 = 14;\nexport const aa_0__15 = 15;\nexport const aa_0__16 = 16;\nexport const aa_0__17 = 17;\nexport const aa_0__18 = 18;\nexport const aa_0__19 = 19;\nexport const aa_0__20 = 20;\nexport const aa_0__21 = 21;\nexport const aa_0__22 = 22;\nexport const aa_0__23 = 23;\nexport const aa_0__24 = 24;\nexport const aa_0__25 = 25;\nexport const aa_0__26 = 26;\nexport const aa_0__27 = 27;\nexport const aa_0__28 = 28;\nexport const aa_0__29 = 29;\nexport const aa_0__30 = 30;\nexport const aa_0__31 = 31;\nexport const aa_0__32 = 32;\nexport const aa_0__33 = 33;\nexport const aa_0__34 = 34;\nexport const aa_0__35 = 35;\nexport const aa_0__36 = 36;\nexport const aa_0__37 = 37;\nexport const aa_0__38 = 38;\nexport const aa_0__39 = 39;\nexport const aa_0__40 = 40;\nexport const aa_0__41 = 41;\nexport const aa_0__42 = 42;\nexport const aa_0__43 = 43;\nexport const aa_0__44 = 44;\nexport const aa_0__45 = 45;\nexport const aa_0__46 = 46;\nexport const aa_0__47 = 47;\nexport const aa_0__48 = 48;\nexport const aa_0__49 = 49;"
 	/home/src/project/project/lib/a_1.ts Text-1 "export const aa_1__0 = 0;\nexport const aa_1__1 = 1;\nexport const aa_1__2 = 2;\nexport const aa_1__3 = 3;\nexport const aa_1__4 = 4;\nexport const aa_1__5 = 5;\nexport const aa_1__6 = 6;\nexport const aa_1__7 = 7;\nexport const aa_1__8 = 8;\nexport const aa_1__9 = 9;\nexport const aa_1__10 = 10;\nexport const aa_1__11 = 11;\nexport const aa_1__12 = 12;\nexport const aa_1__13 = 13;\nexport const aa_1__14 = 14;\nexport const aa_1__15 = 15;\nexport const aa_1__16 = 16;\nexport const aa_1__17 = 17;\nexport const aa_1__18 = 18;\nexport const aa_1__19 = 19;\nexport const aa_1__20 = 20;\nexport const aa_1__21 = 21;\nexport const aa_1__22 = 22;\nexport const aa_1__23 = 23;\nexport const aa_1__24 = 24;\nexport const aa_1__25 = 25;\nexport const aa_1__26 = 26;\nexport const aa_1__27 = 27;\nexport const aa_1__28 = 28;\nexport const aa_1__29 = 29;\nexport const aa_1__30 = 30;\nexport const aa_1__31 = 31;\nexport const aa_1__32 = 32;\nexport const aa_1__33 = 33;\nexport const aa_1__34 = 34;\nexport const aa_1__35 = 35;\nexport const aa_1__36 = 36;\nexport const aa_1__37 = 37;\nexport const aa_1__38 = 38;\nexport const aa_1__39 = 39;\nexport const aa_1__40 = 40;\nexport const aa_1__41 = 41;\nexport const aa_1__42 = 42;\nexport const aa_1__43 = 43;\nexport const aa_1__44 = 44;\nexport const aa_1__45 = 45;\nexport const aa_1__46 = 46;\nexport const aa_1__47 = 47;\nexport const aa_1__48 = 48;\nexport const aa_1__49 = 49;"
@@ -3807,6 +3788,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "class",
             "kind": "keyword",
             "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "console",
+            "kind": "const",
+            "kindModifiers": "declare",
             "sortText": "15"
           },
           {

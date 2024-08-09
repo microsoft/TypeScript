@@ -60,7 +60,6 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
                 path: `/user/username/projects/myproject/node_modules/pkg2`,
                 symLink: `/user/username/projects/myproject/packages/pkg2`,
             },
-            libFile,
         ], { currentDirectory: "/user/username/projects/myproject" });
     }
 
@@ -126,8 +125,8 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
                     name: "@types/pg",
                     types: "index.d.ts",
                 }),
+                "/lib/lib.es2022.full.d.ts": libFile.content,
             }),
-        modifyFs: fs => fs.writeFileSync("/lib/lib.es2022.full.d.ts", libFile.content),
         commandLineArgs: ["-b", "/src/projects/a", "/src/projects/b", "--verbose", "--traceResolution", "--explainFiles"],
         edits: noChangeOnlyRuns,
     });
@@ -176,7 +175,7 @@ describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
             }),
             "/src/projects/project/node_modules/a": new Symlink("/src/projects/project/packages/a"),
             "/lib/lib.esnext.full.d.ts": libFile.content,
-        }, { cwd: "/src/projects/project" });
+        }, { currentDirectory: "/src/projects/project" });
     }
 
     verifyTsc({

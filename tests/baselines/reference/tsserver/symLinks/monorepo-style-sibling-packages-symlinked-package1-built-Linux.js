@@ -67,7 +67,8 @@ type MyBarType = BarType;
 
 
 //// [/home/src/projects/project/node_modules/package1] symlink(/home/src/projects/project/packages/package1) Inode:: 17
-//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] Inode:: 21
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 21
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -82,20 +83,22 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 23
+//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] *Lib* Inode:: 30
+
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 113
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 24
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 114
 export type FooType = "foo";
 export type BarType = "bar";
 
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 25
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 115
 {"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 26
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 116
 {
   "root": [
     "./src/index.ts"
@@ -322,9 +325,9 @@ FsWatches::
 /home/src/projects/project/packages/package1: *new*
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":22}
+  {"inode":112}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":24}
+  {"inode":114}
 /home/src/projects/project/packages/package1/package.json: *new*
   {"inode":7}
 /home/src/projects/project/packages/package1/src: *new*
@@ -338,7 +341,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json: *new*
   {"inode":13}
 /home/src/tslibs/ts/lib/lib.es2016.full.d.ts: *new*
-  {"inode":21}
+  {"inode":30}
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *new*
@@ -528,13 +531,13 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
-  {"inode":21}
+  {"inode":30}
 
 FsWatches *deleted*::
 /home/src/projects/project/packages/package1/dist:
-  {"inode":22}
+  {"inode":112}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":24}
+  {"inode":114}
 
 Timeout callback:: count: 3
 2: /home/src/projects/project/packages/package2/tsconfig.json *new*
@@ -731,7 +734,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
-  {"inode":21}
+  {"inode":30}
 
 Timeout callback:: count: 1
 9: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
@@ -1019,14 +1022,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 1
 14: timerToUpdateChildWatches
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 25
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 26
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 28
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 115
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 116
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 118
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 29
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 119
 export type FooType = "foo";
 export type BarType = "bar";
 
@@ -1060,7 +1063,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":29}
+  {"inode":119}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1074,7 +1077,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
-  {"inode":21}
+  {"inode":30}
 
 Timeout callback:: count: 1
 14: timerToUpdateChildWatches *new*
@@ -1126,9 +1129,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":27}
+  {"inode":117}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":29}
+  {"inode":119}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1142,7 +1145,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
-  {"inode":21}
+  {"inode":30}
 
 Timeout callback:: count: 1
 16: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
@@ -1268,9 +1271,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":27}
+  {"inode":117}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":29}
+  {"inode":119}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1284,7 +1287,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/ts/lib/lib.es2016.full.d.ts:
-  {"inode":21}
+  {"inode":30}
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*

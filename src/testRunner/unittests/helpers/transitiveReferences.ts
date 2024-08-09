@@ -4,7 +4,6 @@ import {
     FsContents,
     getProjectConfigWithNodeNext,
 } from "./contents.js";
-import { libFile } from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForTransitiveReferencesRefsAdts() {
     return dedent`
@@ -67,6 +66,5 @@ export function getFsContentsForTransitiveReferences(withNodeNext?: boolean): Fs
             },
             references: [{ path: "tsconfig.b.json" }],
         }),
-        [libFile.path]: libFile.content,
     };
 }

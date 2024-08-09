@@ -7,6 +7,7 @@ export class Module1Class { }
 import * as M from "folder1/module1";
 
 //// [/user/username/projects/myproject/client/linktofolder2] symlink(/user/username/projects/myproject/folder2)
+
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "compilerOptions": {

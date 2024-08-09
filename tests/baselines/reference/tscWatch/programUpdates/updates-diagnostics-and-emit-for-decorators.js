@@ -1,20 +1,5 @@
 currentDirectory:: /user/username/workspace/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.es6.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/user/username/workspace/projects/project/a.ts]
 import {B} from './b'
 @((_) => {})
@@ -33,6 +18,21 @@ export class B {}
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 /home/src/tslibs/ts/lib/tsc.js -w
 Output::
@@ -44,6 +44,8 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/ts/lib/lib.es6.d.ts] *Lib*
 
 //// [/user/username/workspace/projects/project/b.js]
 export class B {

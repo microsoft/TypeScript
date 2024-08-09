@@ -13,6 +13,21 @@ let x =1;
                     name: number;
                 };
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -37,7 +52,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/file1.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/file2.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: project1
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: project1 WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules/@types 1 undefined Project: project1 WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/bin/node_modules/@types 1 undefined Project: project1 WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/projects/node_modules/@types 1 undefined Project: project1 WatchType: Type roots
@@ -46,11 +61,14 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/vscode/node_modules/@types 1 undefined Project: project1 WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: project1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'project1' (External)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/a/b/file1.js Text-1 "let x =1;"
 	/home/src/projects/project/a/b/file2.d.ts Text-1 "\n                interface T {\n                    name: string;\n                };\n                interface T {\n                    name: number;\n                };"
 
 
+	../../../tslibs/ts/lib/lib.d.ts
+	  Default library for target 'es5'
 	../../../projects/project/a/b/file1.js
 	  Root file specified for compilation
 	../../../projects/project/a/b/file2.d.ts
@@ -60,8 +78,6 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
 
 PolledWatches::
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /home/src/vscode/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/vscode/projects/bin/node_modules/@types: *new*
@@ -73,6 +89,8 @@ FsWatches::
 /home/src/projects/project/a/b/file1.js: *new*
   {}
 /home/src/projects/project/a/b/file2.d.ts: *new*
+  {}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
 
 Projects::
@@ -86,6 +104,10 @@ ScriptInfos::
     containingProjects: 1
         project1
 /home/src/projects/project/a/b/file2.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        project1
+/home/src/tslibs/ts/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         project1
@@ -113,6 +135,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "project1",
       "fileNames": [
+        "/home/src/tslibs/ts/lib/lib.d.ts",
         "/home/src/projects/project/a/b/file1.js",
         "/home/src/projects/project/a/b/file2.d.ts"
       ],
@@ -221,8 +244,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 0,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 166,
+            "dts": 2,
+            "dtsSize": 579,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -243,7 +266,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Project 'project1' (External)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -262,8 +285,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/a/b/node_modules: *new*
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/vscode/node_modules/@types:
   {"pollingInterval":500}
 /home/src/vscode/projects/bin/bower_components: *new*
@@ -279,6 +300,8 @@ FsWatches::
 /home/src/projects/project/a/b/file1.js:
   {}
 /home/src/projects/project/a/b/file2.d.ts:
+  {}
+/home/src/tslibs/ts/lib/lib.d.ts:
   {}
 
 Projects::

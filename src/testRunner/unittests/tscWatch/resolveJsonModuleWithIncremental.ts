@@ -1,9 +1,6 @@
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: resolveJsonModule:: emit file --incremental", () => {
     verifyTscWatch({
@@ -15,7 +12,6 @@ describe("unittests:: tscWatch:: resolveJsonModule:: emit file --incremental", (
                 "/home/src/projects/project/data.json": `{}`, // this file intentionally left blank
                 "/home/src/projects/project/data.d.json.ts": `declare var val: string; export default val;`,
                 "/home/src/projects/project/tsconfig.json": jsonToReadableText({ compilerOptions: { resolveJsonModule: true } }),
-                [libFile.path]: libFile.content,
             }, { currentDirectory: "/home/src/projects/project" }),
         commandLineArgs: ["-i", "-w"],
         edits: [{

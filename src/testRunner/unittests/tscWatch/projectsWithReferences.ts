@@ -15,7 +15,6 @@ import {
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
-    libFile,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -190,7 +189,6 @@ describe("unittests:: tscWatch:: projectsWithReferences:: invoking when referenc
             solutionBuildWithBaseline(
                 createWatchedSystem(
                     {
-                        [libFile.path]: libFile.content,
                         "/user/username/projects/transitiveReferences/a/tsconfig.json": jsonToReadableText({
                             compilerOptions: { composite: true },
                             files: ["index.ts"],
@@ -301,7 +299,6 @@ X;`,
             solutionBuildWithBaseline(
                 createWatchedSystem(
                     {
-                        [libFile.path]: libFile.content,
                         "/user/username/projects/transitiveReferences/a/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
                         "/user/username/projects/transitiveReferences/b/tsconfig.json": jsonToReadableText({
                             compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },

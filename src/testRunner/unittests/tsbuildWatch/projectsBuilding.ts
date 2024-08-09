@@ -8,7 +8,6 @@ import {
 import {
     createWatchedSystem,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding::", () => {
@@ -61,7 +60,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding::", () => {
         commandLineArgs: ["-b", "-w", "-v"],
         sys: () =>
             createWatchedSystem(
-                [libFile, ...ts.flatMap(pkgs(pkgFiles, 3), ts.identity), solution(3)],
+                [...ts.flatMap(pkgs(pkgFiles, 3), ts.identity), solution(3)],
                 { currentDirectory: "/user/username/projects/myproject" },
             ),
         edits: [
@@ -86,7 +85,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding::", () => {
         commandLineArgs: ["-b", "-w", "-v"],
         sys: () =>
             createWatchedSystem(
-                [libFile, ...ts.flatMap(pkgs(pkgFiles, 5), ts.identity), solution(5)],
+                [...ts.flatMap(pkgs(pkgFiles, 5), ts.identity), solution(5)],
                 { currentDirectory: "/user/username/projects/myproject" },
             ),
         edits: [
@@ -111,7 +110,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding::", () => {
         commandLineArgs: ["-b", "-w", "-v"],
         sys: () =>
             createWatchedSystem(
-                [libFile, ...ts.flatMap(pkgs(pkgFiles, 8), ts.identity), solution(8)],
+                [...ts.flatMap(pkgs(pkgFiles, 8), ts.identity), solution(8)],
                 { currentDirectory: "/user/username/projects/myproject" },
             ),
         edits: [
@@ -150,7 +149,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding::", () => {
         commandLineArgs: ["-b", "-w", "-v"],
         sys: () =>
             createWatchedSystem(
-                [libFile, ...ts.flatMap(pkgs(pkgFiles, 23), ts.identity), solution(23)],
+                [...ts.flatMap(pkgs(pkgFiles, 23), ts.identity), solution(23)],
                 { currentDirectory: "/user/username/projects/myproject" },
             ),
         edits: [

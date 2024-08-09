@@ -61,21 +61,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 
 /home/src/tslibs/ts/lib/tsc.js -w --traceResolution --explainFiles
 Output::
@@ -129,6 +114,8 @@ index.ts
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/index.js]
 /// <reference types="pkg"/>

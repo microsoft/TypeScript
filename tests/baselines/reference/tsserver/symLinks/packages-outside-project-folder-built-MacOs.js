@@ -55,6 +55,7 @@ export * from 'c';
 }
 
 //// [/home/src/projects/a/1/a-impl/a/node_modules/c] symlink(/home/src/projects/c/3/c-impl/c) Inode:: 26
+
 //// [/home/src/projects/a/2/unrelated/somefile.ts] Inode:: 29
 export const a: string = 'test';
 
@@ -72,6 +73,7 @@ import { a } from 'a';
 }
 
 //// [/home/src/projects/b/2/b-impl/b/node_modules/a] symlink(/home/src/projects/a/1/a-impl/a) Inode:: 38
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 42
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -87,18 +89,18 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 44
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 134
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = 'test';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 45
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 135
 export declare const c: string;
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 46
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 136
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -118,14 +120,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./c"), exports);
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 47
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 137
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 48
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 138
 {"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 49
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 139
 {
   "root": [
     "../src/c.ts",
@@ -135,18 +137,18 @@ export * from './c';
   "size": 68
 }
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 51
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 141
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 'test';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 52
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 142
 export declare const a: string;
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 53
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 143
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -167,15 +169,15 @@ __exportStar(require("./a"), exports);
 __exportStar(require("c"), exports);
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 54
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 144
 export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 55
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 145
 {"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 56
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 146
 {
   "root": [
     "../src/a.ts",
@@ -373,17 +375,17 @@ PolledWatches::
 
 FsWatches::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
-  {"inode":52}
+  {"inode":142}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-  {"inode":54}
+  {"inode":144}
 /home/src/projects/a/1/a-impl/a/package.json: *new*
   {"inode":24}
 /home/src/projects/b/2/b-impl/b/tsconfig.json: *new*
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
-  {"inode":45}
+  {"inode":135}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-  {"inode":47}
+  {"inode":137}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
@@ -543,7 +545,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jso
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/2/unrelated/somethingUnrelated.ts :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
 2: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
-//// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 57
+//// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 147
 export const a = 10;
 
 
@@ -667,7 +669,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jso
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/4/unrelated/somethingUnrelated.ts :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
 4: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
-//// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 58
+//// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 148
 export const a = 10;
 
 
@@ -791,7 +793,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jso
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/2/unrelated/anotherFile.ts :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
 6: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
-//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 59
+//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 149
 export const a = 10;
 
 
@@ -915,7 +917,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jso
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/4/unrelated/anotherFile.ts :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
 8: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
-//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 60
+//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 150
 export const a = 10;
 
 
@@ -1143,13 +1145,13 @@ FsWatches::
 
 FsWatches *deleted*::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
-  {"inode":52}
+  {"inode":142}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts:
-  {"inode":54}
+  {"inode":144}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts:
-  {"inode":45}
+  {"inode":135}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts:
-  {"inode":47}
+  {"inode":137}
 
 FsWatchesRecursive::
 /home/src/projects/a:
@@ -1510,18 +1512,18 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jso
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
 39: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 62
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 152
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = 'test';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 63
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 153
 export declare const c: string;
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 64
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 154
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1541,14 +1543,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./c"), exports);
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 65
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 155
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 66
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 156
 {"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 67
+//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 157
 {
   "root": [
     "../src/c.ts",
@@ -1558,18 +1560,18 @@ export * from './c';
   "size": 68
 }
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 69
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 159
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 'test';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 70
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 160
 export declare const a: string;
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 71
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 161
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1590,15 +1592,15 @@ __exportStar(require("./a"), exports);
 __exportStar(require("c"), exports);
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 72
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 162
 export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 73
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 163
 {"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 74
+//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 164
 {
   "root": [
     "../src/a.ts",
@@ -1641,17 +1643,17 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
-  {"inode":70}
+  {"inode":160}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-  {"inode":72}
+  {"inode":162}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
-  {"inode":63}
+  {"inode":153}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-  {"inode":65}
+  {"inode":155}
 /home/src/tslibs/ts/lib/lib.d.ts:
   {"inode":42}
 
@@ -1818,17 +1820,17 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
-  {"inode":70}
+  {"inode":160}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts:
-  {"inode":72}
+  {"inode":162}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts:
-  {"inode":63}
+  {"inode":153}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts:
-  {"inode":65}
+  {"inode":155}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
 /home/src/tslibs/ts/lib/lib.d.ts:

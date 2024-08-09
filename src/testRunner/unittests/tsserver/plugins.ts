@@ -10,7 +10,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: plugins:: loading", () => {
@@ -70,7 +69,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
                 },
             }),
         };
-        const { session } = createHostWithPlugin([aTs, tsconfig, libFile]);
+        const { session } = createHostWithPlugin([aTs, tsconfig]);
         openFilesForSession([aTs], session);
         baselineTsserverLogs("plugins", "With local plugins", session);
     });
@@ -95,7 +94,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             path: "/home/src/projects/project/tsconfig.json",
             content: "{}",
         };
-        const { session } = createHostWithPlugin([aTs, tsconfig, libFile], [...expectedToLoad, ...notToLoad]);
+        const { session } = createHostWithPlugin([aTs, tsconfig], [...expectedToLoad, ...notToLoad]);
         openFilesForSession([aTs], session);
         baselineTsserverLogs("plugins", "With global plugins", session);
     });
@@ -114,7 +113,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             }),
         };
 
-        const { session } = createHostWithPlugin([aTs, tsconfig, libFile]);
+        const { session } = createHostWithPlugin([aTs, tsconfig]);
 
         openFilesForSession([aTs], session);
 
@@ -143,7 +142,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             }),
         };
 
-        const { session, host } = createHostWithPlugin([aTs, tsconfig, libFile]);
+        const { session, host } = createHostWithPlugin([aTs, tsconfig]);
 
         openFilesForSession([aTs], session);
         // Write the missing file (referenced by 'a.ts') to schedule an update.
@@ -177,7 +176,7 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
             "some-other-plugin": ["someOtherFile.txt"],
         };
 
-        const host = createServerHost([aTs, tsconfig, libFile]);
+        const host = createServerHost([aTs, tsconfig]);
         host.require = (_initialPath, moduleName) => {
             session.logger.log(`Require:: ${moduleName}`);
             return {
@@ -230,7 +229,7 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
                 compilerOptions: { plugins: [{ name: "myplugin" }] },
             }),
         };
-        const host = createServerHost([aTs, bTs, cTs, config, libFile]);
+        const host = createServerHost([aTs, bTs, cTs, config]);
         host.require = () => {
             return {
                 module: () => ({
@@ -330,7 +329,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                 include: ["*.ts", "*.vue"],
             }),
         };
-        const host = createServerHost([aTs, dTs, bVue, config, libFile]);
+        const host = createServerHost([aTs, dTs, bVue, config]);
         host.require = () => {
             return {
                 module: () => ({
@@ -381,7 +380,7 @@ describe("unittests:: tsserver:: plugins:: supportedExtensions::", () => {
                 include: ["*.ts", "*.vue"],
             }),
         };
-        const host = createServerHost([aTs, bVue, config, libFile]);
+        const host = createServerHost([aTs, bVue, config]);
         let currentVueScriptKind = ts.ScriptKind.TS;
         host.require = () => {
             return {

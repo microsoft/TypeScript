@@ -67,7 +67,8 @@ type MyBarType = BarType;
 
 
 //// [/home/src/projects/project/node_modules/package1] symlink(/home/src/projects/project/packages/package1) Inode:: 17
-//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] Inode:: 21
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 21
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -82,20 +83,22 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 23
+//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] *Lib* Inode:: 30
+
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 113
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 24
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 114
 export type FooType = "foo";
 export type BarType = "bar";
 
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 25
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 115
 {"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 26
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 116
 {
   "root": [
     "./src/index.ts"
@@ -1061,14 +1064,14 @@ Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/p
 Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}:: /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo updated
 Custom watchDirectory:: Triggered Ignored:: {"id":9,"path":"/home/src/projects/project/node_modules/package1","recursive":true,"ignoreUpdate":true}:: /home/src/projects/project/node_modules/package1/tsconfig.tsbuildinfo.readable.baseline.txt updated
 Before request
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 25
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 26
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 28
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 115
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 116
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 118
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 29
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 119
 export type FooType = "foo";
 export type BarType = "bar";
 

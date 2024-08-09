@@ -2,10 +2,7 @@ import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { FsContents } from "./contents.js";
 import { loadProjectFromFiles } from "./vfs.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "./virtualFileSystemWithWatch.js";
+import { createWatchedSystem } from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForDemoProjectReferencesCoreConfig(additional?: object) {
     return jsonToReadableText({
@@ -121,25 +118,19 @@ export function getFsContentsForDemoProjectReferences(): FsContents {
                 },
             ],
         }),
-        [libFile.path]: libFile.content,
     };
 }
 
 export function getFsForDemoProjectReferences() {
     return loadProjectFromFiles(
         getFsContentsForDemoProjectReferences(),
-        {
-            cwd: "/user/username/projects/demo",
-            executingFilePath: libFile.path,
-        },
+        { currentDirectory: "/user/username/projects/demo" },
     );
 }
 
 export function getSysForDemoProjectReferences() {
     return createWatchedSystem(
         getFsContentsForDemoProjectReferences(),
-        {
-            currentDirectory: "/user/username/projects/demo",
-        },
+        { currentDirectory: "/user/username/projects/demo" },
     );
 }

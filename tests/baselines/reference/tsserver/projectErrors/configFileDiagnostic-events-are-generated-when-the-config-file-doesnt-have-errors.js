@@ -4,6 +4,11 @@ Before request
 //// [/home/src/projects/project/a/b/app.ts]
 let x = 10
 
+//// [/home/src/projects/project/a/b/tsconfig.json]
+{
+                    "compilerOptions": {}
+                }
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -18,11 +23,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/home/src/projects/project/a/b/tsconfig.json]
-{
-                    "compilerOptions": {}
-                }
 
 
 Info seq  [hh:mm:ss:mss] request:

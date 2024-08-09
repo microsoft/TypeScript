@@ -17,7 +17,7 @@ describe("unittests:: tsbuild:: extends::", () => {
     verifyTsc({
         scenario: "extends",
         subScenario: "configDir template",
-        fs: () => loadProjectFromFiles(getConfigDirExtendsSys(), { cwd: "/home/src/projects/myproject" }),
+        fs: () => loadProjectFromFiles(getConfigDirExtendsSys(), { currentDirectory: "/home/src/projects/myproject" }),
         commandLineArgs: ["-b", "/home/src/projects/myproject", "--explainFiles", "--v"],
     });
 });

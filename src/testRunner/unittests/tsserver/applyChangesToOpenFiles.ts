@@ -6,7 +6,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: applyChangesToOpenFiles::", () => {
@@ -38,7 +37,7 @@ ${file.content}`;
             content: "let z = 1;",
         };
 
-        const host = createServerHost([app, file3, commonFile1, commonFile2, libFile, configFile]);
+        const host = createServerHost([app, file3, commonFile1, commonFile2, configFile]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,

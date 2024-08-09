@@ -66,7 +66,8 @@ type MyBarType = BarType;
 
 
 //// [/home/src/projects/project/node_modules/package1] symlink(/home/src/projects/project/packages/package1)
-//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts]
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -198,6 +199,8 @@ packages/package2/src/index.ts
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Wild card directory
 
+
+//// [/home/src/tslibs/ts/lib/lib.es2016.full.d.ts] *Lib*
 
 //// [/home/src/projects/project/packages/package2/dist/index.js]
 "use strict";

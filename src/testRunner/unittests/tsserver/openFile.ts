@@ -12,7 +12,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: openfile::", () => {
@@ -89,7 +88,7 @@ describe("unittests:: tsserver:: openfile::", () => {
             path: `${projectRootPath}/tsconfig.json`,
             content: "{}",
         };
-        const files = [aFile, configFile, libFile];
+        const files = [aFile, configFile];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([{ file: aFile, projectRootPath }], session);
@@ -113,7 +112,7 @@ describe("unittests:: tsserver:: openfile::", () => {
             path: `${projectRootPath}/tsconfig.json`,
             content: "{}",
         };
-        const files = [aFile, configFile, libFile];
+        const files = [aFile, configFile];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([{ file: aFile, content: aFile.content, projectRootPath }], session);
@@ -138,7 +137,7 @@ function bar() {
 foo();
 bar();`,
         };
-        const host = createServerHost([file, libFile]);
+        const host = createServerHost([file]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         verifyGetErrRequest({ session, files: [file] });
@@ -182,7 +181,6 @@ bar();`,
                 "/home/src/projects/project/a.ts": "export const a = 10;",
                 "/home/src/projects/project/b.ts": "export const b = 10;",
                 "/home/src/projects/project/tsconfig.json": "{}",
-                [libFile.path]: libFile.content,
             });
             const session = new TestSession(host);
             return { host, session };

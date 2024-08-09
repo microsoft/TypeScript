@@ -20,10 +20,7 @@ import {
     loadProjectFromFiles,
     replaceText,
 } from "./vfs.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "./virtualFileSystemWithWatch.js";
+import { createWatchedSystem } from "./virtualFileSystemWithWatch.js";
 
 function forEachNoEmitChangesWorker(commandType: string[], compilerOptions: CompilerOptions) {
     const discrepancyExplanation = () => [
@@ -406,7 +403,6 @@ export function forEachNoEmitTscWatch(commandType: string[]) {
                         noEmit: true,
                     }),
                 });
-                fsContents[libFile.path] = libFile.content;
                 return createWatchedSystem(fsContents, { currentDirectory: "/home/src/projects/project" });
             },
             edits: [

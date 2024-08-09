@@ -4,8 +4,6 @@ import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
-    getTypeScriptLibTestLocation,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: nodeNextWatch:: emit when module emit is specified as nodenext", () => {
@@ -48,7 +46,7 @@ describe("unittests:: tscWatch:: nodeNextWatch:: emit when module emit is specif
                 content: `declare module "thing";`,
             };
             return createWatchedSystem(
-                [configFile, file1, declFile, packageFile, { ...libFile, path: getTypeScriptLibTestLocation("es2020.full") }],
+                [configFile, file1, declFile, packageFile],
                 { currentDirectory: "/home/src/projects/project" },
             );
         },

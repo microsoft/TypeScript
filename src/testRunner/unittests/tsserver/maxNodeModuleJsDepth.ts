@@ -10,7 +10,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: maxNodeModuleJsDepth:: for inferred projects", () => {
@@ -46,7 +45,7 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth:: for inferred projects", 
             content: "let x =1;",
         };
 
-        const host = createServerHost([file1, file2, libFile]);
+        const host = createServerHost([file1, file2]);
         const session = new TestSession({ host, useSingleInferredProject: true });
 
         openFilesForSession([file1], session);
@@ -77,7 +76,6 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth:: for inferred projects", 
             "/user/username/projects/project1/src/node_modules/path/index.js": dedent`
                 export const z = 10;
             `,
-            [libFile.path]: libFile.content,
         });
         const session = new TestSession({ host, useSingleInferredProject: true });
 

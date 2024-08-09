@@ -2,6 +2,9 @@ Info seq  [hh:mm:ss:mss] For files of style c:/myprojects/project/x.js
 currentDirectory:: c:\home\src\vscode\projects\bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
+//// [c:/myprojects/project/x.js]
+const x = 10
+
 //// [c:/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -16,9 +19,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [c:/myprojects/project/x.js]
-const x = 10
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -245,6 +245,9 @@ Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/myprojects/project/x.js
 currentDirectory:: //vda1cs4850/home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
+//// [//vda1cs4850/vda1cs4850/myprojects/project/x.js]
+const x = 10
+
 //// [//vda1cs4850/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -259,9 +262,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [//vda1cs4850/vda1cs4850/myprojects/project/x.js]
-const x = 10
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -464,6 +464,9 @@ Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/myprojects/project/x
 currentDirectory:: //vda1cs4850/home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
+//// [//vda1cs4850/vda1cs4850/c$/myprojects/project/x.js]
+const x = 10
+
 //// [//vda1cs4850/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -478,9 +481,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [//vda1cs4850/vda1cs4850/c$/myprojects/project/x.js]
-const x = 10
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -707,6 +707,9 @@ Info seq  [hh:mm:ss:mss] For files of style c:/users/username/myprojects/project
 currentDirectory:: c:\home\src\vscode\projects\bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
+//// [c:/users/username/myprojects/project/x.js]
+const x = 10
+
 //// [c:/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -721,9 +724,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [c:/users/username/myprojects/project/x.js]
-const x = 10
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -950,6 +950,9 @@ Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/users/username/mypro
 currentDirectory:: //vda1cs4850/home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
+//// [//vda1cs4850/vda1cs4850/c$/users/username/myprojects/project/x.js]
+const x = 10
+
 //// [//vda1cs4850/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -964,9 +967,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [//vda1cs4850/vda1cs4850/c$/users/username/myprojects/project/x.js]
-const x = 10
 
 
 Info seq  [hh:mm:ss:mss] request:

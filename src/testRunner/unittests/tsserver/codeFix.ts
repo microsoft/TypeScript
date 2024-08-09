@@ -5,10 +5,7 @@ import {
     openFilesForSession,
     TestSession,
 } from "../helpers/tsserver.js";
-import {
-    createServerHost,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: codeFix::", () => {
     function setup() {
@@ -20,7 +17,6 @@ describe("unittests:: tsserver:: codeFix::", () => {
             `,
             "/home/src/projects/project/tsconfig.json": "{ }",
             "/home/src/projects/project/node_modules/vscode/index.js": "export const x = 10;",
-            [libFile.path]: libFile.content,
         }, { typingsInstallerTypesRegistry: ["vscode"] });
         const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project/src/file.ts"], session);

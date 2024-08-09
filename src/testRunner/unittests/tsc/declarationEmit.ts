@@ -10,7 +10,6 @@ import {
     createWatchedSystem,
     FileOrFolderOrSymLink,
     isSymLink,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: declarationEmit::", () => {
@@ -133,7 +132,6 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json`, content: fsaPackageJson() },
                     { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
                     { path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`, symLink: `/user/username/projects/myproject/plugin-two` },
-                    libFile,
                 ],
                 changeCaseFileTestPath: str => str.includes("/plugin-two"),
             });
@@ -163,7 +161,6 @@ ${pluginOneAction()}`,
                     { path: `/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts`, content: fsaIndex() },
                     { path: `/temp/yarn/data/link/plugin-two`, symLink: `/user/username/projects/myproject/plugin-two` },
                     { path: `/user/username/projects/myproject/plugin-one/node_modules/plugin-two`, symLink: `/temp/yarn/data/link/plugin-two` },
-                    libFile,
                 ],
                 changeCaseFileTestPath: str => str.includes("/plugin-two"),
             });
@@ -256,7 +253,6 @@ ${pluginOneAction()}`,
                     path: `/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2`,
                     symLink: `/user/username/projects/myproject/pkg2`,
                 },
-                libFile,
             ],
             changeCaseFileTestPath: str => str.includes("/pkg1"),
         });
@@ -351,7 +347,6 @@ ${pluginOneAction()}`,
                     }
                 `,
                 },
-                libFile,
             ], { currentDirectory: "D:\\Work\\pkg1", windowsStyleRoot: "D:/" }),
         commandLineArgs: ["-p", "D:\\Work\\pkg1", "--explainFiles"],
     });

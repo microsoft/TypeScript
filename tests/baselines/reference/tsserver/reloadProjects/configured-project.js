@@ -10,6 +10,15 @@ Before request
   }
 }
 
+//// [/user/username/projects/myproject/file1.ts]
+import { foo } from "module1";
+                foo();
+                import { bar } from "./file2";
+                bar();
+
+//// [/user/username/projects/myproject/file2.ts]
+export function bar(){}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -24,15 +33,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/file1.ts]
-import { foo } from "module1";
-                foo();
-                import { bar } from "./file2";
-                bar();
-
-//// [/user/username/projects/myproject/file2.ts]
-export function bar(){}
 
 
 Info seq  [hh:mm:ss:mss] request:

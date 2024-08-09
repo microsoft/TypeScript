@@ -8,20 +8,15 @@ import {
 import {
     createServerHost,
     getPathForTypeScriptTestLocation,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: languageService::", () => {
     it("should work correctly on case-sensitive file systems", () => {
-        const lib = {
-            path: libFile.path.replace("/lib/", "/Lib/"),
-            content: libFile.content,
-        };
         const f = {
             path: "/home/src/projects/project/app.ts",
             content: "let x = 1;",
         };
-        const host = createServerHost([lib, f], {
+        const host = createServerHost([f], {
             executingFilePath: getPathForTypeScriptTestLocation("tsc.js").replace("/lib/", "/Lib/"),
             useCaseSensitiveFileNames: true,
         });

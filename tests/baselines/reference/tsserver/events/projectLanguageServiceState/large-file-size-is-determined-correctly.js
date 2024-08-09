@@ -10,6 +10,9 @@ let x = 1;
 //// [/user/username/projects/project/extremlylarge.d.ts]
 
 
+//// [/user/username/projects/project/jsconfig.json]
+{}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -24,9 +27,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/project/jsconfig.json]
-{}
 
 
 Info seq  [hh:mm:ss:mss] request:

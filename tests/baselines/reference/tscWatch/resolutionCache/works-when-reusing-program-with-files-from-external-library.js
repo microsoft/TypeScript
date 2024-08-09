@@ -11,6 +11,17 @@ module11("hello");
 //// [/a/b/projects/myProject/node_modules/module1/index.js]
 module.exports = options => { return options.toString(); }
 
+//// [/a/b/projects/myProject/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "rootDir": ".",
+    "outDir": "../dist",
+    "moduleResolution": "node",
+    "maxNodeModuleJsDepth": 1
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -25,17 +36,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/a/b/projects/myProject/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "allowJs": true,
-    "rootDir": ".",
-    "outDir": "../dist",
-    "moduleResolution": "node",
-    "maxNodeModuleJsDepth": 1
-  }
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js --w -p /a/b/projects/myProject/src

@@ -58,6 +58,21 @@ const bar: Bar = {
 }
 
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -131,7 +146,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/src 1 undefined Config: /home/src/projects/project/packages/core/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/src/loading-indicator.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es2018.full.d.ts 500 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es2018.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/babel-loader/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/babel-loader/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
@@ -142,12 +157,15 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/babel-loader/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/babel-loader/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/babel-loader/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+	/home/src/tslibs/ts/lib/lib.es2018.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
 	/home/src/projects/project/packages/core/src/index.ts Text-1 "\nimport { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n    prop: 0\n}\n"
 	/home/src/projects/project/packages/babel-loader/src/index.ts SVC-1-0 "\nimport type { Foo } from \"../../core/src/index.js\";\n"
 
 
+	../../../../tslibs/ts/lib/lib.es2018.full.d.ts
+	  Default library for target 'es2018'
 	../core/src/loading-indicator.ts
 	  Imported via "./loading-indicator.js" from file '../core/src/index.ts'
 	../core/src/index.ts
@@ -183,8 +201,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 232,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 0,
-            "dtsSize": 0,
+            "dts": 1,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -222,68 +240,12 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/projects/project/packages/babel-loader/src/index.ts",
         "configFile": "/home/src/projects/project/packages/babel-loader/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/home/src/tslibs/ts/lib/lib.es2018.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es2018'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'CallableFunction'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'NewableFunction'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/babel-loader/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/babel-loader/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -298,6 +260,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/ts/lib/lib.es2018.full.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/projects/node_modules/@types: *new*
@@ -308,8 +272,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.es2018.full.d.ts: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/project/packages/babel-loader/tsconfig.json: *new*
@@ -319,6 +281,8 @@ FsWatches::
 /home/src/projects/project/packages/core/src/loading-indicator.ts: *new*
   {}
 /home/src/projects/project/packages/core/tsconfig.json: *new*
+  {}
+/home/src/tslibs/ts/lib/lib.es2018.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -343,6 +307,10 @@ ScriptInfos::
     containingProjects: 1
         /home/src/projects/project/packages/babel-loader/tsconfig.json
 /home/src/projects/project/packages/core/src/loading-indicator.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/babel-loader/tsconfig.json
+/home/src/tslibs/ts/lib/lib.es2018.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/packages/babel-loader/tsconfig.json
@@ -377,7 +345,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/core/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.es2018.full.d.ts 500 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/core/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
@@ -388,11 +355,14 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/core/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/core/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/core/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+	/home/src/tslibs/ts/lib/lib.es2018.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
 	/home/src/projects/project/packages/core/src/index.ts Text-1 "\nimport { Bar } from \"./loading-indicator.js\";\nexport type Foo = {};\nconst bar: Bar = {\n    prop: 0\n}\n"
 
 
+	../../../../tslibs/ts/lib/lib.es2018.full.d.ts
+	  Default library for target 'es2018'
 	src/loading-indicator.ts
 	  Imported via "./loading-indicator.js" from file 'src/index.ts'
 	  Matched by include pattern './src' in 'tsconfig.json'
@@ -427,8 +397,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 179,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 0,
-            "dtsSize": 0,
+            "dts": 1,
+            "dtsSize": 413,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -466,72 +436,16 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/projects/project/packages/core/src/index.ts",
         "configFile": "/home/src/projects/project/packages/core/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/home/src/tslibs/ts/lib/lib.es2018.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es2018'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'CallableFunction'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'NewableFunction'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/packages/core/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/babel-loader/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/core/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -560,8 +474,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types:
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.es2018.full.d.ts:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/project/packages/babel-loader/tsconfig.json:
@@ -569,6 +481,8 @@ FsWatches::
 /home/src/projects/project/packages/core/src/loading-indicator.ts:
   {}
 /home/src/projects/project/packages/core/tsconfig.json:
+  {}
+/home/src/tslibs/ts/lib/lib.es2018.full.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -603,6 +517,11 @@ ScriptInfos::
         /home/src/projects/project/packages/babel-loader/tsconfig.json
         /home/src/projects/project/packages/core/tsconfig.json *default* *new*
 /home/src/projects/project/packages/core/src/loading-indicator.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /home/src/projects/project/packages/babel-loader/tsconfig.json
+        /home/src/projects/project/packages/core/tsconfig.json *new*
+/home/src/tslibs/ts/lib/lib.es2018.full.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /home/src/projects/project/packages/babel-loader/tsconfig.json
@@ -669,6 +588,11 @@ ScriptInfos::
     containingProjects: 2
         /home/src/projects/project/packages/babel-loader/tsconfig.json
         /home/src/projects/project/packages/core/tsconfig.json
+/home/src/tslibs/ts/lib/lib.es2018.full.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/projects/project/packages/babel-loader/tsconfig.json
+        /home/src/projects/project/packages/core/tsconfig.json
 
 Before request
 
@@ -687,10 +611,13 @@ Info seq  [hh:mm:ss:mss] Finding references to /home/src/projects/project/packag
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/babel-loader/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/babel-loader/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/babel-loader/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/ts/lib/lib.es2018.full.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/packages/babel-loader/src/index.ts SVC-1-1 "\nimport type { Foo } from// comment \"../../core/src/index.js\";\n"
 
 
+	../../../../tslibs/ts/lib/lib.es2018.full.d.ts
+	  Default library for target 'es2018'
 	src/index.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
@@ -791,8 +718,6 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types:
   {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.es2018.full.d.ts:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/project/packages/babel-loader/tsconfig.json:
@@ -800,6 +725,8 @@ FsWatches::
 /home/src/projects/project/packages/core/src/loading-indicator.ts:
   {}
 /home/src/projects/project/packages/core/tsconfig.json:
+  {}
+/home/src/tslibs/ts/lib/lib.es2018.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -836,3 +763,8 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /home/src/projects/project/packages/core/tsconfig.json
         /home/src/projects/project/packages/babel-loader/tsconfig.json *deleted*
+/home/src/tslibs/ts/lib/lib.es2018.full.d.ts
+    version: Text-1
+    containingProjects: 2
+        /home/src/projects/project/packages/babel-loader/tsconfig.json
+        /home/src/projects/project/packages/core/tsconfig.json

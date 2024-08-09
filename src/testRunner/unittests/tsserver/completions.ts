@@ -8,7 +8,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: completions::", () => {
@@ -194,7 +193,6 @@ export interface BrowserRouterProps {
         const files = [
             ...filesInProject,
             appPackage,
-            libFile,
             localReactPackage,
             localReactRouterDomPackage,
             localReactRouterDom,

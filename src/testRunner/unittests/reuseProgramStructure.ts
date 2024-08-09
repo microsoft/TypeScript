@@ -16,7 +16,6 @@ import {
 import {
     createWatchedSystem,
     File,
-    libFile,
 } from "./helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: reuseProgramStructure:: General", () => {
@@ -854,7 +853,7 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
                 path: "/a/b/tsconfig.json",
                 content: "{}",
             };
-            verifyProgram([file1, file2, libFile, configFile], [file1.path, file2.path], {}, configFile.path);
+            verifyProgram([file1, file2, configFile], [file1.path, file2.path], {}, configFile.path);
         });
 
         it("has lib specified in the options", () => {
@@ -914,7 +913,7 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
                 content: jsonToReadableText({ compilerOptions }),
             };
 
-            verifyProgram([app, module1, module2, module3, libFile, configFile], [app.path], compilerOptions, configFile.path);
+            verifyProgram([app, module1, module2, module3, configFile], [app.path], compilerOptions, configFile.path);
         });
 
         it("has include paths specified in tsconfig file", () => {
@@ -951,7 +950,7 @@ describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
                 path: "/src/tsconfig.json",
                 content: jsonToReadableText({ compilerOptions, include: ["packages/**/*.ts"] }),
             };
-            verifyProgramWithConfigFile(createWatchedSystem([app, module1, module2, module3, libFile, configFile]), configFile.path);
+            verifyProgramWithConfigFile(createWatchedSystem([app, module1, module2, module3, configFile]), configFile.path);
         });
         it("has the same root file names", () => {
             const module1: File = {

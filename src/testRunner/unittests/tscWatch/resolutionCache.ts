@@ -10,7 +10,6 @@ import {
 import {
     createWatchedSystem,
     File,
-    libFile,
     SymLink,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -27,7 +26,7 @@ describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution c
         };
 
         const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
-            [root, imported, libFile],
+            [root, imported],
             { currentDirectory: "/users/username/projects/project" },
         ));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
@@ -115,7 +114,7 @@ describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution c
         };
 
         const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
-            [root, libFile],
+            [root],
             { currentDirectory: "/users/username/projects/project" },
         ));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
@@ -175,7 +174,7 @@ describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution c
         };
 
         const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
-            [root, imported, libFile],
+            [root, imported],
             { currentDirectory: "/users/username/projects/project" },
         ));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
@@ -242,7 +241,7 @@ describe("unittests:: tscWatch:: resolutionCache:: tsc-watch module resolution c
             createWatchedSystem([{
                 path: "/users/username/projects/project/foo.ts",
                 content: `import * as fs from "fs";`,
-            }, libFile], { currentDirectory: "/users/username/projects/project" }),
+            }], { currentDirectory: "/users/username/projects/project" }),
         edits: [
             {
                 caption: "npm install node types",
@@ -294,7 +293,7 @@ declare module "url" {
 `,
             };
             return createWatchedSystem(
-                [root, file, libFile],
+                [root, file],
                 { currentDirectory: "/users/username/projects/project" },
             );
         },
@@ -348,7 +347,7 @@ declare module "fs" {
                 }),
             };
             return createWatchedSystem(
-                [file1, file2, module1, libFile, configFile],
+                [file1, file2, module1, configFile],
                 { currentDirectory: "/a/b/projects/myProject/" },
             );
         },
@@ -375,7 +374,7 @@ declare module "fs" {
                 content: "export {}",
             };
             return createWatchedSystem(
-                [file, libFile, module],
+                [file, module],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
         },
@@ -408,7 +407,7 @@ declare module "fs" {
                         content: "{}",
                     };
                     return createWatchedSystem(
-                        [libFile, file1, file2, config],
+                        [file1, file2, config],
                         { currentDirectory: ts.getDirectoryPath(config.path) },
                     );
                 },
@@ -448,7 +447,7 @@ declare module "fs" {
                 }),
             };
             return createWatchedSystem(
-                [app, tsconfig, libFile],
+                [app, tsconfig],
                 { currentDirectory: ts.getDirectoryPath(tsconfig.path) },
             );
         },
@@ -523,7 +522,7 @@ declare namespace myapp {
                 content: 'export declare const Foo = "BAR";',
             };
             return createWatchedSystem(
-                [libFile, mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther],
+                [mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther],
                 { currentDirectory: mainPackageRoot },
             );
         },
@@ -570,7 +569,7 @@ declare namespace NodeJS {
                 };
                 const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
                 return createWatchedSystem(
-                    [file, libFile, tsconfig, nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals],
+                    [file, tsconfig, nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals],
                     { currentDirectory: "/user/username/projects/myproject" },
                 );
             },
@@ -636,7 +635,6 @@ declare namespace NodeJS {
                 export {}
             `,
                 "/users/username/projects/project/node_modules/pkg2/index.d.ts": `interface Import2 {}`,
-                [libFile.path]: libFile.content,
             }, { currentDirectory: "/users/username/projects/project" }),
         commandLineArgs: ["-w", "--explainFiles", "--extendedDiagnostics"],
         edits: [
@@ -670,7 +668,6 @@ declare namespace NodeJS {
                 const x: 10 = myapp;
             `,
                 "/user/username/projects/myproject/tsconfig.json": "{}",
-                [libFile.path]: libFile.content,
             }, { currentDirectory: "/user/username/projects/myproject" }),
         edits: [
             {

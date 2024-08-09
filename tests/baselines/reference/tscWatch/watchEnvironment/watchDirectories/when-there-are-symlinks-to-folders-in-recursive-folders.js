@@ -1,6 +1,31 @@
 currentDirectory:: /home/user/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 6
+//// [/home/user/projects/myproject/src/file.ts] Inode:: 6
+import * as a from "a"
+
+//// [/home/user/projects/myproject/tsconfig.json] Inode:: 7
+{
+  "compilerOptions": {
+    "extendedDiagnostics": true,
+    "traceResolution": true
+  }
+}
+
+//// [/home/user/projects/myproject/node_modules/reala/index.d.ts] Inode:: 10
+export {}
+
+//// [/home/user/projects/myproject/node_modules/realb/index.d.ts] Inode:: 12
+export {}
+
+//// [/home/user/projects/myproject/node_modules/a] symlink(/home/user/projects/myproject/node_modules/reala) Inode:: 13
+
+//// [/home/user/projects/myproject/node_modules/b] symlink(/home/user/projects/myproject/node_modules/realb) Inode:: 14
+
+//// [/home/user/projects/myproject/node_modules/reala/node_modules/b] symlink(/home/user/projects/myproject/node_modules/b) Inode:: 16
+
+//// [/home/user/projects/myproject/node_modules/realb/node_modules/a] symlink(/home/user/projects/myproject/node_modules/a) Inode:: 18
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 23
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,27 +40,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/user/projects/myproject/src/file.ts] Inode:: 11
-import * as a from "a"
-
-//// [/home/user/projects/myproject/tsconfig.json] Inode:: 12
-{
-  "compilerOptions": {
-    "extendedDiagnostics": true,
-    "traceResolution": true
-  }
-}
-
-//// [/home/user/projects/myproject/node_modules/reala/index.d.ts] Inode:: 15
-export {}
-
-//// [/home/user/projects/myproject/node_modules/realb/index.d.ts] Inode:: 17
-export {}
-
-//// [/home/user/projects/myproject/node_modules/a] symlink(/home/user/projects/myproject/node_modules/reala) Inode:: 18
-//// [/home/user/projects/myproject/node_modules/b] symlink(/home/user/projects/myproject/node_modules/realb) Inode:: 19
-//// [/home/user/projects/myproject/node_modules/reala/node_modules/b] symlink(/home/user/projects/myproject/node_modules/b) Inode:: 21
-//// [/home/user/projects/myproject/node_modules/realb/node_modules/a] symlink(/home/user/projects/myproject/node_modules/a) Inode:: 23
 
 /home/src/tslibs/ts/lib/tsc.js --w
 Output::
@@ -91,7 +95,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined 
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 
 
-//// [/home/user/projects/myproject/src/file.js] Inode:: 24
+//// [/home/user/projects/myproject/src/file.js] Inode:: 114
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -113,29 +117,29 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"inode":6}
+  {"inode":23}
 /home/user/projects/myproject: *new*
-  {"inode":9}
+  {"inode":4}
 /home/user/projects/myproject/node_modules: *new*
-  {"inode":13}
+  {"inode":8}
 /home/user/projects/myproject/node_modules/a: *new*
-  {"inode":14}
+  {"inode":9}
 /home/user/projects/myproject/node_modules/reala: *new*
-  {"inode":14}
+  {"inode":9}
 /home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
-  {"inode":15}
-/home/user/projects/myproject/node_modules/reala/node_modules: *new*
-  {"inode":20}
-/home/user/projects/myproject/node_modules/realb: *new*
-  {"inode":16}
-/home/user/projects/myproject/node_modules/realb/node_modules: *new*
-  {"inode":22}
-/home/user/projects/myproject/src: *new*
   {"inode":10}
-/home/user/projects/myproject/src/file.ts: *new*
+/home/user/projects/myproject/node_modules/reala/node_modules: *new*
+  {"inode":15}
+/home/user/projects/myproject/node_modules/realb: *new*
   {"inode":11}
+/home/user/projects/myproject/node_modules/realb/node_modules: *new*
+  {"inode":17}
+/home/user/projects/myproject/src: *new*
+  {"inode":5}
+/home/user/projects/myproject/src/file.ts: *new*
+  {"inode":6}
 /home/user/projects/myproject/tsconfig.json: *new*
-  {"inode":12}
+  {"inode":7}
 
 Timeout callback:: count: 1
 1: timerToUpdateChildWatches *new*
@@ -197,31 +201,31 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
-  {"inode":6}
+  {"inode":23}
 /home/user/projects/myproject:
-  {"inode":9}
+  {"inode":4}
 /home/user/projects/myproject/node_modules:
-  {"inode":13}
+  {"inode":8}
 /home/user/projects/myproject/node_modules/a:
-  {"inode":14}
+  {"inode":9}
 /home/user/projects/myproject/node_modules/reala:
-  {"inode":14}
+  {"inode":9}
 /home/user/projects/myproject/node_modules/reala/node_modules:
-  {"inode":20}
+  {"inode":15}
 /home/user/projects/myproject/node_modules/realb:
-  {"inode":16}
-/home/user/projects/myproject/node_modules/realb/node_modules:
-  {"inode":22}
-/home/user/projects/myproject/src:
-  {"inode":10}
-/home/user/projects/myproject/src/file.ts:
   {"inode":11}
+/home/user/projects/myproject/node_modules/realb/node_modules:
+  {"inode":17}
+/home/user/projects/myproject/src:
+  {"inode":5}
+/home/user/projects/myproject/src/file.ts:
+  {"inode":6}
 /home/user/projects/myproject/tsconfig.json:
-  {"inode":12}
+  {"inode":7}
 
 FsWatches *deleted*::
 /home/user/projects/myproject/node_modules/reala/index.d.ts:
-  {"inode":15}
+  {"inode":10}
 
 Timeout callback:: count: 2
 1: timerToUpdateChildWatches *deleted*
@@ -317,7 +321,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/no
 sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 
 
-//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 24
+//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 114
 
 PolledWatches::
 /home/user/projects/myproject/node_modules/@types:
@@ -341,27 +345,27 @@ PolledWatches *deleted*::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
-  {"inode":6}
+  {"inode":23}
 /home/user/projects/myproject:
-  {"inode":9}
+  {"inode":4}
 /home/user/projects/myproject/node_modules:
-  {"inode":13}
+  {"inode":8}
 /home/user/projects/myproject/node_modules/a:
-  {"inode":14}
+  {"inode":9}
 /home/user/projects/myproject/node_modules/reala:
-  {"inode":14}
+  {"inode":9}
 /home/user/projects/myproject/node_modules/reala/node_modules:
-  {"inode":20}
+  {"inode":15}
 /home/user/projects/myproject/node_modules/realb:
-  {"inode":16}
-/home/user/projects/myproject/node_modules/realb/node_modules:
-  {"inode":22}
-/home/user/projects/myproject/src:
-  {"inode":10}
-/home/user/projects/myproject/src/file.ts:
   {"inode":11}
+/home/user/projects/myproject/node_modules/realb/node_modules:
+  {"inode":17}
+/home/user/projects/myproject/src:
+  {"inode":5}
+/home/user/projects/myproject/src/file.ts:
+  {"inode":6}
 /home/user/projects/myproject/tsconfig.json:
-  {"inode":12}
+  {"inode":7}
 
 Timeout callback:: count: 2
 7: timerToInvalidateFailedLookupResolutions *new*

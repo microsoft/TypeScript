@@ -1,6 +1,19 @@
 currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 6
+//// [/user/username/projects/project/commonFile1.ts] Inode:: 5
+let x = 1
+
+//// [/user/username/projects/project/commonFile2.ts] Inode:: 6
+let y = 1
+
+//// [/user/username/projects/project/tsconfig.json] Inode:: 7
+{
+  "watchOptions": {
+    "fallbackPolling": "PriorityInterval"
+  }
+}
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 13
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -14,19 +27,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/project/commonFile1.ts] Inode:: 11
-let x = 1
-
-//// [/user/username/projects/project/commonFile2.ts] Inode:: 12
-let y = 1
-
-//// [/user/username/projects/project/tsconfig.json] Inode:: 13
-{
-  "watchOptions": {
-    "fallbackPolling": "PriorityInterval"
-  }
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w
@@ -43,11 +43,11 @@ sysLog:: /home/src/tslibs/ts/lib/lib.d.ts:: Changing to watchFile
 sysLog:: /user/username/projects/project:: Changing to watchFile
 
 
-//// [/user/username/projects/project/commonFile1.js] Inode:: 14
+//// [/user/username/projects/project/commonFile1.js] Inode:: 104
 var x = 1;
 
 
-//// [/user/username/projects/project/commonFile2.js] Inode:: 15
+//// [/user/username/projects/project/commonFile2.js] Inode:: 105
 var y = 1;
 
 

@@ -49,7 +49,8 @@ export type { TheNum } from './const.cjs';
 }
 
 //// [/user/username/projects/myproject/node_modules/pkg2] symlink(/user/username/projects/myproject/packages/pkg2)
-//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts]
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -137,6 +138,8 @@ File '/package.json' does not exist according to earlier cached lookups.
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/ts/lib/lib.es2022.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.cjs]
 "use strict";

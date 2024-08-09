@@ -1,5 +1,15 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
+//// [/user/username/projects/myproject/main.ts]
+export const x = 10;
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "files": [
+    "main.ts"
+  ]
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,16 +24,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/main.ts]
-export const x = 10;
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "files": [
-    "main.ts"
-  ]
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w --extendedDiagnostics --watchFile useFsEventsOnParentDirectory

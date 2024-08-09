@@ -52,6 +52,7 @@ myFunc();
 }
 
 //// [C:/temp/test/node_modules/project1] symlink(c:/temp/test/project1)
+
 //// [C:/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}

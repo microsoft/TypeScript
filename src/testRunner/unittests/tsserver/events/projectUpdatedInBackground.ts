@@ -9,7 +9,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
     TestServerHost,
 } from "../../helpers/virtualFileSystemWithWatch.js";
 
@@ -32,7 +31,7 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                 path: "/users/username/projects/project/tsconfig.json",
                 content: `{}`,
             };
-            const host = createServerHost([commonFile1, libFile, configFile]);
+            const host = createServerHost([commonFile1, configFile]);
             const session = createSession(host);
             openFilesForSession([commonFile1], session);
 
@@ -63,7 +62,7 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                         content: "export let y = 1",
                     };
 
-                    const files = [f1, config, libFile];
+                    const files = [f1, config];
                     const host = createServerHost(files);
                     const session = createSession(host);
                     openFilesForSession([f1], session);
@@ -124,7 +123,7 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                     content: jsonToReadableText(configObj || { compilerOptions: {} }),
                 };
 
-                const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, libFile, configFile];
+                const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, configFile];
 
                 const filesToReload = firstReloadFileList?.map(fileName => ts.find(files, file => file.path === fileName)!) || files;
                 const host = createServerHost([filesToReload[0], configFile]);
@@ -309,7 +308,7 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                 };
                 const { host, session } = getInitialState({
                     getAdditionalFileOrFolder: () => [file1, file2],
-                    firstReloadFileList: [file1.path, libFile.path, file2.path, configFilePath],
+                    firstReloadFileList: [file1.path, file2.path, configFilePath],
                 });
 
                 host.writeFile(file2.path, file2.content + "export var t3 = 10;");
@@ -326,7 +325,7 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                 };
                 const { host, session } = getInitialState({
                     getAdditionalFileOrFolder: () => [referenceFile1],
-                    firstReloadFileList: [referenceFile1.path, libFile.path, moduleFile1Path, configFilePath],
+                    firstReloadFileList: [referenceFile1.path, moduleFile1Path, configFilePath],
                 });
 
                 host.deleteFile(moduleFile1Path);
@@ -343,7 +342,7 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                 };
                 const { host, moduleFile2, updateContentOfOpenFile, session } = getInitialState({
                     getAdditionalFileOrFolder: () => [referenceFile1],
-                    firstReloadFileList: [referenceFile1.path, libFile.path, configFilePath],
+                    firstReloadFileList: [referenceFile1.path, configFilePath],
                 });
 
                 updateContentOfOpenFile(referenceFile1, referenceFile1.content + "export var yy = Foo();");
@@ -377,7 +376,7 @@ describe("unittests:: tsserver:: events:: projectUpdatedInBackground::", () => {
                         content: jsonToReadableText({ compilerOptions: { typeRoots: [] } }),
                     };
 
-                    const host = createServerHost([file1, file3, libFile, configFile]);
+                    const host = createServerHost([file1, file3, configFile]);
                     const session = createSession(host);
                     openFilesForSession([file1], session);
 

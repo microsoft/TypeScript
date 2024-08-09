@@ -5,10 +5,7 @@ import {
     openFilesForSession,
     TestSession,
 } from "../helpers/tsserver.js";
-import {
-    createServerHost,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: reload::", () => {
     it("should work with temp file", () => {
@@ -57,7 +54,7 @@ describe("unittests:: tsserver:: reload::", () => {
             path: "/home/src/projects/project/app.tmp",
             content: "const y = 42",
         };
-        const host = createServerHost([f1, tmp, libFile]);
+        const host = createServerHost([f1, tmp]);
         const session = new TestSession(host);
         const openContent = "let z = 1";
         // send open request

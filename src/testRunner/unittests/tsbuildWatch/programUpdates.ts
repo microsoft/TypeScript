@@ -17,7 +17,6 @@ import {
 import {
     createWatchedSystem,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: programUpdates::", () => {
@@ -180,7 +179,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: programUpdates::", () => {
         commandLineArgs: ["-b", "-w", "sample1/logic"],
         sys: () =>
             createWatchedSystem({
-                [libFile.path]: libFile.content,
                 "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
                 }),
@@ -254,7 +252,7 @@ createSomeObject().message;`,
                     content: jsonToReadableText({ references: [{ path: "../Library" }] }),
                 };
 
-                const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
+                const files = [libraryTs, libraryTsconfig, appTs, appTsconfig];
                 return createWatchedSystem(files, { currentDirectory: `${"/user/username/projects"}/sample1` });
             },
             edits: [
@@ -380,7 +378,7 @@ createSomeObject().message;`,
                 commandLineArgs: ["-b", "-w", subProject],
                 sys: () =>
                     createWatchedSystem(
-                        [libFile, fileWithError, fileWithoutError, tsconfig],
+                        [fileWithError, fileWithoutError, tsconfig],
                         { currentDirectory: `${"/user/username/projects"}/${solution}` },
                     ),
                 edits: [
@@ -394,7 +392,7 @@ createSomeObject().message;`,
                 commandLineArgs: ["-b", "-w", subProject],
                 sys: () =>
                     createWatchedSystem(
-                        [libFile, fileWithError, fileWithoutError, tsconfig],
+                        [fileWithError, fileWithoutError, tsconfig],
                         { currentDirectory: `${"/user/username/projects"}/${solution}` },
                     ),
                 edits: [
@@ -415,7 +413,7 @@ createSomeObject().message;`,
                     commandLineArgs: ["-b", "-w", subProject],
                     sys: () =>
                         createWatchedSystem(
-                            [libFile, fileWithFixedError, fileWithoutError, tsconfig],
+                            [fileWithFixedError, fileWithoutError, tsconfig],
                             { currentDirectory: `${"/user/username/projects"}/${solution}` },
                         ),
                     edits: [
@@ -430,7 +428,7 @@ createSomeObject().message;`,
                     commandLineArgs: ["-b", "-w", subProject],
                     sys: () =>
                         createWatchedSystem(
-                            [libFile, fileWithFixedError, fileWithoutError, tsconfig],
+                            [fileWithFixedError, fileWithoutError, tsconfig],
                             { currentDirectory: `${"/user/username/projects"}/${solution}` },
                         ),
                     edits: [
@@ -481,7 +479,7 @@ createSomeObject().message;`,
                     },
                 }),
             };
-            return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
+            return createWatchedSystem([index, configFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         edits: [
             {
@@ -628,7 +626,6 @@ createSomeObject().message;`,
                 }),
             };
             return createWatchedSystem([
-                libFile,
                 alphaExtendedConfigFile,
                 project1Config,
                 commonFile1,
@@ -793,7 +790,6 @@ createSomeObject().message;`,
                 }),
             };
             return createWatchedSystem([
-                libFile,
                 configFile,
                 alphaExtendedConfigFile,
                 project1Config,
@@ -832,7 +828,6 @@ createSomeObject().message;`,
                 "/user/username/projects/project/main.ts": "export const x = 10;",
                 "/user/username/projects/project/tsconfig.json": "{}",
                 "/user/username/projects/project/tsconfig.tsbuildinfo": "Some random string",
-                [libFile.path]: libFile.content,
             }, { currentDirectory: "/user/username/projects/project" }),
         commandLineArgs: ["--b", "-i", "-w"],
     });

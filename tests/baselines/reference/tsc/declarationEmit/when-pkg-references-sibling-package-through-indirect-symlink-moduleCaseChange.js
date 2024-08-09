@@ -61,7 +61,9 @@ export const ADMIN = MetadataAccessor.create<boolean>('1');
 }
 
 //// [/user/username/projects/myProject/pkg2/node_modules/@raymondfeng/pkg1] symlink(/user/username/projects/myProject/pkg1)
+
 //// [/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2] symlink(/user/username/projects/myproject/pkg2)
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}

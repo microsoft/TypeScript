@@ -313,6 +313,21 @@ export const S99_0 = 0;
                     declare const exp: {} & { [K in Signals]: K };
                     export = exp;
 
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -577,14 +592,15 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/proj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/a_99.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/project/project/lib/foo/constants.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/project/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined Project: /home/src/project/project/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/ts/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/project/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/project/node_modules/@types 1 undefined Project: /home/src/project/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/project/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (102)
+Info seq  [hh:mm:ss:mss] 	Files (103)
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/project/project/index.ts SVC-1-0 ""
 	/home/src/project/project/lib/a_0.ts Text-1 "export const S0_0 = 0;"
 	/home/src/project/project/lib/a_1.ts Text-1 "export const S1_0 = 0;"
@@ -689,6 +705,8 @@ Info seq  [hh:mm:ss:mss] 	Files (102)
 	/home/src/project/project/lib/foo/constants.d.ts Text-1 "\n                    type Signals = \"SIGINT\" | \"SIGABRT\";\n                    declare const exp: {} & { [K in Signals]: K };\n                    export = exp;"
 
 
+	../../tslibs/ts/lib/lib.d.ts
+	  Default library for target 'es5'
 	index.ts
 	  Matched by default include pattern '**/*'
 	lib/a_0.ts
@@ -922,8 +940,8 @@ Info seq  [hh:mm:ss:mss] event:
             "tsSize": 2290,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 158,
+            "dts": 2,
+            "dtsSize": 571,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -955,57 +973,11 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/home/src/project/project/index.ts",
         "configFile": "/home/src/project/project/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "File '/home/src/tslibs/ts/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-            "code": 6053,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Array'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Boolean'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Function'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'IArguments'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Number'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'Object'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'RegExp'.",
-            "code": 2318,
-            "category": "error"
-          },
-          {
-            "text": "Cannot find global type 'String'.",
-            "code": 2318,
-            "category": "error"
-          }
-        ]
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (102)
+Info seq  [hh:mm:ss:mss] 	Files (103)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -1028,8 +1000,6 @@ PolledWatches::
 /home/src/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/project/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -1236,6 +1206,8 @@ FsWatches::
 /home/src/project/project/lib/foo/constants.d.ts: *new*
   {}
 /home/src/project/project/tsconfig.json: *new*
+  {}
+/home/src/tslibs/ts/lib/lib.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -1654,6 +1626,10 @@ ScriptInfos::
     containingProjects: 1
         /home/src/project/project/tsconfig.json
 /home/src/project/project/lib/foo/constants.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/project/project/tsconfig.json
+/home/src/tslibs/ts/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/project/project/tsconfig.json
@@ -2109,6 +2085,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/project/project/tsconfig.json
+/home/src/tslibs/ts/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/project/project/tsconfig.json
 
 Before request
 
@@ -2126,7 +2106,8 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/project/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/project/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (102)
+Info seq  [hh:mm:ss:mss] 	Files (103)
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/project/project/index.ts SVC-1-1 "s"
 	/home/src/project/project/lib/a_0.ts Text-1 "export const S0_0 = 0;"
 	/home/src/project/project/lib/a_1.ts Text-1 "export const S1_0 = 0;"
@@ -2330,6 +2311,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "class",
             "kind": "keyword",
             "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "console",
+            "kind": "const",
+            "kindModifiers": "declare",
             "sortText": "15"
           },
           {
@@ -5173,6 +5160,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/project/project/tsconfig.json
+/home/src/tslibs/ts/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/project/project/tsconfig.json
 
 Before request
 
@@ -5191,7 +5182,8 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/project/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/project/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/project/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (102)
+Info seq  [hh:mm:ss:mss] 	Files (103)
+	/home/src/tslibs/ts/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/project/project/index.ts SVC-1-2 "si"
 	/home/src/project/project/lib/a_0.ts Text-1 "export const S0_0 = 0;"
 	/home/src/project/project/lib/a_1.ts Text-1 "export const S1_0 = 0;"
@@ -5388,6 +5380,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "class",
             "kind": "keyword",
             "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "console",
+            "kind": "const",
+            "kindModifiers": "declare",
             "sortText": "15"
           },
           {

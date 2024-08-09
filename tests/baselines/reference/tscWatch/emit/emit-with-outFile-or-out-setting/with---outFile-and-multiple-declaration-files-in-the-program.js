@@ -12,6 +12,20 @@ namespace Main { export function fooBar() {} }
 //// [/home/src/projects/a/b/project/src/main2.ts]
 namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }
 
+//// [/home/src/projects/a/b/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "outFile": "../output/common.js",
+    "target": "es5"
+  },
+  "files": [
+    "/home/src/projects/a/b/output/AnotherDependency/file1.d.ts",
+    "/home/src/projects/a/b/dependencies/file2.d.ts",
+    "/home/src/projects/a/b/project/src/main.ts",
+    "/home/src/projects/a/b/project/src/main2.ts"
+  ]
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -26,20 +40,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/home/src/projects/a/b/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "outFile": "../output/common.js",
-    "target": "es5"
-  },
-  "files": [
-    "/home/src/projects/a/b/output/AnotherDependency/file1.d.ts",
-    "/home/src/projects/a/b/dependencies/file2.d.ts",
-    "/home/src/projects/a/b/project/src/main.ts",
-    "/home/src/projects/a/b/project/src/main2.ts"
-  ]
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js --w

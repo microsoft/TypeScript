@@ -10,10 +10,7 @@ import {
     verifyTscWatch,
 } from "./tscWatch.js";
 import { loadProjectFromFiles } from "./vfs.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "./virtualFileSystemWithWatch.js";
+import { createWatchedSystem } from "./virtualFileSystemWithWatch.js";
 
 function getFsContentsForNoEmitOnError(
     mainErrorContent: string,
@@ -40,7 +37,6 @@ function getFsContentsForNoEmitOnError(
             console.log("hi");
             export { }
         `,
-        [libFile.path]: libFile.content,
     };
 }
 
@@ -120,10 +116,7 @@ export function forEachNoEmitOnErrorScenarioTsc(commandLineArgs: string[]) {
                         fs: () =>
                             loadProjectFromFiles(
                                 fsContents(mainErrorContent),
-                                {
-                                    cwd: "/user/username/projects/noEmitOnError",
-                                    executingFilePath: libFile.path,
-                                },
+                                { currentDirectory: "/user/username/projects/noEmitOnError" },
                             ),
                         commandLineArgs,
                         edits: [

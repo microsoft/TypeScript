@@ -8,7 +8,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: navTo:: navigate-to for javascript project", () => {
@@ -21,7 +20,7 @@ describe("unittests:: tsserver:: navTo:: navigate-to for javascript project", ()
             path: "/home/src/projects/project/a/b/jsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([file1, configFile, libFile]);
+        const host = createServerHost([file1, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 
@@ -135,7 +134,7 @@ export const ghijkl = a.abcdef;`,
             path: "/home/src/projects/project/a/b/jsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([file1, configFile, libFile]);
+        const host = createServerHost([file1, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
 

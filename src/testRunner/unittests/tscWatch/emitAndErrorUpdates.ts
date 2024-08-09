@@ -7,7 +7,6 @@ import {
 import {
     createWatchedSystem,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error updates in builder after program changes", () => {
@@ -116,7 +115,7 @@ console.log(b.c.d);`,
         function verifyDeepImportChange(subScenario: string, bFile: File, cFile: File) {
             verifyEmitAndErrorUpdates({
                 subScenario: `deepImportChanges/${subScenario}`,
-                files: () => [aFile, bFile, cFile, config, libFile],
+                files: () => [aFile, bFile, cFile, config],
                 changes: [
                     {
                         caption: "Rename property d to d2 of class C to initialize signatures",
@@ -224,7 +223,7 @@ getPoint().c.x;`,
         };
         verifyEmitAndErrorUpdates({
             subScenario: "file not exporting a deep multilevel import that changes",
-            files: () => [aFile, bFile, cFile, dFile, eFile, config, libFile],
+            files: () => [aFile, bFile, cFile, dFile, eFile, config],
             changes: [
                 {
                     caption: "Rename property x2 to x of interface Coords to initialize signatures",
@@ -295,7 +294,7 @@ export class Data {
         function verifyTransitiveExports(subScenario: string, files: readonly File[]) {
             verifyEmitAndErrorUpdates({
                 subScenario: `transitive exports/${subScenario}`,
-                files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files, config, libFile],
+                files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files, config],
                 changes: [
                     {
                         caption: "Rename property title to title2 of interface ITest to initialize signatures",

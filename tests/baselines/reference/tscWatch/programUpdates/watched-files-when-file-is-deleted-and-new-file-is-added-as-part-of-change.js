@@ -3,6 +3,9 @@ Input::
 //// [/home/username/project/src/file1.ts]
 var a = 10;
 
+//// [/home/username/project/tsconfig.json]
+{}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -17,9 +20,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/home/username/project/tsconfig.json]
-{}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w -p /home/username/project/tsconfig.json

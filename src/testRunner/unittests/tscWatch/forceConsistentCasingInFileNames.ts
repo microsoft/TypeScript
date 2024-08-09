@@ -8,8 +8,6 @@ import {
 import {
     createWatchedSystem,
     File,
-    getTypeScriptLibTestLocation,
-    libFile,
     SymLink,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -36,7 +34,7 @@ describe("unittests:: tscWatch:: forceConsistentCasingInFileNames::", () => {
             commandLineArgs: ["--w", "--p", tsconfig.path],
             sys: () =>
                 createWatchedSystem(
-                    [loggerFile, anotherFile, tsconfig, libFile],
+                    [loggerFile, anotherFile, tsconfig],
                     { currentDirectory: "/user/username/projects/myproject" },
                 ),
             edits: changes,
@@ -87,7 +85,7 @@ describe("unittests:: tscWatch:: forceConsistentCasingInFileNames::", () => {
                 content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
             };
             return createWatchedSystem(
-                [moduleA, moduleB, moduleC, libFile, tsconfig],
+                [moduleA, moduleB, moduleC, tsconfig],
                 { currentDirectory: "/user/username/projects/myproject" },
             );
         },
@@ -111,7 +109,6 @@ describe("unittests:: tscWatch:: forceConsistentCasingInFileNames::", () => {
         commandLineArgs: ["--w", "--p", ".", "--explainFiles"],
         sys: () =>
             createWatchedSystem([
-                libFile,
                 {
                     path: `/user/username/projects/myproject/node_modules/react/Jsx-runtime/index.d.ts`,
                     content: `export namespace JSX {
@@ -172,7 +169,7 @@ a;b;
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
                 return createWatchedSystem(
-                    [moduleA, moduleB, libFile, tsconfig],
+                    [moduleA, moduleB, tsconfig],
                     {
                         windowsStyleRoot,
                         useCaseSensitiveFileNames: false,
@@ -229,7 +226,7 @@ a;b;
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true } }),
                 };
                 return createWatchedSystem(
-                    [moduleA, symlinkA, moduleB, libFile, tsconfig],
+                    [moduleA, symlinkA, moduleB, tsconfig],
                     { currentDirectory: "/user/username/projects/myproject" },
                 );
             },
@@ -286,7 +283,7 @@ a;b;
                     content: jsonToReadableText({ compilerOptions: { forceConsistentCasingInFileNames: true, outFile: "out.js", module: "system" } }),
                 };
                 return createWatchedSystem(
-                    [moduleA, symlinkA, moduleB, libFile, tsconfig],
+                    [moduleA, symlinkA, moduleB, tsconfig],
                     { currentDirectory: "/user/username/projects/myproject" },
                 );
             },
@@ -339,7 +336,6 @@ a;b;
                         traceResolution: true,
                     },
                 }),
-                [libFile.path]: libFile.content,
             }, { currentDirectory: "/Users/name/projects/web" }),
     });
 
@@ -371,7 +367,6 @@ a;b;
                         traceResolution: true,
                     },
                 }),
-                [getTypeScriptLibTestLocation("esnext.full")]: libFile.content,
             }, { currentDirectory: "/Users/name/projects/web" }),
     });
 
@@ -401,7 +396,6 @@ a;b;
                         traceResolution: true,
                     },
                 }),
-                [getTypeScriptLibTestLocation("es2021.full")]: libFile.content,
             }, { currentDirectory: "/Users/name/projects/lib-boilerplate" }),
     });
 

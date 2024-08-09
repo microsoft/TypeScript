@@ -4,6 +4,9 @@ Before request
 //// [/user/username/projects/myproject/app.ts]
 console.log('Hello world');
 
+//// [/user/username/projects/myproject/tsconfig.json]
+{}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -18,9 +21,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{}
 
 
 Info seq  [hh:mm:ss:mss] request:

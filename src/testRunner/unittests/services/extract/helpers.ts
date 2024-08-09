@@ -5,7 +5,6 @@ import * as ts from "../../../_namespaces/ts.js";
 import { customTypesMap } from "../../helpers/typingsInstaller.js";
 import {
     createServerHost,
-    libFile,
     TestServerHost,
 } from "../../helpers/virtualFileSystemWithWatch.js";
 
@@ -112,7 +111,7 @@ export const notImplementedHost: ts.LanguageServiceHost = {
     fileExists: ts.notImplemented,
 };
 
-export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: ts.DiagnosticMessage, includeLib?: boolean) {
+export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: ts.DiagnosticMessage) {
     const t = extractTest(text);
     const selectionRange = t.ranges.get("selection")!;
     if (!selectionRange) {
@@ -123,7 +122,7 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
 
     function runBaseline(extension: ts.Extension) {
         const path = "/a" + extension;
-        const { program } = makeProgram({ path, content: t.source }, includeLib);
+        const { program } = makeProgram({ path, content: t.source });
 
         if (hasSyntacticDiagnostics(program)) {
             // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -158,14 +157,14 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
             const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
             data.push(newTextWithRename);
 
-            const { program: diagProgram } = makeProgram({ path, content: newText }, includeLib);
+            const { program: diagProgram } = makeProgram({ path, content: newText });
             assert.isFalse(hasSyntacticDiagnostics(diagProgram));
         }
         Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
     }
 
-    function makeProgram(f: { path: string; content: string; }, includeLib?: boolean) {
-        const host = createServerHost(includeLib ? [f, libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
+    function makeProgram(f: { path: string; content: string; }) {
+        const host = createServerHost([f]); // libFile is expensive to parse repeatedly - only test when required
         const projectService = new TestProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
@@ -190,7 +189,7 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
             path: "/a.ts",
             content: t.source,
         };
-        const host = createServerHost([f, libFile]);
+        const host = createServerHost([f]);
         const projectService = new TestProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;

@@ -17,6 +17,9 @@ export const cc = 10;
 //// [/user/username/projects/myproject/node_modules/something/index.d.ts]
 export const something = 10;
 
+//// [/user/username/projects/myproject/tsconfig.json]
+{}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -31,9 +34,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{}
 
 //// [/user/username/projects/myproject/node_modules/@types/somemodule/index.d.ts]
 export const something = 10;

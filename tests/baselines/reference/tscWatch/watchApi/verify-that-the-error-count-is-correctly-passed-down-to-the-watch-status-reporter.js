@@ -1,5 +1,18 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
+//// [/user/username/projects/myproject/index.ts]
+let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  },
+  "files": [
+    "index.ts"
+  ]
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,19 +27,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/index.ts]
-let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "compilerOptions": {
-    "module": "commonjs"
-  },
-  "files": [
-    "index.ts"
-  ]
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json

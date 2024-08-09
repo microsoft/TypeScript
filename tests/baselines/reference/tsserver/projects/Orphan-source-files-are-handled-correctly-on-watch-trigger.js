@@ -7,6 +7,14 @@ export let x = 10;
 //// [/user/username/projects/myproject/src/file2.ts]
 export let y = 10;
 
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "files": [
+    "src/file1.ts",
+    "src/file2.ts"
+  ]
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -21,14 +29,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "files": [
-    "src/file1.ts",
-    "src/file2.ts"
-  ]
-}
 
 
 Info seq  [hh:mm:ss:mss] request:

@@ -10,7 +10,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 function verifyPathRecognizedAsDynamic(subscenario: string, path: string) {
@@ -21,7 +20,7 @@ function verifyPathRecognizedAsDynamic(subscenario: string, path: string) {
 /// <reference path="../../../../../../typings/@epic/Shell.d.ts" />
 var x = 10;`,
         };
-        const host = createServerHost([libFile]);
+        const host = createServerHost([]);
         const session = new TestSession(host);
         openFilesForSession([{ file, content: file.content }], session);
         baselineTsserverLogs("dynamicFiles", subscenario, session);
@@ -66,7 +65,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([config, libFile], { useCaseSensitiveFileNames: true });
+        const host = createServerHost([config], { useCaseSensitiveFileNames: true });
         const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
         openFilesForSession([{
             file: untitledFile,
@@ -99,7 +98,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([config, libFile], { useCaseSensitiveFileNames: true });
+        const host = createServerHost([config], { useCaseSensitiveFileNames: true });
         const session = new TestSession(host);
         try {
             openFilesForSession([{
@@ -146,7 +145,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             path: `/user/username/projects/myproject/file.ts`,
             content: "const y = 10",
         };
-        const host = createServerHost([config, file, libFile], { useCaseSensitiveFileNames: true });
+        const host = createServerHost([config, file], { useCaseSensitiveFileNames: true });
         const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
         openFilesForSession([{
             file: untitledFile,
@@ -163,7 +162,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
     });
 
     it("when changing scriptKind of the untitled files", () => {
-        const host = createServerHost([libFile], { useCaseSensitiveFileNames: true });
+        const host = createServerHost([], { useCaseSensitiveFileNames: true });
         const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
         openFilesForSession([{
             file: untitledFile,
@@ -198,7 +197,7 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
             path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
             content: "var x = 10;",
         };
-        const host = createServerHost([libFile], { useCaseSensitiveFileNames: true });
+        const host = createServerHost([], { useCaseSensitiveFileNames: true });
         const session = new TestSession(host);
         setCompilerOptionsForInferredProjectsRequestForSession({
             module: ts.server.protocol.ModuleKind.CommonJS,
@@ -231,7 +230,7 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
             content: "let y = 10;",
         };
         it("with useInferredProjectPerProjectRoot", () => {
-            const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
+            const host = createServerHost([configFile, configProjectFile], { useCaseSensitiveFileNames: true });
             const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
             openFilesForSession([{ file: file.path, projectRootPath: "/user/username/projects/myproject" }], session);
 
@@ -249,7 +248,7 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
         });
 
         it("fails when useInferredProjectPerProjectRoot is false", () => {
-            const host = createServerHost([libFile, configFile, configProjectFile], { useCaseSensitiveFileNames: true });
+            const host = createServerHost([configFile, configProjectFile], { useCaseSensitiveFileNames: true });
             const session = new TestSession(host);
             try {
                 openFilesForSession([{

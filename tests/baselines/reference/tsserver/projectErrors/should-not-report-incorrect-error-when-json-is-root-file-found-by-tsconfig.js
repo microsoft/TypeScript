@@ -9,6 +9,19 @@ console.log(blabla);
 //// [/user/username/projects/myproject/src/blabla.json]
 {}
 
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "composite": true,
+    "outDir": "dist"
+  },
+  "include": [
+    "./src/*.ts",
+    "./src/*.json"
+  ]
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -23,19 +36,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "compilerOptions": {
-    "resolveJsonModule": true,
-    "composite": true,
-    "outDir": "dist"
-  },
-  "include": [
-    "./src/*.ts",
-    "./src/*.json"
-  ]
-}
 
 
 Info seq  [hh:mm:ss:mss] request:

@@ -1,5 +1,5 @@
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -96,7 +96,7 @@ export const m = mod;
 
 
 Output::
-/home/src/tslibs/ts/lib/tsc --build logic2/tsconfig.json
+/lib/tsc --build logic2/tsconfig.json
 exitCode:: ExitStatus.InvalidProject_OutputsSkipped
 
 

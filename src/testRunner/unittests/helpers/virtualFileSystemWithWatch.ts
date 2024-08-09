@@ -50,6 +50,7 @@ import {
     server,
     SortedArray,
     sys,
+    targetToLibMap,
     toPath,
 } from "../../_namespaces/ts.js";
 import { typingsInstaller } from "../../_namespaces/ts.server.js";
@@ -141,15 +142,21 @@ export interface SymLink {
     symLink: string;
 }
 
+export interface LibFile {
+    path: string;
+    libFile: true;
+}
+
 export type FileOrFolderOrSymLink = File | Folder | SymLink;
+export type FileOrFolderOrSymLinkOrLibFile = FileOrFolderOrSymLink | LibFile;
 export interface FileOrFolderOrSymLinkMap {
     [path: string]: string | Omit<File, "path"> | Omit<SymLink, "path"> | undefined;
 }
-export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
-    return isString((fileOrFolderOrSymLink as File).content);
+export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLinkOrLibFile): fileOrFolderOrSymLink is File | LibFile {
+    return isString((fileOrFolderOrSymLink as File).content) || (fileOrFolderOrSymLink as LibFile).libFile;
 }
 
-export function isSymLink(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is SymLink {
+export function isSymLink(fileOrFolderOrSymLink: FileOrFolderOrSymLinkOrLibFile): fileOrFolderOrSymLink is SymLink {
     return isString((fileOrFolderOrSymLink as SymLink).symLink);
 }
 
@@ -164,6 +171,11 @@ interface FsFile extends FSEntryBase {
     fileSize?: number;
 }
 
+interface FsLibFile extends FSEntryBase {
+    content?: string;
+    libFile: true;
+}
+
 interface FsFolder extends FSEntryBase {
     entries: SortedArray<FSEntry>;
 }
@@ -172,14 +184,27 @@ interface FsSymLink extends FSEntryBase {
     symLink: string;
 }
 
-export type FSEntry = FsFile | FsFolder | FsSymLink;
+export type FSEntry = FsFile | FsFolder | FsSymLink | FsLibFile;
+export type FSFileOrLibFile = FsFile | FsLibFile;
 
 function isFsFolder(s: FSEntry | undefined): s is FsFolder {
     return !!s && isArray((s as FsFolder).entries);
 }
 
+function isFsFileOrFsLibFile(s: FSEntry | undefined) {
+    return isFsFile(s) || isFsLibFile(s);
+}
+
+function isFsLibFile(s: FSEntry | undefined): s is FsLibFile {
+    return !!s && (s as FsLibFile).libFile;
+}
+
 function isFsFile(s: FSEntry | undefined): s is FsFile {
     return !!s && isString((s as FsFile).content);
+}
+
+function getFsFileOrLibFileContent(entry: FSFileOrLibFile) {
+    return entry.content ?? (entry.content = libFile.content);
 }
 
 function isFsSymLink(s: FSEntry | undefined): s is FsSymLink {
@@ -461,6 +486,12 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.reloadFS(fileOrFolderorSymLinkList);
 
         // Ensure libs
+        this.ensureFileOrFolder({
+            path: combinePaths(getDirectoryPath(this.executingFilePath), "lib.d.ts"),
+            content: libFile.content,
+        });
+        targetToLibMap.forEach(libFile => this.ensureLib(libFile));
+        libMap.forEach(libFile => this.ensureLib(libFile));
 
         // Ensure global cache location has required data
         this.globalTypingsCacheLocation = this.getHostSpecificPath(typingsInstallerGlobalCacheLocation ?? typeScriptTypingInstallerCacheTest);
@@ -474,6 +505,13 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             // Typings registry
             this.ensureTypingRegistryFile();
         }
+    }
+
+    private ensureLib(path: string) {
+        this.ensureFileOrFolder({
+            path: combinePaths(getDirectoryPath(this.executingFilePath), path),
+            libFile: true,
+        });
     }
 
     ensureTypingRegistryFile() {
@@ -615,7 +653,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
         // Add updated folder with new folder name
         const newFullPath = getNormalizedAbsolutePath(newFileName, this.currentDirectory);
-        const newFile = this.toFsFile({ path: newFullPath, content: file.content });
+        const newFile = this.toFsFileOrLibFile({ path: newFullPath, content: file.content });
         const newPath = newFile.path;
         const basePath = getDirectoryPath(path);
         Debug.assert(basePath !== path);
@@ -666,9 +704,9 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         }
     }
 
-    ensureFileOrFolder(fileOrDirectoryOrSymLink: FileOrFolderOrSymLink, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean, ignoreParentWatch?: boolean, options?: Partial<WatchInvokeOptions>) {
+    ensureFileOrFolder(fileOrDirectoryOrSymLink: FileOrFolderOrSymLinkOrLibFile, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean, ignoreParentWatch?: boolean, options?: Partial<WatchInvokeOptions>) {
         if (isFile(fileOrDirectoryOrSymLink)) {
-            const file = this.toFsFile(fileOrDirectoryOrSymLink);
+            const file = this.toFsFileOrLibFile(fileOrDirectoryOrSymLink);
             // file may already exist when updating existing type declaration file
             if (!this.fs.get(file.path)) {
                 const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath), ignoreParentWatch, options);
@@ -710,7 +748,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return folder;
     }
 
-    private addFileOrFolderInFolder(folder: FsFolder, fileOrDirectory: FsFile | FsFolder | FsSymLink, ignoreWatch?: boolean, options?: Partial<WatchInvokeOptions>) {
+    private addFileOrFolderInFolder(folder: FsFolder, fileOrDirectory: FSEntry, ignoreWatch?: boolean, options?: Partial<WatchInvokeOptions>) {
         if (!this.fs.has(fileOrDirectory.path)) {
             insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
         }
@@ -734,7 +772,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.inodeWatching = inodeWatching;
     }
 
-    private removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRenaming?: boolean, options?: Partial<WatchInvokeOptions>) {
+    private removeFileOrFolder(fileOrDirectory: FSEntry, isRenaming?: boolean, options?: Partial<WatchInvokeOptions>) {
         const basePath = getDirectoryPath(fileOrDirectory.path);
         const baseFolder = this.fs.get(basePath) as FsFolder;
         if (basePath !== fileOrDirectory.path) {
@@ -753,7 +791,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     deleteFile(filePath: string) {
         const file = this.getRealFileOrFolder(filePath);
-        Debug.assert(isFsFile(file));
+        Debug.assert(isFsFileOrFsLibFile(file));
         this.removeFileOrFolder(file);
     }
 
@@ -869,10 +907,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         };
     }
 
-    private toFsFile(file: File): FsFile {
-        const fsFile = this.toFsEntry(file.path) as FsFile;
-        fsFile.content = file.content;
-        fsFile.fileSize = file.fileSize;
+    private toFsFileOrLibFile(file: File | LibFile): FsFile | FsLibFile {
+        const fsFile = this.toFsEntry(file.path) as FsFile & FsLibFile;
+        fsFile.content = (file as File).content;
+        fsFile.fileSize = (file as File).fileSize;
+        fsFile.libFile = (file as LibFile).libFile;
         return fsFile;
     }
 
@@ -914,8 +953,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return !!this.getRealFile(fsEntry.path, fsEntry);
     }
 
-    private getRealFile(path: Path, fsEntry?: FSEntry): FsFile | undefined {
-        return this.getRealFsEntry(isFsFile, path, fsEntry);
+    private getRealFile(path: Path, fsEntry?: FSEntry): FSFileOrLibFile | undefined {
+        return this.getRealFsEntry(isFsFileOrFsLibFile, path, fsEntry);
     }
 
     private isFsFolder(fsEntry: FSEntry) {
@@ -953,14 +992,14 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     readFile(s: string): string | undefined {
         const fsEntry = this.getRealFile(this.toFullPath(s));
-        return fsEntry ? fsEntry.content : undefined;
+        return fsEntry ? getFsFileOrLibFileContent(fsEntry) : undefined;
     }
 
     getFileSize(s: string) {
         const path = this.toFullPath(s);
         const entry = this.fs.get(path)!;
-        if (isFsFile(entry)) {
-            return entry.fileSize ? entry.fileSize : entry.content.length;
+        if (isFsFileOrFsLibFile(entry)) {
+            return (entry as FsFile).fileSize ? (entry as FsFile).fileSize! : getFsFileOrLibFileContent(entry).length;
         }
         return undefined!; // TODO: GH#18217
     }
@@ -1064,7 +1103,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 
     writeFile(path: string, content: string): void {
-        const file = this.toFsFile({ path, content });
+        const file = this.toFsFileOrLibFile({ path, content });
 
         // base folder has to be present
         const base = getDirectoryPath(file.path);
@@ -1199,19 +1238,24 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     }
 }
 
-function diffFsFile(baseline: string[], fsEntry: FsFile, newInode: number | undefined) {
-    baseline.push(`//// [${fsEntry.fullPath}]${inodeString(newInode)}\r\n${fsEntry.content}`, "");
+function diffFsFile(baseline: string[], fsEntry: FSFileOrLibFile, newInode: number | undefined) {
+    if (!isFsLibFile(fsEntry)) {
+        baseline.push(`//// [${fsEntry.fullPath}]${inodeString(newInode)}\r\n${fsEntry.content}`, "");
+    }
+    else if (fsEntry.content) {
+        baseline.push(`//// [${fsEntry.fullPath}] *Lib*${inodeString(newInode)}`, "");
+    }
 }
 function diffFsSymLink(baseline: string[], fsEntry: FsSymLink, newInode: number | undefined) {
-    baseline.push(`//// [${fsEntry.fullPath}] symlink(${fsEntry.symLink})${inodeString(newInode)}`);
+    baseline.push(`//// [${fsEntry.fullPath}] symlink(${fsEntry.symLink})${inodeString(newInode)}`, "");
 }
 function inodeString(inode: number | undefined) {
     return inode !== undefined ? ` Inode:: ${inode}` : "";
 }
 function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, newInode: number | undefined, writtenFiles: Map<string, any> | undefined): void {
     const file = newFsEntry && newFsEntry.fullPath;
-    if (isFsFile(oldFsEntry)) {
-        if (isFsFile(newFsEntry)) {
+    if (isFsFileOrFsLibFile(oldFsEntry)) {
+        if (isFsFileOrFsLibFile(newFsEntry)) {
             if (oldFsEntry.content !== newFsEntry.content) {
                 diffFsFile(baseline, newFsEntry, newInode);
             }
@@ -1253,12 +1297,12 @@ function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsE
         }
         else {
             baseline.push(`//// [${oldFsEntry.fullPath}] deleted symlink`);
-            if (isFsFile(newFsEntry)) {
+            if (isFsFileOrFsLibFile(newFsEntry)) {
                 diffFsFile(baseline, newFsEntry, newInode);
             }
         }
     }
-    else if (isFsFile(newFsEntry)) {
+    else if (isFsFileOrFsLibFile(newFsEntry)) {
         diffFsFile(baseline, newFsEntry, newInode);
     }
     else if (isFsSymLink(newFsEntry)) {

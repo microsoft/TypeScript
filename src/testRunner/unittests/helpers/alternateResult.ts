@@ -1,7 +1,6 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { FsContents } from "./contents.js";
-import { libFile } from "./virtualFileSystemWithWatch.js";
 
 export function getFsConentsForAlternateResultAtTypesPackageJson(packageName: string, addTypesCondition: boolean) {
     return jsonToReadableText({
@@ -81,6 +80,5 @@ export function getFsContentsForAlternateResult(): FsContents {
             },
             files: ["index.mts"],
         }),
-        [libFile.path]: libFile.content,
     };
 }

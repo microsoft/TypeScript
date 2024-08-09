@@ -38,7 +38,14 @@ import { bar } from "bar";
 bar();
 
 //// [/user/username/projects/myproject/foo/node_modules/bar] symlink(/user/username/projects/myproject/bar)
-//// [/home/src/tslibs/ts/lib/lib.es2017.d.ts]
+
+//// [/home/src/tslibs/ts/lib/lib.dom.d.ts]
+
+declare var console: {
+    log(...args: any[]): void;
+};
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -52,12 +59,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.dom.d.ts]
-
-declare var console: {
-    log(...args: any[]): void;
-};
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -210,6 +211,8 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/ts/lib/lib.es2017.d.ts] *Lib*
+
 
 PolledWatches::
 /user/username/projects/myproject/foo/node_modules/@types: *new*

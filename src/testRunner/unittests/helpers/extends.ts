@@ -4,7 +4,6 @@ import { FsContents } from "./contents.js";
 import {
     createServerHost,
     createWatchedSystem,
-    libFile,
     TestServerHost,
 } from "./virtualFileSystemWithWatch.js";
 
@@ -29,7 +28,6 @@ export function getSymlinkedExtendsSys(forTsserver?: true): TestServerHost {
         "/users/user/projects/myproject/node_modules/@something/tsconfig-node": {
             symLink: "/users/user/projects/myconfigs/node_modules/@something/tsconfig-node",
         },
-        [libFile.path]: libFile.content,
     }, { currentDirectory: "/users/user/projects/myproject" });
 }
 
@@ -82,7 +80,6 @@ export function getConfigDirExtendsSys(): FsContents {
         "/home/src/projects/myproject/root2/other/sometype2/index.d.ts": dedent`
             export const k = 10;
         `,
-        [libFile.path]: libFile.content,
     };
 }
 

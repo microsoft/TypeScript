@@ -132,7 +132,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                 scenario: "roots",
                 subScenario,
                 commandLineArgs: ["--b", "projects/server", "-v", "--traceResolution", "--explainFiles"],
-                fs: () => loadProjectFromFiles(getFsContents(), { cwd: "/home/src/workspaces" }),
+                fs: () => loadProjectFromFiles(getFsContents(), { currentDirectory: "/home/src/workspaces" }),
                 edits: [
                     noChangeRun,
                     {

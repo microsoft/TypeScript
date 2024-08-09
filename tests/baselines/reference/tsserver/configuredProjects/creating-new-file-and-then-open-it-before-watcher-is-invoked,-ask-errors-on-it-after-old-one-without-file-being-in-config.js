@@ -7,6 +7,16 @@ export function foo() { }
 //// [/user/username/projects/myproject/src/bar.ts]
 export function bar() { }
 
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "./src/sub"
+  ]
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -21,16 +31,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "include": [
-    "./src"
-  ],
-  "exclude": [
-    "./src/sub"
-  ]
-}
 
 
 Info seq  [hh:mm:ss:mss] request:

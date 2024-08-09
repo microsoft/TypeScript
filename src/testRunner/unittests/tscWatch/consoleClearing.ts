@@ -10,7 +10,6 @@ import {
 import {
     createWatchedSystem,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: consoleClearing::", () => {
@@ -31,7 +30,7 @@ describe("unittests:: tscWatch:: consoleClearing::", () => {
             scenario,
             subScenario,
             commandLineArgs: ["--w", file.path, ...commandLineOptions || ts.emptyArray],
-            sys: () => createWatchedSystem([file, libFile], { currentDirectory: ts.getDirectoryPath(file.path) }),
+            sys: () => createWatchedSystem([file], { currentDirectory: ts.getDirectoryPath(file.path) }),
             edits: makeChangeToFile,
         });
     }
@@ -77,7 +76,7 @@ describe("unittests:: tscWatch:: consoleClearing::", () => {
 
         function sys() {
             return createWatchedSystem(
-                [file, configFile, libFile],
+                [file, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFile.path) },
             );
         }

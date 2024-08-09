@@ -7,6 +7,7 @@ export const b = 2;
 
 
 //// [/user/username/projects/myproject/link.ts] symlink(/user/username/projects/myproject/Xy.ts)
+
 //// [/user/username/projects/myproject/b.ts]
 
 import { a } from "./xY";
@@ -14,6 +15,13 @@ import { b } from "./link";
 
 a;b;
 
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
 
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,13 +37,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "compilerOptions": {
-    "forceConsistentCasingInFileNames": true
-  }
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js --w --p . --explainFiles --extendedDiagnostics

@@ -16,7 +16,6 @@ import {
 import {
     createWatchedSystem,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tscWatch:: watchAPI:: tsc-watch with custom module resolution", () => {
@@ -38,7 +37,7 @@ describe("unittests:: tscWatch:: watchAPI:: tsc-watch with custom module resolut
             content: jsonToReadableText({ content: "Print this" }),
         };
         const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
-            [libFile, mainFile, config, settingsJson],
+            [mainFile, config, settingsJson],
             { currentDirectory: "/user/username/projects/myproject" },
         ));
         const host = createWatchCompilerHostOfConfigFileForBaseline({
@@ -79,7 +78,6 @@ describe("unittests:: tscWatch:: watchAPI:: tsc-watch with custom module resolut
                     }),
                     [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./other";`,
                     [`/user/username/projects/myproject/other.d.ts`]: "export function foo(): void;",
-                    [libFile.path]: libFile.content,
                 }, { currentDirectory: "/user/username/projects/myproject" }));
                 const host = createWatchCompilerHostOfConfigFileForBaseline({
                     configFileName: `/user/username/projects/myproject/tsconfig.json`,
@@ -140,7 +138,7 @@ describe("unittests:: tscWatch:: watchAPI:: tsc-watch expose error count to watc
             content: "let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}",
         };
         const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
-            [libFile, mainFile, config],
+            [mainFile, config],
             { currentDirectory: ts.getDirectoryPath(config.path) },
         ));
         const host = createWatchCompilerHostOfConfigFileForBaseline({
@@ -179,7 +177,7 @@ describe("unittests:: tscWatch:: watchAPI:: when watchHost does not implement se
             content: "const x = 10;",
         };
         const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
-            [config, mainFile, libFile],
+            [config, mainFile],
             { currentDirectory: ts.getDirectoryPath(config.path) },
         ));
         const host = createWatchCompilerHostOfConfigFileForBaseline({
@@ -225,7 +223,7 @@ describe("unittests:: tscWatch:: watchAPI:: when watchHost can add extraFileExte
         };
         const { sys, baseline, cb, getPrograms } = createBaseline(
             createWatchedSystem(
-                [config, mainFile, otherFile, libFile],
+                [config, mainFile, otherFile],
                 { currentDirectory: ts.getDirectoryPath(config.path) },
             ),
         );
@@ -270,7 +268,7 @@ describe("unittests:: tscWatch:: watchAPI:: when watchHost uses createSemanticDi
         };
         return {
             ...createBaseline(createWatchedSystem(
-                [config, mainFile, otherFile, libFile],
+                [config, mainFile, otherFile],
                 { currentDirectory: ts.getDirectoryPath(config.path) },
             )),
             config,
@@ -540,7 +538,7 @@ describe("unittests:: tscWatch:: watchAPI:: when getParsedCommandLine is impleme
             content: `class class2 {}`,
         };
         const system = createWatchedSystem(
-            [config1, class1, class1Dts, config2, class2, libFile],
+            [config1, class1, class1Dts, config2, class2],
             { currentDirectory: "/user/username/projects/myproject/projects" },
         );
         const baseline = createBaseline(system);
@@ -652,7 +650,6 @@ describe("unittests:: tscWatch:: watchAPI:: when builder emit occurs with emitOn
                 }),
                 [`/user/username/projects/myproject/a.ts`]: "export const x = 10;",
                 [`/user/username/projects/myproject/b.ts`]: "export const y: 10 = 20;",
-                [libFile.path]: libFile.content,
             }, { currentDirectory: "/user/username/projects/myproject" });
             const baseline = createBaseline(system);
             const compilerHost = createWatchCompilerHostOfConfigFileForBaseline({
@@ -757,7 +754,6 @@ describe("unittests:: tscWatch:: watchAPI:: when creating program with project r
             }),
             "/user/username/projects/project/lib/index.ts": "export const one = 1;",
             "/user/username/projects/project/lib/index.d.ts": "export const one = 1;",
-            [libFile.path]: libFile.content,
         }, { currentDirectory: "/user/username/projects/project" });
         const baseline = createBaseline(system);
         const commandLine = ts.getParsedCommandLineOfConfigFile(

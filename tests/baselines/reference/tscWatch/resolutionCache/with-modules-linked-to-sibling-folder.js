@@ -1,20 +1,5 @@
 currentDirectory:: /user/username/projects/myproject/main useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-interface ReadonlyArray<T> {}
-declare const console: { log(msg: any): void; };
-
 //// [/user/username/projects/myproject/main/index.ts]
 import { Foo } from '@scoped/linked-package'
 
@@ -32,6 +17,7 @@ import { Foo } from '@scoped/linked-package'
 }
 
 //// [/user/username/projects/myproject/main/node_modules/@scoped/linked-package] symlink(/user/username/projects/myproject/linked-package)
+
 //// [/user/username/projects/myproject/linked-package/package.json]
 {
   "name": "@scoped/linked-package",
@@ -45,6 +31,21 @@ export * from './other';
 
 //// [/user/username/projects/myproject/linked-package/dist/other.d.ts]
 export declare const Foo = "BAR";
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 /home/src/tslibs/ts/lib/tsc.js -w

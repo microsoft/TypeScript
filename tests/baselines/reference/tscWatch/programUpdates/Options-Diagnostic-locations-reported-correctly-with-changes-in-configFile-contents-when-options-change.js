@@ -3,6 +3,17 @@ Input::
 //// [/user/username/workspace/projects/project/app.ts]
 let x = 10
 
+//// [/user/username/workspace/projects/project/tsconfig.json]
+
+{
+    // comment
+    // More comment
+    "compilerOptions": {
+        "inlineSourceMap": true,
+        "mapRoot": "./"
+    }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -17,17 +28,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/workspace/projects/project/tsconfig.json]
-
-{
-    // comment
-    // More comment
-    "compilerOptions": {
-        "inlineSourceMap": true,
-        "mapRoot": "./"
-    }
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w

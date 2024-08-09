@@ -28,7 +28,7 @@ describe("unittests:: tsserver:: inferredProjects::", () => {
             path: `/user/username/projects/myproject/module.d.ts`,
             content: `export let x: number`,
         };
-        const host = createServerHost([appFile, moduleFile, libFile]);
+        const host = createServerHost([appFile, moduleFile]);
         const session = new TestSession(host);
         openFilesForSession([appFile], session);
         baselineTsserverLogs("inferredProjects", "create inferred project", session);
@@ -58,7 +58,7 @@ describe("unittests:: tsserver:: inferredProjects::", () => {
             content: "let x =1;",
         };
 
-        const host = createServerHost([file1, file2, file3, libFile]);
+        const host = createServerHost([file1, file2, file3]);
         const session = new TestSession({ host, useSingleInferredProject: true });
         openFilesForSession([file1, file2, file3], session);
 
@@ -240,7 +240,7 @@ describe("unittests:: tsserver:: inferredProjects::", () => {
             path: `/user/username/projects/myproject/jsFile2.js`,
             content: `const jsFile2 = 10;`,
         };
-        const host = createServerHost([appFile, libFile, config, jsFile1, jsFile2]);
+        const host = createServerHost([appFile, config, jsFile1, jsFile2]);
         const session = new TestSession(host);
 
         // Do not remove config project when opening jsFile that is not present as part of config project
@@ -278,7 +278,7 @@ describe("unittests:: tsserver:: inferredProjects::", () => {
             path: "/user/username/projects/project/commonFile1.ts",
             content: "let x = 1",
         };
-        const host = createServerHost([commonFile1, libFile]);
+        const host = createServerHost([commonFile1]);
         const session = new TestSession(host);
         setCompilerOptionsForInferredProjectsRequestForSession({
             allowJs: true,
@@ -309,7 +309,6 @@ describe("unittests:: tsserver:: inferredProjects::", () => {
             "/user/username/projects/myproject/node_modules/module3/index.d.ts": dedent`
                 export const a = 10;
             `,
-            [libFile.path]: libFile.content,
         });
         const session = new TestSession(host);
         openFilesForSession([{

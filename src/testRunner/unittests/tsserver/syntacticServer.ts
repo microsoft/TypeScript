@@ -10,7 +10,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: syntacticServer:: Semantic operations on Syntax server", () => {
@@ -39,7 +38,7 @@ import { something } from "something";
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
+        const host = createServerHost([file1, file2, file3, something, configFile]);
         const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
         return { host, session, file1, file2, file3, something, configFile };
     }
@@ -150,7 +149,7 @@ function fooB() { }`,
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
+        const host = createServerHost([file1, file2, file3, something, configFile]);
         const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
         const service = session.getProjectService();
         openFilesForSession([file1], session);

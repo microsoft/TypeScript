@@ -11,7 +11,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -69,7 +68,7 @@ fn5();
     const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
     const dtsMapLocation = `${dependecyDeclsLocation}/FnS.d.ts.map`;
 
-    const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
+    const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, randomFile, randomConfig];
 
     function changeDtsFile(session: TestSession, content?: string) {
         session.host.writeFile(

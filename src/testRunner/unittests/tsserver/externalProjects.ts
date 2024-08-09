@@ -15,7 +15,6 @@ import {
     createServerHost,
     File,
     getTypeScriptLibTestLocation,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: externalProjects::", () => {
@@ -191,7 +190,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             path: `/user/username/projects/myproject/^app.ts`,
             content: "const y = 10;",
         };
-        const host = createServerHost([file, app, libFile]);
+        const host = createServerHost([file, app]);
         const session = new TestSession(host);
         openExternalProjectsForSession([{
             projectFileName: `/user/username/projects/myproject/myproject.njsproj`,
@@ -306,7 +305,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             content: jsonToReadableText({ compilerOptions: {} }),
         };
         const projectFileName = "externalproject";
-        const host = createServerHost([file1, file2, libFile, configFile]);
+        const host = createServerHost([file1, file2, configFile]);
         const session = new TestSession(host);
 
         openFilesForSession([file1], session);
@@ -436,7 +435,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
                 content: "{}",
             };
             const projectFileName = "/user/someuser/projects/project/WebApplication6.csproj";
-            const host = createServerHost([libFile, site, configFile]);
+            const host = createServerHost([site, configFile]);
             const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -758,7 +757,7 @@ describe("unittests:: tsserver:: externalProjects::", () => {
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const files = [libFile, tsconfig];
+        const files = [tsconfig];
         const host = createServerHost(files);
         const session = new TestSession(host);
 

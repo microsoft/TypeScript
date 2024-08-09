@@ -12,8 +12,6 @@ import {
 import {
     createServerHost,
     createWatchedSystem,
-    getTypeScriptLibTestLocation,
-    libFile,
     osFlavorToString,
     TestServerHost,
     TestServerHostOsFlavor,
@@ -53,7 +51,6 @@ function getMonorepoSymlinkedSiblingPackagesSys(forTsserver: boolean, built: boo
             type MyBarType = BarType;
         `,
         "/home/src/projects/project/node_modules/package1": { symLink: "/home/src/projects/project/packages/package1" },
-        [getTypeScriptLibTestLocation("es2016.full")]: libFile.content,
     }, { currentDirectory: "/home/src/projects/project", osFlavor });
     if (built) buildMonorepoSymlinkedSiblingPackage1(sys);
     return sys;
@@ -192,7 +189,6 @@ function getMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(
             include: ["src/**/*.ts"],
         }),
         "/home/src/projects/b/2/b-impl/b/node_modules/a": { symLink: "/home/src/projects/a/1/a-impl/a" },
-        [libFile.path]: libFile.content,
     }, { currentDirectory: "/home/src/projects/b/2/b-impl/b", osFlavor });
     if (built) buildDependenciesOfMonorepoSymlinkedSiblingPackagesSysWithUnRelatedFolders(sys);
     return sys;

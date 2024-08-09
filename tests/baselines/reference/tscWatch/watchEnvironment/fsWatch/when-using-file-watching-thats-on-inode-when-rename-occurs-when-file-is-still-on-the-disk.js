@@ -1,6 +1,23 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 6
+//// [/user/username/projects/myproject/main.ts] Inode:: 5
+import { foo } from "./foo"; foo();
+
+//// [/user/username/projects/myproject/foo.ts] Inode:: 6
+export declare function foo(): string;
+
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 7
+{
+  "watchOptions": {
+    "watchFile": "useFsEvents"
+  },
+  "files": [
+    "foo.ts",
+    "main.ts"
+  ]
+}
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 13
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -14,23 +31,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/main.ts] Inode:: 11
-import { foo } from "./foo"; foo();
-
-//// [/user/username/projects/myproject/foo.ts] Inode:: 12
-export declare function foo(): string;
-
-//// [/user/username/projects/myproject/tsconfig.json] Inode:: 13
-{
-  "watchOptions": {
-    "watchFile": "useFsEvents"
-  },
-  "files": [
-    "foo.ts",
-    "main.ts"
-  ]
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w --extendedDiagnostics
@@ -54,12 +54,12 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-//// [/user/username/projects/myproject/foo.js] Inode:: 14
+//// [/user/username/projects/myproject/foo.js] Inode:: 104
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/user/username/projects/myproject/main.js] Inode:: 15
+//// [/user/username/projects/myproject/main.js] Inode:: 105
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("./foo");
@@ -75,13 +75,13 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"inode":6}
-/user/username/projects/myproject/foo.ts: *new*
-  {"inode":12}
-/user/username/projects/myproject/main.ts: *new*
-  {"inode":11}
-/user/username/projects/myproject/tsconfig.json: *new*
   {"inode":13}
+/user/username/projects/myproject/foo.ts: *new*
+  {"inode":6}
+/user/username/projects/myproject/main.ts: *new*
+  {"inode":5}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"inode":7}
 
 Program root files: [
   "/user/username/projects/myproject/foo.ts",
@@ -113,7 +113,7 @@ exitCode:: ExitStatus.undefined
 Change:: Introduce error such that when callback happens file is already appeared
 
 Input::
-//// [/user/username/projects/myproject/foo.ts] Inode:: 16
+//// [/user/username/projects/myproject/foo.ts] Inode:: 106
 export declare function foo2(): string;
 
 
@@ -132,17 +132,17 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
-  {"inode":6}
+  {"inode":13}
 /user/username/projects/myproject/foo.ts:
   {} *new*
 /user/username/projects/myproject/main.ts:
-  {"inode":11}
+  {"inode":5}
 /user/username/projects/myproject/tsconfig.json:
-  {"inode":13}
+  {"inode":7}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.ts:
-  {"inode":12}
+  {"inode":6}
 
 Timeout callback:: count: 1
 1: timerToUpdateProgram *new*
@@ -173,8 +173,8 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 14
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 15
+//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 104
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 105
 
 
 Program root files: [
@@ -205,7 +205,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that fixes error
 
 Input::
-//// [/user/username/projects/myproject/foo.ts] Inode:: 17
+//// [/user/username/projects/myproject/foo.ts] Inode:: 107
 export declare function foo(): string;
 
 
@@ -232,13 +232,13 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts:
-  {"inode":6}
-/user/username/projects/myproject/foo.ts:
-  {"inode":17} *new*
-/user/username/projects/myproject/main.ts:
-  {"inode":11}
-/user/username/projects/myproject/tsconfig.json:
   {"inode":13}
+/user/username/projects/myproject/foo.ts:
+  {"inode":107} *new*
+/user/username/projects/myproject/main.ts:
+  {"inode":5}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":7}
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.ts:
@@ -263,8 +263,8 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 14
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 15
+//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 104
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 105
 
 
 Program root files: [

@@ -27,7 +27,7 @@ export function thing(): void {}
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -72,6 +72,8 @@ index.ts
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts] *Lib*
 
 //// [/Users/name/projects/web/dist/index.js]
 import * as me from "@this/package";

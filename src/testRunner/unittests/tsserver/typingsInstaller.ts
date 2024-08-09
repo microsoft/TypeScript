@@ -25,7 +25,6 @@ import {
     changeToHostTrackingWrittenFiles,
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 import validatePackageName = ts.JsTyping.validatePackageName;
@@ -1249,7 +1248,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             package: "commander",
         };
         const host = createServerHost(
-            [file1, tsconfig, packageJson, file2, tsconfig2, packageJson2, libFile],
+            [file1, tsconfig, packageJson, file2, tsconfig2, packageJson2],
             { typingsInstallerTypesRegistry: ["jquery", "commander"] },
         );
         const session = new TestSession({
@@ -2471,7 +2470,7 @@ declare module "stream" {
         };
 
         const host = createServerHost(
-            [file, libFile],
+            [file],
             { typingsInstallerTypesRegistry: "node" },
         );
         const session = new TestSession({

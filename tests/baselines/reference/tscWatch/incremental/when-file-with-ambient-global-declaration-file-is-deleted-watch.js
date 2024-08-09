@@ -1,5 +1,18 @@
 currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
+//// [/users/username/projects/project/globals.d.ts]
+declare namespace Config { const value: string;} 
+
+//// [/users/username/projects/project/index.ts]
+console.log(Config.value);
+
+//// [/users/username/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "incremental": true
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,19 +27,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/users/username/projects/project/globals.d.ts]
-declare namespace Config { const value: string;} 
-
-//// [/users/username/projects/project/index.ts]
-console.log(Config.value);
-
-//// [/users/username/projects/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "incremental": true
-  }
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w

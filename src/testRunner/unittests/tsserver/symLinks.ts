@@ -14,7 +14,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
     SymLink,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
@@ -57,7 +56,7 @@ describe("unittests:: tsserver:: symLinks::", () => {
             content: `export const C = 8`,
         };
 
-        const files = [cFile, libFile, aFile, aTsconfig, aC, bFile, bTsconfig, bC];
+        const files = [cFile, aFile, aTsconfig, aC, bFile, bTsconfig, bC];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession(
@@ -142,7 +141,7 @@ new C();`,
 
         function verifyModuleResolution(withPathMapping: boolean) {
             describe(withPathMapping ? "when tsconfig file contains path mapping" : "when tsconfig does not contain path mapping", () => {
-                const filesWithSources = [libFile, recognizersDateTimeSrcFile, withPathMapping ? recognizerDateTimeTsconfigWithPathMapping : recognizerDateTimeTsconfigWithoutPathMapping, recognizerTextSrcFile, recongnizerTextPackageJson];
+                const filesWithSources = [recognizersDateTimeSrcFile, withPathMapping ? recognizerDateTimeTsconfigWithPathMapping : recognizerDateTimeTsconfigWithoutPathMapping, recognizerTextSrcFile, recongnizerTextPackageJson];
                 it("when project compiles from sources", () => {
                     const host = createServerHost(filesWithSources);
                     const session = createSessionAndOpenFile(host);

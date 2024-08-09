@@ -183,7 +183,7 @@ export function Component(x: Config): any;`,
                 path: `/user/username/projects/myproject/projects/project2/class2.ts`,
                 content: `class class2 {}`,
             };
-            const system = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
+            const system = createServerHost([config1, class1, class1Dts, config2, class2]);
             const result = ts.getParsedCommandLineOfConfigFile(`/user/username/projects/myproject/projects/project2/tsconfig.json`, /*optionsToExtend*/ undefined, {
                 useCaseSensitiveFileNames: true,
                 fileExists: path => system.fileExists(path),

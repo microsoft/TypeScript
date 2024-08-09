@@ -28,7 +28,7 @@ declare module "thing";
   "main": "index.js"
 }
 
-//// [/home/src/tslibs/ts/lib/lib.es2020.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -52,6 +52,8 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/ts/lib/lib.es2020.full.d.ts] *Lib*
 
 //// [/home/src/projects/dist/index.js]
 import * as Thing from "thing";

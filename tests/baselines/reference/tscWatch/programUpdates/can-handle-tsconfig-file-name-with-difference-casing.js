@@ -3,6 +3,13 @@ Input::
 //// [/user/username/workspace/projects/project/app.ts]
 let x = 1
 
+//// [/user/username/workspace/projects/project/tsconfig.json]
+{
+  "include": [
+    "app.ts"
+  ]
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -17,13 +24,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/workspace/projects/project/tsconfig.json]
-{
-  "include": [
-    "app.ts"
-  ]
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w -p /user/username/workspace/PROJECTS/PROJECT/tsconfig.json

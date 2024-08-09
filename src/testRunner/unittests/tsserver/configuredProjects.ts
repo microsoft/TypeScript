@@ -38,7 +38,7 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
             content: "let z = 1",
         };
 
-        const host = createServerHost([configFile, libFile, file1, file2, file3]);
+        const host = createServerHost([configFile, file1, file2, file3]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         baselineTsserverLogs("configuredProjects", "create configured project without file list", session);
@@ -65,7 +65,7 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
             content: "let z = 1",
         };
 
-        const host = createServerHost([configFile, libFile, file1, file2, file3]);
+        const host = createServerHost([configFile, file1, file2, file3]);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
         baselineTsserverLogs("configuredProjects", "create configured project with the file list", session);
@@ -85,7 +85,7 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
             content: "let y = 1",
         };
 
-        const host = createServerHost([libFile, commonFile1, commonFile2]);
+        const host = createServerHost([commonFile1, commonFile2]);
 
         const session = new TestSession(host);
         // 1: when both files are open
@@ -143,7 +143,7 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
                 content: "let y = 1",
             };
 
-            const host = createServerHost([libFile, commonFile1, commonFile2, configFile, parentOrSiblingConfigFile]);
+            const host = createServerHost([commonFile1, commonFile2, configFile, parentOrSiblingConfigFile]);
             const session = new TestSession(host);
             return { host, session, commonFile1, commonFile2, configFile };
         }
@@ -297,7 +297,7 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
             path: "/user/username/projects/project/commonFile2.ts",
             content: "let y = 1",
         };
-        const host = createServerHost([commonFile1, libFile, configFile]);
+        const host = createServerHost([commonFile1, configFile]);
         const session = new TestSession(host);
         openFilesForSession([commonFile1], session);
 
@@ -475,7 +475,7 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
             path: "/user/username/projects/project/commonFile2.ts",
             content: "let y = 1",
         };
-        const host = createServerHost([commonFile1, commonFile2, libFile, configFile]);
+        const host = createServerHost([commonFile1, commonFile2, configFile]);
         const session = new TestSession(host);
         openFilesForSession([commonFile1], session);
         baselineTsserverLogs("configuredProjects", "should tolerate config file errors and still try to build a project", session);
@@ -499,7 +499,7 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
                 files: ["main.ts", "main2.ts"],
             }),
         };
-        const host = createServerHost([file1, file2, configFile, libFile]);
+        const host = createServerHost([file1, file2, configFile]);
         const session = new TestSession({ host, useSingleInferredProject: true });
         openFilesForSession([file1], session);
         closeFilesForSession([file1], session);
@@ -521,7 +521,7 @@ describe("unittests:: tsserver:: configuredProjects::", () => {
                 files: ["main.ts"],
             }),
         };
-        const host = createServerHost([file1, configFile, libFile]);
+        const host = createServerHost([file1, configFile]);
         const session = new TestSession({ host, useSingleInferredProject: true });
         openFilesForSession([file1], session);
         closeFilesForSession([file1], session);
@@ -811,10 +811,6 @@ bar();`,
             symLink: `/user/username/projects/myproject/bar`,
         };
 
-        const lib2017: File = {
-            path: `${ts.getDirectoryPath(libFile.path)}/lib.es2017.d.ts`,
-            content: libFile.content,
-        };
         const libDom: File = {
             path: `${ts.getDirectoryPath(libFile.path)}/lib.dom.d.ts`,
             content: `
@@ -822,7 +818,7 @@ declare var console: {
     log(...args: any[]): void;
 };`,
         };
-        const host = createServerHost([barConfig, barIndex, fooConfig, fooIndex, barSymLink, lib2017, libDom]);
+        const host = createServerHost([barConfig, barIndex, fooConfig, fooIndex, barSymLink, libDom]);
         const session = new TestSession(host);
         openFilesForSession([fooIndex, barIndex], session);
         verifyGetErrRequest({ session, files: [barIndex, fooIndex] });
@@ -842,7 +838,7 @@ declare var console: {
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const host = createServerHost([file, app, tsconfig, libFile]);
+        const host = createServerHost([file, app, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         baselineTsserverLogs("configuredProjects", "when file name starts with caret", session);
@@ -871,7 +867,6 @@ declare var console: {
             const host = createServerHost([
                 foo,
                 bar,
-                libFile,
                 { path: `/user/username/projects/myproject/src/sub` },
                 withExclude ?
                     {
@@ -985,7 +980,7 @@ foo();`,
             path: `/user/username/projects/myproject/foo/index.ts`,
             content: `export function foo() {}`,
         };
-        const host = createServerHost([barConfig, barIndex, fooBarConfig, fooBarIndex, fooConfig, fooIndex, libFile]);
+        const host = createServerHost([barConfig, barIndex, fooBarConfig, fooBarIndex, fooConfig, fooIndex]);
         ensureErrorFreeBuild(host, [fooConfig.path]);
         const fooDts = `/user/username/projects/myproject/foo/lib/index.d.ts`;
         const session = new TestSession(host);
@@ -1174,7 +1169,7 @@ describe("unittests:: tsserver:: configuredProjects:: non-existing directories l
                 ],
             }),
         };
-        const host = createServerHost([f, config, libFile], { useCaseSensitiveFileNames: true });
+        const host = createServerHost([f, config], { useCaseSensitiveFileNames: true });
         const session = new TestSession(host);
         openFilesForSession([f], session);
 
@@ -1199,7 +1194,7 @@ describe("unittests:: tsserver:: configuredProjects:: non-existing directories l
             path: "/users/username/projects/project/tsconfig.json",
             content: jsonToReadableText({ files: [file1.path], compilerOptions: { module: "amd" } }),
         };
-        const files = [file1, file2a, configFile, libFile];
+        const files = [file1, file2a, configFile];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
@@ -1235,7 +1230,7 @@ describe("unittests:: tsserver:: configuredProjects:: non-existing directories l
             path: "/user/username/rootfolder/a/b/src/tsconfig.json",
             content: jsonToReadableText({ files: ["file1.ts"] }),
         };
-        const files = [file1, module1, module2, module3, configFile, libFile];
+        const files = [file1, module1, module2, module3, configFile];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([file1], session);
@@ -1254,7 +1249,7 @@ describe("unittests:: tsserver:: configuredProjects:: when reading tsconfig file
             content: "let t = 10;",
         };
 
-        const host = createServerHost([file1, libFile, configFile]);
+        const host = createServerHost([file1, configFile]);
         const session = new TestSession(host);
         const originalReadFile = host.readFile;
         host.readFile = f => {

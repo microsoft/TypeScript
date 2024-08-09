@@ -1,6 +1,15 @@
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
+//// [/user/username/projects/myproject/src/main.ts]
+import { foo } from "bar"; foo();
+
+//// [/user/username/projects/myproject/node_modules/bar/index.d.ts]
+export { foo } from "./foo";
+
+//// [/user/username/projects/myproject/node_modules/bar/foo.d.ts]
+export function foo(): string;
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -15,15 +24,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/src/main.ts]
-import { foo } from "bar"; foo();
-
-//// [/user/username/projects/myproject/node_modules/bar/index.d.ts]
-export { foo } from "./foo";
-
-//// [/user/username/projects/myproject/node_modules/bar/foo.d.ts]
-export function foo(): string;
 
 
 Info seq  [hh:mm:ss:mss] request:

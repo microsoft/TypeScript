@@ -1,6 +1,16 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 6
+//// [/user/username/projects/myproject/main.ts] Inode:: 5
+export const x = 10;
+
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 6
+{
+  "files": [
+    "main.ts"
+  ]
+}
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 12
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -14,16 +24,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/myproject/main.ts] Inode:: 11
-export const x = 10;
-
-//// [/user/username/projects/myproject/tsconfig.json] Inode:: 12
-{
-  "files": [
-    "main.ts"
-  ]
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w --extendedDiagnostics
@@ -46,7 +46,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-//// [/user/username/projects/myproject/main.js] Inode:: 13
+//// [/user/username/projects/myproject/main.js] Inode:: 103
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -62,11 +62,11 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"inode":6}
-/user/username/projects/myproject/main.ts: *new*
-  {"inode":11}
-/user/username/projects/myproject/tsconfig.json: *new*
   {"inode":12}
+/user/username/projects/myproject/main.ts: *new*
+  {"inode":5}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"inode":6}
 
 Program root files: [
   "/user/username/projects/myproject/main.ts"
@@ -105,7 +105,7 @@ exitCode:: ExitStatus.undefined
 Change:: modify file contents
 
 Input::
-//// [/user/username/projects/myproject/main.ts] Inode:: 11
+//// [/user/username/projects/myproject/main.ts] Inode:: 5
 export const x = 10;export const y = 10;
 
 
@@ -134,7 +134,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js] Inode:: 13
+//// [/user/username/projects/myproject/main.js] Inode:: 103
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = exports.x = void 0;

@@ -211,7 +211,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/username/project/src/b.ts 2:: WatchInfo: /home/username/project/src/b.ts 500 undefined WatchType: Closed Script info
 Before request
-//// [/home/username/project/src/c.ts] Inode:: 13
+//// [/home/username/project/src/c.ts] Inode:: 103
 export const b = 10;
 
 //// [/home/username/project/src/b.ts] deleted
@@ -483,7 +483,7 @@ FsWatches::
 /home/username/project/src:
   {"inode":4}
 /home/username/project/src/c.ts: *new*
-  {"inode":13}
+  {"inode":103}
 /home/username/project/tsconfig.json:
   {"inode":7}
 

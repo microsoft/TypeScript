@@ -1,6 +1,33 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 6
+//// [/user/username/projects/myproject/src/main.ts] Inode:: 6
+import { foo } from "bar"; foo();
+
+//// [/user/username/projects/myproject/node_modules/bar/index.d.ts] Inode:: 9
+export { foo } from "./foo";
+
+//// [/user/username/projects/myproject/node_modules/bar/foo.d.ts] Inode:: 10
+export function foo(): string;
+
+//// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] Inode:: 11
+export function fooBar(): string;
+
+//// [/user/username/projects/myproject/node_modules/bar/temp/index.d.ts] Inode:: 13
+export function temp(): string;
+
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 14
+{
+  "exclude": [
+    "node_modules"
+  ],
+  "watchOptions": {
+    "excludeDirectories": [
+      "**/temp"
+    ]
+  }
+}
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 20
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,33 +42,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/user/username/projects/myproject/src/main.ts] Inode:: 12
-import { foo } from "bar"; foo();
-
-//// [/user/username/projects/myproject/node_modules/bar/index.d.ts] Inode:: 15
-export { foo } from "./foo";
-
-//// [/user/username/projects/myproject/node_modules/bar/foo.d.ts] Inode:: 16
-export function foo(): string;
-
-//// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] Inode:: 17
-export function fooBar(): string;
-
-//// [/user/username/projects/myproject/node_modules/bar/temp/index.d.ts] Inode:: 19
-export function temp(): string;
-
-//// [/user/username/projects/myproject/tsconfig.json] Inode:: 20
-{
-  "exclude": [
-    "node_modules"
-  ],
-  "watchOptions": {
-    "excludeDirectories": [
-      "**/temp"
-    ]
-  }
-}
-
 
 /home/src/tslibs/ts/lib/tsc.js -w
 Output::
@@ -52,7 +52,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/src/main.js] Inode:: 21
+//// [/user/username/projects/myproject/src/main.js] Inode:: 111
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var bar_1 = require("bar");
@@ -76,23 +76,23 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"inode":6}
-/user/username/projects/myproject: *new*
-  {"inode":10}
-/user/username/projects/myproject/node_modules: *new*
-  {"inode":13}
-/user/username/projects/myproject/node_modules/bar: *new*
-  {"inode":14}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
-  {"inode":16}
-/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
-  {"inode":15}
-/user/username/projects/myproject/src: *new*
-  {"inode":11}
-/user/username/projects/myproject/src/main.ts: *new*
-  {"inode":12}
-/user/username/projects/myproject/tsconfig.json: *new*
   {"inode":20}
+/user/username/projects/myproject: *new*
+  {"inode":4}
+/user/username/projects/myproject/node_modules: *new*
+  {"inode":7}
+/user/username/projects/myproject/node_modules/bar: *new*
+  {"inode":8}
+/user/username/projects/myproject/node_modules/bar/foo.d.ts: *new*
+  {"inode":10}
+/user/username/projects/myproject/node_modules/bar/index.d.ts: *new*
+  {"inode":9}
+/user/username/projects/myproject/src: *new*
+  {"inode":5}
+/user/username/projects/myproject/src/main.ts: *new*
+  {"inode":6}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {"inode":14}
 
 Timeout callback:: count: 1
 1: timerToUpdateChildWatches *new*
@@ -140,7 +140,7 @@ exitCode:: ExitStatus.undefined
 Change:: add new folder to temp
 
 Input::
-//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 23
+//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 113
 export function temp(): string;
 
 

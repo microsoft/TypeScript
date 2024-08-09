@@ -1,6 +1,19 @@
 currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 6
+//// [/user/username/projects/project/commonFile1.ts] Inode:: 5
+let x = 1
+
+//// [/user/username/projects/project/commonFile2.ts] Inode:: 6
+let y = 1
+
+//// [/user/username/projects/project/tsconfig.json] Inode:: 7
+{
+  "watchOptions": {
+    "watchDirectory": "UseFsEvents"
+  }
+}
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 13
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,19 +28,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/user/username/projects/project/commonFile1.ts] Inode:: 11
-let x = 1
-
-//// [/user/username/projects/project/commonFile2.ts] Inode:: 12
-let y = 1
-
-//// [/user/username/projects/project/tsconfig.json] Inode:: 13
-{
-  "watchOptions": {
-    "watchDirectory": "UseFsEvents"
-  }
-}
-
 
 /home/src/tslibs/ts/lib/tsc.js -w
 Output::
@@ -38,11 +38,11 @@ Output::
 
 
 
-//// [/user/username/projects/project/commonFile1.js] Inode:: 14
+//// [/user/username/projects/project/commonFile1.js] Inode:: 104
 var x = 1;
 
 
-//// [/user/username/projects/project/commonFile2.js] Inode:: 15
+//// [/user/username/projects/project/commonFile2.js] Inode:: 105
 var y = 1;
 
 
@@ -55,15 +55,15 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"inode":6}
-/user/username/projects/project: *new*
-  {"inode":10}
-/user/username/projects/project/commonFile1.ts: *new*
-  {"inode":11}
-/user/username/projects/project/commonFile2.ts: *new*
-  {"inode":12}
-/user/username/projects/project/tsconfig.json: *new*
   {"inode":13}
+/user/username/projects/project: *new*
+  {"inode":4}
+/user/username/projects/project/commonFile1.ts: *new*
+  {"inode":5}
+/user/username/projects/project/commonFile2.ts: *new*
+  {"inode":6}
+/user/username/projects/project/tsconfig.json: *new*
+  {"inode":7}
 
 Program root files: [
   "/user/username/projects/project/commonFile1.ts",

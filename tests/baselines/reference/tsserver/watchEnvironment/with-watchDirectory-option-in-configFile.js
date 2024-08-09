@@ -1,7 +1,20 @@
 currentDirectory:: /home/src/vscode/projects/bin useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 6
+//// [/user/username/projects/project/commonFile2.ts] Inode:: 5
+let y = 1
+
+//// [/user/username/projects/project/tsconfig.json] Inode:: 6
+{
+  "watchOptions": {
+    "watchDirectory": "UseFsEvents"
+  }
+}
+
+//// [/user/username/projects/project/commonFile1.ts] Inode:: 7
+let x = 1
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts] Inode:: 13
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,19 +28,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/projects/project/commonFile2.ts] Inode:: 11
-let y = 1
-
-//// [/user/username/projects/project/tsconfig.json] Inode:: 12
-{
-  "watchOptions": {
-    "watchDirectory": "UseFsEvents"
-  }
-}
-
-//// [/user/username/projects/project/commonFile1.ts] Inode:: 13
-let x = 1
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -181,13 +181,13 @@ PolledWatches::
 
 FsWatches::
 /home/src/tslibs/ts/lib/lib.d.ts: *new*
-  {"inode":6}
+  {"inode":13}
 /user/username/projects/project: *new*
-  {"inode":10}
+  {"inode":4}
 /user/username/projects/project/commonFile2.ts: *new*
-  {"inode":11}
+  {"inode":5}
 /user/username/projects/project/tsconfig.json: *new*
-  {"inode":12}
+  {"inode":6}
 
 Projects::
 /user/username/projects/project/tsconfig.json (Configured) *new*

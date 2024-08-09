@@ -1,5 +1,15 @@
 currentDirectory:: /user/username/workspace/projects/project useCaseSensitiveFileNames: false
 Input::
+//// [/user/username/workspace/projects/project/a.ts]
+label: while (1) {}
+
+//// [/user/username/workspace/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "allowUnusedLabels": true
+  }
+}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,16 +24,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/user/username/workspace/projects/project/a.ts]
-label: while (1) {}
-
-//// [/user/username/workspace/projects/project/tsconfig.json]
-{
-  "compilerOptions": {
-    "allowUnusedLabels": true
-  }
-}
 
 
 /home/src/tslibs/ts/lib/tsc.js -w -p /user/username/workspace/projects/project/tsconfig.json

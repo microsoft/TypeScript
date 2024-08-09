@@ -26,7 +26,7 @@ import { thing } from 'lib-boilerplate'
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.es2021.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -79,6 +79,8 @@ test/basic.spec.ts
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/ts/lib/lib.es2021.full.d.ts] *Lib*
 
 //// [/Users/name/projects/lib-boilerplate/src/index.js]
 export function thing() { }

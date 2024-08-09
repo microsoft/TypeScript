@@ -54,6 +54,7 @@ import {foo} from "shared";
 foo
 
 //// [/user/username/projects/myproject/node_modules/shared] symlink(/user/username/projects/myproject/shared)
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}

@@ -1,5 +1,15 @@
 currentDirectory:: /home/src/projects/a/b useCaseSensitiveFileNames: false
 Input::
+//// [/home/src/projects/a/b/referenceFile1.ts]
+/// <reference path="./moduleFile1.ts" />
+export var x = Foo();
+
+//// [/home/src/projects/a/b/moduleFile1.ts]
+export function Foo() { };
+
+//// [/home/src/projects/a/b/tsconfig.json]
+{}
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -14,16 +24,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/home/src/projects/a/b/referenceFile1.ts]
-/// <reference path="./moduleFile1.ts" />
-export var x = Foo();
-
-//// [/home/src/projects/a/b/moduleFile1.ts]
-export function Foo() { };
-
-//// [/home/src/projects/a/b/tsconfig.json]
-{}
 
 
 /home/src/tslibs/ts/lib/tsc.js --w

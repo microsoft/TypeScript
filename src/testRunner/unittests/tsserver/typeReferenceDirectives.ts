@@ -7,7 +7,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: typeReferenceDirectives::", () => {
@@ -57,7 +56,7 @@ declare class TestLib {
             }),
         };
 
-        const files = [typeLib, appLib, testFile, testConfig, libFile];
+        const files = [typeLib, appLib, testFile, testConfig];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([testFile], session);
@@ -86,7 +85,7 @@ declare class TestLib {
             path: `/user/username/projects/myproject/typedefs/filesystem.d.ts`,
             content: `interface LocalFileSystem { someProperty: string; }`,
         };
-        const files = [file, tsconfig, filesystem, libFile];
+        const files = [file, tsconfig, filesystem];
         const host = createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([file], session);

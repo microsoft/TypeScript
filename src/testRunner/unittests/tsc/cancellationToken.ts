@@ -14,7 +14,6 @@ import {
 import {
     createWatchedSystem,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: builder cancellationToken::", () => {
@@ -54,7 +53,7 @@ describe("unittests:: tsc:: builder cancellationToken::", () => {
                 content: jsonToReadableText({ compilerOptions: { incremental: true, declaration: true } }),
             };
             const { sys, baseline } = createBaseline(createWatchedSystem(
-                [aFile, bFile, cFile, dFile, config, libFile],
+                [aFile, bFile, cFile, dFile, config],
                 { currentDirectory: "/user/username/projects/myproject" },
             ));
             sys.exit = exitCode => sys.exitCode = exitCode;

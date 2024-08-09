@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
 Input::
-//// [/home/src/tslibs/ts/lib/lib.d.ts]
+//// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -43,7 +43,7 @@ export { }
 
 
 Output::
-/home/src/tslibs/ts/lib/tsc 
+/lib/tsc 
 exitCode:: ExitStatus.Success
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -58,7 +58,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -94,7 +94,7 @@ Input::
 
 
 Output::
-/home/src/tslibs/ts/lib/tsc 
+/lib/tsc 
 exitCode:: ExitStatus.Success
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -109,7 +109,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -128,7 +128,7 @@ export const a = class { p = 10; };
 
 
 Output::
-/home/src/tslibs/ts/lib/tsc 
+/lib/tsc 
 exitCode:: ExitStatus.Success
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -143,7 +143,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -157,7 +157,7 @@ Input::
 
 
 Output::
-/home/src/tslibs/ts/lib/tsc 
+/lib/tsc 
 exitCode:: ExitStatus.Success
 Program root files: [
   "/user/username/projects/noEmitOnError/shared/types/db.ts",
@@ -172,7 +172,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/ts/lib/lib.d.ts
+/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts

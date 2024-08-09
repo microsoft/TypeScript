@@ -11,7 +11,7 @@ class D extends C { prop = 1; }
   }
 }
 
-//// [/home/src/tslibs/ts/lib/lib.es6.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -40,6 +40,8 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/ts/lib/lib.es6.d.ts] *Lib*
 
 //// [/user/username/projects/project/a.js]
 class C {

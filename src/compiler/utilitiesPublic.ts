@@ -303,28 +303,34 @@ export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics:
     return sortAndDeduplicate<T>(diagnostics, compareDiagnostics, diagnosticsEqualityComparer);
 }
 
+/** @internal */
+export const targetToLibMap = new Map<ScriptTarget, string>([
+    [ScriptTarget.ESNext, "lib.esnext.full.d.ts"],
+    [ScriptTarget.ES2023, "lib.es2023.full.d.ts"],
+    [ScriptTarget.ES2022, "lib.es2022.full.d.ts"],
+    [ScriptTarget.ES2021, "lib.es2021.full.d.ts"],
+    [ScriptTarget.ES2020, "lib.es2020.full.d.ts"],
+    [ScriptTarget.ES2019, "lib.es2019.full.d.ts"],
+    [ScriptTarget.ES2018, "lib.es2018.full.d.ts"],
+    [ScriptTarget.ES2017, "lib.es2017.full.d.ts"],
+    [ScriptTarget.ES2016, "lib.es2016.full.d.ts"],
+    [ScriptTarget.ES2015, "lib.es6.d.ts"], // We don't use lib.es2015.full.d.ts due to breaking change.
+]);
+
 export function getDefaultLibFileName(options: CompilerOptions): string {
-    switch (getEmitScriptTarget(options)) {
+    const target = getEmitScriptTarget(options);
+    switch (target) {
         case ScriptTarget.ESNext:
-            return "lib.esnext.full.d.ts";
         case ScriptTarget.ES2023:
-            return "lib.es2023.full.d.ts";
         case ScriptTarget.ES2022:
-            return "lib.es2022.full.d.ts";
         case ScriptTarget.ES2021:
-            return "lib.es2021.full.d.ts";
         case ScriptTarget.ES2020:
-            return "lib.es2020.full.d.ts";
         case ScriptTarget.ES2019:
-            return "lib.es2019.full.d.ts";
         case ScriptTarget.ES2018:
-            return "lib.es2018.full.d.ts";
         case ScriptTarget.ES2017:
-            return "lib.es2017.full.d.ts";
         case ScriptTarget.ES2016:
-            return "lib.es2016.full.d.ts";
         case ScriptTarget.ES2015:
-            return "lib.es6.d.ts"; // We don't use lib.es2015.full.d.ts due to breaking change.
+            return targetToLibMap.get(target)!;
         default:
             return "lib.d.ts";
     }

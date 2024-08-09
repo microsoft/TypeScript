@@ -15,7 +15,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
@@ -57,7 +56,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
         it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
-            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile]);
             const session = new TestSession(host);
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
@@ -104,7 +103,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
         it("should be up-to-date with the reference map changes", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
-            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile]);
             const session = new TestSession(host);
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
@@ -177,7 +176,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
         it("should be up-to-date with changes made in non-open files", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
-            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile]);
             const session = new TestSession(host);
 
             openFilesForSession([moduleFile1], session);
@@ -210,7 +209,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
         it("should be up-to-date with deleted files", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
-            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile]);
             const session = new TestSession(host);
 
             openFilesForSession([moduleFile1], session);
@@ -241,7 +240,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
         it("should be up-to-date with newly created files", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
-            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile]);
             const session = new TestSession(host);
 
             openFilesForSession([moduleFile1], session);
@@ -293,7 +292,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                     }`,
             };
 
-            const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, configFile]);
             const session = new TestSession(host);
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
@@ -340,7 +339,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
         it("should return all files if a global file changed shape", () => {
             const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
-            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile]);
             const session = new TestSession(host);
 
             openFilesForSession([globalFile3], session);
@@ -371,7 +370,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                 content: `{}`,
             };
 
-            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile]);
             const session = new TestSession(host);
             openFilesForSession([moduleFile1], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -393,7 +392,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                     }`,
             };
 
-            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile]);
             const session = new TestSession(host);
             openFilesForSession([moduleFile1], session);
             session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
@@ -419,7 +418,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                     }`,
             };
 
-            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile2, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile2, configFile]);
             const session = new TestSession(host);
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
@@ -442,7 +441,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                     }`,
             };
 
-            const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, configFile]);
             const session = new TestSession(host);
             openFilesForSession([moduleFile1], session);
 
@@ -477,7 +476,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                     }`,
             };
 
-            const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, configFile]);
             const session = new TestSession(host);
             openFilesForSession([moduleFile1], session);
 
@@ -505,7 +504,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                 path: "/home/src/workspace/projects/b/file1Consumer1Consumer1.ts",
                 content: `import {y} from "./file1Consumer1";`,
             };
-            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile, libFile]);
+            const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile]);
             const session = new TestSession(host);
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
@@ -774,7 +773,7 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
             path: "/home/src/workspace/projects/b/tsconfig.json",
             content: `{}`,
         };
-        const host = createServerHost([file1, file2, configFile, libFile], { newLine: "\r\n" });
+        const host = createServerHost([file1, file2, configFile], { newLine: "\r\n" });
         const session = new TestSession(host);
 
         openFilesForSession([file1, file2], session);
@@ -801,7 +800,7 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
             content: "console.log('file3');",
         };
         const projectFileName = "/home/src/workspace/projects/b/externalproject";
-        const host = createServerHost([file1, file2, file3, libFile]);
+        const host = createServerHost([file1, file2, file3]);
         const session = new TestSession(host);
         openExternalProjectForSession({
             rootFiles: toExternalFiles([file1.path, file2.path]),
@@ -828,7 +827,7 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
             content: "consonle.log('file1');",
         };
         const projectFileName = "/home/src/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj";
-        const host = createServerHost([file1, libFile]);
+        const host = createServerHost([file1]);
         const session = new TestSession(host);
         openExternalProjectForSession({
             rootFiles: toExternalFiles([file1.path]),
@@ -878,7 +877,7 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
                 path: `/user/username/projects/myproject/file2.ts`,
                 content: "const y = 2;",
             };
-            const host = createServerHost([file1, file2, config, libFile]);
+            const host = createServerHost([file1, file2, config]);
             const session = new TestSession(host);
             openFilesForSession([file1], session);
 
@@ -949,7 +948,7 @@ function bar() {
                 content: "export const xyz = 4;",
             };
             const files = [file1, file2, file3, ...(hasModule ? [module] : ts.emptyArray)];
-            const host = createServerHost([...files, config, libFile]);
+            const host = createServerHost([...files, config]);
             const session = new TestSession(host);
             openFilesForSession([file1, file2], session);
 
@@ -1049,7 +1048,7 @@ describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRe
                     compileOnSave: true,
                 }),
             };
-            const files = [libFile, core, app1, app2, app1Config, app2Config];
+            const files = [core, app1, app2, app1Config, app2Config];
             const host = createServerHost(files);
             const session = new TestSession(host);
             openFilesForSession([app1, app2, core], session);

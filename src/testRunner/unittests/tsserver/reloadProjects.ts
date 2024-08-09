@@ -10,7 +10,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -54,7 +53,7 @@ describe("unittests:: tsserver:: reloadProjects::", () => {
     }
 
     it("configured project", () => {
-        const host = createServerHost([configFile, libFile, file1, file2]);
+        const host = createServerHost([configFile, file1, file2]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -74,7 +73,7 @@ describe("unittests:: tsserver:: reloadProjects::", () => {
     });
 
     it("inferred project", () => {
-        const host = createServerHost([libFile, file1, file2]);
+        const host = createServerHost([file1, file2]);
         const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -100,7 +99,7 @@ describe("unittests:: tsserver:: reloadProjects::", () => {
     });
 
     it("external project", () => {
-        const host = createServerHost([libFile, file1, file2]);
+        const host = createServerHost([file1, file2]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -125,7 +124,7 @@ describe("unittests:: tsserver:: reloadProjects::", () => {
     });
 
     it("external project with config file", () => {
-        const host = createServerHost([libFile, file1, file2, configFile]);
+        const host = createServerHost([file1, file2, configFile]);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,

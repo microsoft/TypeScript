@@ -10,7 +10,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: documentRegistry:: document registry in project service", () => {
@@ -44,7 +43,7 @@ describe("unittests:: tsserver:: documentRegistry:: document registry in project
     }
 
     function createSessionAndHost() {
-        const host = createServerHost([file, moduleFile, libFile, configFile]);
+        const host = createServerHost([file, moduleFile, configFile]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
         checkProject(session, /*moduleIsOrphan*/ false);

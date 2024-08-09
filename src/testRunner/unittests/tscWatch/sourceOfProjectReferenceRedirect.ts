@@ -12,7 +12,6 @@ import {
     createWatchedSystem,
     File,
     FileOrFolderOrSymLink,
-    libFile,
     SymLink,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -94,7 +93,7 @@ describe("unittests:: tscWatch:: watchAPI:: with sourceOfProjectReferenceRedirec
                 const aConfig = config("A", extraOptions, ["../B"]);
                 const bConfig = config("B", extraOptions);
                 return {
-                    files: [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink],
+                    files: [bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink],
                     config: aConfig.path,
                     subScenario: `${subScenario}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`,
                 };

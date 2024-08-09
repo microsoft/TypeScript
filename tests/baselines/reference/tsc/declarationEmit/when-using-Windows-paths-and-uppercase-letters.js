@@ -96,31 +96,14 @@ declare const console: { log(msg: any): void; };
 
 D:\home\src\tslibs\ts\lib\tsc.js -p D:\Work\pkg1 --explainFiles
 Output::
-[91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
+[96msrc/utils/index.ts[0m:[93m8[0m:[93m12[0m - [91merror[0m[90m TS2352: [0mConversion of type 'typeof PartialClassType' to type 'MyReturnType' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Cannot assign an abstract constructor type to a non-abstract constructor type.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
+[7m8[0m     return PartialClassType as MyReturnType;
+[7m [0m [91m           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'Object'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'RegExp'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'String'.
-
-[91merror[0m[90m TS6053: [0mFile 'D:/home/src/tslibs/ts/lib/lib.es2017.full.d.ts' not found.
-  The file is in the program because:
-    Default library for target 'es2017'
-
-  [96mtsconfig.json[0m:[93m10[0m:[93m15[0m
-    [7m10[0m     "target": "es2017",
-    [7m  [0m [96m              ~~~~~~~~[0m
-    File is default library for target specified here.
-
+../../home/src/tslibs/ts/lib/lib.es2017.full.d.ts
+  Default library for target 'es2017'
 src/utils/type-helpers.ts
   Imported via './type-helpers' from file 'src/utils/index.ts'
   Matched by include pattern 'src' in 'tsconfig.json'
@@ -130,9 +113,11 @@ src/utils/index.ts
 src/main.ts
   Matched by include pattern 'src' in 'tsconfig.json'
 
-Found 9 errors.
+Found 1 error in src/utils/index.ts[90m:8[0m
 
 
+
+//// [D:/home/src/tslibs/ts/lib/lib.es2017.full.d.ts] *Lib*
 
 //// [D:/Work/pkg1/dist/utils/type-helpers.js.map]
 {"version":3,"file":"type-helpers.js","sourceRoot":"","sources":["../../src/utils/type-helpers.ts"],"names":[],"mappings":""}
@@ -227,6 +212,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
+D:/home/src/tslibs/ts/lib/lib.es2017.full.d.ts
 D:/Work/pkg1/src/utils/type-helpers.ts
 D:/Work/pkg1/src/utils/index.ts
 D:/Work/pkg1/src/main.ts

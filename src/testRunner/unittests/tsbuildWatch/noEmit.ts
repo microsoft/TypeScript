@@ -1,10 +1,7 @@
 import { jsonToReadableText } from "../helpers.js";
 import { forEachNoEmitTscWatch } from "../helpers/noEmit.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmit::", () => {
     function verify(outFile?: object) {
@@ -14,7 +11,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit::", () => {
             commandLineArgs: ["-b", "-w", "-verbose"],
             sys: () =>
                 createWatchedSystem({
-                    [libFile.path]: libFile.content,
                     "/user/username/projects/myproject/a.js": "",
                     "/user/username/projects/myproject/b.ts": "",
                     "/user/username/projects/myproject/tsconfig.json": jsonToReadableText({

@@ -7,7 +7,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: configFileSearch:: searching for config file", () => {
@@ -44,7 +43,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             path: "/a/b/projects/tsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, libFile, configFile, configFile2]);
+        const host = createServerHost([f1, configFile, configFile2]);
         const session = new TestSession(host);
         openFilesForSession([{ file: f1, projectRootPath }], session);
 
@@ -69,7 +68,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
             path: "/a/b/projects/tsconfig.json",
             content: "{}",
         };
-        const host = createServerHost([f1, libFile, configFile, configFile2]);
+        const host = createServerHost([f1, configFile, configFile2]);
         const session = new TestSession({
             host,
             useSingleInferredProject: true,
@@ -101,7 +100,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         }
 
         it("tsconfig for the file exists", () => {
-            const { host, session } = openClientFile([file, libFile, tsconfig]);
+            const { host, session } = openClientFile([file, tsconfig]);
 
             host.deleteFile(tsconfig.path);
             host.runQueuedTimeoutCallbacks();
@@ -113,7 +112,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         });
 
         it("tsconfig for the file does not exist", () => {
-            const { host, session } = openClientFile([file, libFile]);
+            const { host, session } = openClientFile([file]);
 
             host.writeFile(tsconfig.path, tsconfig.content);
             host.runQueuedTimeoutCallbacks();
@@ -129,7 +128,7 @@ describe("unittests:: tsserver:: configFileSearch:: searching for config file", 
         function verifyConfigFileWatch(scenario: string, projectRootPath: string | undefined) {
             it(scenario, () => {
                 const path = `/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js`;
-                const host = createServerHost([libFile, { path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
+                const host = createServerHost([{ path, content: "const x = 10" }], { useCaseSensitiveFileNames: true });
                 const session = new TestSession(host);
                 openFilesForSession([{ file: path, projectRootPath }], session);
                 baselineTsserverLogs("configFileSearch", scenario, session);

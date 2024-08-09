@@ -17,21 +17,21 @@ describe("unittests:: tsc:: extends::", () => {
     verifyTsc({
         scenario: "extends",
         subScenario: "configDir template",
-        fs: () => loadProjectFromFiles(getConfigDirExtendsSys(), { cwd: "/home/src/projects/myproject" }),
+        fs: () => loadProjectFromFiles(getConfigDirExtendsSys(), { currentDirectory: "/home/src/projects/myproject" }),
         commandLineArgs: ["-p", "/home/src/projects/myproject", "--explainFiles"],
     });
 
     verifyTsc({
         scenario: "extends",
         subScenario: "configDir template showConfig",
-        fs: () => loadProjectFromFiles(getConfigDirExtendsSys(), { cwd: "/home/src/projects/myproject" }),
+        fs: () => loadProjectFromFiles(getConfigDirExtendsSys(), { currentDirectory: "/home/src/projects/myproject" }),
         commandLineArgs: ["-p", "/home/src/projects/myproject", "--showConfig"],
     });
 
     verifyTsc({
         scenario: "extends",
         subScenario: "configDir template with commandline",
-        fs: () => loadProjectFromFiles(getConfigDirExtendsSys(), { cwd: "/home/src/projects/myproject" }),
+        fs: () => loadProjectFromFiles(getConfigDirExtendsSys(), { currentDirectory: "/home/src/projects/myproject" }),
         commandLineArgs: ["-p", "/home/src/projects/myproject", "--explainFiles", "--outDir", "${configDir}/outDir"], // eslint-disable-line no-template-curly-in-string
     });
 });

@@ -18,8 +18,6 @@ import {
 import {
     createServerHost,
     File,
-    getTypeScriptLibTestLocation,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: moduleResolution::", () => {
@@ -59,7 +57,6 @@ describe("unittests:: tsserver:: moduleResolution::", () => {
                 fileA,
                 fileB,
                 packageFile,
-                { ...libFile, path: getTypeScriptLibTestLocation("es2016.full") },
             ]);
             const session = new TestSession(host);
             openFilesForSession([fileA], session);
@@ -230,7 +227,6 @@ describe("unittests:: tsserver:: moduleResolution::", () => {
                 "/home/src/projects/project/packages/package-b/src/index.ts": indexContent,
                 "/home/src/projects/project/node_modules/package-a": { symLink: "/home/src/projects/project/packages/package-a" },
                 "/home/src/projects/project/node_modules/package-b": { symLink: "/home/src/projects/project/packages/package-b" },
-                [getTypeScriptLibTestLocation("es2021")]: libFile.content,
             });
             if (built) {
                 solutionBuildWithBaseline(host, ["/home/src/projects/project/packages/package-b"]);

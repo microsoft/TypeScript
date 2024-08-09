@@ -4,10 +4,7 @@ import {
     openFilesForSession,
     TestSession,
 } from "../../helpers/tsserver.js";
-import {
-    createServerHost,
-    libFile,
-} from "../../helpers/virtualFileSystemWithWatch.js";
+import { createServerHost } from "../../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: events:: watchEvents::", () => {
     function verifyCanUseWatchEvents(
@@ -23,7 +20,6 @@ describe("unittests:: tsserver:: events:: watchEvents::", () => {
                 [`${projectPath}${directorySeparator}b.ts`]: `export class b { prop = "hello"; foo() { return this.prop; } }`,
                 [`${projectPath}${directorySeparator}m.ts`]: `import { x } from "something"`,
                 [`${projectPath}${directorySeparator}node_modules${directorySeparator}something${directorySeparator}index.d.ts`]: `export const x = 10;`,
-                [libFile.path]: libFile.content,
             }, { windowsStyleRoot });
             const session = new TestSession({ host, canUseWatchEvents: true, canUseEvents });
             if (!canUseEvents) session.logger.msg = (s, type) => session.logger.info(`${type}:: ${s}`);

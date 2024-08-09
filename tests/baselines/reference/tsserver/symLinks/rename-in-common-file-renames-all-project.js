@@ -4,6 +4,30 @@ Before request
 //// [/users/username/projects/c/fc.ts]
 export const C = 8
 
+//// [/users/username/projects/a/a.ts]
+import {C} from "./c/fc"; console.log(C)
+
+//// [/users/username/projects/a/tsconfig.json]
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
+
+//// [/users/username/projects/a/c] symlink(/users/username/projects/c)
+
+//// [/users/username/projects/b/b.ts]
+import {C} from "./c/fc"; console.log(C)
+
+//// [/users/username/projects/b/tsconfig.json]
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
+
+//// [/users/username/projects/b/c] symlink(/users/username/projects/c)
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -19,28 +43,6 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/users/username/projects/a/a.ts]
-import {C} from "./c/fc"; console.log(C)
-
-//// [/users/username/projects/a/tsconfig.json]
-{
-  "compilerOptions": {
-    "module": "commonjs"
-  }
-}
-
-//// [/users/username/projects/a/c] symlink(/users/username/projects/c)
-//// [/users/username/projects/b/b.ts]
-import {C} from "./c/fc"; console.log(C)
-
-//// [/users/username/projects/b/tsconfig.json]
-{
-  "compilerOptions": {
-    "module": "commonjs"
-  }
-}
-
-//// [/users/username/projects/b/c] symlink(/users/username/projects/c)
 
 Info seq  [hh:mm:ss:mss] request:
     {

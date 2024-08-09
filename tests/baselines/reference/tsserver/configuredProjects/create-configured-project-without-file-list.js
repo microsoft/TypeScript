@@ -9,6 +9,15 @@ Before request
   ]
 }
 
+//// [/home/src/project/project/a/b/c/f1.ts]
+let x = 1
+
+//// [/home/src/project/project/a/b/d/f2.ts]
+let y = 1
+
+//// [/home/src/project/project/a/b/e/f3.ts]
+let z = 1
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -23,15 +32,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/home/src/project/project/a/b/c/f1.ts]
-let x = 1
-
-//// [/home/src/project/project/a/b/d/f2.ts]
-let y = 1
-
-//// [/home/src/project/project/a/b/e/f3.ts]
-let z = 1
 
 
 Info seq  [hh:mm:ss:mss] request:

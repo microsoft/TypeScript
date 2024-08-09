@@ -21,7 +21,6 @@ import {
     createServerHost,
     File,
     FileOrFolderOrSymLink,
-    libFile,
     SerializeOutputOrder,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
@@ -553,7 +552,7 @@ function filePath(file: string | File) {
 
 function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, getErrRequest }: VerifyGetErrScenario) {
     it("verifies the errors in open file", () => {
-        const host = createServerHost([...allFiles(), libFile]);
+        const host = createServerHost(allFiles());
         const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
 
@@ -564,7 +563,7 @@ function verifyErrorsUsingGeterr({ scenario, subScenario, allFiles, openFiles, g
 
 function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario) {
     it("verifies the errors in projects", () => {
-        const host = createServerHost([...allFiles(), libFile]);
+        const host = createServerHost(allFiles());
         const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
 
@@ -581,7 +580,7 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
 
 function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario) {
     it("verifies the errors using sync commands", () => {
-        const host = createServerHost([...allFiles(), libFile]);
+        const host = createServerHost(allFiles());
         const session = new TestSession(host);
         openFilesForSession(openFiles(), session);
         for (const { file, project } of syncDiagnostics()) {

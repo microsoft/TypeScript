@@ -13,7 +13,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 const packageJson: File = {
@@ -270,7 +269,7 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
     };
 
     function verifyReferences(includesLib: boolean) {
-        const files = [libTsconfig, libIndex, appTsconfig, appIndex, libFile];
+        const files = [libTsconfig, libIndex, appTsconfig, appIndex];
         if (includesLib) {
             files.push({
                 path: "/home/src/projects/project/packages/app/other.ts",

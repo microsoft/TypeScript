@@ -33,6 +33,9 @@ export const foo = 0;
 //// [/home/src/projects/project/packages/app/index.ts]
 foo
 
+//// [/home/src/projects/project/packages/app/other.ts]
+import { foo } from "../lib";
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -47,9 +50,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/home/src/projects/project/packages/app/other.ts]
-import { foo } from "../lib";
 
 
 Info seq  [hh:mm:ss:mss] request:

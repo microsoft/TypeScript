@@ -98,8 +98,10 @@ console.log(FOO);
 
 
 //// [/home/src/projects/project/node_modules/package-a] symlink(/home/src/projects/project/packages/package-a)
+
 //// [/home/src/projects/project/node_modules/package-b] symlink(/home/src/projects/project/packages/package-b)
-//// [/home/src/tslibs/ts/lib/lib.es2021.d.ts]
+
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -113,6 +115,8 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
+
+//// [/home/src/tslibs/ts/lib/lib.es2021.d.ts] *Lib*
 
 //// [/home/src/projects/project/packages/package-a/build/subfolder/index.js]
 export const FOO = "bar";

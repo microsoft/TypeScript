@@ -7,7 +7,6 @@ import {
 import {
     createWatchedSystem,
     File,
-    libFile,
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -23,7 +22,6 @@ describe("unittests:: tscWatch:: emit:: with outFile or out setting", () => {
                     "/home/src/projects/a/a.ts": "let x = 1",
                     "/home/src/projects/a/b.ts": "let y = 1",
                     "/home/src/projects/a/tsconfig.json": jsonToReadableText({ compilerOptions: { out, outFile } }),
-                    [libFile.path]: libFile.content,
                 }, { currentDirectory: "/home/src/projects/a" }),
             edits: [
                 {
@@ -75,7 +73,7 @@ describe("unittests:: tscWatch:: emit:: with outFile or out setting", () => {
                     }),
                 };
                 return createWatchedSystem(
-                    [file1, file2, file3, file4, libFile, configFile],
+                    [file1, file2, file3, file4, configFile],
                     { currentDirectory: "/home/src/projects/a/b/project" },
                 );
             },
@@ -143,7 +141,7 @@ describe("unittests:: tscWatch:: emit:: for configured projects", () => {
                     content: jsonToReadableText(configObj || {}),
                 };
                 const additionalFiles = getAdditionalFileOrFolder?.() || ts.emptyArray;
-                const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];
+                const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, ...additionalFiles];
                 return createWatchedSystem(
                     firstReloadFileList ?
                         ts.map(firstReloadFileList, fileName => ts.find(files, file => file.path === fileName)!) :
@@ -314,7 +312,7 @@ export var t1 = 10;`,
 export var t2 = 10;`,
             },
         ],
-        firstReloadFileList: [libFile.path, "/home/src/projects/a/b/file1.ts", "/home/src/projects/a/b/file2.ts", configFilePath],
+        firstReloadFileList: ["/home/src/projects/a/b/file1.ts", "/home/src/projects/a/b/file2.ts", configFilePath],
         changes: [
             {
                 caption: "change file1",
@@ -331,7 +329,7 @@ export var t2 = 10;`,
             content: `/// <reference path="./moduleFile1.ts" />
 export var x = Foo();`,
         }],
-        firstReloadFileList: [libFile.path, "/home/src/projects/a/b/referenceFile1.ts", moduleFile1Path, configFilePath],
+        firstReloadFileList: ["/home/src/projects/a/b/referenceFile1.ts", moduleFile1Path, configFilePath],
         changes: [
             {
                 caption: "delete moduleFile1",
@@ -348,7 +346,7 @@ export var x = Foo();`,
             content: `/// <reference path="./moduleFile2.ts" />
 export var x = Foo();`,
         }],
-        firstReloadFileList: [libFile.path, "/home/src/projects/a/b/referenceFile1.ts", configFilePath],
+        firstReloadFileList: ["/home/src/projects/a/b/referenceFile1.ts", configFilePath],
         changes: [
             {
                 caption: "edit refereceFile1",
@@ -372,13 +370,10 @@ describe("unittests:: tscWatch:: emit:: file content", () => {
             commandLineArgs: ["--w", "/home/src/projects/a/app.ts"],
             sys: () =>
                 createWatchedSystem(
-                    [
-                        {
-                            path: "/home/src/projects/a/app.ts",
-                            content: ["var x = 1;", "var y = 2;"].join(newLine),
-                        },
-                        libFile,
-                    ],
+                    [{
+                        path: "/home/src/projects/a/app.ts",
+                        content: ["var x = 1;", "var y = 2;"].join(newLine),
+                    }],
                     { newLine, currentDirectory: "/home/src/projects/a" },
                 ),
             edits: [
@@ -418,7 +413,7 @@ describe("unittests:: tscWatch:: emit:: file content", () => {
                 content: "{}",
             };
             return createWatchedSystem(
-                [file1, file2, file3, configFile, libFile],
+                [file1, file2, file3, configFile],
                 { currentDirectory: ts.getDirectoryPath(configFile.path) },
             );
         },
@@ -455,7 +450,7 @@ describe("unittests:: tscWatch:: emit:: file content", () => {
                 content: `import { E2 } from "./file2"; const v: E2 = E2.V;`,
             };
             return createWatchedSystem(
-                [file1, file2, file3, libFile],
+                [file1, file2, file3],
                 { currentDirectory },
             );
         },
@@ -487,7 +482,7 @@ describe("unittests:: tscWatch:: emit:: file content", () => {
                 }),
             };
             return createWatchedSystem(
-                [file, configFile, libFile],
+                [file, configFile],
                 {
                     currentDirectory: projectLocation,
                     useCaseSensitiveFileNames: true,
@@ -532,7 +527,7 @@ describe("unittests:: tscWatch:: emit:: with when module emit is specified as no
                 content: "var zz = 10;",
             };
             return createWatchedSystem(
-                [configFile, file1, file2, libFile],
+                [configFile, file1, file2],
                 { currentDirectory: ts.getDirectoryPath(configFile.path) },
             );
         },

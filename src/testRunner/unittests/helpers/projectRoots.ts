@@ -1,7 +1,6 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { FsContents } from "./contents.js";
-import { libFile } from "./virtualFileSystemWithWatch.js";
 
 function getFsContentsForRootsFromReferencedProject(serverFirst: boolean): FsContents {
     return {
@@ -53,7 +52,6 @@ function getFsContentsForRootsFromReferencedProject(serverFirst: boolean): FsCon
                 { path: "../shared" },
             ],
         }),
-        [libFile.path]: libFile.content,
     };
 }
 

@@ -7,7 +7,6 @@ import {
 import {
     createServerHost,
     File,
-    libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: typeOnlyImportChains::", () => {
@@ -161,7 +160,7 @@ describe("unittests:: tsserver:: typeOnlyImportChains::", () => {
 });
 
 function assertUsageError(subScenario: string, files: readonly File[], openFile: File) {
-    const host = createServerHost([...files, libFile]);
+    const host = createServerHost(files);
     const session = new TestSession(host);
     openFilesForSession([openFile], session);
     session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
