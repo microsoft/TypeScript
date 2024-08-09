@@ -928,6 +928,7 @@ export const enum PredicateSemantics {
     None = 0,
     Always = 1 << 0,
     Never = 1 << 1,
+    Literal = 1 << 2,
     Sometimes = Always | Never,
 }
 
