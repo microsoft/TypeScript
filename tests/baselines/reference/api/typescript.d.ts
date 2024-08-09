@@ -8241,6 +8241,7 @@ declare namespace ts {
         readonly interactiveInlayHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+        readonly autoImportSpecifierExcludeRegexes?: string[];
         readonly preferTypeOnlyAutoImports?: boolean;
         /**
          * Indicates whether imports should be organized in a case-insensitive manner.
