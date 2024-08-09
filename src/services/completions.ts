@@ -5474,10 +5474,11 @@ export function getPropertiesForObjectExpression(contextualType: Type, completio
     const hasCompletionsType = completionsType && completionsType !== contextualType;
     const promiseFilteredContextualType = checker.getUnionType(
         filter(
-            contextualType.flags & TypeFlags.Union ? 
+            contextualType.flags & TypeFlags.Union ?
                 (contextualType as UnionType).types :
-                [contextualType], t => !checker.getPromisedTypeOfPromise(t)
-        )
+                [contextualType],
+            t => !checker.getPromisedTypeOfPromise(t),
+        ),
     );
     const type = hasCompletionsType && !(completionsType.flags & TypeFlags.AnyOrUnknown)
         ? checker.getUnionType([promiseFilteredContextualType, completionsType])
