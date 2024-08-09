@@ -40,6 +40,7 @@ import {
     firstDefined,
     flatMap,
     flatMapIterator,
+    forEach,
     forEachExternalModuleToImportFrom,
     forEachNameOfDefaultExport,
     formatting,
@@ -92,9 +93,11 @@ import {
     isJsxOpeningFragment,
     isJsxOpeningLikeElement,
     isJSXTagName,
+    isModuleDeclaration,
     isNamedImports,
     isNamespaceImport,
     isRequireVariableStatement,
+    isSourceFile,
     isSourceFileJS,
     isStringLiteral,
     isStringLiteralLike,
@@ -122,6 +125,7 @@ import {
     NodeFlags,
     nodeIsMissing,
     ObjectBindingPattern,
+    or,
     OrganizeImports,
     PackageJsonImportFilter,
     Path,
@@ -274,10 +278,20 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         addImport(first(info));
     }
 
+    function getExportedSymbolParent(symbol: Symbol, checker: TypeChecker): Symbol {
+        if (symbol.parent) {
+            return symbol.parent;
+        }
+        const constituentParent = Debug.checkDefined(forEach(symbol.declarations, d => tryCast(d.parent, or(isSourceFile, isModuleDeclaration)))?.symbol);
+        const merged = checker.getMergedSymbol(constituentParent);
+        Debug.assert(constituentParent !== merged);
+        return merged;
+    }
+
     function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) {
-        const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
-        const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
         const checker = program.getTypeChecker();
+        const moduleSymbol = getExportedSymbolParent(exportedSymbol, checker);
+        const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
         const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
         if (!exportInfo) {
