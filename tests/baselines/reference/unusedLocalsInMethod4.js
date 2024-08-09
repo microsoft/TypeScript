@@ -11,8 +11,8 @@ function f<T, NonNull extends {}>() {
     let x7: unknown; // should not error
     let x8: T; // should error
     let x9: NonNull; // should error
-    var x10: NonNull; // should error
-    var x11: NonNull; // should not error
+    var x10: NonNull; // should not error
+    let x11: NonNull; // should not error
 
     function foo() {
         console.log(x1);
@@ -158,7 +158,7 @@ function f() {
     var x7; // should not error
     var x8; // should error
     var x9; // should error
-    var x10; // should error
+    var x10; // should not error
     var x11; // should not error
     function foo() {
         console.log(x1);

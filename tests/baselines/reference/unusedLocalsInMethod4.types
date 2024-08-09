@@ -41,11 +41,11 @@ function f<T, NonNull extends {}>() {
 >x9 : NonNull
 >   : ^^^^^^^
 
-    var x10: NonNull; // should error
+    var x10: NonNull; // should not error
 >x10 : NonNull
 >    : ^^^^^^^
 
-    var x11: NonNull; // should not error
+    let x11: NonNull; // should not error
 >x11 : NonNull
 >    : ^^^^^^^
 

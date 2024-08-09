@@ -35,11 +35,11 @@ function f<T, NonNull extends {}>() {
 >x9 : Symbol(x9, Decl(unusedLocalsInMethod4.ts, 9, 7))
 >NonNull : Symbol(NonNull, Decl(unusedLocalsInMethod4.ts, 0, 13))
 
-    var x10: NonNull; // should error
+    var x10: NonNull; // should not error
 >x10 : Symbol(x10, Decl(unusedLocalsInMethod4.ts, 10, 7))
 >NonNull : Symbol(NonNull, Decl(unusedLocalsInMethod4.ts, 0, 13))
 
-    var x11: NonNull; // should not error
+    let x11: NonNull; // should not error
 >x11 : Symbol(x11, Decl(unusedLocalsInMethod4.ts, 11, 7))
 >NonNull : Symbol(NonNull, Decl(unusedLocalsInMethod4.ts, 0, 13))
 
