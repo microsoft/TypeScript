@@ -72,5 +72,5 @@ class BadIterator3 extends Iterator<number> {
 declare const g1: Generator<string, number, boolean>;
 const iter1 = Iterator.from(g1);
 
-declare const iter2: BuiltinIterator<string, BuiltinIteratorReturn>;
+declare const iter2: IteratorObject<string>;
 const iter3 = iter2.flatMap(() => g1);

@@ -61,8 +61,8 @@ async function * inferReturnType5() {
 >  : ^
 }
 async function * inferReturnType6() {
->inferReturnType6 : () => AsyncGenerator<number, void, any>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inferReturnType6 : () => AsyncGenerator<number, void, unknown>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [1, 2];
 >yield* [1, 2] : any
@@ -74,8 +74,8 @@ async function * inferReturnType6() {
 >  : ^
 }
 async function * inferReturnType7() {
->inferReturnType7 : () => AsyncGenerator<number, void, any>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inferReturnType7 : () => AsyncGenerator<number, void, unknown>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [Promise.resolve(1)];
 >yield* [Promise.resolve(1)] : any
@@ -144,8 +144,8 @@ const assignability2: () => AsyncIterableIterator<number> = async function * () 
 const assignability3: () => AsyncIterableIterator<number> = async function * () {
 >assignability3 : () => AsyncIterableIterator<number>
 >               : ^^^^^^                             
->async function * () {    yield* [1, 2];} : () => AsyncGenerator<number, void, any>
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* [1, 2];} : () => AsyncGenerator<number, void, unknown>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [1, 2];
 >yield* [1, 2] : any
@@ -160,8 +160,8 @@ const assignability3: () => AsyncIterableIterator<number> = async function * () 
 const assignability4: () => AsyncIterableIterator<number> = async function * () {
 >assignability4 : () => AsyncIterableIterator<number>
 >               : ^^^^^^                             
->async function * () {    yield* [Promise.resolve(1)];} : () => AsyncGenerator<number, void, any>
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* [Promise.resolve(1)];} : () => AsyncGenerator<number, void, unknown>
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [Promise.resolve(1)];
 >yield* [Promise.resolve(1)] : any
@@ -234,8 +234,8 @@ const assignability7: () => AsyncIterable<number> = async function * () {
 const assignability8: () => AsyncIterable<number> = async function * () {
 >assignability8 : () => AsyncIterable<number>
 >               : ^^^^^^                     
->async function * () {    yield* [1, 2];} : () => AsyncGenerator<number, void, any>
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* [1, 2];} : () => AsyncGenerator<number, void, unknown>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [1, 2];
 >yield* [1, 2] : any
@@ -250,8 +250,8 @@ const assignability8: () => AsyncIterable<number> = async function * () {
 const assignability9: () => AsyncIterable<number> = async function * () {
 >assignability9 : () => AsyncIterable<number>
 >               : ^^^^^^                     
->async function * () {    yield* [Promise.resolve(1)];} : () => AsyncGenerator<number, void, any>
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* [Promise.resolve(1)];} : () => AsyncGenerator<number, void, unknown>
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [Promise.resolve(1)];
 >yield* [Promise.resolve(1)] : any
@@ -324,8 +324,8 @@ const assignability12: () => AsyncIterator<number> = async function * () {
 const assignability13: () => AsyncIterator<number> = async function * () {
 >assignability13 : () => AsyncIterator<number>
 >                : ^^^^^^                     
->async function * () {    yield* [1, 2];} : () => AsyncGenerator<number, void, any>
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* [1, 2];} : () => AsyncGenerator<number, void, unknown>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [1, 2];
 >yield* [1, 2] : any
@@ -340,8 +340,8 @@ const assignability13: () => AsyncIterator<number> = async function * () {
 const assignability14: () => AsyncIterator<number> = async function * () {
 >assignability14 : () => AsyncIterator<number>
 >                : ^^^^^^                     
->async function * () {    yield* [Promise.resolve(1)];} : () => AsyncGenerator<number, void, any>
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function * () {    yield* [Promise.resolve(1)];} : () => AsyncGenerator<number, void, unknown>
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [Promise.resolve(1)];
 >yield* [Promise.resolve(1)] : any

@@ -1813,6 +1813,11 @@
         "category": "Error",
         "code": 1539
     },
+    "A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.": {
+        "category": "Suggestion",
+        "code": 1540,
+        "reportsDeprecated": true
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3915,7 +3920,26 @@
         "category": "Error",
         "code": 2868
     },
-
+    "Right operand of ?? is unreachable because the left operand is never nullish.": {
+        "category": "Error",
+        "code": 2869
+    },
+    "This binary expression is never nullish. Are you missing parentheses?": {
+        "category": "Error",
+        "code": 2870
+    },
+    "This expression is always nullish.": {
+        "category": "Error",
+        "code": 2871
+    },
+    "This kind of expression is always truthy.": {
+        "category": "Error",
+        "code": 2872
+    },
+    "This kind of expression is always falsy.": {
+        "category": "Error",
+        "code": 2873
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

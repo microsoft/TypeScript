@@ -1024,7 +1024,7 @@ export class TestState {
         }
 
         if (ts.hasProperty(options, "isGlobalCompletion") && actualCompletions.isGlobalCompletion !== options.isGlobalCompletion) {
-            this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
+            this.raiseError(`Expected 'isGlobalCompletion' to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
         }
 
         if (ts.hasProperty(options, "optionalReplacementSpan")) {
@@ -1032,6 +1032,14 @@ export class TestState {
                 actualCompletions.optionalReplacementSpan && actualCompletions.optionalReplacementSpan,
                 options.optionalReplacementSpan && ts.createTextSpanFromRange(options.optionalReplacementSpan),
                 "Expected 'optionalReplacementSpan' properties to match",
+            );
+        }
+
+        if (ts.hasProperty(options, "defaultCommitCharacters")) {
+            assert.deepEqual(
+                actualCompletions.defaultCommitCharacters?.sort(),
+                options.defaultCommitCharacters?.sort(),
+                "Expected 'defaultCommitCharacters' properties to match",
             );
         }
 
@@ -1181,6 +1189,13 @@ export class TestState {
         assert.equal(actual.isSnippet, expected.isSnippet, `At entry ${actual.name}: Expected 'isSnippet' properties to match`);
         assert.equal(actual.source, expected.source, `At entry ${actual.name}: Expected 'source' values to match`);
         assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, `At entry ${actual.name}: Expected 'sortText' properties to match`);
+        if (ts.hasProperty(expected, "commitCharacters")) {
+            assert.deepEqual(
+                actual.commitCharacters?.sort(),
+                expected.commitCharacters?.sort(),
+                `At entry ${actual.name}: Expected 'commitCharacters' values to match`,
+            );
+        }
         if (expected.sourceDisplay && actual.sourceDisplay) {
             assert.equal(ts.displayPartsToString(actual.sourceDisplay), expected.sourceDisplay, `At entry ${actual.name}: Expected 'sourceDisplay' properties to match`);
         }
@@ -1606,7 +1621,7 @@ export class TestState {
             }
         }
         let pos = 0;
-        const sortedDetails = ts.stableSort(details, (a, b) => ts.compareValues(a.location, b.location));
+        const sortedDetails = ts.toSorted(details, (a, b) => ts.compareValues(a.location, b.location));
         if (!canDetermineContextIdInline) {
             // Assign contextIds
             sortedDetails.forEach(({ span, type }) => {

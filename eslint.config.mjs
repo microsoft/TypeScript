@@ -212,6 +212,7 @@ export default tseslint.config(
                 { name: "clearImmediate" },
                 { name: "performance" },
             ],
+            "local/no-direct-import": "error",
         },
     },
     {
@@ -219,6 +220,13 @@ export default tseslint.config(
         rules: {
             "no-restricted-globals": "off",
             "regexp/no-super-linear-backtracking": "off",
+            "local/no-direct-import": "off",
+        },
+    },
+    {
+        files: ["src/**/_namespaces/**"],
+        rules: {
+            "local/no-direct-import": "off",
         },
     },
     {

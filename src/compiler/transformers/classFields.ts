@@ -2416,11 +2416,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
             factory.createBlock(
                 setTextRange(
                     factory.createNodeArray(statements),
-                    /*location*/ constructor ? constructor.body!.statements : node.members,
+                    /*location*/ constructor?.body?.statements ?? node.members,
                 ),
                 multiLine,
             ),
-            /*location*/ constructor ? constructor.body : undefined,
+            /*location*/ constructor?.body,
         );
     }
 

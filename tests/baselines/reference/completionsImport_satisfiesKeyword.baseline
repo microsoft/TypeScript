@@ -3744,6 +3744,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -7205,6 +7210,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }
