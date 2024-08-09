@@ -1399,7 +1399,7 @@ interface Int8Array {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 1;
 
     /**
       * The ArrayBuffer instance referenced by the array.
@@ -1645,7 +1645,7 @@ interface Int8ArrayConstructor {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 1;
 
     /**
       * Returns a new array from a set of elements.
@@ -1672,7 +1672,7 @@ interface Uint8Array {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 1;
 
     /**
       * The ArrayBuffer instance referenced by the array.
@@ -1919,7 +1919,7 @@ interface Uint8ArrayConstructor {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 1;
 
     /**
       * Returns a new array from a set of elements.
@@ -1946,7 +1946,7 @@ interface Uint8ClampedArray {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 1;
 
     /**
       * The ArrayBuffer instance referenced by the array.
@@ -2193,7 +2193,7 @@ interface Uint8ClampedArrayConstructor {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 1;
 
     /**
       * Returns a new array from a set of elements.
@@ -2219,7 +2219,7 @@ interface Int16Array {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 2;
 
     /**
       * The ArrayBuffer instance referenced by the array.
@@ -2466,7 +2466,7 @@ interface Int16ArrayConstructor {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 2;
 
     /**
       * Returns a new array from a set of elements.
@@ -2493,7 +2493,7 @@ interface Uint16Array {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 2;
 
     /**
       * The ArrayBuffer instance referenced by the array.
@@ -2740,7 +2740,7 @@ interface Uint16ArrayConstructor {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 2;
 
     /**
       * Returns a new array from a set of elements.
@@ -2766,7 +2766,7 @@ interface Int32Array {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 4;
 
     /**
       * The ArrayBuffer instance referenced by the array.
@@ -3013,7 +3013,7 @@ interface Int32ArrayConstructor {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 4;
 
     /**
       * Returns a new array from a set of elements.
@@ -3039,7 +3039,7 @@ interface Uint32Array {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 4;
 
     /**
       * The ArrayBuffer instance referenced by the array.
@@ -3286,7 +3286,7 @@ interface Uint32ArrayConstructor {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 4;
 
     /**
       * Returns a new array from a set of elements.
@@ -3312,7 +3312,7 @@ interface Float32Array {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 4;
 
     /**
       * The ArrayBuffer instance referenced by the array.
@@ -3559,7 +3559,7 @@ interface Float32ArrayConstructor {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 4;
 
     /**
       * Returns a new array from a set of elements.
@@ -3586,7 +3586,7 @@ interface Float64Array {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 8;
 
     /**
       * The ArrayBuffer instance referenced by the array.
@@ -3833,7 +3833,7 @@ interface Float64ArrayConstructor {
     /**
       * The size in bytes of each element in the array.
       */
-    BYTES_PER_ELEMENT: number;
+    BYTES_PER_ELEMENT: 8;
 
     /**
       * Returns a new array from a set of elements.
