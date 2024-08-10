@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,7 +15,7 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/lib/lib.esnext.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.esnext.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -60,7 +60,7 @@ export const api = ky.extend({});
 
 
 Output::
-/lib/tsc -b /src/project --explainFiles --listEmittedFiles --v
+/home/src/tslibs/ts/lib/tsc -b /src/project --explainFiles --listEmittedFiles --v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -75,7 +75,7 @@ Output::
 
 TSFILE: /src/project/outFile.js
 TSFILE: /src/project/outFile.tsbuildinfo
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/ky.d.ts
   Imported via 'ky' from file 'src/project/src/index.ts'
@@ -118,7 +118,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/project --explainFiles --listEmittedFiles --v
+/home/src/tslibs/ts/lib/tsc -b /src/project --explainFiles --listEmittedFiles --v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -133,7 +133,7 @@ Output::
 
 TSFILE: /src/project/outFile.js
 TSFILE: /src/project/outFile.tsbuildinfo
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/ky.d.ts
   Imported via 'ky' from file 'src/project/src/index.ts'

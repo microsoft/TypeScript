@@ -1,6 +1,6 @@
 currentDirectory:: /src/projects/project useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,7 +15,7 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/lib/lib.esnext.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.esnext.full.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -90,7 +90,7 @@ export { a } from 'a';
 
 
 Output::
-/lib/tsc -b packages/a --verbose --traceResolution --explainFiles
+/home/src/tslibs/ts/lib/tsc -b packages/a --verbose --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/a/tsconfig.json
 
@@ -119,9 +119,13 @@ Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/src/projects/project/packages/a/index.js', result '/src/projects/project/packages/a/index.js'.
 ======== Module name 'a' was successfully resolved to '/src/projects/project/packages/a/index.js' with Package ID 'a/index.js@0.0.0'. ========
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/ts/lib/package.json' does not exist.
+File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-../../../lib/lib.esnext.full.d.ts
+../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 packages/a/index.js
   Matched by default include pattern '**/*'
@@ -141,12 +145,12 @@ export {};
 
 
 //// [/src/projects/project/packages/a/types/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../lib/lib.esnext.full.d.ts","../index.js","../test/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15642581130-export const a = 'a';","signature":"-13259723213-export const a: \"a\";\n","impliedFormat":99},{"version":"-3920874422-import 'a';","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[2,3],"options":{"checkJs":true,"composite":true,"declaration":true,"emitDeclarationOnly":true,"module":199,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./test/index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts","../index.js","../test/index.js"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-15642581130-export const a = 'a';","signature":"-13259723213-export const a: \"a\";\n","impliedFormat":99},{"version":"-3920874422-import 'a';","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[2,3],"options":{"checkJs":true,"composite":true,"declaration":true,"emitDeclarationOnly":true,"module":199,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./test/index.d.ts","version":"FakeTSVersion"}
 
 //// [/src/projects/project/packages/a/types/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../lib/lib.esnext.full.d.ts",
+    "../../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts",
     "../index.js",
     "../test/index.js"
   ],
@@ -156,7 +160,7 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../../../../../lib/lib.esnext.full.d.ts": {
+    "../../../../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -213,7 +217,7 @@ export {};
   },
   "latestChangedDtsFile": "./test/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 1063
+  "size": 1082
 }
 
 
@@ -223,7 +227,7 @@ Input::
 
 
 Output::
-/lib/tsc -b packages/b --verbose --traceResolution --explainFiles
+/home/src/tslibs/ts/lib/tsc -b packages/b --verbose --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * packages/a/tsconfig.json
     * packages/b/tsconfig.json
@@ -255,9 +259,13 @@ Resolving real path for '/src/projects/project/node_modules/a/types/index.d.ts',
 ======== Module name 'a' was successfully resolved to '/src/projects/project/packages/a/types/index.d.ts' with Package ID 'a/types/index.d.ts@0.0.0'. ========
 File '/src/projects/project/packages/a/types/package.json' does not exist.
 Found 'package.json' at '/src/projects/project/packages/a/package.json'.
-File '/lib/package.json' does not exist.
+File '/home/src/tslibs/ts/lib/package.json' does not exist.
+File '/home/src/tslibs/ts/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-../../../lib/lib.esnext.full.d.ts
+../../../home/src/tslibs/ts/lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 packages/a/types/index.d.ts
   Imported via 'a' from file 'packages/b/index.js' with packageId 'a/types/index.d.ts@0.0.0'

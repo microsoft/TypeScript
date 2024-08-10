@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -30,7 +30,7 @@ declare const console: { log(msg: any): void; };
 
 
 Output::
-/lib/tsc --b /src/no-references
+/home/src/tslibs/ts/lib/tsc --b /src/no-references
 [96msrc/no-references/tsconfig.json[0m:[93m3[0m:[93m12[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/src/no-references/tsconfig.json' is empty.
 
 [7m3[0m   "files": [],

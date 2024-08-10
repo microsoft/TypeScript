@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/demo useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -147,7 +147,7 @@ export function createZoo(): Array<Dog> {
 
 
 Output::
-/lib/tsc --b --verbose
+/home/src/tslibs/ts/lib/tsc --b --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * animals/tsconfig.json
     * zoo/tsconfig.json

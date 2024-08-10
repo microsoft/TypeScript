@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -69,7 +69,7 @@ E.A; F.A;
 
 
 Output::
-/lib/tsc --p src/project --pretty false
+/home/src/tslibs/ts/lib/tsc --p src/project --pretty false
 src/project/index.ts(2,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 

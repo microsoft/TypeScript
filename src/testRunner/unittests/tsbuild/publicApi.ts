@@ -12,6 +12,7 @@ import {
     verifyTscBaseline,
 } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { tscTypeScriptTestLocation } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: TscCompileSystem;
@@ -47,7 +48,7 @@ export function f22() { } // trailing`,
         const fs = inputFs.shadow();
 
         // Create system
-        sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+        sys = new fakes.System(fs, { executingFilePath: tscTypeScriptTestLocation }) as TscCompileSystem;
         sys.storeSignatureInfo = true;
         fakes.patchHostForBuildInfoReadWrite(sys);
         const commandLineArgs = ["--b", "/src/tsconfig.json"];

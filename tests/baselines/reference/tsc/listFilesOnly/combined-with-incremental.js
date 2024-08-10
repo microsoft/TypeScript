@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -24,8 +24,8 @@ export const x = 1;
 
 
 Output::
-/lib/tsc -p /src --incremental --listFilesOnly
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/tsc -p /src --incremental --listFilesOnly
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/test.ts
 exitCode:: ExitStatus.Success
 
@@ -37,7 +37,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src --incremental
+/home/src/tslibs/ts/lib/tsc -p /src --incremental
 exitCode:: ExitStatus.Success
 
 
@@ -49,16 +49,16 @@ exports.x = 1;
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"fileNames":["../lib/lib.d.ts","./test.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-12038591281-export const x = 1;"],"root":[2],"version":"FakeTSVersion"}
+{"fileNames":["../home/src/tslibs/ts/lib/lib.d.ts","./test.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-12038591281-export const x = 1;"],"root":[2],"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../lib/lib.d.ts",
+    "../home/src/tslibs/ts/lib/lib.d.ts",
     "./test.ts"
   ],
   "fileInfos": {
-    "../lib/lib.d.ts": {
+    "../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -79,7 +79,7 @@ exports.x = 1;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 610
+  "size": 629
 }
 
 
@@ -89,8 +89,8 @@ Input::
 
 
 Output::
-/lib/tsc -p /src --incremental --listFilesOnly
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/tsc -p /src --incremental --listFilesOnly
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/test.ts
 exitCode:: ExitStatus.Success
 
@@ -102,7 +102,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src --incremental
+/home/src/tslibs/ts/lib/tsc -p /src --incremental
 exitCode:: ExitStatus.Success
 
 

@@ -10,7 +10,10 @@ import {
     verifyTsc,
 } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
-import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
+import {
+    getTypeScriptLibTestLocation,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: libraryResolution:: library file resolution", () => {
     function verify(libRedirection?: true, withoutConfig?: true) {
@@ -49,7 +52,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
                         lib: ["es6"],
                     },
                 }),
-                "/lib/lib.es2015.d.ts": libFile.content,
+                [getTypeScriptLibTestLocation("es2015")]: libFile.content,
             }),
         commandLineArgs: ["-p", "/src/tsconfig.json"],
         edits: [
@@ -77,7 +80,7 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
                         lib: ["es6", "dom"],
                     },
                 }),
-                "/lib/lib.es2015.d.ts": libFile.content,
+                [getTypeScriptLibTestLocation("es2015")]: libFile.content,
             }),
         commandLineArgs: ["-p", "/src/tsconfig.json", "-i", "--explainFiles"],
         baselinePrograms: true,

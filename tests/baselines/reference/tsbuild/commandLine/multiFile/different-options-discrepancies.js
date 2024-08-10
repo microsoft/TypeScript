@@ -5,7 +5,7 @@ TsBuild info text without affectedFilesPendingEmit:: /src/project/tsconfig.tsbui
 CleanBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../home/src/tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -54,7 +54,7 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../home/src/tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -106,7 +106,7 @@ TsBuild info text without affectedFilesPendingEmit:: /src/project/tsconfig.tsbui
 CleanBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../home/src/tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -155,7 +155,7 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../home/src/tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -207,7 +207,7 @@ TsBuild info text without affectedFilesPendingEmit:: /src/project/tsconfig.tsbui
 CleanBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../home/src/tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -256,7 +256,7 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../home/src/tslibs/ts/lib/lib.d.ts": {
       "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },

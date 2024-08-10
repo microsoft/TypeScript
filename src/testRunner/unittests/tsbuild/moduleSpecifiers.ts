@@ -2,7 +2,10 @@ import * as Utils from "../../_namespaces/Utils.js";
 import { symbolLibContent } from "../helpers/contents.js";
 import { verifyTsc } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
-import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
+import {
+    getTypeScriptLibTestLocation,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 // https://github.com/microsoft/TypeScript/issues/31696
 describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
@@ -185,7 +188,7 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                     }`,
             }, ""),
         modifyFs: fs => {
-            fs.writeFileSync("/lib/lib.es2022.full.d.ts", libFile.content);
+            fs.writeFileSync(getTypeScriptLibTestLocation("es2022.full"), libFile.content);
             fs.symlinkSync("/src", "/src/src-types/node_modules");
             fs.symlinkSync("/src", "/src/src-dogs/node_modules");
         },

@@ -5,7 +5,6 @@ import { loadProjectFromFiles } from "./vfs.js";
 import {
     createServerHost,
     createWatchedSystem,
-    getPathForTypeScriptTestLocation,
     getTypeScriptLibTestLocation,
     libFile,
 } from "./virtualFileSystemWithWatch.js";
@@ -59,10 +58,7 @@ function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
 export function getFsForLibResolution(libRedirection: true | undefined) {
     return loadProjectFromFiles(
         getFsContentsForLibResolution(libRedirection),
-        {
-            currentDirectory: "/home/src/workspace/projects",
-            executingFilePath: getPathForTypeScriptTestLocation("tsc.js"),
-        },
+        { currentDirectory: "/home/src/workspace/projects" },
     );
 }
 
@@ -102,7 +98,6 @@ function getFsContentsForLibResolutionUnknown(): FsContents {
                 traceResolution: true,
             },
         }),
-        [libFile.path]: libFile.content,
         [getTypeScriptLibTestLocation("webworker")]: "interface WebWorkerInterface { }",
         [getTypeScriptLibTestLocation("scripthost")]: "interface ScriptHostInterface { }",
     };
@@ -111,10 +106,7 @@ function getFsContentsForLibResolutionUnknown(): FsContents {
 export function getFsForLibResolutionUnknown() {
     return loadProjectFromFiles(
         getFsContentsForLibResolutionUnknown(),
-        {
-            currentDirectory: "/home/src/workspace/projects",
-            executingFilePath: getPathForTypeScriptTestLocation("tsc.js"),
-        },
+        { currentDirectory: "/home/src/workspace/projects" },
     );
 }
 

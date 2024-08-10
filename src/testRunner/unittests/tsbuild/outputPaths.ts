@@ -9,6 +9,7 @@ import {
     VerifyTscWithEditsInput,
 } from "../helpers/tsc.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { tscTypeScriptTestLocation } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild - output file paths", () => {
     const noChangeProject: TestTscEdit = {
@@ -29,7 +30,7 @@ describe("unittests:: tsbuild - output file paths", () => {
         });
 
         it("verify getOutputFileNames", () => {
-            const sys = new fakes.System(input.fs().makeReadonly(), { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+            const sys = new fakes.System(input.fs().makeReadonly(), { executingFilePath: tscTypeScriptTestLocation }) as TscCompileSystem;
 
             assert.deepEqual(
                 ts.getOutputFileNames(

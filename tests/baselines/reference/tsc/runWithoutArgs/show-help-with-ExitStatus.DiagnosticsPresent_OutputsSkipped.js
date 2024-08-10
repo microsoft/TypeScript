@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -18,7 +18,7 @@ declare const console: { log(msg: any): void; };
 
 
 Output::
-/lib/tsc 
+/home/src/tslibs/ts/lib/tsc 
 Version FakeTSVersion
 tsc: The TypeScript Compiler - Version FakeTSVersion
 

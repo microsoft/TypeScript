@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -18,7 +18,7 @@ declare const console: { log(msg: any): void; };
 
 
 Output::
-/lib/tsc -b bogus.json
+/home/src/tslibs/ts/lib/tsc -b bogus.json
 [91merror[0m[90m TS5083: [0mCannot read file '/bogus.json'.
 
 

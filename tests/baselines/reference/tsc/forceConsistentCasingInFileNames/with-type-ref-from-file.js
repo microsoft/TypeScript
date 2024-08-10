@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -29,7 +29,7 @@ declare class c { }
 
 
 Output::
-/lib/tsc -p /src/project/src --explainFiles --traceResolution
+/home/src/tslibs/ts/lib/tsc -p /src/project/src --explainFiles --traceResolution
 ======== Resolving type reference directive './fileOne.d.ts', containing file '/src/project/src/file2.d.ts', root directory '/src/project/src/node_modules/@types,/src/project/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/src/project/src/node_modules/@types, /src/project/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
 Directory '/src/project/src/node_modules/@types' does not exist, skipping all lookups in it.
@@ -42,7 +42,7 @@ File name '/src/project/src/fileOne.d.ts' has a '.d.ts' extension - stripping it
 File '/src/project/src/fileOne.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/project/src/fileOne.d.ts', result '/src/project/src/fileOne.d.ts'.
 ======== Type reference directive './fileOne.d.ts' was successfully resolved to '/src/project/src/fileOne.d.ts', primary: false. ========
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/src/fileOne.d.ts
   Type library referenced via './fileOne.d.ts' from file 'src/project/src/file2.d.ts'

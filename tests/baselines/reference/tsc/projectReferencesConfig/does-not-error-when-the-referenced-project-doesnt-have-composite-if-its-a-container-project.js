@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -47,7 +47,7 @@ import * as mod_0 from "../primary/a"
 
 
 Output::
-/lib/tsc --p /reference/tsconfig.json
+/home/src/tslibs/ts/lib/tsc --p /reference/tsconfig.json
 exitCode:: ExitStatus.Success
 
 

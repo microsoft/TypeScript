@@ -10,6 +10,7 @@ import { verifyTscWatch } from "../helpers/tscWatch.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
 import {
     createWatchedSystem,
+    getTypeScriptLibTestLocation,
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -125,7 +126,7 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
                     name: "@types/pg",
                     types: "index.d.ts",
                 }),
-                "/lib/lib.es2022.full.d.ts": libFile.content,
+                [getTypeScriptLibTestLocation("es2022.full")]: libFile.content,
             }),
         commandLineArgs: ["-b", "/src/projects/a", "/src/projects/b", "--verbose", "--traceResolution", "--explainFiles"],
         edits: noChangeOnlyRuns,
@@ -174,7 +175,7 @@ describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
                 type: "module",
             }),
             "/src/projects/project/node_modules/a": new Symlink("/src/projects/project/packages/a"),
-            "/lib/lib.esnext.full.d.ts": libFile.content,
+            [getTypeScriptLibTestLocation("esnext.full")]: libFile.content,
         }, { currentDirectory: "/src/projects/project" });
     }
 

@@ -16,6 +16,7 @@ import {
     loadProjectFromFiles,
     replaceText,
 } from "../helpers/vfs.js";
+import { tscTypeScriptTestLocation } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: outFile::", () => {
     let outFileFs: vfs.FileSystem;
@@ -130,7 +131,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
     function getOutFileFsAfterBuild() {
         if (outFileWithBuildFs) return outFileWithBuildFs;
         const fs = getOutFileFs().shadow();
-        const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" });
+        const sys = new fakes.System(fs, { executingFilePath: tscTypeScriptTestLocation });
         const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
         const builder = ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
         builder.build();

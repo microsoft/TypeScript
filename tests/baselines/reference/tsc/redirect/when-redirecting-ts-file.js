@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -55,7 +55,7 @@ export const a = 1;
 
 
 Output::
-/lib/tsc -p src/project
+/home/src/tslibs/ts/lib/tsc -p src/project
 exitCode:: ExitStatus.Success
 
 

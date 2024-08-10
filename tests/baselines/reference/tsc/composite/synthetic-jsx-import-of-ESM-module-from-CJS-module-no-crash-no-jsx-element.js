@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -43,7 +43,7 @@ export default 42;
 
 
 Output::
-/lib/tsc 
+/home/src/tslibs/ts/lib/tsc 
 exitCode:: ExitStatus.Success
 
 
@@ -59,12 +59,12 @@ exports.default = 42;
 
 
 //// [/tsconfig.tsbuildinfo]
-{"fileNames":["./lib/lib.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n","impliedFormat":99},{"version":"-1874019635-export default 42;","signature":"-5660511115-declare const _default: 42;\nexport default _default;\n","impliedFormat":1}],"root":[1,3],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/main.d.ts","version":"FakeTSVersion"}
+{"fileNames":["./home/src/tslibs/ts/lib/lib.d.ts","./node_modules/solid-js/jsx-runtime.d.ts","./src/main.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-3511680495-export namespace JSX {\n    type IntrinsicElements = { div: {}; };\n}\n","impliedFormat":99},{"version":"-1874019635-export default 42;","signature":"-5660511115-declare const _default: 42;\nexport default _default;\n","impliedFormat":1}],"root":[1,3],"options":{"composite":true,"jsx":4,"jsxImportSource":"solid-js","module":100},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/main.d.ts","version":"FakeTSVersion"}
 
 //// [/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "./lib/lib.d.ts",
+    "./home/src/tslibs/ts/lib/lib.d.ts",
     "./node_modules/solid-js/jsx-runtime.d.ts",
     "./src/main.ts"
   ],
@@ -74,7 +74,7 @@ exports.default = 42;
     ]
   ],
   "fileInfos": {
-    "./lib/lib.d.ts": {
+    "./home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -108,7 +108,7 @@ exports.default = 42;
   "root": [
     [
       1,
-      "./lib/lib.d.ts"
+      "./home/src/tslibs/ts/lib/lib.d.ts"
     ],
     [
       3,
@@ -128,6 +128,6 @@ exports.default = 42;
   },
   "latestChangedDtsFile": "./src/main.d.ts",
   "version": "FakeTSVersion",
-  "size": 1067
+  "size": 1086
 }
 

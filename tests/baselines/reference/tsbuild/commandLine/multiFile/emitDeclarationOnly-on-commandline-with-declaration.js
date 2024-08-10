@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -58,7 +58,7 @@ import { b } from "../../project1/src/b"; export const g = b;
 
 
 Output::
-/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -98,21 +98,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project1/src/a.ts (computed .d.ts during emit)
 /src/project1/src/b.ts (computed .d.ts during emit)
 /src/project1/src/c.ts (computed .d.ts during emit)
@@ -131,7 +131,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project2/src/e.ts
 /src/project1/src/a.d.ts
 /src/project2/src/f.ts
@@ -141,7 +141,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project2/src/e.ts (computed .d.ts during emit)
 /src/project1/src/a.d.ts (used version)
 /src/project2/src/f.ts (computed .d.ts during emit)
@@ -214,7 +214,7 @@ Input::
 
 
 Output::
-/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -251,7 +251,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project2/src/e.ts
 /src/project1/src/a.d.ts
 /src/project2/src/f.ts
@@ -261,7 +261,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project2/src/e.ts (computed .d.ts during emit)
 /src/project1/src/a.d.ts (used version)
 /src/project2/src/f.ts (computed .d.ts during emit)
@@ -284,7 +284,7 @@ export const a = 10;const aLocal = 10;const aa = 10;
 
 
 Output::
-/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -324,21 +324,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project1/src/a.ts (computed .d.ts during emit)
 /src/project1/src/b.ts (computed .d.ts during emit)
 /src/project1/src/c.ts (computed .d.ts during emit)
@@ -357,7 +357,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project2/src/e.ts
 /src/project1/src/a.d.ts
 /src/project2/src/f.ts
@@ -367,7 +367,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project2/src/e.ts (computed .d.ts during emit)
 /src/project1/src/a.d.ts (used version)
 /src/project2/src/f.ts (computed .d.ts during emit)
@@ -396,7 +396,7 @@ export const a = 10;const aLocal = 10;const aa = 10;export const aaa = 10;
 
 
 Output::
-/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -436,21 +436,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project1/src/a.ts (computed .d.ts during emit)
 /src/project1/src/b.ts (computed .d.ts during emit)
 /src/project1/src/c.ts (computed .d.ts during emit)
@@ -469,7 +469,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project2/src/e.ts
 /src/project1/src/a.d.ts
 /src/project2/src/f.ts
@@ -479,7 +479,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project2/src/e.ts (computed .d.ts during emit)
 /src/project1/src/a.d.ts (used version)
 /src/project2/src/f.ts (computed .d.ts during emit)
@@ -509,7 +509,7 @@ Input::
 
 
 Output::
-/lib/tsc --b /src/project2/src --verbose
+/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -548,21 +548,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project1/src/a.ts (computed .d.ts during emit)
 /src/project1/src/b.ts (computed .d.ts during emit)
 /src/project1/src/c.ts (computed .d.ts during emit)
@@ -580,7 +580,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project2/src/e.ts
 /src/project1/src/a.d.ts
 /src/project2/src/f.ts
@@ -590,7 +590,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project2/src/e.ts (computed .d.ts during emit)
 /src/project1/src/a.d.ts (used version)
 /src/project2/src/f.ts (computed .d.ts during emit)
@@ -673,7 +673,7 @@ Input::
 
 
 Output::
-/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -710,7 +710,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project2/src/e.ts
 /src/project1/src/a.d.ts
 /src/project2/src/f.ts
@@ -720,7 +720,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project2/src/e.ts (computed .d.ts during emit)
 /src/project1/src/a.d.ts (used version)
 /src/project2/src/f.ts (computed .d.ts during emit)
@@ -743,7 +743,7 @@ export const b = 10;const bLocal = 10;const alocal = 10;
 
 
 Output::
-/lib/tsc --b /src/project2/src --verbose
+/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -782,21 +782,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project1/src/a.ts (computed .d.ts during emit)
 /src/project1/src/b.ts (computed .d.ts during emit)
 /src/project1/src/c.ts (computed .d.ts during emit)
@@ -814,7 +814,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project2/src/e.ts
 /src/project1/src/a.d.ts
 /src/project2/src/f.ts
@@ -824,7 +824,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project2/src/e.ts (computed .d.ts during emit)
 /src/project1/src/a.d.ts (used version)
 /src/project2/src/f.ts (computed .d.ts during emit)
@@ -868,7 +868,7 @@ export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;
 
 
 Output::
-/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -908,21 +908,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project1/src/a.ts (computed .d.ts during emit)
 /src/project1/src/b.ts (computed .d.ts during emit)
 /src/project1/src/c.ts (computed .d.ts during emit)
@@ -941,7 +941,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project2/src/e.ts
 /src/project1/src/a.d.ts
 /src/project2/src/f.ts
@@ -951,7 +951,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project2/src/e.ts (computed .d.ts during emit)
 /src/project1/src/a.d.ts (used version)
 /src/project2/src/f.ts (computed .d.ts during emit)
@@ -980,7 +980,7 @@ export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export c
 
 
 Output::
-/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
+/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -1020,21 +1020,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project1/src/a.ts (computed .d.ts during emit)
 /src/project1/src/b.ts (computed .d.ts during emit)
 /src/project1/src/c.ts (computed .d.ts during emit)
@@ -1053,7 +1053,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project2/src/e.ts
 /src/project1/src/a.d.ts
 /src/project2/src/f.ts
@@ -1063,7 +1063,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project2/src/e.ts (computed .d.ts during emit)
 /src/project1/src/a.d.ts (used version)
 /src/project2/src/f.ts (computed .d.ts during emit)
@@ -1096,7 +1096,7 @@ export const b = 10;const bLocal = 10;const alocal = 10;const aaaa = 10;export c
 
 
 Output::
-/lib/tsc --b /src/project2/src --verbose
+/home/src/tslibs/ts/lib/tsc --b /src/project2/src --verbose
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
@@ -1135,21 +1135,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project1/src/a.ts
 /src/project1/src/b.ts
 /src/project1/src/c.ts
 /src/project1/src/d.ts
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project1/src/a.ts (computed .d.ts during emit)
 /src/project1/src/b.ts (computed .d.ts during emit)
 /src/project1/src/c.ts (computed .d.ts during emit)
@@ -1167,7 +1167,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/project2/src/e.ts
 /src/project1/src/a.d.ts
 /src/project2/src/f.ts
@@ -1177,7 +1177,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.d.ts (used version)
 /src/project2/src/e.ts (computed .d.ts during emit)
 /src/project1/src/a.d.ts (used version)
 /src/project2/src/f.ts (computed .d.ts during emit)

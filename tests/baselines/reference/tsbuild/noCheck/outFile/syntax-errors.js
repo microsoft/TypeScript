@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -33,7 +33,7 @@ export const b = 10;
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v --noCheck
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -64,7 +64,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -119,7 +119,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v --noCheck
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -138,7 +138,7 @@ export const a = "hello";
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v --noCheck
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -161,7 +161,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -207,7 +207,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v --noCheck
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -223,7 +223,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -245,12 +245,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -279,7 +279,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -295,7 +295,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v --noCheck
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -314,7 +314,7 @@ export const a = "hello
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v --noCheck
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -345,7 +345,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -392,7 +392,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v --noCheck
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -408,7 +408,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -438,7 +438,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -473,7 +473,7 @@ export const a = "hello";
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v --noCheck
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -496,7 +496,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -542,7 +542,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -564,12 +564,12 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -601,7 +601,7 @@ export const c: number = "hello";
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -632,13 +632,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
@@ -704,7 +704,7 @@ export const a = "hello
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v --noCheck
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -736,7 +736,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
@@ -794,7 +794,7 @@ export const a = "hello";
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v --noCheck
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -818,7 +818,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
@@ -872,7 +872,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -903,13 +903,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
@@ -941,7 +941,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v --noCheck
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v --noCheck
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -957,7 +957,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc -b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -988,13 +988,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts

@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -29,7 +29,7 @@ export const x = 10;
 
 
 Output::
-/lib/tsc --b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -66,7 +66,7 @@ Input::
 
 
 Output::
-/lib/tsc --b /src/tsconfig.json -v
+/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -82,7 +82,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 exitCode:: ExitStatus.Success
 
 

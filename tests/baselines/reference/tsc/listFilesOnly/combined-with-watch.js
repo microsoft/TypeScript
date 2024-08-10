@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -21,7 +21,7 @@ export const x = 1;
 
 
 Output::
-/lib/tsc /src/test.ts --watch --listFilesOnly
+/home/src/tslibs/ts/lib/tsc /src/test.ts --watch --listFilesOnly
 error TS6370: Options 'watch' and 'listFilesOnly' cannot be combined.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 

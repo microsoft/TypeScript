@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -21,8 +21,8 @@ export const x = 1;
 
 
 Output::
-/lib/tsc /src/test.ts --listFilesOnly
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/tsc /src/test.ts --listFilesOnly
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/test.ts
 exitCode:: ExitStatus.Success
 

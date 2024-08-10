@@ -70,7 +70,7 @@ import { k } from "other/sometype2";
 export const x = 10;
 
 
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -88,7 +88,7 @@ declare const console: { log(msg: any): void; };
 
 
 Output::
-/lib/tsc -p /home/src/projects/myproject --showConfig
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/myproject --showConfig
 {
     "compilerOptions": {
         "declarationDir": "./decls",

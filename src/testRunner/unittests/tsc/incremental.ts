@@ -14,7 +14,10 @@ import {
     prependText,
     replaceText,
 } from "../helpers/vfs.js";
-import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
+import {
+    getTypeScriptLibTestLocation,
+    libFile,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({
@@ -184,8 +187,8 @@ declare global {
         }
 
         verifyTsc({
-            scenario: "react-jsx-emit-mode",
-            subScenario: "with no backing types found doesn't crash",
+            scenario: "incremental",
+            subScenario: "react-jsx-emit-mode with no backing types found doesn't crash",
             fs: () =>
                 loadProjectFromFiles({
                     "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
@@ -197,8 +200,8 @@ declare global {
         });
 
         verifyTsc({
-            scenario: "react-jsx-emit-mode",
-            subScenario: "with no backing types found doesn't crash under --strict",
+            scenario: "incremental",
+            subScenario: "react-jsx-emit-mode with no backing types found doesn't crash under --strict",
             fs: () =>
                 loadProjectFromFiles({
                     "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
@@ -327,7 +330,7 @@ declare global {
             }),
         commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
         modifyFs: fs => {
-            fs.writeFileSync("/lib/lib.esnext.d.ts", libFile.content);
+            fs.writeFileSync(getTypeScriptLibTestLocation("esnext"), libFile.content);
         },
     });
 
@@ -394,7 +397,7 @@ console.log(a);`,
             modifyFs: fs =>
                 appendText(
                     fs,
-                    "/lib/lib.d.ts",
+                    libFile.path,
                     dedent`
                     type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
                     type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;`,

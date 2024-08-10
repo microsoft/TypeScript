@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,7 +15,7 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/lib/lib.esnext.full.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.esnext.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -60,14 +60,14 @@ export const api = ky.extend({});
 
 
 Output::
-/lib/tsc -p /src/project --explainFiles --listEmittedFiles
+/home/src/tslibs/ts/lib/tsc -p /src/project --explainFiles --listEmittedFiles
 [96msrc/project/src/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/ky" but cannot be named.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
 TSFILE: /src/project/outFile.js
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/ky.d.ts
   Imported via 'ky' from file 'src/project/src/index.ts'
@@ -95,14 +95,14 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/project --explainFiles --listEmittedFiles
+/home/src/tslibs/ts/lib/tsc -p /src/project --explainFiles --listEmittedFiles
 [96msrc/project/src/index.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4023: [0mExported variable 'api' has or is using name 'KyInstance' from external module "/src/project/ky" but cannot be named.
 
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
 TSFILE: /src/project/outFile.js
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/ky.d.ts
   Imported via 'ky' from file 'src/project/src/index.ts'
@@ -122,7 +122,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/project --explainFiles --listEmittedFiles -v
+/home/src/tslibs/ts/lib/tsc -b /src/project --explainFiles --listEmittedFiles -v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -137,7 +137,7 @@ Output::
 
 TSFILE: /src/project/outFile.js
 TSFILE: /src/project/outFile.tsbuildinfo
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/ky.d.ts
   Imported via 'ky' from file 'src/project/src/index.ts'

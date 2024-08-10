@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -45,7 +45,7 @@ export default hello.hello
 
 
 Output::
-/lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
+/home/src/tslibs/ts/lib/tsc --b /src/tsconfig.json --v --explainFiles --listEmittedFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/tsconfig.json
 
@@ -55,7 +55,7 @@ Output::
 
 TSFILE: /src/dist/index.js
 TSFILE: /src/tsconfig.tsbuildinfo
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/hello.json
   Imported via "../hello.json" from file 'src/src/index.ts'

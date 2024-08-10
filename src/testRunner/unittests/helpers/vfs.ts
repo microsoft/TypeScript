@@ -5,7 +5,6 @@ import { libFile } from "./virtualFileSystemWithWatch.js";
 export interface FsOptions {
     libContentToAppend?: string;
     currentDirectory?: string;
-    executingFilePath?: string;
 }
 export type FsOptionsOrLibContentsToAppend = FsOptions | string;
 
@@ -22,8 +21,7 @@ export function loadProjectFromFiles(
     files: vfs.FileSet,
     options?: FsOptionsOrLibContentsToAppend,
 ): vfs.FileSystem {
-    const executingFilePath = valueOfFsOptions(options, "executingFilePath");
-    const defaultLibLocation = executingFilePath ? getDirectoryPath(executingFilePath) : "/lib";
+    const defaultLibLocation = getDirectoryPath(libFile.path);
     const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
         files,
         cwd: valueOfFsOptions(options, "currentDirectory") || "/",

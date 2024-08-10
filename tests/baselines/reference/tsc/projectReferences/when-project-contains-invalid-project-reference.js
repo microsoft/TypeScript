@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -34,7 +34,7 @@ export const x = 10;
 
 
 Output::
-/lib/tsc --p src/project
+/home/src/tslibs/ts/lib/tsc --p src/project
 [96msrc/project/tsconfig.json[0m:[93m7[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/src/Util/Dates' not found.
 
 [7m7[0m     {

@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -15,7 +15,7 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/lib/lib.es2015.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.es2015.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -50,7 +50,7 @@ const b = 10;
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.d.ts",
@@ -67,17 +67,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.es2015.d.ts
+/home/src/tslibs/ts/lib/lib.es2015.d.ts
 /src/a.d.ts
 /src/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/lib/lib.es2015.d.ts
+/home/src/tslibs/ts/lib/lib.es2015.d.ts
 /src/a.d.ts
 /src/b.ts
 
 Shape signatures in builder refreshed for::
-/lib/lib.es2015.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2015.d.ts (used version)
 /src/a.d.ts (used version)
 /src/b.ts (computed .d.ts during emit)
 
@@ -91,17 +91,17 @@ var b = 10;
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"fileNames":["../lib/lib.es2015.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-5371488691-declare const a = \"hello\";","affectsGlobalScope":true},{"version":"2387014439-const b = 10;","signature":"-1009346399-declare const b = 10;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"declaration":true},"version":"FakeTSVersion"}
+{"fileNames":["../home/src/tslibs/ts/lib/lib.es2015.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-5371488691-declare const a = \"hello\";","affectsGlobalScope":true},{"version":"2387014439-const b = 10;","signature":"-1009346399-declare const b = 10;\n","affectsGlobalScope":true}],"root":[2,3],"options":{"declaration":true},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../lib/lib.es2015.d.ts",
+    "../home/src/tslibs/ts/lib/lib.es2015.d.ts",
     "./a.d.ts",
     "./b.ts"
   ],
   "fileInfos": {
-    "../lib/lib.es2015.d.ts": {
+    "../home/src/tslibs/ts/lib/lib.es2015.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -144,7 +144,7 @@ var b = 10;
     "declaration": true
   },
   "version": "FakeTSVersion",
-  "size": 819
+  "size": 838
 }
 
 
@@ -154,7 +154,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noLib
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noLib
 [91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.

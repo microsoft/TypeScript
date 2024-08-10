@@ -79,6 +79,8 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };`,
 };
 
+export const tscTypeScriptTestLocation = getPathForTypeScriptTestLocation("tsc.js");
+
 export function getPathForTypeScriptTestLocation(fileName: string) {
     return combinePaths(getDirectoryPath(libFile.path), fileName);
 }
@@ -451,7 +453,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
         this.watchUtils = createWatchUtils("PolledWatches", "FsWatches", s => this.getCanonicalFileName(s), this);
         this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
-        this.executingFilePath = this.getHostSpecificPath(executingFilePath ?? getPathForTypeScriptTestLocation("tsc.js"));
+        this.executingFilePath = this.getHostSpecificPath(executingFilePath ?? tscTypeScriptTestLocation);
         this.currentDirectory = this.getHostSpecificPath(currentDirectory);
         this.runWithFallbackPolling = !!runWithFallbackPolling;
         const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE");

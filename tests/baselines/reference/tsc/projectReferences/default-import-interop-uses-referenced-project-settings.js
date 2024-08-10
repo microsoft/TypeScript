@@ -29,10 +29,7 @@ export const local = 0;
   ]
 }
 
-//// [/lib/dist/a.d.ts]
-export declare const a = 0;
-
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -46,6 +43,9 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
+
+//// [/lib/dist/a.d.ts]
+export declare const a = 0;
 
 //// [/lib/src/a.ts]
 export const a = 0;
@@ -80,7 +80,7 @@ export declare const esm: number;
 
 
 Output::
-/lib/tsc --p app --pretty false
+/home/src/tslibs/ts/lib/tsc --p app --pretty false
 app/src/index.ts(2,28): error TS2613: Module '"/app/src/local"' has no default export. Did you mean to use 'import { local } from "/app/src/local"' instead?
 app/src/index.ts(3,28): error TS2613: Module '"/node_modules/esm-package/index"' has no default export. Did you mean to use 'import { esm } from "/node_modules/esm-package/index"' instead?
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

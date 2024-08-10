@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -32,7 +32,7 @@ export const x = 10;
 
 
 Output::
-/lib/tsc --b src/project -v --explainFiles
+/home/src/tslibs/ts/lib/tsc --b src/project -v --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -40,7 +40,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/src/main.tsx
   Matched by include pattern 'src/**/*.tsx' in 'src/project/tsconfig.json'
@@ -77,7 +77,7 @@ Input::
 
 
 Output::
-/lib/tsc --b src/project -v --explainFiles
+/home/src/tslibs/ts/lib/tsc --b src/project -v --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
@@ -93,7 +93,7 @@ Input::
 
 
 Output::
-/lib/tsc -b /src/project --clean
+/home/src/tslibs/ts/lib/tsc -b /src/project --clean
 exitCode:: ExitStatus.Success
 
 

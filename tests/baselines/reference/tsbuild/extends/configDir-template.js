@@ -70,7 +70,7 @@ import { k } from "other/sometype2";
 export const x = 10;
 
 
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -88,7 +88,7 @@ declare const console: { log(msg: any): void; };
 
 
 Output::
-/lib/tsc -b /home/src/projects/myproject --explainFiles --v
+/home/src/tslibs/ts/lib/tsc -b /home/src/projects/myproject --explainFiles --v
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
@@ -126,7 +126,7 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-../../../../lib/lib.d.ts
+../../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'

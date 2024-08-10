@@ -31,7 +31,7 @@ import { m } from '../alpha/a'
   ]
 }
 
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -49,13 +49,13 @@ declare const console: { log(msg: any): void; };
 
 
 Output::
-/lib/tsc --p /beta/tsconfig.json --explainFiles
+/home/src/tslibs/ts/lib/tsc --p /beta/tsconfig.json --explainFiles
 [96mbeta/b.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"../alpha/a"' has no exported member 'm'.
 
 [7m1[0m import { m } from '../alpha/a'
 [7m [0m [91m         ~[0m
 
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 alpha/bin/a.d.ts
   Imported via '../alpha/a' from file 'beta/b.ts'
@@ -78,12 +78,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/beta/bin/tsconfig.tsbuildinfo]
-{"fileNames":["../../lib/lib.d.ts","../../alpha/bin/a.d.ts","../b.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-3531955686-export { };",{"version":"-4853599800-import { m } from '../alpha/a'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":9,"length":1,"messageText":"Module '\"../alpha/a\"' has no exported member 'm'.","category":1,"code":2305}]]],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","../../alpha/bin/a.d.ts","../b.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-3531955686-export { };",{"version":"-4853599800-import { m } from '../alpha/a'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[[3,[{"start":9,"length":1,"messageText":"Module '\"../alpha/a\"' has no exported member 'm'.","category":1,"code":2305}]]],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
 
 //// [/beta/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../lib/lib.d.ts",
+    "../../home/src/tslibs/ts/lib/lib.d.ts",
     "../../alpha/bin/a.d.ts",
     "../b.ts"
   ],
@@ -93,7 +93,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
     ]
   ],
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -146,6 +146,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
   ],
   "latestChangedDtsFile": "./b.d.ts",
   "version": "FakeTSVersion",
-  "size": 997
+  "size": 1016
 }
 

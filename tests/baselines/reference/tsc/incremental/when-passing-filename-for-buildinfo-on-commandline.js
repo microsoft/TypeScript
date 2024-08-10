@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -32,8 +32,8 @@ export const x = 10;
 
 
 Output::
-/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
-lib/lib.d.ts
+/home/src/tslibs/ts/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/src/main.ts
   Matched by include pattern 'src/**/*.ts' in 'src/project/tsconfig.json'
@@ -41,16 +41,16 @@ exitCode:: ExitStatus.Success
 
 
 //// [/src/project/.tsbuildinfo]
-{"fileNames":["../../lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"options":{"module":1,"target":1,"tsBuildInfoFile":"./.tsbuildinfo"},"version":"FakeTSVersion"}
+{"fileNames":["../../home/src/tslibs/ts/lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"options":{"module":1,"target":1,"tsBuildInfoFile":"./.tsbuildinfo"},"version":"FakeTSVersion"}
 
 //// [/src/project/.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../lib/lib.d.ts",
+    "../../home/src/tslibs/ts/lib/lib.d.ts",
     "./src/main.ts"
   ],
   "fileInfos": {
-    "../../lib/lib.d.ts": {
+    "../../home/src/tslibs/ts/lib/lib.d.ts": {
       "original": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -76,7 +76,7 @@ exitCode:: ExitStatus.Success
     "tsBuildInfoFile": "./.tsbuildinfo"
   },
   "version": "FakeTSVersion",
-  "size": 687
+  "size": 706
 }
 
 //// [/src/project/src/main.js]
@@ -93,8 +93,8 @@ Input::
 
 
 Output::
-/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
-lib/lib.d.ts
+/home/src/tslibs/ts/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/project/src/main.ts
   Matched by include pattern 'src/**/*.ts' in 'src/project/tsconfig.json'

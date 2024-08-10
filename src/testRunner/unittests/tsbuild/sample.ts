@@ -25,8 +25,10 @@ import {
 } from "../helpers/vfs.js";
 import {
     changeToHostTrackingWrittenFiles,
+    getTypeScriptLibTestLocation,
     libFile,
     SerializeOutputOrder,
+    tscTypeScriptTestLocation,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuild:: on 'sample1' project", () => {
@@ -44,7 +46,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
     function getSampleFsAfterBuild() {
         if (projFsWithBuild) return projFsWithBuild;
         const fs = projFs.shadow();
-        const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc.js" });
+        const sys = new fakes.System(fs, { executingFilePath: tscTypeScriptTestLocation });
         const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
         const builder = ts.createSolutionBuilder(host, ["tests"], {});
         builder.build();
@@ -166,7 +168,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                     caption: "rebuilds when tsconfig changes",
                     edit: fs => {
                         replaceText(fs, "tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es2020"`);
-                        fs.writeFileSync("/lib/lib.es2020.full.d.ts", libFile.content);
+                        fs.writeFileSync(getTypeScriptLibTestLocation("es2020.full"), libFile.content);
                     },
                 },
             ],
@@ -537,13 +539,13 @@ class someClass2 { }`,
             commandLineArgs: ["--b", "core", "--verbose"],
             modifyFs: fs => {
                 fs.writeFileSync(
-                    "/lib/lib.esnext.full.d.ts",
+                    getTypeScriptLibTestLocation("esnext.full"),
                     `/// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />`,
                 );
-                fs.writeFileSync("/lib/lib.esnext.d.ts", libFile.content);
+                fs.writeFileSync(getTypeScriptLibTestLocation("esnext"), libFile.content);
                 fs.writeFileSync(
-                    "/lib/lib.d.ts",
+                    libFile.path,
                     `/// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />`,
                 );

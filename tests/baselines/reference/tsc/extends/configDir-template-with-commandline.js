@@ -70,7 +70,7 @@ import { k } from "other/sometype2";
 export const x = 10;
 
 
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -88,7 +88,7 @@ declare const console: { log(msg: any): void; };
 
 
 Output::
-/lib/tsc -p /home/src/projects/myproject --explainFiles --outDir ${configDir}/outDir
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/myproject --explainFiles --outDir ${configDir}/outDir
 ======== Resolving module '@myscope/sometype' from '/home/src/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/home/src/projects/myproject', using this value to resolve non-relative module name '@myscope/sometype'.
@@ -119,7 +119,7 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-../../../../lib/lib.d.ts
+../../tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'

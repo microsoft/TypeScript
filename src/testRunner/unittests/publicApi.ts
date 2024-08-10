@@ -5,7 +5,11 @@ import * as ts from "../_namespaces/ts.js";
 import * as vfs from "../_namespaces/vfs.js";
 import { jsonToReadableText } from "./helpers.js";
 import { loadProjectFromFiles } from "./helpers/vfs.js";
-import { libFile } from "./helpers/virtualFileSystemWithWatch.js";
+import {
+    getTypeScriptLibTestLocation,
+    libFile,
+    tscTypeScriptTestLocation,
+} from "./helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
@@ -288,9 +292,9 @@ describe("unittests:: Public APIs:: createProgram", () => {
                     },
                 },
             }),
-            "/lib/lib.esnext.full.d.ts": libFile.content,
-        }, { currentDirectory: "/src/projects/project", executingFilePath: "/lib/tsc.js" });
-        const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc.js" });
+            [getTypeScriptLibTestLocation("esnext.full")]: libFile.content,
+        }, { currentDirectory: "/src/projects/project" });
+        const sys = new fakes.System(fs, { executingFilePath: tscTypeScriptTestLocation });
         const commandLine = ts.getParsedCommandLineOfConfigFile(
             "/src/projects/project/packages/a/tsconfig.json",
             /*optionsToExtend*/ undefined,

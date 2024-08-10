@@ -26,6 +26,12 @@ export const x = "type1";
   }
 }
 
+//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
+interface WebWorkerInterface { }
+
+//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
+interface ScriptHostInterface { }
+
 //// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -40,12 +46,6 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
-
-//// [/home/src/tslibs/ts/lib/lib.webworker.d.ts]
-interface WebWorkerInterface { }
-
-//// [/home/src/tslibs/ts/lib/lib.scripthost.d.ts]
-interface ScriptHostInterface { }
 
 
 /home/src/tslibs/ts/lib/tsc.js -w -p project1 --explainFiles --extendedDiagnostics

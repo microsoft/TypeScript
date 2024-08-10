@@ -7,7 +7,7 @@ import {
 } from "../helpers/tsserver.js";
 import {
     createServerHost,
-    getPathForTypeScriptTestLocation,
+    tscTypeScriptTestLocation,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: languageService::", () => {
@@ -17,7 +17,7 @@ describe("unittests:: tsserver:: languageService::", () => {
             content: "let x = 1;",
         };
         const host = createServerHost([f], {
-            executingFilePath: getPathForTypeScriptTestLocation("tsc.js").replace("/lib/", "/Lib/"),
+            executingFilePath: tscTypeScriptTestLocation.replace("/lib/", "/Lib/"),
             useCaseSensitiveFileNames: true,
         });
         const session = new TestSession(host);

@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -35,7 +35,7 @@ export function child2() {
 
 
 Output::
-/lib/tsc --b /src/child/tsconfig.json -v --traceResolution --explainFiles
+/home/src/tslibs/ts/lib/tsc --b /src/child/tsconfig.json -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
 
@@ -48,7 +48,7 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/src/child/child2', target file types: TypeScript, Declaration.
 File '/src/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/src/child/child2.ts'. ========
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/child/child2.ts
   Imported via "../child/child2" from file 'src/child/child.ts'
@@ -98,7 +98,7 @@ Input::
 
 
 Output::
-/lib/tsc --b /src/child/tsconfig.json -v --traceResolution --explainFiles
+/home/src/tslibs/ts/lib/tsc --b /src/child/tsconfig.json -v --traceResolution --explainFiles
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
 
@@ -123,7 +123,7 @@ Directory '/src/child/child2' does not exist, skipping all lookups in it.
 [7m1[0m import { child2 } from "../child/child2";
 [7m [0m [91m                       ~~~~~~~~~~~~~~~~~[0m
 
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 src/child/child.ts
   Matched by default include pattern '**/*'

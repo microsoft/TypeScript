@@ -16,6 +16,7 @@ import { verifyTscWatch } from "../helpers/tscWatch.js";
 import { loadProjectFromFiles } from "../helpers/vfs.js";
 import {
     createWatchedSystem,
+    getTypeScriptLibTestLocation,
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
@@ -245,7 +246,7 @@ describe("unittests:: tsc:: moduleResolution::", () => {
                 `,
                 "/src/projects/project/src/fileB.mts": "export function foo() {}",
                 "/src/projects/project/package.json": jsonToReadableText({ name: "app", version: "1.0.0" }),
-                "/lib/lib.es2016.full.d.ts": libFile.content,
+                [getTypeScriptLibTestLocation("es2016.full")]: libFile.content,
             }, { currentDirectory: "/src/projects/project" }),
         commandLineArgs: ["-p", "src", "--explainFiles", "--extendedDiagnostics"],
         edits: [

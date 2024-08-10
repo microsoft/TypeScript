@@ -27,7 +27,7 @@ import * as xs4 from "./struct";
 //// [/home/src/projects/project/tsconfig.json]
 {}
 
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -45,7 +45,7 @@ declare const console: { log(msg: any): void; };
 
 
 Output::
-/lib/tsc -p /home/src/projects/project/tsconfig.json --explainFiles
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project/tsconfig.json --explainFiles
 [96mhome/src/projects/project/src/anotherFile.ts[0m:[93m2[0m:[93m22[0m - [91merror[0m[90m TS1149: [0mFile name '/home/src/projects/project/node_modules/fp-ts/lib/struct.d.ts' differs from already included file name '/home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts' only in casing.
   The file is in the program because:
     Imported via "fp-ts/lib/Struct" from file '/home/src/projects/project/src/anotherFile.ts'
@@ -281,7 +281,7 @@ Output::
     [7m [0m [96m                     ~~~~~~~~~~[0m
     File is included via import here.
 
-lib/lib.d.ts
+home/src/tslibs/ts/lib/lib.d.ts
   Default library for target 'es5'
 home/src/projects/project/node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'home/src/projects/project/src/anotherFile.ts'

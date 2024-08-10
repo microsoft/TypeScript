@@ -10,7 +10,7 @@ const a = "hello
   }
 }
 
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -28,7 +28,7 @@ declare const console: { log(msg: any): void; };
 
 
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
@@ -49,7 +49,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 
@@ -60,7 +60,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
@@ -81,7 +81,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 
@@ -95,7 +95,7 @@ const a = "hello";
 
 
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -108,7 +108,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 
@@ -119,7 +119,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -132,7 +132,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 
@@ -143,7 +143,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -155,7 +155,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 
@@ -170,7 +170,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 exitCode:: ExitStatus.Success
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -183,7 +183,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 
@@ -197,7 +197,7 @@ const a = "hello
 
 
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
@@ -218,7 +218,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 
@@ -229,7 +229,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /home/src/projects/project
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
@@ -249,7 +249,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 
@@ -264,7 +264,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /home/src/projects/project --noEmit
+/home/src/tslibs/ts/lib/tsc -p /home/src/projects/project --noEmit
 [96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
@@ -285,7 +285,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /home/src/projects/project/a.ts
 
 

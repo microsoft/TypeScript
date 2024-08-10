@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/lib/lib.d.ts]
+//// [/home/src/tslibs/ts/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -33,7 +33,7 @@ export const b = 10;
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -62,7 +62,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -94,7 +94,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -123,7 +123,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -139,7 +139,7 @@ export const a = "hello";
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
@@ -155,7 +155,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -191,7 +191,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
@@ -207,7 +207,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -221,7 +221,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
@@ -236,7 +236,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -250,7 +250,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
@@ -265,7 +265,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -279,7 +279,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
@@ -295,7 +295,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -312,7 +312,7 @@ export const a = class { private p = 10; };
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -341,7 +341,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -373,7 +373,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -402,7 +402,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -415,7 +415,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -443,7 +443,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -459,7 +459,7 @@ export const a = "hello";
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
@@ -475,7 +475,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -503,7 +503,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
@@ -518,7 +518,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 
@@ -535,7 +535,7 @@ export const c: number = "hello";
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const c: number = "hello";
@@ -559,7 +559,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
@@ -608,7 +608,7 @@ export const a = class { private p = 10; };
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 [96msrc/a.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
 
 [7m1[0m export const a = class { private p = 10; };
@@ -638,7 +638,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
@@ -680,7 +680,7 @@ export const a = "hello";
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
@@ -697,7 +697,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
@@ -732,7 +732,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const c: number = "hello";
@@ -756,7 +756,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
@@ -771,7 +771,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json --noCheck
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json --noCheck
 exitCode:: ExitStatus.Success
 Program root files: [
   "/src/a.ts",
@@ -788,7 +788,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
@@ -803,7 +803,7 @@ Input::
 
 
 Output::
-/lib/tsc -p /src/tsconfig.json
+/home/src/tslibs/ts/lib/tsc -p /src/tsconfig.json
 [96msrc/c.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'string' is not assignable to type 'number'.
 
 [7m1[0m export const c: number = "hello";
@@ -827,7 +827,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/lib/lib.d.ts
+/home/src/tslibs/ts/lib/lib.d.ts
 /src/a.ts
 /src/b.ts
 /src/c.ts
