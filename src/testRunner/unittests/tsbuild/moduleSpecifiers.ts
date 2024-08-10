@@ -93,7 +93,8 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                     ],
                     "include": []
                 }`,
-            }, symbolLibContent),
+                [libFile.path]: `${libFile.content}${symbolLibContent}`,
+            }),
         commandLineArgs: ["-b", "/src", "--verbose"],
     });
 });
@@ -186,7 +187,7 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                             "**/*"
                         ]
                     }`,
-            }, ""),
+            }),
         modifyFs: fs => {
             fs.writeFileSync(getTypeScriptLibTestLocation("es2022.full"), libFile.content);
             fs.symlinkSync("/src", "/src/src-types/node_modules");

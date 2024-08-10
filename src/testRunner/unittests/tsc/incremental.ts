@@ -298,7 +298,8 @@ declare global {
                         <div />
                         <div />
                     </Component>)`,
-            }, `\ninterface ReadonlyArray<T> { readonly length: number }`),
+                [libFile.path]: `${libFile.content}\ninterface ReadonlyArray<T> { readonly length: number }`,
+            }),
         edits: noChangeOnlyRuns,
     });
 

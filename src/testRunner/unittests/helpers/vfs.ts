@@ -3,15 +3,7 @@ import * as vfs from "../../_namespaces/vfs.js";
 import { libFile } from "./virtualFileSystemWithWatch.js";
 
 export interface FsOptions {
-    libContentToAppend?: string;
     currentDirectory?: string;
-}
-export type FsOptionsOrLibContentsToAppend = FsOptions | string;
-
-function valueOfFsOptions(options: FsOptionsOrLibContentsToAppend | undefined, key: keyof FsOptions) {
-    return typeof options === "string" ?
-        key === "libContentToAppend" ? options : undefined :
-        options?.[key];
 }
 
 /**
@@ -19,17 +11,16 @@ function valueOfFsOptions(options: FsOptionsOrLibContentsToAppend | undefined, k
  */
 export function loadProjectFromFiles(
     files: vfs.FileSet,
-    options?: FsOptionsOrLibContentsToAppend,
+    options?: FsOptions,
 ): vfs.FileSystem {
     const defaultLibLocation = getDirectoryPath(libFile.path);
     const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
         files,
-        cwd: valueOfFsOptions(options, "currentDirectory") || "/",
+        cwd: options?.currentDirectory ?? "/",
         meta: { defaultLibLocation },
     });
-    const libContentToAppend = valueOfFsOptions(options, "libContentToAppend");
     fs.mkdirpSync(defaultLibLocation);
-    fs.writeFileSync(`${defaultLibLocation}/lib.d.ts`, libContentToAppend ? `${libFile.content}${libContentToAppend}` : libFile.content);
+    if (!fs.existsSync(`${defaultLibLocation}/lib.d.ts`)) fs.writeFileSync(`${defaultLibLocation}/lib.d.ts`, libFile.content);
     fs.makeReadonly();
     return fs;
 }
@@ -60,86 +51,4 @@ export function appendText(fs: vfs.FileSystem, path: string, additionalContent: 
     }
     const old = fs.readFileSync(path, "utf-8");
     fs.writeFileSync(path, `${old}${additionalContent}`);
-}
-
-export function enableStrict(fs: vfs.FileSystem, path: string) {
-    replaceText(fs, path, `"strict": false`, `"strict": true`);
-}
-
-export function addTestPrologue(fs: vfs.FileSystem, path: string, prologue: string) {
-    prependText(
-        fs,
-        path,
-        `${prologue}
-`,
-    );
-}
-
-export function addShebang(fs: vfs.FileSystem, project: string, file: string) {
-    prependText(
-        fs,
-        `src/${project}/${file}.ts`,
-        `#!someshebang ${project} ${file}
-`,
-    );
-}
-
-export function restContent(project: string, file: string) {
-    return `function for${project}${file}Rest() {
-const { b, ...rest } = { a: 10, b: 30, yy: 30 };
-}`;
-}
-function nonrestContent(project: string, file: string) {
-    return `function for${project}${file}Rest() { }`;
-}
-
-export function addRest(fs: vfs.FileSystem, project: string, file: string) {
-    appendText(fs, `src/${project}/${file}.ts`, restContent(project, file));
-}
-
-export function removeRest(fs: vfs.FileSystem, project: string, file: string) {
-    replaceText(fs, `src/${project}/${file}.ts`, restContent(project, file), nonrestContent(project, file));
-}
-
-export function addStubFoo(fs: vfs.FileSystem, project: string, file: string) {
-    appendText(fs, `src/${project}/${file}.ts`, nonrestContent(project, file));
-}
-
-export function changeStubToRest(fs: vfs.FileSystem, project: string, file: string) {
-    replaceText(fs, `src/${project}/${file}.ts`, nonrestContent(project, file), restContent(project, file));
-}
-
-export function addSpread(fs: vfs.FileSystem, project: string, file: string) {
-    const path = `src/${project}/${file}.ts`;
-    const content = fs.readFileSync(path, "utf8");
-    fs.writeFileSync(
-        path,
-        `${content}
-function ${project}${file}Spread(...b: number[]) { }
-const ${project}${file}_ar = [20, 30];
-${project}${file}Spread(10, ...${project}${file}_ar);`,
-    );
-
-    replaceText(
-        fs,
-        `src/${project}/tsconfig.json`,
-        `"strict": false,`,
-        `"strict": false,
-    "downlevelIteration": true,`,
-    );
-}
-
-export function getTripleSlashRef(project: string) {
-    return `/src/${project}/tripleRef.d.ts`;
-}
-
-export function addTripleSlashRef(fs: vfs.FileSystem, project: string, file: string) {
-    fs.writeFileSync(getTripleSlashRef(project), `declare class ${project}${file} { }`);
-    prependText(
-        fs,
-        `src/${project}/${file}.ts`,
-        `///<reference path="./tripleRef.d.ts"/>
-const ${file}Const = new ${project}${file}();
-`,
-    );
 }
