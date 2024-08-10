@@ -153,7 +153,7 @@ interface BigInt64Array {
     copyWithin(target: number, start: number, end?: number): this;
 
     /** Yields index, value pairs for every entry in the array. */
-    entries(): BuiltinIterator<[number, bigint], BuiltinIteratorReturn>;
+    entries(): ArrayIterator<[number, bigint]>;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -238,7 +238,7 @@ interface BigInt64Array {
     join(separator?: string): string;
 
     /** Yields each index in the array. */
-    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
+    keys(): ArrayIterator<number>;
 
     /**
      * Returns the index of the last occurrence of a value in an array.
@@ -360,9 +360,9 @@ interface BigInt64Array {
     valueOf(): BigInt64Array;
 
     /** Yields each value in the array. */
-    values(): BuiltinIterator<bigint, BuiltinIteratorReturn>;
+    values(): ArrayIterator<bigint>;
 
-    [Symbol.iterator](): BuiltinIterator<bigint, BuiltinIteratorReturn>;
+    [Symbol.iterator](): ArrayIterator<bigint>;
 
     readonly [Symbol.toStringTag]: "BigInt64Array";
 
@@ -425,7 +425,7 @@ interface BigUint64Array {
     copyWithin(target: number, start: number, end?: number): this;
 
     /** Yields index, value pairs for every entry in the array. */
-    entries(): BuiltinIterator<[number, bigint], BuiltinIteratorReturn>;
+    entries(): ArrayIterator<[number, bigint]>;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -510,7 +510,7 @@ interface BigUint64Array {
     join(separator?: string): string;
 
     /** Yields each index in the array. */
-    keys(): BuiltinIterator<number, BuiltinIteratorReturn>;
+    keys(): ArrayIterator<number>;
 
     /**
      * Returns the index of the last occurrence of a value in an array.
@@ -632,9 +632,9 @@ interface BigUint64Array {
     valueOf(): BigUint64Array;
 
     /** Yields each value in the array. */
-    values(): BuiltinIterator<bigint, BuiltinIteratorReturn>;
+    values(): ArrayIterator<bigint>;
 
-    [Symbol.iterator](): BuiltinIterator<bigint, BuiltinIteratorReturn>;
+    [Symbol.iterator](): ArrayIterator<bigint>;
 
     readonly [Symbol.toStringTag]: "BigUint64Array";
 

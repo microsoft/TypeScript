@@ -118,30 +118,27 @@ class MyMap implements Map<string, number> {
 >value : Symbol(value, Decl(iterableTReturnTNext.ts, 35, 20))
 >this : Symbol(MyMap, Decl(iterableTReturnTNext.ts, 21, 57))
 
-    entries(): BuiltinIterator<[string, number], BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
+    entries(): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
 >entries : Symbol(MyMap.entries, Decl(iterableTReturnTNext.ts, 35, 58))
->BuiltinIterator : Symbol(BuiltinIterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
->BuiltinIteratorReturn : Symbol(BuiltinIteratorReturn, Decl(lib.es2015.iterable.d.ts, --, --))
+>MapIterator : Symbol(MapIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
-    keys(): BuiltinIterator<string, BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
->keys : Symbol(MyMap.keys, Decl(iterableTReturnTNext.ts, 36, 119))
->BuiltinIterator : Symbol(BuiltinIterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
->BuiltinIteratorReturn : Symbol(BuiltinIteratorReturn, Decl(lib.es2015.iterable.d.ts, --, --))
+    keys(): MapIterator<string> { throw new Error("Method not implemented."); }
+>keys : Symbol(MyMap.keys, Decl(iterableTReturnTNext.ts, 36, 92))
+>MapIterator : Symbol(MapIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
-    [Symbol.iterator](): BuiltinIterator<[string, number], BuiltinIteratorReturn> { throw new Error("Method not implemented."); }
->[Symbol.iterator] : Symbol(MyMap[Symbol.iterator], Decl(iterableTReturnTNext.ts, 37, 106))
+    [Symbol.iterator](): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
+>[Symbol.iterator] : Symbol(MyMap[Symbol.iterator], Decl(iterableTReturnTNext.ts, 37, 79))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->BuiltinIterator : Symbol(BuiltinIterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
->BuiltinIteratorReturn : Symbol(BuiltinIteratorReturn, Decl(lib.es2015.iterable.d.ts, --, --))
+>MapIterator : Symbol(MapIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
     // error when strictBuiltinIteratorReturn is true because values() has implicit `void` return, which isn't assignable to `undefined`
     * values() {
->values : Symbol(MyMap.values, Decl(iterableTReturnTNext.ts, 38, 129))
+>values : Symbol(MyMap.values, Decl(iterableTReturnTNext.ts, 38, 102))
 
         yield* this._values;
 >this._values : Symbol(MyMap._values, Decl(iterableTReturnTNext.ts, 25, 36))
