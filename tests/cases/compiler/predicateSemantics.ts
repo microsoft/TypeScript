@@ -30,14 +30,18 @@ const p04 = null ?? null;
 const p05 = (class foo { }) && null;
 const p06 = (class foo { }) || null;
 const p07 = null ?? null ?? null;
+const p08 = null ?? opt ?? null;
+const p09 = null ?? (opt ? null : undefined) ?? null;
 
 const p10 = opt ?? null ?? 1;
 const p11 = opt ?? null ?? null;
 const p12 = opt ?? (null ?? 1);
 const p13 = opt ?? (null ?? null);
 const p14 = opt ?? (null ?? null ?? null);
+const p15 = opt ?? (opt ? null : undefined) ?? null;
+const p16 = opt ?? 1 ?? 2;
+const p17 = opt ?? (opt ? 1 : 2) ?? 3;
 
-const p20 = null ?? (opt ? null : undefined) ?? null;
 const p21 = null ?? null ?? null ?? null;
 const p22 = null ?? 1 ?? 1;
 const p23 = null ?? (opt ? 1 : 2) ?? 1;

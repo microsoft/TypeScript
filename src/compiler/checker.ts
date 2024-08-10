@@ -39667,50 +39667,53 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 grammarErrorOnNode(right, Diagnostics._0_and_1_operations_cannot_be_mixed_without_parentheses, tokenToString(right.operatorToken.kind), tokenToString(operatorToken.kind));
             }
 
-            checkNullishCoalesceOperandLeft(node);
-            checkNullishCoalesceOperandRight(node);
+            const leftNullishSemantics = checkNullishCoalesceOperandLeft(node);
+            const rightNullishSemantics = checkNullishCoalesceOperandRight(node);
+
+            // check self if not checked by left operand of parent nullish coalesce expression
+            if (leftNullishSemantics === PredicateSemantics.Always && isNotWithinNullishCoalesceExpression(node)) {
+                if (rightNullishSemantics === PredicateSemantics.Always) {
+                    error(node, Diagnostics.This_expression_is_always_nullish);
+                }
+            }
         }
     }
 
     function checkNullishCoalesceOperandLeft(node: BinaryExpression) {
         const leftTarget = skipOuterExpressions(node.left, OuterExpressionKinds.All);
-        let nullishSemantics = getSyntacticNullishnessSemantics(leftTarget);
-        if (nullishSemantics & PredicateSemantics.Literal && isLeftmostNullishCoalesceOperand(node)) {
-            return;
-        }
 
+        let nullishSemantics = getSyntacticNullishnessSemantics(leftTarget);
+        const isLiteral = nullishSemantics & PredicateSemantics.Literal;
         nullishSemantics = nullishSemantics & ~PredicateSemantics.Literal;
 
+        if (isLiteral && isLeftmostNullishCoalesceOperand(node)) {
+            return nullishSemantics;
+        }
+
         if (nullishSemantics !== PredicateSemantics.Sometimes) {
-            if (node.parent.kind === SyntaxKind.BinaryExpression) {
-                error(leftTarget, Diagnostics.This_binary_expression_is_never_nullish_Are_you_missing_parentheses);
+            if (nullishSemantics === PredicateSemantics.Always) {
+                error(leftTarget, Diagnostics.This_expression_is_always_nullish);
             }
             else {
-                if (nullishSemantics === PredicateSemantics.Always) {
-                    error(leftTarget, Diagnostics.This_expression_is_always_nullish);
-                }
-                else {
-                    error(leftTarget, Diagnostics.Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish);
-                }
+                error(leftTarget, Diagnostics.Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish);
             }
         }
+
+        return nullishSemantics;
     }
 
     function checkNullishCoalesceOperandRight(node: BinaryExpression) {
-        if (isRightmostNullishCoalesceOperand(node)) {
-            return;
-        }
-
         const rightTarget = skipOuterExpressions(node.right, OuterExpressionKinds.All);
         const nullishSemantics = getSyntacticNullishnessSemantics(rightTarget) & ~PredicateSemantics.Literal;
-        if (nullishSemantics !== PredicateSemantics.Sometimes) {
-            if (nullishSemantics === PredicateSemantics.Always) {
-                error(rightTarget, Diagnostics.This_expression_is_always_nullish);
-            }
-            else {
-                error(rightTarget, Diagnostics.This_expression_is_never_nullish);
-            }
+        if (isNotWithinNullishCoalesceExpression(node)) {
+            return nullishSemantics;
         }
+
+        if (nullishSemantics === PredicateSemantics.Always) {
+            error(rightTarget, Diagnostics.This_expression_is_always_nullish);
+        }
+
+        return nullishSemantics;
     }
 
     function isLeftmostNullishCoalesceOperand(node: BinaryExpression) {
@@ -39718,10 +39721,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             node = node.parent;
         }
 
-        return !isBinaryExpression(node.parent) || node.parent.operatorToken.kind !== SyntaxKind.QuestionQuestionToken;
+        return isNotWithinNullishCoalesceExpression(node);
     }
 
-    function isRightmostNullishCoalesceOperand(node: BinaryExpression) {
+    function isNotWithinNullishCoalesceExpression(node: BinaryExpression) {
         return !isBinaryExpression(node.parent) || node.parent.operatorToken.kind !== SyntaxKind.QuestionQuestionToken;
     }
 
@@ -39738,15 +39741,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.BinaryExpression:
                 // List of operators that can produce null/undefined:
                 // = ??= ?? || ||= && &&=
-                switch ((node as BinaryExpression).operatorToken.kind) {
-                    case SyntaxKind.EqualsToken:
+                const binaryExpression = node as BinaryExpression;
+                if (binaryExpression.operatorToken.kind === SyntaxKind.EqualsToken) {
+                    return getSyntacticNullishnessSemantics(binaryExpression.right) & ~PredicateSemantics.Literal;
+                }
+
+                const leftSemantics = getSyntacticNullishnessSemantics(binaryExpression.left) & ~PredicateSemantics.Literal;
+                const rightSemantics = getSyntacticNullishnessSemantics(binaryExpression.right) & ~PredicateSemantics.Literal;
+                switch (binaryExpression.operatorToken.kind) {
                     case SyntaxKind.QuestionQuestionToken:
                     case SyntaxKind.QuestionQuestionEqualsToken:
                     case SyntaxKind.BarBarToken:
                     case SyntaxKind.BarBarEqualsToken:
+                        return leftSemantics === PredicateSemantics.Never || rightSemantics === PredicateSemantics.Never ? PredicateSemantics.Never :
+                            leftSemantics === PredicateSemantics.Sometimes || rightSemantics === PredicateSemantics.Sometimes ? PredicateSemantics.Sometimes :
+                            PredicateSemantics.Always;
                     case SyntaxKind.AmpersandAmpersandToken:
                     case SyntaxKind.AmpersandAmpersandEqualsToken:
-                        return PredicateSemantics.Sometimes;
+                        return leftSemantics === PredicateSemantics.Never && rightSemantics === PredicateSemantics.Never ? PredicateSemantics.Never :
+                            leftSemantics === PredicateSemantics.Sometimes && rightSemantics === PredicateSemantics.Sometimes ? PredicateSemantics.Sometimes :
+                            PredicateSemantics.Always;
                 }
                 return PredicateSemantics.Never;
             case SyntaxKind.ConditionalExpression:

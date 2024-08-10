@@ -2,24 +2,38 @@ predicateSemantics.ts(7,16): error TS2871: This expression is always nullish.
 predicateSemantics.ts(10,16): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
 predicateSemantics.ts(26,13): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
 predicateSemantics.ts(27,13): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(29,13): error TS2871: This expression is always nullish.
 predicateSemantics.ts(30,13): error TS2872: This kind of expression is always truthy.
 predicateSemantics.ts(31,13): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(32,13): error TS2871: This expression is always nullish.
+predicateSemantics.ts(32,13): error TS2871: This expression is always nullish.
 predicateSemantics.ts(32,21): error TS2871: This expression is always nullish.
-predicateSemantics.ts(34,20): error TS2871: This expression is always nullish.
-predicateSemantics.ts(35,20): error TS2871: This expression is always nullish.
-predicateSemantics.ts(38,29): error TS2871: This expression is always nullish.
-predicateSemantics.ts(40,22): error TS2871: This expression is always nullish.
+predicateSemantics.ts(34,13): error TS2871: This expression is always nullish.
+predicateSemantics.ts(34,13): error TS2871: This expression is always nullish.
+predicateSemantics.ts(34,22): error TS2871: This expression is always nullish.
+predicateSemantics.ts(36,20): error TS2871: This expression is always nullish.
+predicateSemantics.ts(37,20): error TS2871: This expression is always nullish.
+predicateSemantics.ts(39,21): error TS2871: This expression is always nullish.
+predicateSemantics.ts(40,21): error TS2871: This expression is always nullish.
+predicateSemantics.ts(40,21): error TS2871: This expression is always nullish.
+predicateSemantics.ts(40,29): error TS2871: This expression is always nullish.
 predicateSemantics.ts(41,21): error TS2871: This expression is always nullish.
-predicateSemantics.ts(41,29): error TS2871: This expression is always nullish.
-predicateSemantics.ts(42,21): error TS2874: This expression is never nullish.
-predicateSemantics.ts(43,22): error TS2874: This expression is never nullish.
-predicateSemantics.ts(46,8): error TS2872: This kind of expression is always truthy.
-predicateSemantics.ts(47,11): error TS2872: This kind of expression is always truthy.
-predicateSemantics.ts(48,8): error TS2872: This kind of expression is always truthy.
-predicateSemantics.ts(49,8): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(42,13): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(43,13): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(45,13): error TS2871: This expression is always nullish.
+predicateSemantics.ts(45,13): error TS2871: This expression is always nullish.
+predicateSemantics.ts(45,13): error TS2871: This expression is always nullish.
+predicateSemantics.ts(45,21): error TS2871: This expression is always nullish.
+predicateSemantics.ts(45,29): error TS2871: This expression is always nullish.
+predicateSemantics.ts(46,13): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(47,13): error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+predicateSemantics.ts(50,8): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(51,11): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(52,8): error TS2872: This kind of expression is always truthy.
+predicateSemantics.ts(53,8): error TS2872: This kind of expression is always truthy.
 
 
-==== predicateSemantics.ts (19 errors) ====
+==== predicateSemantics.ts (33 errors) ====
     declare let opt: number | undefined;
     
     // OK: One or other operand is possibly nullish
@@ -57,6 +71,8 @@ predicateSemantics.ts(49,8): error TS2872: This kind of expression is always tru
 !!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
     const p03 = null ?? 1;
     const p04 = null ?? null;
+                ~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
     const p05 = (class foo { }) && null;
                 ~~~~~~~~~~~~~~~
 !!! error TS2872: This kind of expression is always truthy.
@@ -64,7 +80,19 @@ predicateSemantics.ts(49,8): error TS2872: This kind of expression is always tru
                 ~~~~~~~~~~~~~~~
 !!! error TS2872: This kind of expression is always truthy.
     const p07 = null ?? null ?? null;
+                ~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
                         ~~~~
+!!! error TS2871: This expression is always nullish.
+    const p08 = null ?? opt ?? null;
+    const p09 = null ?? (opt ? null : undefined) ?? null;
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
+                         ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2871: This expression is always nullish.
     
     const p10 = opt ?? null ?? 1;
@@ -75,24 +103,42 @@ predicateSemantics.ts(49,8): error TS2872: This kind of expression is always tru
 !!! error TS2871: This expression is always nullish.
     const p12 = opt ?? (null ?? 1);
     const p13 = opt ?? (null ?? null);
+                        ~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
     const p14 = opt ?? (null ?? null ?? null);
+                        ~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
+                        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
                                 ~~~~
 !!! error TS2871: This expression is always nullish.
-    
-    const p20 = null ?? (opt ? null : undefined) ?? null;
-                         ~~~~~~~~~~~~~~~~~~~~~~
+    const p15 = opt ?? (opt ? null : undefined) ?? null;
+                        ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2871: This expression is always nullish.
+    const p16 = opt ?? 1 ?? 2;
+                ~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    const p17 = opt ?? (opt ? 1 : 2) ?? 3;
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
+    
     const p21 = null ?? null ?? null ?? null;
+                ~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2871: This expression is always nullish.
                         ~~~~
 !!! error TS2871: This expression is always nullish.
                                 ~~~~
 !!! error TS2871: This expression is always nullish.
     const p22 = null ?? 1 ?? 1;
-                        ~
-!!! error TS2874: This expression is never nullish.
+                ~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
     const p23 = null ?? (opt ? 1 : 2) ?? 1;
-                         ~~~~~~~~~~~
-!!! error TS2874: This expression is never nullish.
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2869: Right operand of ?? is unreachable because the left operand is never nullish.
     
     // Outer expression tests
     while ({} as any) { }

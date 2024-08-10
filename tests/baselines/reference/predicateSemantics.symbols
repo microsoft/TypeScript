@@ -61,39 +61,58 @@ const p06 = (class foo { }) || null;
 const p07 = null ?? null ?? null;
 >p07 : Symbol(p07, Decl(predicateSemantics.ts, 31, 5))
 
-const p10 = opt ?? null ?? 1;
->p10 : Symbol(p10, Decl(predicateSemantics.ts, 33, 5))
+const p08 = null ?? opt ?? null;
+>p08 : Symbol(p08, Decl(predicateSemantics.ts, 32, 5))
 >opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
 
-const p11 = opt ?? null ?? null;
->p11 : Symbol(p11, Decl(predicateSemantics.ts, 34, 5))
->opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
-
-const p12 = opt ?? (null ?? 1);
->p12 : Symbol(p12, Decl(predicateSemantics.ts, 35, 5))
->opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
-
-const p13 = opt ?? (null ?? null);
->p13 : Symbol(p13, Decl(predicateSemantics.ts, 36, 5))
->opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
-
-const p14 = opt ?? (null ?? null ?? null);
->p14 : Symbol(p14, Decl(predicateSemantics.ts, 37, 5))
->opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
-
-const p20 = null ?? (opt ? null : undefined) ?? null;
->p20 : Symbol(p20, Decl(predicateSemantics.ts, 39, 5))
+const p09 = null ?? (opt ? null : undefined) ?? null;
+>p09 : Symbol(p09, Decl(predicateSemantics.ts, 33, 5))
 >opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
 >undefined : Symbol(undefined)
 
+const p10 = opt ?? null ?? 1;
+>p10 : Symbol(p10, Decl(predicateSemantics.ts, 35, 5))
+>opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
+
+const p11 = opt ?? null ?? null;
+>p11 : Symbol(p11, Decl(predicateSemantics.ts, 36, 5))
+>opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
+
+const p12 = opt ?? (null ?? 1);
+>p12 : Symbol(p12, Decl(predicateSemantics.ts, 37, 5))
+>opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
+
+const p13 = opt ?? (null ?? null);
+>p13 : Symbol(p13, Decl(predicateSemantics.ts, 38, 5))
+>opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
+
+const p14 = opt ?? (null ?? null ?? null);
+>p14 : Symbol(p14, Decl(predicateSemantics.ts, 39, 5))
+>opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
+
+const p15 = opt ?? (opt ? null : undefined) ?? null;
+>p15 : Symbol(p15, Decl(predicateSemantics.ts, 40, 5))
+>opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
+>opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
+>undefined : Symbol(undefined)
+
+const p16 = opt ?? 1 ?? 2;
+>p16 : Symbol(p16, Decl(predicateSemantics.ts, 41, 5))
+>opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
+
+const p17 = opt ?? (opt ? 1 : 2) ?? 3;
+>p17 : Symbol(p17, Decl(predicateSemantics.ts, 42, 5))
+>opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
+>opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
+
 const p21 = null ?? null ?? null ?? null;
->p21 : Symbol(p21, Decl(predicateSemantics.ts, 40, 5))
+>p21 : Symbol(p21, Decl(predicateSemantics.ts, 44, 5))
 
 const p22 = null ?? 1 ?? 1;
->p22 : Symbol(p22, Decl(predicateSemantics.ts, 41, 5))
+>p22 : Symbol(p22, Decl(predicateSemantics.ts, 45, 5))
 
 const p23 = null ?? (opt ? 1 : 2) ?? 1;
->p23 : Symbol(p23, Decl(predicateSemantics.ts, 42, 5))
+>p23 : Symbol(p23, Decl(predicateSemantics.ts, 46, 5))
 >opt : Symbol(opt, Decl(predicateSemantics.ts, 0, 11))
 
 // Outer expression tests
@@ -103,14 +122,14 @@ while ((<any>({}))) { }
 while ((({}))) { }
 
 declare let cond: any;
->cond : Symbol(cond, Decl(predicateSemantics.ts, 50, 11))
+>cond : Symbol(cond, Decl(predicateSemantics.ts, 54, 11))
 
 // Should be OK
 console.log((cond || undefined) && 1 / cond);
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->cond : Symbol(cond, Decl(predicateSemantics.ts, 50, 11))
+>cond : Symbol(cond, Decl(predicateSemantics.ts, 54, 11))
 >undefined : Symbol(undefined)
->cond : Symbol(cond, Decl(predicateSemantics.ts, 50, 11))
+>cond : Symbol(cond, Decl(predicateSemantics.ts, 54, 11))
 

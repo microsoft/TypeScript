@@ -33,14 +33,18 @@ const p04 = null ?? null;
 const p05 = (class foo { }) && null;
 const p06 = (class foo { }) || null;
 const p07 = null ?? null ?? null;
+const p08 = null ?? opt ?? null;
+const p09 = null ?? (opt ? null : undefined) ?? null;
 
 const p10 = opt ?? null ?? 1;
 const p11 = opt ?? null ?? null;
 const p12 = opt ?? (null ?? 1);
 const p13 = opt ?? (null ?? null);
 const p14 = opt ?? (null ?? null ?? null);
+const p15 = opt ?? (opt ? null : undefined) ?? null;
+const p16 = opt ?? 1 ?? 2;
+const p17 = opt ?? (opt ? 1 : 2) ?? 3;
 
-const p20 = null ?? (opt ? null : undefined) ?? null;
 const p21 = null ?? null ?? null ?? null;
 const p22 = null ?? 1 ?? 1;
 const p23 = null ?? (opt ? 1 : 2) ?? 1;
@@ -58,7 +62,7 @@ console.log((cond || undefined) && 1 / cond);
 
 
 //// [predicateSemantics.js]
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u;
 // OK: One or other operand is possibly nullish
 var test1 = (_a = (opt ? undefined : 32)) !== null && _a !== void 0 ? _a : "possibly reached";
 // Not OK: Both operands nullish
@@ -90,15 +94,19 @@ var p06 = (/** @class */ (function () {
     return foo;
 }())) || null;
 var p07 = (_g = null !== null && null !== void 0 ? null : null) !== null && _g !== void 0 ? _g : null;
-var p10 = (_h = opt !== null && opt !== void 0 ? opt : null) !== null && _h !== void 0 ? _h : 1;
-var p11 = (_j = opt !== null && opt !== void 0 ? opt : null) !== null && _j !== void 0 ? _j : null;
+var p08 = (_h = null !== null && null !== void 0 ? null : opt) !== null && _h !== void 0 ? _h : null;
+var p09 = (_j = null !== null && null !== void 0 ? null : (opt ? null : undefined)) !== null && _j !== void 0 ? _j : null;
+var p10 = (_k = opt !== null && opt !== void 0 ? opt : null) !== null && _k !== void 0 ? _k : 1;
+var p11 = (_l = opt !== null && opt !== void 0 ? opt : null) !== null && _l !== void 0 ? _l : null;
 var p12 = opt !== null && opt !== void 0 ? opt : (null !== null && null !== void 0 ? null : 1);
 var p13 = opt !== null && opt !== void 0 ? opt : (null !== null && null !== void 0 ? null : null);
-var p14 = opt !== null && opt !== void 0 ? opt : ((_k = null !== null && null !== void 0 ? null : null) !== null && _k !== void 0 ? _k : null);
-var p20 = (_l = null !== null && null !== void 0 ? null : (opt ? null : undefined)) !== null && _l !== void 0 ? _l : null;
-var p21 = (_o = (_m = null !== null && null !== void 0 ? null : null) !== null && _m !== void 0 ? _m : null) !== null && _o !== void 0 ? _o : null;
-var p22 = (_p = null !== null && null !== void 0 ? null : 1) !== null && _p !== void 0 ? _p : 1;
-var p23 = (_q = null !== null && null !== void 0 ? null : (opt ? 1 : 2)) !== null && _q !== void 0 ? _q : 1;
+var p14 = opt !== null && opt !== void 0 ? opt : ((_m = null !== null && null !== void 0 ? null : null) !== null && _m !== void 0 ? _m : null);
+var p15 = (_o = opt !== null && opt !== void 0 ? opt : (opt ? null : undefined)) !== null && _o !== void 0 ? _o : null;
+var p16 = (_p = opt !== null && opt !== void 0 ? opt : 1) !== null && _p !== void 0 ? _p : 2;
+var p17 = (_q = opt !== null && opt !== void 0 ? opt : (opt ? 1 : 2)) !== null && _q !== void 0 ? _q : 3;
+var p21 = (_s = (_r = null !== null && null !== void 0 ? null : null) !== null && _r !== void 0 ? _r : null) !== null && _s !== void 0 ? _s : null;
+var p22 = (_t = null !== null && null !== void 0 ? null : 1) !== null && _t !== void 0 ? _t : 1;
+var p23 = (_u = null !== null && null !== void 0 ? null : (opt ? 1 : 2)) !== null && _u !== void 0 ? _u : 1;
 // Outer expression tests
 while ({}) { }
 while ({}) { }
