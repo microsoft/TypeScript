@@ -449,12 +449,11 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.osFlavor = osFlavor || TestServerHostOsFlavor.Windows;
         this.windowsStyleRoot = windowsStyleRoot;
         this.environmentVariables = environmentVariables;
-        currentDirectory = currentDirectory ?? "/home/src/vscode/projects/bin";
+        this.currentDirectory = this.getHostSpecificPath(currentDirectory ?? "/home/src/vscode/projects/bin");
         this.getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
         this.watchUtils = createWatchUtils("PolledWatches", "FsWatches", s => this.getCanonicalFileName(s), this);
-        this.toPath = s => toPath(s, currentDirectory, this.getCanonicalFileName);
+        this.toPath = s => toPath(s, this.currentDirectory, this.getCanonicalFileName);
         this.executingFilePath = this.getHostSpecificPath(executingFilePath ?? tscTypeScriptTestLocation);
-        this.currentDirectory = this.getHostSpecificPath(currentDirectory);
         this.runWithFallbackPolling = !!runWithFallbackPolling;
         const tscWatchFile = this.environmentVariables && this.environmentVariables.get("TSC_WATCHFILE");
         const tscWatchDirectory = this.environmentVariables && this.environmentVariables.get("TSC_WATCHDIRECTORY");
