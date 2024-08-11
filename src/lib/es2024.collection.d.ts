@@ -5,7 +5,7 @@ interface MapConstructor {
      * @param keySelector A callback which will be invoked for each item in items.
      */
     groupBy<K, T>(
-        items: Iterable<T, unknown, undefined>,
+        items: Iterable<T>,
         keySelector: (item: T, index: number) => K,
     ): Map<K, T[]>;
 }
