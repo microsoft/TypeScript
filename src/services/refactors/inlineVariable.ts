@@ -23,8 +23,9 @@ import {
     isNumericLiteral,
     isObjectLiteralExpression,
     isPropertyAccessExpression,
-    isStringLiteral,
     isShorthandPropertyAssignment,
+    isStringLiteral,
+    isTaggedTemplateExpression,
     isTemplateSpan,
     isTypeQueryNode,
     isVariableDeclarationInVariableStatement,
@@ -42,7 +43,6 @@ import {
     textRangeContainsPositionInclusive,
     TypeChecker,
     VariableDeclaration,
-    isTaggedTemplateExpression,
 } from "../_namespaces/ts.js";
 import {
     RefactorErrorInfo,
@@ -274,7 +274,7 @@ function replaceTemplateStringVariableWithLiteral(tracker: textChanges.ChangeTra
         sourceFile,
         {
             pos: prevNode.getEnd() - 2,
-            end: reference.literal.getStart() + 1
+            end: reference.literal.getStart() + 1,
         },
         replacement.text.replace(/\\/g, "\\\\").replace(/`/g, "\\`"),
     );
