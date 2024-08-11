@@ -42,6 +42,7 @@ import {
     textRangeContainsPositionInclusive,
     TypeChecker,
     VariableDeclaration,
+    isTaggedTemplateExpression,
 } from "../_namespaces/ts.js";
 import {
     RefactorErrorInfo,
@@ -119,7 +120,7 @@ registerRefactor(refactorName, {
         const { references, declaration, replacement } = info;
         const edits = textChanges.ChangeTracker.with(context, tracker => {
             for (const node of references) {
-                if (isStringLiteral(replacement) && isIdentifier(node) && isTemplateSpan(node.parent)) {
+                if (isStringLiteral(replacement) && isIdentifier(node) && isTemplateSpan(node.parent) && !isTaggedTemplateExpression(node.parent.parent.parent)) {
                     replaceTemplateStringVariableWithLiteral(tracker, file, node.parent, replacement);
                 }
                 else {
